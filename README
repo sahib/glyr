@@ -1,0 +1,28 @@
+glyr is a (commandline) tool tow download lyrics and covers from the web
+In future versions it will be able to downlaod also other meta-info,
+but lyric/cover download works already very well:
+
+Sources:
+
+lyrics:
+- lyricswiki
+- lyrix.at
+- darklyrics 
+- lyrdb (lyrdb.com si currently borken and therfore disabled)
+- magistrix (often gets wrong resutls and therfore disabled)
+- metrolyrics
+
+cover
+- amazon (via freeapisign)
+- discogs  
+- last.fm
+- lyricswiki 
+- google as a fallback (finds ALWAYS some THING)
+
+Currently it has only a very limited commandline interface, look at main.c to see how it works
+Examples:
+
+./glyr lyric "Eluveitie" "Slania" "Slanias Song" "./" # downloads "Slanias Song" from Eluveitie into the dir "./", album is optional
+./glyr cover "Eluveitie" "Everything remains as it never was" 10 "wldag"  # ...
+
+
