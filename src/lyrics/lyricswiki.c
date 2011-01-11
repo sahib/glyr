@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "lyricswiki.h"
 
@@ -14,10 +15,61 @@ const char * lyrics_lyricswiki_url(void)
 	return LW_URL;
 }
 
+#define LV_MAX_DIST 8
+
+// Compare response, so lyricswiki's search did not fool us
+// This is to prevent completely wrong results, therfore the quite high tolerance
+bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * capo_p)
+{
+	size_t tmp_a_len = strstr(to_artist,"</artist>") -  to_artist;
+	size_t tmp_t_len = strstr(to_artist,"</song>")   -  to_title;
+	
+	if(tmp_a_len < 1 || tmp_t_len < 1 || !to_artist || !to_title || !capo_p)
+	{
+		return false;
+	}
+
+		
+	char * tmp_artist = malloc(tmp_a_len + 1);	
+	char * tmp_title  = malloc(tmp_t_len + 1);
+	strncpy(tmp_artist, to_artist, tmp_a_len);	
+	strncpy(tmp_title,  to_title, tmp_t_len);
+
+	tmp_artist[tmp_a_len] = '\0';
+	tmp_title [tmp_t_len] = '\0';
+	ascii_strdown_modify(tmp_artist,tmp_a_len);
+	ascii_strdown_modify(tmp_title,tmp_t_len);
+	
+	char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo_p->artist),-1);
+	char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo_p->title),-1);
+	
+	bool _r = true;
+
+	if( ( levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) > LV_MAX_DIST)
+	{
+		fprintf(stderr, "lyricswiki.c:warn(): levenshtein_strcmp() refused weird input");
+		_r = false;
+	}
+
+	free(cmp_a);
+	free(cmp_t);
+
+	free(tmp_artist);
+	free(tmp_title);
+
+	return _r;
+}
+
+
 memCache_t * lyrics_lyricswiki_parse(cb_object * capo)
 {
   char *find, *endTag; 
   
+  if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo) == false)
+  {
+	return NULL;
+  }
+ 
   if( (find = strstr(capo->cache->data,"<url>")) == NULL) 
   {
 	  return NULL; 

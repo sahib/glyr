@@ -14,6 +14,8 @@
 #include "lyrics/lyrdb.h"
 #include "lyrics/metrolyrics.h"
 
+#define MAX_PLUGINS 10
+
 /*
 lyricwiki // done
 magistrix // done
@@ -46,7 +48,7 @@ bool write_lyrics(const char * path, const char * lyrics, const char * artist, c
 	    multi_fprintf("\"%s\" by \"%s\" ",artist,title);
 	    if(album)
 	    {
-		multi_fprintf("from album \"%s\"",album);
+		multi_fprintf("\nfrom album \"%s\"",album);
 	    }
 
 	    multi_fprintf("\n-------------------------------------\n");
@@ -62,6 +64,23 @@ bool write_lyrics(const char * path, const char * lyrics, const char * artist, c
 
 // let this be only a local phenomena
 #undef multi_fprintf
+
+static char * finalize(cb_object * plugin_list, size_t it, const char * dir, const char *artist, const char * album, const char * title)
+{
+	// Now do the complex multi download action in the background..
+	memCache_t *result = invoke(plugin_list, it, 10,artist,album,title);
+
+	if(result)
+	{
+		//printf("\n%s",beautify_lyrics(result->data));
+		char * path = strdup_printf("%s/%s-%s.lyr",dir,artist,title);
+		char * blyr = beautify_lyrics(result->data);
+		write_lyrics(path,blyr, artist,album,title);
+		return path;
+	}
+	
+	return NULL;
+}
 
 char * get_lyrics(const char *artist, const char * album, const char *title, const char *dir,  char update, char max_parallel, const char * order)
 {
@@ -87,37 +106,39 @@ char * get_lyrics(const char *artist, const char * album, const char *title, con
 	{
 		return filename;
 	}
+	else
+	{
+		// Re-init
+		free(filename);
+		filename = NULL;
+	}
 
 	// Assume a max. of 10 plugins, just set it higher if you need to.
-	cb_object *plugin_list = malloc(sizeof(cb_object) * 10);
+	cb_object *plugin_list = malloc(sizeof(cb_object) * MAX_PLUGINS);
 
 	// Current plugin
 	size_t it = 0;
 
 	// lyrdb is currently (the webiste, not the code) & magistrix fails far too often (wrong lyrics...)
 	// Perhaps Mr. Leven can help here
-	//plugin_init( &plugin_list[it++], lyrics_lyrdb_url(), lyrics_lyrdb_parse, 0,0,"lyrdb");
-	//plugin_init( &plugin_list[it++], lyrics_magistrix_url(), lyrics_magistrix_parse, 0,0,"magistrix");
 
 	plugin_init( &plugin_list[it++], lyrics_lyricswiki_url(), lyrics_lyricswiki_parse, 0,0,"lyricswiki");
  	plugin_init( &plugin_list[it++], lyrics_lyrixat_url(), lyrics_lyrixat_parse, 0,0,"lyrix.at");
 	plugin_init( &plugin_list[it++], lyrics_darklyrics_url(), lyrics_darklyrics_parse, 0,0,"darklyrics");
 	plugin_init( &plugin_list[it++], lyrics_metrolyrics_url(), lyrics_metrolyrics_parse, 0,0,"metrolyrics");
 
-	// Now do the complex multi download action in the background..
-	memCache_t *result = invoke(plugin_list, it, 10,artist,album,title);
-
-	if(result)
+	if( (filename=finalize(plugin_list, it, dir, artist, album, title)) == NULL)
 	{
-		//printf("\n%s",beautify_lyrics(result->data));
-		char * path = strdup_printf("%s/%s-%s.lyr",dir,artist,title);
-		char * blyr = beautify_lyrics(result->data);
-		write_lyrics(path,blyr, artist,album,title);
-		free(path);
-	}
-	else
-	{
-		puts("== Crap, it failed");
+		memset(plugin_list, 0, MAX_PLUGINS * sizeof(cb_object));
+		it = 0;
+	
+		plugin_init( &plugin_list[it++], lyrics_lyrdb_url(), lyrics_lyrdb_parse, 0,0,"lyrdb");
+		plugin_init( &plugin_list[it++], lyrics_magistrix_url(), lyrics_magistrix_parse, 0,0,"magistrix");
+		
+		if( (filename=finalize ( plugin_list, it, filename, artist, album, title)) == NULL)
+		{
+			puts("== Crap, it failed :(");
+		}
 	}
 
 	return filename;

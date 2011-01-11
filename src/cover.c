@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include <unistd.h>
 
 #include "core.h"
@@ -12,6 +13,39 @@
 #include "cover/amazon.h"
 #include "cover/lyricswiki.h"
 #include "cover/google.h"
+
+// If you really exceed this...
+// ...you're good! :-)
+#define MAX_PLUGIN 10
+
+static bool finalize(cb_object * plugin_list, size_t it,  const char *filename, const char * artist, const char * album)
+{
+    // Now do the actual work
+    memCache_t *result = invoke(plugin_list, it, 10,artist,album,"NULL");
+
+    if (result != NULL && result->data != NULL && filename)
+    {
+        memCache_t * image = download_single(result->data,1L);
+        fprintf(stderr,C_G"*"C_R"] "C_);
+
+        if (image == NULL)
+        {
+            fprintf(stderr,"?? Found an apparently correct url, but unable to download <%s>\n",result->data);
+            fprintf(stderr,"?? Please drop me a note, this might be a bug.\n");
+        }
+
+        write_file(filename,image);
+        fprintf(stderr,C_"Saving to '"C_R"%s"C_"'\n"C_,filename);
+
+        DL_free(image);
+        DL_free(result);
+        result = NULL;
+	return true;
+    }
+
+    return false;
+}
+
 
 char * get_cover(const char *artist, const char *album, const char *dir,  char update, char max_parallel, const char * order)
 {
@@ -37,15 +71,13 @@ char * get_cover(const char *artist, const char *album, const char *dir,  char u
         return filename;
     }
 
-    // else: do what this thingie is supposed to do:
-
     // Assume a max. of 10 plugins, just set it higher if you need to.
     cb_object *plugin_list = malloc(sizeof(cb_object) * 10);
 
     size_t it = 0;
 
     int max = -1;
-    int min = 150;
+    int min = 120;
 
     // Sanitize input
     if (max != -1 && min > max) min=-1;
@@ -59,7 +91,7 @@ char * get_cover(const char *artist, const char *album, const char *dir,  char u
 
     // Register plugins
     // You only have to set the url and the callback to your needs..
-    int i = 0;
+    int i;
     for (i = 0; i < strlen(order); i++)
     {
         switch (order[i])
@@ -67,65 +99,57 @@ char * get_cover(const char *artist, const char *album, const char *dir,  char u
         case 'w':
             if (max == -1 || max >= 400)
             {
-                plugin_init( &plugin_list[it++], cover_lyricswiki_url(), cover_lyricswiki_parse, min, max, C_C"<W>"C_);
+                plugin_init( &plugin_list[it++], cover_lyricswiki_url(), cover_lyricswiki_parse, min, max, C_C"<lyricsWiki>"C_);
             }
             break;
         case 'l':
             if (min == -1 || min <= 125)
             {
-                plugin_init( &plugin_list[it++], cover_lastfm_url(), cover_lastfm_parse, min,max,C_B"<L>"C_);
-            }
-            break;
-        case 'd':
-            if (max == -1 || max >= 400)
-            {
-                plugin_init( &plugin_list[it++], cover_discogs_url(), cover_discogs_parse,min,max,C_G"<D>"C_);
+                plugin_init( &plugin_list[it++], cover_lastfm_url(), cover_lastfm_parse, min,max,C_B"<last.fm>"C_);
             }
             break;
         case 'a':
-            plugin_init( &plugin_list[it++], cover_amazon_url_lng(-1), cover_amazon_parse,min,max,C_Y"<A>"C_);
+            plugin_init( &plugin_list[it++], cover_amazon_url_lng(-1), cover_amazon_parse,min,max,C_Y"<Amazon>"C_);
             break;
-        case 'g':
-            plugin_init( &plugin_list[it++], cover_google_url(min,max),  cover_google_parse,min,max,C_R"<G>"C_);
-            break;
+	default:
+	    fprintf(stderr,"Unknown plugin <%c>\n",order[i]);
         }
     }
 
-    fprintf(stderr,C_R"["C_"%s"C_R"]-["C_"%s"C_R"]=["C_,artist,album);
-
-    // Now do the actual work
-    memCache_t *result = invoke(plugin_list, it, 10,artist,album,"NULL");
-
-    if (result != NULL && result->data != NULL && filename)
+    //fprintf(stderr,C_R"["C_"%s"C_R"]-["C_"%s"C_R"]=["C_,artist,album);
+  
+    if(finalize(plugin_list, it,filename, artist, album) == false)
     {
-        memCache_t * image = download_single(result->data,1L);
-        fprintf(stderr,C_G"*"C_R"] "C_);
+	// None of the safe plugins found something
+	// If specified, try the unsafe ones,
+	// which may deliever wrong content, but may also 
+	// offer covers others don't have
 
-        if (image == NULL)
-        {
-            fprintf(stderr,"?? Found an apparently correct url, but unable to download <%s>\n",result->data);
-            fprintf(stderr,"?? Please drop me a note, this might be a bug.\n");
-        }
+	// Start the list from 0 again 
+	memset(plugin_list,0, MAX_PLUGIN * sizeof(cb_object));
+	it = 0;
 
-        write_file(filename,image);
-        fprintf(stderr,C_G">> ("C_"'%s'"C_G")\n"C_,filename);
+        plugin_init( &plugin_list[it++], cover_google_url(min,max),  cover_google_parse,min,max,C_R"<Google>"C_);
+        plugin_init( &plugin_list[it++], cover_discogs_url(), cover_discogs_parse,min,max,C_G"<Discogs>"C_);
 
-        DL_free(image);
-        DL_free(result);
-        result = NULL;
+	// Oh glory hope, stand by side!
+	if(finalize(plugin_list,it,filename, artist, album) == false)
+	{
+		// Oh all hope is forsaken, mylady..
+		// Prepare for our last battle
+
+		// Let the user know that nothing was found
+		if(filename)
+		{
+			free(filename);
+			filename = NULL;
+		}
+	}
+		
     }
-    else
-    {
-        fprintf(stderr,C_"\\<end>"C_R"] ");
-        if (filename)
-        {
-            free(filename);
-        }
 
-        fprintf(stderr,C_R":(\n"C_);
-        filename = NULL;
-    }
-
+    // Thanks for serving dear list
+    // I always was the opinion that we sh
     if (plugin_list)
     {
         free(plugin_list);

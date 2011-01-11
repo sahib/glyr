@@ -4,6 +4,7 @@
 int    levenshtein_strcmp(const char * s, const char * t);
 char * escape_slashes(const char * in);
 char * ascii_strdown (const char * string, size_t len);
+char * ascii_strdown_modify(char * string, size_t len);
 char * strreplace(const char * string, const char * subs, const char * with);
 char * prepare_url   (const char * URL, const char * artist, const char * album, const char * title);
 char * unescape_html_UTF8(const char *data);

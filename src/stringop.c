@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdarg.h>
+#include <ctype.h>
 
 // For curl_easy_escape()
 #include <curl/curl.h>
@@ -94,6 +95,21 @@ char * ascii_strdown(const char * string, size_t len)
     size_t i=0,L=(len==-1)?(string)?strlen(string):0:len;
     for (;i<L;i++)p[i] += (p[i]>0x40 && p[i]<0x5B) ? 0x20 : 0;
     return p;
+}
+
+/* ------------------------------------------------------------- */
+
+// Like ascii_strdown, but does modify buffer in place
+char * ascii_strdown_modify(char * string, size_t len)
+{
+	size_t _i,_l=(len==-1)?(string)?strlen(string):0:len;
+
+	for(_i = 0; _i < _l; _i++) 
+	{
+		string[_i] = tolower(string[_i]);
+	}
+
+	return string;
 }
 
 /* ------------------------------------------------------------- */

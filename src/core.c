@@ -14,6 +14,8 @@
 #include "stringop.h"
 #include "types.h"
 
+/*--------------------------------------------------------*/
+
 // Sleep usec microseconds
 int DL_usleep(long usec)
 {
@@ -44,7 +46,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 	static char print_dot;
 	if( (print_dot = (print_dot == 2) ? 0 :
                          (print_dot == 1) ? 2 : 1) == 1) {
- 		fprintf(stderr,(mem->ecode == -1) ? C_G""C_  : C_M":"C_);
+ 		//fprintf(stderr,(mem->ecode == -1) ? C_G""C_  : C_M":"C_);
 	}
 	// </!! STATIC WARNING !!>
 
