@@ -19,6 +19,12 @@ cover
 - lyricswiki 
 - google as a fallback (finds ALWAYS some THING)
 
+Goal:
+
+* Providing a easy to use C-API to download various sort of metadata
+* Always have more than fallback
+* commandline intercace for annoyed linux users
+
 Currently it has only a very limited commandline interface, look at main.c to see how it works
 Examples:
 
