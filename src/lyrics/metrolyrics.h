@@ -3,7 +3,7 @@
 
 #include "../types.h"
 
-const char * lyrics_metrolyrics_url(void);
+const char * lyrics_metrolyrics_url(glyr_settings_t * settings);
 memCache_t * lyrics_metrolyrics_parse(cb_object *capo);
 
 #endif

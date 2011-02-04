@@ -2,8 +2,10 @@
 #define COVER_H
 
 #include <stdbool.h>
+#include "types.h"
 
-char * get_cover(const char *artist, const char *album, const char *dir, char update, char max_parallel, const char *order);
+sk_pair_t *  glyr_get_cover_providers(void);
+char * get_cover(glyr_settings_t * settings, const char * filename);
 
 #endif
 

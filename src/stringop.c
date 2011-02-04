@@ -32,10 +32,12 @@ int levenshtein_strcmp(const char * s, const char * t)
     int m = (t) ? strlen(t)+1 : 0;
 
     // Nothing to compute really..
-    if (n==0) {
+    if (n==0)
+    {
         return m;
     }
-    if (m==0) {
+    if (m==0)
+    {
         return n;
     }
 
@@ -56,26 +58,33 @@ int levenshtein_strcmp(const char * s, const char * t)
         {
             // Do -1 only once
             int jm1 = j-1,
-                      im1 = i-1;
+                im1 = i-1;
 
             // a = above cell, b = left cell, c = left above celli
             int a = d[im1][j] + 1,
-                    b = d[i][jm1] + 1,
-                        c = d[im1][jm1] + (t[jm1] != cats);
+                b = d[i][jm1] + 1,
+                c = d[im1][jm1] + (t[jm1] != cats);
 
             // Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j]
-            if (a < b) {
-                if (a < c) {
+            if (a < b)
+            {
+                if (a < c)
+                {
                     d[i][j]=a;
                 }
-                else      {
+                else
+                {
                     d[i][j]=c;
                 }
-            } else {
-                if (b < c) {
+            }
+            else
+            {
+                if (b < c)
+                {
                     d[i][j]=b;
                 }
-                else      {
+                else
+                {
                     d[i][j]=c;
                 }
             }
@@ -92,8 +101,8 @@ int levenshtein_strcmp(const char * s, const char * t)
 char * ascii_strdown(const char * string, size_t len)
 {
     char *p = strdup(string);
-    size_t i=0,L=(len==-1)?(string)?strlen(string):0:len;
-    for (;i<L;i++)p[i] += (p[i]>0x40 && p[i]<0x5B) ? 0x20 : 0;
+size_t i=0,L=(len==-1)?(string)?strlen(string):0:len;
+    for (; i<L; i++)p[i] += (p[i]>0x40 && p[i]<0x5B) ? 0x20 : 0;
     return p;
 }
 
@@ -102,14 +111,14 @@ char * ascii_strdown(const char * string, size_t len)
 // Like ascii_strdown, but does modify buffer in place
 char * ascii_strdown_modify(char * string, size_t len)
 {
-	size_t _i,_l=(len==-1)?(string)?strlen(string):0:len;
+size_t _i,_l=(len==-1)?(string)?strlen(string):0:len;
 
-	for(_i = 0; _i < _l; _i++) 
-	{
-		string[_i] = tolower(string[_i]);
-	}
+    for(_i = 0; _i < _l; _i++)
+    {
+        string[_i] = tolower(string[_i]);
+    }
 
-	return string;
+    return string;
 }
 
 /* ------------------------------------------------------------- */
@@ -188,15 +197,18 @@ static char * remove_surrender(const char * name)
 
     for (; i < len; i++)
     {
-        if (name[i] == '(' ) {
+        if (name[i] == '(' )
+        {
             lock = 1;
             continue;
         }
-        if (name[i] == ')' ) {
+        if (name[i] == ')' )
+        {
             lock = 0;
             continue;
         }
-        if (name[i] != '\t' && !lock)  {
+        if (name[i] != '\t' && !lock)
+        {
             ret[j++] = name[i];
         }
     }
@@ -240,7 +252,8 @@ static char * prepare_string(const char * in)
 // Prepares the url for you to get downloaded. You don't have to call this.
 char * prepare_url(const char *URL, const char *artist, const char *album, const char *title)
 {
-    if (URL == NULL) {
+    if (URL == NULL)
+    {
         return NULL;
     }
 
@@ -256,15 +269,18 @@ char * prepare_url(const char *URL, const char *artist, const char *album, const
     prepare_swap(ret,tmp,"%album%" ,p_album);
     prepare_swap(ret,tmp,"%title%" ,p_title);
 
-    if (p_artist) {
+    if (p_artist)
+    {
         free(p_artist);
         p_artist = NULL;
     }
-    if (p_album)  {
+    if (p_album)
+    {
         free(p_album);
         p_album  = NULL;
     }
-    if (p_title)  {
+    if (p_title)
+    {
         free(p_title);
         p_title  = NULL;
     }
@@ -301,24 +317,24 @@ char* escape_slashes(const char* in)
 // manipulation is not the bottleneck here...
 char * strrstr_len(char *haystack, char *needle, size_t len)
 {
-	size_t stringlen, findlen, lc;
-	char *cp;
+    size_t stringlen, findlen, lc;
+    char *cp;
 
-	lc = 0;
-	findlen = strlen(needle);
-	stringlen = strlen(haystack);
-	if (findlen > stringlen)
-		return NULL;
+    lc = 0;
+    findlen = strlen(needle);
+    stringlen = strlen(haystack);
+    if (findlen > stringlen)
+        return NULL;
 
-	for (cp = haystack + stringlen - findlen; cp >= haystack && lc <= len; cp--,lc++) 
-	{
-		if (strncmp(cp, needle, findlen) == 0)
-		{
-			return cp;
-		}
-	}
+    for (cp = haystack + stringlen - findlen; cp >= haystack && lc <= len; cp--,lc++)
+    {
+        if (strncmp(cp, needle, findlen) == 0)
+        {
+            return cp;
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 
@@ -363,7 +379,8 @@ char *unescape_html_UTF8(const char * data)
         else
         {
             /* "Replace" a <br> tag with a newline char (... not really supposed to be here... ut well..) */
-            if (data[i] == '<')  {
+            if (data[i] == '<')
+            {
                 tagflag = 1;
                 continue;
             }
@@ -381,16 +398,20 @@ char *unescape_html_UTF8(const char * data)
 
 char *strdup_printf (const char *format, ...)
 {
-    va_list arg;
-    char *tmp;
-
-    va_start (arg, format);
-    if(vasprintf (&tmp, format, arg) == -1)
+    if(format)
     {
-        return NULL;
+        va_list arg;
+        char *tmp = NULL;
+
+        va_start (arg, format);
+        if(vasprintf (&tmp, format, arg) == -1)
+        {
+            return NULL;
+        }
+        va_end (arg);
+        return tmp;
     }
-    va_end (arg);
-    return tmp;
+    return NULL;
 }
 
 /* ------------------------------------------------------------- */
@@ -626,7 +647,7 @@ char * remove_html_tags_from_string(const char * string, size_t len)
 {
     if(string == NULL)
     {
-	return NULL;
+        return NULL;
     }
 
     size_t iLen = (len>0) ? len : strlen(string);
@@ -636,9 +657,9 @@ char * remove_html_tags_from_string(const char * string, size_t len)
 
     for(; i < iLen; i++)
     {
-      if(string[i] == '<') flag = 0;
-      if(flag) new[x++] = string[i];
-      if(string[i] == '>') flag = 1;
+        if(string[i] == '<') flag = 0;
+        if(flag) new[x++] = string[i];
+        if(string[i] == '>') flag = 1;
     }
 
     return new;
@@ -648,39 +669,39 @@ char * remove_html_tags_from_string(const char * string, size_t len)
  * trimming everything and removing double newlines        */
 char * beautify_lyrics(const char * lyrics)
 {
-       char * strip = strip_html_unicode(lyrics);
-       if(strip)
-       {
-	 /* Now convert all unichars like &ouml; */
-	 char * unicode = unescape_html_UTF8(strip);
-	 free(strip);
+    char * strip = strip_html_unicode(lyrics);
+    if(strip)
+    {
+        /* Now convert all unichars like &ouml; */
+        char * unicode = unescape_html_UTF8(strip);
+        free(strip);
 
-	 if(unicode)
-	 {
-	    size_t len   = strlen(unicode);
-	    int i = 0, j = 0;
+        if(unicode)
+        {
+            size_t len   = strlen(unicode);
+            int i = 0, j = 0;
 
-	    for(i = 0; i < len; i++)
-	    {
-	      int tlen = 0;
-	      for(j = i; j < len && unicode[j] == '\n'; j++)
-	      {
-		   ++tlen;
-		   if(tlen > 1)
-		   {
-		     unicode[j] = ' ';
-		   }
-	      }
-	      if(tlen > 1)
-		unicode[j-1] = '\n';
+            for(i = 0; i < len; i++)
+            {
+                int tlen = 0;
+                for(j = i; j < len && unicode[j] == '\n'; j++)
+                {
+                    ++tlen;
+                    if(tlen > 1)
+                    {
+                        unicode[j] = ' ';
+                    }
+                }
+                if(tlen > 1)
+                    unicode[j-1] = '\n';
 
-	      i = j+1;
-	    }
-	    return unicode;
-	    char * bye_html = remove_html_tags_from_string(unicode,len);
-	    free(unicode);
-	    return bye_html;
-	 }
-       }
-       return NULL;
+                i = j+1;
+            }
+            return unicode;
+            char * bye_html = remove_html_tags_from_string(unicode,len);
+            free(unicode);
+            return bye_html;
+        }
+    }
+    return NULL;
 }

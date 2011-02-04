@@ -39,16 +39,22 @@ SOURCES= \
     $(SOURCEDIR)/stringop.c \
     $(SOURCEDIR)/lyrics.c \
     $(SOURCEDIR)/cover.c \
+    $(SOURCEDIR)/glyr.c \
     $(SOURCEDIR)/main.c \
     $(SUBDIR_COVER)/google.c \
+    $(SUBDIR_COVER)/coverhunt.c \
+    $(SUBDIR_COVER)/albumart.c \
     $(SUBDIR_COVER)/last_fm.c \
     $(SUBDIR_COVER)/lyricswiki.c \
     $(SUBDIR_COVER)/discogs.c \
     $(SUBDIR_COVER)/amazon.c \
     $(SUBDIR_LYRICS)/lyrdb.c \
+    $(SUBDIR_LYRICS)/lyricsvip.c \
     $(SUBDIR_LYRICS)/magistrix.c \
     $(SUBDIR_LYRICS)/lyrix_at.c \
     $(SUBDIR_LYRICS)/darklyrics.c \
+    $(SUBDIR_LYRICS)/directlyrics.c \
+    $(SUBDIR_LYRICS)/songlyrics.c \
     $(SUBDIR_LYRICS)/metrolyrics.c \
     $(SUBDIR_LYRICS)/lyricswiki.c
 

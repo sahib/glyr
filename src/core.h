@@ -11,5 +11,8 @@ memCache_t * download_single(const char* url, long redirects);
 memCache_t * DL_init(void);
 
 int write_file(const char *path, memCache_t *data);
+int sk_is_in(sk_pair_t * arr, const char * string);
+void glyr_init_settings(glyr_settings_t * glyrs);
 
+const char * register_and_execute(glyr_settings_t * settings, const char * filename, const char * (* finalizer) (cb_object *, size_t it, const char *, glyr_settings_t *));
 #endif

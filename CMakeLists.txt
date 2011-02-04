@@ -1,10 +1,13 @@
 cmake_minimum_required (VERSION 2.6)
 
-PROJECT(glyr)
+PROJECT(glyr C)
+
+# depends
+find_package(CURL REQUIRED)
 
 #versioning
 set (glyr_VERSION_MAJOR 0)
-set (glyr_VERSION_MINOR 0)
+set (glyr_VERSION_MINOR 1)
 
 # paths
 set (BINARYDIR ./)
@@ -16,16 +19,16 @@ set (SUBDIR_LYRICS src/lyrics)
 set (GLYR_LIBCURL "-lcurl")
 
 # Optimizations, if used
-set (GLYR_OPTIMIZ "--march=native -Os -finline-functions -fomit-frame-pointer -s")
+#set (GLYR_OPTIMIZ "--march=native -Os -finline-functions -fomit-frame-pointer -s")
+set (GLYR_OPTIMIZ "-g -ggdb3")
 
 # Compiler warnings
 set (GLYR_WARNSET "-Wall")
 
 #Debug options
-set (GLYR_DEBUGFL "-ggdb3")
 
 # Pass it to cmake
-set (CMAKE_CXX_FLAGS "-c -pipe ${GLYR_OPTIMIZ} ${GLYR_WARNSET}")
+set (CMAKE_CXX_FLAGS "-c -g -pipe ${GLYR_OPTIMIZ} ${GLYR_WARNSET}")
 set (CMAKE_EXE_LINKER_FLAGS "-lcurl") 
 
 INCLUDE_DIRECTORIES( include "/usr/include" ) 
@@ -46,16 +49,25 @@ ADD_EXECUTABLE(
    "${SOURCEDIR}/stringop.c" 
    "${SOURCEDIR}/lyrics.c" 
    "${SOURCEDIR}/cover.c" 
+   "${SOURCEDIR}/glyr.c" 
    "${SOURCEDIR}/main.c" 
    "${SUBDIR_COVER}/google.c" 
+   "${SUBDIR_COVER}/coverhunt.c" 
    "${SUBDIR_COVER}/last_fm.c" 
    "${SUBDIR_COVER}/lyricswiki.c" 
+   "${SUBDIR_COVER}/albumart.c" 
    "${SUBDIR_COVER}/discogs.c" 
    "${SUBDIR_COVER}/amazon.c" 
    "${SUBDIR_LYRICS}/lyrdb.c" 
    "${SUBDIR_LYRICS}/magistrix.c" 
    "${SUBDIR_LYRICS}/lyrix_at.c"
+   "${SUBDIR_LYRICS}/lyricsvip.c"
+   "${SUBDIR_LYRICS}/directlyrics.c"
+   "${SUBDIR_LYRICS}/songlyrics.c"
    "${SUBDIR_LYRICS}/darklyrics.c"
    "${SUBDIR_LYRICS}/metrolyrics.c"
    "${SUBDIR_LYRICS}/lyricswiki.c"
 )
+
+# Add dependency to target executable
+target_link_libraries(glyr ${CURL_LIBRARY})

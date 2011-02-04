@@ -3,7 +3,7 @@
 
 #include "../types.h"
 
-const char * lyrics_magistrix_url(void);
+const char * lyrics_magistrix_url(glyr_settings_t * settings);
 memCache_t * lyrics_magistrix_parse(cb_object *capo);
 
 #endif

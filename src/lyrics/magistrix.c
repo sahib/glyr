@@ -9,15 +9,15 @@
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
 
-const char * lyrics_magistrix_url(void)
+const char * lyrics_magistrix_url(glyr_settings_t * settings)
 {
-	return MG_URL;
+    return MG_URL;
 }
 
 memCache_t * lyrics_magistrix_parse (cb_object * capo)
 {
-	/* By issuing the base url we either get  a ready-to-parse lyricpage or some search results */
-	char *find, *endTag;
+    /* By issuing the base url we either get  a ready-to-parse lyricpage or some search results */
+    char *find, *endTag;
 
     if( strstr(capo->cache->data,"<div class='empty_collection'>") )
     {
@@ -29,7 +29,7 @@ memCache_t * lyrics_magistrix_parse (cb_object * capo)
         int i = 0;
         char *real_url = NULL;
 
-        for(;i<4;i++) nextTag(find);
+        for(; i<4; i++) nextTag(find);
 
         if(find == NULL || *find == 0)
         {
@@ -37,7 +37,9 @@ memCache_t * lyrics_magistrix_parse (cb_object * capo)
         }
 
         while(*find && *find != '"')
-            { find++; }
+        {
+            find++;
+        }
 
         find++;
         if( (endTag = strstr(find,"\" class")) == NULL)
@@ -117,6 +119,6 @@ memCache_t * lyrics_magistrix_parse (cb_object * capo)
         return r_cache;
     }
 
-	return NULL;
+    return NULL;
 
 }

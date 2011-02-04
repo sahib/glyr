@@ -3,7 +3,7 @@
 
 #include "../types.h"
 
-const char * cover_lastfm_url(void);
+const char * cover_lastfm_url(glyr_settings_t * sets);
 memCache_t * cover_lastfm_parse(cb_object *capo);
 
 #endif

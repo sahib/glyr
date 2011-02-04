@@ -1,52 +1,47 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+#include "glyr.h"
 
-#include "cover.h"
-#include "lyrics.h"
-
-#include "../glyr_config.h"
-
-int main(int argc, char **argv)
+static void usage(void)
 {
-    // ToDo: cmd line parsing
-    if(argc > 1)
+    printf("Help text is still missing - Sorry.\n");
+    printf("Usage Examples: \n");
+    printf("\t./glyr -g cover -o \"Fejd %% Eifur\" --from \"all\" --update\n");
+    printf("\t./glyr -g lyric -o \"Fejd %% Eifur\" %% Drängen o kräkan\" --from \"safe\" --update\n");
+    printf("\n");
+    exit(0);
+}
+
+
+int main(int argc, char * argv[])
+{
+    if(argc >= 2)
     {
-	if(!strcmp(argv[1],"cover"))
-	{
-	    if (argc > 4)
-	    {
-		char *path = get_cover(argv[2],argv[3],argv[4],0,10,"wla");
+        // glyr's control struct
+        glyr_settings_t my_settings;
 
-		if (path)
-		{
-		    free(path);
-		    return EXIT_SUCCESS;
-		}
-	    }
+        // Init to the default settings
+        glyr_init_settings( &my_settings);
 
-	}
-	else if(!strcmp(argv[1],"lyric"))
-	{
-	    if (argc > 5)
-	    {
-		char *path = get_lyrics(argv[2],argv[3],argv[4],argv[5],1,10,NULL);
+        // Parse the commandline
+        if(glyr_parse_commandline(argc, argv, &my_settings) == false)
+            usage();
 
-		if (path)
-		{
-		    free(path);
-		    return EXIT_SUCCESS;
-		}
-	    }
-	}
-	else
-	{
-		puts("Unknown command");
-	}
+        // Now execute..
+        const char * filename = glyr_get(&my_settings);
+        if(filename)
+        {
+            puts(filename);
+            free((char*)filename);
+            filename =NULL;
+        }
+
+        // Clean memory
+        glyr_destroy_settings( &my_settings);
     }
-
-
-    fprintf(stderr,"Exit is lacking success...\n");
-    fprintf(stderr,"-> %d.%d \n",glyr_VERSION_MAJOR,glyr_VERSION_MINOR); 
-    return EXIT_FAILURE;
+    else
+    {
+        usage();
+    }
+    return 0;
 }
