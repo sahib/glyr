@@ -8,12 +8,16 @@ lyrics:
 - lyricswiki
 - lyrix.at
 - darklyrics 
-- lyrdb (lyrdb.com si currently borken and therfore disabled)
-- magistrix (often gets wrong resutls and therfore disabled)
+- lyricsvip (thx Seb!)
+- songlyrics
+- lyrdb
+- magistrix 
 - metrolyrics
 
 cover
 - amazon (via freeapisign)
+- albumart
+- coverhunt
 - discogs  
 - last.fm
 - lyricswiki 
