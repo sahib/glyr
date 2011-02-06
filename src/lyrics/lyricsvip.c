@@ -32,7 +32,6 @@ memCache_t * lyrics_lyricsvip_parse(cb_object *capo)
     char * start = NULL;
     char * end = NULL;
     char * content = NULL;
-    size_t len = 0;
 
     if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) == NULL)
     {
@@ -51,9 +50,7 @@ memCache_t * lyrics_lyricsvip_parse(cb_object *capo)
 
     *(end) = 0;
 
-    len = strlen(start);
     content = strreplace(start,"<br />","");
-
 
     memCache_t * r_cache = DL_init();
     r_cache->data = content;

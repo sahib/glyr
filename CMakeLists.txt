@@ -14,6 +14,7 @@ set (BINARYDIR ./)
 set (SOURCEDIR src)
 set (SUBDIR_COVER src/cover)
 set (SUBDIR_LYRICS src/lyrics)
+set (SUBDIR_BOOKS src/books)
 
 # tell the compiler how to take care of this 
 set (GLYR_LIBCURL "-lcurl")
@@ -67,6 +68,8 @@ ADD_EXECUTABLE(
    "${SUBDIR_LYRICS}/darklyrics.c"
    "${SUBDIR_LYRICS}/metrolyrics.c"
    "${SUBDIR_LYRICS}/lyricswiki.c"
+   "${SUBDIR_BOOKS}/dnb.c"
+   "${SUBDIR_BOOKS}/kit.c"
 )
 
 # Add dependency to target executable

@@ -13,5 +13,9 @@ char * strip_html_unicode(const char * string);
 char * beautify_lyrics(const char * lyrics);
 char * strdup_printf (const char *format, ...);
 char * strrstr_len(char *haystack, char *needle, size_t len);
+void trim_copy(char *input, char *output);
+void trim_inplace(char *s);
+char *trim_nocopy(char *s);
+char * getStr (char ** s, char * start, char * end);
 
 #endif
