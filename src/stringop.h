@@ -17,5 +17,6 @@ void trim_copy(char *input, char *output);
 void trim_inplace(char *s);
 char *trim_nocopy(char *s);
 char * getStr (char ** s, char * start, char * end);
+char * remove_html_tags_from_string(const char * string, size_t len);
 
 #endif

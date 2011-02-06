@@ -662,6 +662,8 @@ char * remove_html_tags_from_string(const char * string, size_t len)
 		if(string[i] == '>') flag = 1;
 	}
 
+	new[x] = 0;
+
 	return new;
 }
 
