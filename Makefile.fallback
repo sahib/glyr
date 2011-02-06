@@ -42,6 +42,7 @@ SOURCES= \
     $(SOURCEDIR)/lyrics.c \
     $(SOURCEDIR)/cover.c \
     $(SOURCEDIR)/photos.c \
+    $(SOURCEDIR)/books.c \
     $(SOURCEDIR)/glyr.c \
     $(SOURCEDIR)/main.c \
     $(SUBDIR_PHOTOS)/flickr.c \
@@ -61,7 +62,8 @@ SOURCES= \
     $(SUBDIR_LYRICS)/songlyrics.c \
     $(SUBDIR_LYRICS)/metrolyrics.c \
     $(SUBDIR_LYRICS)/lyricswiki.c \
-    $(SUBDIR_BOOKS)/dnb.c 
+    $(SUBDIR_BOOKS)/kit.c \
+    $(SUBDIR_BOOKS)/dnb.c  
 
 
 OBJECTS=$(SOURCES:.c=.o )

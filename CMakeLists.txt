@@ -52,6 +52,7 @@ ADD_EXECUTABLE(
    "${SOURCEDIR}/lyrics.c" 
    "${SOURCEDIR}/cover.c" 
    "${SOURCEDIR}/photos.c" 
+   "${SOURCEDIR}/books.c" 
    "${SOURCEDIR}/glyr.c" 
    "${SOURCEDIR}/main.c" 
    "${SUBDIR_COVER}/google.c" 

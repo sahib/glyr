@@ -62,7 +62,7 @@ static const char * finalize(cb_object * plugin_list, size_t it,  const char *fi
 			{
 				char * url = malloc(url_len+1);
 
-				if(url && *url)
+				if(url)
 				{
 					strncpy(url,l_url,url_len);
 					url[url_len] = '\0';
@@ -85,10 +85,16 @@ static const char * finalize(cb_object * plugin_list, size_t it,  const char *fi
 	for(i = 0; i < result->size; i++)
 	{
 		if(url_list[i].url)
+		{
 		    free(url_list[i].url);
+		    url_list[i].url=NULL;
+		}
 
 		if(url_list[i].name)
+		{
 		    free((char*)url_list[i].name);
+		    url_list[i].name=NULL;
+		}
 	}
 
 	if(url_list)

@@ -5,12 +5,15 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "glyr.h"
 #include "stringop.h"
+#include "core.h"
+
+#include "glyr.h"
+
 #include "cover.h"
 #include "lyrics.h"
 #include "photos.h"
-#include "core.h"
+#include "books.h"
 
 #include "../glyr_config.h"
 
@@ -22,6 +25,7 @@ sk_pair_t getwd_commands [] =
     {"cover" ,"..",NULL,true},
     {"lyrics","..",NULL,true},
     {"photos","..",NULL,true},
+    {"books", "..",NULL,true},
     {NULL,   NULL, NULL,true}
 };
 
@@ -116,6 +120,46 @@ void glyr_register_group(sk_pair_t * providers, const char * groupname)
         i++;
     }
 }
+/*--------------------------------------------------------*/
+
+static int sk_is_in(sk_pair_t * arr, const char * string)
+{
+    size_t i = 0;
+
+    while(arr[i].name != NULL)
+    {
+        if(!strcasecmp(arr[i].name,string) || (arr[i].key && !strcasecmp(arr[i].key,string)))
+        {
+            arr[i].use = true;
+            return i;
+        }
+
+        i++;
+    }
+
+    printf(": Unknown word: '%s'\n",string);
+
+    i = 0;
+    char flag = 1;
+    while(arr[i].name != NULL)
+    {
+        if(levenshtein_strcmp(arr[i].name,string) < 5)
+        {
+            if(flag)
+            {
+                printf(": Did you mean ");
+            }
+
+            printf("%c '%s' ",(flag) ? ' ' : ',',arr[i].name);
+
+            if(flag) flag = 0;
+        }
+        i++;
+    }
+
+    if(!flag) printf("?\n");
+    return -1;
+}
 
 /*-----------------------------------------------*/
 
@@ -126,6 +170,7 @@ static sk_pair_t * glyr_get_provider_by_id(int ID)
 		case GET_COVER: return glyr_get_cover_providers();
 		case GET_LYRIC: return glyr_get_lyric_providers();
 		case GET_PHOTO: return glyr_get_photo_providers();
+		case GET_BOOKS: return glyr_get_books_providers();
 		default       : return NULL;
 	}
 }
@@ -137,42 +182,45 @@ void glyr_parse_from(const char * arg, glyr_settings_t * settings)
     if(settings && arg)
     {
         sk_pair_t * what_pair = glyr_get_provider_by_id(settings->type);
-        settings->providers   = what_pair;
+	settings->providers   = what_pair;
 
-        char * c_arg = NULL;
-        size_t length = strlen(arg);
-        size_t offset = 0;
+	if(what_pair)
+	{
+		char * c_arg = NULL;
+		size_t length = strlen(arg);
+		size_t offset = 0;
 
-        if(arg[0] == '[' && arg[1] == '[')
-            offset = 2;
+		if(arg[0] == '[' && arg[1] == '[')
+		    offset = 2;
 
-        while( (c_arg = next_word(arg," % ", length, &offset)) != NULL)
-        {
-            if(!strcasecmp(c_arg,"all"))
-            {
-                size_t y = 0;
-                while(what_pair[y].name) what_pair[y++].use = true;
-                free(c_arg);
-                break;
-            }
+		while( (c_arg = next_word(arg," % ", length, &offset)) != NULL)
+		{
+		    if(!strcasecmp(c_arg,"all"))
+		    {
+			size_t y = 0;
+			while(what_pair[y].name) what_pair[y++].use = true;
+			free(c_arg);
+			break;
+		    }
 
-            if(!strcasecmp(c_arg,"safe"))
-            {
-                glyr_register_group(what_pair, "safe");
-                break;
-            }
+		    if(!strcasecmp(c_arg,"safe"))
+		    {
+			glyr_register_group(what_pair, "safe");
+			break;
+		    }
 
-            if(!strcasecmp(c_arg,"unsafe"))
-            {
-                glyr_register_group(what_pair, "unsafe");
-                break;
-            }
-            size_t c_arg_len = strlen(c_arg);
-            if(c_arg_len > 1 && c_arg[c_arg_len-1] == ']' && c_arg[c_arg_len-2] == ']')
-                c_arg[c_arg_len-2] = '\0';
+		    if(!strcasecmp(c_arg,"unsafe"))
+		    {
+			glyr_register_group(what_pair, "unsafe");
+			break;
+		    }
+		    size_t c_arg_len = strlen(c_arg);
+		    if(c_arg_len > 1 && c_arg[c_arg_len-1] == ']' && c_arg[c_arg_len-2] == ']')
+			c_arg[c_arg_len-2] = '\0';
 
-            sk_is_in( what_pair, c_arg);
-            free(c_arg);
+		    sk_is_in( what_pair, c_arg);
+		    free(c_arg);
+		}
         }
     }
 }
@@ -194,6 +242,14 @@ static void glyr_parse_get(const char * string, glyr_settings_t * glyrs)
 	else if (!strcasecmp(string, "photos"))
 	{
 	    glyrs->type = GET_PHOTO;
+	}
+	else if (!strcasecmp(string, "books"))
+	{
+	    glyrs->type = GET_BOOKS;
+	}
+	else
+	{
+	    glyrs->type = GET_UNSURE;
 	}
     }
 }
@@ -490,6 +546,15 @@ char * glyr_path(glyr_settings_t * settings)
 			path = strdup(settings->save_path);
 			break;
 		}
+		case GET_BOOKS:
+		{
+			char * esc_t = escape_slashes(settings->artist);
+			if(esc_t)
+			{
+				path = strdup_printf("%s/%s.book",settings->save_path,esc_t);
+				free(esc_t);
+			}
+		}
         }
 
         return path;
@@ -504,11 +569,14 @@ const char * glyr_get(glyr_settings_t * settings)
 {
     if(settings->providers == NULL)
     {
-       // fprintf(stderr,C_R"(!)"C_" No providers in cmdline. Try with --from 'all'.\n");
-       // fprintf(stderr,C_R"(!)"C_" Defaulting to 'safe'\n");
-
-	settings->providers = glyr_get_provider_by_id(settings->type); 
-	glyr_register_group((sk_pair_t*)settings->providers, "safe");
+	if( (settings->providers = glyr_get_provider_by_id(settings->type)) != NULL)
+	{
+		glyr_register_group((sk_pair_t*)settings->providers, "safe");
+	}
+	else
+	{
+		return NULL;
+	}
     }
 
     char * result = NULL;
@@ -526,6 +594,9 @@ const char * glyr_get(glyr_settings_t * settings)
                 break;
 	    case GET_PHOTO:
 		result = get_photos(settings,path);
+		break;
+	    case GET_BOOKS:
+		result = get_books(settings,path);
 		break;
             case GET_UNSURE:
                 fprintf(stderr,C_R"ERROR:"C_" You did not specify a Get command!\n");

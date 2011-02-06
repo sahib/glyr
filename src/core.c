@@ -339,7 +339,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
                 cb_object * capo = (cb_object * ) p_pass;
 
                 // The stage is yours <name>
-                fprintf(stderr,"%s"C_G":"C_" %s <%s"C_">...%c",capo->url,(status) ? status : "Trying",capo->name,(status) ? '\n' : '\0');
+                fprintf(stderr,"%s"C_G":"C_" %s <%s"C_">...%c",status ? capo->url : "",(status) ? status : "Trying",capo->name,(status) ? '\n' : '\0');
                 if(capo && capo->cache && capo->cache->data && msg->data.result == 0)
                 {
                     // Here is where the actual callback shall be executed
@@ -482,47 +482,6 @@ int write_file(const char *path, memCache_t *data)
             return b;
         }
     }
-    return -1;
-}
-
-/*--------------------------------------------------------*/
-
-int sk_is_in(sk_pair_t * arr, const char * string)
-{
-    size_t i = 0;
-
-    while(arr[i].name != NULL)
-    {
-        if(!strcasecmp(arr[i].name,string) || (arr[i].key && !strcasecmp(arr[i].key,string)))
-        {
-            arr[i].use = true;
-            return i;
-        }
-
-        i++;
-    }
-
-    printf(": Unknown word: '%s'\n",string);
-
-    i = 0;
-    char flag = 1;
-    while(arr[i].name != NULL)
-    {
-        if(levenshtein_strcmp(arr[i].name,string) < 5)
-        {
-            if(flag)
-            {
-                printf(": Did you mean ");
-            }
-
-            printf("%c'%s' ",(flag) ? ' ' : ',',arr[i].name);
-
-            if(flag) flag = 0;
-        }
-        i++;
-    }
-
-    if(!flag) printf("?\n");
     return -1;
 }
 

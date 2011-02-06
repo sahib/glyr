@@ -17,15 +17,10 @@
 #include "lyrics/lyrdb.h"
 #include "lyrics/metrolyrics.h"
 
-#include "books/dnb.h"
-#include "books/kit.h"
-
 // Add your's here
 sk_pair_t lyric_providers[] =
 {
 //  full name       key  coloredname    use?    parser callback           geturl callback         free url?
-    {"kit",         "k", "kit",         false, {books_kit_parse,          books_kit_url,          false}},
-    {"dnb",         "n", "dnb",         false, {books_dnb_parse,          books_dnb_url,          false}},
     {"lyricswiki",  "w", "lyricswiki",  false, {lyrics_lyricswiki_parse,  lyrics_lyricswiki_url,  false}},
     {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,  lyrics_darklyrics_url,  false}},
     {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse,lyrics_directlyrics_url,true }},
@@ -77,7 +72,7 @@ bool write_lyrics(const char * path, const char * lyrics, const char * artist, c
 // let this be only a local phenomena
 #undef multi_fprintf
 
-const char * finalize(cb_object * plugin_list, size_t it, const char * dummy, glyr_settings_t * s)
+static const char * finalize(cb_object * plugin_list, size_t it, const char * dummy, glyr_settings_t * s)
 {
     // Now do the complex multi download action in the background..
     memCache_t *result = invoke(plugin_list, it, LYRIC_MAX_PLUGIN, DEFAULT_TIMEOUT, DEFAULT_REDIRECTS, s->artist,s->album,s->title,NULL);
@@ -113,4 +108,3 @@ const char * get_lyrics(glyr_settings_t * settings, const char * filename)
 
     return register_and_execute(settings, filename, finalize);
 }
-

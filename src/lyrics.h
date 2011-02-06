@@ -1,7 +1,6 @@
 #ifndef LYRICS_H
 #define LYRICS_H
 
-#include <stdbool.h>
 #include "types.h"
 
 sk_pair_t * glyr_get_lyric_providers(void);

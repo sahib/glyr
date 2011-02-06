@@ -130,7 +130,8 @@ enum GLYR_GET_TYPES
     GET_UNSURE,
     GET_COVER,
     GET_LYRIC,
-    GET_PHOTO
+    GET_PHOTO,
+    GET_BOOKS
 };
 
 #endif
