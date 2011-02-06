@@ -15,6 +15,8 @@ static void usage(void)
 
 int main(int argc, char * argv[])
 {
+    int result = 0;
+
     if(argc >= 2)
     {
         // glyr's control struct
@@ -35,6 +37,10 @@ int main(int argc, char * argv[])
             free((char*)filename);
             filename = NULL;
         }
+	else
+	{
+	    result = 1;
+	}
 
         // Clean memory
         glyr_destroy_settings( &my_settings);
@@ -43,5 +49,5 @@ int main(int argc, char * argv[])
     {
         usage();
     }
-    return 0;
+    return result;
 }
