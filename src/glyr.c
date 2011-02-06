@@ -9,6 +9,7 @@
 #include "stringop.h"
 #include "cover.h"
 #include "lyrics.h"
+#include "photos.h"
 #include "core.h"
 
 #include "../glyr_config.h"
@@ -18,9 +19,10 @@
 // The rest is done for you quite automagically.
 sk_pair_t getwd_commands [] =
 {
-    {"cover","..",NULL,true},
-    {"lyric","..",NULL,true},
-    {NULL,   NULL,NULL   -1}
+    {"cover" ,"..",NULL,true},
+    {"lyrics","..",NULL,true},
+    {"photos","..",NULL,true},
+    {NULL,   NULL, NULL,true}
 };
 
 /*-----------------------------------------------*/
@@ -41,6 +43,7 @@ void glyr_init_settings(glyr_settings_t * glyrs)
     glyrs->parallel  = 4;
     glyrs->save_path = ".";
 
+    glyrs->AMAZON_LANG_ID = -1;
     glyrs->update = 0;
 }
 
@@ -116,11 +119,24 @@ void glyr_register_group(sk_pair_t * providers, const char * groupname)
 
 /*-----------------------------------------------*/
 
+static sk_pair_t * glyr_get_provider_by_id(int ID)
+{
+	switch(ID)
+	{
+		case GET_COVER: return glyr_get_cover_providers();
+		case GET_LYRIC: return glyr_get_lyric_providers();
+		case GET_PHOTO: return glyr_get_photo_providers();
+		default       : return NULL;
+	}
+}
+
+/*-----------------------------------------------*/
+
 void glyr_parse_from(const char * arg, glyr_settings_t * settings)
 {
     if(settings && arg)
     {
-        sk_pair_t * what_pair = (settings->type == GET_COVER) ? glyr_get_cover_providers() : glyr_get_lyric_providers();
+        sk_pair_t * what_pair = glyr_get_provider_by_id(settings->type);
         settings->providers   = what_pair;
 
         char * c_arg = NULL;
@@ -175,6 +191,10 @@ static void glyr_parse_get(const char * string, glyr_settings_t * glyrs)
         {
             glyrs->type = GET_LYRIC;
         }
+	else if (!strcasecmp(string, "photos"))
+	{
+	    glyrs->type = GET_PHOTO;
+	}
     }
 }
 
@@ -440,30 +460,36 @@ char * glyr_path(glyr_settings_t * settings)
         char * path = NULL;
         switch(settings->type)
         {
-        case GET_COVER:
-        {
-            char * esc_a = escape_slashes(settings->artist);
-            char * esc_b = escape_slashes(settings->album);
-            if(esc_a && esc_b)
-            {
-                path = strdup_printf("%s/%s-%s.jpg",settings->save_path,esc_a,esc_b);
-                free(esc_a);
-                free(esc_b);
-            }
-            break;
-        }
-        case GET_LYRIC:
-        {
-            char * esc_a = escape_slashes(settings->artist);
-            char * esc_t = escape_slashes(settings->title);
-            if(esc_a && esc_t)
-            {
-                path = strdup_printf("%s/%s-%s.lyr",settings->save_path,esc_a,esc_t);
-                free(esc_a);
-                free(esc_t);
-            }
-            break;
-        }
+		case GET_COVER:
+		{
+		    char * esc_a = escape_slashes(settings->artist);
+		    char * esc_b = escape_slashes(settings->album);
+		    if(esc_a && esc_b)
+		    {
+			path = strdup_printf("%s/%s-%s.jpg",settings->save_path,esc_a,esc_b);
+			free(esc_a);
+			free(esc_b);
+		    }
+		    break;
+		}
+		case GET_LYRIC:
+		{
+		    char * esc_a = escape_slashes(settings->artist);
+		    char * esc_t = escape_slashes(settings->title);
+		    if(esc_a && esc_t)
+		    {
+			path = strdup_printf("%s/%s-%s.lyr",settings->save_path,esc_a,esc_t);
+			free(esc_a);
+			free(esc_t);
+		    }
+		    break;
+		}
+		case GET_PHOTO:
+		{
+			// Only dir is interesting.
+			path = strdup(settings->save_path);
+			break;
+		}
         }
 
         return path;
@@ -479,9 +505,9 @@ const char * glyr_get(glyr_settings_t * settings)
     if(settings->providers == NULL)
     {
        // fprintf(stderr,C_R"(!)"C_" No providers in cmdline. Try with --from 'all'.\n");
-       //fprintf(stderr,C_R"(!)"C_" Defaulting to 'safe'\n");
+       // fprintf(stderr,C_R"(!)"C_" Defaulting to 'safe'\n");
 
-	settings->providers = (settings->type == GET_COVER) ? glyr_get_cover_providers() : glyr_get_lyric_providers(); 
+	settings->providers = glyr_get_provider_by_id(settings->type); 
 	glyr_register_group((sk_pair_t*)settings->providers, "safe");
     }
 
@@ -498,6 +524,9 @@ const char * glyr_get(glyr_settings_t * settings)
             case GET_LYRIC:
                 result = get_lyrics(settings,path);
                 break;
+	    case GET_PHOTO:
+		result = get_photos(settings,path);
+		break;
             case GET_UNSURE:
                 fprintf(stderr,C_R"ERROR:"C_" You did not specify a Get command!\n");
                 break;

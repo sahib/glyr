@@ -27,13 +27,13 @@ int main(int argc, char * argv[])
         if(glyr_parse_commandline(argc, argv, &my_settings) == false)
             usage();
 
-        // Now execute..
+        // Now execute...
         const char * filename = glyr_get(&my_settings);
         if(filename)
         {
             puts(filename);
             free((char*)filename);
-            filename =NULL;
+            filename = NULL;
         }
 
         // Clean memory

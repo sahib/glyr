@@ -144,7 +144,7 @@ static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, long timeo
 /*--------------------------------------------------------*/
 
 // Init a callback object and a curl_easy_handle
-static memCache_t * handle_init(CURLM * cm, cb_object * caps)
+static memCache_t * handle_init(CURLM * cm, cb_object * caps, long timeout, long redirects)
 {
     CURL *eh = curl_easy_init();
 
@@ -161,7 +161,7 @@ static memCache_t * handle_init(CURLM * cm, cb_object * caps)
     caps->handle = eh;
 
     // Configure curl
-    DL_setopt(eh, dlcache, caps->url, 20L,1L,(void*)caps);
+    DL_setopt(eh, dlcache, caps->url, timeout, redirects,(void*)caps);
 
     // Add handle to multihandle
     curl_multi_add_handle(cm, eh);
@@ -223,7 +223,7 @@ memCache_t * download_single(const char* url, long redirects)
 
 /*--------------------------------------------------------*/
 
-memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *artist, const char* album, const char *title)
+memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, long redirects, const char *artist, const char* album, const char *title, const char * status)
 {
     CURLM *cm;
     CURLMsg *msg;
@@ -241,7 +241,10 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *arti
 
     // Wake curl up..
     if(curl_global_init(CURL_GLOBAL_ALL) != 0)
-        return NULL;
+    {
+	printf("Init failed!");
+        return NULL; 
+    }
 
     // Init the multi handler (=~ container for easy handlers)
     cm = curl_multi_init();
@@ -259,7 +262,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *arti
         oblist[C].title  = title;
         oblist[C].url    = prepare_url(oblist[C].url,oblist[C].artist,oblist[C].album,oblist[C].title);
 
-        oblist[C].cache = handle_init(cm,&oblist[C]);
+        oblist[C].cache = handle_init(cm,&oblist[C],timeout,redirects);
 
         if(oblist[C].cache == NULL)
         {
@@ -336,8 +339,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *arti
                 cb_object * capo = (cb_object * ) p_pass;
 
                 // The stage is yours <name>
-                fprintf(stderr,C_G":"C_" Trying <%s"C_">...",capo->name);
-
+                fprintf(stderr,"%s"C_G":"C_" %s <%s"C_">...%c",capo->url,(status) ? status : "Trying",capo->name,(status) ? '\n' : '\0');
                 if(capo && capo->cache && capo->cache->data && msg->data.result == 0)
                 {
                     // Here is where the actual callback shall be executed
@@ -359,15 +361,23 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *arti
                         capo->cache = NULL;
                     }
 
-                    if(result)
-                    {
-                        fprintf(stderr,C_G"..found!\n"C_);
-                    }
-                    else
-                    {
-                        fprintf(stderr,C_R"..failed.\n"C_);
-                    }
+		    if(!status)
+		    {
+			    if(result)
+			    {
+				fprintf(stderr,C_G"..found!\n"C_);
+			    }
+			    else
+			    {
+				fprintf(stderr,C_R"..failed.\n"C_);
+			    }
+		    }
                 }
+		else 
+		{
+			const char * curl_err = curl_easy_strerror(msg->data.result);
+			printf(C_R"(!)"C_" ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
+		}
 
                 curl_multi_remove_handle(cm,e);
                 if(capo->url)
@@ -387,7 +397,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, const char *arti
             if (C <  CNT)
             {
                 // Get a new handle and new cache
-                oblist[C].cache = handle_init(cm,&oblist[C]);
+                oblist[C].cache = handle_init(cm,&oblist[C],timeout,redirects);
 
                 C++;
                 U++;
@@ -521,7 +531,6 @@ int sk_is_in(sk_pair_t * arr, const char * string)
 const char * register_and_execute(glyr_settings_t * settings, const char * filename, const char * (* finalizer) (cb_object *, size_t it, const char *, glyr_settings_t *))
 {
     size_t i = 0;
-    size_t grp = 0;
     size_t it   = 0;
 
     // Sanitize input
@@ -542,6 +551,7 @@ const char * register_and_execute(glyr_settings_t * settings, const char * filen
         // end of group
         if(providers[i].key == NULL)
         {
+	    //printf("Executing grp %s",providers[i].name);
             if( (result = finalizer(plugin_list, it, filename, settings)) == NULL)
             {
                 // Get ready for next group

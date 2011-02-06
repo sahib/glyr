@@ -29,7 +29,11 @@
 
 const char * cover_lastfm_url(glyr_settings_t * sets)
 {
-    return "http://ws.audioscrobbler.com/1.0/album/%artist%/%album%/info.xml";
+    if(sets->cover_min_size >= 125)
+    {
+    	return "http://ws.audioscrobbler.com/1.0/album/%artist%/%album%/info.xml";
+    }
+    return NULL;
 }
 
 memCache_t * cover_lastfm_parse(cb_object *capo)

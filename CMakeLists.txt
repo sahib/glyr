@@ -14,6 +14,7 @@ set (BINARYDIR ./)
 set (SOURCEDIR src)
 set (SUBDIR_COVER src/cover)
 set (SUBDIR_LYRICS src/lyrics)
+set (SUBDIR_PHOTOS src/photos)
 
 # tell the compiler how to take care of this 
 set (GLYR_LIBCURL "-lcurl")
@@ -49,6 +50,7 @@ ADD_EXECUTABLE(
    "${SOURCEDIR}/stringop.c" 
    "${SOURCEDIR}/lyrics.c" 
    "${SOURCEDIR}/cover.c" 
+   "${SOURCEDIR}/photos.c" 
    "${SOURCEDIR}/glyr.c" 
    "${SOURCEDIR}/main.c" 
    "${SUBDIR_COVER}/google.c" 
@@ -67,6 +69,7 @@ ADD_EXECUTABLE(
    "${SUBDIR_LYRICS}/darklyrics.c"
    "${SUBDIR_LYRICS}/metrolyrics.c"
    "${SUBDIR_LYRICS}/lyricswiki.c"
+   "${SUBDIR_PHOTOS}/flickr.c"
 )
 
 # Add dependency to target executable

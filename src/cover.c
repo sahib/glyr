@@ -44,7 +44,7 @@ sk_pair_t *  glyr_get_cover_providers(void)
 static const char * finalize(cb_object * plugin_list, size_t it,  const char *filename, glyr_settings_t * settings)
 {
     // Now do the actual work
-    memCache_t *result = invoke(plugin_list, it, COVER_MAX_PLUGIN, settings->artist, settings->album,"NULL");
+    memCache_t *result = invoke(plugin_list, it, COVER_MAX_PLUGIN, DEFAULT_TIMEOUT, DEFAULT_REDIRECTS, settings->artist, settings->album,"unused",NULL);
 
     if (result != NULL && result->data != NULL && filename)
     {
@@ -91,5 +91,3 @@ char * get_cover(glyr_settings_t * settings, const char * filename)
         return NULL;
     }
 }
-
-

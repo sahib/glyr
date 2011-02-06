@@ -21,6 +21,9 @@
 #define LYRIC_MAX_PLUGIN 15
 #define COVER_MAX_PLUGIN 15
 
+#define DEFAULT_TIMEOUT  20L
+#define DEFAULT_REDIRECTS 1L
+
 // Note:
 // you will notice that some structs share the same data,
 // the more specialized the struct gets the more obsucre members it have
@@ -126,7 +129,8 @@ enum GLYR_GET_TYPES
 {
     GET_UNSURE,
     GET_COVER,
-    GET_LYRIC
+    GET_LYRIC,
+    GET_PHOTO
 };
 
 #endif

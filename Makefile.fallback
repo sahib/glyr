@@ -4,6 +4,7 @@
 SOURCEDIR=src
 SUBDIR_COVER=src/cover
 SUBDIR_LYRICS=src/lyrics
+SUBDIR_PHOTOS=src/photos
 
 #MANDIR
 MANDIR=/usr/share/man/man1
@@ -39,8 +40,10 @@ SOURCES= \
     $(SOURCEDIR)/stringop.c \
     $(SOURCEDIR)/lyrics.c \
     $(SOURCEDIR)/cover.c \
+    $(SOURCEDIR)/photos.c \
     $(SOURCEDIR)/glyr.c \
     $(SOURCEDIR)/main.c \
+    $(SUBDIR_PHOTOS)/flickr.c \
     $(SUBDIR_COVER)/google.c \
     $(SUBDIR_COVER)/coverhunt.c \
     $(SUBDIR_COVER)/albumart.c \

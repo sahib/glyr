@@ -74,7 +74,7 @@ bool write_lyrics(const char * path, const char * lyrics, const char * artist, c
 const char * finalize(cb_object * plugin_list, size_t it, const char * dummy, glyr_settings_t * s)
 {
     // Now do the complex multi download action in the background..
-    memCache_t *result = invoke(plugin_list, it, LYRIC_MAX_PLUGIN,s->artist,s->album,s->title);
+    memCache_t *result = invoke(plugin_list, it, LYRIC_MAX_PLUGIN, DEFAULT_TIMEOUT, DEFAULT_REDIRECTS, s->artist,s->album,s->title,NULL);
 
     if(result)
     {
