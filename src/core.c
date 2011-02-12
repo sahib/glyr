@@ -18,7 +18,7 @@
 /*--------------------------------------------------------*/
 
 // Sleep usec microseconds
-int DL_usleep(long usec)
+static int DL_usleep(long usec)
 {
     struct timespec req= { 0 };
     time_t sec = (int) (usec / 1e6L);
@@ -42,15 +42,6 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {
     size_t realsize = size * nmemb;
     struct memCache_t *mem = (struct memCache_t *)cache;
-
-    // <!! STATIC WARNING !!>
-    static char print_dot;
-    if( (print_dot = (print_dot == 2) ? 0 :
-                     (print_dot == 1) ? 2 : 1) == 1)
-    {
-        //	fprintf(stderr,(mem->ecode == -1) ? C_G""C_  : C_M":"C_);
-    }
-    // </!! STATIC WARNING !!>
 
     mem->data = realloc(mem->data, mem->size + realsize + 1);
     if (mem->data)
@@ -79,7 +70,6 @@ void DL_free(memCache_t *cache)
         }
 
         cache->size   = 0;
-        cache->ecode  = 0;
         cache->data   = NULL;
 
         free(cache);
@@ -97,7 +87,6 @@ memCache_t* DL_init(void)
     if(cache)
     {
         cache->size   = 0;
-        cache->ecode  = 0;
         cache->data   = NULL;
     }
     else
@@ -117,7 +106,7 @@ static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, long timeo
     curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
     // last.fm and discogs require an useragent (wokrs without too)
-    curl_easy_setopt(eh, CURLOPT_USERAGENT, "firefox");
+    curl_easy_setopt(eh, CURLOPT_USERAGENT, "glyrBeta");
     curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
     // Pass vars to curl
@@ -149,10 +138,8 @@ static memCache_t * handle_init(CURLM * cm, cb_object * caps, long timeout, long
     CURL *eh = curl_easy_init();
 
     // You did sth. wrong..
-    if(caps == NULL || caps->url == NULL)
-    {
+    if(!caps || !caps->url)
         return NULL;
-    }
 
     // Init cache
     memCache_t *dlcache = DL_init();
@@ -191,7 +178,6 @@ memCache_t * download_single(const char* url, long redirects)
     // Init handles
     curl = curl_easy_init();
     memCache_t * dldata = DL_init();
-    dldata->ecode = -1;
 
     if(curl != NULL)
     {
@@ -223,7 +209,7 @@ memCache_t * download_single(const char* url, long redirects)
 
 /*--------------------------------------------------------*/
 
-memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, long redirects, const char *artist, const char* album, const char *title, const char * status)
+memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, glyr_settings_t * s, const char * status)
 {
     CURLM *cm;
     CURLMsg *msg;
@@ -242,8 +228,8 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
     // Wake curl up..
     if(curl_global_init(CURL_GLOBAL_ALL) != 0)
     {
-	printf("Init failed!");
-        return NULL; 
+        printf("Init failed!");
+        return NULL;
     }
 
     // Init the multi handler (=~ container for easy handlers)
@@ -256,13 +242,19 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
     // Set up all fields of cb_object (except callback and url)
     for (C = 0; C < CNT; C++)
     {
-
-        oblist[C].artist = artist;
-        oblist[C].album  = album;
-        oblist[C].title  = title;
+	char * track = oblist[C].url;
+	
+        oblist[C].artist = s->artist;
+        oblist[C].album  = s->album;
+        oblist[C].title  = s->title;
         oblist[C].url    = prepare_url(oblist[C].url,oblist[C].artist,oblist[C].album,oblist[C].title);
+        oblist[C].cache = handle_init(cm,&oblist[C],timeout,s->redirects);
 
-        oblist[C].cache = handle_init(cm,&oblist[C],timeout,redirects);
+	if(track) 
+	{
+		// orig. url always strdup'd
+		free(track);
+	}	
 
         if(oblist[C].cache == NULL)
         {
@@ -361,23 +353,23 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
                         capo->cache = NULL;
                     }
 
-		    if(!status)
-		    {
-			    if(result)
-			    {
-				fprintf(stderr,C_G"..found!\n"C_);
-			    }
-			    else
-			    {
-				fprintf(stderr,C_R"..failed.\n"C_);
-			    }
-		    }
+                    if(!status)
+                    {
+                        if(result)
+                        {
+                            fprintf(stderr,C_G"..found!\n"C_);
+                        }
+                        else
+                        {
+                            fprintf(stderr,C_R"..failed.\n"C_);
+                        }
+                    }
                 }
-		else 
-		{
-			const char * curl_err = curl_easy_strerror(msg->data.result);
-			printf(C_R"(!)"C_" ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
-		}
+                else if(msg->data.result)
+                {
+                    const char * curl_err = curl_easy_strerror(msg->data.result);
+                    printf(C_R"(!)"C_" CURL ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
+                }
 
                 curl_multi_remove_handle(cm,e);
                 if(capo->url)
@@ -397,7 +389,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
             if (C <  CNT)
             {
                 // Get a new handle and new cache
-                oblist[C].cache = handle_init(cm,&oblist[C],timeout,redirects);
+                oblist[C].cache = handle_init(cm,&oblist[C],timeout,s->redirects);
 
                 C++;
                 U++;
@@ -425,7 +417,6 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
             oblist[I].url = NULL;
         }
 
-        // Make list the same as before
         oblist[I].artist = NULL;
         oblist[I].album  = NULL;
         oblist[I].title  = NULL;
@@ -441,10 +432,10 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, lo
 
 /*--------------------------------------------------------*/
 
-void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_object*), int min, int max, const char *name)
+void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_object*), glyr_settings_t * s, const char *name)
 {
-    // Set url (and make it nicely readable for curl)
-    ref->url = (char*)url;
+    // always dup the url
+    ref->url = url?strdup(url):NULL;
 
     // Set callback
     ref->parser_callback = callback;
@@ -456,9 +447,12 @@ void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_objec
     ref->handle = NULL;
     ref->title  = NULL;
 
-    // Set mins/max
-    ref->max  = max;
-    ref->min  = min;
+    if(s!=NULL)
+    {
+    	// Set min/max
+    	ref->max  = s->cover.max_size;
+    	ref->min  = s->cover.min_size;
+    }
     ref->name = name;
 }
 
@@ -487,54 +481,68 @@ int write_file(const char *path, memCache_t *data)
 
 /*--------------------------------------------------------*/
 
-const char * register_and_execute(glyr_settings_t * settings, const char * filename, const char * (* finalizer) (cb_object *, size_t it, const char *, glyr_settings_t *))
+const char * register_and_execute(glyr_settings_t * settings, const char * filename, const char * (* finalizer) (memCache_t *, glyr_settings_t *, const char *))
 {
-    size_t i = 0;
-    size_t it   = 0;
+    // check if we need to update
+    if(filename)
+    {
+	if(!access(filename,R_OK) && settings->update)
+	{
+		return filename;
+	}
+    }
 
-    // Sanitize input
-    int max = settings->cover_max_size;
-    int min = settings->cover_min_size;
-    if (max != -1 && min > max) min=-1;
-    if (min != -1 && max < min) max=-1;
+    size_t i  = 0;
+    size_t it = 0;
 
-    sk_pair_t * providers = settings->providers;
+    plugin_t * providers = settings->providers;
 
     const char * result = NULL;
 
     // Assume a max. of 10 plugins, just set it higher if you need to.
-    cb_object *plugin_list = malloc(sizeof(cb_object) * COVER_MAX_PLUGIN);
+    cb_object *plugin_list = malloc(sizeof(cb_object) * WHATEVER_MAX_PLUGIN);
 
     while(providers && providers[i].name)
     {
         // end of group
         if(providers[i].key == NULL)
         {
-	    //printf("Executing grp %s",providers[i].name);
-            if( (result = finalizer(plugin_list, it, filename, settings)) == NULL)
-            {
-                // Get ready for next group
-                memset(plugin_list,0,COVER_MAX_PLUGIN * sizeof(cb_object));
-                it = 0;
+    	    memCache_t * cache = invoke(plugin_list, it, settings->parallel, settings->timeout, settings, NULL);
+	    if(cache)
+	    {
+		    if( (result = finalizer(cache, settings, filename)) != NULL)
+		    {
+			// Oh? We're done?
+			DL_free(cache);
+			break;
+		    }
+		    else
+		    {
+			DL_free(cache);
+		    	goto RE_INIT_LIST;
+		    }
             }
-            else
-            {
-                // Oh? We're done?
-                break;
-            }
+	    else
+	    {
+		RE_INIT_LIST:
+		{
+		    // Get ready for next group
+		    memset(plugin_list,0,COVER_MAX_PLUGIN * sizeof(cb_object));
+		    it = 0;
+		}
+	    }
         }
         if(providers[i].use && providers[i].plug.url_callback)
         {
             // Call the Url getter of the plugin
-            const char * url = providers[i].plug.url_callback(settings);
+            char * url = (char*)providers[i].plug.url_callback(settings);
             if(url)
             {
-                plugin_init( &plugin_list[it++], providers[i].plug.url_callback(settings), providers[i].plug.parser_callback,min,max,providers[i].color);
-
-                if(providers[i].plug.free_url && url)
-                {
-                    free((char*)url);
-                }
+                plugin_init( &plugin_list[it++], url, providers[i].plug.parser_callback,settings,providers[i].color);
+		if(providers[i].plug.free_url)
+		{
+			free(url);
+		}
             }
         }
         i++;
@@ -548,6 +556,15 @@ const char * register_and_execute(glyr_settings_t * settings, const char * filen
     }
 
     return result;
+}
+
+/*--------------------------------------------------------*/
+
+plugin_t * copy_table(const plugin_t * o, size_t size)
+{
+    plugin_t * d = malloc(size);
+    memcpy(d,o,size);
+    return d;
 }
 
 /*--------------------------------------------------------*/

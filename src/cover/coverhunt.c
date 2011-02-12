@@ -98,6 +98,7 @@ memCache_t * cover_coverhunt_parse(cb_object *capo)
                                 memCache_t *result_cache = DL_init();
                                 result_cache->data = img_url;
                                 result_cache->size = img_len;
+                                DL_free(search_buf);
                                 return result_cache;
                             }
                         }

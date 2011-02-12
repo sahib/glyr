@@ -13,63 +13,57 @@
 
 const char * lyrics_directlyrics_url(glyr_settings_t * settings)
 {
+    char * url   = NULL;
+
     char * esc_a = ascii_strdown(settings->artist,-1);
-    char * esc_t = ascii_strdown(settings->title, -1);
-
-    if(esc_a && esc_t)
+    if(esc_a)
     {
-        char * rep_a = strreplace(esc_a," ","-");
-        char * rep_t = strreplace(esc_t," ","-");
-
-        free(esc_a);
-        free(esc_t);
-
-        if(rep_a && rep_t)
-        {
-            char * url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
-            free(rep_a);
-            free(rep_t);
-            return url;
-        }
+        char * esc_t = ascii_strdown(settings->title, -1);
+	if(esc_t)
+	{
+		char * rep_a = strreplace(esc_a," ","-");
+		if(rep_a)
+		{
+			char * rep_t = strreplace(esc_t," ","-");
+			if(rep_t)
+			{
+    			     url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
+			     free(rep_t);
+			}
+			free(rep_a);
+		}
+		free(esc_t);
+	}
+	free(esc_a);
     }
-    return NULL;
+    return url;
 }
 
 memCache_t * lyrics_directlyrics_parse(cb_object * capo)
 {
     char * f_entry;
-    char * f_end;
+    memCache_t * result = NULL;
 
-    if( (f_entry = strstr(capo->cache->data,"<div id=\"lyricsContent\"><p>")) == NULL)
+    if( (f_entry = strstr(capo->cache->data,"<div id=\"lyricsContent\"><p>")) )
     {
-        return NULL;
+	    char * f_end = NULL;
+            f_entry += strlen("<div id=\"lyricsContent\"><p>");
+	    if( (f_end = strstr(f_entry,"</div>")) )
+	    {
+		    char * buf = copy_value(f_entry,f_end);
+		    if(buf)
+		    {
+			// replace nonsense brs that glyr would expand to newlines
+			char * brtagged = strreplace(buf,"<br>","");
+			if(brtagged)
+			{
+			    result = DL_init();
+			    result->data = brtagged;
+			    result->size = strlen(brtagged);
+			}
+			free(buf);
+		    }
+	    }
     }
-
-    f_entry += strlen("<div id=\"lyricsContent\"><p>");
-    if( (f_end = strstr(f_entry,"</div>")) == NULL)
-    {
-        return NULL;
-    }
-
-    size_t len = f_end - f_entry;
-    char * buf = malloc(len+1);
-    if(buf)
-    {
-        strncpy(buf,f_entry,len);
-        buf[len] = '\0';
-
-        // replace nonsense brs
-        char * brtagged = strreplace(buf,"<br>","");
-        free(buf);
-        if(brtagged)
-        {
-            memCache_t * result = DL_init();
-            result->data = brtagged;
-            result->size = strlen(brtagged);
-            return result;
-        }
-    }
-    return NULL;
+    return result;
 }
-
-

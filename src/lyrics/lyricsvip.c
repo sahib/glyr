@@ -12,19 +12,19 @@
 
 const char * lyrics_lyricsvip_url(glyr_settings_t * settings)
 {
+    char * result = NULL;
     char * artist_clean = strreplace(settings->artist, " ", "-");
-    char * title_clean =  strreplace(settings->title, " ", "-");
-
-    if(artist_clean && title_clean)
+    if(artist_clean)
     {
-        char * url = strdup_printf(LV_URL, artist_clean, title_clean);
-
-        free(artist_clean);
-        free(title_clean);
-        return url;
+	    char * title_clean =  strreplace(settings->title, " ", "-");
+	    if(title_clean)
+	    {
+	    	result = strdup_printf(LV_URL, artist_clean, title_clean);
+		free(title_clean);
+	    }
+	    free(artist_clean);
     }
-
-    return NULL;
+    return result;
 }
 
 memCache_t * lyrics_lyricsvip_parse(cb_object *capo)

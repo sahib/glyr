@@ -6,78 +6,68 @@
 
 #include "last_fm.h"
 
+#include "../cover.h"
+#include "../stringop.h"
 #include "../types.h"
 #include "../core.h"
 
-
-// Example snippet:
-/*
-  What we get from last.fm:
-
- <?xml version="1.0" encoding="UTF-8"?>
- <album artist="Equilibrium" title="Sagas">
-     <reach>33152</reach>
-     <url>http://www.last.fm/music/Equilibrium/Sagas</url>
-     <releasedate>    8 Jul 2008, 00:00</releasedate>
-     <coverart>
-         <small>http://userserve-ak.last.fm/serve/34s/26963745.jpg</small>
-         <medium>http://userserve-ak.last.fm/serve/64s/26963745.jpg</medium>
-         <large>http://userserve-ak.last.fm/serve/126/26963745.jpg</large>
-     </coverart>
-*/
-
+#define API_KEY "7199021d9c8fbae507bf77d0a88533d7"
 
 const char * cover_lastfm_url(glyr_settings_t * sets)
 {
-    if(sets->cover_min_size >= 125)
+    if(sets->cover.min_size < 300)
     {
-    	return "http://ws.audioscrobbler.com/1.0/album/%artist%/%album%/info.xml";
+        return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY;
     }
     return NULL;
 }
 
 memCache_t * cover_lastfm_parse(cb_object *capo)
 {
-    char *find, *endTag;
-
-    // ~ max. size of last.fm:
-    if(capo->min > 125)
-    {
-        return NULL;
-    }
-
     // Handle size requirements (Default to large)
-    char *tag_ssize = (capo->max == -1) ? "<large>"  : (capo->max < 40) ? "<small>"  : (capo->max < 70) ? "<medium>"  : "<large>";
-    char *tag_esize = (capo->max == -1) ? "</large>" : (capo->max < 40) ? "</small>" : (capo->max < 70) ? "</medium>" : "</large>";
+    char *tag_ssize = NULL ;
+    char *tag_esize = "</image>";
 
-    if( (find = strcasestr(capo->cache->data, tag_ssize)) == NULL)
+    // find desired size
+    if( size_is_okay(300,capo->min,capo->max) )
+        tag_ssize = "<image size=\"extralarge\">";
+    else if( size_is_okay(125,capo->min,capo->max) )
+        tag_ssize = "<image size=\"large\">";
+    else if( size_is_okay(64, capo->min,capo->max) )
+        tag_ssize = "<image size=\"middle\">";
+    else if( size_is_okay(34, capo->min,capo->max) )
+        tag_ssize = "<image size=\"small\">";
+    else if ( true || false )
+        tag_ssize = "<image size=\"extralarge\">";
+
+    // The (perhaps) result
+    memCache_t * result = NULL;
+
+    char * find = NULL;
+    if( (find = strcasestr(capo->cache->data, tag_ssize)) != NULL)
     {
-        return NULL;
+        char * end_tag = NULL;
+        if( (end_tag = strcasestr(find, tag_esize)) != NULL)
+        {
+            char * url = NULL;
+            if( (url = copy_value(find + strlen(tag_ssize), end_tag)) != NULL)
+            {
+                if(strcmp(url,"http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"))
+                {
+                    result = DL_init();
+                    result->data = url;
+                    result->size = end_tag - (find + strlen(tag_ssize));
+                }
+                else
+                {
+                    free(url);
+                    url=NULL;
+                }
+            }
+            end_tag = NULL;
+        }
+        find = NULL;
     }
 
-    nextTag(find);
-
-    if( (endTag = strcasestr(find, tag_esize) ) == NULL)
-    {
-        return NULL;
-    }
-
-    size_t endTagLen = (size_t)(endTag - find);
-
-    if(endTagLen == 0) return NULL;
-
-    char *result_url = calloc(endTagLen+1, sizeof(char));
-    strncpy(result_url, find, endTagLen);
-    result_url[endTagLen] = '\0';
-
-    if(strcmp(result_url,"http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png") != 0)
-    {
-        memCache_t * result = DL_init();
-        result->data = result_url;
-        result->size = endTagLen;
-        return result;
-    }
-
-    if(result_url) free(result_url);
-    return NULL;
+    return result;
 }

@@ -6,7 +6,6 @@
 #include <curl/curl.h>
 
 //Nifty defines:
-#define nextTag(X) while(*X && *X++ != '>')
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
 
 #define C_B "\x1b[34;01m" // blue
@@ -18,11 +17,14 @@
 #define C_  "\x1b[0m"     // Reset
 
 // Change this if you really need more
-#define LYRIC_MAX_PLUGIN 15
-#define COVER_MAX_PLUGIN 15
+#define WHATEVER_MAX_PLUGIN 16
+#define LYRIC_MAX_PLUGIN WHATEVER_MAX_PLUGIN
+#define COVER_MAX_PLUGIN WHATEVER_MAX_PLUGIN
 
 #define DEFAULT_TIMEOUT  20L
 #define DEFAULT_REDIRECTS 1L
+
+#define PTR_SPACE 10
 
 // Note:
 // you will notice that some structs share the same data,
@@ -34,7 +36,7 @@ typedef struct memCache_t
 {
     char  *data;   // data buffer
     size_t size;   // Size of data
-    char  ecode;   // error code (0)
+    char  *dsrc;   // Source of data
 
 // Note: the error code is not used at the moment
 } memCache_t;
@@ -50,6 +52,9 @@ typedef struct cb_object
 
     // What url to download before the callback is called
     char *url;
+
+    // Storage of the --of argument 
+    const char ** info;
 
     // Artist related... (pointer to parameters give to plugin_init)
     const char *artist;
@@ -75,22 +80,31 @@ typedef struct glyr_settings_t
     // get
     int type;
 
+    const char * info[PTR_SPACE];
+    
     // of
     const char * artist;
     const char * album;
     const char * title;
 
-    // minsize
-    int cover_min_size;
+    // photo 
+    struct {
+	int number;
+    } photos;
 
-    // minsize
-    int cover_max_size;
+    // cover
+    struct {
+    	int min_size;
+    	int max_size;
+    } cover;
 
     // from
     void * providers;
 
-    // multi
-    int parallel;
+    // invoke() control
+    long parallel;
+    long timeout;
+    long redirects;
 
     // to
     const char * save_path;
@@ -108,12 +122,12 @@ typedef struct glyr_settings_t
 // Also the descriptive argumentstring is internally converted to a
 // glyr_settings_t first
 
-typedef struct sk_pair_t
+typedef struct plugin_t
 {
     const char * name;  // Full name
     const char * key;   // A one-letter ID
     const char * color; // Colored name
-    bool use;           // Use this source?
+    int use;            // Use this source?
 
     struct
     {
@@ -123,7 +137,7 @@ typedef struct sk_pair_t
         bool free_url;
     } plug;
 
-} sk_pair_t;
+} plugin_t;
 
 enum GLYR_GET_TYPES
 {

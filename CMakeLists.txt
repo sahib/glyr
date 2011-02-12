@@ -72,6 +72,7 @@ ADD_EXECUTABLE(
    "${SUBDIR_LYRICS}/metrolyrics.c"
    "${SUBDIR_LYRICS}/lyricswiki.c"
    "${SUBDIR_PHOTOS}/flickr.c"
+   "${SUBDIR_PHOTOS}/lastfm.c"
    "${SUBDIR_BOOKS}/dnb.c"
    "${SUBDIR_BOOKS}/kit.c"
 )

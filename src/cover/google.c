@@ -14,19 +14,19 @@
 const char * cover_google_url(glyr_settings_t * sets)
 {
     // Only use the 'large' option if really set high (>1000), large is usually verrrry incorrrect.
-    if(sets->cover_min_size == -1)
+    if(sets->cover.min_size == -1)
     {
         return "http://www.google.de/images?q=%artist%+%album%+album&safe=off&tbs=isch:1,iar:s,islt:qsvga";
     }
-    else if(sets->cover_min_size <  50 && sets->cover_max_size <= 150)
+    else if(sets->cover.min_size <  50 && sets->cover.max_size <= 150)
     {
         return "http://www.google.de/images?q=%artist%+%album%+album&safe=off&tbs=isch:1,iar:s,isz:i";
     }
-    else if(sets->cover_min_size < 150 && sets->cover_max_size <= 300)
+    else if(sets->cover.min_size < 150 && sets->cover.max_size <= 300)
     {
         return "http://www.google.de/images?q=%artist%+%album%+album&safe=off&tbs=isch:1,iar:s,isz:s";
     }
-    else if(sets->cover_min_size < 300 && sets->cover_max_size <= 1000)
+    else if(sets->cover.min_size < 300 && sets->cover.max_size <= 1000)
     {
         return "http://www.google.de/images?q=%artist%+%album%+album&safe=off&tbs=isch:1,iar:s,islt:qsvga";
     }

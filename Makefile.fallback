@@ -27,8 +27,8 @@ CC=gcc
 WARN=-Wall
 
 #Quite heavy optimization
-#OPTI=-march=native -Os -finline-functions -fomit-frame-pointer -s
-OPTI=-ggdb3
+OPTI=-march=native -Os -finline-functions -fomit-frame-pointer -s
+#OPTI=-ggdb3
 
 #also use -pipe
 CFLAGS=-c -pipe $(OPTI) $(WARN)
@@ -46,6 +46,7 @@ SOURCES= \
     $(SOURCEDIR)/glyr.c \
     $(SOURCEDIR)/main.c \
     $(SUBDIR_PHOTOS)/flickr.c \
+    $(SUBDIR_PHOTOS)/lastfm.c \
     $(SUBDIR_COVER)/google.c \
     $(SUBDIR_COVER)/coverhunt.c \
     $(SUBDIR_COVER)/albumart.c \
