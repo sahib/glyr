@@ -15,7 +15,7 @@ plugin_t photos_providers[] =
 {
     {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, false}},
     {"safe",   NULL, NULL,                  false, {NULL,              NULL,                false}},
-    {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, false}},
+    {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, true }},
     {"unsafe", NULL, NULL,                  false, {NULL,              NULL,                false}},
     {NULL,     NULL, NULL,                  false, {NULL,              NULL,                false}}
 };
@@ -27,119 +27,105 @@ plugin_t * glyr_get_photo_providers(void)
 
 static memCache_t * photo_callback(cb_object * capo)
 {
-    if(write_file(capo->name,capo->cache) == -1)
-        fprintf(stderr,"Unable to write %s\n",capo->name);
+    size_t i = capo->s->photos.offset;
+    memCache_t ** lst = capo->custom;
 
+    // find next empty place
+    // this function shall not be called
+    // more often than the lst is big
+    // if a overflow occures it's because
+    // photo_finalize did sth. weird.
+    for(; lst[i]->data; i++);
+
+    // Set!
+    lst[i]->data = malloc(capo->cache->size+1);
+    memcpy(lst[i]->data, capo->cache->data, capo->cache->size);
+    lst[i]->size = capo->cache->size;
+
+    // return null so others 'plugins' are called
     return NULL;
 }
 
-static const char * photo_finalize(memCache_t * result, glyr_settings_t * settings, const char * filename)
+static memCache_t ** photo_finalize(memCache_t * result, glyr_settings_t * settings)
 {
-	size_t i=0,urlc = 0;
-	cb_object * url_list = malloc(result->size * sizeof(cb_object));
-	memset(url_list,0,result->size * sizeof(cb_object));
+    size_t i, urlc = 0;
 
-	// Used to track ptr where still memory is allocated
-	char **urls_list_of_ptr = malloc(result->size * sizeof(char*));
-	char **name_list_of_ptr = malloc(result->size * sizeof(char*));
-	memset(urls_list_of_ptr,0,result->size * sizeof(char*));
-	memset(name_list_of_ptr,0,result->size * sizeof(char*));
+    // no need for cleanup
+    if(!result)
+        return NULL;
+    if(!result->size)
+        return NULL;
+    if(result->size <= settings->photos.offset)
+    {
+	glyr_message(1,settings,stderr,C_R"[]"C_" photo_offset is equal or higher than the number of available images.\n");
+    }
 
-	char * l_url = NULL;
-	char * c_url = result->data+1;
 
-	for(; i < result->size && i < settings->photos.number; i++)
-	{
-	    l_url = c_url;
-	    c_url = strstr(l_url,"\n");
+    // list of buffers
+    memCache_t ** cache_lst = DL_new_lst(result->size);
 
-	    if(l_url)
-	    {
-		size_t  url_len;
-		if(c_url)
-		    url_len = c_url - l_url;
-		else
-		    url_len = strlen(l_url);
+    // Every url is treated as a plugin, and downloaded in parallel
+    // This is a little bit of missuse, but who cares ;-)
+    cb_object * url_list    = calloc(result->size, sizeof(cb_object));
 
-		if(url_len > 0)
-		{
-		    char * url = malloc(url_len+1);
+    char * l_url = NULL;
+    char * c_url = result->data+1;
 
-		    if(url)
-		    {
-			// copy url 
-			strncpy(url,l_url,url_len);
-			url[url_len] = '\0';
+    for(i = settings->photos.offset; i < result->size && i < settings->photos.number; i++)
+    {
+        l_url = c_url;
+        c_url = strstr(l_url,"\n");
 
-			// track this url
-			urls_list_of_ptr[i] = url;
+        if(l_url)
+        {
+            size_t  url_len;
+            if(c_url)
+                url_len = c_url - l_url;
+            else
+                url_len = strlen(l_url);
 
-			char * name = strdup_printf("%s/%s_photo_%d.jpg",settings->save_path,settings->artist,i);
-			if(name)
-			{
-			    // Keep an eye on this pointer so we can free it later
-			    name_list_of_ptr[i] = name;
+            if(url_len > 0)
+            {
+                char * url = malloc(url_len+1);
 
-			    // Init "plugin" (this is actually a missuse of plugin_init())
-			    // Init only when $artist_photo_$i does not exit yet, or if update is desired 
-			    if(settings->update || access(name,R_OK))
-				plugin_init(&url_list[urlc++],url,photo_callback,settings,name);
-			}
-		    }
-		}
-	    }
+                if(url)
+                {
+                    // copy url
+                    strncpy(url,l_url,url_len);
+                    url[url_len] = '\0';
 
-	    c_url++;
-	}
+                    cache_lst[i] = DL_init();
+                    cache_lst[i]->dsrc = url;
 
-	// This shall always return NULL, so no extra free is needed
-	// The timeout is result->size as big because we need to download $result->size images
-	// Arg  6,7,8 are not used also, they may not be empyt though 
-	invoke(url_list, urlc, settings->parallel, settings->timeout * urlc, settings,"Downloading");
+                    // Init "plugin" (this is actually a missuse of plugin_init())
+                    // Init only when $artist_photo_$i does not exit yet, or if update is desired
+                    plugin_init(&url_list[urlc++],url,photo_callback,settings,NULL,cache_lst);
+                }
+            }
+        }
+        c_url++;
+    }
 
-	// Free tracked pointers
-	for(i = 0; i < result->size; i++)
-	{
-	    if(urls_list_of_ptr[i])
-	    {
-		free(urls_list_of_ptr[i]);
-		urls_list_of_ptr[i]=NULL;
-	    }
+    // This shall always return NULL, so no extra free is needed
+    // The timeout is result->size as big because we need to download $result->size images
+    // Arg  6,7,8 are not used also, they may not be empyt though
+    invoke(url_list, urlc, settings->parallel, settings->timeout * urlc, settings);
 
-	    if(name_list_of_ptr[i])
-	    {
-		free(name_list_of_ptr[i]);
-		name_list_of_ptr[i]=NULL;
-	    }
-	}
+    // free all the rest
+    if(url_list)
+        free(url_list);
 
-	// free all the rest
-	if(url_list)
-	{
-	    free(url_list);
-	    url_list=NULL;
-	}
-	if(urls_list_of_ptr)
-	{
-	    free(urls_list_of_ptr);
-	    urls_list_of_ptr=NULL;
-	}
-	if(name_list_of_ptr)
-	{
-	    free(name_list_of_ptr);
-	    name_list_of_ptr=NULL;
-	}
-
-	// return result
-	char * rt_val = strdup(result->data);
-	return rt_val;
+    url_list=NULL;
+    return cache_lst;
 }
 
 
-char * get_photos(glyr_settings_t * settings)
+memCache_t ** get_photos(glyr_settings_t * settings)
 {
     if (settings && settings->artist)
-    	return (char*)register_and_execute(settings, NULL, photo_finalize);
-    
+        return register_and_execute(settings,photo_finalize);
+    else
+	glyr_message(2,settings,stderr,C_R"[]"C_" Artist is needed to download artist-related photos!\n");
+
     return NULL;
 }

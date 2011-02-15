@@ -4,7 +4,7 @@
 
 #include "lastfm.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -26,9 +26,8 @@ memCache_t * photos_lastfm_parse(cb_object * capo)
     char * root = capo->cache->data;
 
     size_t urlc = 0;
-    size_t maxc = capo->album ? atoi(capo->album) : 5;
 
-    while ( (root = strstr(root,SIZE_FO)) != NULL && urlc < maxc)
+    while ( (root = strstr(root,SIZE_FO)) != NULL && urlc < capo->s->photos.number + capo->s->photos.offset)
     {
         char * begin = strstr(root,URL_BEGIN);
         if(begin)
@@ -37,7 +36,7 @@ memCache_t * photos_lastfm_parse(cb_object * capo)
             char * endin = strstr(begin,URL_ENDIN);
             if(endin)
             {
-		char * urlb = copy_value(begin,endin);
+                char * urlb = copy_value(begin,endin);
                 if(urlb)
                 {
                     char * old = ulst;
@@ -48,7 +47,7 @@ memCache_t * photos_lastfm_parse(cb_object * capo)
                         free(old);
 
                     free(urlb);
-		    urlb=NULL;
+                    urlb=NULL;
                 }
             }
         }

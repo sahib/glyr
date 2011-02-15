@@ -3,7 +3,7 @@
 
 #include "kit.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -47,10 +47,7 @@ memCache_t * books_kit_parse(cb_object * capo)
     while ((pointer = strstr(pointer, RESULT)) != NULL)
     {
         pointer+=strlen(RESULT);
-
         field = (field=getStr(&pointer, RESULT_LINK_START, RESULT_LINK_END)) == NULL ? "" : field;
-        //printf("%s", field);
-
         field = (field= getStr(&pointer, RESULT_START, RESULT_END)) == NULL ? "" : field;
         printf("%s\n", field);
     }

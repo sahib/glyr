@@ -6,6 +6,7 @@ SUBDIR_COVER=src/cover
 SUBDIR_LYRICS=src/lyrics
 SUBDIR_PHOTOS=src/photos
 SUBDIR_BOOKS=src/books
+SUBDIR_ADESCR=src/adescr
 
 #MANDIR
 MANDIR=/usr/share/man/man1
@@ -27,8 +28,8 @@ CC=gcc
 WARN=-Wall
 
 #Quite heavy optimization
-OPTI=-march=native -Os -finline-functions -fomit-frame-pointer -s
-#OPTI=-ggdb3
+#OPTI=-march=native -Os -finline-functions -fomit-frame-pointer -s
+OPTI=-ggdb3
 
 #also use -pipe
 CFLAGS=-c -pipe $(OPTI) $(WARN)
@@ -43,10 +44,12 @@ SOURCES= \
     $(SOURCEDIR)/cover.c \
     $(SOURCEDIR)/photos.c \
     $(SOURCEDIR)/books.c \
+    $(SOURCEDIR)/adescr.c \
     $(SOURCEDIR)/glyr.c \
     $(SOURCEDIR)/main.c \
     $(SUBDIR_PHOTOS)/flickr.c \
     $(SUBDIR_PHOTOS)/lastfm.c \
+    $(SUBDIR_ADESCR)/lastfm.c \
     $(SUBDIR_COVER)/google.c \
     $(SUBDIR_COVER)/coverhunt.c \
     $(SUBDIR_COVER)/albumart.c \
@@ -88,7 +91,7 @@ run:
 
 clean:
 	@$(ECHO) "<> Making clean."
-	@$(RM) $(SOURCEDIR)/*.o $(EXECUTABLE) $(SUBDIR_COVER)/*.o  $(SUBDIR_LYRICS)/*.o  2> /dev/null
+	@$(RM) $(SOURCEDIR)/*.o $(EXECUTABLE) $(SUBDIR_PHOTOS)/*.o $(SUBDIR_COVER)/*.o  $(SUBDIR_LYRICS)/*.o $(SUBDIR_BOOKS)/*.o $(SUBDIR_ADESCR)/*.o  2> /dev/null
 
 install:
 	@$(ECHO) "++ Copying executable to /usr/bin."

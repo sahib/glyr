@@ -13,8 +13,6 @@
 #include "stringop.h"
 #include "types.h"
 
-// I wrote this on the day I heard first off obfuscated C
-
 // Implementation of the Levenshtein distance algorithm
 // Compare the number of edits needed to convert string $s
 // to target string $t
@@ -108,10 +106,10 @@ char * ascii_strdown_modify(char * string, size_t len)
 {
     if(string)
     {
-	    size_t i   = 0;
-	    size_t men = (len>=0) ? strlen(string):len; 
-	    for(i = 0; i < men; i++)
-		string[i] = tolower(string[i]);
+        size_t i   = 0;
+        size_t men = (len>=0) ? strlen(string):len;
+        for(i = 0; i < men; i++)
+            string[i] = tolower(string[i]);
     }
     return string;
 }
@@ -170,6 +168,8 @@ char * strreplace(const char * string, const char * subs, const char * with)
 }
 
 
+/* ------------------------------------------------------------- */
+
 // Replace a single character
 int strcrepl(char* in, const char orig, const char new)
 {
@@ -181,6 +181,8 @@ int strcrepl(char* in, const char orig, const char new)
     return i;
 }
 
+
+/* ------------------------------------------------------------- */
 
 // Remove anything in between '(' && ')'
 static char * remove_surrender(const char * name)
@@ -212,22 +214,24 @@ static char * remove_surrender(const char * name)
     return ret;
 }
 
+/* ------------------------------------------------------------- */
+
 static char * prepare_string(const char * in)
 {
     char * result = NULL;
     if(in)
     {
         char * d1 = ascii_strdown(in,-1);
-	if(d1)
-	{	
-		char * c1 = curl_easy_escape(NULL,d1,0);
-		if(c1)
-		{
-			result = remove_surrender(c1);
-			free(c1);
-		}
-		free(d1);
-	}
+        if(d1)
+        {
+            char * c1 = curl_easy_escape(NULL,d1,0);
+            if(c1)
+            {
+                result = remove_surrender(c1);
+                free(c1);
+            }
+            free(d1);
+        }
     }
     return result;
 }
@@ -241,30 +245,30 @@ char * prepare_url(const char *URL, const char *artist, const char *album, const
     char * old = NULL;
     if(URL)
     {
-	    char * p_artist = prepare_string(artist);
-	    if(p_artist)
-	    {
-		    url = strreplace(URL,"%artist%",p_artist);	    
-		    char * p_album  = prepare_string(album);
-		    if(p_album)
-		    {
-			    old = url;
-			    url = strreplace(old,"%album%",p_album);
-			    free(old);
+        char * p_artist = prepare_string(artist);
+        if(p_artist)
+        {
+            url = strreplace(URL,"%artist%",p_artist);
+            char * p_album  = prepare_string(album);
+            if(p_album)
+            {
+                old = url;
+                url = strreplace(old,"%album%",p_album);
+                free(old);
 
-			    char * p_title  = prepare_string(title);
-			    if(p_title)
-			    {
-				old = url;
-				url = strreplace(old,"%title%",p_title);			
-				free(old);
+                char * p_title  = prepare_string(title);
+                if(p_title)
+                {
+                    old = url;
+                    url = strreplace(old,"%title%",p_title);
+                    free(old);
 
-				free(p_title);		
-			    }
-			    free(p_album);
-		    }
-		    free(p_artist);
-    	    }
+                    free(p_title);
+                }
+                free(p_album);
+            }
+            free(p_artist);
+        }
     }
     return url;
 }
@@ -288,6 +292,38 @@ char* escape_slashes(const char* in)
             out[i] = ' ';
     }
     return out;
+}
+
+/* ------------------------------------------------------------- */
+
+char * get_next_word(const char * string, const char * delim, size_t *offset, size_t len)
+{
+	char * word = NULL;
+	if(string && delim && *(offset) < len)
+	{
+		char * occurence = strstr(string+(*offset),delim);
+		if(occurence)
+		{
+			word=copy_value(string+(*offset),occurence);
+			*(offset) += (1 + occurence - (string + *(offset)));
+		}
+		else
+		{
+			word=copy_value(string+(*offset),string+len);
+			*(offset) = len;
+		}
+	}
+	if(word)
+	{
+		char * trim = calloc(len+1,sizeof(char));
+		if(trim)
+		{
+			trim_copy(word,trim);
+		}
+		free(word);
+		word = trim;
+	}
+	return word;
 }
 
 /* ------------------------------------------------------------- */
@@ -438,6 +474,7 @@ const char *umap[][2] =
     {"brvbar","¦"},
     {"sect","§"},
     {"uml","¨"},
+    {"amp","&"},
     {"copy","©"},
     {"ordf","ª"},
     {"laquo","«"},
@@ -505,6 +542,7 @@ const char *umap[][2] =
     {"eacute","é"},
     {"ecirc","ê"},
     {"euml","ë"},
+    {"quot","\""},
     {"igrave","ì"},
     {"iacute","í"},
     {"icirc","î"},
@@ -657,6 +695,7 @@ char * remove_html_tags_from_string(const char * string, size_t len)
  * trimming everything and removing double newlines        */
 char * beautify_lyrics(const char * lyrics)
 {
+    char * result = NULL;
     char * strip = strip_html_unicode(lyrics);
     if(strip)
     {
@@ -685,14 +724,23 @@ char * beautify_lyrics(const char * lyrics)
 
                 i = j+1;
             }
-            return unicode;
+
             char * bye_html = remove_html_tags_from_string(unicode,len);
             free(unicode);
-            trim_inplace(bye_html);
-	    return bye_html;
+	    if(bye_html)	
+	    {
+		    char * trimd = calloc(1,sizeof(char) * strlen(bye_html));
+		    if(trimd)
+		    {
+		        trim_copy(bye_html,trimd); 
+		    }
+
+		    result = trimd;
+		    free(bye_html);
+	    }
         }
     }
-    return NULL;
+    return result;
 }
 
 
@@ -792,3 +840,5 @@ char * getStr (char ** s, char * start, char * end)
 
     return start+strlen(tmp);
 }
+
+/* ------------------------------------------------------------- */

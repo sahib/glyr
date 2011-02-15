@@ -3,7 +3,7 @@
 
 #include "magistrix.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -20,74 +20,77 @@ const char * lyrics_lyrixat_url(glyr_settings_t * settings)
 #define URL_TAG_ENDIN "'>"
 #define LV_MAX_DIST 4
 
-// The code ahead is a bit ugly..
+#define MAX_TRIES 5
+
 memCache_t * lyrics_lyrixat_parse(cb_object * capo)
 {
     /* lyrix.at does not offer any webservice -> use the searchfield to get some results */
-	memCache_t * result = NULL;     
+    memCache_t * result = NULL;
 
- 	char * search_begin_tag = capo->cache->data;
-	while( (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && !result)
-	{
-		char * url_tag = search_begin_tag;
-		size_t toggle = 1,i;
+    char * search_begin_tag = capo->cache->data;
+    int ctr = 0;
+    while( (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && !result && MAX_TRIES >= ctr++)
+    {
+        char * url_tag = search_begin_tag;
+        size_t toggle = 1,i;
 
-		for(i=0; i < toggle && url_tag; i++)
-		    url_tag = strstr(url_tag,URL_TAG_BEGIN);
+        for(i=0; i < toggle && url_tag; i++)
+            url_tag = strstr(url_tag,URL_TAG_BEGIN);
 
-		if(url_tag)
-		{
-			char * title_tag = strstr(url_tag,URL_TAG_ENDIN);
-			if(title_tag)
-			{
-				char * title_end = strstr(title_tag,"<");
-				if(title_end)
-				{
-					
-					char * title = copy_value(title_tag + strlen(URL_TAG_ENDIN),title_end);
-					if(title)
-					{
-						if(levenshtein_strcmp(ascii_strdown_modify(title,-1),capo->title) <= LV_MAX_DIST)
-						{
-							char * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
-							if(url_part)
-							{
-								char * url = strdup_printf("http://lyrix.at/de%s",url_part);
-								if(url)
-								{
-									memCache_t * lyrcache = download_single(url,1L);
-									if(lyrcache)
-									{
-										char * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);
-										if(lyr_begin)
-										{
-											char * lyr_endin = strstr(lyr_begin,"<div>");
-											if(lyr_endin)
-											{
-												char * lyrics = copy_value(lyr_begin,lyr_endin);
-												if(lyrics)
-												{
-													result = DL_init();
-													result->data = strreplace(lyrics,"<br />","");
-													result->size = strlen(lyrics);
-												}
-												free(lyrics);
-											}
-											lyr_begin=NULL;
-										}
-										DL_free(lyrcache);
-									}
-									free(url);
-								}
-								free(url_part);
-							}
-						}
-						free(title);
-					}
-					title_end=NULL;
-				}
-			}
-		}	
-	}
-	return result;
+        if(url_tag)
+        {
+            char * title_tag = strstr(url_tag,URL_TAG_ENDIN);
+            if(title_tag)
+            {
+                char * title_end = strstr(title_tag,"<");
+                if(title_end)
+                {
+
+                    char * title = copy_value(title_tag + strlen(URL_TAG_ENDIN),title_end);
+                    if(title)
+                    {
+                        if(levenshtein_strcmp(ascii_strdown_modify(title,-1),capo->s->title) <= LV_MAX_DIST)
+                        {
+                            char * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
+                            if(url_part)
+                            {
+                                char * url = strdup_printf("http://lyrix.at/de%s",url_part);
+                                if(url)
+                                {
+                                    memCache_t * lyrcache = download_single(url,capo->s);
+                                    if(lyrcache)
+                                    {
+                                        char * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);
+                                        if(lyr_begin)
+                                        {
+                                            char * lyr_endin = strstr(lyr_begin,"<div>");
+                                            if(lyr_endin)
+                                            {
+                                                char * lyrics = copy_value(lyr_begin,lyr_endin);
+                                                if(lyrics)
+                                                {
+                                                    result = DL_init();
+                                                    result->data = strreplace(lyrics,"<br />","");
+                                                    result->size = strlen(lyrics);
+                                                    result->dsrc = strdup(url);
+                                                }
+                                                free(lyrics);
+                                            }
+                                            lyr_begin=NULL;
+                                        }
+                                        DL_free(lyrcache);
+                                    }
+                                    free(url);
+                                }
+                                free(url_part);
+                            }
+                        }
+                        free(title);
+                    }
+                    title_end=NULL;
+                }
+            }
+        }
+    }
+    return result;
 }

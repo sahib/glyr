@@ -38,9 +38,9 @@ plugin_t cover_providers[] =
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
-       (min == -1 && max >= sZ) ||
-       (min <= sZ && max == -1) ||
-       (min <= sZ && max >= sZ)  )
+            (min == -1 && max >= sZ) ||
+            (min <= sZ && max == -1) ||
+            (min <= sZ && max >= sZ)  )
         return true;
 
     return false;
@@ -51,59 +51,59 @@ plugin_t *  glyr_get_cover_providers(void)
     return copy_table(cover_providers,sizeof(cover_providers));
 }
 
-static const char * cover_finalize(memCache_t * result, glyr_settings_t * settings, const char * filename)
+static memCache_t ** cover_finalize(memCache_t * result, glyr_settings_t * settings)
 {
-    if (filename)
+    // result is guaranteed to be !NULL for usual
+    // if result is NULL it will be the LAST call to this method
+    if(!result)
     {
-        memCache_t * image = NULL; 
-        if((image = download_single(result->data,1L)))
-	{
-		if(write_file(filename,image) != -1)
-		{
-			result = NULL;
-		}
-		else
-		{
-		    fprintf(stderr,C_R"Unable to write file to '"C_"%s"C_R"'\n"C_,filename);
-		}
-
-		DL_free(image);
-		return filename;
-	}
-	else
-        {
-            fprintf(stderr,C_R"??"C_" Found an apparently correct url, but unable to download <%s>\n",result->data);
-            fprintf(stderr,C_R"??"C_" Please drop me a note, this might be a bug.\n");
-        }
+        return settings->cover.lst;
     }
 
+    memCache_t * image = NULL;
+    if((image = download_single(result->data,settings)) == NULL)
+    {
+        glyr_message(1,settings,stderr,C_R"??"C_" Found an apparently correct url, but unable to download <%s>\n",result->data);
+        glyr_message(1,settings,stderr,C_R"??"C_" Please drop me a note, this might be a bug.\n");
+        return settings->cover.lst;
+    }
+
+    if(settings->cover.lst == NULL)
+        settings->cover.lst = DL_new_lst(settings->cover.number+1);
+
+    settings->cover.lst[settings->cover.c_buf] = image;
+    image->dsrc = strdup(result->data);
+
+    if(settings->cover.number <= settings->cover.c_buf+1)
+    {
+        // mark end
+        settings->cover.lst[settings->cover.c_buf+1] = NULL;
+
+        // enoug covers. return
+        return settings->cover.lst;
+    }
+
+    settings->cover.c_buf++;
     return NULL;
 }
 
-
-char * get_cover(glyr_settings_t * settings)
+memCache_t ** get_cover(glyr_settings_t * settings)
 {
+    memCache_t ** res = NULL;
     if (settings && settings->artist && settings->album)
     {
-	    // validate size
-	    if(settings->cover.min_size <= 0)
-		settings->cover.min_size = -1;
+        // validate size
+        if(settings->cover.min_size <= 0)
+            settings->cover.min_size = -1;
 
-	    if(settings->cover.max_size <= 0)
-		settings->cover.max_size = -1;
+        if(settings->cover.max_size <= 0)
+            settings->cover.max_size = -1;
 
-	    char * filename = strdup_printf("%s/%s-%s.img",settings->save_path,settings->artist,settings->album);
-	    if(filename)
-	    {
-	    	if(register_and_execute(settings, filename, cover_finalize) != NULL)
-			return filename;
-		else
-			free(filename);
-	    }
-     }
-     else
-     {
-	    printf(C_R":: "C_"%s is needed to download covers.\n",settings->artist ? "Album" : "Artist");
-     }
-     return NULL;
+        res = register_and_execute(settings, cover_finalize);
+    }
+    else
+    {
+        glyr_message(1,settings,stderr,C_R"[] "C_"%s is needed to download covers.\n",settings->artist ? "Album" : "Artist");
+    }
+    return res;
 }

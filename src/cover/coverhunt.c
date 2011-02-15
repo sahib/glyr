@@ -7,13 +7,16 @@
 #include "coverhunt.h"
 
 #include "../stringop.h"
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 
 
 const char * cover_coverhunt_url(glyr_settings_t * sets)
 {
-    return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
+    if(sets->cover.min_size <= 500 || sets->cover.min_size)
+        return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
+
+    return NULL;
 }
 
 static bool check_size(const char * art_root, const char *hw, cb_object * capo)
@@ -33,8 +36,8 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
             int atoid = atoi(buf);
             free(buf);
 
-            if((atoid >= capo->min || capo->min == -1) &&
-                    (atoid <= capo->max || capo->max == -1)  )
+            if((atoid >= capo->s->cover.min_size || capo->s->cover.min_size == -1) &&
+                    (atoid <= capo->s->cover.max_size || capo->s->cover.max_size == -1)  )
                 return true;
         }
     }
@@ -52,6 +55,8 @@ memCache_t * cover_coverhunt_parse(cb_object *capo)
     {
         return NULL;
     }
+
+    memCache_t * result_cache  = NULL;
 
     table_start += strlen("<table><tr><td><a href=\"");
 
@@ -73,7 +78,7 @@ memCache_t * cover_coverhunt_parse(cb_object *capo)
 
         if(real_url)
         {
-            memCache_t * search_buf = download_single(real_url,1L);
+            memCache_t * search_buf = download_single(real_url,capo->s);
 
             free(real_url);
             if(search_buf && search_buf->data)
@@ -90,25 +95,21 @@ memCache_t * cover_coverhunt_parse(cb_object *capo)
                             img_src += strlen("<img src=\"");
                             if( (img_end = strstr(img_src,"\" ")) != NULL)
                             {
-                                size_t img_len = img_end - img_src;
-                                char * img_url = malloc(img_len+1);
-                                strncpy(img_url,img_src,img_len);
-                                img_url[img_len] = '\0';
-
-                                memCache_t *result_cache = DL_init();
-                                result_cache->data = img_url;
-                                result_cache->size = img_len;
-                                DL_free(search_buf);
-                                return result_cache;
+                                char * img_url = copy_value(img_src,img_end);
+				if(img_url)
+				{
+					result_cache = DL_init();
+					result_cache->data = img_url;
+					result_cache->size = strlen(img_url);
+				}
                             }
                         }
                     }
-
                 }
                 DL_free(search_buf);
             }
         }
 
     }
-    return NULL;
+    return result_cache;
 }

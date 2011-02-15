@@ -6,7 +6,7 @@
 #include "lyricswiki.h"
 
 #include "../stringop.h"
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 
 
@@ -39,7 +39,7 @@ memCache_t * cover_lyricswiki_parse(cb_object * capo)
 
     memCache_t * result = NULL;
 
-    char *tmp = strreplace(capo->album," ","_");
+    char *tmp = strreplace(capo->s->album," ","_");
     if(tmp)
     {
         char *_album = ascii_strdown(tmp,-1);

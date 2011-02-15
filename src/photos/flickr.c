@@ -4,7 +4,7 @@
 
 #include "flickr.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -13,14 +13,17 @@
 
 const char * photos_flickr_url(glyr_settings_t * settings)
 {
-    return "http://api.flickr.com/services/rest/"
-           "?method=flickr.photos.search&"
-           "api_key=b5af0c3230fb478d53b20835223d57a4&"
-           "tags=%artist%&"
-           "content_type=1&"
-           "media=photos&"
-           "is_gallery=true&"
-           "per_page=%album%";
+    return strdup_printf("http://api.flickr.com/services/rest/"
+                         "?method=flickr.photos.search&"
+                         "api_key=b5af0c3230fb478d53b20835223d57a4&"
+                         "tags=%s&"
+                         "content_type=1&"
+                         "media=photos&"
+                         "is_gallery=true&"
+                         "per_page=%d",
+                         settings->artist,
+                         settings->photos.number
+                        );
 }
 
 static char * get_field_by_name(const char * string, const char * name)
@@ -38,7 +41,7 @@ static char * get_field_by_name(const char * string, const char * name)
             char * end = strstr(find,"\"");
             if(end)
             {
-		return copy_value(find,end);
+                return copy_value(find,end);
             }
         }
     }
@@ -51,30 +54,29 @@ memCache_t * photos_flickr_parse(cb_object * capo)
     char * ph_begin = capo->cache->data;
     char * result   = "";
 
-    size_t maxc = capo->album ? atoi(capo->album) : 5;
     size_t urlc = 0;
 
-    while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && urlc < maxc)
+    while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && urlc < (capo->s->photos.number + capo->s->photos.offset))
     {
         if(! *(++ph_begin))
-	    continue; 
-	
+            continue;
+
         char * ph_end = strstr(ph_begin,LINE_ENDIN);
         if(ph_end)
         {
-	    char * linebf = copy_value(ph_begin,ph_end);        
-	    if(linebf)
-	    {
+            char * linebf = copy_value(ph_begin,ph_end);
+            if(linebf)
+            {
                 char * ID = get_field_by_name(linebf, "id=");
                 char * SC = get_field_by_name(linebf, "secret=");
                 char * SV = get_field_by_name(linebf, "server=");
                 char * FR = get_field_by_name(linebf, "farm=");
 
-		// Track old ptr
+                // Track old ptr
                 char * old = result;
 
                 free(linebf);
-		linebf = NULL;
+                linebf = NULL;
 
                 result = strdup_printf("%s\nhttp://farm%s.static.flickr.com/%s/%s_%s.jpg",result,FR,SV,ID,SC);
 

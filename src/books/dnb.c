@@ -22,65 +22,65 @@
 
 const char * books_dnb_url(glyr_settings_t * settings)
 {
-    if (strcmp(settings->artist, "LINK") == 0)
-    {
-        if (strstr(settings->album, DOMAIN) != NULL)
-        {
-            return settings->album;
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    else
-    {
-        return URL;
-    }
+	if (strcmp(settings->artist, "LINK") == 0)
+	{
+	       	if (strstr(settings->album, DOMAIN) != NULL)
+		{
+			return settings->album;
+		} 
+		else
+		{
+ 			return NULL;	
+		}
+	}
+	else
+	{
+		return URL;
+	}
 }
 
 memCache_t * books_dnb_parse(cb_object * capo)
 {
-    char * column = NULL;
-    char * pointer = capo->cache->data;
+	char * column = NULL;
+	char * pointer = capo->cache->data;
 
-    pointer = getStr(&pointer, TABLE_START, TABLE_END);
+	pointer = getStr(&pointer, TABLE_START, TABLE_END);
 
-    if (pointer == NULL)
-    {
-        return NULL;
-    }
+	if (pointer == NULL)
+	{
+		return NULL;
+	}
 
-    while (1)
-    {
-        if ((pointer = strstr(pointer, COLUMN_KEY)) == NULL)
-        {
-            break;
-        }
+	while (1)
+	{
+		if ((pointer = strstr(pointer, COLUMN_KEY)) == NULL)
+		{
+			break;
+		}
 
-        column = (column=getStr(&pointer, COLUMN_KEY_START, COLUMN_KEY_END)) == NULL ? "" : column;
-        column = remove_html_tags_from_string(column, strlen(column));
-        trim_inplace(column);
-        printf("%s", column);
-        free(column);
+		column = (column=getStr(&pointer, COLUMN_KEY_START, COLUMN_KEY_END)) == NULL ? "" : column;
+		column = remove_html_tags_from_string(column, strlen(column));
+		trim_inplace(column);
+		printf("%s", column);
+		free(column);
 
-        if ((pointer = strstr(pointer, COLUMN_VALUE)) == NULL)
-        {
-            break;
-        }
+		if ((pointer = strstr(pointer, COLUMN_VALUE)) == NULL)
+		{
+			break;
+		}
 
-        column = (column=getStr(&pointer, COLUMN_VALUE_START, COLUMN_VALUE_END)) == NULL ? "" : column;
-        column = remove_html_tags_from_string(column, strlen(column));
-        trim_inplace(column);
-        printf(";%s\n", column);
-        free(column);
-    }
+		column = (column=getStr(&pointer, COLUMN_VALUE_START, COLUMN_VALUE_END)) == NULL ? "" : column;
+		column = remove_html_tags_from_string(column, strlen(column));
+		trim_inplace(column);
+		printf(";%s\n", column);
+		free(column);
+	}
 
-    /*
-    memCache_t * r_cache = DL_init();
-    r_cache->data = strdup(start);
-    r_cache->size = strlen(start);
-    return r_cache;
-    */
-    return NULL;
+	/*
+	memCache_t * r_cache = DL_init();
+	r_cache->data = strdup(start);
+	r_cache->size = strlen(start);
+	return r_cache;
+	*/
+	return NULL;
 }

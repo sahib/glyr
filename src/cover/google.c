@@ -5,8 +5,8 @@
 
 #include "google.h"
 
-#include "../types.h"
 #include "../core.h"
+#include "../stringop.h"
 
 #define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="
 #define END_OF_URL   "&imgrefurl="
@@ -53,18 +53,14 @@ memCache_t * cover_google_parse(cb_object * capo)
         return NULL;
     }
 
-    size_t len = end_of_url - find;
-    char *url = malloc(len+1);
-    strncpy(url,find,len);
-    url[len] = 0;
-
+    char * url = copy_value(find,end_of_url);
     memCache_t * result = DL_init();
+
     if(result != NULL)
     {
         result->data = url;
-        result->size = len;
+        result->size = strlen(url);
         return result;
     }
-
     return NULL;
 }

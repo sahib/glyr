@@ -1,5 +1,9 @@
+#define _GNU_SOURCE
+
 #include <errno.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
 #include <stdbool.h>
 #include <string.h>
 
@@ -14,6 +18,36 @@
 // Own headers:
 #include "stringop.h"
 #include "types.h"
+#include "core.h"
+
+/*--------------------------------------------------------*/
+
+int glyr_message(int v, glyr_settings_t * s, FILE * stream, const char * fmt, ...)
+{
+    int r=0;
+    if(s || v == -1)
+    {
+        if(v == -1 || v <= s->verbosity)
+        {
+            va_list param;
+            char * tmp = NULL;
+            if(stream && fmt)
+            {
+                va_start(param,fmt);
+                r = vasprintf (&tmp, fmt, param);
+                va_end(param);
+
+                if(r != -1 && tmp)
+                {
+                    r = fprintf(stream,"%s",tmp);
+                    free(tmp);
+                    tmp = NULL;
+                }
+            }
+        }
+    }
+    return r;
+}
 
 /*--------------------------------------------------------*/
 
@@ -52,7 +86,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
     }
     else
     {
-        fprintf(stderr,"Caching failed: Out of memory.\n");
+        glyr_message(-1,NULL,stderr,"Caching failed: Out of memory.\n");
     }
     return realsize;
 }
@@ -62,15 +96,20 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 // cleanup internal buffer if no longer used
 void DL_free(memCache_t *cache)
 {
-    if(cache != NULL)
+    if(cache)
     {
-        if(cache->size && cache->data != NULL)
+        if(cache->size && cache->data)
         {
             free(cache->data);
+            cache->data   = NULL;
+        }
+        if(cache->dsrc)
+        {
+            free(cache->dsrc);
+            cache->dsrc   = NULL;
         }
 
         cache->size   = 0;
-        cache->data   = NULL;
 
         free(cache);
         cache = NULL;
@@ -88,37 +127,68 @@ memCache_t* DL_init(void)
     {
         cache->size   = 0;
         cache->data   = NULL;
+        cache->dsrc   = NULL;
     }
     else
     {
-        fprintf(stderr,"Warning: empty dlcache...\n");
+        glyr_message(-1,NULL,stderr,"Warning: empty dlcache...\n");
     }
     return cache;
 }
 
 /*--------------------------------------------------------*/
 
-// Init an easyhandler with all relevant options
-static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, long timeout, long redirects, void * magic_private_ptr)
+memCache_t ** DL_new_lst(int n)
 {
+    memCache_t ** lst = malloc(sizeof(memCache_t*)*(n+1));
+    memset(lst,0,sizeof(memCache_t*)*(n+1));
+    return lst;
+}
+/*--------------------------------------------------------*/
+
+void DL_free_lst(memCache_t ** lst, glyr_settings_t *s)
+{
+    if(lst && s)
+    {
+        size_t i;
+	if(s->type == GET_PHOTO)
+	    i = s->photos.offset;
+	else
+	    i = 0;
+
+        for(; lst[i]; i++)
+        {
+            DL_free(lst[i]);
+        }
+        free(lst);
+        lst = NULL;
+    }
+}
+/*--------------------------------------------------------*/
+
+// Init an easyhandler with all relevant options
+static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, glyr_settings_t * s, void * magic_private_ptr)
+{
+    if(!s) return;
+
     // Set options (see 'man curl_easy_setopt')
-    curl_easy_setopt(eh, CURLOPT_TIMEOUT, timeout);
+    curl_easy_setopt(eh, CURLOPT_TIMEOUT, s->timeout);
     curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
     // last.fm and discogs require an useragent (wokrs without too)
-    curl_easy_setopt(eh, CURLOPT_USERAGENT, "glyrBeta");
+    curl_easy_setopt(eh, CURLOPT_USERAGENT, "BamesJond");
     curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
     // Pass vars to curl
     curl_easy_setopt(eh, CURLOPT_URL, url);
     curl_easy_setopt(eh, CURLOPT_PRIVATE, magic_private_ptr);
-    curl_easy_setopt(eh, CURLOPT_VERBOSE, 0L);
+    curl_easy_setopt(eh, CURLOPT_VERBOSE, (s->verbosity == 3));
     curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, DL_buffer);
     curl_easy_setopt(eh, CURLOPT_WRITEDATA, (void *)cache);
 
     // amazon plugin requires redirects
     curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, 1L);
-    curl_easy_setopt(eh, CURLOPT_MAXREDIRS, redirects);
+    curl_easy_setopt(eh, CURLOPT_MAXREDIRS, s->redirects);
 
     // Discogs equires gzip compression
     curl_easy_setopt(eh, CURLOPT_ENCODING,"gzip");
@@ -133,22 +203,23 @@ static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, long timeo
 /*--------------------------------------------------------*/
 
 // Init a callback object and a curl_easy_handle
-static memCache_t * handle_init(CURLM * cm, cb_object * caps, long timeout, long redirects)
+static memCache_t * handle_init(CURLM * cm, cb_object * capo, glyr_settings_t *s)
 {
-    CURL *eh = curl_easy_init();
-
     // You did sth. wrong..
-    if(!caps || !caps->url)
+    if(!capo || !capo->url)
         return NULL;
+
+    // Init handle
+    CURL *eh = curl_easy_init();
 
     // Init cache
     memCache_t *dlcache = DL_init();
 
     // Set handle
-    caps->handle = eh;
+    capo->handle = eh;
 
     // Configure curl
-    DL_setopt(eh, dlcache, caps->url, timeout, redirects,(void*)caps);
+    DL_setopt(eh, dlcache, capo->url, s,(void*)capo);
 
     // Add handle to multihandle
     curl_multi_add_handle(cm, eh);
@@ -158,7 +229,7 @@ static memCache_t * handle_init(CURLM * cm, cb_object * caps, long timeout, long
 /*--------------------------------------------------------*/
 
 // Download a singe file NOT in parallel
-memCache_t * download_single(const char* url, long redirects)
+memCache_t * download_single(const char* url, glyr_settings_t * s)
 {
     if(url==NULL)
     {
@@ -172,7 +243,7 @@ memCache_t * download_single(const char* url, long redirects)
 
     if(curl_global_init(CURL_GLOBAL_ALL))
     {
-        fprintf(stderr,"?? libcurl failed to init.\n");
+        glyr_message(-1,NULL,stderr,"?? libcurl failed to init.\n");
     }
 
     // Init handles
@@ -182,7 +253,7 @@ memCache_t * download_single(const char* url, long redirects)
     if(curl != NULL)
     {
         // Configure curl
-        DL_setopt(curl,dldata,url,20L,redirects,NULL);
+        DL_setopt(curl,dldata,url,s,NULL);
 
         // Perform transaction
         res = curl_easy_perform(curl);
@@ -190,7 +261,7 @@ memCache_t * download_single(const char* url, long redirects)
         // Better check again
         if(res != CURLE_OK)
         {
-            fprintf(stderr,C_"\n:: %s\n", curl_easy_strerror(res));
+            glyr_message(-1,NULL,stderr,C_"\n:: %s\n", curl_easy_strerror(res));
             DL_free(dldata);
             dldata = NULL;
         }
@@ -209,7 +280,7 @@ memCache_t * download_single(const char* url, long redirects)
 
 /*--------------------------------------------------------*/
 
-memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, glyr_settings_t * s, const char * status)
+memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, glyr_settings_t * s)
 {
     CURLM *cm;
     CURLMsg *msg;
@@ -220,6 +291,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
 
     // What we (hopefully) return:
     memCache_t *result = NULL;
+    bool do_exit = false;
 
     // used for select()
     fd_set R, W, E;
@@ -228,7 +300,7 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
     // Wake curl up..
     if(curl_global_init(CURL_GLOBAL_ALL) != 0)
     {
-        printf("Init failed!");
+        glyr_message(-1,NULL,stderr,"Initializing libcurl failed!");
         return NULL;
     }
 
@@ -242,34 +314,32 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
     // Set up all fields of cb_object (except callback and url)
     for (C = 0; C < CNT; C++)
     {
-	char * track = oblist[C].url;
-	
-        oblist[C].artist = s->artist;
-        oblist[C].album  = s->album;
-        oblist[C].title  = s->title;
-        oblist[C].url    = prepare_url(oblist[C].url,oblist[C].artist,oblist[C].album,oblist[C].title);
-        oblist[C].cache = handle_init(cm,&oblist[C],timeout,s->redirects);
+        char * track = oblist[C].url;
+        oblist[C].url    = prepare_url(oblist[C].url,oblist[C].s->artist,oblist[C].s->album,oblist[C].s->title);
+        oblist[C].cache  = handle_init(cm,&oblist[C],s);
 
-	if(track) 
-	{
-		// orig. url always strdup'd
-		free(track);
-	}	
+        if(track)
+        {
+            // orig. url always strdup'd
+            free(track);
+        }
 
         if(oblist[C].cache == NULL)
         {
-            fprintf(stderr,"[Internal Error:] Empty callback or empty url!\n");
-            fprintf(stderr,"[Internal Error:] Call your local C-h4x0r!\n");
+            glyr_message(-1,NULL,stderr,"[Internal Error:] Empty callback or empty url!\n");
+            glyr_message(-1,NULL,stderr,"[Internal Error:] Call your local C-h4x0r!\n");
             return NULL;
         }
     }
-    while (U != 0 && result == NULL)
+
+    int progess_indicator = 0;
+    while (U != 0 &&  do_exit == false)
     {
         // Store number of handles still being transferred in U
         CURLMcode merr;
         if( (merr = curl_multi_perform(cm, &U)) != CURLM_OK)
         {
-            fprintf(stderr,"E: (%s) in dlqueue\n",curl_multi_strerror(merr));
+            glyr_message(-1,NULL,stderr,"E: (%s) in dlqueue\n",curl_multi_strerror(merr));
             return NULL;
         }
 
@@ -281,13 +351,13 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
 
             if (curl_multi_fdset(cm, &R, &W, &E, &M))
             {
-                fprintf(stderr, "E: curl_multi_fdset\n");
+                glyr_message(-1,NULL,stderr, "E: curl_multi_fdset\n");
                 return NULL;
             }
 
             if (curl_multi_timeout(cm, &L))
             {
-                fprintf(stderr, "E: curl_multi_timeout\n");
+                glyr_message(-1,NULL,stderr, "E: curl_multi_timeout\n");
                 return NULL;
             }
             if (L == -1)
@@ -309,13 +379,13 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
 
                 if (0 > select(M+1, &R, &W, &E, &T))
                 {
-                    fprintf(stderr, "E: select(%i,,,,%li): %i: %s\n",M+1, L, errno, strerror(errno));
+                    glyr_message(-1,NULL,stderr, "E: select(%i,,,,%li): %i: %s\n",M+1, L, errno, strerror(errno));
                     return NULL;
                 }
             }
         }
 
-        while ((msg = curl_multi_info_read(cm, &Q)) && result == NULL)
+        while ((msg = curl_multi_info_read(cm, &Q)) && do_exit == false)
         {
             // We're done
             if (msg->msg == CURLMSG_DONE)
@@ -331,20 +401,26 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                 cb_object * capo = (cb_object * ) p_pass;
 
                 // The stage is yours <name>
-                fprintf(stderr,"%s"C_G":"C_" %s <%s"C_">...%c",status ? capo->url : "",(status) ? status : "Trying",capo->name,(status) ? '\n' : '\0');
-                if(capo && capo->cache && capo->cache->data && msg->data.result == 0)
+                if(capo->name)
+                    glyr_message(2,s,stderr,C_G"[]"C_" %s <%s"C_">...","Trying",capo->name);
+
+                if(capo && capo->cache && capo->cache->data && msg->data.result == CURLE_OK)
                 {
                     // Here is where the actual callback shall be executed
                     if(capo->parser_callback)
                     {
                         // Now try to parse what we downloaded
                         result = capo->parser_callback(capo);
+			if(result) 
+			{
+				do_exit = true;
+			}
                     }
                     else
                     {
                         // Some bad plugin..
                         result = NULL;
-                        fprintf(stderr,"WARN: Unable to exec callback (=NULL)\n");
+                        glyr_message(1,s,stderr,"WARN: Unable to exec callback (=NULL)\n");
                     }
 
                     if(capo->cache)
@@ -353,22 +429,44 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                         capo->cache = NULL;
                     }
 
-                    if(!status)
+                    if(result)
                     {
-                        if(result)
+                        glyr_message(2,s,stderr,C_G"..found!\n"C_);
+                    }
+                    else if(capo->name)
+                    {
+                        glyr_message(2,s,stderr,C_R"..failed.\n"C_);
+                    }
+                    else
+                    {
+                        char c = 0;
+                        switch(progess_indicator % 4)
                         {
-                            fprintf(stderr,C_G"..found!\n"C_);
+                        case 0:
+                            c ='\\';
+                            break;
+                        case 1:
+                            c ='-';
+                            break;
+                        case 2:
+                            c ='/';
+                            break;
+                        case 3:
+                            c ='|';
+                            break;
                         }
-                        else
-                        {
-                            fprintf(stderr,C_R"..failed.\n"C_);
-                        }
+                        glyr_message(2,s,stderr,C_G": "C_"Downloading [%c]\r",c);
+                        progess_indicator++;
                     }
                 }
-                else if(msg->data.result)
+                else if(msg->data.result != CURLE_OK)
                 {
                     const char * curl_err = curl_easy_strerror(msg->data.result);
-                    printf(C_R"(!)"C_" CURL ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
+                    glyr_message(1,s,stderr,C_R"(!)"C_" CURL ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
+                }
+                else if(capo->cache->data == NULL)
+                {
+                    glyr_message(2,s,stderr,C_R"..page not reachable.\n"C_);
                 }
 
                 curl_multi_remove_handle(cm,e);
@@ -383,19 +481,23 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
             }
             else
             {
-                fprintf(stderr, "E: CURLMsg (%d)\n", msg->msg);
+                glyr_message(1,s,stderr, "E: CURLMsg (%d)\n", msg->msg);
             }
 
             if (C <  CNT)
             {
                 // Get a new handle and new cache
-                oblist[C].cache = handle_init(cm,&oblist[C],timeout,s->redirects);
+                oblist[C].cache = handle_init(cm,&oblist[C],s);
 
                 C++;
                 U++;
             }
         }
     }
+
+    // erase "downloading [.] message"
+    if(oblist && !oblist[0].name)
+        glyr_message(2,s,stderr,"%-20c\n",0);
 
     // Job done - clean up what we did to the memory..
     size_t I = 0;
@@ -417,22 +519,19 @@ memCache_t * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
             oblist[I].url = NULL;
         }
 
-        oblist[I].artist = NULL;
-        oblist[I].album  = NULL;
-        oblist[I].title  = NULL;
-        oblist[I].name   = NULL;
-        oblist[I].min    = 0;
-        oblist[I].max    = 0;
+        oblist[I].name = NULL;
+        oblist[I].s    = NULL;
     }
     curl_multi_cleanup(cm);
     curl_global_cleanup();
+
 
     return result;
 }
 
 /*--------------------------------------------------------*/
 
-void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_object*), glyr_settings_t * s, const char *name)
+void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_object*), glyr_settings_t * s, const char *name, void * custom)
 {
     // always dup the url
     ref->url = url?strdup(url):NULL;
@@ -440,97 +539,62 @@ void plugin_init(cb_object *ref, const char *url, memCache_t*(callback)(cb_objec
     // Set callback
     ref->parser_callback = callback;
 
-    // Gets filled by invoke()
+    // empty cache
     ref->cache  = NULL;
-    ref->artist = NULL;
-    ref->album  = NULL;
-    ref->handle = NULL;
-    ref->title  = NULL;
 
-    if(s!=NULL)
-    {
-    	// Set min/max
-    	ref->max  = s->cover.max_size;
-    	ref->min  = s->cover.min_size;
-    }
-    ref->name = name;
+    // custom pointer passed to finalize()
+    ref->custom = custom;
+
+    // name of plugin (for display)
+    ref->name   = name;
+
+    // ptr to settings
+    ref->s      = s;
 }
 
 /*--------------------------------------------------------*/
 
-int write_file(const char *path, memCache_t *data)
+memCache_t ** register_and_execute(glyr_settings_t * settings, memCache_t**(*finalizer)(memCache_t *, glyr_settings_t *))
 {
-    // dumb write
-    if(path == NULL || data == NULL)
-    {
-        return -1;
-    }
-    else
-    {
-        FILE *pF = fopen(path,"w");
-
-        if(pF)
-        {
-            int b = fwrite(data->data,sizeof(char),data->size,pF);
-            fclose(pF);
-            return b;
-        }
-    }
-    return -1;
-}
-
-/*--------------------------------------------------------*/
-
-const char * register_and_execute(glyr_settings_t * settings, const char * filename, const char * (* finalizer) (memCache_t *, glyr_settings_t *, const char *))
-{
-    // check if we need to update
-    if(filename)
-    {
-	if(!access(filename,R_OK) && settings->update)
-	{
-		return filename;
-	}
-    }
-
     size_t i  = 0;
     size_t it = 0;
 
     plugin_t * providers = settings->providers;
 
-    const char * result = NULL;
+    memCache_t ** result = NULL;
 
     // Assume a max. of 10 plugins, just set it higher if you need to.
-    cb_object *plugin_list = malloc(sizeof(cb_object) * WHATEVER_MAX_PLUGIN);
+    cb_object *plugin_list = calloc(sizeof(cb_object), WHATEVER_MAX_PLUGIN);
 
     while(providers && providers[i].name)
     {
         // end of group
         if(providers[i].key == NULL)
         {
-    	    memCache_t * cache = invoke(plugin_list, it, settings->parallel, settings->timeout, settings, NULL);
-	    if(cache)
-	    {
-		    if( (result = finalizer(cache, settings, filename)) != NULL)
-		    {
-			// Oh? We're done?
-			DL_free(cache);
-			break;
-		    }
-		    else
-		    {
-			DL_free(cache);
-		    	goto RE_INIT_LIST;
-		    }
+            memCache_t * cache = invoke(plugin_list, it, settings->parallel, settings->timeout, settings);
+            if(cache)
+            {
+                if( (result = finalizer(cache, settings)) != NULL)
+                {
+                    // Oh? We're done?
+                    DL_free(cache);
+                    break;
+                }
+                else
+                {
+                    DL_free(cache);
+                    goto RE_INIT_LIST;
+                }
             }
-	    else
-	    {
-		RE_INIT_LIST:
-		{
-		    // Get ready for next group
-		    memset(plugin_list,0,COVER_MAX_PLUGIN * sizeof(cb_object));
-		    it = 0;
-		}
-	    }
+            else
+            {
+RE_INIT_LIST:
+                {
+                    // Get ready for next group
+                    memset(plugin_list,0,WHATEVER_MAX_PLUGIN * sizeof(cb_object));
+                    it = 0;
+                }
+            }
         }
         if(providers[i].use && providers[i].plug.url_callback)
         {
@@ -538,14 +602,23 @@ const char * register_and_execute(glyr_settings_t * settings, const char * filen
             char * url = (char*)providers[i].plug.url_callback(settings);
             if(url)
             {
-                plugin_init( &plugin_list[it++], url, providers[i].plug.parser_callback,settings,providers[i].color);
-		if(providers[i].plug.free_url)
-		{
-			free(url);
-		}
+                plugin_init( &plugin_list[it++], url, providers[i].plug.parser_callback,settings,providers[i].color,NULL);
+                if(providers[i].plug.free_url)
+                {
+                    free(url);
+                }
             }
         }
         i++;
+    }
+
+    // call finalize again to make cleaning up in the plugin code possible
+    memCache_t ** finalized_result = finalizer(NULL,settings);
+
+    // only update result if finalized_result != NULL
+    if(finalized_result != NULL)
+    {
+        result = finalized_result;
     }
 
     // Thanks for serving dear list

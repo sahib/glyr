@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-plugin_t * glyr_get_books_providers(void);
-char * get_books(glyr_settings_t * settings);
+plugin_t   * glyr_get_books_providers(void);
+memCache_t **get_books(glyr_settings_t * settings);
 
 #endif

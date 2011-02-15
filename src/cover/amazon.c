@@ -3,7 +3,7 @@
 
 #include "amazon.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../stringop.h"
 #include "../core.h"
 #include "../glyr.h"
@@ -61,34 +61,38 @@ Country settings:
 
 const char * cover_amazon_url(glyr_settings_t * sets)
 {
-    switch(sets->AMAZON_LANG_ID)
+    if(sets->cover.min_size <= 500 || sets->cover.min_size)
     {
-    case  GLYR_AMAZON_US:
-        return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    case  GLYR_AMAZON_CA:
-        return "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    case  GLYR_AMAZON_UK:
-        return "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    case  GLYR_AMAZON_FR:
-        return "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    case  GLYR_AMAZON_DE:
-        return "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    case  GLYR_AMAZON_JP:
-        return "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-    default:
-        return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        switch(sets->AMAZON_LANG_ID)
+        {
+        case  GLYR_AMAZON_US:
+            return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        case  GLYR_AMAZON_CA:
+            return "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        case  GLYR_AMAZON_UK:
+            return "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        case  GLYR_AMAZON_FR:
+            return "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        case  GLYR_AMAZON_DE:
+            return "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        case  GLYR_AMAZON_JP:
+            return "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        default:
+            return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
+        }
     }
+    return NULL;
 }
 
-#define MAX(X) (capo->max <  X && capo->max != -1)
-#define MIN(X) (capo->min >= X && capo->min != -1)
+#define MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
+#define MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
 
 memCache_t * cover_amazon_parse(cb_object *capo)
 {
     char * find, * endTag;
-    char *tag_ssize = (capo->max == -1 && capo->min == -1) ? "<LargeImage>"  :
+    char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
                       (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
-                      (MAX( 70) && MIN(30)) ? "<SmallImage>" :
+                      (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
                       (MAX(150) && MIN(70)) ? "<MediumImage>" :
                       "<LargeImage>"  ;
 
@@ -109,14 +113,11 @@ memCache_t * cover_amazon_parse(cb_object *capo)
         return NULL;
     }
 
-    size_t endTagLen = (size_t)(endTag - find);
-    char *result_url = calloc(endTagLen+1, sizeof(char));
-    strncpy(result_url, find, endTagLen);
-    result_url[endTagLen] = '\0';
+    char * result_url = copy_value(find,endTag);
 
     memCache_t *result_cache = DL_init();
     result_cache->data = result_url;
-    result_cache->size = endTagLen;
+    result_cache->size = strlen(result_url);
     return result_cache;
 }
 

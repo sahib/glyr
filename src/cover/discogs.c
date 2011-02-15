@@ -5,7 +5,7 @@
 
 #include "discogs.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -19,13 +19,18 @@
 #define URL_ENDIN "\" uri150="
 #define IMG_TYPE "primary"
 
+#define MAX_TRIES 5
+
 #define LV_DISTANCE 3
 
 #define API_KEY "adff651383"
 
 const char * cover_discogs_url(glyr_settings_t * sets)
 {
-    return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
+    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
+        return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
+
+    return NULL;
 }
 
 
@@ -35,8 +40,9 @@ memCache_t * cover_discogs_parse(cb_object * capo)
     memCache_t * result=NULL;
 
     // Go through all release node
+    int ctr = 0;
     char * release_node = capo->cache->data;
-    while((release_node = strstr(release_node+1,RELEASE_ID)) != NULL && !result)
+    while((release_node = strstr(release_node+1,RELEASE_ID)) != NULL && !result && MAX_TRIES >= ctr++)
     {
         // Find title in node
         char * title_begin = strstr(release_node,TITLE_BEGIN);
@@ -55,7 +61,7 @@ memCache_t * cover_discogs_parse(cb_object * capo)
             title_endin = NULL;
 
             // Compare with levenshtein
-            if(levenshtein_strcmp(title_value,capo->album) <= LV_DISTANCE)
+            if(levenshtein_strcmp(title_value,capo->s->album) <= LV_DISTANCE)
             {
                 // Get release ID
                 char * release_end = strstr(release_node, RELEASE_END);
@@ -71,7 +77,7 @@ memCache_t * cover_discogs_parse(cb_object * capo)
                         char *release_url = strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
                         if(release_url)
                         {
-                            memCache_t * tmp_cache = download_single(release_url,1L);
+                            memCache_t * tmp_cache = download_single(release_url,capo->s);
                             if(tmp_cache && tmp_cache->data && tmp_cache->size)
                             {
                                 // Parsing the image url from here on
@@ -90,10 +96,10 @@ memCache_t * cover_discogs_parse(cb_object * capo)
                                         if(size)
                                         {
                                             int iS = atoi(size);
-                                            if( (capo->min == -1 && capo->max == -1) ||
-                                                    (capo->min == -1 && capo->max >= iS) ||
-                                                    (capo->min <= iS && capo->max == -1) ||
-                                                    (capo->min <= iS && capo->max >= iS)  )
+                                            if( (capo->s->cover.min_size == -1 && capo->s->cover.max_size == -1) ||
+                                                    (capo->s->cover.min_size == -1 && capo->s->cover.max_size >= iS) ||
+                                                    (capo->s->cover.min_size <= iS && capo->s->cover.max_size == -1) ||
+                                                    (capo->s->cover.min_size <= iS && capo->s->cover.max_size >= iS)  )
                                             {
                                                 char * uri_begin = strstr(imgurl_endin,URL_BEGIN);
                                                 if(uri_begin)

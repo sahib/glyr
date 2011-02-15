@@ -3,7 +3,7 @@
 
 #include "directlyrics.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -19,22 +19,22 @@ const char * lyrics_directlyrics_url(glyr_settings_t * settings)
     if(esc_a)
     {
         char * esc_t = ascii_strdown(settings->title, -1);
-	if(esc_t)
-	{
-		char * rep_a = strreplace(esc_a," ","-");
-		if(rep_a)
-		{
-			char * rep_t = strreplace(esc_t," ","-");
-			if(rep_t)
-			{
-    			     url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
-			     free(rep_t);
-			}
-			free(rep_a);
-		}
-		free(esc_t);
-	}
-	free(esc_a);
+        if(esc_t)
+        {
+            char * rep_a = strreplace(esc_a," ","-");
+            if(rep_a)
+            {
+                char * rep_t = strreplace(esc_t," ","-");
+                if(rep_t)
+                {
+                    url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
+                    free(rep_t);
+                }
+                free(rep_a);
+            }
+            free(esc_t);
+        }
+        free(esc_a);
     }
     return url;
 }
@@ -46,24 +46,25 @@ memCache_t * lyrics_directlyrics_parse(cb_object * capo)
 
     if( (f_entry = strstr(capo->cache->data,"<div id=\"lyricsContent\"><p>")) )
     {
-	    char * f_end = NULL;
-            f_entry += strlen("<div id=\"lyricsContent\"><p>");
-	    if( (f_end = strstr(f_entry,"</div>")) )
-	    {
-		    char * buf = copy_value(f_entry,f_end);
-		    if(buf)
-		    {
-			// replace nonsense brs that glyr would expand to newlines
-			char * brtagged = strreplace(buf,"<br>","");
-			if(brtagged)
-			{
-			    result = DL_init();
-			    result->data = brtagged;
-			    result->size = strlen(brtagged);
-			}
-			free(buf);
-		    }
-	    }
+        char * f_end = NULL;
+        f_entry += strlen("<div id=\"lyricsContent\"><p>");
+        if( (f_end = strstr(f_entry,"</div>")) )
+        {
+            char * buf = copy_value(f_entry,f_end);
+            if(buf)
+            {
+                // replace nonsense brs that glyr would expand to newlines
+                char * brtagged = strreplace(buf,"<br>","");
+                if(brtagged)
+                {
+                    result = DL_init();
+                    result->data = brtagged;
+                    result->size = strlen(brtagged);
+                    result->dsrc = strdup(capo->url);
+                }
+                free(buf);
+            }
+        }
     }
     return result;
 }

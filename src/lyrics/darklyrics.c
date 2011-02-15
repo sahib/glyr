@@ -4,7 +4,7 @@
 
 #include "darklyrics.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -26,33 +26,34 @@ memCache_t * lyrics_darklyrics_parse(cb_object * capo)
 
     memCache_t * r_cache = NULL;
 
-    char *searchstring = strdup_printf(". %s%s",capo->title,"</a></h3>");
+    char *searchstring = strdup_printf(". %s%s",capo->s->title,"</a></h3>");
     if(searchstring)
     {
-	    ascii_strdown_modify(searchstring,-1);
-	    char *cache_copy = strdup(capo->cache->data);
-	    if(cache_copy)
-	    {
-		    ascii_strdown_modify(cache_copy,-1);
-		    char *head = strstr(cache_copy,searchstring);
-		    if(head)
-		    {
-			    char *foot  = strstr(head, "<a name=");
-			    if(foot)
-			    {
-				    char * html_code = copy_value(head,foot);
-				    if(html_code)
-				    {
-				            r_cache = DL_init();
-					    r_cache->data = strreplace(html_code,"<br />","");
-					    r_cache->size = strlen(r_cache->data);
-					    free(html_code);
-				    }
-			    }
-    		    }
-		    free(cache_copy);
-	   }
-	   free(searchstring);
+        ascii_strdown_modify(searchstring,-1);
+        char *cache_copy = strdup(capo->cache->data);
+        if(cache_copy)
+        {
+            ascii_strdown_modify(cache_copy,-1);
+            char *head = strstr(cache_copy,searchstring);
+            if(head)
+            {
+                char *foot  = strstr(head, "<a name=");
+                if(foot)
+                {
+                    char * html_code = copy_value(head,foot);
+                    if(html_code)
+                    {
+                        r_cache = DL_init();
+                        r_cache->data = strreplace(html_code,"<br />","");
+                        r_cache->size = strlen(r_cache->data);
+                        r_cache->dsrc = strdup(capo->url);
+                        free(html_code);
+                    }
+                }
+            }
+            free(cache_copy);
+        }
+        free(searchstring);
     }
     return r_cache;
 }

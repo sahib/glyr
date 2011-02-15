@@ -18,13 +18,24 @@
 
 // Change this if you really need more
 #define WHATEVER_MAX_PLUGIN 16
-#define LYRIC_MAX_PLUGIN WHATEVER_MAX_PLUGIN
 #define COVER_MAX_PLUGIN WHATEVER_MAX_PLUGIN
 
 #define DEFAULT_TIMEOUT  20L
 #define DEFAULT_REDIRECTS 1L
+#define DEFAULT_PARALLEL 4L
+#define PHOTOS_DEFAULT_OFFSET 0
+#define PHOTOS_DEFAULT_NUMBER 5
+#define DEFAULT_CMINSIZE 125
+#define DEFAULT_CMAXSIZE -1
+#define DEFAULT_VERBOSITY 2
+#define DEFAULT_AMAZON_ID -1
+#define DEFAULT_DO_UPDATE false
+#define DEFAULT_CNUMBER 1
 
 #define PTR_SPACE 10
+
+// Prototype cb_object struct
+struct cb_object;
 
 // Note:
 // you will notice that some structs share the same data,
@@ -41,64 +52,36 @@ typedef struct memCache_t
 // Note: the error code is not used at the moment
 } memCache_t;
 
-// Internal calback object, used for cover, lyrics and meta
-// This is only used inside the core and the plugins
-// Other parts of the program shall not use this struct
-// memCache_t is what you're searching
-typedef struct cb_object
-{
-    // What callback to call
-    memCache_t * (* parser_callback) (struct cb_object *);
-
-    // What url to download before the callback is called
-    char *url;
-
-    // Storage of the --of argument 
-    const char ** info;
-
-    // Artist related... (pointer to parameters give to plugin_init)
-    const char *artist;
-    const char *album;
-    const char *title;
-
-    // What max/min size a cover may have (this is only for covers)
-    int max,min;
-
-    //Plugin name - only important for verbose output
-    const char * name;
-
-    // What curl handle this is attached
-    CURL *handle;
-
-    // internal cache attached to this url
-    memCache_t *cache;
-
-} cb_object;
-
 typedef struct glyr_settings_t
 {
     // get
     int type;
 
     const char * info[PTR_SPACE];
-    
+
     // of
     const char * artist;
     const char * album;
     const char * title;
 
-    // photo 
-    struct {
-	int number;
+    // photo
+    struct
+    {
+        int number;
+	int offset;
     } photos;
 
     // cover
-    struct {
-    	int min_size;
-    	int max_size;
+    struct
+    {
+        int min_size;
+        int max_size;
+        int number;
+        int c_buf;
+        memCache_t ** lst;
     } cover;
 
-    // from
+    // from (as void because I didnt manage to prototype plugin_t... *?*)
     void * providers;
 
     // invoke() control
@@ -106,8 +89,8 @@ typedef struct glyr_settings_t
     long timeout;
     long redirects;
 
-    // to
-    const char * save_path;
+    // verbosity
+    int verbosity;
 
     //update
     int update;
@@ -134,7 +117,7 @@ typedef struct plugin_t
         // Passed to the corresponding cb_object and is called...perhaps
         memCache_t * (* parser_callback) (struct cb_object *);
         const char * (* url_callback)    (glyr_settings_t  *);
-        bool free_url;
+        bool free_url; // pass result of url_callback to free() ?
     } plug;
 
 } plugin_t;
@@ -145,7 +128,8 @@ enum GLYR_GET_TYPES
     GET_COVER,
     GET_LYRIC,
     GET_PHOTO,
-    GET_BOOKS
+    GET_BOOKS,
+    GET_ADESCR
 };
 
 #endif

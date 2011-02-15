@@ -4,7 +4,7 @@
 
 #include "lyricsvip.h"
 
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -16,13 +16,13 @@ const char * lyrics_lyricsvip_url(glyr_settings_t * settings)
     char * artist_clean = strreplace(settings->artist, " ", "-");
     if(artist_clean)
     {
-	    char * title_clean =  strreplace(settings->title, " ", "-");
-	    if(title_clean)
-	    {
-	    	result = strdup_printf(LV_URL, artist_clean, title_clean);
-		free(title_clean);
-	    }
-	    free(artist_clean);
+        char * title_clean =  strreplace(settings->title, " ", "-");
+        if(title_clean)
+        {
+            result = strdup_printf(LV_URL, artist_clean, title_clean);
+            free(title_clean);
+        }
+        free(artist_clean);
     }
     return result;
 }
@@ -55,6 +55,7 @@ memCache_t * lyrics_lyricsvip_parse(cb_object *capo)
     memCache_t * r_cache = DL_init();
     r_cache->data = content;
     r_cache->size = strlen(content);
+    r_cache->dsrc = strdup(capo->url);
     return r_cache;
 }
 

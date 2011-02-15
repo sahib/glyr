@@ -20,5 +20,6 @@ char * trim_nocopy(char *s);
 char * getStr (char ** s, char * start, char * end);
 char * remove_html_tags_from_string(const char * string, size_t len);
 char * copy_value(const char * begin, const char * end);
+char * get_next_word(const char * string, const char * delim, size_t *offset, size_t len);
 
 #endif

@@ -8,14 +8,14 @@
 
 #include "../cover.h"
 #include "../stringop.h"
-#include "../types.h"
+#include "../core.h"
 #include "../core.h"
 
 #define API_KEY "7199021d9c8fbae507bf77d0a88533d7"
 
 const char * cover_lastfm_url(glyr_settings_t * sets)
 {
-    if(sets->cover.min_size < 300)
+    if(sets->cover.min_size <= 350 || sets->cover.min_size == -1)
     {
         return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY;
     }
@@ -29,13 +29,13 @@ memCache_t * cover_lastfm_parse(cb_object *capo)
     char *tag_esize = "</image>";
 
     // find desired size
-    if( size_is_okay(300,capo->min,capo->max) )
+    if( size_is_okay(300,capo->s->cover.min_size,capo->s->cover.max_size) )
         tag_ssize = "<image size=\"extralarge\">";
-    else if( size_is_okay(125,capo->min,capo->max) )
+    else if( size_is_okay(125,capo->s->cover.min_size,capo->s->cover.max_size) )
         tag_ssize = "<image size=\"large\">";
-    else if( size_is_okay(64, capo->min,capo->max) )
+    else if( size_is_okay(64, capo->s->cover.min_size,capo->s->cover.max_size) )
         tag_ssize = "<image size=\"middle\">";
-    else if( size_is_okay(34, capo->min,capo->max) )
+    else if( size_is_okay(34, capo->s->cover.min_size,capo->s->cover.max_size) )
         tag_ssize = "<image size=\"small\">";
     else if ( true || false )
         tag_ssize = "<image size=\"extralarge\">";
