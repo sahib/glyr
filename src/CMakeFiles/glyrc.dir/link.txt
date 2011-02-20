@@ -1,1 +1,0 @@
-/usr/bin/gcc  -march=native -O3 -fomit-frame-pointer -msse4a    CMakeFiles/glyrc.dir/main.c.o  -o glyrc -rdynamic ../lib/libglyr.so -lcurl -Wl,-rpath,/home/spohst/Projects/gittry/glyr/lib 
