@@ -16,8 +16,6 @@
 #include "books.h"
 #include "ainfo.h"
 
-#include "../glyr_config.h"
-
 // prot
 static int glyr_parse_from(const char * arg, glyr_settings_t * settings);
 static int glyr_set_info(glyr_settings_t * s, int at, const char * arg);
