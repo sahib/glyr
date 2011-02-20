@@ -1,0 +1,5 @@
+// the configured options and settings for Tutorial
+#define glyr_VERSION_MAJOR @glyr_VERSION_MAJOR@
+#define glyr_VERSION_MINOR @glyr_VERSION_MINOR@
+
+

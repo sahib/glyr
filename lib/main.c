@@ -5,12 +5,12 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "../lib/glyr.h"
+#include "glyr.h"
 
 // also includes glyr's stringlib
 // you shouldnt do this yourself, but
 // implementing functions twice is silly.
-#include "../lib/stringop.h"
+#include "stringop.h"
 
 #include <dirent.h>
 #include <sys/types.h>
