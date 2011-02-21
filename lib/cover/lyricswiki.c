@@ -51,7 +51,7 @@ cache_list * cover_lyricswiki_parse(cb_object * capo)
             {
                 // Find end & start of the name
                 find  += strlen(IMG_TAG);
-                endTag = strcasestr(find,END_TAG);
+                endTag = strstr(find,END_TAG);
 
                 if(endTag == NULL || endTag <= find)
                     continue;
@@ -83,14 +83,14 @@ cache_list * cover_lyricswiki_parse(cb_object * capo)
                                     char * url = copy_value(url_start, url_end);
                                     if(url)
                                     {
-					if(!r_list) r_list = DL_new_lst();
+                                        if(!r_list) r_list = DL_new_lst();
 
                                         memCache_t * result = DL_init();
                                         result->data = url;
                                         result->size = url_end - url_start;
 
-					DL_add_to_list(r_list,result);
-					urlc++;
+                                        DL_add_to_list(r_list,result);
+                                        urlc++;
                                     }
 
                                     url_end=NULL;

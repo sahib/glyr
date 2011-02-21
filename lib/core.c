@@ -10,6 +10,8 @@
 // Handle non-standardized systems:
 #ifndef WIN32
 #include <unistd.h>
+#else
+#include <time.h>
 #endif
 
 // All curl stuff we need:
@@ -19,8 +21,16 @@
 #include "stringop.h"
 #include "core.h"
 
+// Get user agent
+#include "config.h"
+
 /*--------------------------------------------------------*/
 
+#define remove_color( string, color )             \
+	if(string && color) {                     \
+	char * x = strreplace(string,color,NULL); \
+	free(string); string = x;}                \
+ 
 int glyr_message(int v, glyr_settings_t * s, FILE * stream, const char * fmt, ...)
 {
     int r=0;
@@ -33,11 +43,25 @@ int glyr_message(int v, glyr_settings_t * s, FILE * stream, const char * fmt, ..
             if(stream && fmt)
             {
                 va_start(param,fmt);
-                r = vasprintf (&tmp, fmt, param);
+                r = x_vasprintf (&tmp, fmt, param);
                 va_end(param);
 
                 if(r != -1 && tmp)
                 {
+
+// Remove any color if desired
+#ifdef USE_COLOR
+                    if(s && !s->color_output)
+                    {
+                        remove_color(tmp,C_B);
+                        remove_color(tmp,C_M);
+                        remove_color(tmp,C_C);
+                        remove_color(tmp,C_R);
+                        remove_color(tmp,C_G);
+                        remove_color(tmp,C_Y);
+                        remove_color(tmp,C_ );
+                    }
+#endif
                     r = fprintf(stream,"%s%s",(v>2)?C_B"DEBUG: "C_:"",tmp);
                     free(tmp);
                     tmp = NULL;
@@ -48,11 +72,14 @@ int glyr_message(int v, glyr_settings_t * s, FILE * stream, const char * fmt, ..
     return r;
 }
 
+#undef remove_color
+
 /*--------------------------------------------------------*/
 
 // Sleep usec microseconds
 static int DL_usleep(long usec)
 {
+#ifndef WIN32
     struct timespec req= { 0 };
     time_t sec = (int) (usec / 1e6L);
 
@@ -64,7 +91,9 @@ static int DL_usleep(long usec)
     {
         continue;
     }
-
+#else // Windooze
+    Sleep(usec / 1e3L);
+#endif
     return 0;
 }
 
@@ -72,25 +101,25 @@ static int DL_usleep(long usec)
 
 memCache_t * DL_copy(memCache_t * src)
 {
-	memCache_t * dest = NULL;
-	if(src) 
-	{
-		dest = DL_init();
-		if(dest)
-		{
-			if(src->data)
-			{
-				dest->data = calloc(src->size+1,sizeof(char));
-				memcpy(dest->data,src->data,src->size);
-			}
-			if(src->dsrc)
-			{
-				dest->dsrc = strdup(src->dsrc);
-			}
-			dest->size = src->size;
-		}
-	}	
-	return dest;
+    memCache_t * dest = NULL;
+    if(src)
+    {
+        dest = DL_init();
+        if(dest)
+        {
+            if(src->data)
+            {
+                dest->data = calloc(src->size+1,sizeof(char));
+                memcpy(dest->data,src->data,src->size);
+            }
+            if(src->dsrc)
+            {
+                dest->dsrc = strdup(src->dsrc);
+            }
+            dest->size = src->size;
+        }
+    }
+    return dest;
 }
 
 /*--------------------------------------------------------*/
@@ -167,16 +196,16 @@ cache_list * DL_new_lst(void)
     cache_list * c = calloc(1,sizeof(cache_list));
     if(c != NULL)
     {
-	c->size = 0;
-    	c->list = calloc(1,sizeof(memCache_t*));
-	if(!c->list)
-	{
-		glyr_message(-1,NULL,stderr,"calloc() returned NULL!");
-	}
+        c->size = 0;
+        c->list = calloc(1,sizeof(memCache_t*));
+        if(!c->list)
+        {
+            glyr_message(-1,NULL,stderr,"calloc() returned NULL!");
+        }
     }
     else
     {
-	glyr_message(-1,NULL,stderr,"c is still empty?");
+        glyr_message(-1,NULL,stderr,"c is still empty?");
     }
 
     return c;
@@ -186,31 +215,31 @@ cache_list * DL_new_lst(void)
 
 void DL_add_to_list(cache_list * l, memCache_t * c)
 {
-   if(l && c)
-   {
-	l->list = realloc(l->list, sizeof(memCache_t *) * (l->size+2));
-	l->list[  l->size] = c;
-	l->list[++l->size] = NULL;
-   } 
+    if(l && c)
+    {
+        l->list = realloc(l->list, sizeof(memCache_t *) * (l->size+2));
+        l->list[  l->size] = c;
+        l->list[++l->size] = NULL;
+    }
 }
 
 /*--------------------------------------------------------*/
 
 void DL_push_sublist(cache_list * l, cache_list * s)
 {
-	if(l && s)
-	{
-		size_t i;
-		for(i = 0; i < s->size; i++)
-		{
-			DL_add_to_list(l,s->list[i]);
-		}
-	}
+    if(l && s)
+    {
+        size_t i;
+        for(i = 0; i < s->size; i++)
+        {
+            DL_add_to_list(l,s->list[i]);
+        }
+    }
 }
 
 /*--------------------------------------------------------*/
 
-// Free list itself and all caches stored in there 
+// Free list itself and all caches stored in there
 void DL_free_lst(cache_list * c)
 {
     if(c)
@@ -218,8 +247,8 @@ void DL_free_lst(cache_list * c)
         size_t i;
         for(i = 0; i < c->size ; i++)
             DL_free(c->list[i]);
-        
-	DL_free_container(c);
+
+        DL_free_container(c);
     }
 }
 
@@ -228,14 +257,14 @@ void DL_free_lst(cache_list * c)
 // only free list, caches are left intact
 void DL_free_container(cache_list * c)
 {
-	if(c!=NULL)
-	{
-		if(c->list)
-		   free(c->list);
+    if(c!=NULL)
+    {
+        if(c->list)
+            free(c->list);
 
-		memset(c,0,sizeof(cache_list));
-		free(c);		
-	}
+        memset(c,0,sizeof(cache_list));
+        free(c);
+    }
 }
 
 /*--------------------------------------------------------*/
@@ -250,7 +279,7 @@ static void DL_setopt(CURL *eh, memCache_t * cache, const char * url, glyr_setti
     curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
     // last.fm and discogs require an useragent (wokrs without too)
-    curl_easy_setopt(eh, CURLOPT_USERAGENT, "Gullible Kunrad the Owl");
+    curl_easy_setopt(eh, CURLOPT_USERAGENT, glyr_VERSION_NAME );
     curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
     // Pass vars to curl
@@ -390,19 +419,19 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
     {
         char * track = oblist[C].url;
 
-	// format url
+        // format url
         oblist[C].url    = prepare_url(oblist[C].url,oblist[C].s->artist,oblist[C].s->album,oblist[C].s->title);
 
-	// init cache and the CURL handle assicoiated with it
+        // init cache and the CURL handle assicoiated with it
         oblist[C].cache  = handle_init(cm,&oblist[C],s,timeout);
 
-	// old url will be freed as it's always strdup'd
+        // old url will be freed as it's always strdup'd
         if(track)
-	{
+        {
             free(track);
-	}
+        }
 
-	// > huh?-case
+        // > huh?-case
         if(oblist[C].cache == NULL)
         {
             glyr_message(-1,NULL,stderr,"[Internal Error:] Empty callback or empty url!\n");
@@ -411,7 +440,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
         }
     }
 
-    // counter of plugins tried 
+    // counter of plugins tried
     int n_sources = 0;
 
     while (U != 0 &&  do_exit == false)
@@ -445,7 +474,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
             }
             if (M == -1)
             {
-                DL_usleep(L * 1000);
+                DL_usleep(L * 100);
             }
             else
             {
@@ -475,7 +504,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                 cb_object * capo = (cb_object *) p_pass;
 
                 // The stage is yours <name>
-                if(capo->name) glyr_message(2,s,stderr,C_G"[]"C_" %s <%s"C_">...","Trying",capo->name);
+                if(capo->name) glyr_message(2,s,stderr,"%s <%s"C_">...","Trying",capo->name);
 
                 if(capo && capo->cache && capo->cache->data && msg->data.result == CURLE_OK)
                 {
@@ -484,63 +513,63 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                     {
                         // Now try to parse what we downloaded
                         cache_list * cl = capo->parser_callback(capo);
-			if(cl) 
-			{
-				if(capo->name)
-				{
-                        		glyr_message(2,s,stderr,C_G"..found!"C_" (%dx)\n",cl->size);
-				}
-				else
-				{
-                        		char c = 0;
-					switch(n_sources % 4)
-					{
-						case 0:
-						    c ='\\';
-						    break;
-						case 1:
-						    c ='-';
-						    break;
-						case 2:
-						    c ='/';
-						    break;
-						case 3:
-						    c ='|';
-						    break;
-					}
-                        		glyr_message(2,s,stderr,C_G"O "C_"Downloading [%c] [#%d] - %2.2f\r",c,n_sources,(float)(n_sources / s->number));
-				}
-			
-				if(!result_lst)
-				{
-				    result_lst = DL_new_lst();
-				}
-	
-				// push all pointers from sublist to resultlist
-				DL_push_sublist(result_lst,cl);
+                        if(cl)
+                        {
+                            if(capo->name)
+                            {
+                                glyr_message(2,s,stderr,C_G"..found!"C_" (%dx)\n",cl->size);
+                            }
+                            else
+                            {
+                                char c = 0;
+                                switch(n_sources % 4)
+                                {
+                                case 0:
+                                    c ='\\';
+                                    break;
+                                case 1:
+                                    c ='-';
+                                    break;
+                                case 2:
+                                    c ='/';
+                                    break;
+                                case 3:
+                                    c ='|';
+                                    break;
+                                }
+                                glyr_message(2,s,stderr,C_G"O "C_"Downloading [%c] [#%d] - %2.2f%%\r",c,n_sources,(float)(n_sources / s->number));
+                            }
 
-				// free the old container
-				DL_free_container(cl);
+                            if(!result_lst)
+                            {
+                                result_lst = DL_new_lst();
+                            }
 
-				glyr_message(3,s,stderr,"Tried sources: %d (of max. %d) | Buffers in line: %d\n",n_sources,s->number,result_lst->size);
+                            // push all pointers from sublist to resultlist
+                            DL_push_sublist(result_lst,cl);
 
-				// Are we finally done?
-				if(n_sources >= CNT || s->number <= result_lst->size)
-				{
-				    do_exit = true;
-				}
-			}
+                            // free the old container
+                            DL_free_container(cl);
+
+                            glyr_message(3,s,stderr,"Tried sources: %d (of max. %d) | Buffers in line: %d\n",n_sources,s->number,result_lst->size);
+
+                            // Are we finally done?
+                            if(n_sources >= CNT || s->number <= result_lst->size)
+                            {
+                                do_exit = true;
+                            }
+                        }
                         else if(capo->name)
-    	                {
-        	            glyr_message(2,s,stderr,C_R"..failed.\n"C_);
-                	}
+                        {
+                            glyr_message(2,s,stderr,C_R"..failed.\n"C_);
+                        }
                     }
                     else
                     {
                         glyr_message(1,s,stderr,"WARN: Unable to exec callback (=NULL)\n");
                     }
 
-		    // delete cache 
+                    // delete cache
                     if(capo->cache)
                     {
                         DL_free(capo->cache);
@@ -553,7 +582,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                     const char * curl_err = curl_easy_strerror(msg->data.result);
                     glyr_message(1,s,stderr,C_R"(!)"C_" CURL ERROR [%d]: %s\n",msg->data.result, curl_err ? curl_err : "Unknown Error");
                 }
-                else if(capo->cache->data == NULL && capo->name) 
+                else if(capo->cache->data == NULL && capo->name)
                 {
                     glyr_message(2,s,stderr,C_R"..page not reachable.\n"C_);
                 }
@@ -582,7 +611,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                 U++;
             }
 
-	    // amount of tried plugins
+            // amount of tried plugins
             n_sources++;
         }
     }
@@ -605,8 +634,8 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
         if(oblist[I].url != NULL)
             free(oblist[I].url);
 
-	// erase everything 
-	memset(&oblist[I],0,sizeof(cb_object));
+        // erase everything
+        memset(&oblist[I],0,sizeof(cb_object));
     }
 
     curl_multi_cleanup(cm);
@@ -655,44 +684,44 @@ cache_list * register_and_execute(glyr_settings_t * settings, cache_list * (*fin
         // end of group -> execute
         if(providers[iterator].key == NULL)
         {
-	    glyr_message(3,settings,stderr,"Executing jobgroup '%s'\n",providers[iterator].name);
+            glyr_message(3,settings,stderr,"Executing jobgroup '%s'\n",providers[iterator].name);
 
-	    // Get the raw result of one jobgroup 
+            // Get the raw result of one jobgroup
             cache_list * invoked_list = invoke(plugin_list, i_plugin, settings->parallel, settings->timeout, settings);
             if(invoked_list)
             {
-		// "finalize" this list
-		cache_list * sub_list = finalizer(invoked_list,settings);
-		if(sub_list)
-		{
-			if(!result_lst) result_lst = DL_new_lst();
-			// Store pointers to final caches
-			DL_push_sublist(result_lst,sub_list);
+                // "finalize" this list
+                cache_list * sub_list = finalizer(invoked_list,settings);
+                if(sub_list)
+                {
+                    if(!result_lst) result_lst = DL_new_lst();
+                    // Store pointers to final caches
+                    DL_push_sublist(result_lst,sub_list);
 
-			// Free all old container
-			DL_free_container(sub_list);
-		}
+                    // Free all old container
+                    DL_free_container(sub_list);
+                }
 
-		DL_free_lst(invoked_list);
-	
-		//glyr_message(3,settings,stderr,"Result_list_iterator: %d (up to n=%d)\n",(int)result_lst->size, settings->number);
+                DL_free_lst(invoked_list);
+
+                //glyr_message(3,settings,stderr,"Result_list_iterator: %d (up to n=%d)\n",(int)result_lst->size, settings->number);
 
                 if(result_lst != NULL && settings->number <= result_lst->size)
                 {
                     // We are done.
-		    glyr_message(3,settings,stderr,"register_and_execute() Breaking out.\n");
+                    glyr_message(3,settings,stderr,"register_and_execute() Breaking out.\n");
                     break;
                 }
                 else
                 {
-		    // Not enough data -> search again
-		    glyr_message(3,settings,stderr,"register_and_execute() (Re)-initializing list.\n");
+                    // Not enough data -> search again
+                    glyr_message(3,settings,stderr,"register_and_execute() (Re)-initializing list.\n");
                     goto RE_INIT_LIST;
                 }
             }
             else
             {
-		RE_INIT_LIST:
+RE_INIT_LIST:
                 {
                     // Get ready for next group
                     memset(plugin_list,0,WHATEVER_MAX_PLUGIN * sizeof(cb_object));
@@ -705,10 +734,10 @@ cache_list * register_and_execute(glyr_settings_t * settings, cache_list * (*fin
         {
             // Call the Url getter of the plugin
             char * url = (char*)providers[iterator].plug.url_callback(settings);
-	    glyr_message(3,settings,stderr,"URL callback return <%s>\n",url);
+            glyr_message(3,settings,stderr,"URL callback return <%s>\n",url);
             if(url)
             {
-		glyr_message(3,settings,stderr,"Registering plugin '%s'\n",providers[iterator].name);
+                glyr_message(3,settings,stderr,"Registering plugin '%s'\n",providers[iterator].name);
                 plugin_init( &plugin_list[i_plugin++], url, providers[iterator].plug.parser_callback,settings,providers[iterator].color,NULL);
                 if(providers[iterator].plug.free_url)
                 {

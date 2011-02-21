@@ -19,7 +19,7 @@ typedef struct cb_object
     // Storage of the --of argument
     const char ** info;
 
-    // Custom pointer used to pass 
+    // Custom pointer used to pass
     // unspecified data to finalize()
     void * custom;
 

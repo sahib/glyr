@@ -238,13 +238,13 @@ static char * prepare_string(const char * in)
 
 static void swap_string(char ** tmp, const char * subs, const char * with)
 {
-	char *swap = *tmp;
-	*tmp = strreplace(swap,subs,with);
+    char *swap = *tmp;
+    *tmp = strreplace(swap,subs,with);
 
-	if(swap) 
-	{
-		free(swap);
-	}
+    if(swap)
+    {
+        free(swap);
+    }
 }
 
 // Prepares the url for you to get downloaded. You don't have to call this.
@@ -253,22 +253,22 @@ char * prepare_url(const char *URL, const char *artist, const char *album, const
     char * tmp = NULL;
     if(URL)
     {
-	tmp = strdup(URL);
+        tmp = strdup(URL);
 
         char * p_artist = prepare_string(artist);
-	char * p_album  = prepare_string(album);
-	char * p_title  = prepare_string(title);
+        char * p_album  = prepare_string(album);
+        char * p_title  = prepare_string(title);
 
-	swap_string(&tmp,"%artist%",p_artist);
-	swap_string(&tmp,"%album%", p_album);
-	swap_string(&tmp,"%title%", p_title);
+        swap_string(&tmp,"%artist%",p_artist);
+        swap_string(&tmp,"%album%", p_album);
+        swap_string(&tmp,"%title%", p_title);
 
-	if(p_artist)
-	    free(p_artist);
-	if(p_album)
-	    free(p_album);
-	if(p_title)
-	    free(p_title);
+        if(p_artist)
+            free(p_artist);
+        if(p_album)
+            free(p_album);
+        if(p_title)
+            free(p_title);
     }
     return tmp;
 }
@@ -298,32 +298,32 @@ char* escape_slashes(const char* in)
 
 char * get_next_word(const char * string, const char * delim, size_t *offset, size_t len)
 {
-	char * word = NULL;
-	if(string && delim && *(offset) < len)
-	{
-		char * occurence = strstr(string+(*offset),delim);
-		if(occurence)
-		{
-			word=copy_value(string+(*offset),occurence);
-			*(offset) += (1 + occurence - (string + *(offset)));
-		}
-		else
-		{
-			word=copy_value(string+(*offset),string+len);
-			*(offset) = len;
-		}
-	}
-	if(word)
-	{
-		char * trim = calloc(len+1,sizeof(char));
-		if(trim)
-		{
-			trim_copy(word,trim);
-		}
-		free(word);
-		word = trim;
-	}
-	return word;
+    char * word = NULL;
+    if(string && delim && *(offset) < len)
+    {
+        char * occurence = strstr(string+(*offset),delim);
+        if(occurence)
+        {
+            word=copy_value(string+(*offset),occurence);
+            *(offset) += (1 + occurence - (string + *(offset)));
+        }
+        else
+        {
+            word=copy_value(string+(*offset),string+len);
+            *(offset) = len;
+        }
+    }
+    if(word)
+    {
+        char * trim = calloc(len+1,sizeof(char));
+        if(trim)
+        {
+            trim_copy(word,trim);
+        }
+        free(word);
+        word = trim;
+    }
+    return word;
 }
 
 /* ------------------------------------------------------------- */
@@ -411,6 +411,43 @@ char *unescape_html_UTF8(const char * data)
 
 /* ------------------------------------------------------------- */
 
+/* replacement for the non-portable vasprintf() */
+int x_vasprintf(char ** str, const char * fmt, va_list params)
+{
+    int r = -1;
+    if(!str)
+    {
+        return r;
+    }
+
+#ifndef WIN32
+    /* Assume we have a vasprintf() somewhere */
+    r = vasprintf (str, fmt, params);
+#else
+    /* Dirty hack to get the length of the fmt string */
+    /* Windows does sadly not offer vasprintf(),      */
+    /* So, the string is printed to a NUL device, and */
+    /* characters are counted and saved in buf_len    */
+    /* The buffer is allocated and built by vsnprintf */
+    FILE * nul = fopen("NUL","w");
+    if(nul)
+    {
+        size_t buf_size = vfprintf(nul, fmt, params) + 1;
+        char * buffer   = calloc(buf_size+1,sizeof(char));
+
+        if(buffer)
+        {
+            r = vsnprintf(buffer, buf_size, fmt, params);
+            *str = buffer;
+        }
+        fclose(nul);
+    }
+#endif
+    return r;
+}
+
+/* ------------------------------------------------------------- */
+
 char *strdup_printf (const char *format, ...)
 {
     if(format)
@@ -419,7 +456,7 @@ char *strdup_printf (const char *format, ...)
         char *tmp = NULL;
 
         va_start (arg, format);
-        if(vasprintf (&tmp, format, arg) == -1)
+        if(x_vasprintf (&tmp, format, arg) == -1)
         {
             return NULL;
         }
@@ -727,17 +764,17 @@ char * beautify_lyrics(const char * lyrics)
 
             char * bye_html = remove_html_tags_from_string(unicode,len);
             free(unicode);
-	    if(bye_html)	
-	    {
-		    char * trimd = calloc(1,sizeof(char) * (strlen(bye_html)+1));
-		    if(trimd)
-		    {
-		        trim_copy(bye_html,trimd); 
-		    }
+            if(bye_html)
+            {
+                char * trimd = calloc(1,sizeof(char) * (strlen(bye_html)+1));
+                if(trimd)
+                {
+                    trim_copy(bye_html,trimd);
+                }
 
-		    result = trimd;
-		    free(bye_html);
-	    }
+                result = trimd;
+                free(bye_html);
+            }
         }
     }
     return result;

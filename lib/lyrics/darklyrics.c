@@ -59,8 +59,8 @@ cache_list * lyrics_darklyrics_parse(cb_object * capo)
 
     if(r_cache)
     {
-	r_list = DL_new_lst();
-	DL_add_to_list(r_list,r_cache);
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,r_cache);
     }
     return r_list;
 }

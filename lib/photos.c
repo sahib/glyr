@@ -27,14 +27,19 @@ plugin_t * glyr_get_photo_providers(void)
 
 static cache_list * cover_callback(cb_object * capo)
 {
-	cache_list * ls = DL_new_lst();
-	memCache_t * dl = DL_copy(capo->cache);
-	if(dl)
-	{
-		dl->dsrc = strdup(capo->url);
-		DL_add_to_list(ls,dl);	
-	}
-	return ls;
+    cache_list * ls = DL_new_lst();
+    memCache_t * dl = DL_copy(capo->cache);
+    if(dl)
+    {
+        dl->dsrc = strdup(capo->url);
+
+        // call user defined callback
+        if(capo->s->callback.download)
+            capo->s->callback.download(dl,capo->s);
+
+        DL_add_to_list(ls,dl);
+    }
+    return ls;
 }
 
 static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settings)
@@ -42,22 +47,42 @@ static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settin
     cache_list * dl_list = NULL;
     if(result)
     {
-	cb_object  * urlplug_list = calloc(result->size+1,sizeof(cb_object));
-	if(urlplug_list)
-	{
-		size_t i = 0;
-		for(i = 0; i < result->size; i++)
-		{
-			if(result->list[i] && result->list[i]->data)
-			{
-				plugin_init(&urlplug_list[i], result->list[i]->data, cover_callback, settings, NULL, NULL);
-				free(result->list[i]->data);
-			}
-		}
-printf("\n%d timeout\n", settings->timeout);
-		dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);
-		free(urlplug_list);
-	}
+        if(settings->download)
+        {
+            cb_object  * urlplug_list = calloc(result->size+1,sizeof(cb_object));
+            if(urlplug_list)
+            {
+                size_t i = 0;
+                for(i = 0; i < result->size; i++)
+                {
+                    if(result->list[i] && result->list[i]->data)
+                    {
+                        plugin_init(&urlplug_list[i], result->list[i]->data, cover_callback, settings, NULL, NULL);
+                        free(result->list[i]->data);
+                    }
+                }
+                dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);
+                free(urlplug_list);
+            }
+        }
+        else
+        {
+            size_t i = 0;
+            for( i = 0; i < result->size; i++)
+            {
+                if(result->list[i])
+                {
+                    if(!dl_list) dl_list = DL_new_lst();
+
+                    memCache_t * r_copy = DL_init();
+                    r_copy->data = strdup(result->list[i]->data);
+                    r_copy->size = strlen(r_copy->data);
+                    DL_add_to_list(dl_list,r_copy);
+
+                    free(result->list[i]->data);
+                }
+            }
+        }
     }
     return dl_list;
 }
@@ -68,7 +93,7 @@ cache_list * get_photos(glyr_settings_t * settings)
     if (settings && settings->artist)
         return register_and_execute(settings,photo_finalize);
     else
-	glyr_message(2,settings,stderr,C_R"[]"C_" Artist is needed to download artist-related photos!\n");
+        glyr_message(2,settings,stderr,C_R"[]"C_" Artist is needed to download artist-related photos!\n");
 
     return NULL;
 }

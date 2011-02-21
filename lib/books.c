@@ -30,17 +30,14 @@ static cache_list * books_finalize(cache_list * result, glyr_settings_t * settin
 {
     if(!result) return NULL;
 
-    cache_list * lst = DL_new_lst();
+    size_t i = 0;
+    cache_list * r_list = DL_new_lst();
 
-    size_t i;
     for(i = 0; i < result->size; i++)
     {
-    	memCache_t * res = DL_init();
-    	res->data = beautify_lyrics(result->list[i]->data);
-    	res->size = strlen(res->data);    
-    	DL_add_to_list(lst,res);
+        DL_add_to_list(r_list,DL_copy(result->list[i]));
     }
-    return lst;
+    return r_list;
 }
 
 cache_list * get_books(glyr_settings_t * settings)

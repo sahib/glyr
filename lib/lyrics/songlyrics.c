@@ -63,7 +63,7 @@ cache_list * lyrics_songlyrics_parse(cb_object * capo)
                 }
             }
         }
-    } 
+    }
     if(result)
     {
         r_list = DL_new_lst();

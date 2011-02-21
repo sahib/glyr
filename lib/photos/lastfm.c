@@ -38,12 +38,12 @@ cache_list * photos_lastfm_parse(cb_object * capo)
                 char * urlb = copy_value(begin,endin);
                 if(urlb)
                 {
-		    // init list if not done yet
-		    if(!r_list) r_list = DL_new_lst();
+                    // init list if not done yet
+                    if(!r_list) r_list = DL_new_lst();
 
-		    memCache_t * cache = DL_init();
-		    cache->data = urlb;
-		    DL_add_to_list(r_list,cache);
+                    memCache_t * cache = DL_init();
+                    cache->data = urlb;
+                    DL_add_to_list(r_list,cache);
                     urlc++;
 
                 }

@@ -22,16 +22,17 @@ plugin_t lyric_providers[] =
 {
 //  full name       key  coloredname    use?    parser callback           geturl callback         free url?
     {"lyricswiki",  "w", "lyricswiki",  false, {lyrics_lyricswiki_parse,  lyrics_lyricswiki_url,  false}},
-    {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,  lyrics_darklyrics_url,  false}},
-    {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse,lyrics_directlyrics_url,true }},
     {"songlyrics",  "s", "songlyrics",  false, {lyrics_songlyrics_parse,  lyrics_songlyrics_url,  true }},
     {"lyricsvip",   "v", "lyricsvip",   false, {lyrics_lyricsvip_parse,   lyrics_lyricsvip_url,   true }},
     {"safe",        NULL,NULL,          false, {NULL,                     NULL,                   false}},
     {"lyr.db",      "d", "lyr.db",      false, {lyrics_lyrdb_parse,       lyrics_lyrdb_url,       false}},
     {"lyrix.at",    "a", "lyrix.at",    false, {lyrics_lyrixat_parse,     lyrics_lyrixat_url,     false}},
-    {"metrolyrics", "m", "metrolyrics", false, {lyrics_metrolyrics_parse, lyrics_metrolyrics_url, false}},
     {"magistrix",   "x", "magistrix",   false, {lyrics_magistrix_parse,   lyrics_magistrix_url,   false}},
     {"unsafe",      NULL, NULL,         false, {NULL,                     NULL,                   false}},
+    {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse,lyrics_directlyrics_url,true }},
+    {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,  lyrics_darklyrics_url,  false}},
+    {"metrolyrics", "m", "metrolyrics", false, {lyrics_metrolyrics_parse, lyrics_metrolyrics_url, false}},
+    {"special",     NULL, NULL,         false, {NULL,                     NULL,                   false}},
     { NULL,         NULL, NULL,         false, {NULL,                     NULL,                   false}},
 };
 
@@ -49,12 +50,16 @@ static cache_list * lyrics_finalize(cache_list * result, glyr_settings_t * setti
     size_t i = 0;
     for(i = 0; i < result->size; i++)
     {
-	    memCache_t * dl = DL_init();
-	    dl->data = beautify_lyrics(result->list[i]->data);
-	    dl->size = strlen(dl->data);
-	    dl->dsrc = strdup(result->list[i]->dsrc);
+        memCache_t * dl = DL_init();
+        dl->data = beautify_lyrics(result->list[i]->data);
+        dl->size = strlen(dl->data);
+        dl->dsrc = strdup(result->list[i]->dsrc);
 
-	    DL_add_to_list(lst,dl);
+        // call user defined callback
+        if(settings->callback.download)
+            settings->callback.download(result->list[i],settings);
+
+        DL_add_to_list(lst,dl);
     }
     return lst;
 }
@@ -68,7 +73,7 @@ cache_list * get_lyrics(glyr_settings_t * settings)
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"[] "C_"%s is needed to download covers.\n",settings->artist ? "Title" : "Artist");
+        glyr_message(2,settings,stderr,C_R"[] "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
     }
     return result;
 }

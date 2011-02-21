@@ -95,8 +95,8 @@ cache_list * lyrics_lyrixat_parse(cb_object * capo)
     }
     if(result)
     {
-    	r_list = DL_new_lst();
-	DL_add_to_list(r_list,result);
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,result);
     }
     return r_list;
 }

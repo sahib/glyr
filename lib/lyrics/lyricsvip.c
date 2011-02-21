@@ -39,26 +39,26 @@ cache_list * lyrics_lyricsvip_parse(cb_object *capo)
     if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL)
     {
         if ((end = strstr(start,"</table>")) != NULL)
-	{
-	    if (ABS(end-start) > 0)
-	    {
-    	        *(end) = 0;
-    		content = strreplace(start,"<br />",NULL);
-		if(content)
-		{
-		    r_cache = DL_init();
-		    r_cache->data = content;
-		    r_cache->size = strlen(content);
-		    r_cache->dsrc = strdup(capo->url);
-		}
-	    }
-	}
+        {
+            if (ABS(end-start) > 0)
+            {
+                *(end) = 0;
+                content = strreplace(start,"<br />",NULL);
+                if(content)
+                {
+                    r_cache = DL_init();
+                    r_cache->data = content;
+                    r_cache->size = strlen(content);
+                    r_cache->dsrc = strdup(capo->url);
+                }
+            }
+        }
     }
 
     if(r_cache)
     {
-    	r_list = DL_new_lst();
-	DL_add_to_list(r_list,r_cache);
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,r_cache);
     }
     return r_list;
 }

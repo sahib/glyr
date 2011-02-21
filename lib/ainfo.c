@@ -13,7 +13,7 @@
 plugin_t ainfo_providers[] =
 {
 //  full name       key  coloredname          use?   parser callback           geturl callback         free url?
-    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,    ainfo_lastfm_url,      false}},
+    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       true }},
     {"safe",        NULL,NULL,                false,  {NULL,                   NULL,                   false}},
     { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   false}},
 };
@@ -26,13 +26,17 @@ plugin_t * glyr_get_ainfo_providers(void)
 static cache_list * ainfo_finalize(cache_list * result, glyr_settings_t * settings)
 {
     if(!result) return NULL;
-  
+
     size_t i = 0;
     cache_list * r_list = DL_new_lst();
- 
+
     for(i = 0; i < result->size; i++)
     {
-    	DL_add_to_list(r_list,DL_copy(result->list[i]));
+        // call user defined callback
+        if(settings->callback.download)
+            settings->callback.download(result->list[i],settings);
+
+        DL_add_to_list(r_list,DL_copy(result->list[i]));
     }
     return r_list;
 }

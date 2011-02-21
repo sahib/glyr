@@ -73,10 +73,10 @@ cache_list * photos_flickr_parse(cb_object * capo)
                 free(linebf);
                 linebf = NULL;
 
-		if(!r_list) r_list = DL_new_lst();
-		memCache_t * cache = DL_init();
+                if(!r_list) r_list = DL_new_lst();
+                memCache_t * cache = DL_init();
                 cache->data = strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
-		DL_add_to_list(r_list,cache);
+                DL_add_to_list(r_list,cache);
 
                 if(ID)
                     free(ID);

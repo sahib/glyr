@@ -6,9 +6,14 @@
 #include <stdbool.h>
 #include <curl/curl.h>
 
+#include "config.h"
+
 //Nifty defines:
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
 
+#define PRT_COLOR glyr_USE_COLOR
+#define USE_COLOR
+#ifdef  USE_COLOR
 #define C_B "\x1b[34;01m" // blue
 #define C_M "\x1b[35;01m" // magenta
 #define C_C "\x1b[36;01m" // Cyan
@@ -16,10 +21,18 @@
 #define C_G "\x1b[32;01m" // Green
 #define C_Y "\x1b[33;01m" // Yellow
 #define C_  "\x1b[0m"     // Reset
+#else
+#define C_B "" // blue
+#define C_M "" // magenta
+#define C_C "" // Cyan
+#define C_R "" // Red
+#define C_G "" // Green
+#define C_Y "" // Yellow
+#define C_  "" // Reset
+#endif
 
 // Change this if you really need more
 #define WHATEVER_MAX_PLUGIN 16
-#define COVER_MAX_PLUGIN WHATEVER_MAX_PLUGIN
 
 #define DEFAULT_TIMEOUT  20L
 #define DEFAULT_REDIRECTS 1L
@@ -27,12 +40,23 @@
 #define DEFAULT_CMINSIZE 125
 #define DEFAULT_CMAXSIZE -1
 #define DEFAULT_VERBOSITY 2
-#define DEFAULT_AMAZON_ID -1
-#define DEFAULT_DO_UPDATE false
 #define DEFAULT_NUMBER 1
 #define DEFAULT_OFFSET 0
 #define DEFAULT_PLUGMAX 7
+#define DEFAULT_LANG GLYRL_UK
+#define DEFAULT_DOWNLOAD true
 
+enum GLYR_LANG
+{
+    GLYRL_US,
+    GLYRL_CA,
+    GLYRL_UK,
+    GLYRL_FR,
+    GLYRL_DE,
+    GLYRL_JP,
+};
+
+// seperator for providerlist
 #define FROM_ARGUMENT_DELIM ";"
 
 #define PTR_SPACE 10
@@ -53,11 +77,11 @@ typedef struct memCache_t
     char  *dsrc;   // Source of data
 } memCache_t;
 
-// list of memCache_ts 
-typedef struct cache_list 
+// list of memCache_ts
+typedef struct cache_list
 {
-	memCache_t ** list;
-	size_t size;
+    memCache_t ** list;
+    size_t size;
 } cache_list;
 
 typedef struct glyr_settings_t
@@ -94,12 +118,20 @@ typedef struct glyr_settings_t
 
     // verbosity
     int verbosity;
+    // use colored output?
+    bool color_output;
 
-    //update
-    int update;
+    // return only urls without downloading?
+    // this converts glyr to a sort of search engines
+    bool download;
 
-    // what amazon server to query
-    char AMAZON_LANG_ID;
+    // language settings (for amazon / google / last.fm)
+    int lang;
+
+    struct callback {
+        void (* download)(memCache_t * dl, struct glyr_settings_t * s);
+        void  * user_pointer;
+    } callback;
 
 } glyr_settings_t;
 
@@ -120,7 +152,7 @@ typedef struct plugin_t
         // Passed to the corresponding cb_object and is called...perhaps
         cache_list * (* parser_callback) (struct cb_object *);
         const char * (* url_callback)    (glyr_settings_t  *);
-        bool free_url; // pass result of url_callback to free() ?
+        bool free_url; // pass result of url_callback to free()?
     } plug;
 
 } plugin_t;
@@ -130,8 +162,8 @@ enum GLYR_GET_TYPES
     GET_COVER,
     GET_LYRIC,
     GET_PHOTO,
-    GET_BOOKS,
     GET_AINFO,
+    GET_BOOKS,
     GET_UNSURE
 };
 

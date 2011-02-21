@@ -110,7 +110,7 @@ cache_list * lyrics_magistrix_parse (cb_object * capo)
                                                 char * dl_url = strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
-                                                        memCache_t * dl_cache = download_single(dl_url,capo->s);
+                                                    memCache_t * dl_cache = download_single(dl_url,capo->s);
                                                     if(dl_cache)
                                                     {
                                                         result = parse_lyric_page(dl_cache->data);
@@ -137,8 +137,8 @@ cache_list * lyrics_magistrix_parse (cb_object * capo)
     }
     if(result)
     {
-    	r_list = DL_new_lst();
-	DL_add_to_list(r_list,result);
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,result);
     }
     return r_list;
 }

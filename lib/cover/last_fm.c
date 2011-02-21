@@ -47,24 +47,24 @@ cache_list * cover_lastfm_parse(cb_object *capo)
     int urlc = 0;
 
     char * find = capo->cache->data;
-    while( (find = strcasestr(find+1, tag_ssize)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (find = strstr(find+1, tag_ssize)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
     {
         char * end_tag = NULL;
-        if( (end_tag = strcasestr(find, tag_esize)) != NULL)
+        if( (end_tag = strstr(find, tag_esize)) != NULL)
         {
             char * url = NULL;
             if( (url = copy_value(find + strlen(tag_ssize), end_tag)) != NULL)
             {
                 if(strcmp(url,"http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"))
                 {
-		    if(!r_list) r_list = DL_new_lst();
+                    if(!r_list) r_list = DL_new_lst();
 
                     result = DL_init();
                     result->data = url;
                     result->size = end_tag - (find + strlen(tag_ssize));
 
-		    DL_add_to_list(r_list,result);
-		    urlc++;
+                    DL_add_to_list(r_list,result);
+                    urlc++;
                 }
                 else
                 {

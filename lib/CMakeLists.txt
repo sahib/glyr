@@ -1,11 +1,22 @@
-set (DIR_ROOT   .      )
-set (DIR_COVER  cover  )
-set (DIR_LYRICS lyrics )
-set (DIR_PHOTOS photos )
-set (DIR_BOOKS  books  )
-set (DIR_AINFO  ainfo  )
+set (DIR_ROOT   ${PROJECT_BINARY_DIR}/${SUBDIR_LIB}  )
+set (DIR_COVER  ${DIR_ROOT}/cover                    )
+set (DIR_LYRICS ${DIR_ROOT}/lyrics                   )
+set (DIR_PHOTOS ${DIR_ROOT}/photos                   )
+set (DIR_BOOKS  ${DIR_ROOT}/books                    )
+set (DIR_AINFO  ${DIR_ROOT}/ainfo                    )
 
-ADD_LIBRARY( glyr SHARED 
+# configure
+set( GLYR_VERSION_MAJOR "0")
+set( GLYR_VERSION_MINOR "1")
+set( GLYR_VERSION_NAME  "Kleptomaniacal Magpie")
+set( GLYR_COLORED_OUTPUT true)
+
+configure_file (
+  "${DIR_ROOT}/config.h.in"
+  "${DIR_ROOT}/config.h"
+)
+
+ADD_LIBRARY(glyr SHARED 
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/stringop.c"
@@ -36,3 +47,10 @@ ADD_LIBRARY( glyr SHARED
     	"${DIR_BOOKS}/dnb.c"
     	"${DIR_BOOKS}/kit.c"
 )
+
+IF(CMAKE_CROSSCOMPILING)
+ TARGET_LINK_LIBRARIES(glyr curl ws2_32 )
+ REMOVE_DEFINITIONS( -fPIC -rdynamic ) 
+ELSE(CMAKE_CROSSCOMPILING)
+ TARGET_LINK_LIBRARIES(glyr curl ) 
+ENDIF(CMAKE_CROSSCOMPILING)

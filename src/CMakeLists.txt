@@ -1,5 +1,2 @@
-INCLUDE_DIRECTORIES(${GLYR_SOURCE_DIR}/glyr)
-
 ADD_EXECUTABLE(glyrc main.c)
-
 TARGET_LINK_LIBRARIES(glyrc glyr curl) 

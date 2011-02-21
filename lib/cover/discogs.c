@@ -115,11 +115,11 @@ cache_list * cover_discogs_parse(cb_object * capo)
                                                             {
                                                                 result->data = url;
                                                                 result->size = uri_endin - (uri_begin + strlen(URL_BEGIN));
-			
-								if(!r_list) r_list = DL_new_lst();
-								DL_add_to_list(r_list,result);
 
-								urlc++;
+                                                                if(!r_list) r_list = DL_new_lst();
+                                                                DL_add_to_list(r_list,result);
+
+                                                                urlc++;
                                                             }
                                                             else
                                                             {

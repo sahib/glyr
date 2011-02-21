@@ -63,19 +63,19 @@ const char * cover_amazon_url(glyr_settings_t * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size)
     {
-        switch(sets->AMAZON_LANG_ID)
+        switch(sets->lang)
         {
-        case  GLYR_AMAZON_US:
+        case  GLYRL_US:
             return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYR_AMAZON_CA:
+        case  GLYRL_CA:
             return "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYR_AMAZON_UK:
+        case  GLYRL_UK:
             return "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYR_AMAZON_FR:
+        case  GLYRL_FR:
             return "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYR_AMAZON_DE:
+        case  GLYRL_DE:
             return "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYR_AMAZON_JP:
+        case  GLYRL_JP:
             return "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
         default:
             return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
@@ -97,33 +97,33 @@ cache_list * cover_amazon_parse(cb_object *capo)
 
 #undef MAX
 #undef MIN
-    
+
     int urlc = 0;
     cache_list * r_list = NULL;
 
     char * find = capo->cache->data;
     while( (find = strstr(find +1, tag_ssize)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
     {
-	    /* Next two XML tags not relevant */
-	    nextTag(find);
-	    nextTag(find);
+        /* Next two XML tags not relevant */
+        nextTag(find);
+        nextTag(find);
 
-	    char * endTag = NULL;
-	    if( (endTag = strstr(find, "</URL>")) != NULL)
-	    {
-		    char * result_url = copy_value(find,endTag);
-		    if(result_url)
-		    {
-			if(!r_list) r_list = DL_new_lst();
+        char * endTag = NULL;
+        if( (endTag = strstr(find, "</URL>")) != NULL)
+        {
+            char * result_url = copy_value(find,endTag);
+            if(result_url)
+            {
+                if(!r_list) r_list = DL_new_lst();
 
-		    	memCache_t * result_cache = DL_init();
-		        result_cache->data = result_url;
-		        result_cache->size = strlen(result_url);
+                memCache_t * result_cache = DL_init();
+                result_cache->data = result_url;
+                result_cache->size = strlen(result_url);
 
-			DL_add_to_list(r_list,result_cache);
-			urlc++;
-	            }
-	    }
+                DL_add_to_list(r_list,result_cache);
+                urlc++;
+            }
+        }
     }
     return r_list;
 }
