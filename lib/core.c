@@ -474,7 +474,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
             }
             if (M == -1)
             {
-                DL_usleep(L * 100);
+                DL_usleep(L * 1000);
             }
             else
             {
@@ -537,7 +537,7 @@ cache_list * invoke(cb_object *oblist, long CNT, long parallel, long timeout, gl
                                     c ='|';
                                     break;
                                 }
-                                glyr_message(2,s,stderr,C_G"O "C_"Downloading [%c] [#%d] - %2.2f%%\r",c,n_sources,(float)(n_sources / s->number));
+                                glyr_message(2,s,stderr,C_G"O "C_"Downloading [%c] [#%d]\r",c,n_sources+1);
                             }
 
                             if(!result_lst)
@@ -706,7 +706,7 @@ cache_list * register_and_execute(glyr_settings_t * settings, cache_list * (*fin
 
                 //glyr_message(3,settings,stderr,"Result_list_iterator: %d (up to n=%d)\n",(int)result_lst->size, settings->number);
 
-                if(result_lst != NULL && settings->number <= result_lst->size)
+                if(result_lst != NULL && settings->number < result_lst->size)
                 {
                     // We are done.
                     glyr_message(3,settings,stderr,"register_and_execute() Breaking out.\n");

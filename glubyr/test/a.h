@@ -1,1 +1,0 @@
-double mean(double, double);

@@ -41,7 +41,6 @@
 #define DEFAULT_CMAXSIZE -1
 #define DEFAULT_VERBOSITY 2
 #define DEFAULT_NUMBER 1
-#define DEFAULT_OFFSET 0
 #define DEFAULT_PLUGMAX 7
 #define DEFAULT_LANG GLYRL_UK
 #define DEFAULT_DOWNLOAD true
@@ -96,9 +95,8 @@ typedef struct glyr_settings_t
     const char * album;
     const char * title;
 
-    // number && offset
+    // number
     int number;
-    int offset;
     int plugmax;
 
     // cover

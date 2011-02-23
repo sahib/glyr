@@ -163,19 +163,6 @@ int glyr_setopt(glyr_settings_t * s, int option, ...)
             s->number = ABS(arg);
             break;
         }
-        case GLYRO_OFFSET :
-        {
-            int arg = va_arg(param,int);
-            arg = ABS(arg);
-            if(arg >= s->number)
-            {
-                glyr_message(2,s,stderr,C_R"[]"C_" offset is equal or higher than number. Setting to 0.\n");
-                result = GLYRE_BAD_VALUE;
-                arg = 0;
-            }
-            s->offset = arg;
-            break;
-        }
         case GLYRO_VERBOSITY:
         {
             int arg = va_arg(param,int);
@@ -240,7 +227,6 @@ void glyr_init_settings(glyr_settings_t * glyrs)
     glyrs->cover.max_size = DEFAULT_CMAXSIZE;
 
     glyrs->number = DEFAULT_NUMBER;
-    glyrs->offset = DEFAULT_OFFSET;
     glyrs->parallel  = DEFAULT_PARALLEL;
     glyrs->redirects = DEFAULT_REDIRECTS;
     glyrs->timeout   = DEFAULT_TIMEOUT;
@@ -280,7 +266,6 @@ void glyr_destroy_settings(glyr_settings_t * sets)
         sets->color_output = PRT_COLOR;
 
         sets->number  = DEFAULT_NUMBER;
-        sets->offset  = DEFAULT_OFFSET;
         sets->plugmax = DEFAULT_PLUGMAX;
 
         sets->artist = NULL;

@@ -12,6 +12,7 @@
 #include "cover/coverhunt.h"
 #include "cover/discogs.h"
 #include "cover/amazon.h"
+#include "cover/allmusic_com.h"
 #include "cover/lyricswiki.h"
 #include "cover/albumart.h"
 #include "cover/google.h"
@@ -26,6 +27,7 @@ plugin_t cover_providers[] =
     {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   false}},
     {"safe",       NULL,   NULL,              false, {NULL,                    NULL,                 false}},
     {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, false}},
+    {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   false}},
     {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  false}},
     {"unsafe",     NULL,  NULL,               false, {NULL,                    NULL,                 false}},
     {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    false}},
