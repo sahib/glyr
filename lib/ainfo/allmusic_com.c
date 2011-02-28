@@ -6,7 +6,7 @@
 #include "../core.h"
 #include "../glyr.h"
 
-const char * ainfo_allmusic_url(glyr_settings_t * s)
+const char * ainfo_allmusic_url(GlyQuery * s)
 {
 	return "http://www.allmusic.com/search/artist/%artist%";
 }
@@ -14,9 +14,9 @@ const char * ainfo_allmusic_url(glyr_settings_t * s)
 #define IMG_BEGIN "<p class=\"text\">"
 #define IMG_ENDIN "</p>"
 
-memCache_t * parse_bio_short(memCache_t * to_parse)
+GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
 {
-	memCache_t * rche = NULL;
+	GlyMemCache * rche = NULL;
 	char * text_begin = strstr(to_parse->data,IMG_BEGIN);
 	if(text_begin != NULL)
 	{
@@ -56,9 +56,9 @@ memCache_t * parse_bio_short(memCache_t * to_parse)
 #define ROOT "<div id=\"tabs\">"
 #define ROOT_URL "http://www.allmusic.com/artist/"
 
-memCache_t * parse_bio_long(memCache_t * to_parse, glyr_settings_t * s)
+GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
 {
-	memCache_t * rche = NULL;
+	GlyMemCache * rche = NULL;
 	char * root = strstr(to_parse->data,ROOT);
 	if(root)
 	{
@@ -71,7 +71,7 @@ memCache_t * parse_bio_long(memCache_t * to_parse, glyr_settings_t * s)
 				char * url = strdup_printf(ROOT_URL"%s",id);
 				if(url != NULL)
 				{
-					memCache_t * dl = download_single(url,s);
+					GlyMemCache * dl = download_single(url,s);
 					if(dl != NULL)
 					{
 						rche = parse_bio_short(dl);
@@ -95,14 +95,14 @@ memCache_t * parse_bio_long(memCache_t * to_parse, glyr_settings_t * s)
 #define SEARCH_NODE "<td><a href=\""
 #define SEARCH_DELM "\">"
 
-cache_list * ainfo_allmusic_parse(cb_object * capo)
+GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
 {
-	cache_list * r_list = NULL;
+	GlyCacheList * r_list = NULL;
 	if( strstr(capo->cache->data, "<!--Begin Biography -->") )
 	{
 		r_list = DL_new_lst();
-		memCache_t * info_short = parse_bio_short(capo->cache);
-		memCache_t * info_long  = parse_bio_long (capo->cache,capo->s);
+		GlyMemCache * info_short = parse_bio_short(capo->cache);
+		GlyMemCache * info_long  = parse_bio_long (capo->cache,capo->s);
 		
 		DL_add_to_list(r_list,info_short);
 		DL_add_to_list(r_list,info_long );
@@ -116,22 +116,22 @@ cache_list * ainfo_allmusic_parse(cb_object * capo)
 
 	int urlc = 0;	
 	char *  node = search_begin;
-	while( (node = strstr(node+1,SEARCH_NODE)) && urlc < capo->s->plugmax && urlc < capo->s->number)
+	while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
 	{
 		char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
 		if(url != NULL)
 		{
-			memCache_t * dl = download_single(url,capo->s);
+			GlyMemCache * dl = download_single(url,capo->s);
 			if(dl != NULL)
 			{
 				if(!r_list) r_list = DL_new_lst();
-				memCache_t * info_short = parse_bio_short(dl);
+				GlyMemCache * info_short = parse_bio_short(dl);
 				if(info_short != NULL)
 				{
 					DL_add_to_list(r_list,info_short);
 				}
 
-				memCache_t * info_long  = parse_bio_long (dl,capo->s);
+				GlyMemCache * info_long  = parse_bio_long (dl,capo->s);
 				if(info_long != NULL)
 				{
 					DL_add_to_list(r_list,info_long );

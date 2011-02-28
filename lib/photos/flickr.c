@@ -11,7 +11,7 @@
 #define LINE_BEGIN "<photo id="
 #define LINE_ENDIN "/>"
 
-const char * photos_flickr_url(glyr_settings_t * settings)
+const char * photos_flickr_url(GlyQuery * settings)
 {
     return strdup_printf("http://api.flickr.com/services/rest/"
                          "?method=flickr.photos.search&"
@@ -48,14 +48,14 @@ static char * get_field_by_name(const char * string, const char * name)
     return NULL;
 }
 
-cache_list * photos_flickr_parse(cb_object * capo)
+GlyCacheList * photos_flickr_parse(cb_object * capo)
 {
     // Needed: ID,secret,server,farm
     char * ph_begin = capo->cache->data;
     size_t urlc = 0;
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
-    while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && continue_search(urlc,capo->s))
     {
         if(! *(++ph_begin))
             continue;
@@ -74,7 +74,7 @@ cache_list * photos_flickr_parse(cb_object * capo)
                 linebf = NULL;
 
                 if(!r_list) r_list = DL_new_lst();
-                memCache_t * cache = DL_init();
+                GlyMemCache * cache = DL_init();
                 cache->data = strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
                 DL_add_to_list(r_list,cache);
 

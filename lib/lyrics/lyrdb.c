@@ -9,15 +9,15 @@
 
 #define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=%artist%|%title%&for=match&agent=mpdbox"
 
-const char * lyrics_lyrdb_url(glyr_settings_t * settings)
+const char * lyrics_lyrdb_url(GlyQuery * settings)
 {
     return LYRDB_URL;
 }
 
-cache_list * lyrics_lyrdb_parse(cb_object * capo)
+GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
 {
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
     char *slash;
     if( (slash = strchr(capo->cache->data,'\\')) )
@@ -28,7 +28,7 @@ cache_list * lyrics_lyrdb_parse(cb_object * capo)
             char * lyr_url = strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
             if(lyr_url)
             {
-                memCache_t * new_cache = download_single(lyr_url,capo->s);
+                GlyMemCache * new_cache = download_single(lyr_url,capo->s);
                 if(new_cache)
                 {
                     char *buffer = malloc(new_cache->size+1);
@@ -51,6 +51,11 @@ cache_list * lyrics_lyrdb_parse(cb_object * capo)
             free(uID);
         }
     }
+    else
+    {
+	result = DL_error(NO_BEGIN_TAG);
+    }
+
     if(result)
     {
         r_list = DL_new_lst();

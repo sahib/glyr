@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * books_dnb_url(glyr_settings_t * settings);
-cache_list * books_dnb_parse(cb_object * capo);
+const char * books_dnb_url(GlyQuery * settings);
+GlyCacheList * books_dnb_parse(cb_object * capo);
 
 #endif

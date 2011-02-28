@@ -13,7 +13,7 @@
 #define RESULT_START ">"
 #define RESULT_END "</a>"
 
-const char * books_kit_url(glyr_settings_t * settings)
+const char * books_kit_url(GlyQuery * settings)
 {
     return "http://kvk.ubka.uni-karlsruhe.de/hylib-bin/kvk/nph-kvk2.cgi?"
            "maske=kvk-last&"
@@ -38,14 +38,14 @@ const char * books_kit_url(glyr_settings_t * settings)
            "kataloge=ZDB";
 }
 
-static memCache_t * get_field(char ** pointer, char * start, char * end, cb_object * capo)
+static GlyMemCache * get_field(char ** pointer, char * start, char * end, cb_object * capo)
 {
     char * field = NULL;
     field = (field=getStr(pointer, start, end)) == NULL ? "" : field;
 
     if(field)
     {
-        memCache_t * dl = DL_init();
+        GlyMemCache * dl = DL_init();
         dl->data = strdup(field);
         dl->size = strlen(dl->data);
         dl->dsrc = strdup(capo->url);
@@ -55,12 +55,13 @@ static memCache_t * get_field(char ** pointer, char * start, char * end, cb_obje
 }
 
 
-cache_list * books_kit_parse(cb_object * capo)
+GlyCacheList * books_kit_parse(cb_object * capo)
 {
     char * pointer = capo->cache->data;
-    cache_list * ls = NULL;
+    GlyCacheList * ls = NULL;
 
-    while ((pointer = strstr(pointer, RESULT)) != NULL)
+    int urlc = 0;
+    while ((pointer = strstr(pointer, RESULT)) != NULL && continue_search(urlc++,capo->s))
     {
         pointer+=strlen(RESULT);
 

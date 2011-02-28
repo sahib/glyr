@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * photos_flickr_url(glyr_settings_t * settings);
-cache_list * photos_flickr_parse(cb_object * capo);
+const char * photos_flickr_url(GlyQuery * settings);
+GlyCacheList * photos_flickr_parse(cb_object * capo);
 
 #endif

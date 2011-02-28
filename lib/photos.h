@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-plugin_t   * glyr_get_photo_providers(void);
-cache_list * get_photos(glyr_settings_t * settings);
+GlyPlugin   * glyr_get_photo_providers(void);
+GlyCacheList * get_photos(GlyQuery * settings);
 
 #endif

@@ -15,18 +15,18 @@
 #define URL_BEGIN "\">"
 #define URL_ENDIN "</size>"
 
-const char * photos_lastfm_url(glyr_settings_t * settings)
+const char * photos_lastfm_url(GlyQuery * settings)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY;
 }
 
-cache_list * photos_lastfm_parse(cb_object * capo)
+GlyCacheList * photos_lastfm_parse(cb_object * capo)
 {
     char * root = capo->cache->data;
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
     size_t urlc = 0;
 
-    while ( (root = strstr(root,SIZE_FO)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while ( (root = strstr(root,SIZE_FO)) != NULL && continue_search(urlc,capo->s))
     {
         char * begin = strstr(root,URL_BEGIN);
         if(begin)
@@ -41,7 +41,7 @@ cache_list * photos_lastfm_parse(cb_object * capo)
                     // init list if not done yet
                     if(!r_list) r_list = DL_new_lst();
 
-                    memCache_t * cache = DL_init();
+                    GlyMemCache * cache = DL_init();
                     cache->data = urlb;
                     DL_add_to_list(r_list,cache);
                     urlc++;

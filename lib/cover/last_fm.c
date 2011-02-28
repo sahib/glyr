@@ -13,7 +13,7 @@
 
 #define API_KEY "7199021d9c8fbae507bf77d0a88533d7"
 
-const char * cover_lastfm_url(glyr_settings_t * sets)
+const char * cover_lastfm_url(GlyQuery * sets)
 {
     if(sets->cover.min_size <= 350 || sets->cover.min_size == -1)
     {
@@ -22,7 +22,7 @@ const char * cover_lastfm_url(glyr_settings_t * sets)
     return NULL;
 }
 
-cache_list * cover_lastfm_parse(cb_object *capo)
+GlyCacheList * cover_lastfm_parse(cb_object *capo)
 {
     // Handle size requirements (Default to large)
     char *tag_ssize = NULL ;
@@ -41,13 +41,13 @@ cache_list * cover_lastfm_parse(cb_object *capo)
         tag_ssize = "<image size=\"extralarge\">";
 
     // The (perhaps) result
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
     int urlc = 0;
 
     char * find = capo->cache->data;
-    while( (find = strstr(find+1, tag_ssize)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (find = strstr(find+1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
     {
         char * end_tag = NULL;
         if( (end_tag = strstr(find, tag_esize)) != NULL)

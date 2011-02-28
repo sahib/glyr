@@ -16,34 +16,11 @@
 
 #define API_KEY "7199021d9c8fbae507bf77d0a88533d7"
 
-const char * ainfo_lastfm_url(glyr_settings_t * s)
+const char * ainfo_lastfm_url(GlyQuery * s)
 {
     const char * lang = NULL;
-    switch(s->lang)
-    {
-    case  GLYRL_US:
-        lang = "en"  ;
-        break;
-    case  GLYRL_CA:
-        lang = "en"  ;
-        break;
-    case  GLYRL_UK:
-        lang = "en"  ;
-        break;
-    case  GLYRL_FR:
-        lang = "fr"  ;
-        break;
-    case  GLYRL_DE:
-        lang = "de"  ;
-        break;
-    case  GLYRL_JP:
-        lang = "ja"  ;
-        break;
-    default:
-        lang = "en";
-    }
     char * right_artist = strreplace(s->artist," ","+");
-    char * url = strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,lang);
+    char * url = strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,s->lang);
 
     if(right_artist)
         free(right_artist);
@@ -80,21 +57,21 @@ static char * fix_crappy_lastfm_txt(const char * txt)
     return result;
 }
 
-cache_list * ainfo_lastfm_parse(cb_object * capo)
+GlyCacheList * ainfo_lastfm_parse(cb_object * capo)
 {
-    cache_list * r_lst = NULL;
+    GlyCacheList * r_lst = NULL;
     char * short_desc = copy_value(strstr(capo->cache->data,SUMMARY_BEGIN)+strlen(SUMMARY_BEGIN),strstr(capo->cache->data,SUMMARY_ENDIN));
     if(short_desc)
     {
         char * content = copy_value(strstr(capo->cache->data,CONTENT_BEGIN)+strlen(CONTENT_BEGIN),strstr(capo->cache->data,CONTENT_ENDIN));
         if(content)
         {
-            memCache_t * sc = DL_init();
+            GlyMemCache * sc = DL_init();
             sc->data = fix_crappy_lastfm_txt(short_desc);
             sc->size = strlen(sc->data);
             sc->dsrc = strdup(capo->url);
 
-            memCache_t * lc = DL_init();
+            GlyMemCache * lc = DL_init();
             lc->data = fix_crappy_lastfm_txt(content);
             lc->size = strlen(lc->data);
             lc->dsrc = strdup(capo->url);

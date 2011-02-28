@@ -11,32 +11,23 @@
 #define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="
 #define END_OF_URL   "&imgrefurl="
 
-const char * cover_google_url(glyr_settings_t * sets)
+const char * cover_google_url(GlyQuery * sets)
 {
     const char * lang = NULL;
-    switch(sets->lang)
-    {
-    case  GLYRL_US:
+    if(!strcasecmp(sets->lang,"us"))
         lang = "com"  ;
-        break;
-    case  GLYRL_CA:
+    else if(!strcasecmp(sets->lang,"ca"))
         lang = "ca"   ;
-        break;
-    case  GLYRL_UK:
+    else if(!strcasecmp(sets->lang,"uk"))
         lang = "co.uk";
-        break;
-    case  GLYRL_FR:
+    else if(!strcasecmp(sets->lang,"fr"))
         lang = "fr"   ;
-        break;
-    case  GLYRL_DE:
+    else if(!strcasecmp(sets->lang,"de"))
         lang = "de"   ;
-        break;
-    case  GLYRL_JP:
+    else if(!strcasecmp(sets->lang,"jp"))
         lang = "co.jp";
-        break;
-    default:
+    else
         lang = "com";
-    }
 
     const char * back = NULL;
 
@@ -65,15 +56,15 @@ const char * cover_google_url(glyr_settings_t * sets)
     return strdup_printf("http://www.google.%s/images?q=%s+%s+album&safe=off&tbs=isch:1,iar:s,%s",lang,sets->artist,sets->album,back);
 }
 
-cache_list * cover_google_parse(cb_object * capo)
+GlyCacheList * cover_google_parse(cb_object * capo)
 {
     // we blindly take the first result
     // actually we have not much of a choice (no, not Nr.42)
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
     size_t urlc = 0;
     char * find = capo->cache->data;
-    while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && continue_search(urlc,capo->s))
     {
         char * end_of_url;
         find += strlen(FIRST_RESULT);
@@ -84,7 +75,7 @@ cache_list * cover_google_parse(cb_object * capo)
             {
                 if(!r_list) r_list = DL_new_lst();
 
-                memCache_t * result = DL_init();
+                GlyMemCache * result = DL_init();
                 result->data = url;
                 result->size = strlen(url);
 

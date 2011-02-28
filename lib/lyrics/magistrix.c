@@ -10,14 +10,14 @@
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
 #define LV_MAX_DIST 4
 
-const char * lyrics_magistrix_url(glyr_settings_t * settings)
+const char * lyrics_magistrix_url(GlyQuery * settings)
 {
     return MG_URL;
 }
 
-memCache_t * parse_lyric_page(const char * buffer)
+GlyMemCache * parse_lyric_page(const char * buffer)
 {
-    memCache_t * result = NULL;
+    GlyMemCache * result = NULL;
     if(buffer)
     {
         char * begin = strstr(buffer,"<div id='songtext'>");
@@ -64,10 +64,10 @@ static bool approve_content(char * content, const char * compare)
 #define SEARCH_END   "</a>"
 #define MAX_TRIES 5
 
-cache_list * lyrics_magistrix_parse (cb_object * capo)
+GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
 {
-    memCache_t * result=NULL;
-    cache_list * r_list=NULL;
+    GlyMemCache * result=NULL;
+    GlyCacheList * r_list=NULL;
 
     if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL) // No songtext page?
     {
@@ -83,7 +83,7 @@ cache_list * lyrics_magistrix_parse (cb_object * capo)
         {
             char * node = capo->cache->data;
             int ctr = 0;
-            while( (node = strstr(node+1,"<tr class='topLine'>")) && !result && MAX_TRIES >= ctr++)
+            while( (node = strstr(node+1,"<tr class='topLine'>")) && !result && MAX_TRIES >= ctr++ && continue_search(ctr,capo->s))
             {
                 char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
                 if(artist)
@@ -110,7 +110,7 @@ cache_list * lyrics_magistrix_parse (cb_object * capo)
                                                 char * dl_url = strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
-                                                    memCache_t * dl_cache = download_single(dl_url,capo->s);
+                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s);
                                                     if(dl_cache)
                                                     {
                                                         result = parse_lyric_page(dl_cache->data);

@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <libgen.h>
 
 #include "../lib/glyr.h"
 
@@ -17,6 +18,7 @@
 #include <sys/types.h>
 
 bool update = false;
+const char * default_path = ".";
 
 //* --------------------------------------------------------- */
 // --------------------------------------------------------- //
@@ -24,7 +26,7 @@ bool update = false;
 
 static void print_version(void)
 {
-    glyr_message(-1,NULL,stdout, C_G"%s\n\n"C_,glyr_version());
+    glyr_message(-1,NULL,stdout, C_G"%s\n\n"C_,Gly_version());
     glyr_message(-1,NULL,stderr, C_"This is still beta software, expect quite a lot bugs.\n");
     glyr_message(-1,NULL,stderr, C_"Email bugs to <sahib@online.de> or use the bugtracker\n"
                  C_"at https://github.com/sahib/glyr/issues - Thank you! \n");
@@ -35,7 +37,7 @@ static void print_version(void)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-const char * next_group(plugin_t * table, int s)
+const char * next_group(GlyPlugin * table, int s)
 {
 	int i;
 	for(i = s; table[i].name; i++)
@@ -49,7 +51,7 @@ const char * next_group(plugin_t * table, int s)
 #define _S "\t"
 static void list_provider_at_id(int id, int min_align)
 {
-    plugin_t * cp = glyr_get_provider_by_id(id);
+    GlyPlugin * cp = Gly_get_provider_by_id(id);
     const char * c_group = next_group(cp,0);
 
     if(cp != NULL)
@@ -99,7 +101,7 @@ static void usage(void)
     glyr_message(-1,NULL,stdout,"glyrc downloads variouse sorts of musicrelated metadata.\n");
     glyr_message(-1,NULL,stdout,C_Y"GETTER"C_" is the type of metadata to download, it must be one of: \n");
     
-    list_provider_at_id(-1, 7);
+    list_provider_at_id(-1, 10);
  
 #define GET_C C_G
 #define OPT_C C_C
@@ -127,15 +129,21 @@ static void usage(void)
     list_provider_at_id(GET_PHOTO,12);
     glyr_message(-1,NULL,stdout,C_B"AINFO\n"C_);
     glyr_message(-1,NULL,stdout,_S"Download "OPT_C"-n"C_" artist descriptions of the artist given by "OPT_C"-a"C_".\n");
+    glyr_message(-1,NULL,stdout,_S"Apart from the name, a similiarity rating from 0.0 to 1.0, a URL to last.fm page\n");
+    glyr_message(-1,NULL,stdout,_S"and a bunch of URLs to images of the similiar artist in ascending size.\n");
     glyr_message(-1,NULL,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
     list_provider_at_id(GET_AINFO,12);
+    glyr_message(-1,NULL,stdout,C_B"\nSIMILIAR\n"C_);
+    glyr_message(-1,NULL,stdout,_S"Download "OPT_C"-n"C_" information about similiar artist to the one given with -a "OPT_C"-a"C_".\n");
+    glyr_message(-1,NULL,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
+    list_provider_at_id(GET_SIMILIAR,12);
     glyr_message(-1,NULL,stdout,C_B"\nGENERAL OPTIONS\n"C_);
     glyr_message(-1,NULL,stdout,OPT_A"-f --from <prov>\n"C_);
     glyr_message(-1,NULL,stdout,_S"Set the sources (providers) you want to query.\n");
     glyr_message(-1,NULL,stdout,_S"The string you have to provide cotains the names of the providers or a group\n");
-    glyr_message(-1,NULL,stdout,_S"(or their shortcuts), seperated by a \"%s\" and prepended by a + or -,\n", FROM_ARGUMENT_DELIM);
+    glyr_message(-1,NULL,stdout,_S"(or their shortcuts), seperated by a \"%s\" and prepended by a + or -,\n", DEFAULT_FROM_ARGUMENT_DELIM);
     glyr_message(-1,NULL,stdout,_S"which adds or deletes this source to/from the current state.\n");
-    glyr_message(-1,NULL,stdout,_S"An example would be: \"+all%s-special%s+d\"\n",FROM_ARGUMENT_DELIM,FROM_ARGUMENT_DELIM );
+    glyr_message(-1,NULL,stdout,_S"An example would be: \"+all%s-special%s+d\"\n",DEFAULT_FROM_ARGUMENT_DELIM,DEFAULT_FROM_ARGUMENT_DELIM );
     glyr_message(-1,NULL,stdout,_S _S "+all     : adds everything.\n");
     glyr_message(-1,NULL,stdout,_S _S "-special : subtract the members of group 'special'.\n");
     glyr_message(-1,NULL,stdout,_S _S "+d       : add the provider 'd' (discogs, see above)\n");
@@ -155,8 +163,9 @@ static void usage(void)
     glyr_message(-1,NULL,stdout,_S"Default is %s.\n",DEFAULT_DOWNLOAD ? "true" : "false");
     glyr_message(-1,NULL,stdout,OPT_A"-w --write <dir>\n"C_);
     glyr_message(-1,NULL,stdout,_S"Write all files to the directory <dir>\n");
-    glyr_message(-1,NULL,stdout,_S"The filenames itself is determined by the artist,album, title depending on <GET>\n");
+    glyr_message(-1,NULL,stdout,_S"The filenames itself is determined by the artist,album, title depending on <GET>, see the also the FILES section.\n");
     glyr_message(-1,NULL,stdout,_S"The special value \"stdout\" will print the data directly to stdout, \"stderr\" to stderr\n"_S"and \"null\" will print nothing.\n");
+    glyr_message(-1,NULL,stdout,_S"Default is '%s'\n",default_path);
     glyr_message(-1,NULL,stdout,C_B"\nLIBCURL OPTIONS\n"C_);
     glyr_message(-1,NULL,stdout,OPT_A"-p --parallel <int>\n"C_);
     glyr_message(-1,NULL,stdout,_S"Download max. <int> files in parallel if there's more than one to download.\n");
@@ -213,7 +222,7 @@ static void usage(void)
     glyr_message(-1,NULL,stdout,_S _S"# show it in stdout, and write it to Equilibrium_Blut+im+Auge_0.lyrics\n");
     glyr_message(-1,NULL,stdout,C_B"\nFILES\n"C_);
     glyr_message(-1,NULL,stdout,_S"Everything is stored in a file with the pattern $save_dir/$artist_($album|$title)_suffix.type\n");
-    glyr_message(-1,NULL,stdout,_S"Spaces in artist/album/title are escaped with a '+'.\n");
+    glyr_message(-1,NULL,stdout,_S"Spaces and Slashes in artist/album/title are escaped with a '+'.\n");
     glyr_message(-1,NULL,stdout,_S _S"$artist_$album_$num.img\n");
     glyr_message(-1,NULL,stdout,_S _S"$artist_$title_$num.lyrics\n");
     glyr_message(-1,NULL,stdout,_S _S"$artist_photos_$num.img\n");
@@ -231,7 +240,7 @@ static void usage(void)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static bool set_get_type(glyr_settings_t * s, const char * arg)
+static bool set_get_type(GlyQuery * s, const char * arg)
 {
     bool result = true;
 
@@ -239,7 +248,7 @@ static bool set_get_type(glyr_settings_t * s, const char * arg)
         return result;
 
     // get list of avaliable commands
-    plugin_t * plist = glyr_get_provider_by_id(-1);
+    GlyPlugin * plist = Gly_get_provider_by_id(-1);
     if(plist)
     {
         int i = 0;
@@ -247,7 +256,7 @@ static bool set_get_type(glyr_settings_t * s, const char * arg)
         {
             if(!strcmp(arg,plist[i].name) || *arg == *plist[i].name)
             {
-                glyr_setopt(s,GLYRO_TYPE,plist[i].color);
+                GlyOpt_type(s,(long)plist[i].color);
                 free(plist);
                 return result;
             }
@@ -282,9 +291,9 @@ static bool set_get_type(glyr_settings_t * s, const char * arg)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static void search_similiar_providers(const char * providers, glyr_settings_t * s)
+static void search_similiar_providers(const char * providers, GlyQuery * s)
 {
-    plugin_t * plist = glyr_get_provider_by_id(s->type);
+    GlyPlugin * plist = Gly_get_provider_by_id(s->type);
     if(plist)
     {
 
@@ -292,7 +301,7 @@ static void search_similiar_providers(const char * providers, glyr_settings_t * 
         size_t offset = 0;
         char * name = NULL;
 
-        while( (name = get_next_word(providers,FROM_ARGUMENT_DELIM,&offset,length)))
+        while( (name = get_next_word(providers,DEFAULT_FROM_ARGUMENT_DELIM,&offset,length)))
         {
             int j;
 
@@ -341,7 +350,7 @@ static void search_similiar_providers(const char * providers, glyr_settings_t * 
 /* --------------------------------------------------------- */
 
 
-static void suggest_other_options(int m, int argc, char * const * argv, int at, struct option * long_options, glyr_settings_t * s)
+static void suggest_other_options(int m, int argc, char * const * argv, int at, struct option * long_options, GlyQuery * s)
 {
     bool dym = false;
 
@@ -349,7 +358,7 @@ static void suggest_other_options(int m, int argc, char * const * argv, int at, 
     while(*argument && *argument == '-')
         argument++;
 
-    glyr_message(1,s,stderr,C_R"[]"C_" Unknown option or missing argument: %s\n",argv[at]);
+    glyr_message(1,s,stderr,C_R"*"C_" Unknown option or missing argument: %s\n",argv[at]);
     if(argument && *argument)
     {
         int i = 0;
@@ -359,7 +368,7 @@ static void suggest_other_options(int m, int argc, char * const * argv, int at, 
             {
                 if(!dym)
                 {
-                    glyr_message(1,s,stderr,C_G"[]"C_" Did you mean");
+                    glyr_message(1,s,stderr,C_G"*"C_" Did you mean");
                 }
 
                 glyr_message(1,s,stderr,C_G"%s'--%s' (-%c) "C_,!dym?" ":"or",long_options[i].name,long_options[i].val);
@@ -381,10 +390,29 @@ static void suggest_other_options(int m, int argc, char * const * argv, int at, 
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * parse_commandline_general(int argc, char * const * argv, glyr_settings_t * glyrs)
+static bool check_if_dir(const char * path)
+{
+    if(strcasecmp(optarg,"stdout") && strcasecmp(optarg,"stderr") && strcasecmp(optarg,"null"))
+    {
+	DIR * dummy = opendir(path);
+	if(dummy)
+	{
+	    closedir(dummy);
+	    return true;
+	}
+	else
+	{
+	    return false;
+	}
+    }
+    return true;
+}
+
+static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery * glyrs)
 {
     int c;
-    char * v = NULL;
+    char ** write_arg = NULL;
+    bool haswrite_arg = false;
 
     static struct option long_options[] =
     {
@@ -426,59 +454,77 @@ static char * parse_commandline_general(int argc, char * const * argv, glyr_sett
         {
         case 'w':
         {
-            v = strdup(optarg);
-            if(strcasecmp(optarg,"stdout") && strcasecmp(optarg,"stderr") && strcasecmp(optarg,"null"))
-            {
-                DIR * dummy = opendir(v);
-                if(dummy)
-                {
-                    if(v != NULL)
-                    {
-                        size_t len = strlen(v);
-                        if(v[len-1] == '/')
-                        {
-                            v[len-1] = 0;
-                        }
-                    }
-                    closedir(dummy);
-                }
-                else
-                {
-                    glyr_message(2,glyrs,stderr,C_R"[]"C_" '%s' is not a valid directory!\n\n",optarg);
-                    exit(-1);
-                }
-            }
-            break;
+	    size_t length = strlen(optarg);
+	    size_t offset = 0;
+	    size_t elemct = 0;	    
+
+	    char * c_arg = NULL;
+	    while( (c_arg = get_next_word(optarg,";",&offset,length)) != NULL)
+	    {
+		    const char * element = NULL;
+		    if(*c_arg && strcasecmp(c_arg,"stdout") && strcasecmp(c_arg,"stderr") && strcasecmp(c_arg,"null"))
+		    {
+			    if(check_if_dir(c_arg) == false)
+			    {
+				glyr_message(1,glyrs,stderr,C_R"*"C_" %s is not a valid directory.\n",c_arg);
+			    }
+			    else
+			    {
+				element = dirname(c_arg); 
+			    }
+		    }
+		    else if(*c_arg)
+		    {
+			element = c_arg;
+		    }
+	
+		    if(element)
+		    {
+			    write_arg = realloc(write_arg, (elemct+2) * sizeof(char*));
+			    write_arg[  elemct] = strdup(element);
+			    write_arg[++elemct] = NULL;
+			    haswrite_arg = true;
+		    }
+		    free(c_arg);
+		    c_arg=NULL;
+	     }
+	     if(elemct == 0)
+	     {
+		glyr_message(1,glyrs,stderr,C_R"*"C_" you should give at least one valid dir to --w!\n");
+		glyr_message(1,glyrs,stderr,C_R"*"C_" Will default to the current working directory.\n");
+		write_arg = NULL;
+	     }
+             break;
         }
         case 'u':
             update = true;
             break;
 
         case 'f':
-            if(glyr_setopt(glyrs,GLYRO_FROM,optarg) != GLYRE_OK)
+            if(GlyOpt_from(glyrs,optarg) != GLYRE_OK)
             {
                 search_similiar_providers(optarg,glyrs);
             }
             break;
 
         case 'v':
-            glyr_setopt(glyrs,GLYRO_VERBOSITY,atoi(optarg));
+            GlyOpt_verbosity(glyrs,atoi(optarg));
             break;
 
         case 'p':
-            glyr_setopt(glyrs,GLYRO_PARALLEL,atoi(optarg));
+            GlyOpt_parallel(glyrs,atoi(optarg));
             break;
 
         case 'r':
-            glyr_setopt(glyrs,GLYRO_REDIRECTS,atoi(optarg));
+            GlyOpt_redirects(glyrs,atoi(optarg));
             break;
 
         case 'm':
-            glyr_setopt(glyrs,GLYRO_TIMEOUT,atoi(optarg));
+            GlyOpt_timeout(glyrs,atoi(optarg));
             break;
 
         case 'x':
-            glyr_setopt(glyrs,GLYRO_PLUGMAX,atoi(optarg));
+            GlyOpt_plugmax(glyrs,atoi(optarg));
             break;
 
         case 'V':
@@ -489,57 +535,31 @@ static char * parse_commandline_general(int argc, char * const * argv, glyr_sett
             usage();
             break;
 	case 'c':
-	    glyr_setopt(glyrs,GLYRO_COLOR,(PRT_COLOR)?false:true);
+	    GlyOpt_color(glyrs,false);
 	    break;
         case 'a':
-            glyr_setopt(glyrs,GLYRO_ARTIST,optarg);
+            GlyOpt_artist(glyrs,optarg);
             break;
         case 'b':
-            glyr_setopt(glyrs,GLYRO_ALBUM,optarg);
+            GlyOpt_album(glyrs,optarg);
             break;
         case 't':
-            glyr_setopt(glyrs,GLYRO_TITLE,optarg);
+            GlyOpt_title(glyrs,optarg);
             break;
         case 'i':
-            glyr_setopt(glyrs,GLYRO_CMINSIZE,atoi(optarg));
+            GlyOpt_cminsize(glyrs,atoi(optarg));
             break;
         case 'e':
-            glyr_setopt(glyrs,GLYRO_CMAXSIZE,atoi(optarg));
+            GlyOpt_cmaxsize(glyrs,atoi(optarg));
             break;
         case 'n':
-            glyr_setopt(glyrs,GLYRO_NUMBER,atoi(optarg));
+            GlyOpt_number(glyrs,atoi(optarg));
             break;
         case 'd':
-            glyr_setopt(glyrs,GLYRO_DOWNLOAD,false);
-            break;
-        case 's':
-            glyr_setopt(glyrs,GLYRO_COLOR,1);
+            GlyOpt_download(glyrs,false);
             break;
         case 'l':
-            if(!strcasecmp(optarg,"us"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else  if(!strcasecmp(optarg,"uk"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else  if(!strcasecmp(optarg,"ca"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else  if(!strcasecmp(optarg,"fr"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else  if(!strcasecmp(optarg,"de"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else  if(!strcasecmp(optarg,"jp"))
-                glyr_setopt(glyrs,GLYRO_LANG,GLYRL_DE);
-            else
-            {
-                glyr_message(1,glyrs,stderr,"Unknown language: "C_G"#%s\n"C_,optarg);
-                glyr_message(1,glyrs,stderr,"Possible values:\n");
-                glyr_message(1,glyrs,stderr,"    us\n");
-                glyr_message(1,glyrs,stderr,"    uk\n");
-                glyr_message(1,glyrs,stderr,"    ca\n");
-                glyr_message(1,glyrs,stderr,"    fr\n");
-                glyr_message(1,glyrs,stderr,"    de\n");
-                glyr_message(1,glyrs,stderr,"    jp\n");
-                glyr_message(1,glyrs,stderr,"      \n");
-            }
+            GlyOpt_lang(glyrs,optarg);
             break;
         case '?':
             suggest_other_options(sizeof(long_options) / sizeof(struct option), argc, argv, optind-1, long_options,glyrs);
@@ -555,7 +575,9 @@ static char * parse_commandline_general(int argc, char * const * argv, glyr_sett
             optind++;
         }
     }
-    return v;
+    if(haswrite_arg) return write_arg;
+
+    return NULL;
 }
 
 //* --------------------------------------------------------- */
@@ -582,52 +604,11 @@ char * correct_path(const char * path)
 	return r;
 }
 
-//* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-static int write_to_file(const char * path, memCache_t * data, const char * save_dir, const char * type, glyr_settings_t *s)
-{
-    int bytes = -1;
-    if(path)
-    {
-        if(!strcasecmp(save_dir,"null"))
-        {
-            bytes = 0;
-        }
-        else if(!strcasecmp(save_dir,"stdout"))
-        {
-            bytes=fwrite(data->data,1,data->size,stdout);
-            fputc('\n',stdout);
-        }
-        else if(!strcasecmp(save_dir,"stderr"))
-        {
-            bytes=fwrite(data->data,1,data->size,stderr);
-            fputc('\n',stderr);
-        }
-        else
-        {
-	    glyr_message(1,s,stdout,""C_R"=>"C_" Writing %s to %s\n",type,path);
-	    FILE * fp = fopen(path,"w");
-	    if(fp)
-	    {
-		bytes=fwrite(data->data,1,data->size,fp);
-		fclose(fp);
-	    }
-	    else
-	    {
-		glyr_message(-1,NULL,stderr,"Unable to write to '%s'!\n",path);
-	    }
-        }
-    }
-    return bytes;
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_covers(glyr_settings_t * s, const char * save_dir, int i)
+static char * path_covers(GlyQuery * s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
     char * good_album  = correct_path(s->album );
@@ -641,19 +622,15 @@ static char * path_covers(glyr_settings_t * s, const char * save_dir, int i)
     return good_path;
 }
 
-static void handle_covers(memCache_t * cache, glyr_settings_t * s)
-{
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_lyrics(glyr_settings_t * s, const char * save_dir, int i)
+static char * path_lyrics(GlyQuery * s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
     char * good_title  = correct_path(s->title );
-    char * good_path   =  strdup_printf("%s/%s_%s_%d.lyrics",save_dir,good_artist,good_title,i);
+    char * good_path   =  strdup_printf("%s/%s_%s_%d_lyrics.txt",save_dir,good_artist,good_title,i);
     
     if(good_title)
 	free(good_title);
@@ -663,21 +640,11 @@ static char * path_lyrics(glyr_settings_t * s, const char * save_dir, int i)
     return good_path;
 }
 
-static void handle_lyrics(memCache_t * cache, glyr_settings_t * s)
-{
-    bool have_album = (s->album != NULL);
-    int dots = glyr_message(2,s,stderr,"\n%s by %s%s%s\n",s->title,s->artist,have_album ? " from ":"",have_album ? s->album : "");
-    int d = 0;
-
-    for(; d < dots; d++) glyr_message(1,s,stderr,"-");
-    glyr_message(1,s,stdout,"\n%s\n\n",cache->data);
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_photos(glyr_settings_t * s, const char * save_dir, int i)
+static char * path_photos(GlyQuery * s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
     char * good_path   = strdup_printf("%s/%s_photo_%d.img",save_dir,good_artist,i);
@@ -688,18 +655,14 @@ static char * path_photos(glyr_settings_t * s, const char * save_dir, int i)
     return good_path;
 }
 
-static void handle_photos(memCache_t* cache, glyr_settings_t * s)
-{
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_ainfo(glyr_settings_t * s, const char * save_dir, int i)
+static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s_artist_%d.ainfo\n",good_artist,i);
+    char * good_path   = strdup_printf("%s_artist_%d_ainfo.txt\n",good_artist,i);
 
     if(good_artist)
 	free(good_artist);
@@ -707,19 +670,14 @@ static char * path_ainfo(glyr_settings_t * s, const char * save_dir, int i)
     return good_path;
 }
 
-static void handle_ainfo(memCache_t * cache, glyr_settings_t *s)
-{
-    glyr_message(2,s,stdout,"\n%s\n",cache->data);
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_books(glyr_settings_t *s, const char * save_dir, int i)
+static char * path_books(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s/%s.book_%d",save_dir, good_artist,i);
+    char * good_path   = strdup_printf("%s/%s_%d_book.txt",save_dir, good_artist,i);
 	
     if(good_artist)
 	free(good_artist);
@@ -727,16 +685,44 @@ static char * path_books(glyr_settings_t *s, const char * save_dir, int i)
     return good_path;
 }
 
-static void handle_books(memCache_t * cache, glyr_settings_t * s)
+/* --------------------------------------------------------- */
+// --------------------------------------------------------- //
+/* --------------------------------------------------------- */
+
+static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
 {
-    glyr_message(1,s,stderr,"%s\n",cache->data);
+    char * good_artist = correct_path(s->artist);
+    char * good_path   = strdup_printf("%s/%s_similiar.txt",save_dir, good_artist,i);
+	
+    if(good_artist)
+	free(good_artist);
+
+    return good_path;
 }
 
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-char * get_path_by_type(glyr_settings_t * s, const char * sd, int iter)
+static char * path_review(GlyQuery *s, const char * save_dir, int i)
+{
+    char * good_artist = correct_path(s->artist);
+    char * good_album  = correct_path(s->album );
+    char * good_path   = strdup_printf("%s/%s_%s_%d_review.txt",save_dir,good_artist,good_album,i);
+	
+    if(good_artist)
+	free(good_artist);
+    if(good_album)
+	free(good_album);
+
+    return good_path;
+}
+
+/* --------------------------------------------------------- */
+// --------------------------------------------------------- //
+/* --------------------------------------------------------- */
+
+char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 {
     char * m_path = NULL;
     switch(s->type)
@@ -756,6 +742,11 @@ char * get_path_by_type(glyr_settings_t * s, const char * sd, int iter)
     case GET_AINFO:
         m_path = path_ainfo(s,sd,iter);
         break;
+    case GET_SIMILIAR:
+	m_path = path_similiar(s,sd,iter);
+	break;
+    case GET_REVIEW:
+	m_path = path_review(s,sd,iter);
     }
     return m_path;
 }
@@ -764,7 +755,7 @@ char * get_path_by_type(glyr_settings_t * s, const char * sd, int iter)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static void cb(memCache_t * c, glyr_settings_t * s)
+static void cb(GlyMemCache * c, GlyQuery * s)
 {
     // This is just to demonstrate the callback option.
     // Put anything in here that you want to be executed when
@@ -775,141 +766,116 @@ static void cb(memCache_t * c, glyr_settings_t * s)
 
 int main(int argc, char * argv[])
 {
-    int result = 0;
+    int result = EXIT_SUCCESS;
 
     if(argc >= 3)
     {
+	GlyQuery my_query;
         // glyr's control struct
-        glyr_settings_t my_settings;
-
-        // Init to the default settings
-        glyr_init_settings( &my_settings);
+        Gly_init_query(&my_query);
 
         // Set the type..
-        if(!set_get_type(&my_settings, argv[1]))
+        if(!set_get_type(&my_query, argv[1]))
         {
-            glyr_destroy_settings( &my_settings );
+            Gly_destroy_query( &my_query );
             return EXIT_FAILURE;
         }
 
-        char * save_dir = parse_commandline_general(argc-1, argv+1, &my_settings);
+        char ** write_arg = parse_commandline_general(argc-1, argv+1, &my_query);
+	if(write_arg == NULL)
+	{
+		write_arg = malloc(2 * sizeof(char*));
+		write_arg[0] = strdup(default_path);
+		write_arg[1] = NULL;
+	}
 
-        // default to working dir
-        const char * default_path = ".";
-        if(!save_dir)
-        {
-            save_dir = (char*)default_path;
-        }
-
-        char *  m_path = NULL;
-        char ** c_path = calloc(sizeof(char *), (my_settings.number+1));
+        if(my_query.type == GET_AINFO)
+            my_query.number *= 2;
 
         // Check if files do already exist
         bool file_exist = false;
 
-        if(my_settings.type == GET_AINFO)
-            my_settings.number++;
-
         size_t iter = 0;
-        for(iter = 0; iter < my_settings.number; iter++)
+        for(iter = 0; iter < my_query.number; iter++)
         {
-
-            m_path = get_path_by_type(&my_settings, save_dir, iter);
-            if(m_path)
-            {
-                c_path[iter] = m_path;
-                if(!update && (file_exist = !access(m_path,R_OK) ))
-                {
-                    break;
-                }
-            }
+	    size_t j = 0;
+	    for(j = 0; write_arg[j]; j++)
+	    {
+		    char * path = get_path_by_type(&my_query, write_arg[j], iter);
+		    if(path)
+		    {
+			if(!update && (file_exist = !access(path,R_OK) ))
+			{
+			    free(path);
+			    break;
+			}
+			free(path);
+			path = NULL;
+		    }
+	    }
         }
 
         // Set (example) callback
-        glyr_set_dl_callback(&my_settings, cb, NULL);
+       	GlyOpt_dlcallback(&my_query, cb, NULL);
 
-        size_t frec = my_settings.number;
-        if(my_settings.type != GET_UNSURE)
+        size_t frec = my_query.number;
+        if(my_query.type != GET_UNSURE)
         {
             if(!file_exist)
             {
-                // Now download everything
+	        // Now download everything
                 int get_error = GLYRE_OK;
-                cache_list * my_list= glyr_get(&my_settings, &get_error);
+                GlyCacheList * my_list= Gly_get(&my_query, &get_error);
                 if(my_list)
                 {
-                    plugin_t * table_copy = glyr_get_provider_by_id(-1);
+		    glyr_message(2,&my_query,stderr,"\n");
+                    GlyPlugin * table_copy = Gly_get_provider_by_id(-1);
                     if(get_error == GLYRE_OK)
                     {
                         size_t i = 0;
                         for(i = 0; i < my_list->size && my_list->list[i]; i++)
                         {
-                            switch(my_settings.type)
-                            {
-                            case GET_COVER:
-                                handle_covers(my_list->list[i], &my_settings);
-                                break;
-                            case GET_LYRIC:
-                                handle_lyrics(my_list->list[i], &my_settings);
-                                break;
-                            case GET_PHOTO:
-                                handle_photos(my_list->list[i], &my_settings);
-                                break;
-                            case GET_BOOKS:
-                                handle_books (my_list->list[i], &my_settings);
-                                break;
-                            case GET_AINFO:
-                                handle_ainfo(my_list->list[i], &my_settings);
-                                break;
-                            }
-
-                            if(i >= my_settings.number || c_path[i] == NULL)
-                            {
-                                c_path = realloc(c_path, sizeof(char * ) * (frec+2));
-                                c_path[i] = get_path_by_type(&my_settings,save_dir,i);
-                                frec++;
-                            }
-
-                            if(write_to_file(c_path[i],my_list->list[i],save_dir, table_copy[my_settings.type].name, &my_settings))
-                                result = EXIT_FAILURE;
+			    size_t j = 0;
+			    for(j = 0; write_arg[j]; j++)
+			    {
+			    	  char * path = get_path_by_type(&my_query,write_arg[j],i);
+				  if(path != NULL)
+				  {
+					  if(Gly_write_binary_file(path,my_list->list[i],write_arg[j], table_copy[my_query.type].name, &my_query) == -1)
+					  {
+						result = EXIT_FAILURE;
+					  }
+					  free(path);
+					  path = NULL;
+				  }
+			    }
                         }
                     }
 
                     // Free all downloaded buffers
-                    glyr_free_list(my_list);
+                    Gly_free_list(my_list);
                     free(table_copy);
                 }
             }
             else
             {
-                glyr_message(1,&my_settings,stderr,C_B"[]"C_" File(s) already exist. Use -u to update.\n");
+                glyr_message(1,&my_query,stderr,C_B"*"C_" File(s) already exist. Use -u to update.\n");
             }
 
-            if(c_path)
-            {
-                size_t i = 0;
-                for(i = 0; i < frec; i++)
-                {
-                    if(c_path[i])
-                    {
-                        free(c_path[i]);
-                        c_path[i] = NULL;
-                    }
-                }
-                free(c_path);
-                c_path = NULL;
+	    size_t x = 0;
+	    for( x = 0; write_arg[x]; x++)
+	    {
+		free(write_arg[x]);
+		write_arg[x] = NULL;
             }
+	    free(write_arg);
+            write_arg = NULL;
 
             // Clean memory alloc'd by settings
-            glyr_destroy_settings( &my_settings);
-
-            if(save_dir != default_path)
-            {
-                free(save_dir);
-            }
+            Gly_destroy_query( &my_query);
         }
     }
-    else if(argc >= 1 && !strcmp(argv[1],"-V"))
+    else if(argc >= 2 && !strcmp(argv[1],"-V"))
     {
         print_version();
     }

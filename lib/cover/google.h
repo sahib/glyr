@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * cover_google_url(glyr_settings_t * sets);
-cache_list * cover_google_parse(cb_object *capo);
+const char * cover_google_url(GlyQuery * sets);
+GlyCacheList * cover_google_parse(cb_object *capo);
 
 #endif

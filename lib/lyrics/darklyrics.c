@@ -10,12 +10,12 @@
 
 #define DARK_URL "http://darklyrics.com/lyrics/%artist%/%album%.html#1"
 
-const char * lyrics_darklyrics_url(glyr_settings_t * settings)
+const char * lyrics_darklyrics_url(GlyQuery * settings)
 {
     return DARK_URL;
 }
 
-cache_list * lyrics_darklyrics_parse(cb_object * capo)
+GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
 {
     /* We have to search for the title in the data,
      * Therefore we convert everything to lowercase
@@ -24,8 +24,8 @@ cache_list * lyrics_darklyrics_parse(cb_object * capo)
      * the correct case in the finaly lyrics
      * */
 
-    cache_list * r_list = NULL;
-    memCache_t * r_cache = NULL;
+    GlyCacheList * r_list = NULL;
+    GlyMemCache * r_cache = NULL;
 
     char *searchstring = strdup_printf(". %s%s",capo->s->title,"</a></h3>");
     if(searchstring)
@@ -51,10 +51,18 @@ cache_list * lyrics_darklyrics_parse(cb_object * capo)
                         free(html_code);
                     }
                 }
+		else
+		{
+		    r_cache = DL_error(NO_ENDIN_TAG);
+		}
             }
             free(cache_copy);
         }
         free(searchstring);
+    }
+    else
+    {
+	r_cache = DL_error(NO_BEGIN_TAG);
     }
 
     if(r_cache)

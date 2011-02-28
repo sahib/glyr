@@ -7,7 +7,7 @@
 #include "../core.h"
 #include "../stringop.h"
 
-const char * cover_albumart_url(glyr_settings_t * sets)
+const char * cover_albumart_url(GlyQuery * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size == -1)
         return "http://www.albumart.org/index.php?srchkey=%artist%+%album%&itempage=1&newsearch=1&searchindex=Music";
@@ -17,9 +17,9 @@ const char * cover_albumart_url(glyr_settings_t * sets)
 
 #define AMZ "http://ecx.images-amazon.com/images/"
 
-cache_list * cover_albumart_parse(cb_object * capo)
+GlyCacheList * cover_albumart_parse(cb_object * capo)
 {
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
     char * node = strstr(capo->cache->data,"<div id=\"main\">");
     if(node)
@@ -32,7 +32,7 @@ cache_list * cover_albumart_parse(cb_object * capo)
         }
 
         size_t urlc = 0;
-        while( (node = strstr(node+1,"<li><div style=\"")) && urlc < capo->s->number && urlc < capo->s->plugmax)
+        while( (node = strstr(node+1,"<li><div style=\"")) && continue_search(urlc,capo->s))
         {
             size_t i = 0;
             char * img_tag = node;
@@ -49,7 +49,7 @@ cache_list * cover_albumart_parse(cb_object * capo)
                 {
                     if(!r_list) r_list = DL_new_lst();
 
-                    memCache_t * result = DL_init();
+                    GlyMemCache * result = DL_init();
                     result->data = strdup_printf(AMZ"%s.jpg",img_url);
                     result->size = strlen(result->data);
 

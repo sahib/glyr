@@ -7,7 +7,7 @@
 #include "../core.h"
 #include "../stringop.h"
 
-const char * lyrics_songlyrics_url(glyr_settings_t * settings)
+const char * lyrics_songlyrics_url(GlyQuery * settings)
 {
     char * url = NULL;
     if(settings && settings->artist && settings->title)
@@ -37,10 +37,10 @@ const char * lyrics_songlyrics_url(glyr_settings_t * settings)
     return url;
 }
 
-cache_list * lyrics_songlyrics_parse(cb_object * capo)
+GlyCacheList * lyrics_songlyrics_parse(cb_object * capo)
 {
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
     char * find_tag, * find_end;
     if( (find_tag = strstr(capo->cache->data,"<p id=\"songLyricsDiv\"")) != NULL)
     {
@@ -61,8 +61,8 @@ cache_list * lyrics_songlyrics_parse(cb_object * capo)
                     }
                     free(buf);
                 }
-            }
-        }
+            } else result = DL_error(NO_ENDIN_TAG);
+        } else result = DL_error(NO_BEGIN_TAG);
     }
     if(result)
     {

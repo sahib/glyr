@@ -10,7 +10,7 @@
 
 #define LV_URL "http://www.lyricsvip.com/%s/%s-Lyrics.html"
 
-const char * lyrics_lyricsvip_url(glyr_settings_t * settings)
+const char * lyrics_lyricsvip_url(GlyQuery * settings)
 {
     char * result = NULL;
     char * artist_clean = strreplace(settings->artist, " ", "-");
@@ -27,14 +27,14 @@ const char * lyrics_lyricsvip_url(glyr_settings_t * settings)
     return result;
 }
 
-cache_list * lyrics_lyricsvip_parse(cb_object *capo)
+GlyCacheList * lyrics_lyricsvip_parse(cb_object *capo)
 {
     char * start = NULL;
     char * end = NULL;
     char * content = NULL;
 
-    memCache_t * r_cache = NULL;
-    cache_list * r_list  = NULL;
+    GlyMemCache * r_cache = NULL;
+    GlyCacheList * r_list  = NULL;
 
     if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL)
     {
@@ -52,8 +52,8 @@ cache_list * lyrics_lyricsvip_parse(cb_object *capo)
                     r_cache->dsrc = strdup(capo->url);
                 }
             }
-        }
-    }
+        } else r_cache = DL_error(NO_ENDIN_TAG);
+    } else r_cache = DL_error(NO_BEGIN_TAG);
 
     if(r_cache)
     {

@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-plugin_t   * glyr_get_books_providers(void);
-cache_list * get_books(glyr_settings_t * settings);
+GlyPlugin   * glyr_get_books_providers(void);
+GlyCacheList * get_books(GlyQuery * settings);
 
 #endif

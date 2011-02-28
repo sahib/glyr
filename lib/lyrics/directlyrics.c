@@ -11,7 +11,7 @@
 // Unable to use this via CGI without lots of pain..
 // So only use dump URL scheme
 
-const char * lyrics_directlyrics_url(glyr_settings_t * settings)
+const char * lyrics_directlyrics_url(GlyQuery * settings)
 {
     char * url   = NULL;
 
@@ -39,17 +39,20 @@ const char * lyrics_directlyrics_url(glyr_settings_t * settings)
     return url;
 }
 
-cache_list * lyrics_directlyrics_parse(cb_object * capo)
+#define START "<div id=\"lyricsContent\"><p>"
+#define ENDIN "</div>"
+
+GlyCacheList * lyrics_directlyrics_parse(cb_object * capo)
 {
     char * f_entry;
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
-    if( (f_entry = strstr(capo->cache->data,"<div id=\"lyricsContent\"><p>")) )
+    if( (f_entry = strstr(capo->cache->data,START)) )
     {
         char * f_end = NULL;
-        f_entry += strlen("<div id=\"lyricsContent\"><p>");
-        if( (f_end = strstr(f_entry,"</div>")) )
+        f_entry += strlen(START);
+        if( (f_end = strstr(f_entry,ENDIN)) )
         {
             char * buf = copy_value(f_entry,f_end);
             if(buf)
@@ -66,6 +69,14 @@ cache_list * lyrics_directlyrics_parse(cb_object * capo)
                 free(buf);
             }
         }
+	else
+	{
+	    result = DL_error(NO_ENDIN_TAG);
+	}
+    }
+    else
+    {
+	result = DL_error(NO_BEGIN_TAG);
     }
     if(result)
     {

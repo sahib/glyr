@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * lyrics_lyricswiki_url(glyr_settings_t * settings);
-cache_list * lyrics_lyricswiki_parse(cb_object *capo);
+const char * lyrics_lyricswiki_url(GlyQuery * settings);
+GlyCacheList * lyrics_lyricswiki_parse(cb_object *capo);
 
 #endif

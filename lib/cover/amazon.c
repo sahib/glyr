@@ -59,27 +59,24 @@ Country settings:
 // as an fallback there is the albumart and coverhunt plugin which implement a search on amazon (on serverside)
 #define ACCESS_KEY "AKIAJ6NEA642OU3FM24Q"
 
-const char * cover_amazon_url(glyr_settings_t * sets)
+const char * cover_amazon_url(GlyQuery * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size)
     {
-        switch(sets->lang)
-        {
-        case  GLYRL_US:
+        if(!strcmp(sets->lang,"us"))
             return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYRL_CA:
+        else if(!strcmp(sets->lang,"ca"))
             return "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYRL_UK:
+        else if(!strcmp(sets->lang,"uk"))
             return "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYRL_FR:
+        else if(!strcmp(sets->lang,"fr"))
             return "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYRL_DE:
+        else if(!strcmp(sets->lang,"de"))
             return "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        case  GLYRL_JP:
+        else if(!strcmp(sets->lang,"jp"))
             return "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        default:
+        else
             return "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=%artist%+%album%\0";
-        }
     }
     return NULL;
 }
@@ -87,7 +84,7 @@ const char * cover_amazon_url(glyr_settings_t * sets)
 #define MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
 #define MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
 
-cache_list * cover_amazon_parse(cb_object *capo)
+GlyCacheList * cover_amazon_parse(cb_object *capo)
 {
     char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
                       (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
@@ -99,10 +96,10 @@ cache_list * cover_amazon_parse(cb_object *capo)
 #undef MIN
 
     int urlc = 0;
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
     char * find = capo->cache->data;
-    while( (find = strstr(find +1, tag_ssize)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (find = strstr(find +1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
     {
         /* Next two XML tags not relevant */
         nextTag(find);
@@ -116,7 +113,7 @@ cache_list * cover_amazon_parse(cb_object *capo)
             {
                 if(!r_list) r_list = DL_new_lst();
 
-                memCache_t * result_cache = DL_init();
+                GlyMemCache * result_cache = DL_init();
                 result_cache->data = result_url;
                 result_cache->size = strlen(result_url);
 

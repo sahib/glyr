@@ -18,7 +18,7 @@
 #include "lyrics/metrolyrics.h"
 
 // Add your's here
-plugin_t lyric_providers[] =
+GlyPlugin lyric_providers[] =
 {
 //  full name       key  coloredname    use?    parser callback           geturl callback         free url?
     {"lyricswiki",  "w", "lyricswiki",  false, {lyrics_lyricswiki_parse,  lyrics_lyricswiki_url,  false}},
@@ -36,21 +36,21 @@ plugin_t lyric_providers[] =
     { NULL,         NULL, NULL,         false, {NULL,                     NULL,                   false}},
 };
 
-plugin_t * glyr_get_lyric_providers(void)
+GlyPlugin * glyr_get_lyric_providers(void)
 {
     return copy_table(lyric_providers,sizeof(lyric_providers));
 }
 
-static cache_list * lyrics_finalize(cache_list * result, glyr_settings_t * settings)
+static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     if(!result) return NULL;
 
-    cache_list * lst = DL_new_lst();
+    GlyCacheList * lst = DL_new_lst();
 
     size_t i = 0;
     for(i = 0; i < result->size; i++)
     {
-        memCache_t * dl = DL_init();
+        GlyMemCache * dl = DL_init();
         dl->data = beautify_lyrics(result->list[i]->data);
         dl->size = strlen(dl->data);
         dl->dsrc = strdup(result->list[i]->dsrc);
@@ -64,16 +64,16 @@ static cache_list * lyrics_finalize(cache_list * result, glyr_settings_t * setti
     return lst;
 }
 
-cache_list * get_lyrics(glyr_settings_t * settings)
+GlyCacheList * get_lyrics(GlyQuery * settings)
 {
-    cache_list * result = NULL;
+    GlyCacheList * result = NULL;
     if(settings && settings->artist && settings->title)
     {
         result = register_and_execute(settings, lyrics_finalize);
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"[] "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
+        glyr_message(2,settings,stderr,C_R"* "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
     }
     return result;
 }

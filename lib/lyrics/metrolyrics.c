@@ -19,14 +19,14 @@
 #define MAX_TRIES 5
 
 // Just return URL
-const char * lyrics_metrolyrics_url(glyr_settings_t * settings)
+const char * lyrics_metrolyrics_url(GlyQuery * settings)
 {
     return ML_URL;
 }
 
-static memCache_t * parse_lyrics_page(const char * buffer)
+static GlyMemCache * parse_lyrics_page(const char * buffer)
 {
-    memCache_t * result = NULL;
+    GlyMemCache * result = NULL;
     if(buffer)
     {
         char * begin = strstr(buffer,"<div id=\"lyrics\">");
@@ -74,17 +74,17 @@ static bool approve_content(char * content, const char * compare)
 #define NODE_ENDIN "\" title=\""
 #define TITLE_END  " Lyrics"
 
-cache_list * lyrics_metrolyrics_parse(cb_object * capo)
+GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
 {
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
     char * root = strstr(capo->cache->data,ROOT_NODE);
     if(root)
     {
         size_t tries = 0;
         char * node = root;
-        while(node && (node = strstr(node+1,NODE_BEGIN)) && (tries++) < MAX_TRIES )
+        while(node && (node = strstr(node+1,NODE_BEGIN)) && (tries++) < MAX_TRIES && continue_search(tries,capo->s))
         {
             char * title_beg = strstr(node,NODE_ENDIN);
             if(title_beg)
@@ -103,7 +103,7 @@ cache_list * lyrics_metrolyrics_parse(cb_object * capo)
                                 char * dl_url = strdup_printf("www.metrolyrics.com%s",url);
                                 if(dl_url)
                                 {
-                                    memCache_t * dl_cache = download_single(dl_url,capo->s);
+                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s);
                                     if(dl_cache)
                                     {
                                         result = parse_lyrics_page(dl_cache->data);

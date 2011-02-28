@@ -25,7 +25,7 @@
 
 #define API_KEY "adff651383"
 
-const char * cover_discogs_url(glyr_settings_t * sets)
+const char * cover_discogs_url(GlyQuery * sets)
 {
     if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
         return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
@@ -35,14 +35,14 @@ const char * cover_discogs_url(glyr_settings_t * sets)
 
 
 // The discogs.com parser is a little more complicated...
-cache_list * cover_discogs_parse(cb_object * capo)
+GlyCacheList * cover_discogs_parse(cb_object * capo)
 {
-    cache_list * r_list=NULL;
+    GlyCacheList * r_list=NULL;
 
     // Go through all release node
     int urlc = 0;
     char * release_node = capo->cache->data;
-    while((release_node = strstr(release_node+1,RELEASE_ID)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while((release_node = strstr(release_node+1,RELEASE_ID)) != NULL && continue_search(urlc,capo->s))
     {
         // Find title in node
         char * title_begin = strstr(release_node,TITLE_BEGIN);
@@ -77,7 +77,7 @@ cache_list * cover_discogs_parse(cb_object * capo)
                         char *release_url = strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
                         if(release_url)
                         {
-                            memCache_t * tmp_cache = download_single(release_url,capo->s);
+                            GlyMemCache * tmp_cache = download_single(release_url,capo->s);
                             if(tmp_cache && tmp_cache->data && tmp_cache->size)
                             {
                                 // Parsing the image url from here on
@@ -110,7 +110,7 @@ cache_list * cover_discogs_parse(cb_object * capo)
                                                         char * url = copy_value(uri_begin+strlen(URL_BEGIN),uri_endin);
                                                         if(url)
                                                         {
-                                                            memCache_t * result = DL_init();
+                                                            GlyMemCache * result = DL_init();
                                                             if(result)
                                                             {
                                                                 result->data = url;

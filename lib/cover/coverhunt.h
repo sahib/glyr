@@ -3,8 +3,8 @@
 
 #include "../core.h"
 
-const char * cover_coverhunt_url(glyr_settings_t * sets);
-cache_list * cover_coverhunt_parse(cb_object *capo);
+const char * cover_coverhunt_url(GlyQuery * sets);
+GlyCacheList * cover_coverhunt_parse(cb_object *capo);
 
 #endif
 

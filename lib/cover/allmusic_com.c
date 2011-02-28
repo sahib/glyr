@@ -6,7 +6,7 @@
 #include "../core.h"
 #include "../glyr.h"
 
-const char * cover_allmusic_url(glyr_settings_t * s)
+const char * cover_allmusic_url(GlyQuery * s)
 {
 	if(s->cover.min_size < 200)
 	    return "http://www.allmusic.com/search/album/%album%";
@@ -30,9 +30,9 @@ const char * cover_allmusic_url(glyr_settings_t * s)
 #define IMG_BEGIN "<div class=\"image\"> <img src=\"" 
 #define IMG_ENDIN "\" alt=\""
 
-memCache_t * parse_cover_page(memCache_t * dl)
+GlyMemCache * parse_cover_page(GlyMemCache * dl)
 {
-	memCache_t * rc = NULL;
+	GlyMemCache * rc = NULL;
 	if(dl != NULL)
 	{
 		char * img_begin = strstr(dl->data,IMG_BEGIN);
@@ -50,12 +50,12 @@ memCache_t * parse_cover_page(memCache_t * dl)
 	return rc;
 }
 
-cache_list * cover_allmusic_parse(cb_object * capo)
+GlyCacheList * cover_allmusic_parse(cb_object * capo)
 {
-	cache_list * r_list = NULL;
+	GlyCacheList * r_list = NULL;
 	if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
 	{
-		memCache_t * result = parse_cover_page(capo->cache);
+		GlyMemCache * result = parse_cover_page(capo->cache);
 		r_list = DL_new_lst();
 		DL_add_to_list(r_list, result);
 		return r_list;
@@ -68,7 +68,7 @@ cache_list * cover_allmusic_parse(cb_object * capo)
 
 	int urlc = 0;	
 	char *  node = search_begin;
-	while( (node = strstr(node+1,SEARCH_NODE)) && urlc < capo->s->plugmax && urlc < capo->s->number)
+	while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
 	{
 		char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
 		if(url != NULL)
@@ -87,15 +87,15 @@ cache_list * cover_allmusic_parse(cb_object * capo)
 						ascii_strdown_modify(orig_artist,-1);
 						if(levenshtein_strcmp(orig_artist,artist) <= LV_MAX)
 						{
-							memCache_t * dl = download_single(url,capo->s);
+							GlyMemCache * dl = download_single(url,capo->s);
 							if(dl != NULL)
 							{
-								memCache_t * result = parse_cover_page(dl);
+								GlyMemCache * result = parse_cover_page(dl);
 								if(result != NULL)
 								{
-									urlc++;
 									if(!r_list) r_list = DL_new_lst();
 									DL_add_to_list(r_list,result);
+									urlc++;
 								}
 								DL_free(dl);
 							}

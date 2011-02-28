@@ -11,7 +11,7 @@
 #include "ainfo/allmusic_com.h"
 
 // Add your's here
-plugin_t ainfo_providers[] =
+GlyPlugin ainfo_providers[] =
 {
 //  full name       key  coloredname          use?   parser callback           geturl callback         free url?
     {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       true }},
@@ -21,17 +21,17 @@ plugin_t ainfo_providers[] =
     { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   false}},
 };
 
-plugin_t * glyr_get_ainfo_providers(void)
+GlyPlugin * glyr_get_ainfo_providers(void)
 {
     return copy_table(ainfo_providers,sizeof(ainfo_providers));
 }
 
-static cache_list * ainfo_finalize(cache_list * result, glyr_settings_t * settings)
+static GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     if(!result) return NULL;
 
     size_t i = 0;
-    cache_list * r_list = DL_new_lst();
+    GlyCacheList * r_list = DL_new_lst();
 
     for(i = 0; i < result->size; i++)
     {
@@ -44,9 +44,9 @@ static cache_list * ainfo_finalize(cache_list * result, glyr_settings_t * settin
     return r_list;
 }
 
-cache_list * get_ainfo(glyr_settings_t * settings)
+GlyCacheList * get_ainfo(GlyQuery * settings)
 {
-    cache_list * result = NULL;
+    GlyCacheList * result = NULL;
     if(settings && settings->artist)
     {
         result = register_and_execute(settings, ainfo_finalize);

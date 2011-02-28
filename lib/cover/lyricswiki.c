@@ -10,7 +10,7 @@
 #include "../core.h"
 
 
-const char * cover_lyricswiki_url(glyr_settings_t * sets)
+const char * cover_lyricswiki_url(GlyQuery * sets)
 {
     if(sets->cover.min_size < 500)
         return "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
@@ -32,13 +32,13 @@ const char * cover_lyricswiki_url(glyr_settings_t * sets)
 #define URL_MARKER "url=\""
 #define URL_END "\" descriptionurl="
 
-cache_list * cover_lyricswiki_parse(cb_object * capo)
+GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
 {
     char * find=capo->cache->data;
     char * endTag   = NULL;
 
     int urlc = 0;
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
     char *tmp = strreplace(capo->s->album," ","_");
     if(tmp)
@@ -47,7 +47,7 @@ cache_list * cover_lyricswiki_parse(cb_object * capo)
         if(_album)
         {
             // Go through all names and compare them with Levenshtein
-            while(find && (find = strstr(find+1,IMG_TAG)) != NULL && urlc < capo->s->number && urlc < capo->s->plugmax)
+            while(find && (find = strstr(find+1,IMG_TAG)) != NULL && continue_search(urlc,capo->s))
             {
                 // Find end & start of the name
                 find  += strlen(IMG_TAG);
@@ -85,7 +85,7 @@ cache_list * cover_lyricswiki_parse(cb_object * capo)
                                     {
                                         if(!r_list) r_list = DL_new_lst();
 
-                                        memCache_t * result = DL_init();
+                                        GlyMemCache * result = DL_init();
                                         result->data = url;
                                         result->size = url_end - url_start;
 

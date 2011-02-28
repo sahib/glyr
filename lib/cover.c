@@ -20,19 +20,19 @@
 #define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
 
 // Add yours here.
-plugin_t cover_providers[] =
+GlyPlugin cover_providers[] =
 {
     // Start of safe group
     {"last.fm",    "l", C_"last"C_R"."C_"fm", false, {cover_lastfm_parse,      cover_lastfm_url,     false}},
-    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   false}},
+    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     false}},
     {"safe",       NULL,   NULL,              false, {NULL,                    NULL,                 false}},
     {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, false}},
-    {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   false}},
-    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  false}},
+    {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     true }},
+    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   false}},
     {"unsafe",     NULL,  NULL,               false, {NULL,                    NULL,                 false}},
     {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    false}},
-    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     false}},
-    {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     true }},
+    {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   false}},
+    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  false}},
     {"special",    NULL,  NULL,               false, {NULL,                    NULL,                 false}},
     { NULL,        NULL,  NULL,               false, {NULL,                    NULL,                 false}}
 };
@@ -48,15 +48,17 @@ bool size_is_okay(int sZ, int min, int max)
     return false;
 }
 
-plugin_t * glyr_get_cover_providers(void)
+GlyPlugin * glyr_get_cover_providers(void)
 {
     return copy_table(cover_providers,sizeof(cover_providers));
 }
 
-static cache_list * cover_callback(cb_object * capo)
+static GlyCacheList * cover_callback(cb_object * capo)
 {
-    cache_list * ls = DL_new_lst();
-    memCache_t * dl = DL_copy(capo->cache);
+    // in this 'pseudo' callback we copy 
+    // the downloaded cache, and add the source url
+    GlyCacheList * ls = DL_new_lst();
+    GlyMemCache * dl = DL_copy(capo->cache);
     if(dl)
     {
         dl->dsrc = strdup(capo->url);
@@ -70,9 +72,14 @@ static cache_list * cover_callback(cb_object * capo)
     return ls;
 }
 
-static cache_list * cover_finalize(cache_list * result, glyr_settings_t * settings)
+const char * URLblacklist[] = {
+	"http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",
+	NULL
+};
+
+static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    cache_list * dl_list = NULL;
+    GlyCacheList * dl_list = NULL;
     if(result)
     {
         if(settings->download)
@@ -80,27 +87,43 @@ static cache_list * cover_finalize(cache_list * result, glyr_settings_t * settin
             cb_object  * urlplug_list = calloc(result->size+1,sizeof(cb_object));
             if(urlplug_list)
             {
-                size_t i = 0;
+		/* Ignore double URLs */
+		flag_double_urls(result,settings);
+
+		/* Watch out for blacklisted URLs */
+		flag_blacklisted_urls(result,URLblacklist,settings);
+
+		size_t i = 0;
+		int ctr = 0;
                 for(i = 0; i < result->size; i++)
                 {
-                    if(result->list[i]->data == NULL) puts("oh?");
-
-                    plugin_init(&urlplug_list[i], result->list[i]->data, cover_callback, settings, NULL, NULL);
+		    if(!result->list[i]->error)
+		    {
+                    	plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, NULL);
+			ctr++;
+		    }
                 }
 
-                dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);
+                dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
+		glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
                 free(urlplug_list);
             }
         }
         else
         {
+	    /* Ignore double URLs */
+	    flag_double_urls(result,settings);
+
+	    /* Watch out for blacklisted URLs */
+	    flag_blacklisted_urls(result,URLblacklist,settings);
+
             size_t i = 0;
             for( i = 0; i < result->size; i++)
             {
-                if(result->list[i])
+                if(result->list[i] && result->list[i]->error == ALL_OK)
                 {
                     if(!dl_list) dl_list = DL_new_lst();
-                    memCache_t * r_copy = DL_copy(result->list[i]);
+                    GlyMemCache * r_copy = DL_copy(result->list[i]);
                     DL_add_to_list(dl_list,r_copy);
                 }
             }
@@ -109,9 +132,9 @@ static cache_list * cover_finalize(cache_list * result, glyr_settings_t * settin
     return dl_list;
 }
 
-cache_list * get_cover(glyr_settings_t * settings)
+GlyCacheList * get_cover(GlyQuery * settings)
 {
-    cache_list * res = NULL;
+    GlyCacheList * res = NULL;
     if (settings && settings->artist && settings->album)
     {
         // validate size
@@ -125,7 +148,7 @@ cache_list * get_cover(glyr_settings_t * settings)
     }
     else
     {
-        glyr_message(1,settings,stderr,C_R"[] "C_"%s is needed to download covers.\n",settings->artist ? "Album" : "Artist");
+        glyr_message(1,settings,stderr,C_R"* "C_"%s is needed to download covers.\n",settings->artist ? "Album" : "Artist");
     }
     return res;
 }

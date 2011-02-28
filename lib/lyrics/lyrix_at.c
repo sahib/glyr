@@ -9,7 +9,7 @@
 
 #define AT_URL "http://lyrix.at/lyrics-search/s-%artist%,,%title%,,any,1321,0.html"
 
-const char * lyrics_lyrixat_url(glyr_settings_t * settings)
+const char * lyrics_lyrixat_url(GlyQuery * settings)
 {
     return AT_URL;
 }
@@ -22,15 +22,15 @@ const char * lyrics_lyrixat_url(glyr_settings_t * settings)
 
 #define MAX_TRIES 5
 
-cache_list * lyrics_lyrixat_parse(cb_object * capo)
+GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
 {
     /* lyrix.at does not offer any webservice -> use the searchfield to get some results */
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
     char * search_begin_tag = capo->cache->data;
     int ctr = 0;
-    while( (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && !result && MAX_TRIES >= ctr++)
+    while( (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && !result && MAX_TRIES >= ctr++ && continue_search(ctr,capo->s))
     {
         char * url_tag = search_begin_tag;
         size_t toggle = 1,i;
@@ -58,7 +58,7 @@ cache_list * lyrics_lyrixat_parse(cb_object * capo)
                                 char * url = strdup_printf("http://lyrix.at/de%s",url_part);
                                 if(url)
                                 {
-                                    memCache_t * lyrcache = download_single(url,capo->s);
+                                    GlyMemCache * lyrcache = download_single(url,capo->s);
                                     if(lyrcache)
                                     {
                                         char * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);

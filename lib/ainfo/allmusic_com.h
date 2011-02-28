@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * ainfo_allmusic_url(glyr_settings_t *s);
-cache_list * ainfo_allmusic_parse(cb_object * capo);
+const char * ainfo_allmusic_url(GlyQuery *s);
+GlyCacheList * ainfo_allmusic_parse(cb_object * capo);
 
 #endif

@@ -11,7 +11,7 @@
 #include "../core.h"
 
 
-const char * cover_coverhunt_url(glyr_settings_t * sets)
+const char * cover_coverhunt_url(GlyQuery * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size)
         return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
@@ -46,9 +46,9 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
 // Take the first link we find.
 // coverhunt sadly offers  no way to check if the
 // image is really related to the query we're searching for
-cache_list * cover_coverhunt_parse(cb_object *capo)
+GlyCacheList * cover_coverhunt_parse(cb_object *capo)
 {
-    cache_list * r_list = NULL;
+    GlyCacheList * r_list = NULL;
 
     // navigate to start of search results
     char * table_start;
@@ -59,7 +59,7 @@ cache_list * cover_coverhunt_parse(cb_object *capo)
 
     int urlc = 0;
 
-    while( (table_start = strstr(table_start + 1,NODE_BEGIN)) && urlc < capo->s->number && urlc < capo->s->plugmax)
+    while( (table_start = strstr(table_start + 1,NODE_BEGIN)) && continue_search(urlc,capo->s))
     {
         char * table_end = NULL;
         if( (table_end = strstr(table_start,"\">")) != NULL)
@@ -70,7 +70,7 @@ cache_list * cover_coverhunt_parse(cb_object *capo)
                 char * real_url = strdup_printf("http://www.coverhunt.com/go/%s",go_url);
                 if(real_url)
                 {
-                    memCache_t * search_buf = download_single(real_url,capo->s);
+                    GlyMemCache * search_buf = download_single(real_url,capo->s);
                     if(search_buf)
                     {
                         char * artwork = strstr(search_buf->data, "<div class=\"artwork\">");
@@ -90,7 +90,7 @@ cache_list * cover_coverhunt_parse(cb_object *capo)
                                         {
                                             if(!r_list) r_list = DL_new_lst();
 
-                                            memCache_t * shell = DL_init();
+                                            GlyMemCache * shell = DL_init();
                                             shell->data = url;
                                             shell->size = img_end - img_start;
 

@@ -3,7 +3,7 @@
 
 #include "../core.h"
 
-const char * lyrics_magistrix_url(glyr_settings_t * settings);
-cache_list * lyrics_magistrix_parse(cb_object *capo);
+const char * lyrics_magistrix_url(GlyQuery * settings);
+GlyCacheList * lyrics_magistrix_parse(cb_object *capo);
 
 #endif

@@ -20,7 +20,7 @@
 #define URL "https://portal.d-nb.de/opac.htm?method=showFullRecord&currentResultId=%artist%%2526any&currentPosition=0"
 #define DOMAIN "d-nb."
 
-const char * books_dnb_url(glyr_settings_t * settings)
+const char * books_dnb_url(GlyQuery * settings)
 {
     if (strcmp(settings->artist, "LINK") == 0)
     {
@@ -39,14 +39,14 @@ const char * books_dnb_url(glyr_settings_t * settings)
     }
 }
 
-memCache_t * get_column(char ** pointer, char * start, char * end)
+GlyMemCache * get_column(char ** pointer, char * start, char * end)
 {
     char * column = NULL;
     column = (column=getStr(pointer, start, end)) == NULL ? "" : column;
     column = remove_html_tags_from_string(column, strlen(column));
     trim_inplace(column);
 
-    memCache_t * rc = DL_init();
+    GlyMemCache * rc = DL_init();
     if(rc)
     {
         rc->data = column;
@@ -55,7 +55,7 @@ memCache_t * get_column(char ** pointer, char * start, char * end)
     return rc;
 }
 
-cache_list * books_dnb_parse(cb_object * capo)
+GlyCacheList * books_dnb_parse(cb_object * capo)
 {
     char * pointer = capo->cache->data;
     pointer = getStr(&pointer, TABLE_START, TABLE_END);
@@ -65,10 +65,11 @@ cache_list * books_dnb_parse(cb_object * capo)
         return NULL;
     }
 
-    memCache_t * r = NULL;
-    cache_list *ls = NULL;
+    GlyMemCache * r = NULL;
+    GlyCacheList *ls = NULL;
 
-    while (true)
+    int urlc = 0;
+    while (continue_search(urlc++,capo->s))
     {
         if ((pointer = strstr(pointer, COLUMN_KEY)) == NULL)
         {

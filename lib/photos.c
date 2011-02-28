@@ -11,7 +11,7 @@
 #include "photos/flickr.h"
 #include "photos/lastfm.h"
 
-plugin_t photos_providers[] =
+GlyPlugin photos_providers[] =
 {
     {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, false}},
     {"safe",   NULL, NULL,                  false, {NULL,              NULL,                false}},
@@ -20,15 +20,15 @@ plugin_t photos_providers[] =
     {NULL,     NULL, NULL,                  false, {NULL,              NULL,                false}}
 };
 
-plugin_t * glyr_get_photo_providers(void)
+GlyPlugin * glyr_get_photo_providers(void)
 {
     return copy_table(photos_providers,sizeof(photos_providers));
 }
 
-static cache_list * cover_callback(cb_object * capo)
+static GlyCacheList * cover_callback(cb_object * capo)
 {
-    cache_list * ls = DL_new_lst();
-    memCache_t * dl = DL_copy(capo->cache);
+    GlyCacheList * ls = DL_new_lst();
+    GlyMemCache * dl = DL_copy(capo->cache);
     if(dl)
     {
         dl->dsrc = strdup(capo->url);
@@ -42,9 +42,9 @@ static cache_list * cover_callback(cb_object * capo)
     return ls;
 }
 
-static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settings)
+static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    cache_list * dl_list = NULL;
+    GlyCacheList * dl_list = NULL;
     if(result)
     {
         if(settings->download)
@@ -52,14 +52,22 @@ static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settin
             cb_object  * urlplug_list = calloc(result->size+1,sizeof(cb_object));
             if(urlplug_list)
             {
-                size_t i = 0;
+  	        /* Ignore double URLs */
+	        flag_double_urls(result,settings);
+
+                size_t ctr = 0,i = 0;
                 for(i = 0; i < result->size; i++)
                 {
-                    if(result->list[i] && result->list[i]->data)
+                    if(result->list[i] && result->list[i]->data && result->list[i]->error == ALL_OK)
                     {
-                        plugin_init(&urlplug_list[i], result->list[i]->data, cover_callback, settings, NULL, NULL);
-                        free(result->list[i]->data);
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, NULL);
+			ctr++;
                     }
+
+		    if(result->list[i]->data)
+		    {
+                        free(result->list[i]->data);
+		    }
                 }
                 dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);
                 free(urlplug_list);
@@ -68,13 +76,17 @@ static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settin
         else
         {
             size_t i = 0;
+
+	    /* Ignore double URLs */
+	    flag_double_urls(result,settings);
+
             for( i = 0; i < result->size; i++)
             {
-                if(result->list[i])
+                if(result->list[i] && result->list[i]->error == ALL_OK)
                 {
                     if(!dl_list) dl_list = DL_new_lst();
 
-                    memCache_t * r_copy = DL_init();
+                    GlyMemCache * r_copy = DL_init();
                     r_copy->data = strdup(result->list[i]->data);
                     r_copy->size = strlen(r_copy->data);
                     DL_add_to_list(dl_list,r_copy);
@@ -88,7 +100,7 @@ static cache_list * photo_finalize(cache_list * result, glyr_settings_t * settin
 }
 
 
-cache_list * get_photos(glyr_settings_t * settings)
+GlyCacheList * get_photos(GlyQuery * settings)
 {
     if (settings && settings->artist)
         return register_and_execute(settings,photo_finalize);

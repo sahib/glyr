@@ -1,13 +1,15 @@
-set (DIR_ROOT   ${PROJECT_BINARY_DIR}/${SUBDIR_LIB}  )
-set (DIR_COVER  ${DIR_ROOT}/cover                    )
-set (DIR_LYRICS ${DIR_ROOT}/lyrics                   )
-set (DIR_PHOTOS ${DIR_ROOT}/photos                   )
-set (DIR_BOOKS  ${DIR_ROOT}/books                    )
-set (DIR_AINFO  ${DIR_ROOT}/ainfo                    )
+set (DIR_ROOT      ${PROJECT_BINARY_DIR}/${SUBDIR_LIB}  )
+set (DIR_COVER     ${DIR_ROOT}/cover                    )
+set (DIR_LYRICS    ${DIR_ROOT}/lyrics                   )
+set (DIR_PHOTOS    ${DIR_ROOT}/photos                   )
+set (DIR_BOOKS     ${DIR_ROOT}/books                    )
+set (DIR_AINFO     ${DIR_ROOT}/ainfo                    )
+set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
+set (DIR_REVIEW    ${DIR_ROOT}/review                   )
 
 # configure
 set( GLYR_VERSION_MAJOR "0")
-set( GLYR_VERSION_MINOR "1")
+set( GLYR_VERSION_MINOR "2")
 set( GLYR_VERSION_NAME  "Kleptomaniacal Magpie")
 set( GLYR_COLORED_OUTPUT true)
 
@@ -23,10 +25,14 @@ ADD_LIBRARY(glyr SHARED
 	"${DIR_ROOT}/ainfo.c"
 	"${DIR_ROOT}/books.c"
 	"${DIR_ROOT}/cover.c"
+	"${DIR_ROOT}/similiar.c"
 	"${DIR_ROOT}/lyrics.c"
 	"${DIR_ROOT}/photos.c"
+	"${DIR_ROOT}/review.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
+	"${DIR_SIMILIAR}/lastfm.c"
+	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_COVER}/last_fm.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
@@ -49,10 +55,14 @@ ADD_LIBRARY(glyr SHARED
     	"${DIR_BOOKS}/dnb.c"
     	"${DIR_BOOKS}/kit.c"
 )
+ 
+ADD_DEFINITIONS( -ggdb3 ) 
+
+install(TARGETS glyr LIBRARY DESTINATION lib)
 
 IF(CMAKE_CROSSCOMPILING)
  TARGET_LINK_LIBRARIES(glyr curl ws2_32 )
  REMOVE_DEFINITIONS( -fPIC -rdynamic ) 
 ELSE(CMAKE_CROSSCOMPILING)
- TARGET_LINK_LIBRARIES(glyr curl ) 
+ TARGET_LINK_LIBRARIES(glyr curl) 
 ENDIF(CMAKE_CROSSCOMPILING)

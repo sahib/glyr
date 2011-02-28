@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-plugin_t   * glyr_get_ainfo_providers(void);
-cache_list * get_ainfo(glyr_settings_t * settings);
+GlyPlugin   * glyr_get_ainfo_providers(void);
+GlyCacheList * get_ainfo(GlyQuery * settings);
 
 #endif

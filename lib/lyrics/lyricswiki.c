@@ -10,7 +10,7 @@
 
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=%artist%&song=%title%"
 
-const char * lyrics_lyricswiki_url(glyr_settings_t * settings)
+const char * lyrics_lyricswiki_url(GlyQuery * settings)
 {
     return LW_URL;
 }
@@ -55,10 +55,10 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 }
 
 
-cache_list * lyrics_lyricswiki_parse(cb_object * capo)
+GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
 {
-    memCache_t * result = NULL;
-    cache_list * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
         char *find, *endTag;
@@ -70,7 +70,7 @@ cache_list * lyrics_lyricswiki_parse(cb_object * capo)
                 char * wiki_page_url = copy_value(find,endTag);
                 if(wiki_page_url)
                 {
-                    memCache_t * new_cache = download_single(wiki_page_url, capo->s);
+                    GlyMemCache * new_cache = download_single(wiki_page_url, capo->s);
                     if(new_cache)
                     {
                         char *lyr_begin, *lyr_end;
@@ -91,18 +91,19 @@ cache_list * lyrics_lyricswiki_parse(cb_object * capo)
                                     result->dsrc = strdup(wiki_page_url);
                                 }
                                 lyr_end=NULL;
-                            }
+                            } 
                             lyr_begin=NULL;
-                        }
+                        } 
                         DL_free(new_cache);
                     }
                     free(wiki_page_url);
                 }
                 endTag=NULL;
-            }
+            }  result = DL_error(NO_ENDIN_TAG);
             find=NULL;
-        }
-    }
+        } else result = DL_error(NO_BEGIN_TAG);
+    } else result = DL_error(NO_BEGIN_TAG);
+
     if(result)
     {
         r_list = DL_new_lst();
