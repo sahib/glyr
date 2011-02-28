@@ -1,0 +1,5 @@
+This folder contains the implemantation of libglyr.
+All subfolders implement a getter: cover,lyrics,ainfo (..)
+A corrsponding .c file (cover.c, lyrics.c, ainfo.c... ) implement the getter itself. 
+All other files implement the general webscraping abilities of glyr.
+Start reading src/main.c:main() to get through it.. Good luck! :-)

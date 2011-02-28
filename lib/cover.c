@@ -1,3 +1,22 @@
+/***********************************************************
+* This file is part of glyr
+* + a commnadline tool and library to download various sort of musicrelated metadata.
+* + Copyright (C) [2011]  [Christopher Pahl]
+* + Hosted at: https://github.com/sahib/glyr
+*
+* glyr is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* glyr is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with glyr. If not, see <http://www.gnu.org/licenses/>.
+**************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -55,7 +74,7 @@ GlyPlugin * glyr_get_cover_providers(void)
 
 static GlyCacheList * cover_callback(cb_object * capo)
 {
-    // in this 'pseudo' callback we copy 
+    // in this 'pseudo' callback we copy
     // the downloaded cache, and add the source url
     GlyCacheList * ls = DL_new_lst();
     GlyMemCache * dl = DL_copy(capo->cache);
@@ -72,9 +91,10 @@ static GlyCacheList * cover_callback(cb_object * capo)
     return ls;
 }
 
-const char * URLblacklist[] = {
-	"http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",
-	NULL
+const char * URLblacklist[] =
+{
+    "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",
+    NULL
 };
 
 static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
@@ -87,35 +107,35 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
             cb_object  * urlplug_list = calloc(result->size+1,sizeof(cb_object));
             if(urlplug_list)
             {
-		/* Ignore double URLs */
-		flag_double_urls(result,settings);
+                /* Ignore double URLs */
+                flag_double_urls(result,settings);
 
-		/* Watch out for blacklisted URLs */
-		flag_blacklisted_urls(result,URLblacklist,settings);
+                /* Watch out for blacklisted URLs */
+                flag_blacklisted_urls(result,URLblacklist,settings);
 
-		size_t i = 0;
-		int ctr = 0;
+                size_t i = 0;
+                int ctr = 0;
                 for(i = 0; i < result->size; i++)
                 {
-		    if(!result->list[i]->error)
-		    {
-                    	plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, NULL);
-			ctr++;
-		    }
+                    if(!result->list[i]->error)
+                    {
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, NULL);
+                        ctr++;
+                    }
                 }
 
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
-		glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
+                glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
                 free(urlplug_list);
             }
         }
         else
         {
-	    /* Ignore double URLs */
-	    flag_double_urls(result,settings);
+            /* Ignore double URLs */
+            flag_double_urls(result,settings);
 
-	    /* Watch out for blacklisted URLs */
-	    flag_blacklisted_urls(result,URLblacklist,settings);
+            /* Watch out for blacklisted URLs */
+            flag_blacklisted_urls(result,URLblacklist,settings);
 
             size_t i = 0;
             for( i = 0; i < result->size; i++)

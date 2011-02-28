@@ -1,0 +1,2 @@
+This folder contains only the implementation of the commandline interface.
+glyrc is linked against libglyr (built in /lib)

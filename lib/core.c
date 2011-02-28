@@ -1,3 +1,23 @@
+/***********************************************************
+* This file is part of glyr
+* + a commnadline tool and library to download various sort of musicrelated metadata.
+* + Copyright (C) [2011]  [Christopher Pahl]
+* + Hosted at: https://github.com/sahib/glyr
+*
+* glyr is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* glyr is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with glyr. If not, see <http://www.gnu.org/licenses/>.
+**************************************************************/
+
 #define _GNU_SOURCE
 
 #include <errno.h>
@@ -181,7 +201,7 @@ GlyMemCache* DL_init(void)
         cache->size   = 0;
         cache->data   = NULL;
         cache->dsrc   = NULL;
-	cache->error  = 0;
+        cache->error  = 0;
     }
     else
     {
@@ -335,90 +355,90 @@ static GlyMemCache * handle_init(CURLM * cm, cb_object * capo, GlyQuery *s, long
 // return a memcache only with error field set (for error report)
 GlyMemCache * DL_error(int eid)
 {
-	GlyMemCache * ec = DL_init();
-	if(ec != NULL)
-	{
-		ec->error = eid;
-	}
-	return ec;
+    GlyMemCache * ec = DL_init();
+    if(ec != NULL)
+    {
+        ec->error = eid;
+    }
+    return ec;
 }
 
 /*--------------------------------------------------------*/
 
 bool continue_search(int iter, GlyQuery * s)
 {
-	if(s != NULL)
-	{
-		if((iter + s->itemctr) < s->number && iter < s->plugmax)
-		{
-			glyr_message(4,s,stderr,"\ncontinue! iter=%d && s->number %d && plugmax=%d && items=%d\n",iter,s->number,s->plugmax,s->itemctr);
-			return true;
-		}
-	}
-	glyr_message(4,s,stderr,"\nSTOP! iter=%d && s->number %d && plugmax=%d && items=%d\n",iter,s->number,s->plugmax,s->itemctr);
-	return false;
+    if(s != NULL)
+    {
+        if((iter + s->itemctr) < s->number && iter < s->plugmax)
+        {
+            glyr_message(4,s,stderr,"\ncontinue! iter=%d && s->number %d && plugmax=%d && items=%d\n",iter,s->number,s->plugmax,s->itemctr);
+            return true;
+        }
+    }
+    glyr_message(4,s,stderr,"\nSTOP! iter=%d && s->number %d && plugmax=%d && items=%d\n",iter,s->number,s->plugmax,s->itemctr);
+    return false;
 }
 
 /*--------------------------------------------------------*/
 
 int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 {
-	size_t i = 0, dp = 0;
-	for(i = 0; i < result->size; i++)
-	{
-		size_t j = 0;
-		if(result->list[i]->error == 0)
-		{
-			for(j = 0; j < result->size; j++)
-			{
-				if(i != j && result->list[i]->error == 0)
-				{
-					if(!strcmp(result->list[i]->data,result->list[j]->data))
-					{
-						result->list[j]->error = 1;
-						dp++;
-					}
-				}
-			}
-		}
-	}
+    size_t i = 0, dp = 0;
+    for(i = 0; i < result->size; i++)
+    {
+        size_t j = 0;
+        if(result->list[i]->error == 0)
+        {
+            for(j = 0; j < result->size; j++)
+            {
+                if(i != j && result->list[i]->error == 0)
+                {
+                    if(!strcmp(result->list[i]->data,result->list[j]->data))
+                    {
+                        result->list[j]->error = 1;
+                        dp++;
+                    }
+                }
+            }
+        }
+    }
 
-	if(dp != 0)
-	{
-		glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occure twice.\n\n",dp,dp>=1 ? " " : "s ");
-		s->itemctr -= dp;
-	}
-	return dp;
+    if(dp != 0)
+    {
+        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occure twice.\n\n",dp,dp>=1 ? " " : "s ");
+        s->itemctr -= dp;
+    }
+    return dp;
 }
 
 /*--------------------------------------------------------*/
 
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s)
 {
-	size_t i = 0, ctr = 0;
-	for(i = 0; i < result->size; i++)
-	{
-		if(result->list[i]->error == 0)
-		{
-			size_t j = 0;
-			for(j = 0; URLblacklist[j]; j++)
-			{
-				if(result->list[j]->error == 0)
-				{
-					if(!strcmp(result->list[i]->data,URLblacklist[j]))
-					{
-						result->list[i]->error = BLACKLISTED; 
-						ctr++;
-					}
-				}
-			}
-		}
-	}
-	if(ctr != 0)
-	{
-		glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d blacklisted URL%s.\n\n",ctr,ctr>=1 ? " " : "s ");
-		s->itemctr -= ctr;
-	}
+    size_t i = 0, ctr = 0;
+    for(i = 0; i < result->size; i++)
+    {
+        if(result->list[i]->error == 0)
+        {
+            size_t j = 0;
+            for(j = 0; URLblacklist[j]; j++)
+            {
+                if(result->list[j]->error == 0)
+                {
+                    if(!strcmp(result->list[i]->data,URLblacklist[j]))
+                    {
+                        result->list[i]->error = BLACKLISTED;
+                        ctr++;
+                    }
+                }
+            }
+        }
+    }
+    if(ctr != 0)
+    {
+        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d blacklisted URL%s.\n\n",ctr,ctr>=1 ? " " : "s ");
+        s->itemctr -= ctr;
+    }
 }
 
 /*--------------------------------------------------------*/
@@ -482,7 +502,7 @@ if(m > 0) {                           \
      for(;i<d;i++) {                  \
         glyr_message(2,s,stderr,"."); \
      }  }                             \
-
+ 
 GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s)
 {
     // curl multi handles
@@ -603,13 +623,13 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 // Cast to actual object
                 cb_object * capo = (cb_object *) p_pass;
 
-		int align_msg = 0;
+                int align_msg = 0;
                 // The stage is yours <name>
-                if(capo->name) 
-		{
-			align_msg = strlen(capo->name);
-			glyr_message(2,s,stderr,"Query: %s",capo->color);
-		}
+                if(capo->name)
+                {
+                    align_msg = strlen(capo->name);
+                    glyr_message(2,s,stderr,"Query: %s",capo->color);
+                }
 
                 if(capo && capo->cache && capo->cache->data && msg->data.result == CURLE_OK)
                 {
@@ -622,9 +642,9 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                         {
                             if(capo->name)
                             {
-				ALIGN(align_msg);
+                                ALIGN(align_msg);
                                 glyr_message(2,s,stderr,C_G"found!"C_" ["C_R"%d item%c"C_"]\n",cl->size,cl->size == 1 ? ' ' : 's');
-				s->itemctr += cl->size;
+                                s->itemctr += cl->size;
                             }
                             else
                             {
@@ -668,27 +688,27 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                         }
                         else if(capo->name)
                         {
-			    ALIGN(align_msg);
-			
-			    int err = (!cl) ? -1 : cl->list[0]->error;
-			    switch(err)
-			    {
-				    case NO_BEGIN_TAG:
-					 glyr_message(2,s,stderr,C_R"No begin tag found.\n"C_);
-					 break;
-				    case NO_ENDIN_TAG:
-					 glyr_message(2,s,stderr,C_R"No begin tag found.\n"C_);
-					 break;
-				    default:
-					 glyr_message(2,s,stderr,C_R"failed.\n"C_);
-			    }
+                            ALIGN(align_msg);
 
-			    if(cl != NULL) DL_free_lst(cl);
+                            int err = (!cl) ? -1 : cl->list[0]->error;
+                            switch(err)
+                            {
+                            case NO_BEGIN_TAG:
+                                glyr_message(2,s,stderr,C_R"No begin tag found.\n"C_);
+                                break;
+                            case NO_ENDIN_TAG:
+                                glyr_message(2,s,stderr,C_R"No begin tag found.\n"C_);
+                                break;
+                            default:
+                                glyr_message(2,s,stderr,C_R"failed.\n"C_);
+                            }
+
+                            if(cl != NULL) DL_free_lst(cl);
                         }
                     }
                     else
                     {
-			ALIGN(align_msg);
+                        ALIGN(align_msg);
                         glyr_message(1,s,stderr,"WARN: Unable to exec callback (=NULL)\n");
                     }
 
@@ -702,18 +722,19 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 }
                 else if(msg->data.result != CURLE_OK)
                 {
-	    	    ALIGN(align_msg);
+                    ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
                     glyr_message(1,s,stderr,"%s - [%d]\n",curl_err ? curl_err : "Unknown Error",msg->data.result);
                 }
                 else if(capo->cache->data == NULL && capo->name)
                 {
-		    ALIGN(align_msg);
-		    switch(capo->cache->error)
-		    {
+                    ALIGN(align_msg);
+                    switch(capo->cache->error)
+                    {
 
-                    	default:  glyr_message(2,s,stderr,C_R"page not reachable.\n"C_);
-		    }
+                    default:
+                        glyr_message(2,s,stderr,C_R"page not reachable.\n"C_);
+                    }
                 }
 
                 curl_multi_remove_handle(cm,e);
@@ -814,10 +835,10 @@ GlyCacheList * register_and_execute(GlyQuery * settings, GlyCacheList * (*finali
         // end of group -> execute
         if(providers[iterator].key == NULL)
         {
-	    if(i_plugin)
-	    {
-            	glyr_message(2,settings,stderr,"Now switching to group "C_Y"%s"C_":\n",providers[iterator].name);
-	    }
+            if(i_plugin)
+            {
+                glyr_message(2,settings,stderr,"Now switching to group "C_Y"%s"C_":\n",providers[iterator].name);
+            }
 
             // Get the raw result of one jobgroup
             GlyCacheList * invoked_list = invoke(plugin_list, i_plugin, settings->parallel, settings->timeout, settings);

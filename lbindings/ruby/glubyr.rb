@@ -1,5 +1,5 @@
 require 'rubygems'
-require './../glyr'
+require './glyr'
 
 class Glubyr
         # Called when object is destroyed

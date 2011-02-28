@@ -1,3 +1,22 @@
+/***********************************************************
+* This file is part of glyr
+* + a commnadline tool and library to download various sort of musicrelated metadata.
+* + Copyright (C) [2011]  [Christopher Pahl]
+* + Hosted at: https://github.com/sahib/glyr
+*
+* glyr is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* glyr is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with glyr. If not, see <http://www.gnu.org/licenses/>.
+**************************************************************/
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -51,7 +70,7 @@ const char * Gly_version(void)
 }
 
 /*-----------------------------------------------*/
-// _opt_ 
+// _opt_
 /*-----------------------------------------------*/
 
 // Seperate method because va_arg struggles with function pointers
@@ -61,7 +80,7 @@ int GlyOpt_dlcallback(GlyQuery * settings, void (*dl_cb)(GlyMemCache *, GlyQuery
     {
         settings->callback.download     = dl_cb;
         settings->callback.user_pointer = userp;
-	return GLYRE_OK;
+        return GLYRE_OK;
     }
     return GLYRE_EMPTY_STRUCT;
 }
@@ -70,192 +89,192 @@ int GlyOpt_dlcallback(GlyQuery * settings, void (*dl_cb)(GlyMemCache *, GlyQuery
 
 int GlyOpt_type(GlyQuery * s, int type)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(type >= GET_COVER && type < GET_UNSURE)
-	{
-		s->type = ABS(type);
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(type >= GET_COVER && type < GET_UNSURE)
+    {
+        s->type = ABS(type);
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_artist(GlyQuery * s, char * artist)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->artist = artist;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->artist = artist;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_album(GlyQuery * s, char * album)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->album = album;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->album = album;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_title(GlyQuery * s, char * title)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->title = title;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->title = title;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 static size_set(int * ref, int size)
 {
-	if(size < -1 && ref)
-	{
-		*ref = -1;
-		return GLYRE_BAD_VALUE;
-	}
-	
-	if(ref)
-	{
-		*ref = size;
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_OPTION;
+    if(size < -1 && ref)
+    {
+        *ref = -1;
+        return GLYRE_BAD_VALUE;
+    }
+
+    if(ref)
+    {
+        *ref = size;
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_OPTION;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_cmaxsize(GlyQuery * s, int size)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return size_set(&s->cover.max_size,size);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return size_set(&s->cover.max_size,size);
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_cminsize(GlyQuery * s, int size)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return size_set(&s->cover.min_size,size);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return size_set(&s->cover.min_size,size);
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_parallel(GlyQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->parallel = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->parallel = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_timeout(GlyQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->timeout = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->timeout = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_redirects(GlyQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->redirects = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->redirects = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_lang(GlyQuery * s, char * langcode)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(langcode != NULL)
-	{
-		s->lang = langcode;
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(langcode != NULL)
+    {
+        s->lang = langcode;
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_number(GlyQuery * s, unsigned int num)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->number = num;
-	return GLYRE_OK;
-	
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->number = num;
+    return GLYRE_OK;
+
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_verbosity(GlyQuery * s, unsigned int level)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->verbosity = level;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->verbosity = level;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_infoat(GlyQuery * s, int at, const char * value)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return glyr_set_info(s,at,value);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return glyr_set_info(s,at,value);
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_from(GlyQuery * s, const char * from)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return glyr_parse_from(from,s);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return glyr_parse_from(from,s);
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->color_output = iLikeColorInMyLife;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->color_output = iLikeColorInMyLife;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_plugmax(GlyQuery * s, int plugmax)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(plugmax < 0)
-	{
-		return GLYRE_BAD_VALUE;
-	}
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(plugmax < 0)
+    {
+        return GLYRE_BAD_VALUE;
+    }
 
-	s->plugmax = plugmax;
-	return GLYRE_OK;
+    s->plugmax = plugmax;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 int GlyOpt_download(GlyQuery * s, bool download)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->download = download;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->download = download;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 {
-	if(clist && iter >= 0)
-	{
-		return clist->list[iter];
-	}
-	return NULL;
+    if(clist && iter >= 0)
+    {
+        return clist->list[iter];
+    }
+    return NULL;
 }
 
 /*-----------------------------------------------*/
@@ -321,7 +340,7 @@ void Gly_destroy_query(GlyQuery * sets)
         sets->album  = NULL;
         sets->title  = NULL;
 
-	sets->itemctr = 0;
+        sets->itemctr = 0;
 
         sets->callback.download = NULL;
         sets->callback.user_pointer = NULL;
@@ -360,7 +379,7 @@ void Gly_free_cache(GlyMemCache * c)
 
 GlyMemCache * Gly_new_cache(void)
 {
-	return DL_init();
+    return DL_init();
 }
 
 /*-----------------------------------------------*/
@@ -409,11 +428,11 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
         result = get_ainfo(settings);
         break;
     case GET_SIMILIAR:
-	result = get_similiar(settings);
-	break;
+        result = get_similiar(settings);
+        break;
     case GET_REVIEW:
-	result = get_review(settings);
-	break;
+        result = get_review(settings);
+        break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
@@ -445,17 +464,17 @@ int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * sa
         }
         else
         {
-	    glyr_message(1,s,stdout,""C_G"*"C_" Writing %s to %s\n",type,path);
-	    FILE * fp = fopen(path,"wb");
-	    if(fp)
-	    {
-		bytes=fwrite(data->data,1,data->size,fp);
-		fclose(fp);
-	    }
-	    else
-	    {
-		glyr_message(-1,NULL,stderr,"Unable to write to '%s'!\n",path);
-	    }
+            glyr_message(1,s,stdout,""C_G"*"C_" Writing %s to %s\n",type,path);
+            FILE * fp = fopen(path,"wb");
+            if(fp)
+            {
+                bytes=fwrite(data->data,1,data->size,fp);
+                fclose(fp);
+            }
+            else
+            {
+                glyr_message(-1,NULL,stderr,"Unable to write to '%s'!\n",path);
+            }
         }
     }
     return bytes;
@@ -478,9 +497,9 @@ GlyPlugin * Gly_get_provider_by_id(int ID)
     case GET_AINFO:
         return glyr_get_ainfo_providers();
     case GET_SIMILIAR:
-	return glyr_get_similiar_providers();
+        return glyr_get_similiar_providers();
     case GET_REVIEW:
-	return glyr_get_review_providers();
+        return glyr_get_review_providers();
     case -1       :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :
@@ -554,8 +573,8 @@ static void glyr_register_group(GlyPlugin * providers, const char * groupname, b
 
 void anvoke(callback_t callback, void *user_data, const char *other_data)
 {
-   puts("Calling anvoke.");
-  callback(user_data, other_data);
+    puts("Calling anvoke.");
+    callback(user_data, other_data);
 }
 
 
@@ -620,7 +639,7 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
                     }
                     if(!found)
                     {
-                        glyr_message(1,settings,stderr,C_R"[]"C_" Unknown provider '%s'\n",c_arg);
+                        glyr_message(1,settings,stderr,C_R"*"C_" Unknown provider '%s'\n",c_arg);
                         result = GLYRE_BAD_VALUE;
                     }
                 }

@@ -1,38 +1,211 @@
-glyr is a (commandline) tool tow download lyrics and covers from the web
-In future versions it will be able to downlaod also other meta-info,
-but lyric/cover download works already very well:
+USAGE:
+	glyrc GETTER [OPTIONS...]
 
-Sources:
+glyrc downloads variouse sorts of musicrelated metadata.
+GETTER is the type of metadata to download, it must be one of: 
+	- cover     [c]
+	- lyrics    [l]
+	- photos    [p]
+	- ainfo     [a]
+	- similiar  [s]
+	- review    [r]
 
-lyrics:
-- lyricswiki
-- lyrix.at
-- darklyrics 
-- lyricsvip (thx Seb!)
-- songlyrics
-- lyrdb
-- magistrix 
-- metrolyrics
+The getter has to be always the very first argument given, and may require other arguments
+A short note to the terminology: a provider is a source glyrc may download data from.
+A group is a collection of providers, each getter has at least the groups all,safe and unsafe,
+Please note that providers and groups may differ heavily from getter to getter!
+you can modify glyrc's providerlist by passing the names (or their shortcuts) to --from.
+To find out what getter needs what argument see below: (-n is the max number of items)
 
-cover
-- amazon (via freeapisign)
-- albumart
-- coverhunt
-- discogs  
-- last.fm
-- lyricswiki 
-- google as a fallback (finds ALWAYS some THING)
+COVER
+	Download -n albumart images of the artist and album specified with -a and -b
+	The filetype of the image is unspecified (as libglyr often could only vaguely guess)
+	and may be determinded by its header; glyrc saves it as '.img in all cases.'
+	Currently --from takes the following strings here:
 
-Goal:
+	- last.fm     [l] in group all,safe
+	- amazon      [a] in group all,safe
+	- lyricswiki  [w] in group all,unsafe
+	- google      [g] in group all,unsafe
+	- albumart    [b] in group all,unsafe
+	- discogs     [d] in group all,special
+	- allmusic    [m] in group all,special
+	- coverhunt   [c] in group all,special
+LYRICS
+	Download -n lyrics of the artist and title specified with -a and -t
+	The album (-b) is optional and may be used by some plugins.
+	Currently --from takes the following strings here:
 
-* Providing a easy to use C-API to download various sort of metadata
-* Always have more than fallback
-* commandline intercace for annoyed linux users
+	- lyricswiki   [w] in group all,safe
+	- lyr.db       [d] in group all,safe
+	- lyrix.at     [a] in group all,safe
+	- magistrix    [x] in group all,unsafe
+	- directlyrics [i] in group all,unsafe
+	- lyricsvip    [v] in group all,unsafe
+	- songlyrics   [s] in group all,special
+	- darklyrics   [y] in group all,special
+	- metrolyrics  [m] in group all,special
+PHOTOS
+	Download -n photos that are related to the artist given by -a.
+	Currently --from takes the following strings here:
 
-Currently it has only a very limited commandline interface, look at main.c to see how it works
-Examples:
+	- lastfm      [l] in group all,safe
+	- flickr      [f] in group all,unsafe
+AINFO
+	Download -n artist descriptions of the artist given by -a.
+	Apart from the name, a similiarity rating from 0.0 to 1.0, a URL to last.fm page
+	and a bunch of URLs to images of the similiar artist in ascending size.
+	Currently --from takes the following strings here:
 
-./glyr lyric "Eluveitie" "Slania" "Slanias Song" "./" # downloads "Slanias Song" from Eluveitie into the dir "./", album is optional
-./glyr cover "Eluveitie" "Everything remains as it never was" 10 "wldag"  # ...
+	- lastfm      [l] in group all,safe
+	- allmusic    [m] in group all,unsafe
 
+SIMILIAR
+	Download -n information about similiar artist to the one given with -a -a.
+	Currently --from takes the following strings here:
 
+	- lastfm      [l] in group all,safe
+
+GENERAL OPTIONS
+
+    -f --from <prov>
+	Set the sources (providers) you want to query.
+	The string you have to provide cotains the names of the providers or a group
+	(or their shortcuts), seperated by a ";" and prepended by a + or -,
+	which adds or deletes this source to/from the current state.
+	An example would be: "+all;-special;+d"
+		+all     : adds everything.
+		-special : subtract the members of group 'special'.
+		+d       : add the provider 'd' (discogs, see above)
+
+    -n --number <int>
+	Maximum number of items a getter may download.
+	Default is 1.
+
+    -x --plugmax <int>
+	Maximum number of items a plugin may download.
+	Default is 10.
+
+    -u --update
+	Update file even if already present.
+	Default is false.
+
+    -d --nodownload
+	Do not download final result, only print URL.
+	This only works for images, as lyrics and ainfo do not neccesarely have a concrete URL.
+	Use this to turn glyrc into some sort of music-metadate search engine.
+	Default is true.
+
+    -w --write <dir>
+	Write all files to the directory <dir>
+	The filenames itself is determined by the artist,album, title depending on <GET>, see the also the FILES section.
+	The special value "stdout" will print the data directly to stdout, "stderr" to stderr
+	and "null" will print nothing.
+	Default is '.'
+
+LIBCURL OPTIONS
+
+    -p --parallel <int>
+	Download max. <int> files in parallel if there's more than one to download.
+	This is useful for downloading photos in line; Default is 4.
+
+    -r --redirects <int>
+	Allow max. <int> redirects. This is only used for Amazon and you should never need to use it.
+	Default is 1.
+
+    -m --timeout <int>
+	Maximum number of <int> seconds to wait before cancelling a download.
+	Default is 20.
+
+MISC OPTIONS
+
+    -V --version
+	Print version string and exit.
+
+    -h --help
+	Print this help and exit.
+
+    -c --color
+	Enables colored console output (Unix only).
+	Default is true.
+
+    -v --verbosity <int>
+	Level of verbosity:
+		-v0: Print nothing but fatal errors.
+		-v1: Print only basic information.
+		-v2: Print informative output. (default)
+		-v3: Enable debugging messages.
+		-v4: Enable libcurl-debugging messages.
+
+PLUGIN OPTIONS
+
+    -a --artist <string>; -b --album <string>; -t --title <string>
+	Depending on the getter you have to provide information on what to search.
+	Please refer to the getter description to find what argument is needed for what getter.
+
+    -i --minsize
+	For cover only: The minimum size a coverimage may have
+	A value of -1 will disable the sizecheck.
+	Note that this value is only a 'suggestion' for libglyr,
+	but it should work in 95% of all cases.
+	Default is 125.
+
+    -e --maxsize
+	For cover only: The maximum size a coverimage may have (see above)
+	A value of -1 will disable the sizecheck.
+	Default is -1.
+
+    -l --lang <l>
+	For cover:
+		decides which amazon / google server is queried,
+		what may have impact on search results.
+
+	For ainfo's last.fm plugin:
+		Decide in which language results are returned.
+
+	The language is given by ISO 639-1 codes;
+	Examples are: us,ca,uk,fr,de,jp
+
+EXAMPLES
+	glyrc cover -a Equilibrium -b "Turis Fratyr"
+		# Download the cover art of the album 'Turis Fratyr' by the band equilibrium,
+		# save it to Equilibrium_Turis+Fratyr_0.img
+	glyrc cover -a Equilibrium -b Rekreatur -n 5 -i 100 -e 250 --from "amazon"
+		# Download 5x (different) images of 'Rekreatur',
+		# with the dimensions in between 100x100 and 250x250 from amazon
+	glyrc lyrics -a Equilibrium -t "Blut im Auge"
+		# Download lyrics of the Song "Blut im Auge" by Equilibrium,
+		# show it in stdout, and write it to Equilibrium_Blut+im+Auge_0.lyrics
+        glyrc ainfo -a "Justin Bieber" --lang "de" --from "l"
+                # This produces nothing but hopefully a Segfault.
+		# If not it will print all the things you always wanted to know about Justin Bieber.
+		# (In german Language)
+        glyrc photos -a "Die Apokalyptischen Reiter" -v0 -n 5
+                # Downloads 5 photos showing the band "Die Apokalyptischen Reiter"
+        glyrc review -a "Equilibrium" -b "Sagas" -w stdout -v0
+                # Dumps the review of Equilibrium Sagas to stdout
+        glyrc similiar -a "Equilibrium" -w stdout -v0 -n 5
+                # Show the 5 most similiar artist to Equilibrium (according to last.fm...)
+                # Every set includes the name, matchrate (from 0.0 to 1.0),
+                # a link to the last.fm page, and a link to a pressphoto (different sizes)
+FILES
+	Everything is stored in a file with the pattern $save_dir/$artist_($album|$title)_suffix.type
+	Spaces and Slashes in artist/album/title are escaped with a '+'. ($num is the itemcounter)
+		$dir/$artist_$album_cover_$num.jpg
+		$dir/$artist_$title_lyrics_$num.txt
+		$dir/$artist_photos_$num.jpg
+		$dir/$artist_ainfo_$num.txt
+                $dir/$artist_similiar_$num.txt
+                $dir/$artist_$album_review_$num.txt
+
+AUTHOR 
+   
+        See the AUTHORS file that comes in glyr's distribution.
+        See also COPYING to know about your rights.
+
+BUGS
+
+        Quite some probably. Report bugs to sahib@online.de
+        or use the bugtracker at https://github.com/sahib/glyr/issues
+
+           
