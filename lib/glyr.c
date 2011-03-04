@@ -42,7 +42,7 @@
 // prot
 static int glyr_parse_from(const char * arg, GlyQuery * settings);
 static int glyr_set_info(GlyQuery * s, int at, const char * arg);
-static void glyr_register_group(GlyPlugin * providers, const char * groupname, bool value);
+static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value);
 
 // Fill yours in here if you added a new one.
 // The rest is done for you quite automagically.
@@ -127,7 +127,7 @@ int GlyOpt_title(GlyQuery * s, char * title)
 
 /*-----------------------------------------------*/
 
-static size_set(int * ref, int size)
+static int size_set(int * ref, int size)
 {
     if(size < -1 && ref)
     {
@@ -259,6 +259,15 @@ int GlyOpt_plugmax(GlyQuery * s, int plugmax)
 
 /*-----------------------------------------------*/
 
+int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	s->groupedDL = groupedDL;
+	return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 int GlyOpt_download(GlyQuery * s, bool download)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -281,17 +290,15 @@ GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 
-void Gly_init_query(GlyQuery * glyrs)
+static void set_query_on_defaults(GlyQuery * glyrs)
 {
     glyrs->type = GET_UNSURE;
     glyrs->artist = NULL;
     glyrs->album  = NULL;
     glyrs->title  = NULL;
     glyrs->providers = NULL;
-
     glyrs->cover.min_size = DEFAULT_CMINSIZE;
     glyrs->cover.max_size = DEFAULT_CMAXSIZE;
-
     glyrs->number = DEFAULT_NUMBER;
     glyrs->parallel  = DEFAULT_PARALLEL;
     glyrs->redirects = DEFAULT_REDIRECTS;
@@ -299,17 +306,18 @@ void Gly_init_query(GlyQuery * glyrs)
     glyrs->verbosity = DEFAULT_VERBOSITY;
     glyrs->lang = DEFAULT_LANG;
     glyrs->plugmax = DEFAULT_PLUGMAX;
-
     glyrs->color_output = PRT_COLOR;
-
     glyrs->download = DEFAULT_DOWNLOAD;
-
+    glyrs->groupedDL = DEFAULT_GROUPEDL;
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
-
     glyrs->itemctr = 0;
-
     memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
+}
+
+void Gly_init_query(GlyQuery * glyrs)
+{
+	set_query_on_defaults(glyrs);
 }
 
 /*-----------------------------------------------*/
@@ -318,37 +326,6 @@ void Gly_destroy_query(GlyQuery * sets)
 {
     if(sets)
     {
-        if(sets->providers)
-            free(sets->providers);
-
-        // reset settings
-        sets->type = GET_UNSURE;
-        sets->cover.max_size = DEFAULT_CMAXSIZE;
-        sets->cover.min_size = DEFAULT_CMINSIZE;
-
-        sets->providers = NULL;
-        sets->parallel  = DEFAULT_PARALLEL;
-        sets->redirects = DEFAULT_REDIRECTS;
-        sets->timeout   = DEFAULT_TIMEOUT;
-        sets->verbosity = DEFAULT_VERBOSITY;
-        sets->color_output = PRT_COLOR;
-
-        sets->number  = DEFAULT_NUMBER;
-        sets->plugmax = DEFAULT_PLUGMAX;
-
-        sets->artist = NULL;
-        sets->album  = NULL;
-        sets->title  = NULL;
-
-        sets->itemctr = 0;
-
-        sets->callback.download = NULL;
-        sets->callback.user_pointer = NULL;
-
-        sets->download = DEFAULT_DOWNLOAD;
-
-        sets->lang = DEFAULT_LANG;
-
         size_t i = 0;
         for(; i < PTR_SPACE; i++)
         {
@@ -358,7 +335,22 @@ void Gly_destroy_query(GlyQuery * sets)
                 sets->info[i] = NULL;
             }
         }
+
+        if(sets->providers != NULL)
+	{
+            free(sets->providers);
+	    sets->providers = NULL;
+	}
+
+	set_query_on_defaults(sets);
     }
+}
+
+/*-----------------------------------------------*/
+
+GlyMemCache * Gly_download(const char * url, GlyQuery * s)
+{
+	return download_single(url,s);
 }
 
 /*-----------------------------------------------*/
@@ -399,7 +391,7 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
         GlyPlugin * p = Gly_get_provider_by_id(settings->type);
         if(p != NULL)
         {
-            glyr_register_group(p,"all",true);
+            glyr_register_group(p,GRP_ALL,true);
             settings->providers = p;
         }
         else
@@ -407,6 +399,11 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
             if(e) *e = GLYRE_NO_PROVIDER;
             return NULL;
         }
+    }
+
+    if(curl_global_init(CURL_GLOBAL_ALL))
+    {
+        glyr_message(-1,NULL,stderr,"?? libcurl failed to init.\n");
     }
 
     GlyCacheList * result = NULL;
@@ -437,6 +434,8 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
 
+    
+    curl_global_cleanup();
     settings->itemctr = 0;
     return result;
 }
@@ -542,10 +541,10 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 
 /*-----------------------------------------------*/
 
-static void glyr_register_group(GlyPlugin * providers, const char * groupname, bool value)
+static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value)
 {
     int i = 0;
-    if(!strcasecmp(groupname,"all"))
+    if(GIDmask == GRP_ALL) /* (Un)Register ALL */
     {
         while(providers[i].name)
         {
@@ -557,26 +556,19 @@ static void glyr_register_group(GlyPlugin * providers, const char * groupname, b
         }
         return;
     }
-    while(providers[i].name)
+    else /* Register a specific Group */
     {
-        if(providers[i].key == NULL && !strcasecmp(providers[i].name,groupname))
-        {
-            int back = i-1;
-            while(back >= 0 && providers[back].key != NULL)
-                providers[back--].use = value;
-
-            return;
-        }
-        i++;
-    }
+	    while(providers[i].name)
+	    {
+		if(providers[i].gid & GIDmask)
+		{
+			puts(providers[i].name);
+			providers[i].use = value;
+		}
+		i++;
+	    }
+     }
 }
-
-void anvoke(callback_t callback, void *user_data, const char *other_data)
-{
-    puts("Calling anvoke.");
-    callback(user_data, other_data);
-}
-
 
 /*-----------------------------------------------*/
 
@@ -586,7 +578,11 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
     if(settings && arg)
     {
         GlyPlugin * what_pair = Gly_get_provider_by_id(settings->type);
-        settings->providers  = what_pair;
+	if(settings->providers != NULL)
+	{
+		free(settings->providers);
+	}
+        settings->providers = what_pair;
 
         if(what_pair)
         {
@@ -609,21 +605,29 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
                     c_arg++;
                 }
 
-                if(!strcasecmp(c_arg,"all"))
+                if(!strcasecmp(c_arg,GRPN_ALL))
                 {
-                    glyr_register_group(what_pair,"all",value);
+                    glyr_register_group(what_pair,GRP_ALL,value);
                 }
-                else if(!strcasecmp(c_arg,"safe"))
+                else if(!strcasecmp(c_arg,GRPN_SAFE))
                 {
-                    glyr_register_group(what_pair, "safe",value);
+                    glyr_register_group(what_pair, GRP_SAFE,value);
                 }
-                else if(!strcasecmp(c_arg,"unsafe"))
+                else if(!strcasecmp(c_arg,GRPN_USFE))
                 {
-                    glyr_register_group(what_pair, "unsafe",value);
+                    glyr_register_group(what_pair, GRP_USFE,value);
                 }
-                else if(!strcasecmp(c_arg,"special"))
+                else if(!strcasecmp(c_arg,GRPN_SPCL))
                 {
-                    glyr_register_group(what_pair,"special",value);
+                    glyr_register_group(what_pair, GRP_SPCL,value);
+                }
+                else if(!strcasecmp(c_arg,GRPN_FAST))
+                {
+                    glyr_register_group(what_pair,GRP_FAST,value);
+                }
+                else if(!strcasecmp(c_arg,GRPN_SLOW))
+                {
+                    glyr_register_group(what_pair,GRP_SLOW,value);
                 }
                 else
                 {

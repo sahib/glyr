@@ -33,9 +33,8 @@
 GlyPlugin similiar_providers[] =
 {
 //  full name       key  coloredname          use?   parser callback           geturl callback         free url?
-    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {similiar_lastfm_parse,  similiar_lastfm_url,    false}},
-    {"safe",        NULL,NULL,                false,  {NULL,                   NULL,                   false}},
-    { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   false}},
+    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {similiar_lastfm_parse,  similiar_lastfm_url,  false}, GRP_SAFE | GRP_FAST},
+    {NULL,          NULL, NULL,               false,  {NULL,                   NULL,                 false}, GRP_NONE | GRP_NONE}
 };
 
 GlyPlugin * glyr_get_similiar_providers(void)

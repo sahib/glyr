@@ -78,6 +78,7 @@ extern "C"
     int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
     int GlyOpt_plugmax(GlyQuery * s, int plugmax);
     int GlyOpt_download(GlyQuery * s, bool download);
+    int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
 
     // return library version
     const char * Gly_version(void);
@@ -87,6 +88,9 @@ extern "C"
 
     // get information about available plugins
     GlyPlugin * Gly_get_provider_by_id(int ID);
+
+    // Download a URL and sae it in Memcache
+    GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
     // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
     int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s);

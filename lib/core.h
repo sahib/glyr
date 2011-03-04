@@ -39,25 +39,25 @@ typedef struct cb_object
     // Storage of the --of argument
     const char ** info;
 
-    // Custom pointer used to pass
-    // unspecified data to finalize()
-    void * custom;
-
     // pointer to settings struct (artist,album,etc)
     GlyQuery * s;
-
-    //Plugin name and the colored version - only important for verbose output
-    const char * name;
-    const char * color;
 
     // What curl handle this is attached
     CURL *handle;
 
+    GlyPlugin * plug;
+
     // internal cache attached to this url
     GlyMemCache *cache;
+	
+    // shall invoke() use a batch-like mode?
+    // This usually only affects the output
+    bool batch;
 
 } cb_object;
 
+// Internal list of errors
+// Use those with DL_error(ecode)
 enum CORE_ERR
 {
     ALL_OK,
@@ -67,31 +67,36 @@ enum CORE_ERR
     BLACKLISTED
 };
 
+// Check if a plugin needs to search more items
 bool continue_search(int iter, GlyQuery * s);
 
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, const char *name, const char * color, void * custom);
-void glyr_init_settings(GlyQuery * glyrs);
-
+// This needs to be called for each getter in the get_$getter() call. It sets up everything invoke() needs
 GlyCacheList * register_and_execute(GlyQuery * settings, GlyCacheList * (* finalizer) (GlyCacheList *, GlyQuery *));
+void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, bool batch);
 
+// download related methods
 GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s);
 GlyMemCache * download_single(const char* url, GlyQuery * s);
 
+// cache related functions
 GlyMemCache * DL_init(void);
 GlyMemCache * DL_error(int eid);
 GlyMemCache * DL_copy(GlyMemCache * src);
-
 void DL_free(GlyMemCache *cache);
 
+// cacheList related methods
 GlyCacheList * DL_new_lst(void);
 void DL_free_lst(GlyCacheList * c);
 void DL_add_to_list(GlyCacheList * l, GlyMemCache * c);
 void DL_free_container(GlyCacheList * c);
 
+// Copy a plugin_t * struct to a newly alloc'd bufer
 GlyPlugin * copy_table(const GlyPlugin * o, size_t size);
 
+// Verbosity fix
 int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 
+// Control for bad items
 int flag_double_urls(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
 

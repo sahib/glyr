@@ -33,11 +33,9 @@
 // Add your's here
 GlyPlugin books_providers[] =
 {
-//  full name       key  coloredname    use?    parser callback           geturl callback         free url?
-    {"kit",         "k", "kit",         false, {books_kit_parse,          books_kit_url,          false}},
-    {"dnb",         "n", "dnb",         false, {books_dnb_parse,          books_dnb_url,          false}},
-    {"safe",        NULL, NULL,         false },
-    { NULL,         NULL, NULL,         false },
+    {"kit",  "k", "kit", false, {books_kit_parse,  books_kit_url,  false}, GRP_SAFE | GRP_FAST},
+    {"dnb",  "n", "dnb", false, {books_dnb_parse,  books_dnb_url,  false}, GRP_SAFE | GRP_FAST},
+    { NULL,  NULL, NULL, false, {NULL,             NULL,           false}, GRP_NONE | GRP_NONE},
 };
 
 GlyPlugin * glyr_get_books_providers(void)

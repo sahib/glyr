@@ -24,7 +24,6 @@
 #include "amazon.h"
 
 #include "../core.h"
-#include "../core.h"
 #include "../stringop.h"
 
 const char * cover_albumart_url(GlyQuery * sets)

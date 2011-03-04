@@ -111,7 +111,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
                             if(dl != NULL)
                             {
                                 GlyMemCache * result = parse_cover_page(dl);
-                                if(result != NULL)
+                                if(result != NULL && result->data)
                                 {
                                     if(!r_list) r_list = DL_new_lst();
                                     DL_add_to_list(r_list,result);

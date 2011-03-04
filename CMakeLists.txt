@@ -42,10 +42,62 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 # set directories
 SET( SUBDIR_LIB lib)
 SET( SUBDIR_SRC src)
+SET( SUBDIR_BIND lbindings)
 
 # find libcurl dependency
 FIND_PACKAGE(CURL REQUIRED)
 
+set (DIR_ROOT      ${PROJECT_BINARY_DIR}/${SUBDIR_LIB}  )
+set (DIR_COVER     ${DIR_ROOT}/cover                    )
+set (DIR_LYRICS    ${DIR_ROOT}/lyrics                   )
+set (DIR_PHOTOS    ${DIR_ROOT}/photos                   )
+set (DIR_BOOKS     ${DIR_ROOT}/books                    )
+set (DIR_AINFO     ${DIR_ROOT}/ainfo                    )
+set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
+set (DIR_REVIEW    ${DIR_ROOT}/review                   )
+
+SET(LIB_SOURCE_LOCATIONS 
+	"${DIR_ROOT}/glyr.c"
+	"${DIR_ROOT}/core.c"
+	"${DIR_ROOT}/stringop.c"
+	"${DIR_ROOT}/ainfo.c"
+	"${DIR_ROOT}/books.c"
+	"${DIR_ROOT}/cover.c"
+	"${DIR_ROOT}/similiar.c"
+	"${DIR_ROOT}/lyrics.c"
+	"${DIR_ROOT}/photos.c"
+	"${DIR_ROOT}/review.c"
+	"${DIR_AINFO}/lastfm.c"
+	"${DIR_AINFO}/allmusic_com.c"
+	"${DIR_SIMILIAR}/lastfm.c"
+	"${DIR_REVIEW}/allmusic_com.c"
+	"${DIR_COVER}/last_fm.c"
+	"${DIR_COVER}/google.c"
+	"${DIR_COVER}/coverhunt.c"
+	"${DIR_COVER}/lyricswiki.c"
+	"${DIR_COVER}/albumart.c"
+	"${DIR_COVER}/allmusic_com.c"
+	"${DIR_COVER}/discogs.c"
+	"${DIR_COVER}/amazon.c"
+	"${DIR_COVER}/allcdcovers.c"
+        "${DIR_LYRICS}/lyrdb.c"
+    	"${DIR_LYRICS}/magistrix.c"
+    	"${DIR_LYRICS}/lyrix_at.c"
+	"${DIR_LYRICS}/lyricsvip.c"
+    	"${DIR_LYRICS}/directlyrics.c"
+    	"${DIR_LYRICS}/songlyrics.c"
+    	"${DIR_LYRICS}/darklyrics.c"
+    	"${DIR_LYRICS}/metrolyrics.c"
+    	"${DIR_LYRICS}/lyricswiki.c"
+    	"${DIR_PHOTOS}/flickr.c"
+    	"${DIR_PHOTOS}/lastfm.c"
+    	"${DIR_BOOKS}/dnb.c"
+    	"${DIR_BOOKS}/kit.c"
+)
+
+ADD_DEFINITIONS( -fPIC )
+
 # go on with subdirs
-ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
-ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
+ADD_SUBDIRECTORY( ${SUBDIR_LIB}  )
+ADD_SUBDIRECTORY( ${SUBDIR_SRC}  )
+ADD_SUBDIRECTORY( ${SUBDIR_BIND} )

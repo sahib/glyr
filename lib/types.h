@@ -30,6 +30,8 @@
 
 //Nifty defines:
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
+#define BETWEEN(val,low,up) (val >= low && val <= up)
+
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
 #ifdef  USE_COLOR
@@ -63,14 +65,40 @@
 #define DEFAULT_PLUGMAX 10
 #define DEFAULT_LANG "en"
 #define DEFAULT_DOWNLOAD true
+#define DEFAULT_GROUPEDL true
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
 
 #define PTR_SPACE 10
 
-#define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
 #define API_KEY_DISCOGS "adff651383"
+#define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
 #define API_KEY_LASTFM  "7199021d9c8fbae507bf77d0a88533d7"
 #define API_KEY_FLICKR  "b5af0c3230fb478d53b20835223d57a4"
+
+/* --------------------------- */
+/* --------- GROUPS ---------- */
+/* --------------------------- */
+
+/* Group IDs */
+enum GLYR_GROUPS
+{
+	GRP_NONE = 0 << 0, /* None    */
+	GRP_SAFE = 1 << 0, /* Safe    */
+	GRP_USFE = 1 << 1, /* Unsafe  */
+	GRP_SPCL = 1 << 2, /* Special */
+	GRP_FAST = 1 << 3, /* Fast    */
+	GRP_SLOW = 1 << 4, /* Slow    */
+	GRP_ALL  = 1 << 5  /* All!    */
+};
+
+/* Group names */
+#define GRPN_NONE "none"
+#define GRPN_SAFE "safe"
+#define GRPN_USFE "unsafe"
+#define GRPN_SPCL "special"
+#define GRPN_FAST "fast"
+#define GRPN_SLOW "slow"
+#define GRPN_ALL  "all"
 
 // Prototype cb_object struct
 struct cb_object;
@@ -136,6 +164,10 @@ typedef struct GlyQuery
     // this converts glyr to a sort of search engines
     bool download;
 
+    // Download group for group, 
+    // or all in parallel? (faster, but less accurate)
+    bool groupedDL;
+
     // language settings (for amazon / google / last.fm)
     char * lang;
 
@@ -169,6 +201,8 @@ typedef struct GlyPlugin
         const char *   (* url_callback)    (GlyQuery  *);
         bool free_url; // pass result of url_callback to free()?
     } plug;
+
+    unsigned char gid;
 
 } GlyPlugin;
 

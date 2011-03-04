@@ -1,5 +1,10 @@
 require 'rubygems'
-require './glyr'
+
+begin 
+	require './glyr'
+rescue LoadError
+	print "FATAL: glyr.so could not be loaded.. :-("
+end
 
 class Glubyr
         # Called when object is destroyed
@@ -20,6 +25,12 @@ class Glubyr
         end 
 
         ## -- PUBLIC -- ##
+
+	def reset
+		@query = nil
+		Glyr::freeList(@cache_list)
+		@query = Glyr::GlyQuery.new
+	end
 
         def getLyrics(artist,album,title)
                 @query.artist = artist

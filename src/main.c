@@ -465,6 +465,7 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         {"version",   no_argument,       0, 'V'},
         {"color",     no_argument,       0, 'c'},
         {"nodownload",no_argument,       0, 'd'},
+	{"nogrouping",no_argument,       0, 'g'},
         // -- plugin specific -- //
         {"artist",    required_argument, 0, 'a'},
         {"album",     required_argument, 0, 'b'},
@@ -479,7 +480,7 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
     while (true)
     {
         int option_index = 0;
-        c = getopt_long(argc, argv, "uVhcdf:w:p:r:m:x:v:a:b:t:i:e:n:l:",long_options, &option_index);
+        c = getopt_long(argc, argv, "uVhcdgf:w:p:r:m:x:v:a:b:t:i:e:n:l:",long_options, &option_index);
 
         // own error report
         opterr = 0;
@@ -537,11 +538,14 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             update = true;
             break;
 
+	case 'g':
+	    GlyOpt_groupedDL(glyrs,false);
+	    break;
+
         case 'f':
             if(GlyOpt_from(glyrs,optarg) != GLYRE_OK)
-            {
                 search_similiar_providers(optarg,glyrs);
-            }
+
             break;
 
         case 'v':
