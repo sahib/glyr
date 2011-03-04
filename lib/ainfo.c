@@ -33,9 +33,9 @@
 GlyPlugin ainfo_providers[] =
 {
 //  full name       key  coloredname          use?   parser callback           geturl callback         free url?
-    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       true }, GRP_SAFE | GRP_FAST},
-    {"allmusic",    "m", C_"all"C_C"music",   false,  {ainfo_allmusic_parse,   ainfo_allmusic_url,     false}, GRP_USFE | GRP_SLOW},
-    { NULL,        NULL, NULL,                false, {NULL,                    NULL,                   false}, GRP_NONE | GRP_NONE},
+    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       NULL, true }, GRP_SAFE | GRP_FAST},
+    {"allmusic",    "m", C_"all"C_C"music",   false,  {ainfo_allmusic_parse,   ainfo_allmusic_url,     NULL, false}, GRP_USFE | GRP_SLOW},
+    { NULL,        NULL, NULL,                false, {NULL,                    NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 GlyPlugin * glyr_get_ainfo_providers(void)

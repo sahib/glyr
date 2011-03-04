@@ -199,6 +199,7 @@ typedef struct GlyPlugin
         // Passed to the corresponding cb_object and is called...perhaps
         GlyCacheList * (* parser_callback) (struct cb_object *);
         const char *   (* url_callback)    (GlyQuery  *);
+	char *  endmarker; // Stop download if containing this string
         bool free_url; // pass result of url_callback to free()?
     } plug;
 

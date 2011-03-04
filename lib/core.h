@@ -54,6 +54,8 @@ typedef struct cb_object
     // This usually only affects the output
     bool batch;
 
+    const char * endmark;
+
 } cb_object;
 
 // Internal list of errors
@@ -72,11 +74,11 @@ bool continue_search(int iter, GlyQuery * s);
 
 // This needs to be called for each getter in the get_$getter() call. It sets up everything invoke() needs
 GlyCacheList * register_and_execute(GlyQuery * settings, GlyCacheList * (* finalizer) (GlyCacheList *, GlyQuery *));
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, bool batch);
+void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, bool batch);
 
 // download related methods
 GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s);
-GlyMemCache * download_single(const char* url, GlyQuery * s);
+GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
 
 // cache related functions
 GlyMemCache * DL_init(void);

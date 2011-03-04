@@ -44,16 +44,16 @@
 GlyPlugin cover_providers[] =
 {
     // Start of safe group
-    {"last.fm",    "l", C_"last"C_R"."C_"fm", false, {cover_lastfm_parse,      cover_lastfm_url,     false}, GRP_SAFE | GRP_FAST},
-    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     false}, GRP_SAFE | GRP_FAST},
-    {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, false}, GRP_SAFE | GRP_FAST},
-    {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     true }, GRP_USFE | GRP_FAST},
-    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   false}, GRP_USFE | GRP_FAST},
-    {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    false}, GRP_USFE | GRP_SLOW},
-    {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   false}, GRP_SPCL | GRP_SLOW},
-    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  false}, GRP_SPCL | GRP_FAST},
-//  {"allcdcovers","o", ALLCDCOVERSC,         false, {cover_allcdcovers_parse, cover_allcdcovers_url,false}, GRP_USFE | GRP_SLOW},
-    { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 false}, GRP_NONE | GRP_NONE},
+    {"last.fm",    "l", C_"last"C_R"."C_"fm", false, {cover_lastfm_parse,      cover_lastfm_url,     NULL, false}, GRP_SAFE | GRP_FAST},
+    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     NULL, false}, GRP_SAFE | GRP_FAST},
+    {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, NULL, false}, GRP_SAFE | GRP_FAST},
+    {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     NULL, true }, GRP_USFE | GRP_FAST},
+    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   NULL, false}, GRP_USFE | GRP_FAST},
+    {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    NULL, false}, GRP_USFE | GRP_SLOW},
+    {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   NULL, false}, GRP_SPCL | GRP_SLOW},
+    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  NULL, false}, GRP_SPCL | GRP_FAST},
+//  {"allcdcovers","o", ALLCDCOVERSC,         false, {cover_allcdcovers_parse, cover_allcdcovers_url,NULL, false}, GRP_USFE | GRP_SLOW},
+    { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 bool size_is_okay(int sZ, int min, int max)
@@ -119,7 +119,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(!result->list[i]->error)
                     {
-                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, true);
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, true);
                         ctr++;
                     }
                 }

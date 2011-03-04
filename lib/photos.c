@@ -33,9 +33,9 @@
 
 GlyPlugin photos_providers[] =
 {
-    {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, false}, GRP_SAFE | GRP_FAST},
-    {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, true }, GRP_USFE | GRP_SLOW},
-    {NULL,     NULL, NULL,                  false, {NULL,                NULL,              false}, GRP_NONE | GRP_NONE}
+    {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, NULL, false}, GRP_SAFE | GRP_FAST},
+    {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, NULL, true }, GRP_USFE | GRP_SLOW},
+    {NULL,     NULL, NULL,                  false, {NULL,                NULL,              NULL, false}, GRP_NONE | GRP_NONE}
 };
 
 GlyPlugin * glyr_get_photo_providers(void)
@@ -78,7 +78,7 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(result->list[i] && result->list[i]->data && result->list[i]->error == ALL_OK)
                     {
-                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, true);
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, true);
                         ctr++;
                     }
 

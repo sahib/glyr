@@ -33,9 +33,8 @@
 GlyPlugin review_providers[] =
 {
 //  full name       key   coloredname          use?   parser callback           geturl callback        free url?
-    {"allmusic",    "m",  C_"all"C_C"music",  false,  {review_allmusic_parse,  review_allmusic_url,    false}},
-    {"safe",        NULL, NULL,               false,  {NULL,                   NULL,                   false}},
-    { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   false}},
+    {"allmusic",    "m",  C_"all"C_C"music",  false,  {review_allmusic_parse,  review_allmusic_url,    NULL, false}, GRP_SAFE | GRP_FAST},
+    { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 GlyPlugin * glyr_get_review_providers(void)

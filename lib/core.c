@@ -99,7 +99,7 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...)
 // Sleep usec microseconds
 static int DL_usleep(long usec)
 {
-#ifndef WIN32
+#ifndef WIN32 // posix
     struct timespec req= { 0 };
     time_t sec = (int) (usec / 1e6L);
 
@@ -111,7 +111,7 @@ static int DL_usleep(long usec)
     {
         continue;
     }
-#else // Windooze
+#else // Windooza 
     Sleep(usec / 1e3L);
 #endif
     return 0;
@@ -157,7 +157,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
         mem->size += realsize;
         mem->data[mem->size] = 0;
 
-	if(strstr(mem->data,"<p>"))
+	if(mem->dsrc != NULL && strstr(mem->data,mem->dsrc))
 	{
 		puts("Found endmark..");
 		return 0;
@@ -345,6 +345,10 @@ static GlyMemCache * handle_init(CURLM * cm, cb_object * capo, GlyQuery *s, long
 
     // Init cache
     GlyMemCache *dlcache = DL_init();
+    if(capo && capo->plug && capo->plug->plug.endmarker)
+    {
+    	dlcache->dsrc = strdup(capo->plug->plug.endmarker);
+    }
 
     // Set handle
     capo->handle = eh;
@@ -412,7 +416,7 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 
     if(dp != 0)
     {
-        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occure twice.\n\n",dp,dp>=1 ? " " : "s ");
+        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occures twice.\n\n",dp,dp>=1 ? " " : "s ");
         s->itemctr -= dp;
     }
     return dp;
@@ -452,7 +456,7 @@ int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, Gly
 /*--------------------------------------------------------*/
 
 // Download a singe file NOT in parallel
-GlyMemCache * download_single(const char* url, GlyQuery * s)
+GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 {
     if(url==NULL)
     {
@@ -467,6 +471,10 @@ GlyMemCache * download_single(const char* url, GlyQuery * s)
     // Init handles
     curl = curl_easy_init();
     GlyMemCache * dldata = DL_init();
+    if(end != NULL)
+    {
+    	dldata->dsrc = strdup(end);
+    }
 
     if(curl != NULL)
     {
@@ -771,13 +779,14 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 
 /*--------------------------------------------------------*/
 
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, bool batch)
+void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, bool batch)
 {
     ref->url = url ? strdup(url) : NULL;
     ref->parser_callback = callback;
     ref->cache  = NULL;
     ref->plug = plug;
     ref->batch = batch;
+    ref->endmark = endmark;
     ref->s = s;
 }
 
@@ -823,7 +832,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
 				break;
 			}
 
-                	plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter],false);
+                	plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter], pList[iter].plug.endmarker, false);
 
 			// If the plugin uses dynamic memory it should set plug.free_url to TRUE
 			// So it is free'd here. plugin_init strdups the URL and invoke handles all URLs equally.

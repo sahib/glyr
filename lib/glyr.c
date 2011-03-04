@@ -350,7 +350,7 @@ void Gly_destroy_query(GlyQuery * sets)
 
 GlyMemCache * Gly_download(const char * url, GlyQuery * s)
 {
-	return download_single(url,s);
+	return download_single(url,s,NULL);
 }
 
 /*-----------------------------------------------*/
