@@ -77,7 +77,7 @@ GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
                                 char * url = strdup_printf("http://lyrix.at/de%s",url_part);
                                 if(url)
                                 {
-                                    GlyMemCache * lyrcache = download_single(url,capo->s);
+                                    GlyMemCache * lyrcache = download_single(url,capo->s,NULL);
                                     if(lyrcache)
                                     {
                                         char * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);

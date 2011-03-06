@@ -129,7 +129,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                                                 char * dl_url = strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
-                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s);
+                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
                                                     if(dl_cache)
                                                     {
                                                         result = parse_lyric_page(dl_cache->data);

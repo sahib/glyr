@@ -441,8 +441,45 @@ static bool check_if_dir(const char * path)
         {
             return false;
         }
-    }
+     }
     return true;
+}
+
+
+void help_short(void)
+{
+	glyr_message(-1,NULL,stderr,"Usage: "
+	"glyrc [GETTER] (options)\n[GETTER] must be one of:\n");
+	
+	list_provider_at_id(-1,10);
+
+	#define IN "\t"
+	glyr_message(-1,NULL,stderr,"\n\nOPTIONS:\n"
+        IN"-f|--from\n"
+        IN"-w|--write\n"
+        IN"-p|--parallel\n"
+        IN"-r|--redirects\n"    
+        IN"-m|--timeout\n"  
+        IN"-x|--plugmax\n"    
+        IN"-v|--verbosity\n"
+        IN"-u|--update\n"
+        IN"-U|--skip-update\n"
+        IN"-h|--help\n"
+        IN"-H|--usage\n"
+        IN"-V|--version\n"
+        IN"-c|--color\n"
+        IN"-C|--skip-color\n"
+        IN"-d|--download\n"
+        IN"-D|--skip-download\n"
+	IN"-g|--groups\n"
+	IN"-G|--skip-groups\n" 
+        IN"-a|--artist\n"
+        IN"-b|--album\n"
+        IN"-t|--title\n"
+	"\nRefer to --usage for more detailed explanation.\n"
+	);
+
+	exit(EXIT_FAILURE);
 }
 
 static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery * glyrs)
@@ -453,34 +490,39 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
 
     static struct option long_options[] =
     {
-        {"from",      required_argument, 0, 'f'},
-        {"write",     required_argument, 0, 'w'},
-        {"parallel",  required_argument, 0, 'p'},
-        {"redirects", required_argument, 0, 'r'},
-        {"timeout",   required_argument, 0, 'm'},
-        {"plugmax",   required_argument, 0, 'x'},
-        {"verbosity", required_argument, 0, 'v'},
-        {"update",    no_argument,       0, 'u'},
-        {"help",      no_argument,       0, 'h'},
-        {"version",   no_argument,       0, 'V'},
-        {"color",     no_argument,       0, 'c'},
-        {"nodownload",no_argument,       0, 'd'},
-	{"nogrouping",no_argument,       0, 'g'},
+        {"from",         required_argument, 0, 'f'},
+        {"write",        required_argument, 0, 'w'},
+        {"parallel",     required_argument, 0, 'p'},
+        {"redirects",    required_argument, 0, 'r'},
+        {"timeout",      required_argument, 0, 'm'},
+        {"plugmax",      required_argument, 0, 'x'},
+        {"verbosity",    required_argument, 0, 'v'},
+        {"update",       no_argument,       0, 'u'},
+        {"skip-update",  no_argument,       0, 'U'},
+        {"help",         no_argument,       0, 'h'},
+        {"usage",     no_argument,       0, 'H'},
+        {"version",      no_argument,       0, 'V'},
+        {"color",        no_argument,       0, 'c'},
+        {"skip-color",   no_argument,       0, 'C'},
+        {"download",     no_argument,       0, 'd'},
+        {"skip-download",no_argument,       0, 'D'},
+	{"groups",       no_argument,       0, 'g'},
+	{"skip-groups",  no_argument,       0, 'G'},
         // -- plugin specific -- //
-        {"artist",    required_argument, 0, 'a'},
-        {"album",     required_argument, 0, 'b'},
-        {"title",     required_argument, 0, 't'},
-        {"minsize",   required_argument, 0, 'i'},
-        {"maxsize",   required_argument, 0, 'e'},
-        {"number",    required_argument, 0, 'n'},
-        {"lang",      required_argument, 0, 'l'},
-        {0,           0,                 0,  0 }
+        {"artist",       required_argument, 0, 'a'},
+        {"album",        required_argument, 0, 'b'},
+        {"title",        required_argument, 0, 't'},
+        {"minsize",      required_argument, 0, 'i'},
+        {"maxsize",      required_argument, 0, 'e'},
+        {"number",       required_argument, 0, 'n'},
+        {"lang",         required_argument, 0, 'l'},
+        {0,              0,                 0,  0 }
     };
 
     while (true)
     {
         int option_index = 0;
-        c = getopt_long(argc, argv, "uVhcdgf:w:p:r:m:x:v:a:b:t:i:e:n:l:",long_options, &option_index);
+        c = getopt_long(argc, argv, "uUVhcCdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:",long_options, &option_index);
 
         // own error report
         opterr = 0;
@@ -538,7 +580,15 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             update = true;
             break;
 
+	case 'U':
+	    update = false;
+	    break;
+
 	case 'g':
+	    GlyOpt_groupedDL(glyrs,true);
+	    break;
+
+	case 'G':
 	    GlyOpt_groupedDL(glyrs,false);
 	    break;
 
@@ -572,12 +622,21 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             print_version();
             break;
 
-        case 'h':
+	case 'h':
+	    help_short();
+	    break;
+
+        case 'H':
             usage();
             break;
         case 'c':
-            GlyOpt_color(glyrs,false);
+            GlyOpt_color(glyrs,true);
             break;
+
+	case 'C':
+	    GlyOpt_color(glyrs,false);
+	    break;
+
         case 'a':
             GlyOpt_artist(glyrs,optarg);
             break;
@@ -597,8 +656,11 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             GlyOpt_number(glyrs,atoi(optarg));
             break;
         case 'd':
-            GlyOpt_download(glyrs,false);
+            GlyOpt_download(glyrs,true);
             break;
+	case 'D':
+	    GlyOpt_download(glyrs,false);
+	    break;
         case 'l':
             GlyOpt_lang(glyrs,optarg);
             break;

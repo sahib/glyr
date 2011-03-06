@@ -122,7 +122,7 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
                                 char * dl_url = strdup_printf("www.metrolyrics.com%s",url);
                                 if(dl_url)
                                 {
-                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s);
+                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
                                     if(dl_cache)
                                     {
                                         result = parse_lyrics_page(dl_cache->data);

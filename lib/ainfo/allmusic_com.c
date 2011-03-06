@@ -91,7 +91,7 @@ GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
                 char * url = strdup_printf(ROOT_URL"%s",id);
                 if(url != NULL)
                 {
-                    GlyMemCache * dl = download_single(url,s);
+                    GlyMemCache * dl = download_single(url,s,NULL);
                     if(dl != NULL)
                     {
                         rche = parse_bio_short(dl);
@@ -141,7 +141,7 @@ GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
         char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
         if(url != NULL)
         {
-            GlyMemCache * dl = download_single(url,capo->s);
+            GlyMemCache * dl = download_single(url,capo->s,NULL);
             if(dl != NULL)
             {
                 if(!r_list) r_list = DL_new_lst();

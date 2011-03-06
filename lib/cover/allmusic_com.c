@@ -107,7 +107,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
                         ascii_strdown_modify(orig_artist,-1);
                         if(levenshtein_strcmp(orig_artist,artist) <= LV_MAX)
                         {
-                            GlyMemCache * dl = download_single(url,capo->s);
+                            GlyMemCache * dl = download_single(url,capo->s,NULL);
                             if(dl != NULL)
                             {
                                 GlyMemCache * result = parse_cover_page(dl);

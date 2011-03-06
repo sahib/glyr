@@ -120,7 +120,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
                             char * review_url = strdup_printf("%s/review",url);
                             if(review_url)
                             {
-                                GlyMemCache * dl = download_single(review_url,capo->s);
+                                GlyMemCache * dl = download_single(review_url,capo->s,NULL);
                                 if(dl != NULL)
                                 {
                                     GlyMemCache * result = parse_text(dl);

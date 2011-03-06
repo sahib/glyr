@@ -1,0 +1,16 @@
+- type member in GlyMemcache 
+- Order | apperance of groups
+  + taking order from --from
+  + adding intersection and negation
+ 
+- skip duplicate check option
+- memory leaks
+- making plugins that share code
+- new plugins (wikipedia for ainfo - clementine)
+- at least two more review plugins
+- ainfo with correct formatting, perhaps also review
+- Increment version number to 0.5 :-)
+- --prefer=format option
+- Negate options
+- docu!
+- short help

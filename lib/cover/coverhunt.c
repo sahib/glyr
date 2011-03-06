@@ -90,7 +90,7 @@ GlyCacheList * cover_coverhunt_parse(cb_object *capo)
                 char * real_url = strdup_printf("http://www.coverhunt.com/go/%s",go_url);
                 if(real_url)
                 {
-                    GlyMemCache * search_buf = download_single(real_url,capo->s);
+                    GlyMemCache * search_buf = download_single(real_url,capo->s,NULL);
                     if(search_buf)
                     {
                         char * artwork = strstr(search_buf->data, "<div class=\"artwork\">");

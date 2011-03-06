@@ -47,7 +47,7 @@ GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
             char * lyr_url = strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
             if(lyr_url)
             {
-                GlyMemCache * new_cache = download_single(lyr_url,capo->s);
+                GlyMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
                 if(new_cache)
                 {
                     char *buffer = malloc(new_cache->size+1);
