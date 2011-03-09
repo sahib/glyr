@@ -26,22 +26,12 @@
 // all structs used by glyr are here
 #include "types.h"
 
-enum GLYR_ERROR
-{
-    GLYRE_OK,           // everything is fine
-    GLYRE_BAD_OPTION,   // you passed a bad option to Gly_setopt()
-    GLYRE_BAD_VALUE,    // Invalid value in va_list
-    GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
-    GLYRE_NO_PROVIDER,  // setttings->provider == NULL
-    GLYRE_UNKNOWN_GET   // settings->type is not valid
-};
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
     typedef void (*callback_t) (void *user_data, const char *other_data);
-    void anvoke(callback_t callback, void *user_data, const char *other_data);
 
     // the actual main of glyr
     GlyCacheList * Gly_get(GlyQuery * settings, int * error);
@@ -60,7 +50,7 @@ extern "C"
     GlyMemCache * Gly_new_cache(void);
 
     /* Gly_opt_* methods */
-    int GlyOpt_dlcallback(GlyQuery * settings, void (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp);
+    int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp);
     int GlyOpt_type(GlyQuery * s, int type);
     int GlyOpt_artist(GlyQuery * s, char * artist);
     int GlyOpt_album(GlyQuery * s,  char * album);
@@ -94,6 +84,9 @@ extern "C"
 
     // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
     int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s);
+
+    // Returns the actual name of the group pointed by ID
+    const char * Gly_groupname_by_id(int ID);
 
 #ifdef _cplusplus
 }

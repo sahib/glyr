@@ -61,6 +61,7 @@ GlyCacheList * lyrics_songlyrics_parse(cb_object * capo)
     GlyMemCache * result = NULL;
     GlyCacheList * r_list = NULL;
     char * find_tag, * find_end;
+ 
     if( (find_tag = strstr(capo->cache->data,"<p id=\"songLyricsDiv\"")) != NULL)
     {
         if( (find_tag = strstr(find_tag,"&#")) != NULL)

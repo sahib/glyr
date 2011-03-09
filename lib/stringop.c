@@ -867,13 +867,16 @@ char * copy_value(const char * begin, const char * end)
     if(begin && end)
     {
         size_t length = end - begin;
-        char * buffer = malloc(length+1);
-        if(buffer)
-        {
-            strncpy(buffer,begin,length);
-            buffer[length] = '\0';
-        }
-        return buffer;
+	if(length >= 0)
+	{
+            char * buffer = malloc(length+1);
+            if(buffer)
+            {
+                strncpy(buffer,begin,length);
+                buffer[length] = '\0';
+            }
+            return buffer;
+	}
     }
     return NULL;
 }

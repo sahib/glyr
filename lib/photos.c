@@ -43,18 +43,20 @@ GlyPlugin * glyr_get_photo_providers(void)
     return copy_table(photos_providers,sizeof(photos_providers));
 }
 
-static GlyCacheList * cover_callback(cb_object * capo)
+static GlyCacheList * photo_callback(cb_object * capo)
 {
     GlyCacheList * ls = DL_new_lst();
     GlyMemCache * dl = DL_copy(capo->cache);
     if(dl)
     {
         dl->dsrc = strdup(capo->url);
+	dl->type = TYPE_PHOTOS;
 
         // call user defined callback
         if(capo->s->callback.download)
-            capo->s->callback.download(dl,capo->s);
-
+	{
+            ls->usersig = capo->s->callback.download(dl,capo->s);
+	}
         DL_add_to_list(ls,dl);
     }
     return ls;
@@ -62,6 +64,8 @@ static GlyCacheList * cover_callback(cb_object * capo)
 
 static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
+    if(!result) return NULL;
+
     GlyCacheList * dl_list = NULL;
     if(result)
     {
@@ -78,13 +82,14 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(result->list[i] && result->list[i]->data && result->list[i]->error == ALL_OK)
                     {
-                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, true);
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, photo_callback, settings, NULL, NULL, true);
                         ctr++;
                     }
 
                     if(result->list[i]->data)
                     {
                         free(result->list[i]->data);
+			result->list[i]->data = NULL;
                     }
                 }
                 dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);

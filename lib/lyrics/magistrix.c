@@ -34,7 +34,7 @@ const char * lyrics_magistrix_url(GlyQuery * settings)
     return MG_URL;
 }
 
-GlyMemCache * parse_lyric_page(const char * buffer)
+static GlyMemCache * parse_lyric_page(const char * buffer)
 {
     GlyMemCache * result = NULL;
     if(buffer)
@@ -81,29 +81,30 @@ static bool approve_content(char * content, const char * compare)
 #define TITLE_BEGIN "\" class=\"lyricIcon bgMove\">"
 #define URL_BEGIN   "<a href=\""
 #define SEARCH_END   "</a>"
-#define MAX_TRIES 5
+#define MAX_TRIES 7
 
 GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
 {
-    GlyMemCache * result=NULL;
     GlyCacheList * r_list=NULL;
-
     if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL) // No songtext page?
     {
         if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL) // Are we not on the search result page?
         {
-            result = parse_lyric_page(capo->cache->data);
+            GlyMemCache * result = parse_lyric_page(capo->cache->data);
             if(result)
             {
                 result->dsrc = strdup(capo->url);
+		if(!r_list) r_list = DL_new_lst();
+		DL_add_to_list(r_list,result);
             }
         }
         else
         {
             char * node = capo->cache->data;
-            int ctr = 0;
-            while( (node = strstr(node+1,"<tr class='topLine'>")) && !result && MAX_TRIES >= ctr++ && continue_search(ctr,capo->s))
+            int ctr = 0, urlc = 0;
+            while( (node = strstr(node+1,"<tr class='topLine'>")) && MAX_TRIES >= ctr && continue_search(urlc,capo->s))
             {
+		ctr++;
                 char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
                 if(artist)
                 {
@@ -129,16 +130,21 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                                                 char * dl_url = strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
-                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
+						    // We don't need the ugly comments
+                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
                                                     if(dl_cache)
                                                     {
-                                                        result = parse_lyric_page(dl_cache->data);
+                                                        GlyMemCache * result = parse_lyric_page(dl_cache->data);
                                                         if(result)
                                                         {
+							    urlc++;
                                                             result->dsrc = strdup(dl_url);
+							    if(!r_list) r_list = DL_new_lst();
+							    DL_add_to_list(r_list,result);
                                                         }
                                                         DL_free(dl_cache);
                                                     }
+						    free(dl_url);
                                                 }
                                                 free(url);
                                             }
@@ -153,11 +159,6 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                 }
             }
         }
-    }
-    if(result)
-    {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
     }
     return r_list;
 }

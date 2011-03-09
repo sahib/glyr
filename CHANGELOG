@@ -1,0 +1,20 @@
+Hand written changelog of important changes.
+Use the github page to view the automated git generated brother.
+
+2011/03/07
+----------
++ Fixed lyrix.at parser (ctr was incremented always, not only on item found)
++ Speed up of cover and lyrics plugins (Up to 200%)
++ Fixed lyrics:magistrix plugin
++ Fixed lyrics:lyricswiki plugin
++ Fix of DynHelp
++ Fixed overall memory leaks
++ added finalize() call to cleanup plugins
+
+2011/03/09
+----------
++ Help text reacts now on "I DONT WANNA COLOR!"
++ added ability to stop searchengine by returning GLYRE_STOP_BY_CB in callback
++ Fixed a bug when using the google plugin and -D
++ Fixed google (and other) returning 404 Pages
+

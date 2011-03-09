@@ -33,7 +33,7 @@
 GlyPlugin review_providers[] =
 {
 //  full name       key   coloredname          use?   parser callback           geturl callback        free url?
-    {"allmusic",    "m",  C_"all"C_C"music",  false,  {review_allmusic_parse,  review_allmusic_url,    NULL, false}, GRP_SAFE | GRP_FAST},
+    {"allmusic",    "m",  C_"all"C_C"music",  false,  {review_allmusic_parse,  review_allmusic_url, "<div id=\"right-sidebar\">", false}, GRP_SAFE | GRP_FAST},
     { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 
@@ -53,8 +53,10 @@ static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings
     {
         // call user defined callback
         if(settings->callback.download)
+	{
             settings->callback.download(result->list[i],settings);
-
+	}
+	result->list[i]->type = TYPE_REVIEW;
         DL_add_to_list(r_list,DL_copy(result->list[i]));
     }
     return r_list;

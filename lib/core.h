@@ -102,4 +102,7 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 int flag_double_urls(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
 
+// ....
+const char * grp_id_to_name(int id); 
+
 #endif

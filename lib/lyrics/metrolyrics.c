@@ -95,9 +95,7 @@ static bool approve_content(char * content, const char * compare)
 
 GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
 {
-    GlyMemCache * result = NULL;
     GlyCacheList * r_list = NULL;
-
     char * root = strstr(capo->cache->data,ROOT_NODE);
     if(root)
     {
@@ -125,10 +123,12 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
                                     GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
                                     if(dl_cache)
                                     {
-                                        result = parse_lyrics_page(dl_cache->data);
+                                        GlyMemCache * result = parse_lyrics_page(dl_cache->data);
                                         if(result)
                                         {
                                             result->dsrc = strdup(dl_url);
+					    if(!r_list) r_list = DL_new_lst();
+					    DL_add_to_list(r_list,result);
                                         }
                                         DL_free(dl_cache);
                                     }
@@ -149,11 +149,6 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
 
             if(node > dist) break;
         }
-    }
-    if(result)
-    {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
     }
     return r_list;
 }

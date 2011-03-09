@@ -48,10 +48,10 @@ GlyPlugin cover_providers[] =
     {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     NULL, false}, GRP_SAFE | GRP_FAST},
     {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, NULL, false}, GRP_SAFE | GRP_FAST},
     {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     NULL, true }, GRP_USFE | GRP_FAST},
-    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   NULL, false}, GRP_USFE | GRP_FAST},
+    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   "<div id=\"pagination\"", false}, GRP_USFE | GRP_FAST},
     {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    NULL, false}, GRP_USFE | GRP_SLOW},
     {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   NULL, false}, GRP_SPCL | GRP_SLOW},
-    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  NULL, false}, GRP_SPCL | GRP_FAST},
+    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  "<div id=\"footer\">", false}, GRP_SPCL | GRP_FAST},
 //  {"allcdcovers","o", ALLCDCOVERSC,         false, {cover_allcdcovers_parse, cover_allcdcovers_url,NULL, false}, GRP_USFE | GRP_SLOW},
     { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
@@ -78,13 +78,18 @@ static GlyCacheList * cover_callback(cb_object * capo)
     // the downloaded cache, and add the source url
     GlyCacheList * ls = DL_new_lst();
     GlyMemCache * dl = DL_copy(capo->cache);
+
     if(dl)
     {
         dl->dsrc = strdup(capo->url);
+	if(dl->type == TYPE_NOIDEA)
+	    dl->type = TYPE_COVER;
 
         // call user defined callback
         if(capo->s->callback.download)
-            capo->s->callback.download(dl,capo->s);
+	{
+            ls->usersig = capo->s->callback.download(dl,capo->s);
+	}
 
         DL_add_to_list(ls,dl);
     }
@@ -99,6 +104,13 @@ const char * URLblacklist[] =
 
 static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 {
+    // Only NULL when finalizing()
+    if(result == NULL)
+    {
+	glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
+	return NULL;
+    }
+
     GlyCacheList * dl_list = NULL;
     if(result)
     {
@@ -125,7 +137,10 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 }
 
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
-                glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
+		if(dl_list != NULL)
+		{
+                	glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
+		}
                 free(urlplug_list);
             }
         }

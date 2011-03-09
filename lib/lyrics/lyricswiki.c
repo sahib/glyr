@@ -119,7 +119,7 @@ GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
                 }
                 endTag=NULL;
             }
-            result = DL_error(NO_ENDIN_TAG);
+            else result = DL_error(NO_ENDIN_TAG);
             find=NULL;
         }
         else result = DL_error(NO_BEGIN_TAG);

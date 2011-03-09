@@ -62,11 +62,12 @@
 #define DEFAULT_CMAXSIZE -1
 #define DEFAULT_VERBOSITY 2
 #define DEFAULT_NUMBER 1
-#define DEFAULT_PLUGMAX 10
+#define DEFAULT_PLUGMAX -1
 #define DEFAULT_LANG "en"
 #define DEFAULT_DOWNLOAD true
 #define DEFAULT_GROUPEDL true
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
+#define DEFAULT_DUPLCHECK true
 
 #define PTR_SPACE 10
 
@@ -89,6 +90,17 @@ enum GLYR_GROUPS
 	GRP_FAST = 1 << 3, /* Fast    */
 	GRP_SLOW = 1 << 4, /* Slow    */
 	GRP_ALL  = 1 << 5  /* All!    */
+};
+
+enum GLYR_ERROR
+{
+    GLYRE_OK,           // everything is fine
+    GLYRE_BAD_OPTION,   // you passed a bad option to Gly_setopt()
+    GLYRE_BAD_VALUE,    // Invalid value in va_list
+    GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
+    GLYRE_NO_PROVIDER,  // setttings->provider == NULL
+    GLYRE_UNKNOWN_GET,  // settings->type is not valid
+    GLYRE_STOP_BY_CB    // Callback returned stop signal.
 };
 
 /* Group names */
@@ -115,6 +127,7 @@ typedef struct GlyMemCache
     size_t size;   // Size of data
     char  *dsrc;   // Source of data
     int   error;   // error code - internal use only
+    int   type;    // type of metadata
 } GlyMemCache;
 
 // list of GlyMemCaches
@@ -122,6 +135,7 @@ typedef struct GlyCacheList
 {
     GlyMemCache ** list;
     size_t size;
+    int usersig;
 } GlyCacheList;
 
 typedef struct GlyQuery
@@ -168,6 +182,9 @@ typedef struct GlyQuery
     // or all in parallel? (faster, but less accurate)
     bool groupedDL;
 
+    // Check for bad data?
+    bool duplcheck;
+
     // language settings (for amazon / google / last.fm)
     char * lang;
 
@@ -176,7 +193,7 @@ typedef struct GlyQuery
 
     struct callback
     {
-        void (* download)(GlyMemCache * dl, struct GlyQuery * s);
+        int  (* download)(GlyMemCache * dl, struct GlyQuery * s);
         void  * user_pointer;
     } callback;
 
@@ -215,8 +232,19 @@ enum GLYR_GET_TYPES
     GET_AINFO,
     GET_SIMILIAR,
     GET_REVIEW,
-    GET_BOOKS,
+    GET_BOOKS, // This should be removed
     GET_UNSURE
+};
+
+enum GLYR_DATA_TYPE
+{
+    TYPE_NOIDEA,
+    TYPE_LYRICS,
+    TYPE_REVIEW,
+    TYPE_PHOTOS,
+    TYPE_COVER,
+    TYPE_AINFO,
+    TYPE_SIMILIAR
 };
 
 #endif

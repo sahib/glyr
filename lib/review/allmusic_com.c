@@ -90,6 +90,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
         DL_add_to_list(r_list, result);
         return r_list;
     }
+
     char * search_begin = NULL;
     if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
     {
@@ -120,7 +121,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
                             char * review_url = strdup_printf("%s/review",url);
                             if(review_url)
                             {
-                                GlyMemCache * dl = download_single(review_url,capo->s,NULL);
+                                GlyMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
                                 if(dl != NULL)
                                 {
                                     GlyMemCache * result = parse_text(dl);

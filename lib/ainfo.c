@@ -56,6 +56,7 @@ static GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
         if(settings->callback.download)
             settings->callback.download(result->list[i],settings);
 
+	result->list[i]->type = TYPE_AINFO;
         DL_add_to_list(r_list,DL_copy(result->list[i]));
     }
     return r_list;

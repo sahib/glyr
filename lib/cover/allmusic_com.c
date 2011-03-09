@@ -59,11 +59,19 @@ GlyMemCache * parse_cover_page(GlyMemCache * dl)
         if(img_begin != NULL)
         {
             char * img_url = copy_value(img_begin + strlen(IMG_BEGIN), strstr(img_begin,IMG_ENDIN));
-            if(img_url != NULL && strcmp(img_url,"/img/pages/site/icons/no_cover_200.gif"))
+            if(img_url != NULL)
             {
-                rc = DL_init();
-                rc->data = img_url;
-                rc->size = strlen(img_url);
+		if(strcmp(img_url,"/img/pages/site/icons/no_cover_200.gif"))
+		{
+			rc = DL_init();
+			rc->data = img_url;
+			rc->size = strlen(img_url);
+		}
+		else
+		{
+			free(img_url);
+			img_url=NULL;
+		}
             }
         }
     }
@@ -80,6 +88,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
         DL_add_to_list(r_list, result);
         return r_list;
     }
+
     char * search_begin = NULL;
     if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
     {
@@ -107,7 +116,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
                         ascii_strdown_modify(orig_artist,-1);
                         if(levenshtein_strcmp(orig_artist,artist) <= LV_MAX)
                         {
-                            GlyMemCache * dl = download_single(url,capo->s,NULL);
+                            GlyMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
                             if(dl != NULL)
                             {
                                 GlyMemCache * result = parse_cover_page(dl);

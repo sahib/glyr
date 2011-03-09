@@ -48,18 +48,18 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 // The rest is done for you quite automagically.
 GlyPlugin getwd_commands [] =
 {
-    {"cover" ,  "c",  (char*)GET_COVER,    false},
-    {"lyrics",  "l",  (char*)GET_LYRIC,    false},
-    {"photos",  "p",  (char*)GET_PHOTO,    false},
-    {"ainfo",   "a",  (char*)GET_AINFO,    false},
-    {"similiar","s",  (char*)GET_SIMILIAR, false},
-    {"review",  "r",  (char*)GET_REVIEW,   false},
+    {"cover" ,  "c",  (char*)GET_COVER,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"lyrics",  "l",  (char*)GET_LYRIC,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"photos",  "p",  (char*)GET_PHOTO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"ainfo",   "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"similiar","s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"review",  "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
 #ifdef USE_BOOKS
     /* Books was developed for private use     */
     /* You can enable it by defining USE_BOOKS */
-    {"books",   "b",  (char*)GET_BOOKS,    false},
+    {"books",   "b",  (char*)GET_BOOKS,    false, {NULL, NULL, NULL, false}, GRP_NONE},
 #endif
-    {NULL,   NULL, NULL,  42}
+    {NULL,   NULL, NULL,  42,                     {NULL, NULL, NULL, false}, GRP_NONE}
 };
 
 /*-----------------------------------------------*/
@@ -74,7 +74,7 @@ const char * Gly_version(void)
 /*-----------------------------------------------*/
 
 // Seperate method because va_arg struggles with function pointers
-int GlyOpt_dlcallback(GlyQuery * settings, void (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp)
+int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp)
 {
     if(settings)
     {
@@ -259,6 +259,15 @@ int GlyOpt_plugmax(GlyQuery * s, int plugmax)
 
 /*-----------------------------------------------*/
 
+int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck)
+{	
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->duplcheck = duplcheck;
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
 {
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -287,6 +296,13 @@ GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 }
 
 /*-----------------------------------------------*/
+
+const char * Gly_groupname_by_id(int ID)
+{
+	return grp_id_to_name(ID);
+}
+
+/*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 
@@ -312,6 +328,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
     glyrs->itemctr = 0;
+    glyrs->duplcheck = DEFAULT_DUPLCHECK;
     memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
 }
 
@@ -605,27 +622,27 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
                     c_arg++;
                 }
 
-                if(!strcasecmp(c_arg,GRPN_ALL))
+                if(!strcasecmp(c_arg, grp_id_to_name(GRP_ALL)))
                 {
                     glyr_register_group(what_pair,GRP_ALL,value);
                 }
-                else if(!strcasecmp(c_arg,GRPN_SAFE))
+                else if(!strcasecmp(c_arg, grp_id_to_name(GRP_SAFE)))
                 {
                     glyr_register_group(what_pair, GRP_SAFE,value);
                 }
-                else if(!strcasecmp(c_arg,GRPN_USFE))
+                else if(!strcasecmp(c_arg, grp_id_to_name(GRP_USFE)))
                 {
                     glyr_register_group(what_pair, GRP_USFE,value);
                 }
-                else if(!strcasecmp(c_arg,GRPN_SPCL))
+                else if(!strcasecmp(c_arg, grp_id_to_name(GRP_SPCL)))
                 {
                     glyr_register_group(what_pair, GRP_SPCL,value);
                 }
-                else if(!strcasecmp(c_arg,GRPN_FAST))
+                else if(!strcasecmp(c_arg, grp_id_to_name(GRP_FAST)))
                 {
                     glyr_register_group(what_pair,GRP_FAST,value);
                 }
-                else if(!strcasecmp(c_arg,GRPN_SLOW))
+                else if(!strcasecmp(c_arg, grp_id_to_name(GRP_SLOW)))
                 {
                     glyr_register_group(what_pair,GRP_SLOW,value);
                 }

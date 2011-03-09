@@ -1,3 +1,27 @@
+Glyr is both a library and a commandline tool to download various sorts of music related metadata.
+It was writte because the author was heavily annoyed by some musicplayers with broken or weird cover download.
+Therfore glyr can be used as a C library to provide routines to easily add features like cover/lyrics/photo download to your musicplayers.
+At the moment bindings are available for Ruby (and the wrapper class 'Glubyr'), but a SWIG interface file is provided which makes 
+writing bindings for other scripting languages very ease.
+
+Glyr's feature in a nutshell are:
+	- download of coverart / lyrics / similiar artists / album reviews / band related photos / artist information
+	- Always having more than fallback, and a hit rate of approx. 97% for coverdownload
+	- Portable: Windows and Linux are supported (Developement on Linux), if you like to port glyr to Mac OSX please drop me a note,
+	  There will be only minor to no changes on Mac OS X in the source..
+	- Fuzzy matching: Search providers with Levenshtein algorithm to eliminate typos
+	- Fast Download: libcurl is used internally, and sources are searched in parallel, unneeded data is not downloaded if possible.
+	- Almost no dependencies: Only libcurl.
+	- Download of a user defined amount of items, glyrc cover -a Foo -b Bar -n 30 loads 30 covers of 'Bar' by 'Foo'
+	- grouped download: Query providers by descending Accuray / Speed
+	- Optional download of images, URL is returned otherwise
+	- Uses prefereable Sources that provide a good API
+	- Check for duplicate URLs
+	- Licensed under the GPLv3
+
+glyrc is (note the 'c') the commandline interface to libglyr which can be used for example in bash scripts, or to tag your musicdb.
+The usage of the commandlin interface is descriped below... (also available via --usage)
+
 USAGE:
 	glyrc GETTER [OPTIONS...]
 

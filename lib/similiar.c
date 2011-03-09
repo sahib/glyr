@@ -55,6 +55,7 @@ static GlyCacheList * similiar_finalize(GlyCacheList * result, GlyQuery * settin
         if(settings->callback.download)
             settings->callback.download(result->list[i],settings);
 
+	result->list[i]->type = TYPE_SIMILIAR;
         DL_add_to_list(r_list,DL_copy(result->list[i]));
     }
     return r_list;

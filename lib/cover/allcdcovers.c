@@ -47,6 +47,7 @@ static GlyMemCache * get_cover_page(const char * url, GlyQuery * s)
 {
 	GlyMemCache * rt = NULL;
 	GlyMemCache * dl = download_single(url,s,NULL);
+
 	if(dl != NULL)
 	{
 		char * dl_link = strstr(dl->data,DOWNLOAD_BEGIN);

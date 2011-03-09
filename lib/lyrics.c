@@ -37,19 +37,24 @@
 #include "lyrics/lyrdb.h"
 #include "lyrics/metrolyrics.h"
 
+#define LATE "<div id='d_navigation'"
+#define DIRE "<!-- google_ad_section_start(weight=ignore) -->"
+#define VIPE "</td></tr></table>"
+#define DARE "<div class=\"note\">"
+
 // Add your's here
 GlyPlugin lyric_providers[] =
 {
 //  full name       key  coloredname    use?    parser callback           geturl callback         free url?
     {"lyricswiki",  "w", "lyricswiki",  false, {lyrics_lyricswiki_parse,  lyrics_lyricswiki_url,  NULL, false}, GRP_SAFE | GRP_FAST},
     {"lyr.db",      "d", "lyr.db",      false, {lyrics_lyrdb_parse,       lyrics_lyrdb_url,       NULL, false}, GRP_SAFE | GRP_FAST},
-    {"lyrix.at",    "a", "lyrix.at",    false, {lyrics_lyrixat_parse,     lyrics_lyrixat_url,     NULL, false}, GRP_SAFE | GRP_FAST},
-    {"magistrix",   "x", "magistrix",   false, {lyrics_magistrix_parse,   lyrics_magistrix_url,   NULL, false}, GRP_SAFE | GRP_FAST},
-    {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse,lyrics_directlyrics_url,NULL, true }, GRP_SAFE | GRP_FAST},
-    {"lyricsvip",   "v", "lyricsvip",   false, {lyrics_lyricsvip_parse,   lyrics_lyricsvip_url,   NULL, true }, GRP_SAFE | GRP_FAST},
-    {"songlyrics",  "s", "songlyrics",  false, {lyrics_songlyrics_parse,  lyrics_songlyrics_url,  NULL, true }, GRP_SAFE | GRP_FAST},
-    {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,  lyrics_darklyrics_url,  NULL, false}, GRP_SAFE | GRP_FAST},
-    {"metrolyrics", "m", "metrolyrics", false, {lyrics_metrolyrics_parse, lyrics_metrolyrics_url, NULL, false}, GRP_SAFE | GRP_FAST},
+    {"lyrix.at",    "a", "lyrix.at",    false, {lyrics_lyrixat_parse,     lyrics_lyrixat_url,     LATE, false}, GRP_SAFE | GRP_SLOW},
+    {"magistrix",   "x", "magistrix",   false, {lyrics_magistrix_parse,   lyrics_magistrix_url,   NULL, false}, GRP_USFE | GRP_FAST},
+    {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse,lyrics_directlyrics_url,DIRE, true }, GRP_SAFE | GRP_FAST},
+    {"lyricsvip",   "v", "lyricsvip",   false, {lyrics_lyricsvip_parse,   lyrics_lyricsvip_url,   VIPE, true }, GRP_USFE | GRP_FAST},
+    {"songlyrics",  "s", "songlyrics",  false, {lyrics_songlyrics_parse,  lyrics_songlyrics_url,  NULL, true }, GRP_SPCL | GRP_SLOW},
+    {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,  lyrics_darklyrics_url,  DARE, false}, GRP_SAFE | GRP_FAST},
+    {"metrolyrics", "m", "metrolyrics", false, {lyrics_metrolyrics_parse, lyrics_metrolyrics_url, NULL, false}, GRP_SPCL | GRP_SLOW},
     { NULL,         NULL, NULL,         false, {NULL,                     NULL,                   NULL, false}, GRP_NONE | GRP_NONE}
 };
 
@@ -71,6 +76,7 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
         dl->data = beautify_lyrics(result->list[i]->data);
         dl->size = strlen(dl->data);
         dl->dsrc = strdup(result->list[i]->dsrc);
+	dl->type = TYPE_LYRICS;
 
         // call user defined callback
         if(settings->callback.download)
