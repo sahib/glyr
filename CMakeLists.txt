@@ -51,7 +51,6 @@ set (DIR_ROOT      ${PROJECT_BINARY_DIR}/${SUBDIR_LIB}  )
 set (DIR_COVER     ${DIR_ROOT}/cover                    )
 set (DIR_LYRICS    ${DIR_ROOT}/lyrics                   )
 set (DIR_PHOTOS    ${DIR_ROOT}/photos                   )
-set (DIR_BOOKS     ${DIR_ROOT}/books                    )
 set (DIR_AINFO     ${DIR_ROOT}/ainfo                    )
 set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
 set (DIR_REVIEW    ${DIR_ROOT}/review                   )
@@ -61,7 +60,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/stringop.c"
 	"${DIR_ROOT}/ainfo.c"
-	"${DIR_ROOT}/books.c"
 	"${DIR_ROOT}/cover.c"
 	"${DIR_ROOT}/similiar.c"
 	"${DIR_ROOT}/lyrics.c"
@@ -91,8 +89,6 @@ SET(LIB_SOURCE_LOCATIONS
     	"${DIR_LYRICS}/lyricswiki.c"
     	"${DIR_PHOTOS}/flickr.c"
     	"${DIR_PHOTOS}/lastfm.c"
-    	"${DIR_BOOKS}/dnb.c"
-    	"${DIR_BOOKS}/kit.c"
 )
 
 ADD_DEFINITIONS( -fPIC )

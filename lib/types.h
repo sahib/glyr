@@ -232,7 +232,6 @@ enum GLYR_GET_TYPES
     GET_AINFO,
     GET_SIMILIAR,
     GET_REVIEW,
-    GET_BOOKS, // This should be removed
     GET_UNSURE
 };
 

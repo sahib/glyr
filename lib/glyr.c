@@ -32,7 +32,6 @@
 #include "cover.h"
 #include "lyrics.h"
 #include "photos.h"
-#include "books.h"
 #include "ainfo.h"
 #include "similiar.h"
 #include "review.h"
@@ -54,11 +53,6 @@ GlyPlugin getwd_commands [] =
     {"ainfo",   "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"similiar","s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"review",  "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
-#ifdef USE_BOOKS
-    /* Books was developed for private use     */
-    /* You can enable it by defining USE_BOOKS */
-    {"books",   "b",  (char*)GET_BOOKS,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-#endif
     {NULL,   NULL, NULL,  42,                     {NULL, NULL, NULL, false}, GRP_NONE}
 };
 
@@ -435,9 +429,6 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
     case GET_PHOTO:
         result = get_photos(settings);
         break;
-    case GET_BOOKS:
-        result = get_books(settings);
-        break;
     case GET_AINFO:
         result = get_ainfo(settings);
         break;
@@ -508,8 +499,6 @@ GlyPlugin * Gly_get_provider_by_id(int ID)
         return glyr_get_lyric_providers();
     case GET_PHOTO:
         return glyr_get_photo_providers();
-    case GET_BOOKS:
-        return glyr_get_books_providers();
     case GET_AINFO:
         return glyr_get_ainfo_providers();
     case GET_SIMILIAR:

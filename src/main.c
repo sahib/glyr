@@ -816,9 +816,6 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
     case GET_PHOTO:
         m_path = path_photos(s,sd,iter);
         break;
-    case GET_BOOKS:
-        m_path = path_books(s,sd,iter);
-        break;
     case GET_AINFO:
         m_path = path_ainfo(s,sd,iter);
         break;
