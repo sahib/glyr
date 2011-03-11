@@ -236,7 +236,8 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stdout,_S _S"$dir/$artist_similiar_$num.txt\n");
     glyr_message(-1,s,stdout,_S _S"$dir/$artist_$album_review_$num.txt\n");
     glyr_message(-1,s,stdout,C_B"\nAUTHOR\n"C_);
-    glyr_message(-1,s,stdout,_S"See the AUTHORS file that comes in glyr's distribution.\n");
+    glyr_message(-1,s,stdout,_S"(C) Christopher Pahl - 2011\n");
+    glyr_message(-1,s,stdout,_S"See the AUTHORS file that comes in glyr's distribution for a complete list.\n");
     glyr_message(-1,s,stdout,_S"See also COPYING to know about your rights.\n");
     glyr_message(-1,s,stdout,_S"\n");
 
@@ -432,8 +433,8 @@ void help_short(GlyQuery * s)
 	
 	#define IN "\t"
 	glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
-        IN"-f --from  <s>        Providers from where to get metadata. Refer to the list in --usage.\n"
-        IN"-w --write <d>        Write metadata to <d>, special values stdout, stderr and null are supported\n"
+        IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
+        IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
         IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
         IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"    
         IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"  
@@ -453,8 +454,27 @@ void help_short(GlyQuery * s)
         IN"-a --artist           Artist name (Used by all plugins)\n"
         IN"-b --album            Album name (Used by cover,review,lyrics)\n"
         IN"-t --title            Songname (used mainly by lyrics)\n"
-	"\n"
+        IN"-n --number           Download max. <n> items. Amount of actual downloaded items may vary.\n"
+        IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
+        IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
+        IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
+	"\nList of providers:\n"
 	);
+	
+	glyr_message(-1,s,stderr,"\n"IN"# cover:\n");
+        list_provider_at_id(GET_COVER,13,s);
+	glyr_message(-1,s,stderr,"\n"IN"# lyrics:\n");
+        list_provider_at_id(GET_LYRIC,13,s);
+	glyr_message(-1,s,stderr,"\n"IN"# photos:\n");
+        list_provider_at_id(GET_PHOTO,13,s);
+	glyr_message(-1,s,stderr,"\n"IN"# review:\n");
+        list_provider_at_id(GET_REVIEW,13,s);
+	glyr_message(-1,s,stderr,"\n"IN"# similiar:\n");
+        list_provider_at_id(GET_SIMILIAR,13,s);
+	glyr_message(-1,s,stderr,"\n"IN"# ainfo:\n");
+        list_provider_at_id(GET_AINFO,13,s);
+
+        glyr_message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
 	exit(EXIT_FAILURE);
 }
@@ -754,21 +774,6 @@ static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_books(GlyQuery *s, const char * save_dir, int i)
-{
-    char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s/%s_book_%d.txt",save_dir, good_artist,i);
-
-    if(good_artist)
-        free(good_artist);
-
-    return good_path;
-}
-
-/* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
 static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
@@ -784,11 +789,11 @@ static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_review(GlyQuery *s, const char * save_dir, int i)
+static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const char * type)
 {
     char * good_artist = correct_path(s->artist);
     char * good_album  = correct_path(s->album );
-    char * good_path   = strdup_printf("%s/%s_%s_review_%d.txt",save_dir,good_artist,good_album,i);
+    char * good_path   = strdup_printf("%s/%s_%s_%s_%d.txt",save_dir,good_artist,good_album,type,i);
 
     if(good_artist)
         free(good_artist);
@@ -798,6 +803,19 @@ static char * path_review(GlyQuery *s, const char * save_dir, int i)
     return good_path;
 }
 
+/* --------------------------------------------------------- */
+// --------------------------------------------------------- //
+/* --------------------------------------------------------- */
+
+static char * path_review(GlyQuery *s, const char * save_dir, int i)
+{
+     return path_album_artist(s,save_dir,i,"review");
+}
+
+static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
+{
+     return path_album_artist(s,save_dir,i,"track");	
+}
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
@@ -824,6 +842,10 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
         break;
     case GET_REVIEW:
         m_path = path_review(s,sd,iter);
+	break;
+    case GET_TRACKLIST:
+	m_path = path_tracklist(s,sd,iter);
+	break;
     }
     return m_path;
 }
@@ -839,9 +861,7 @@ static int cb(GlyMemCache * c, GlyQuery * s)
     // a cache is 'ready' (i.e. ready for return)
     // See the glyr_set_dl_callback for more info
     // a custom pointer is in s->user_pointer
-
-    // return GLYRE_STOP_BY_CB;
-    return GLYRE_OK;
+    return (c && s) ? GLYRE_OK : GLYRE_STOP_BY_CB;
 }
 
 int main(int argc, char * argv[])
@@ -853,6 +873,7 @@ int main(int argc, char * argv[])
         GlyQuery my_query;
         // glyr's control struct
         Gly_init_query(&my_query);
+	GlyOpt_verbosity(&my_query,2);
 
         // Set the type..
         if(!set_get_type(&my_query, argv[1]))
@@ -875,7 +896,7 @@ int main(int argc, char * argv[])
         // Check if files do already exist
         bool file_exist = false;
 
-        size_t iter = 0;
+        int iter = 0;
         for(iter = 0; iter < my_query.number; iter++)
         {
             size_t j = 0;
@@ -897,8 +918,6 @@ int main(int argc, char * argv[])
 
         // Set (example) callback
         GlyOpt_dlcallback(&my_query, cb, NULL);
-
-        size_t frec = my_query.number;
         if(my_query.type != GET_UNSURE)
         {
             if(!file_exist)

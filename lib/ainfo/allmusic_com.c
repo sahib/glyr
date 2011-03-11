@@ -19,8 +19,6 @@
 **************************************************************/
 #include <stdlib.h>
 #include <string.h>
-
-#include "../core.h"
 #include "../stringop.h"
 #include "../core.h"
 #include "../glyr.h"
@@ -35,7 +33,6 @@ const char * ainfo_allmusic_url(GlyQuery * s)
 
 GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
 {
-
     GlyMemCache * rche = NULL;
     char * text_begin = strstr(to_parse->data,IMG_BEGIN);
     if(text_begin != NULL)

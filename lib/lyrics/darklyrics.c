@@ -22,8 +22,6 @@
 #include <stdbool.h>
 
 #include "darklyrics.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -49,11 +47,11 @@ GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
     char *searchstring = strdup_printf(". %s%s",capo->s->title,"</a></h3>");
     if(searchstring)
     {
-        ascii_strdown_modify(searchstring,-1);
+        ascii_strdown_modify(searchstring);
         char *cache_copy = strdup(capo->cache->data);
         if(cache_copy)
         {
-            ascii_strdown_modify(cache_copy,-1);
+            ascii_strdown_modify(cache_copy);
             char *head = strstr(cache_copy,searchstring);
             if(head)
             {

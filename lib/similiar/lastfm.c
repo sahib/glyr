@@ -22,13 +22,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <string.h>
 
 #include "lastfm.h"
-
 #include "../cover.h"
 #include "../stringop.h"
-#include "../core.h"
 #include "../core.h"
 
 #define API_KEY API_KEY_LASTFM

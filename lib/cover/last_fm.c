@@ -22,13 +22,10 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <string.h>
-
 #include "last_fm.h"
 
 #include "../cover.h"
 #include "../stringop.h"
-#include "../core.h"
 #include "../core.h"
 
 #define API_KEY API_KEY_LASTFM
@@ -45,8 +42,8 @@ const char * cover_lastfm_url(GlyQuery * sets)
 GlyCacheList * cover_lastfm_parse(cb_object *capo)
 {
     // Handle size requirements (Default to large)
-    char *tag_ssize = NULL ;
-    char *tag_esize = "</image>";
+    const char *tag_ssize = NULL ;
+    const char *tag_esize = "</image>";
 
     // find desired size
     if( size_is_okay(300,capo->s->cover.min_size,capo->s->cover.max_size) )

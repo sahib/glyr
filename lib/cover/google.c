@@ -24,13 +24,11 @@
 #include <string.h>
 
 #include "google.h"
-
 #include "../core.h"
 #include "../stringop.h"
 
 #define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="
 #define END_OF_URL   "&imgrefurl="
-
 const char * cover_google_url(GlyQuery * sets)
 {
     const char * lang = NULL;

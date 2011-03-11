@@ -65,13 +65,13 @@ static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings
 GlyCacheList * get_review(GlyQuery * settings)
 {
     GlyCacheList * result = NULL;
-    if(settings && settings->artist)
+    if(settings && settings->artist && settings->album)
     {
         result = register_and_execute(settings, review_finalize);
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to find similiar artist (o rly?).\n");
+        glyr_message(2,settings,stderr,C_R"* "C_"Artist and album is needed to retrieve reviews (o rly?).\n");
     }
     return result;
 }

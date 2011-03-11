@@ -22,8 +22,6 @@
 #include <stdbool.h>
 
 #include "lyricswiki.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -46,15 +44,15 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
         char * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
         if(tmp_artist)
         {
-            ascii_strdown_modify(tmp_artist,-1);
+            ascii_strdown_modify(tmp_artist);
             char * tmp_title  = copy_value(to_title, strstr(to_title ,"</song>" ));
             if(tmp_title)
             {
-                ascii_strdown_modify(tmp_title,-1);
-                char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo->s->artist),-1);
+                ascii_strdown_modify(tmp_title);
+                char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo->s->artist));
                 if(cmp_a)
                 {
-                    char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title),-1);
+                    char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title));
                     if(cmp_t)
                     {
                         if( ( levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= LV_MAX_DIST)

@@ -74,7 +74,7 @@ extern "C"
     const char * Gly_version(void);
 
     // print method that works with verbosity
-    int Gly_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
+    int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 
     // get information about available plugins
     GlyPlugin * Gly_get_provider_by_id(int ID);

@@ -22,8 +22,6 @@
 #include <stdbool.h>
 
 #include "lastfm.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 

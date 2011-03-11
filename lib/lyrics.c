@@ -65,6 +65,7 @@ GlyPlugin * glyr_get_lyric_providers(void)
 
 static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings)
 {
+    // no cleanup needs to be done
     if(!result) return NULL;
 
     GlyCacheList * lst = DL_new_lst();
@@ -80,8 +81,9 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
 
         // call user defined callback
         if(settings->callback.download)
-            settings->callback.download(result->list[i],settings);
-
+	{
+            settings->callback.download(dl,settings);
+        }
         DL_add_to_list(lst,dl);
     }
     return lst;

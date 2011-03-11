@@ -40,6 +40,9 @@
 #define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
 #define ALLCDCOVERSC C_G"all"C_Y"cd"C_B"covers"
 
+#define ALBE "<div id=\"pagination\""
+#define COLE "<div id=\"footer\">"
+
 // Add yours here.
 GlyPlugin cover_providers[] =
 {
@@ -48,10 +51,10 @@ GlyPlugin cover_providers[] =
     {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     NULL, false}, GRP_SAFE | GRP_FAST},
     {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, NULL, false}, GRP_SAFE | GRP_FAST},
     {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     NULL, true }, GRP_USFE | GRP_FAST},
-    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   "<div id=\"pagination\"", false}, GRP_USFE | GRP_FAST},
+    {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   ALBE, false}, GRP_USFE | GRP_FAST},
     {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    NULL, false}, GRP_USFE | GRP_SLOW},
     {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   NULL, false}, GRP_SPCL | GRP_SLOW},
-    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  "<div id=\"footer\">", false}, GRP_SPCL | GRP_FAST},
+    {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  COLE, false}, GRP_SPCL | GRP_FAST},
 //  {"allcdcovers","o", ALLCDCOVERSC,         false, {cover_allcdcovers_parse, cover_allcdcovers_url,NULL, false}, GRP_USFE | GRP_SLOW},
     { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
@@ -59,10 +62,10 @@ GlyPlugin cover_providers[] =
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
-            (min == -1 && max >= sZ) ||
-            (min <= sZ && max == -1) ||
-            (min <= sZ && max >= sZ)  )
-        return true;
+       (min == -1 && max >= sZ) ||
+       (min <= sZ && max == -1) ||
+       (min <= sZ && max >= sZ)  )
+       return true;
 
     return false;
 }

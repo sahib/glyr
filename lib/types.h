@@ -60,7 +60,7 @@
 #define DEFAULT_PARALLEL 4L
 #define DEFAULT_CMINSIZE 125
 #define DEFAULT_CMAXSIZE -1
-#define DEFAULT_VERBOSITY 2
+#define DEFAULT_VERBOSITY 0
 #define DEFAULT_NUMBER 1
 #define DEFAULT_PLUGMAX -1
 #define DEFAULT_LANG "en"
@@ -126,8 +126,8 @@ typedef struct GlyMemCache
     char  *data;   // data buffer
     size_t size;   // Size of data
     char  *dsrc;   // Source of data
-    int   error;   // error code - internal use only
     int   type;    // type of metadata
+    int   error;   // error code - internal use only
 } GlyMemCache;
 
 // list of GlyMemCaches
@@ -186,7 +186,7 @@ typedef struct GlyQuery
     bool duplcheck;
 
     // language settings (for amazon / google / last.fm)
-    char * lang;
+    const char * lang;
 
     // count of dl'd items, starting from 0
     int itemctr;
@@ -216,7 +216,7 @@ typedef struct GlyPlugin
         // Passed to the corresponding cb_object and is called...perhaps
         GlyCacheList * (* parser_callback) (struct cb_object *);
         const char *   (* url_callback)    (GlyQuery  *);
-	char *  endmarker; // Stop download if containing this string
+	const char *  endmarker; // Stop download if containing this string
         bool free_url; // pass result of url_callback to free()?
     } plug;
 
@@ -232,9 +232,12 @@ enum GLYR_GET_TYPES
     GET_AINFO,
     GET_SIMILIAR,
     GET_REVIEW,
+    GET_TRACKLIST,
     GET_UNSURE
 };
 
+// This is not a duplicate of GLYR_GET_TYPE
+// (more to follow)
 enum GLYR_DATA_TYPE
 {
     TYPE_NOIDEA,
@@ -243,7 +246,8 @@ enum GLYR_DATA_TYPE
     TYPE_PHOTOS,
     TYPE_COVER,
     TYPE_AINFO,
-    TYPE_SIMILIAR
+    TYPE_SIMILIAR,
+    TYPE_TRACK
 };
 
 #endif

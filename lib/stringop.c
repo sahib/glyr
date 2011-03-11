@@ -114,21 +114,20 @@ int levenshtein_strcmp(const char * s, const char * t)
 
 /* ------------------------------------------------------------- */
 
-char * ascii_strdown(const char * string, size_t len)
+char * ascii_strdown(const char * string)
 {
-    return (char*)((string) ? ascii_strdown_modify(strdup(string),len) : NULL);
+    return (char*)((string) ? ascii_strdown_modify(strdup(string)) : NULL);
 }
 
 /* ------------------------------------------------------------- */
 
 // Like ascii_strdown, but does modify buffer in place
-char * ascii_strdown_modify(char * string, size_t len)
+char * ascii_strdown_modify(char * string)
 {
     if(string)
     {
-        size_t i   = 0;
-        size_t men = (len>=0) ? strlen(string):len;
-        for(i = 0; i < men; i++)
+        size_t i = 0,len = strlen(string);
+        for(i = 0; i < len; i++)
             string[i] = tolower(string[i]);
     }
     return string;
@@ -241,7 +240,7 @@ static char * prepare_string(const char * in)
     char * result = NULL;
     if(in)
     {
-        char * d1 = ascii_strdown(in,-1);
+        char * d1 = ascii_strdown(in);
         if(d1)
         {
             char * c1 = curl_easy_escape(NULL,d1,0);
@@ -300,8 +299,7 @@ char* escape_slashes(const char* in)
 {
     if (!in) return NULL;
 
-    int i = 0;
-    size_t len = strlen(in);
+    size_t i = 0,len = strlen(in);
     char *out = malloc(len+1);
 
     for (; i < len+1; i++)
@@ -675,7 +673,7 @@ char * strip_html_unicode(const char * string)
 
     while (*p)
     {
-        char *sub = " ";
+        char *sub = (char*)" ";
         is_uc = false;
 
         if (*p == '&')
@@ -729,8 +727,8 @@ char * remove_html_tags_from_string(const char * string, size_t len)
         return NULL;
     }
 
-    size_t iLen = (len>0) ? len : strlen(string);
-    int i = 0, flag = 1, x = 0;
+    size_t i = 0,iLen = (len>0) ? len : strlen(string);
+    int flag = 1, x = 0;
 
     char * new = malloc(iLen + 1);
 
@@ -762,9 +760,7 @@ char * beautify_lyrics(const char * lyrics)
 
         if(unicode)
         {
-            size_t len   = strlen(unicode);
-            int i = 0, j = 0;
-
+            size_t i,j,len   = strlen(unicode);
             for(i = 0; i < len; i++)
             {
                 int tlen = 0;
@@ -867,16 +863,13 @@ char * copy_value(const char * begin, const char * end)
     if(begin && end)
     {
         size_t length = end - begin;
-	if(length >= 0)
-	{
-            char * buffer = malloc(length+1);
-            if(buffer)
-            {
-                strncpy(buffer,begin,length);
-                buffer[length] = '\0';
-            }
-            return buffer;
-	}
+        char * buffer = malloc(length+1);
+        if(buffer)
+        {
+	    strncpy(buffer,begin,length);
+	    buffer[length] = '\0';
+        }
+    return buffer;
     }
     return NULL;
 }

@@ -31,10 +31,10 @@ const char * lyrics_songlyrics_url(GlyQuery * settings)
     char * url = NULL;
     if(settings && settings->artist && settings->title)
     {
-        char * esc_a = ascii_strdown(settings->artist,-1);
+        char * esc_a = ascii_strdown(settings->artist);
         if(esc_a)
         {
-            char * esc_t = ascii_strdown(settings->title,-1);
+            char * esc_t = ascii_strdown(settings->title);
             if(esc_t)
             {
                 char * rep_a = strreplace(esc_a," ","-");

@@ -23,6 +23,7 @@
 
 #include "amazon.h"
 
+// util
 #include "../core.h"
 #include "../stringop.h"
 
@@ -44,7 +45,6 @@ GlyCacheList * cover_albumart_parse(cb_object * capo)
     if(node)
     {
         size_t size_it = 2;
-
         if(capo->s->cover.max_size < 450 && capo->s->cover.max_size != -1 && capo->s->cover.min_size < 160)
         {
             size_it = 1;

@@ -27,8 +27,6 @@
 
 #include "../stringop.h"
 #include "../core.h"
-#include "../core.h"
-
 
 const char * cover_lyricswiki_url(GlyQuery * sets)
 {
@@ -63,7 +61,7 @@ GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
     char *tmp = strreplace(capo->s->album," ","_");
     if(tmp)
     {
-        char *_album = ascii_strdown(tmp,-1);
+        char *_album = ascii_strdown(tmp);
         if(_album)
         {
             // Go through all names and compare them with Levenshtein
@@ -87,7 +85,7 @@ GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
                             name[ll] = '\0';
 
                     // Compare only lower case strings...
-                    char * down_name = ascii_strdown(name,-1);
+                    char * down_name = ascii_strdown(name);
                     if(down_name)
                     {
                         // Allow max. 2 'typos'

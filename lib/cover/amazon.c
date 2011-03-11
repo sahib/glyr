@@ -25,7 +25,6 @@
 
 #include "../core.h"
 #include "../stringop.h"
-#include "../core.h"
 #include "../glyr.h"
 
 // Example snippet of what we parse:
@@ -53,20 +52,6 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 <Height Units="pixels">455</Height>
 <Width Units="pixels">455</Width>
 </LargeImage>
-
-***/
-
-
-/***
-
-Country settings:
-
-0) US
-1) Canada
-2) UK
-3) France
-4) Germany
-5) Japan
 
 ***/
 
@@ -106,12 +91,11 @@ const char * cover_amazon_url(GlyQuery * sets)
 
 GlyCacheList * cover_amazon_parse(cb_object *capo)
 {
-    char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
-                      (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
-                      (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
-                      (MAX(150) && MIN(70)) ? "<MediumImage>" :
-                      "<LargeImage>"  ;
-
+    const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
+                            (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
+                            (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
+                            (MAX(150) && MIN(70)) ? "<MediumImage>" :
+                            "<LargeImage>"  ;
 #undef MAX
 #undef MIN
 
@@ -124,7 +108,6 @@ GlyCacheList * cover_amazon_parse(cb_object *capo)
         /* Next two XML tags not relevant */
         nextTag(find);
         nextTag(find);
-
         char * endTag = NULL;
         if( (endTag = strstr(find, "</URL>")) != NULL)
         {

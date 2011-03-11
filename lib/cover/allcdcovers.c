@@ -22,7 +22,6 @@
 #include <string.h>
 
 #include "allcdcovers.h"
-
 #include "../core.h"
 #include "../stringop.h"
 

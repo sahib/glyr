@@ -54,6 +54,7 @@ set (DIR_PHOTOS    ${DIR_ROOT}/photos                   )
 set (DIR_AINFO     ${DIR_ROOT}/ainfo                    )
 set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
 set (DIR_REVIEW    ${DIR_ROOT}/review                   )
+set (DIR_TRACKLIST ${DIR_ROOT}/tracklist                )
 
 SET(LIB_SOURCE_LOCATIONS 
 	"${DIR_ROOT}/glyr.c"
@@ -65,9 +66,11 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/lyrics.c"
 	"${DIR_ROOT}/photos.c"
 	"${DIR_ROOT}/review.c"
+	"${DIR_ROOT}/tracklist.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_SIMILIAR}/lastfm.c"
+	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_COVER}/last_fm.c"
 	"${DIR_COVER}/google.c"
@@ -91,7 +94,7 @@ SET(LIB_SOURCE_LOCATIONS
     	"${DIR_PHOTOS}/lastfm.c"
 )
 
-ADD_DEFINITIONS( -fPIC )
+ADD_DEFINITIONS( -Wall -Winline -W -Wwrite-strings -Werror -Wno-unused-parameter )
 
 # go on with subdirs
 ADD_SUBDIRECTORY( ${SUBDIR_LIB}  )

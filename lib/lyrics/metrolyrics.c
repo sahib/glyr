@@ -29,7 +29,6 @@
 
 // extended string lib
 #include "../core.h"
-#include "../core.h"
 #include "../stringop.h"
 
 // Search URL
@@ -77,7 +76,7 @@ static bool approve_content(char * content, const char * compare)
         char * tmp = strdup(compare);
         if(tmp)
         {
-            if(levenshtein_strcmp(ascii_strdown_modify(plain,-1),ascii_strdown_modify(tmp,-1)) <= LEVEN_TOLERANCE)
+            if(levenshtein_strcmp(ascii_strdown_modify(plain),ascii_strdown_modify(tmp)) <= LEVEN_TOLERANCE)
                 result = true;
 
             free(tmp);

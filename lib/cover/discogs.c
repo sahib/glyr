@@ -24,8 +24,6 @@
 #include <string.h>
 
 #include "discogs.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 

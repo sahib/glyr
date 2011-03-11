@@ -35,6 +35,7 @@
 #include "ainfo.h"
 #include "similiar.h"
 #include "review.h"
+#include "tracklist.h"
 
 #include "config.h"
 
@@ -47,13 +48,14 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 // The rest is done for you quite automagically.
 GlyPlugin getwd_commands [] =
 {
-    {"cover" ,  "c",  (char*)GET_COVER,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"lyrics",  "l",  (char*)GET_LYRIC,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"photos",  "p",  (char*)GET_PHOTO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"ainfo",   "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"similiar","s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"review",  "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {NULL,   NULL, NULL,  42,                     {NULL, NULL, NULL, false}, GRP_NONE}
+    {"cover" ,   "c",  (char*)GET_COVER,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"lyrics",   "l",  (char*)GET_LYRIC,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"photos",   "p",  (char*)GET_PHOTO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"ainfo",    "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"similiar", "s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"review",   "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"tracklist","r",  (char*)GET_TRACKLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {NULL,   NULL, NULL,  42,                      {NULL, NULL, NULL, false}, GRP_NONE}
 };
 
 /*-----------------------------------------------*/
@@ -438,6 +440,9 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
     case GET_REVIEW:
         result = get_review(settings);
         break;
+    case GET_TRACKLIST:
+	result =  get_tracklist(settings);
+	break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
@@ -505,6 +510,8 @@ GlyPlugin * Gly_get_provider_by_id(int ID)
         return glyr_get_similiar_providers();
     case GET_REVIEW:
         return glyr_get_review_providers();
+    case GET_TRACKLIST:
+	return glyr_get_tracklist_providers();
     case -1       :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :

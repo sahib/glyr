@@ -21,10 +21,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <string.h>
-
 #include "allmusic_com.h"
-
 #include "../stringop.h"
 #include "../core.h"
 
@@ -114,9 +111,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
                     char * orig_artist = strdup(capo->s->artist);
                     if(orig_artist)
                     {
-                        ascii_strdown_modify(artist,-1);
-                        ascii_strdown_modify(orig_artist,-1);
-                        if(levenshtein_strcmp(orig_artist,artist) <= LV_MAX)
+                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= LV_MAX)
                         {
                             char * review_url = strdup_printf("%s/review",url);
                             if(review_url)

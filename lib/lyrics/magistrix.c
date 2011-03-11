@@ -19,10 +19,7 @@
 **************************************************************/
 #include <stdlib.h>
 #include <string.h>
-
 #include "magistrix.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -67,7 +64,7 @@ static bool approve_content(char * content, const char * compare)
     if(compare)
     {
         char * tmp = strdup(compare);
-        if(levenshtein_strcmp(ascii_strdown_modify(content,-1),ascii_strdown_modify(tmp,-1)) <= LV_MAX_DIST)
+        if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= LV_MAX_DIST)
         {
             free(tmp);
             return true;

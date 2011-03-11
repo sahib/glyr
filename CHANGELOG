@@ -17,4 +17,6 @@ Use the github page to view the automated git generated brother.
 + added ability to stop searchengine by returning GLYRE_STOP_BY_CB in callback
 + Fixed a bug when using the google plugin and -D
 + Fixed google (and other) returning 404 Pages
++ Added 'tracklist' getter
++ Fixed all warnings occuring with highger warn level (Default now)
 

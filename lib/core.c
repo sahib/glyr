@@ -100,7 +100,8 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...)
 static int DL_usleep(long usec)
 {
 #ifndef WIN32 // posix
-    struct timespec req= { 0 };
+    struct timespec req;
+    memset(&req,0,sizeof(struct timespec));
     time_t sec = (int) (usec / 1e6L);
 
     usec = usec - (sec*1e6L);
@@ -189,7 +190,8 @@ void DL_free(GlyMemCache *cache)
             cache->dsrc   = NULL;
         }
 
-        cache->size   = 0;
+        cache->size = 0;
+	cache->type = TYPE_NOIDEA; 
 
         free(cache);
         cache = NULL;
@@ -299,13 +301,6 @@ void DL_free_container(GlyCacheList * c)
 
 /*--------------------------------------------------------*/
 
-// Check header - This currently not used
-size_t internal_header_function( void *ptr, size_t size, size_t nmemb, void *userdata)
-{
-	glyr_message(-1,NULL,stderr,"Header:\n%s\n",(char*)ptr);
-	return size * nmemb;
-}
-
 // Init an easyhandler with all relevant options
 static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery * s, void * magic_private_ptr, long timeout)
 {
@@ -332,7 +327,6 @@ static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery 
 
     // Do not download 404 pages
     curl_easy_setopt(eh, CURLOPT_FAILONERROR, 1L);
-   // curl_easy_setopt(eh, CURLOPT_HEADERFUNCTION, internal_header_function);
 
     // Discogs equires gzip compression
     curl_easy_setopt(eh, CURLOPT_ENCODING,"gzip");
@@ -700,7 +694,8 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                             glyr_message(3,s,stderr,"Tried sources: %d (of max. %d) | Buffers in line: %d\n",n_sources,s->number,result_lst->size);
 
                             // Are we finally done?
-                            if((capo->batch && cl->usersig == GLYRE_STOP_BY_CB) ||n_sources >= CNT || (!capo->batch ? s->number <= s->itemctr : s->number <= result_lst->size))
+                            if((capo->batch && cl->usersig == GLYRE_STOP_BY_CB) || n_sources >= CNT ||
+			      (!capo->batch ? s->number <= s->itemctr : s->number <= (int)result_lst->size))
                             {
                                 do_exit = true;
                             }
@@ -786,7 +781,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 
     // erase "downloading [.] message"
     if(oblist[0].batch) glyr_message(2,s,stderr,"%-25c\n",1);
-    int I = 0;
+    size_t I = 0;
     for(I = 0; I < Counter; I++)
     {
         DL_free(oblist[I].cache);
@@ -938,7 +933,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
 		}
 
 		// Free URLs that have been allocated, but not used
-		int I = 0;
+		size_t I = 0;
 		for(I = 0; I < plugCtr; I++)
 		{
 			if(visitList[I]==false && URLContainer[I].url)

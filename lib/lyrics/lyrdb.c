@@ -19,10 +19,7 @@
 **************************************************************/
 #include <stdlib.h>
 #include <string.h>
-
 #include "lyrdb.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -52,7 +49,7 @@ GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
                 {
                     char *buffer = malloc(new_cache->size+1);
 
-                    int i;
+                    size_t i;
                     for(i=0; i < new_cache->size; i++)
                         buffer[i] = (new_cache->data[i] == '\r') ? ' ' : new_cache->data[i];
 

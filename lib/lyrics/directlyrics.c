@@ -21,8 +21,6 @@
 #include <string.h>
 
 #include "directlyrics.h"
-
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 
@@ -34,10 +32,10 @@ const char * lyrics_directlyrics_url(GlyQuery * settings)
 {
     char * url   = NULL;
 
-    char * esc_a = ascii_strdown(settings->artist,-1);
+    char * esc_a = ascii_strdown(settings->artist);
     if(esc_a)
     {
-        char * esc_t = ascii_strdown(settings->title, -1);
+        char * esc_t = ascii_strdown(settings->title);
         if(esc_t)
         {
             char * rep_a = strreplace(esc_a," ","-");

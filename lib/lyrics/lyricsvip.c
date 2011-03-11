@@ -20,10 +20,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
 #include "lyricsvip.h"
 
-#include "../core.h"
 #include "../core.h"
 #include "../stringop.h"
 

@@ -1,24 +1,36 @@
-
 Ideas:
 ------
 - Musicbrainz!
+
+Has
+- labels x
+- artists 
+- releases
+- tracks!
+
+Could:
+- tracklist
+- albumlist
+- review pages.. (at least the links.)
+
+
+- get_type_to_string()
 - type member in GlyMemcache 
   - mostly implemented
   - COVER_BACK, COVER_FRONT.. etc. still missing
 
 - new plugins (wikipedia for ainfo - clementine)
 - at least two more review plugins
-- colors for Win32
-- check header for content type..
+- relation getter
+- photo:discogs
+- ainfo:discogs
 
 Missing:
 --------
 - ainfo with correct formatting, perhaps also review
 - More documentation!
-- short help (in work)
 - making plugins that share code (clean up the mess..)
 - Ensure legality (and add a legal note somewhere)
-- Check if min/max works correct
-- remove books (seperatze branch)
 - example.c
 - photos:google
+- content check via Header content type

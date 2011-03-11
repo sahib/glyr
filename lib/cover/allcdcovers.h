@@ -22,8 +22,7 @@
 #define C_ALLCDCOVERS_H
 
 #include "../core.h"
-
-const char * cover_allcdcovers_url(GlyQuery * sets);
+const char   * cover_allcdcovers_url(GlyQuery * sets);
 GlyCacheList * cover_allcdcovers_parse(cb_object * capo);
 
 #endif
