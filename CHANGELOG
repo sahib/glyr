@@ -22,6 +22,7 @@ Use the github page to view the automated git generated brother.
 
 2011/03/13
 ----------
++ Added examplce.c
 + Removed alldcovers plugin (they have good image, but don't allow API usage for library and desktop applications it seems :-( )
 + Added format check for image plugins. Almost 100% success (== valid images) with this check now
 + Added option (C API) to configure levenshtein fuzzyness
