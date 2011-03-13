@@ -33,7 +33,6 @@
 
 // Search URL
 #define ML_URL "http://www.metrolyrics.com/search.php?search=%artist%+%title%&category=artisttitle"
-#define LEVEN_TOLERANCE 4
 #define MAX_TRIES 5
 
 // Just return URL
@@ -67,7 +66,7 @@ static GlyMemCache * parse_lyrics_page(const char * buffer)
     return result;
 }
 
-static bool approve_content(char * content, const char * compare)
+static bool approve_content(char * content, const char * compare, size_t fuzz)
 {
     bool result = false;
     char * plain = beautify_lyrics(content); // cheap & well working ;-)
@@ -76,7 +75,7 @@ static bool approve_content(char * content, const char * compare)
         char * tmp = strdup(compare);
         if(tmp)
         {
-            if(levenshtein_strcmp(ascii_strdown_modify(plain),ascii_strdown_modify(tmp)) <= LEVEN_TOLERANCE)
+            if(levenshtein_strcmp(ascii_strdown_modify(plain),ascii_strdown_modify(tmp)) <= fuzz)
                 result = true;
 
             free(tmp);
@@ -111,7 +110,7 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
                     char * title = copy_value(title_beg+strlen(NODE_ENDIN),title_end);
                     if(title)
                     {
-                        if(approve_content(title,capo->s->title))
+                        if(approve_content(title,capo->s->title,capo->s->fuzzyness))
                         {
                             char * url = copy_value(node+strlen(NODE_BEGIN),title_beg);
                             if(url)

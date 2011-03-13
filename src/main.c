@@ -349,7 +349,7 @@ static void search_similiar_providers(const char * providers, GlyQuery * s)
             name=NULL;
         }
 
-        glyr_message(2,s,stderr,"Must be one of:\n");
+        glyr_message(2,s,stderr,C_R"* "C_"Must be one of:\n");
         list_provider_at_id(s->type,15,s);
         glyr_message(2,s,stderr,"\n");
 

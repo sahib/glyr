@@ -44,9 +44,6 @@ const char * cover_allmusic_url(GlyQuery * s)
 // artist
 #define ARTIST_PART "<td>"
 #define ARTIST_END  "</td>"
-
-#define LV_MAX 3
-
 #define IMG_BEGIN "<div class=\"image\"> <img src=\""
 #define IMG_ENDIN "\" alt=\""
 
@@ -112,7 +109,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
                     char * orig_artist = strdup(capo->s->artist);
                     if(orig_artist)
                     {
-                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= LV_MAX)
+                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= capo->s->fuzzyness)
                         {
                             GlyMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
                             if(dl != NULL)

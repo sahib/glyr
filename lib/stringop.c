@@ -43,7 +43,7 @@
 // For instructions go to http://www.merriampark.com/ld.htm
 // They have also Source code in C++, Java & VB
 
-int levenshtein_strcmp(const char * s, const char * t)
+size_t levenshtein_strcmp(const char * s, const char * t)
 {
     int n = (s) ? strlen(s)+1 : 0;
     int m = (t) ? strlen(t)+1 : 0;

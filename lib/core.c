@@ -398,6 +398,9 @@ bool continue_search(int iter, GlyQuery * s)
 }
 
 /*--------------------------------------------------------*/
+// Bad data checker mehods:
+/*--------------------------------------------------------*/
+
 
 int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 {
@@ -426,10 +429,76 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 
     if(dp != 0)
     {
-        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occures twice.\n\n",dp,dp>=1 ? " " : "s ");
+        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occure twice.\n",dp,dp>=1 ? " " : "s ");
         s->itemctr -= dp;
     }
     return dp;
+}
+
+/*--------------------------------------------------------*/
+
+const char * allowed_formats[] = {
+	"jpeg",
+	"jpga",
+	"png",
+	NULL
+};
+
+const char * formats = "jpg;jpeg;png";
+
+int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
+{
+	int c = 0;
+	size_t i = 0;
+	for(i = 0; i < result->size; i++)
+	{
+		char * data = result->list[i]->data;
+		size_t dlen = strlen(data);
+
+		if(data != NULL)
+		{
+			// Search for '.' marking seperator from name
+			char * dot_ptr = strrstr_len(data,(char*)".",dlen);
+			if(dot_ptr != NULL)
+			{
+				// Copy format spec
+				char * c_format = copy_value(dot_ptr+1,data+dlen);
+				if(c_format != NULL)
+				{
+					ascii_strdown_modify(c_format);
+					char  * f = NULL;
+					size_t offset = 0, kick_me = false, flen = strlen(formats);
+					while(!kick_me && (f = get_next_word(formats,";",&offset,flen)))
+					{
+						if(!strcmp(f,c_format))
+						{
+							kick_me = true;
+						}
+						free(f);
+						f = NULL;
+					}
+					
+					if(!kick_me)
+					{
+						result->list[i]->error = BAD_FORMAT;
+						c++;
+					}
+				}
+				free(c_format);
+			}
+			else
+			{
+				result->list[i]->error = BAD_FORMAT;
+				c++;
+			}
+		}
+	}
+	if(c != 0)
+	{
+		glyr_message(2,s,stderr,C_R"* "C_"Ignoring %d images with unknown format.\n",c);
+		s->itemctr -= c;
+	}
+	return c;
 }
 
 /*--------------------------------------------------------*/
@@ -745,7 +814,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 {
                     ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
-                    glyr_message(1,s,stderr,"%s - [%d]\n",curl_err ? curl_err : "Unknown Error",msg->data.result);
+                    glyr_message(1,s,stderr,"#[%d]"C_R" %s.\n"C_,msg->data.result,curl_err ? curl_err : "Unknown Error");
                 }
 		else
 		{

@@ -12,25 +12,19 @@ Could:
 - tracklist
 - albumlist
 - review pages.. (at least the links.)
-
-
-- get_type_to_string()
-- type member in GlyMemcache 
-  - mostly implemented
-  - COVER_BACK, COVER_FRONT.. etc. still missing
-
 - new plugins (wikipedia for ainfo - clementine)
+
+
+- type member in GlyMemcache  COVER_BACK, COVER_FRONT.. etc. still missing
 - at least two more review plugins
 - relation getter
 - photo:discogs
 - ainfo:discogs
+- possibility to explicitly call a parser 
+- force format option
+- ainfo with correct formatting, perhaps also review
 
 Missing:
 --------
-- ainfo with correct formatting, perhaps also review
 - More documentation!
-- making plugins that share code (clean up the mess..)
-- Ensure legality (and add a legal note somewhere)
-- example.c
 - photos:google
-- content check via Header content type

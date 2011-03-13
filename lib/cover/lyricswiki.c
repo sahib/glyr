@@ -89,7 +89,7 @@ GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
                     if(down_name)
                     {
                         // Allow max. 2 'typos'
-                        if(levenshtein_strcmp(_album, down_name) < 4)
+                        if(levenshtein_strcmp(_album, down_name) < capo->s->fuzzyness)
                         {
                             char *url_start = strstr(endTag,URL_MARKER);
                             if(url_start)

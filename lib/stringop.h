@@ -23,7 +23,7 @@
 #include <stdarg.h>
 
 #define nextTag(X) while(*X && *X++ != '>')
-int    levenshtein_strcmp(const char * s, const char * t);
+size_t levenshtein_strcmp(const char * s, const char * t);
 char * escape_slashes(const char * in);
 char * ascii_strdown_modify(char * string);
 char * ascii_strdown (const char * string);
@@ -35,8 +35,8 @@ char * strip_html_unicode(const char * string);
 char * beautify_lyrics(const char * lyrics);
 char * strdup_printf (const char *format, ...);
 char * strrstr_len(char *haystack, char *needle, size_t len);
-void trim_copy(char *input, char *output);
-void trim_inplace(char *s);
+void   trim_copy(char *input, char *output);
+void   trim_inplace(char *s);
 char * trim_nocopy(char *s);
 char * getStr (char ** s, char * start, char * end);
 char * remove_html_tags_from_string(const char * string, size_t len);

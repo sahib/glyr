@@ -42,7 +42,7 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 # set directories
 SET( SUBDIR_LIB lib)
 SET( SUBDIR_SRC src)
-SET( SUBDIR_BIND lbindings)
+SET( SUBDIR_BIND bind)
 
 # find libcurl dependency
 FIND_PACKAGE(CURL REQUIRED)
@@ -80,7 +80,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/allmusic_com.c"
 	"${DIR_COVER}/discogs.c"
 	"${DIR_COVER}/amazon.c"
-	"${DIR_COVER}/allcdcovers.c"
         "${DIR_LYRICS}/lyrdb.c"
     	"${DIR_LYRICS}/magistrix.c"
     	"${DIR_LYRICS}/lyrix_at.c"

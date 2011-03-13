@@ -76,6 +76,7 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
             {
                 /* Ignore double URLs */
                 flag_double_urls(result,settings);
+                flag_invalid_format(result,settings);
 
                 size_t ctr = 0,i = 0;
                 for(i = 0; i < result->size; i++)
@@ -102,6 +103,7 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
 
             /* Ignore double URLs */
             flag_double_urls(result,settings);
+            flag_invalid_format(result,settings);
 
             for( i = 0; i < result->size; i++)
             {

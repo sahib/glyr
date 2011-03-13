@@ -66,6 +66,7 @@ enum CORE_ERR
     NO_BEGIN_TAG,
     NO_ENDIN_TAG,
     DOUBLE_ITEM,
+    BAD_FORMAT,
     BLACKLISTED
 };
 
@@ -101,8 +102,8 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 // Control for bad items
 int flag_double_urls(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
+int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 
 // ....
 const char * grp_id_to_name(int id); 
-
 #endif

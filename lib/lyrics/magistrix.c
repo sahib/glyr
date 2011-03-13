@@ -24,7 +24,6 @@
 #include "../stringop.h"
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
-#define LV_MAX_DIST 4
 
 const char * lyrics_magistrix_url(GlyQuery * settings)
 {
@@ -59,12 +58,12 @@ static GlyMemCache * parse_lyric_page(const char * buffer)
     return result;
 }
 
-static bool approve_content(char * content, const char * compare)
+static bool approve_content(char * content, const char * compare, size_t fuzz)
 {
     if(compare)
     {
         char * tmp = strdup(compare);
-        if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= LV_MAX_DIST)
+        if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= fuzz)
         {
             free(tmp);
             return true;
@@ -105,7 +104,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                 char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
                 if(artist)
                 {
-                    if(approve_content(artist,capo->s->artist))
+                    if(approve_content(artist,capo->s->artist,capo->s->fuzzyness))
                     {
                         char * title_begin = strstr(node,TITLE_BEGIN);
                         if(title_begin)
@@ -113,7 +112,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                             char * title = copy_value(title_begin+strlen(TITLE_BEGIN),strstr(title_begin,"</a>"));
                             if(title)
                             {
-                                if(approve_content(title,capo->s->title))
+                                if(approve_content(title,capo->s->title,capo->s->fuzzyness))
                                 {
                                     char * url_begin = strstr(node,URL_BEGIN);
                                     if(url_begin)

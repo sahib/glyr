@@ -39,14 +39,13 @@
 
 #define MAX_TRIES 5
 
-#define LV_DISTANCE 3
-
 #define API_KEY API_KEY_DISCOGS
 
 const char * cover_discogs_url(GlyQuery * sets)
 {
-    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
+    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1) {
         return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
+    }
 
     return NULL;
 }
@@ -79,7 +78,7 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
             title_endin = NULL;
 
             // Compare with levenshtein
-            if(levenshtein_strcmp(title_value,capo->s->album) <= LV_DISTANCE)
+            if(levenshtein_strcmp(title_value,capo->s->album) <= capo->s->fuzzyness - 1)
             {
                 // Get release ID
                 char * release_end = strstr(release_node, RELEASE_END);

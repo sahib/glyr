@@ -36,8 +36,6 @@
 #define ARTIST_PART "<td>"
 #define ARTIST_END  "</td>"
 
-#define LV_MAX 3
-
 const char * review_allmusic_url(GlyQuery * s)
 {
     return "http://www.allmusic.com/search/album/%album%";
@@ -111,7 +109,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
                     char * orig_artist = strdup(capo->s->artist);
                     if(orig_artist)
                     {
-                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= LV_MAX)
+                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/)
                         {
                             char * review_url = strdup_printf("%s/review",url);
                             if(review_url)

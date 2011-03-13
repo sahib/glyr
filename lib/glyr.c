@@ -241,6 +241,15 @@ int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife)
 
 /*-----------------------------------------------*/
 
+int GlyOpt_fuzzyness(GlyQuery * s, unsigned int fuzzy)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->fuzzyness = fuzzy;
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 int GlyOpt_plugmax(GlyQuery * s, int plugmax)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -324,6 +333,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
     glyrs->itemctr = 0;
+    glyrs->fuzzyness = DEFAULT_FUZZYNESS;
     glyrs->duplcheck = DEFAULT_DUPLCHECK;
     memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
 }
@@ -575,7 +585,6 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 	    {
 		if(providers[i].gid & GIDmask)
 		{
-			puts(providers[i].name);
 			providers[i].use = value;
 		}
 		i++;

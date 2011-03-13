@@ -34,11 +34,9 @@
 #include "cover/allmusic_com.h"
 #include "cover/lyricswiki.h"
 #include "cover/albumart.h"
-#include "cover/allcdcovers.h"
 #include "cover/google.h"
 
 #define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
-#define ALLCDCOVERSC C_G"all"C_Y"cd"C_B"covers"
 
 #define ALBE "<div id=\"pagination\""
 #define COLE "<div id=\"footer\">"
@@ -55,7 +53,6 @@ GlyPlugin cover_providers[] =
     {"discogs",    "d", C_"disc"C_Y"o"C_"gs", false, {cover_discogs_parse,     cover_discogs_url,    NULL, false}, GRP_USFE | GRP_SLOW},
     {"allmusic",   "m", C_"all"C_C"music",    false, {cover_allmusic_parse,    cover_allmusic_url,   NULL, false}, GRP_SPCL | GRP_SLOW},
     {"coverhunt",  "c", C_G"coverhunt",       false, {cover_coverhunt_parse,   cover_coverhunt_url,  COLE, false}, GRP_SPCL | GRP_FAST},
-//  {"allcdcovers","o", ALLCDCOVERSC,         false, {cover_allcdcovers_parse, cover_allcdcovers_url,NULL, false}, GRP_USFE | GRP_SLOW},
     { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
 
@@ -99,6 +96,8 @@ static GlyCacheList * cover_callback(cb_object * capo)
     return ls;
 }
 
+// Place any bad URLs that should never ever get out
+// Prefer to handle this in the plugin though!
 const char * URLblacklist[] =
 {
     "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",
@@ -110,7 +109,10 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
     // Only NULL when finalizing()
     if(result == NULL)
     {
-	glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
+	if(settings->itemctr)
+	{
+		glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
+	}
 	return NULL;
     }
 
@@ -127,6 +129,8 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 
                 /* Watch out for blacklisted URLs */
                 flag_blacklisted_urls(result,URLblacklist,settings);
+
+		flag_invalid_format(result,settings);
 
                 size_t i = 0;
                 int ctr = 0;
@@ -154,6 +158,8 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 
             /* Watch out for blacklisted URLs */
             flag_blacklisted_urls(result,URLblacklist,settings);
+		
+  	    flag_invalid_format(result,settings);
 
             size_t i = 0;
             for( i = 0; i < result->size; i++)

@@ -35,7 +35,6 @@ const char * lyrics_lyrixat_url(GlyQuery * settings)
 #define LYRIC_BEGIN "<div class='songtext' id='stextDIV'>"
 #define URL_TAG_BEGIN "<a href='/de"
 #define URL_TAG_ENDIN "'>"
-#define LV_MAX_DIST 4
 
 #define MAX_TRIES 5
 
@@ -65,7 +64,7 @@ GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
                     char * title = copy_value(title_tag + strlen(URL_TAG_ENDIN),title_end);
                     if(title)
                     {
-                        if(levenshtein_strcmp(ascii_strdown_modify(title),capo->s->title) <= LV_MAX_DIST)
+                        if(levenshtein_strcmp(ascii_strdown_modify(title),capo->s->title) <= capo->s->fuzzyness)
                         {
                             char * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
                             if(url_part)

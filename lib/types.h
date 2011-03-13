@@ -68,6 +68,7 @@
 #define DEFAULT_GROUPEDL true
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
 #define DEFAULT_DUPLCHECK true
+#define DEFAULT_FUZZYNESS 4
 
 #define PTR_SPACE 10
 
@@ -191,6 +192,7 @@ typedef struct GlyQuery
     // count of dl'd items, starting from 0
     int itemctr;
 
+    size_t fuzzyness;
     struct callback
     {
         int  (* download)(GlyMemCache * dl, struct GlyQuery * s);

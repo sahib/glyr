@@ -32,8 +32,6 @@ const char * lyrics_lyricswiki_url(GlyQuery * settings)
     return LW_URL;
 }
 
-#define LV_MAX_DIST 8
-
 // Compare response, so lyricswiki's search did not fool us
 // This is to prevent completely wrong results, therfore the quite high tolerance
 bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * capo)
@@ -55,7 +53,7 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
                     char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title));
                     if(cmp_t)
                     {
-                        if( ( levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= LV_MAX_DIST)
+                        if((levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness)
                         {
                             res = true;
                         }
