@@ -440,6 +440,9 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
 	size_t i = 0;
 	for(i = 0; i < result->size; i++)
 	{
+		if(result->list[i]->error != ALL_OK)
+		    continue;
+
 		char * data = result->list[i]->data;
 		size_t dlen = strlen(data);
 
@@ -499,6 +502,9 @@ int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, Gly
     size_t i = 0, ctr = 0;
     for(i = 0; i < result->size; i++)
     {
+        if(result->list[i]->error != ALL_OK)
+	    continue;
+
         if(result->list[i]->error == 0)
         {
             size_t j = 0;

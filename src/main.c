@@ -454,27 +454,30 @@ void help_short(GlyQuery * s)
         IN"-a --artist           Artist name (Used by all plugins)\n"
         IN"-b --album            Album name (Used by cover,review,lyrics)\n"
         IN"-t --title            Songname (used mainly by lyrics)\n"
-        IN"-n --number           Download max. <n> items. Amount of actual downloaded items may vary.\n"
+        IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
         IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
         IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
         IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
-	"\nList of providers:\n"
+        IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
+        IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+	"\nList of providers:\n",
+	DEFAULT_FORMATS
 	);
 	
-	glyr_message(-1,s,stderr,"\n"IN"# cover:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# cover:\n");
         list_provider_at_id(GET_COVER,13,s);
-	glyr_message(-1,s,stderr,"\n"IN"# lyrics:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# lyrics:\n");
         list_provider_at_id(GET_LYRIC,13,s);
-	glyr_message(-1,s,stderr,"\n"IN"# photos:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# photos:\n");
         list_provider_at_id(GET_PHOTO,13,s);
-	glyr_message(-1,s,stderr,"\n"IN"# review:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# review:\n");
         list_provider_at_id(GET_REVIEW,13,s);
-	glyr_message(-1,s,stderr,"\n"IN"# similiar:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# similiar:\n");
         list_provider_at_id(GET_SIMILIAR,13,s);
-	glyr_message(-1,s,stderr,"\n"IN"# ainfo:\n");
+	glyr_message(-1,s,stderr,"\n"IN C_"# ainfo:\n");
         list_provider_at_id(GET_AINFO,13,s);
 
-        glyr_message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+        glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
 	exit(EXIT_FAILURE);
 }
@@ -513,13 +516,15 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         {"maxsize",      required_argument, 0, 'e'},
         {"number",       required_argument, 0, 'n'},
         {"lang",         required_argument, 0, 'l'},
-        {0,              0,                 0,  0 }
+	{"fuzzyness",    required_argument, 0, 'z'},
+	{"prefer",       required_argument, 0, 'r'},
+        {0,              0,                 0, 'o'}
     };
 
     while (true)
     {
         int option_index = 0;
-        c = getopt_long(argc, argv, "uUVhHcCdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:",long_options, &option_index);
+        c = getopt_long(argc, argv, "uUVhHcCdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:",long_options, &option_index);
 
         // own error report
         opterr = 0;
@@ -576,64 +581,49 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         case 'u':
             update = true;
             break;
-
 	case 'U':
 	    update = false;
 	    break;
-
 	case 'g':
 	    GlyOpt_groupedDL(glyrs,true);
 	    break;
-
 	case 'G':
 	    GlyOpt_groupedDL(glyrs,false);
 	    break;
-
         case 'f':
             if(GlyOpt_from(glyrs,optarg) != GLYRE_OK)
                 search_similiar_providers(optarg,glyrs);
-
             break;
-
         case 'v':
             GlyOpt_verbosity(glyrs,atoi(optarg));
             break;
-
         case 'p':
             GlyOpt_parallel(glyrs,atoi(optarg));
             break;
-
         case 'r':
             GlyOpt_redirects(glyrs,atoi(optarg));
             break;
-
         case 'm':
             GlyOpt_timeout(glyrs,atoi(optarg));
             break;
-
         case 'x':
             GlyOpt_plugmax(glyrs,atoi(optarg));
             break;
-
         case 'V':
             print_version(glyrs);
             break;
-
 	case 'h':
 	    help_short(glyrs);
 	    break;
-
         case 'H':
             usage(glyrs);
             break;
         case 'c':
             GlyOpt_color(glyrs,true);
             break;
-
 	case 'C':
 	    GlyOpt_color(glyrs,false);
 	    break;
-
         case 'a':
             GlyOpt_artist(glyrs,optarg);
             break;
@@ -661,6 +651,12 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         case 'l':
             GlyOpt_lang(glyrs,optarg);
             break;
+	case 'z':
+	    GlyOpt_fuzzyness(glyrs,atoi(optarg));
+	    break;
+	case 'o':
+	    GlyOpt_formats(glyrs,optarg);
+	    break;
         case '?':
             suggest_other_options(sizeof(long_options) / sizeof(struct option), argc, argv, optind-1, long_options,glyrs);
             break;
@@ -874,6 +870,10 @@ int main(int argc, char * argv[])
         // glyr's control struct
         Gly_init_query(&my_query);
 	GlyOpt_verbosity(&my_query,2);
+
+        GlyOpt_call_direct_use(&my_query, true);
+        GlyOpt_call_direct_provider(&my_query, "a");
+        GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
 
         // Set the type..
         if(!set_get_type(&my_query, argv[1]))

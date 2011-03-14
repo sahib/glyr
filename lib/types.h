@@ -70,6 +70,8 @@
 #define DEFAULT_DUPLCHECK true
 #define DEFAULT_FUZZYNESS 4
 #define DEFAULT_FORMATS "jpg;jpeg;png"
+#define DEFAULT_CALL_DIRECT_USE false
+#define DEFAULT_CALL_DIRECT_PROVIDER NULL
 
 #define PTR_SPACE 10
 
@@ -204,6 +206,13 @@ typedef struct GlyQuery
         int  (* download)(GlyMemCache * dl, struct GlyQuery * s);
         void  * user_pointer;
     } callback;
+
+    struct call_direct
+    {
+	bool use;
+	const char * provider;
+	const char * url;
+    } call_direct;
 
 } GlyQuery;
 

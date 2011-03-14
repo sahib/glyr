@@ -27,3 +27,7 @@ Use the github page to view the automated git generated brother.
 + Added format check for image plugins. Almost 100% success (== valid images) with this check now
 + Added option (C API) to configure levenshtein fuzzyness
 + went to bed :-)
+
+2011/03/14
+----------
++ Fixed a bug that made the itemcounter to be negative. (Got -21 images! he happily replied)

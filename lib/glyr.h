@@ -71,6 +71,9 @@ extern "C"
     int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
     int GlyOpt_formats(GlyQuery * s, const char * formats);
     int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+    int GlyOpt_call_direct_use(GlyQuery * s, bool use);
+    int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider);
+    int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
 
     // return library version
     const char * Gly_version(void);

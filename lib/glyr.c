@@ -304,6 +304,31 @@ int GlyOpt_download(GlyQuery * s, bool download)
 
 /*-----------------------------------------------*/
 
+int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return glyr_set_info(s,4,provider);
+}
+
+/*-----------------------------------------------*/
+
+int GlyOpt_call_direct_url(GlyQuery * s, const char * URL)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return glyr_set_info(s,5,URL);
+}
+
+/*-----------------------------------------------*/
+
+int GlyOpt_call_direct_use(GlyQuery * s, bool use)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->call_direct.use = true;
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 {
     if(clist && iter >= 0)
@@ -349,8 +374,15 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->fuzzyness = DEFAULT_FUZZYNESS;
     glyrs->duplcheck = DEFAULT_DUPLCHECK;
     glyrs->formats = DEFAULT_FORMATS;
+
+    // direct call
+    glyrs->call_direct.url = NULL;
+    glyrs->call_direct.use = DEFAULT_CALL_DIRECT_USE;
+    glyrs->call_direct.provider = DEFAULT_CALL_DIRECT_PROVIDER;
     memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
 }
+
+/*-----------------------------------------------*/
 
 void Gly_init_query(GlyQuery * glyrs)
 {
@@ -420,9 +452,60 @@ void Gly_add_to_list(GlyCacheList * l, GlyMemCache * c)
 
 /*-----------------------------------------------*/
 
+static GlyCacheList * call_parser_direct(GlyQuery * s)
+{
+    GlyCacheList * re = NULL;
+    GlyPlugin * cPlug = Gly_get_provider_by_id(s->type);
+    if(cPlug != NULL)
+    {
+	size_t iter;
+	for(iter = 0; cPlug[iter].name; iter++)
+	{
+	     if(!strcmp(cPlug[iter].key,s->call_direct.provider) || !strcmp(cPlug[iter].name,s->call_direct.provider))
+	     {
+		GlyMemCache * c = NULL; 
+		const char  * dl_url = (s->call_direct.url) ? cPlug[iter].plug.url_callback(s) : s->call_direct.url;
+		if(dl_url != NULL)
+		{
+			c = download_single(dl_url,s,NULL);
+			if(c != NULL)
+			{
+				cb_object capo;
+				plugin_init(&capo,NULL,NULL,s,NULL,NULL,0);
+				capo.cache = c;				
+
+				re = cPlug[iter].plug.parser_callback(&capo);
+
+				DL_free(c);
+				c = NULL;
+				capo.cache = NULL;
+			}
+		}
+		break;
+	     }
+ 	}
+	free(cPlug);
+	cPlug = NULL;
+    }
+    return re;
+}
+
+/*-----------------------------------------------*/
+
 GlyCacheList * Gly_get(GlyQuery * settings, int * e)
 {
     if(e) *e = GLYRE_OK;
+    if(!settings)
+    {
+	if(e) *e = GLYRE_EMPTY_STRUCT;
+	return NULL;
+    }
+
+    if(settings->call_direct.use)
+    {
+	return call_parser_direct(settings);
+    }
+
     if(!settings->providers)
     {
         GlyPlugin * p = Gly_get_provider_by_id(settings->type);
@@ -559,7 +642,7 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
         switch(at)
         {
         case 0:
-            s->artist  = (char*)s->info[at];
+            s->artist = (char*)s->info[at];
             break;
         case 1:
             s->album = (char*)s->info[at];
@@ -569,6 +652,12 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
             break;
 	case 3:
 	    s->formats = (char*)s->info[at];
+	    break;
+	case 4:
+	    s->call_direct.provider = (char*)s->info[at];
+	    break;
+	case 5:
+	    s->call_direct.url = (char*)s->info[at];
 	    break;
 	default: glyr_message(2,s,stderr,"Warning: wrong AT for glyr_info_at!\n");
         }

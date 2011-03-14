@@ -20,9 +20,9 @@ Could:
 - relation getter
 - photo:discogs
 - ainfo:discogs
-- possibility to explicitly call a parser 
-- force format option
+- update help textt
 - ainfo with correct formatting, perhaps also review
+- strerror
 
 Missing:
 --------
