@@ -1,0 +1,90 @@
+C API
+=====
+This document should give you both a reference and a quickstart into using libglyr from a C/C++ program.
+As you perhaps read 17x times and just in case you googled your way till this point:
+
+libglyr is a library that finds various sorts of music related metadata, as applications like musicplayers
+require (cover art,lyrics,similiar artists etc.).
+
+If you hate reading such text: Look into src/example.c and you'll get the same results ;-)
+
+INSTALL
+=======
+Install the dependencies:
+* libcurl - all network related stuff.
+* cmake   - Only needed to built glyr.
+
+# Get the sources
+git clone https://sahib@github.com/sahib/glyr.git
+
+# Configure and compile
+cmake . && make
+
+# Install 
+sudo make install
+
+USING
+=====
+Now you can #incude <glyr/glyr.h> in your application.
+To compile you'll also need to link against libglyr by appending '-lglyr' to your Linker line
+Still here? Fine.
+
+If you ever tried to use glyrc (the cmdline interface) you have a rough image how the API works.
+The central place is the GlyQuery structure, which represents ONE job (or query) for libglyr.
+
+The usual usecase looks like this:
+----------------------------------
+- Create a variable of type GlyQuery x;
+- Init it with Gly_init_query(&x); (which just will set sane defaults)
+- configure it by calling the GlyOpt_ methods (see down)
+- call GlyCacheList * results = Gly_get(&x,&error);
+- Use the results.
+- Free the results.
+- Free the query.
+
+In code:
+
+// init
+GlyQuery query;
+Gly_init_query(&q);
+
+// configure
+GlyOpt_type(&q,GET_COVER);  // You normally set this as first opt
+GlyOpt_verbosity(&q,2);     // Normal verbosity, glyr will warn if you things get weird
+GlyOpt_artist(&q,"Cher");   // Don't make any assuptions on my musical taste here :-)
+GlyOpt_album(&q,"Believe"); // -"-       -"-        -"-   
+
+// Get it from all providers being in the group 'fast', but without 'coverhunt'
+// If you omit this option it will default to 'all'
+GlyOpt_from(&q,"fast;-coverhunt");
+
+// Get 3 covers.
+GlyOpt_number(&q,3);
+
+// Get! 
+int error;
+GlyCacheList * list = Gly_get(&q,&error);
+
+// Now you can use the list to work with the data:
+int i = 0;
+for(i = 0; i < list->size; i++)
+{
+	// Do something with result->list[i]->data
+	//                                  ->type
+	//                                  ->size
+	//                                  ->dsrc	
+}
+
+// free
+Gly_free_list(list);
+Gly_free_query(query);
+
+Configuring the query is done via the GlyOpt-method family, and a few rules:
+- You should never set a member of GlyQuery explicitly
+- Getting is fine, all values have the same name as the corresponding GlyOpt_ call
+- For every metadata-type you'll need to set a few minimum fields (type, artist for usual)
+- Glyr will warn you if something's weird. Set the debug level to 2 therefore: GlyOpt_verbosity(&query,2)
+
+
+
+

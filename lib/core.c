@@ -158,11 +158,8 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
         mem->size += realsize;
         mem->data[mem->size] = 0;
 
-	if(mem->dsrc != NULL && strstr(mem->data,mem->dsrc))
-	{
-		// Stop download now, as we appear to have everything
-		return 0;
-	}
+	if(mem->dsrc && strstr(mem->data,mem->dsrc))
+  	    return 0;
     }
     else
     {
@@ -411,15 +408,15 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
     for(i = 0; i < result->size; i++)
     {
         size_t j = 0;
-        if(result->list[i]->error == 0)
+        if(result->list[i]->error == ALL_OK)
         {
             for(j = 0; j < result->size; j++)
             {
-                if(i != j && result->list[i]->error == 0)
+                if(i != j && result->list[i]->error == ALL_OK)
                 {
                     if(!strcmp(result->list[i]->data,result->list[j]->data))
                     {
-                        result->list[j]->error = 1;
+                        result->list[j]->error = DOUBLE_ITEM;
                         dp++;
                     }
                 }
@@ -436,15 +433,6 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 }
 
 /*--------------------------------------------------------*/
-
-const char * allowed_formats[] = {
-	"jpeg",
-	"jpga",
-	"png",
-	NULL
-};
-
-const char * formats = "jpg;jpeg;png";
 
 int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
 {
@@ -467,8 +455,8 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
 				{
 					ascii_strdown_modify(c_format);
 					char  * f = NULL;
-					size_t offset = 0, kick_me = false, flen = strlen(formats);
-					while(!kick_me && (f = get_next_word(formats,";",&offset,flen)))
+					size_t offset = 0, kick_me = false, flen = strlen(s->formats);
+					while(!kick_me && (f = get_next_word(s->formats,";",&offset,flen)))
 					{
 						if(!strcmp(f,c_format))
 						{

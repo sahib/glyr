@@ -69,6 +69,8 @@ extern "C"
     int GlyOpt_plugmax(GlyQuery * s, int plugmax);
     int GlyOpt_download(GlyQuery * s, bool download);
     int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
+    int GlyOpt_formats(GlyQuery * s, const char * formats);
+    int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
 
     // return library version
     const char * Gly_version(void);

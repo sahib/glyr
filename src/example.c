@@ -14,7 +14,7 @@
 static int funny_callback(GlyMemCache * c, GlyQuery * q)
 {
 	// This is called whenever glyr gets a ready to use item
-	fprintf(stderr,"Received %d bytes of awesomeness.\n",c->size);
+	fprintf(stderr,"Received %u bytes of awesomeness.\n",(unsigned int)c->size);
 	return GLYRE_OK;
 }
 
@@ -32,14 +32,14 @@ int main(void)
 	// Set at least the required fields to your needs
 	// For lyrics those are 'artist' and 'title' ('album') 
 	// is strictly optional and may be used by a few plugins
-	GlyOpt_artist(&q,"Die Apokalyptischen Reiter");
-	GlyOpt_album (&q,"Moral & Wahnsinn");
-	GlyOpt_title (&q,"Die Boten");
+	GlyOpt_artist(&q,(char*)"Die Apokalyptischen Reiter");
+	GlyOpt_album (&q,(char*)"Moral & Wahnsinn");
+	GlyOpt_title (&q,(char*)"Die Boten");
 	// Execute a func when getting one item
 	GlyOpt_dlcallback(&q,funny_callback,NULL);
 
 	// For the start: Enable verbosity
-	GlyOpt_verbosity(&q,0);
+	GlyOpt_verbosity(&q,2);
 
 	// Call the most important command: GET!
 	// This returned a list of (GlyMemCache *)s
@@ -49,9 +49,9 @@ int main(void)
 	// Now iterate through it...
 	if(result_list != NULL)
 	{
-		fprintf(stderr,"Got %d item(s).\n",result_list->size);
+		fprintf(stderr,"Got %d item(s).\n",(int)result_list->size);
 
-		int i = 0;
+		size_t i = 0;
 		for(i = 0; i < result_list->size; i++)
 		{
 			// GlyMemcache members
@@ -60,7 +60,7 @@ int main(void)
 			// type = Type of data
 			// data = actual data
 			// (error) - Don't use this. Only internal use
-			fprintf(stderr,"Item from <%s>\nof size %d bytes containing a ",result_list->list[i]->dsrc,result_list->list[i]->size);
+			fprintf(stderr,"Item from <%s>\nof size %d bytes containing a ",result_list->list[i]->dsrc,(int)result_list->list[i]->size);
 
 			// Each cache identfies it's data by a constant
 			switch(result_list->list[i]->type)

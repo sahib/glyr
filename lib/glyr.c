@@ -241,11 +241,15 @@ int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife)
 
 /*-----------------------------------------------*/
 
-int GlyOpt_fuzzyness(GlyQuery * s, unsigned int fuzzy)
+int GlyOpt_formats(GlyQuery * s, const char * formats)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    s->fuzzyness = fuzzy;
-    return GLYRE_OK;
+    if(formats != NULL)
+    {
+      glyr_set_info(s,3,formats);
+      return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
@@ -268,6 +272,15 @@ int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck)
 {	
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->duplcheck = duplcheck;
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
+int GlyOpt_fuzzyness(GlyQuery * s, int fuzz)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->fuzzyness = fuzz;
     return GLYRE_OK;
 }
 
@@ -335,6 +348,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->itemctr = 0;
     glyrs->fuzzyness = DEFAULT_FUZZYNESS;
     glyrs->duplcheck = DEFAULT_DUPLCHECK;
+    glyrs->formats = DEFAULT_FORMATS;
     memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
 }
 
@@ -553,6 +567,10 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
         case 2:
             s->title = (char*)s->info[at];
             break;
+	case 3:
+	    s->formats = (char*)s->info[at];
+	    break;
+	default: glyr_message(2,s,stderr,"Warning: wrong AT for glyr_info_at!\n");
         }
     }
     else

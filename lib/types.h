@@ -69,6 +69,7 @@
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
 #define DEFAULT_DUPLCHECK true
 #define DEFAULT_FUZZYNESS 4
+#define DEFAULT_FORMATS "jpg;jpeg;png"
 
 #define PTR_SPACE 10
 
@@ -192,7 +193,12 @@ typedef struct GlyQuery
     // count of dl'd items, starting from 0
     int itemctr;
 
+    // Treshold for Levenshtein
     size_t fuzzyness;
+
+    // allowed formats for images
+    const char * formats;
+
     struct callback
     {
         int  (* download)(GlyMemCache * dl, struct GlyQuery * s);
