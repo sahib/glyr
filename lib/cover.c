@@ -36,8 +36,6 @@
 #include "cover/albumart.h"
 #include "cover/google.h"
 
-#define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
-
 #define ALBE "<div id=\"pagination\""
 #define COLE "<div id=\"footer\">"
 

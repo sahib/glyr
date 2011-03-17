@@ -35,7 +35,7 @@
 GlyPlugin photos_providers[] =
 {
     {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    {"google", "g",  C_C"goog"C_R"r",       false, {photos_google_parse, photos_google_url, NULL, true }, GRP_USFE | GRP_FAST},
+    {"google", "g",  GOOGLE_COLOR,          false, {photos_google_parse, photos_google_url, NULL, true }, GRP_USFE | GRP_FAST},
     {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, NULL, true }, GRP_USFE | GRP_SLOW},
     {NULL,     NULL, NULL,                  false, {NULL,                NULL,              NULL, false}, GRP_NONE | GRP_NONE}
 };
@@ -111,7 +111,6 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                         result->list[i]->data = NULL;
                     }
                 }
-                printf("i = %d\n",(int)i);
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
                 free(urlplug_list);
             }

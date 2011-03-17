@@ -644,7 +644,6 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
     for (Counter = 0; Counter < CNT; Counter++)
     {
         char * track = oblist[Counter].url;
-        printf("%p:%s | %p\n",oblist[Counter].url,oblist[Counter].url,oblist[Counter].s);
         oblist[Counter].url    = prepare_url(oblist[Counter].url,
                                              oblist[Counter].s->artist,
                                              oblist[Counter].s->album,
@@ -817,13 +816,13 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                     }
 
                 }
-                else if(msg->data.result != CURLE_OK)
+                else if(!capo->batch && msg->data.result != CURLE_OK)
                 {
                     ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
                     glyr_message(1,s,stderr,"#[%d]"C_R" %s.\n"C_,msg->data.result,curl_err ? curl_err : "Unknown Error");
                 }
-                else
+                else if(!capo->batch)
                 {
                     ALIGN(align_msg);
                     glyr_message(2,s,stderr,C_R"failed.\n"C_);

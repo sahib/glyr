@@ -38,7 +38,6 @@ const char * photos_google_url(GlyQuery * s)
     {
         result = generic_google_url(s,searchterm);
         free(searchterm);
-        puts(result);
     }
     return result;
 }
