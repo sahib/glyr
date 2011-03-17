@@ -43,7 +43,8 @@
 
 const char * cover_discogs_url(GlyQuery * sets)
 {
-    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1) {
+    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
+    {
         return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
     }
 
@@ -94,7 +95,7 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
                         char *release_url = strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
                         if(release_url)
                         {
-			    // Only download till artists tag. 
+                            // Only download till artists tag.
                             GlyMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
                             if(tmp_cache && tmp_cache->data && tmp_cache->size)
                             {

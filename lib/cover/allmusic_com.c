@@ -58,17 +58,17 @@ GlyMemCache * parse_cover_page(GlyMemCache * dl)
             char * img_url = copy_value(img_begin + strlen(IMG_BEGIN), strstr(img_begin,IMG_ENDIN));
             if(img_url != NULL)
             {
-		if(strcmp(img_url,"/img/pages/site/icons/no_cover_200.gif"))
-		{
-			rc = DL_init();
-			rc->data = img_url;
-			rc->size = strlen(img_url);
-		}
-		else
-		{
-			free(img_url);
-			img_url=NULL;
-		}
+                if(strcmp(img_url,"/img/pages/site/icons/no_cover_200.gif"))
+                {
+                    rc = DL_init();
+                    rc->data = img_url;
+                    rc->size = strlen(img_url);
+                }
+                else
+                {
+                    free(img_url);
+                    img_url=NULL;
+                }
             }
         }
     }

@@ -31,3 +31,11 @@ Use the github page to view the automated git generated brother.
 2011/03/14
 ----------
 + Fixed a bug that made the itemcounter to be negative. (Got -21 images! he happily replied)
+
+2011/03/17
+----------
++ Fixed very ugly stringop.c - Many functions should be faster and smoother now.
++ Fixed -w stdout and tracklist. (fwrite didn't recognize \0, as ->size was the duration here)
++ Fixed an ugly bug in photos.c that crashed libglyr if ignoring a URL
++ added provider photos:google
++ reformatted due to trying anjuta as IDE (instead of pure gVim)

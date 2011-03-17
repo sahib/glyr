@@ -90,8 +90,8 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
             if(result)
             {
                 result->dsrc = strdup(capo->url);
-		if(!r_list) r_list = DL_new_lst();
-		DL_add_to_list(r_list,result);
+                if(!r_list) r_list = DL_new_lst();
+                DL_add_to_list(r_list,result);
             }
         }
         else
@@ -100,7 +100,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
             int ctr = 0, urlc = 0;
             while( (node = strstr(node+1,"<tr class='topLine'>")) && MAX_TRIES >= ctr && continue_search(urlc,capo->s))
             {
-		ctr++;
+                ctr++;
                 char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
                 if(artist)
                 {
@@ -126,21 +126,21 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                                                 char * dl_url = strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
-						    // We don't need the ugly comments
+                                                    // We don't need the ugly comments
                                                     GlyMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
                                                     if(dl_cache)
                                                     {
                                                         GlyMemCache * result = parse_lyric_page(dl_cache->data);
                                                         if(result)
                                                         {
-							    urlc++;
+                                                            urlc++;
                                                             result->dsrc = strdup(dl_url);
-							    if(!r_list) r_list = DL_new_lst();
-							    DL_add_to_list(r_list,result);
+                                                            if(!r_list) r_list = DL_new_lst();
+                                                            DL_add_to_list(r_list,result);
                                                         }
                                                         DL_free(dl_cache);
                                                     }
-						    free(dl_url);
+                                                    free(dl_url);
                                                 }
                                                 free(url);
                                             }

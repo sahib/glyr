@@ -49,7 +49,7 @@ static void print_version(GlyQuery * s)
     glyr_message(-1,s,stdout, C_G"%s\n\n"C_,Gly_version());
     glyr_message(-1,s,stderr, C_"This is still beta software, expect quite a lot bugs.\n");
     glyr_message(-1,s,stderr, C_"Email bugs to <sahib@online.de> or use the bugtracker\n"
-                              C_"at https://github.com/sahib/glyr/issues - Thank you! \n");
+                 C_"at https://github.com/sahib/glyr/issues - Thank you! \n");
 
     exit(0);
 }
@@ -65,28 +65,28 @@ static void list_provider_at_id(int id, int min_align,GlyQuery * s)
 
     if(cp != NULL)
     {
-	int i = 0;
-	for(i = 0; cp[i].name != NULL; i++)
-	{
-		int align = min_align - strlen(cp[i].name);
-		int a = 0;
-		glyr_message(-1,s,stdout,C_G _S"%s"C_,cp[i].name);
-		for(a = 0; a < align; a++)
-		    glyr_message(-1,s,stdout," ");
+        int i = 0;
+        for(i = 0; cp[i].name != NULL; i++)
+        {
+            int align = min_align - strlen(cp[i].name);
+            int a = 0;
+            glyr_message(-1,s,stdout,C_G _S"%s"C_,cp[i].name);
+            for(a = 0; a < align; a++)
+                glyr_message(-1,s,stdout," ");
 
-		glyr_message(-1,s,stdout,C_" ["C_R"%s"C_"]%s",cp[i].key, (id == -1) ? "" : " in groups "C_Y"all"C_);
-		int b = 1, j = 0;
-		for(b = 1, j = 0; b <= GRP_ALL; j++)
-		{
-			if(b & cp[i].gid) 
-			{
-				glyr_message(-1,s,stdout,C_","C_Y"%s",Gly_groupname_by_id(b));
-			}
-			b <<= 1;
-		}
-		glyr_message(-1,s,stdout,"\n");
-	}
-	free(cp);
+            glyr_message(-1,s,stdout,C_" ["C_R"%s"C_"]%s",cp[i].key, (id == -1) ? "" : " in groups "C_Y"all"C_);
+            int b = 1, j = 0;
+            for(b = 1, j = 0; b <= GRP_ALL; j++)
+            {
+                if(b & cp[i].gid)
+                {
+                    glyr_message(-1,s,stdout,C_","C_Y"%s",Gly_groupname_by_id(b));
+                }
+                b <<= 1;
+            }
+            glyr_message(-1,s,stdout,"\n");
+        }
+        free(cp);
     }
 }
 
@@ -416,70 +416,70 @@ static bool check_if_dir(const char * path)
         {
             return false;
         }
-     }
+    }
     return true;
 }
 
 
 void help_short(GlyQuery * s)
 {
-	glyr_message(-1,s,stderr,"Usage: "
-	"glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
-	
-	list_provider_at_id(-1,10,s);
+    glyr_message(-1,s,stderr,"Usage: "
+                 "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
 
-	glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
-				 "you probably want to view --usage, which has more details & examples\n");
-	
-	#define IN "\t"
-	glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
-        IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
-        IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
-        IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
-        IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"    
-        IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"  
-        IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"    
-        IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
-        IN"-u --update           Also download metadata if files are already in path (given by -w or '.')\n"
-        IN"-U --skip-update      Do not download data if already present.\n"
-        IN"-h --help             This text you unlucky wanderer are viewing.\n"
-        IN"-H --usage            A more detailed version of this text.\n"
-        IN"-V --version          Print the version string.\n"
-        IN"-c --color            Enable colored output (Unix only)\n"
-        IN"-C --skip-color       Disable colored output. (Unix only)\n"
-        IN"-d --download         Download Images.\n"
-        IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
-	IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
-	IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n" 
-        IN"-a --artist           Artist name (Used by all plugins)\n"
-        IN"-b --album            Album name (Used by cover,review,lyrics)\n"
-        IN"-t --title            Songname (used mainly by lyrics)\n"
-        IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
-        IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
-        IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
-        IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
-        IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
-        IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
-	"\nList of providers:\n",
-	DEFAULT_FORMATS
-	);
-	
-	glyr_message(-1,s,stderr,"\n"IN C_"# cover:\n");
-        list_provider_at_id(GET_COVER,13,s);
-	glyr_message(-1,s,stderr,"\n"IN C_"# lyrics:\n");
-        list_provider_at_id(GET_LYRIC,13,s);
-	glyr_message(-1,s,stderr,"\n"IN C_"# photos:\n");
-        list_provider_at_id(GET_PHOTO,13,s);
-	glyr_message(-1,s,stderr,"\n"IN C_"# review:\n");
-        list_provider_at_id(GET_REVIEW,13,s);
-	glyr_message(-1,s,stderr,"\n"IN C_"# similiar:\n");
-        list_provider_at_id(GET_SIMILIAR,13,s);
-	glyr_message(-1,s,stderr,"\n"IN C_"# ainfo:\n");
-        list_provider_at_id(GET_AINFO,13,s);
+    list_provider_at_id(-1,10,s);
 
-        glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+    glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
+                 "you probably want to view --usage, which has more details & examples\n");
 
-	exit(EXIT_FAILURE);
+#define IN "\t"
+    glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
+                 IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
+                 IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
+                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
+                 IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
+                 IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
+                 IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
+                 IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
+                 IN"-u --update           Also download metadata if files are already in path (given by -w or '.')\n"
+                 IN"-U --skip-update      Do not download data if already present.\n"
+                 IN"-h --help             This text you unlucky wanderer are viewing.\n"
+                 IN"-H --usage            A more detailed version of this text.\n"
+                 IN"-V --version          Print the version string.\n"
+                 IN"-c --color            Enable colored output (Unix only)\n"
+                 IN"-C --skip-color       Disable colored output. (Unix only)\n"
+                 IN"-d --download         Download Images.\n"
+                 IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
+                 IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
+                 IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n"
+                 IN"-a --artist           Artist name (Used by all plugins)\n"
+                 IN"-b --album            Album name (Used by cover,review,lyrics)\n"
+                 IN"-t --title            Songname (used mainly by lyrics)\n"
+                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
+                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
+                 IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
+                 IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
+                 IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
+                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+                 "\nList of providers:\n",
+                 DEFAULT_FORMATS
+                );
+
+    glyr_message(-1,s,stderr,"\n"IN C_"# cover:\n");
+    list_provider_at_id(GET_COVER,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# lyrics:\n");
+    list_provider_at_id(GET_LYRIC,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# photos:\n");
+    list_provider_at_id(GET_PHOTO,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# review:\n");
+    list_provider_at_id(GET_REVIEW,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# similiar:\n");
+    list_provider_at_id(GET_SIMILIAR,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# ainfo:\n");
+    list_provider_at_id(GET_AINFO,13,s);
+
+    glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+
+    exit(EXIT_FAILURE);
 }
 
 static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery * glyrs)
@@ -506,8 +506,8 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         {"skip-color",   no_argument,       0, 'C'},
         {"download",     no_argument,       0, 'd'},
         {"skip-download",no_argument,       0, 'D'},
-	{"groups",       no_argument,       0, 'g'},
-	{"skip-groups",  no_argument,       0, 'G'},
+        {"groups",       no_argument,       0, 'g'},
+        {"skip-groups",  no_argument,       0, 'G'},
         // -- plugin specific -- //
         {"artist",       required_argument, 0, 'a'},
         {"album",        required_argument, 0, 'b'},
@@ -516,8 +516,8 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         {"maxsize",      required_argument, 0, 'e'},
         {"number",       required_argument, 0, 'n'},
         {"lang",         required_argument, 0, 'l'},
-	{"fuzzyness",    required_argument, 0, 'z'},
-	{"prefer",       required_argument, 0, 'r'},
+        {"fuzzyness",    required_argument, 0, 'z'},
+        {"prefer",       required_argument, 0, 'r'},
         {0,              0,                 0, 'o'}
     };
 
@@ -581,15 +581,15 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         case 'u':
             update = true;
             break;
-	case 'U':
-	    update = false;
-	    break;
-	case 'g':
-	    GlyOpt_groupedDL(glyrs,true);
-	    break;
-	case 'G':
-	    GlyOpt_groupedDL(glyrs,false);
-	    break;
+        case 'U':
+            update = false;
+            break;
+        case 'g':
+            GlyOpt_groupedDL(glyrs,true);
+            break;
+        case 'G':
+            GlyOpt_groupedDL(glyrs,false);
+            break;
         case 'f':
             if(GlyOpt_from(glyrs,optarg) != GLYRE_OK)
                 search_similiar_providers(optarg,glyrs);
@@ -612,18 +612,18 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         case 'V':
             print_version(glyrs);
             break;
-	case 'h':
-	    help_short(glyrs);
-	    break;
+        case 'h':
+            help_short(glyrs);
+            break;
         case 'H':
             usage(glyrs);
             break;
         case 'c':
             GlyOpt_color(glyrs,true);
             break;
-	case 'C':
-	    GlyOpt_color(glyrs,false);
-	    break;
+        case 'C':
+            GlyOpt_color(glyrs,false);
+            break;
         case 'a':
             GlyOpt_artist(glyrs,optarg);
             break;
@@ -645,18 +645,18 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
         case 'd':
             GlyOpt_download(glyrs,true);
             break;
-	case 'D':
-	    GlyOpt_download(glyrs,false);
-	    break;
+        case 'D':
+            GlyOpt_download(glyrs,false);
+            break;
         case 'l':
             GlyOpt_lang(glyrs,optarg);
             break;
-	case 'z':
-	    GlyOpt_fuzzyness(glyrs,atoi(optarg));
-	    break;
-	case 'o':
-	    GlyOpt_formats(glyrs,optarg);
-	    break;
+        case 'z':
+            GlyOpt_fuzzyness(glyrs,atoi(optarg));
+            break;
+        case 'o':
+            GlyOpt_formats(glyrs,optarg);
+            break;
         case '?':
             suggest_other_options(sizeof(long_options) / sizeof(struct option), argc, argv, optind-1, long_options,glyrs);
             break;
@@ -805,12 +805,12 @@ static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const
 
 static char * path_review(GlyQuery *s, const char * save_dir, int i)
 {
-     return path_album_artist(s,save_dir,i,"review");
+    return path_album_artist(s,save_dir,i,"review");
 }
 
 static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
 {
-     return path_album_artist(s,save_dir,i,"track");	
+    return path_album_artist(s,save_dir,i,"track");
 }
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
@@ -838,10 +838,10 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
         break;
     case GET_REVIEW:
         m_path = path_review(s,sd,iter);
-	break;
+        break;
     case GET_TRACKLIST:
-	m_path = path_tracklist(s,sd,iter);
-	break;
+        m_path = path_tracklist(s,sd,iter);
+        break;
     }
     return m_path;
 }
@@ -857,16 +857,7 @@ static int cb(GlyMemCache * c, GlyQuery * s)
     // a cache is 'ready' (i.e. ready for return)
     // See the glyr_set_dl_callback for more info
     // a custom pointer is in s->user_pointer
-    if(aa== 2)
-    {
-	puts(".....?");
-    	return GLYRE_STOP_BY_CB;
-    }
-
-puts("Caaaaaallleeeee!");
-aa++;
-	return GLYRE_OK;
-    //return (c && s) ? GLYRE_OK : GLYRE_STOP_BY_CB;
+    return GLYRE_OK;
 }
 
 int main(int argc, char * argv[])
@@ -878,13 +869,13 @@ int main(int argc, char * argv[])
         GlyQuery my_query;
         // glyr's control struct
         Gly_init_query(&my_query);
-	GlyOpt_verbosity(&my_query,2);
+        GlyOpt_verbosity(&my_query,2);
 
-/*
-        GlyOpt_call_direct_use(&my_query, true);
-        GlyOpt_call_direct_provider(&my_query, "a");
-        GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
-*/
+        /*
+                GlyOpt_call_direct_use(&my_query, true);
+                GlyOpt_call_direct_provider(&my_query, "a");
+                GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
+        */
         // Set the type..
         if(!set_get_type(&my_query, argv[1]))
         {
@@ -990,19 +981,19 @@ int main(int argc, char * argv[])
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-CH")))
     {
-	GlyQuery tmp;
-	tmp.color_output = false;
-	usage(&tmp);
+        GlyQuery tmp;
+        tmp.color_output = false;
+        usage(&tmp);
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"-ch")))
     {
-	help_short(NULL);
+        help_short(NULL);
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-Ch")))
     {
-	GlyQuery tmp;
-	tmp.color_output = false;
-	help_short(&tmp);
+        GlyQuery tmp;
+        tmp.color_output = false;
+        help_short(&tmp);
     }
     else usage(NULL);
 

@@ -7,13 +7,8 @@ Ideas:
 - photo:discogs
 - ainfo:discogs
 - update help textt
-- ainfo with correct formatting, perhaps also review
+- fixing stringop.c *brr!*
 
 Working:
 --------
 - More documentation!
-- type member in GlyMemcache  COVER_BACK, COVER_FRONT.. etc. still missing
-
-Missing:
---------
-- photos:google

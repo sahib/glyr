@@ -27,9 +27,10 @@
 #include "../core.h"
 #include "../stringop.h"
 
+
 #define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="
 #define END_OF_URL   "&imgrefurl="
-const char * cover_google_url(GlyQuery * sets)
+const char * generic_google_url(GlyQuery * sets, const char * searchterm)
 {
     const char * lang = NULL;
     if(!strcasecmp(sets->lang,"us"))
@@ -71,13 +72,23 @@ const char * cover_google_url(GlyQuery * sets)
         back = "islt:vga";
     }
 
-    return strdup_printf("http://www.google.%s/images?q=%s+%s+album&safe=off&tbs=isch:1,iar:s,%s",lang,sets->artist,sets->album,back);
+    return strdup_printf("http://www.google.%s/images?q=%s&safe=off&tbs=isch:1,iar:s,%s",lang,searchterm,back);
 }
 
-GlyCacheList * cover_google_parse(cb_object * capo)
+const char * cover_google_url(GlyQuery * s)
 {
-    // we blindly take the first result
-    // actually we have not much of a choice (no, not Nr.42)
+    const char * result = NULL;
+    char * searchterm = strdup_printf("%s+%s+album",s->artist,s->album);
+    if(searchterm != NULL)
+    {
+        result = generic_google_url(s,searchterm);
+        free(searchterm);
+    }
+    return result;
+}
+
+GlyCacheList * generic_google_parse(cb_object * capo)
+{
     GlyCacheList * r_list = NULL;
 
     size_t urlc = 0;
@@ -104,4 +115,9 @@ GlyCacheList * cover_google_parse(cb_object * capo)
         }
     }
     return r_list;
+}
+
+GlyCacheList * cover_google_parse(cb_object * capo)
+{
+    return generic_google_parse(capo);
 }

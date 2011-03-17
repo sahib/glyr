@@ -18,10 +18,15 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#ifndef GOOGLE_H
-#define GOOGLE_H
+#ifndef C_GOOGLE_H
+#define C_GOOGLE_H
 
 #include "../core.h"
+
+// Cover google plugin is also used for photos
+const char * generic_google_url(GlyQuery * sets, const char * searchterm);
+GlyCacheList * generic_google_parse(cb_object * capo);
+
 const char   * cover_google_url(GlyQuery * sets);
 GlyCacheList * cover_google_parse(cb_object *capo);
 

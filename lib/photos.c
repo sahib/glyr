@@ -30,10 +30,12 @@
 
 #include "photos/flickr.h"
 #include "photos/lastfm.h"
+#include "photos/google.h"
 
 GlyPlugin photos_providers[] =
 {
     {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, NULL, false}, GRP_SAFE | GRP_FAST},
+    {"google", "g",  C_C"goog"C_R"r",       false, {photos_google_parse, photos_google_url, NULL, true }, GRP_USFE | GRP_FAST},
     {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, NULL, true }, GRP_USFE | GRP_SLOW},
     {NULL,     NULL, NULL,                  false, {NULL,                NULL,              NULL, false}, GRP_NONE | GRP_NONE}
 };
@@ -52,28 +54,28 @@ static GlyCacheList * photo_callback(cb_object * capo)
 
     if(dl != NULL)
     {
-	int usersig = GLYRE_OK;
+        int usersig = GLYRE_OK;
 
         dl->dsrc = strdup(capo->url);
-	if(dl->type == TYPE_NOIDEA)
-	    dl->type = TYPE_PHOTOS;
+        if(dl->type == TYPE_NOIDEA)
+            dl->type = TYPE_PHOTOS;
 
         // call user defined callback if any
         if(capo->s->callback.download)
-	{
+        {
             usersig = capo->s->callback.download(dl,capo->s);
-	}
+        }
 
-	if(usersig == GLYRE_OK)
-	{
-		ls = DL_new_lst();
-		ls->usersig = usersig; 
-        	DL_add_to_list(ls,dl);
-	}
-	else
-	{
-		DL_free(dl);
-	}
+        if(usersig == GLYRE_OK)
+        {
+            ls = DL_new_lst();
+            ls->usersig = usersig;
+            DL_add_to_list(ls,dl);
+        }
+        else
+        {
+            DL_free(dl);
+        }
     }
     return ls;
 }
@@ -106,10 +108,11 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                     if(result->list[i]->data)
                     {
                         free(result->list[i]->data);
-			result->list[i]->data = NULL;
+                        result->list[i]->data = NULL;
                     }
                 }
-                dl_list = invoke(urlplug_list,i,settings->parallel,settings->timeout * i, settings);
+                printf("i = %d\n",(int)i);
+                dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
                 free(urlplug_list);
             }
         }
@@ -146,7 +149,7 @@ GlyCacheList * get_photos(GlyQuery * settings)
     if (settings && settings->artist)
         return register_and_execute(settings,photo_finalize);
     else
-        glyr_message(2,settings,stderr,C_R"[]"C_" Artist is needed to download artist-related photos!\n");
+        glyr_message(2,settings,stderr,C_R"*"C_" Artist is needed to download artist-related photos!\n");
 
     return NULL;
 }

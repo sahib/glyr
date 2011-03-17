@@ -53,18 +53,18 @@ static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings
     {
         // call user defined callback
         if(settings->callback.download)
-	{
+        {
             settings->callback.download(result->list[i],settings);
-	}
-	if(r_list->usersig == GLYRE_OK)
-	{
-		result->list[i]->type = TYPE_REVIEW;
-	        DL_add_to_list(r_list,DL_copy(result->list[i]));
-	}
-	else 
-	{
-		break;
-	}
+        }
+        if(r_list->usersig == GLYRE_OK)
+        {
+            result->list[i]->type = TYPE_REVIEW;
+            DL_add_to_list(r_list,DL_copy(result->list[i]));
+        }
+        else
+        {
+            break;
+        }
     }
     return r_list;
 }

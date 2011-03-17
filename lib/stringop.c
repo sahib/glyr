@@ -135,29 +135,29 @@ char * ascii_strdown_modify(char * string)
 
 /* ------------------------------------------------------------- */
 
+// recursively replace strings
 static char * __strsubs(char * string, const char * subs, size_t subs_len, const char * with, size_t with_len, long offset)
 {
-    char * new, * occ = strstr(string+offset,subs);
-    size_t strn_len = 0;
-
     /* Terminate when no occurences left */
-    if(occ == NULL)
+    char * occ = NULL;
+    if( (occ = strstr(string+offset,subs)) != NULL)
     {
-        return string;
+        /* string has a variable length */
+        size_t strn_len = strlen(string);
+        char * new = calloc(strn_len + with_len - subs_len + 1,sizeof(char));
+
+        /* Split & copy */
+        strncat(new, string, occ-string);
+        strncat(new, with, with_len);
+        strncat(new, occ+subs_len, strn_len - subs_len - (occ-string));
+
+        /* free previous pointer */
+        free(string);
+
+        /* Call recursively on next possible occurence */
+        return __strsubs(new,subs,subs_len,with,with_len,(occ-string)+with_len);
     }
-
-    /* string has a variable length */
-    strn_len = strlen(string);
-    new = calloc(strn_len + with_len - subs_len + 1,sizeof(char));
-
-    /* Split & copy */
-    strncat(new, string, occ-string);
-    strncat(new, with, with_len);
-    strncat(new, occ+subs_len, strn_len - subs_len - (occ-string));
-
-    /* free previous pointer */
-    free(string);
-    return __strsubs(new,subs,subs_len,with,with_len,(occ-string)+with_len);
+    return string;
 }
 
 /* ------------------------------------------------------------- */
@@ -168,22 +168,20 @@ char * strreplace(const char * string, const char * subs, const char * with)
     size_t subs_len, with_len;
 
     /* Handle special cases (where __strsubs would return weird things) */
-    if(!string || *string == 0)
+    if(string && *string)
     {
-        return NULL;
-    }
+        if(subs && *subs)
+        {
+            /* Call strlen() only once */
+            subs_len = strlen(subs);
+            with_len = (with) ? strlen(with) : 0;
 
-    if(!subs || *subs == 0)
-    {
+            /* Replace all occurenced recursevely */
+            return __strsubs(strdup(string), subs, subs_len, with, with_len,0);
+        }
         return strdup(string);
     }
-
-    /* Call strlen() only once */
-    subs_len = strlen(subs);
-    with_len = (with) ? strlen(with) : 0;
-
-    /* Replace all occurenced recursevely */
-    return __strsubs(strdup(string), subs, subs_len, with, with_len,0);
+    return NULL;
 }
 
 
@@ -235,21 +233,21 @@ static char * remove_surrender(const char * name)
 
 /* ------------------------------------------------------------- */
 
-static char * prepare_string(const char * in)
+static char * prepare_string(const char * input)
 {
     char * result = NULL;
-    if(in)
+    if(input != NULL)
     {
-        char * d1 = ascii_strdown(in);
-        if(d1)
+        char * downed = ascii_strdown(input);
+        if(downed)
         {
-            char * c1 = curl_easy_escape(NULL,d1,0);
-            if(c1)
+            char * escaped = curl_easy_escape(NULL,downed,0);
+            if(escaped)
             {
-                result = remove_surrender(c1);
-                free(c1);
+                result = remove_surrender(escaped);
+                free(escaped);
             }
-            free(d1);
+            free(downed);
         }
     }
     return result;
@@ -257,7 +255,7 @@ static char * prepare_string(const char * in)
 
 static void swap_string(char ** tmp, const char * subs, const char * with)
 {
-    char *swap = *tmp;
+    char * swap = *tmp;
     *tmp = strreplace(swap,subs,with);
 
     if(swap)
@@ -270,7 +268,7 @@ static void swap_string(char ** tmp, const char * subs, const char * with)
 char * prepare_url(const char *URL, const char *artist, const char *album, const char *title)
 {
     char * tmp = NULL;
-    if(URL)
+    if(URL != NULL)
     {
         tmp = strdup(URL);
 
@@ -290,26 +288,6 @@ char * prepare_url(const char *URL, const char *artist, const char *album, const
             free(p_title);
     }
     return tmp;
-}
-
-
-/* ------------------------------------------------------------- */
-
-char* escape_slashes(const char* in)
-{
-    if (!in) return NULL;
-
-    size_t i = 0,len = strlen(in);
-    char *out = malloc(len+1);
-
-    for (; i < len+1; i++)
-    {
-        if (in[i] != '/')
-            out[i] = in[i];
-        else
-            out[i] = ' ';
-    }
-    return out;
 }
 
 /* ------------------------------------------------------------- */
@@ -351,24 +329,26 @@ char * get_next_word(const char * string, const char * delim, size_t *offset, si
 // manipulation is not the bottleneck here...
 char * strrstr_len(char *haystack, char *needle, size_t len)
 {
-    size_t stringlen, findlen, lc;
-    char *cp;
+    size_t stringlen, findlen, lc = 0;
+    char *cp = NULL;
 
-    lc = 0;
-    findlen = strlen(needle);
-    stringlen = strlen(haystack);
-    if (findlen > stringlen)
-        return NULL;
-
-    for (cp = haystack + stringlen - findlen; cp >= haystack && lc <= len; cp--,lc++)
+    if(haystack && needle)
     {
-        if (strncmp(cp, needle, findlen) == 0)
+        findlen = strlen(needle);
+        stringlen = strlen(haystack);
+
+        if (findlen > stringlen)
+            return NULL;
+
+        for (cp = haystack + stringlen - findlen; cp >= haystack && lc <= len; cp--,lc++)
         {
-            return cp;
+            if (strncmp(cp, needle, findlen) == 0)
+            {
+                return cp;
+            }
         }
     }
-
-    return NULL;
+    return cp;
 }
 
 
@@ -377,53 +357,56 @@ char * strrstr_len(char *haystack, char *needle, size_t len)
 /* Translate strings of &ouml; (== ü) to characters */
 char *unescape_html_UTF8(const char * data)
 {
-    size_t i = 0;
-    size_t len = (data) ? strlen(data) : 0;
-    char *result = malloc(len + 1);
+    char * result = NULL;
 
-    int tagflag = 0;
-    int iB = 0;
-
-    memset(result,0,len);
-
-    for (; i  < len; ++i)
+    if(data != NULL)
     {
-        char *semicol = NULL;
-        if (data[i] == '&' && data[i+1] == '#' && (semicol = strstr(data+i,";")) != NULL)
-        {
-            int n = atoi(&data[i+2]);
+        size_t i = 0, len = strlen(data);
+        int tagflag = 0;
+        int iB = 0;
 
-            if (n >= 0x800)
+        result = malloc(len+1);
+        memset(result,0,len);
+
+        for (i = 0; i  < len; ++i)
+        {
+            char * semicol = NULL;
+            if (data[i] == '&' && data[i+1] == '#' && (semicol = strstr(data+i,";")) != NULL)
             {
-                result[iB++] = (char)(0xe0 | ((n >> 12) & 0x0f));
-                result[iB++] = (char)(0x80 | ((n >> 6 ) & 0x3f));
-                result[iB++] = (char)(0x80 | ((n      ) & 0x3f));
-            }
-            else if (n >= 0x80)
-            {
-                result[iB++] = (char)(0xc0 | ((n >> 6) & 0x1f));
-                result[iB++] = (char)(0x80 | ((n     ) & 0x3f));
+                int n = atoi(&data[i+2]);
+
+                if (n >= 0x800)
+                {
+                    result[iB++] = (char)(0xe0 | ((n >> 12) & 0x0f));
+                    result[iB++] = (char)(0x80 | ((n >> 6 ) & 0x3f));
+                    result[iB++] = (char)(0x80 | ((n      ) & 0x3f));
+                }
+                else if (n >= 0x80)
+                {
+                    result[iB++] = (char)(0xc0 | ((n >> 6) & 0x1f));
+                    result[iB++] = (char)(0x80 | ((n     ) & 0x3f));
+                }
+                else
+                {
+                    result[iB++] = (char)n;
+                }
+                i =  (int)ABS(semicol-data);
             }
             else
             {
-                result[iB++] = (char)n;
-            }
-            i =  (int)ABS(semicol-data);
-        }
-        else
-        {
-            if (data[i] == '<')
-            {
-                tagflag = 1;
-                continue;
-            }
-            if (tagflag ==  0 ) result[iB++] = data[i];
-            else if (data[i] == '>') result[iB++] = '\n';
+                if (data[i] == '<')
+                {
+                    tagflag = 1;
+                    continue;
+                }
+                if (tagflag ==  0 ) result[iB++] = data[i];
+                else if (data[i] == '>') result[iB++] = '\n';
 
-            if (data[i] == '>') tagflag = 0;
+                if (data[i] == '>') tagflag = 0;
+            }
         }
+        result[iB] = 0;
     }
-    result[iB] = 0;
     return result;
 }
 
@@ -651,7 +634,7 @@ const char *umap[][2] =
     {"#x2030","‰"},
     {"#x2122","™"},
     {"#x20AC","€"},
-    {NULL} //endmark
+    {NULL, NULL  }
 };
 
 /* ------------------------------------------------------------- */
@@ -659,8 +642,8 @@ const char *umap[][2] =
 /* returns newly allocated string without unicode like expressions */
 char * strip_html_unicode(const char * string)
 {
-    if (string == NULL) 
-      return NULL;
+    if (string == NULL)
+        return NULL;
 
     // Total length, iterator and resultbuf
     size_t sR_len = strlen(string), sR_i = 0;
@@ -669,56 +652,102 @@ char * strip_html_unicode(const char * string)
     size_t aPos = 0;
     for(   aPos = 0; aPos < sR_len; aPos++)
     {
-  	if(string[aPos] == '&')
-	{
-	   char * semicolon = NULL;
-	   if(  (semicolon  = strchr(string+aPos,';')) != NULL)
-	   {
-		// The distance between '&' and ';'
-		size_t diff = semicolon - (string+aPos);
+        // An ampersand might be a hint
+        if(string[aPos] == '&')
+        {
+            char * semicolon = NULL;
+            if(  (semicolon  = strchr(string+aPos,';')) != NULL)
+            {
+                // The distance between '&' and ';'
+                size_t diff = semicolon - (string+aPos);
 
-		// copy that portion so we can find the translation
-		char cmp_buf[diff];
-		strncpy(cmp_buf, string + aPos + 1 ,diff);
-		cmp_buf[diff-1] = '\0';
+                // Only translate codes shorter than 10 signs.
+                if(diff > 0 && diff < 8)
+                {
+                    // copy that portion so we can find the translation
+                    char cmp_buf[diff];
+                    strncpy(cmp_buf, string + aPos + 1 ,diff-1);
+                    cmp_buf[diff-1] = '\0';
 
-		// Now find the 'translation' of this code
-		// This is a bit slow for performance aware applications
-		// Glyr isn't because it has to wait for data from the internet most 
-		// of the time. You might want to add some sort of 'Hash'
-		size_t iter = 0;
-		while( umap[iter] != NULL )
-		{
-		    if(!strcmp(cmp_buf,umap[iter][0]))
-		    {
-			break;
-		    }	
-		    iter++;
-		}
+                    // Now find the 'translation' of this code
+                    // This is a bit slow for performance aware applications
+                    // Glyr isn't because it has to wait for data from the internet most
+                    // of the time. You might want to add some sort of 'Hash'
+                    size_t iter = 0;
+                    while( umap[iter][0] != NULL )
+                    {
+                        if(umap[iter][0] &&  !strcmp(cmp_buf,umap[iter][0]))
+                        {
+                            break;
+                        }
+                        iter++;
+                    }
 
-		// If nothing found we just copy it
-		if(umap[iter] != NULL)
-		{
-			// Copy the translation to the string
-			size_t trans_len = strlen(umap[iter][1]);
-			strncpy(sResult + sR_i, umap[iter][1], trans_len);
+                    // If nothing found we just copy it
+                    if(umap[iter][0] != NULL && umap[iter][1] != NULL)
+                    {
+                        // Copy the translation to the string
+                        size_t trans_len = strlen(umap[iter][1]);
+                        strncpy(sResult + sR_i, umap[iter][1], trans_len);
 
-			// Overjump next bytes.
-			sR_i += trans_len;
-			aPos += diff;
-			continue;
-		}
-	   }
-	}
+                        // Overjump next bytes.
+                        sR_i += trans_len;
+                        aPos += diff;
+                        continue;
+                    }
+                }
+            }
+        }
 
-	// Plain strcpy most of the time..
-	sResult[sR_i++] = string[aPos];
+        // Plain strcpy most of the time..
+        sResult[sR_i++] = string[aPos];
     }
     return sResult;
 }
 
-
 /* ------------------------------------------------------------- */
+/*
+H<a>W</a>!
+0123456789
+0123345677
+1111222223
+*/
+int m_remove_html_tags_from_string(char * string, size_t len)
+{
+    size_t offset = 0;
+
+    if(string != NULL)
+    {
+        bool do_copy = true;
+        size_t pos = 0, i = 0, L = strlen(string);
+
+        for(i = 0; i < L; i++)
+        {
+            if(string[i] == '<')
+            {
+                do_copy = false;
+            }
+
+            bool is_end = string[i] == '>';
+
+            if(!do_copy)
+            {
+                offset++;
+            }
+
+            string[pos] = string[pos + offset];
+            pos++;
+            //string[i] = do_copy ? string[i] : ' ';
+
+            if(is_end)
+            {
+                do_copy = true;
+            }
+        }
+
+    }
+    return offset;
+}
 
 char * remove_html_tags_from_string(const char * string, size_t len)
 {
@@ -751,6 +780,8 @@ char * remove_html_tags_from_string(const char * string, size_t len)
 char * beautify_lyrics(const char * lyrics)
 {
     char * result = NULL;
+
+	// Strip numeric HTML unicodes 
     char * strip = strip_html_unicode(lyrics);
     if(strip)
     {
@@ -866,10 +897,10 @@ char * copy_value(const char * begin, const char * end)
         char * buffer = malloc(length+1);
         if(buffer)
         {
-	    strncpy(buffer,begin,length);
-	    buffer[length] = '\0';
+            strncpy(buffer,begin,length);
+            buffer[length] = '\0';
         }
-    return buffer;
+        return buffer;
     }
     return NULL;
 }

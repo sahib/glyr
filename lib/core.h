@@ -49,7 +49,7 @@ typedef struct cb_object
 
     // internal cache attached to this url
     GlyMemCache *cache;
-	
+
     // shall invoke() use a batch-like mode?
     // This usually only affects the output
     bool batch;
@@ -105,5 +105,5 @@ int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, Gly
 int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 
 // ....
-const char * grp_id_to_name(int id); 
+const char * grp_id_to_name(int id);
 #endif

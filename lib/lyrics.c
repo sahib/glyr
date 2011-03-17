@@ -77,23 +77,23 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
         dl->data = beautify_lyrics(result->list[i]->data);
         dl->size = strlen(dl->data);
         dl->dsrc = strdup(result->list[i]->dsrc);
-	dl->type = TYPE_LYRICS;
+        dl->type = TYPE_LYRICS;
 
         // call user defined callback
         if(settings->callback.download)
-	{
+        {
             lst->usersig = settings->callback.download(dl,settings);
         }
 
-	if(lst->usersig == GLYRE_OK)
-	{
-        	DL_add_to_list(lst,dl);
-	}
-	else 
-	{
-		DL_free(dl);
-		break;
-	}
+        if(lst->usersig == GLYRE_OK)
+        {
+            DL_add_to_list(lst,dl);
+        }
+        else
+        {
+            DL_free(dl);
+            break;
+        }
     }
     return lst;
 }

@@ -88,10 +88,10 @@ GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
                                                     result->data = strreplace(lyrics,"<br />","");
                                                     result->size = strlen(lyrics);
                                                     result->dsrc = strdup(url);
-				
-						    if(!r_list) r_list = DL_new_lst();
-						    DL_add_to_list(r_list,result);
-						    urlc++;
+
+                                                    if(!r_list) r_list = DL_new_lst();
+                                                    DL_add_to_list(r_list,result);
+                                                    urlc++;
                                                 }
                                                 free(lyrics);
                                             }

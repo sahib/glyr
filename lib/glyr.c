@@ -246,8 +246,8 @@ int GlyOpt_formats(GlyQuery * s, const char * formats)
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(formats != NULL)
     {
-      glyr_set_info(s,3,formats);
-      return GLYRE_OK;
+        glyr_set_info(s,3,formats);
+        return GLYRE_OK;
     }
     return GLYRE_BAD_VALUE;
 }
@@ -269,7 +269,7 @@ int GlyOpt_plugmax(GlyQuery * s, int plugmax)
 /*-----------------------------------------------*/
 
 int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck)
-{	
+{
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->duplcheck = duplcheck;
     return GLYRE_OK;
@@ -288,9 +288,9 @@ int GlyOpt_fuzzyness(GlyQuery * s, int fuzz)
 
 int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->groupedDL = groupedDL;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->groupedDL = groupedDL;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
@@ -342,7 +342,7 @@ GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 
 const char * Gly_groupname_by_id(int ID)
 {
-	return grp_id_to_name(ID);
+    return grp_id_to_name(ID);
 }
 
 /*-----------------------------------------------*/
@@ -386,7 +386,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
 
 void Gly_init_query(GlyQuery * glyrs)
 {
-	set_query_on_defaults(glyrs);
+    set_query_on_defaults(glyrs);
 }
 
 /*-----------------------------------------------*/
@@ -406,12 +406,12 @@ void Gly_destroy_query(GlyQuery * sets)
         }
 
         if(sets->providers != NULL)
-	{
+        {
             free(sets->providers);
-	    sets->providers = NULL;
-	}
+            sets->providers = NULL;
+        }
 
-	set_query_on_defaults(sets);
+        set_query_on_defaults(sets);
     }
 }
 
@@ -419,7 +419,7 @@ void Gly_destroy_query(GlyQuery * sets)
 
 GlyMemCache * Gly_download(const char * url, GlyQuery * s)
 {
-	return download_single(url,s,NULL);
+    return download_single(url,s,NULL);
 }
 
 /*-----------------------------------------------*/
@@ -458,34 +458,34 @@ static GlyCacheList * call_parser_direct(GlyQuery * s)
     GlyPlugin * cPlug = Gly_get_provider_by_id(s->type);
     if(cPlug != NULL)
     {
-	size_t iter;
-	for(iter = 0; cPlug[iter].name; iter++)
-	{
-	     if(!strcmp(cPlug[iter].key,s->call_direct.provider) || !strcmp(cPlug[iter].name,s->call_direct.provider))
-	     {
-		GlyMemCache * c = NULL; 
-		const char  * dl_url = (s->call_direct.url) ? cPlug[iter].plug.url_callback(s) : s->call_direct.url;
-		if(dl_url != NULL)
-		{
-			c = download_single(dl_url,s,NULL);
-			if(c != NULL)
-			{
-				cb_object capo;
-				plugin_init(&capo,NULL,NULL,s,NULL,NULL,0);
-				capo.cache = c;				
+        size_t iter;
+        for(iter = 0; cPlug[iter].name; iter++)
+        {
+            if(!strcmp(cPlug[iter].key,s->call_direct.provider) || !strcmp(cPlug[iter].name,s->call_direct.provider))
+            {
+                GlyMemCache * c = NULL;
+                const char  * dl_url = (s->call_direct.url) ? cPlug[iter].plug.url_callback(s) : s->call_direct.url;
+                if(dl_url != NULL)
+                {
+                    c = download_single(dl_url,s,NULL);
+                    if(c != NULL)
+                    {
+                        cb_object capo;
+                        plugin_init(&capo,NULL,NULL,s,NULL,NULL,0);
+                        capo.cache = c;
 
-				re = cPlug[iter].plug.parser_callback(&capo);
+                        re = cPlug[iter].plug.parser_callback(&capo);
 
-				DL_free(c);
-				c = NULL;
-				capo.cache = NULL;
-			}
-		}
-		break;
-	     }
- 	}
-	free(cPlug);
-	cPlug = NULL;
+                        DL_free(c);
+                        c = NULL;
+                        capo.cache = NULL;
+                    }
+                }
+                break;
+            }
+        }
+        free(cPlug);
+        cPlug = NULL;
     }
     return re;
 }
@@ -497,13 +497,13 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
     if(e) *e = GLYRE_OK;
     if(!settings)
     {
-	if(e) *e = GLYRE_EMPTY_STRUCT;
-	return NULL;
+        if(e) *e = GLYRE_EMPTY_STRUCT;
+        return NULL;
     }
 
     if(settings->call_direct.use)
     {
-	return call_parser_direct(settings);
+        return call_parser_direct(settings);
     }
 
     if(!settings->providers)
@@ -548,13 +548,13 @@ GlyCacheList * Gly_get(GlyQuery * settings, int * e)
         result = get_review(settings);
         break;
     case GET_TRACKLIST:
-	result =  get_tracklist(settings);
-	break;
+        result =  get_tracklist(settings);
+        break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
 
-    
+
     curl_global_cleanup();
     settings->itemctr = 0;
     return result;
@@ -618,7 +618,7 @@ GlyPlugin * Gly_get_provider_by_id(int ID)
     case GET_REVIEW:
         return glyr_get_review_providers();
     case GET_TRACKLIST:
-	return glyr_get_tracklist_providers();
+        return glyr_get_tracklist_providers();
     case -1       :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :
@@ -650,16 +650,17 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
         case 2:
             s->title = (char*)s->info[at];
             break;
-	case 3:
-	    s->formats = (char*)s->info[at];
-	    break;
-	case 4:
-	    s->call_direct.provider = (char*)s->info[at];
-	    break;
-	case 5:
-	    s->call_direct.url = (char*)s->info[at];
-	    break;
-	default: glyr_message(2,s,stderr,"Warning: wrong AT for glyr_info_at!\n");
+        case 3:
+            s->formats = (char*)s->info[at];
+            break;
+        case 4:
+            s->call_direct.provider = (char*)s->info[at];
+            break;
+        case 5:
+            s->call_direct.url = (char*)s->info[at];
+            break;
+        default:
+            glyr_message(2,s,stderr,"Warning: wrong AT for glyr_info_at!\n");
         }
     }
     else
@@ -688,15 +689,15 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
     }
     else /* Register a specific Group */
     {
-	    while(providers[i].name)
-	    {
-		if(providers[i].gid & GIDmask)
-		{
-			providers[i].use = value;
-		}
-		i++;
-	    }
-     }
+        while(providers[i].name)
+        {
+            if(providers[i].gid & GIDmask)
+            {
+                providers[i].use = value;
+            }
+            i++;
+        }
+    }
 }
 
 /*-----------------------------------------------*/
@@ -707,10 +708,10 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
     if(settings && arg)
     {
         GlyPlugin * what_pair = Gly_get_provider_by_id(settings->type);
-	if(settings->providers != NULL)
-	{
-		free(settings->providers);
-	}
+        if(settings->providers != NULL)
+        {
+            free(settings->providers);
+        }
         settings->providers = what_pair;
 
         if(what_pair)

@@ -125,8 +125,8 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
                                         if(result)
                                         {
                                             result->dsrc = strdup(dl_url);
-					    if(!r_list) r_list = DL_new_lst();
-					    DL_add_to_list(r_list,result);
+                                            if(!r_list) r_list = DL_new_lst();
+                                            DL_add_to_list(r_list,result);
                                         }
                                         DL_free(dl_cache);
                                     }

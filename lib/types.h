@@ -87,13 +87,13 @@
 /* Group IDs */
 enum GLYR_GROUPS
 {
-	GRP_NONE = 0 << 0, /* None    */
-	GRP_SAFE = 1 << 0, /* Safe    */
-	GRP_USFE = 1 << 1, /* Unsafe  */
-	GRP_SPCL = 1 << 2, /* Special */
-	GRP_FAST = 1 << 3, /* Fast    */
-	GRP_SLOW = 1 << 4, /* Slow    */
-	GRP_ALL  = 1 << 5  /* All!    */
+    GRP_NONE = 0 << 0, /* None    */
+    GRP_SAFE = 1 << 0, /* Safe    */
+    GRP_USFE = 1 << 1, /* Unsafe  */
+    GRP_SPCL = 1 << 2, /* Special */
+    GRP_FAST = 1 << 3, /* Fast    */
+    GRP_SLOW = 1 << 4, /* Slow    */
+    GRP_ALL  = 1 << 5  /* All!    */
 };
 
 enum GLYR_ERROR
@@ -127,11 +127,12 @@ struct cb_object;
 // Internal buffer model
 typedef struct GlyMemCache
 {
-    char  *data;   // data buffer
-    size_t size;   // Size of data
-    char  *dsrc;   // Source of data
-    int   type;    // type of metadata
-    int   error;   // error code - internal use only
+    char  *data;    // data buffer
+    size_t size;    // Size of data
+    char  *dsrc;    // Source of data
+    int   type;     // type of metadata
+    int   error;    // error code - internal use only
+    int   duration; // Duration of a song. Only for tracklist getter.
 } GlyMemCache;
 
 // list of GlyMemCaches
@@ -182,7 +183,7 @@ typedef struct GlyQuery
     // this converts glyr to a sort of search engines
     bool download;
 
-    // Download group for group, 
+    // Download group for group,
     // or all in parallel? (faster, but less accurate)
     bool groupedDL;
 
@@ -209,9 +210,9 @@ typedef struct GlyQuery
 
     struct call_direct
     {
-	bool use;
-	const char * provider;
-	const char * url;
+        bool use;
+        const char * provider;
+        const char * url;
     } call_direct;
 
 } GlyQuery;
@@ -233,7 +234,7 @@ typedef struct GlyPlugin
         // Passed to the corresponding cb_object and is called...perhaps
         GlyCacheList * (* parser_callback) (struct cb_object *);
         const char *   (* url_callback)    (GlyQuery  *);
-	const char *  endmarker; // Stop download if containing this string
+        const char *  endmarker; // Stop download if containing this string
         bool free_url; // pass result of url_callback to free()?
     } plug;
 

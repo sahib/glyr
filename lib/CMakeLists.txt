@@ -1,7 +1,7 @@
 # configure
 set( GLYR_VERSION_MAJOR "0")
 set( GLYR_VERSION_MINOR "4")
-set( GLYR_VERSION_NAME  "Larcenous Locust")
+set( GLYR_VERSION_NAME  "Larcenous Locust (dev)")
 set( GLYR_COLORED_OUTPUT true)
 
 configure_file (

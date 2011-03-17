@@ -59,10 +59,10 @@ GlyPlugin cover_providers[] =
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
-       (min == -1 && max >= sZ) ||
-       (min <= sZ && max == -1) ||
-       (min <= sZ && max >= sZ)  )
-       return true;
+            (min == -1 && max >= sZ) ||
+            (min <= sZ && max == -1) ||
+            (min <= sZ && max >= sZ)  )
+        return true;
 
     return false;
 }
@@ -81,28 +81,28 @@ static GlyCacheList * cover_callback(cb_object * capo)
 
     if(dl != NULL)
     {
-	int usersig = GLYRE_OK;
+        int usersig = GLYRE_OK;
 
         dl->dsrc = strdup(capo->url);
-	if(dl->type == TYPE_NOIDEA)
-	    dl->type = TYPE_COVER;
+        if(dl->type == TYPE_NOIDEA)
+            dl->type = TYPE_COVER;
 
         // call user defined callback if any
         if(capo->s->callback.download)
-	{
+        {
             usersig = capo->s->callback.download(dl,capo->s);
-	}
+        }
 
-	if(usersig == GLYRE_OK)
-	{
-		ls = DL_new_lst();
-		ls->usersig = usersig; 
-        	DL_add_to_list(ls,dl);
-	}
-	else
-	{
-		DL_free(dl);
-	}
+        if(usersig == GLYRE_OK)
+        {
+            ls = DL_new_lst();
+            ls->usersig = usersig;
+            DL_add_to_list(ls,dl);
+        }
+        else
+        {
+            DL_free(dl);
+        }
     }
     return ls;
 }
@@ -120,11 +120,11 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
     // Only NULL when finalizing()
     if(result == NULL)
     {
-	if(settings->itemctr)
-	{
-		glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
-	}
-	return NULL;
+        if(settings->itemctr)
+        {
+            glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
+        }
+        return NULL;
     }
 
     GlyCacheList * dl_list = NULL;
@@ -141,7 +141,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 /* Watch out for blacklisted URLs */
                 flag_blacklisted_urls(result,URLblacklist,settings);
 
-		flag_invalid_format(result,settings);
+                flag_invalid_format(result,settings);
 
                 size_t i = 0;
                 int ctr = 0;
@@ -155,10 +155,10 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 }
 
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
-		if(dl_list != NULL)
-		{
-                	glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
-		}
+                if(dl_list != NULL)
+                {
+                    glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
+                }
                 free(urlplug_list);
             }
         }
@@ -169,8 +169,8 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 
             /* Watch out for blacklisted URLs */
             flag_blacklisted_urls(result,URLblacklist,settings);
-		
-  	    flag_invalid_format(result,settings);
+
+            flag_invalid_format(result,settings);
 
             size_t i = 0;
             for( i = 0; i < result->size; i++)

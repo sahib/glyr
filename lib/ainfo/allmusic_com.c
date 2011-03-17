@@ -58,8 +58,8 @@ GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
                     rche = DL_init();
                     rche->data = strip_html_unicode(cr);
                     rche->size = strlen(rche->data);
-if(rche->data)
-	puts(rche->data);
+                    if(rche->data)
+                        puts(rche->data);
 
                     free(cr);
                     cr = NULL;
