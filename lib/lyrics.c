@@ -82,9 +82,18 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
         // call user defined callback
         if(settings->callback.download)
 	{
-            settings->callback.download(dl,settings);
+            lst->usersig = settings->callback.download(dl,settings);
         }
-        DL_add_to_list(lst,dl);
+
+	if(lst->usersig == GLYRE_OK)
+	{
+        	DL_add_to_list(lst,dl);
+	}
+	else 
+	{
+		DL_free(dl);
+		break;
+	}
     }
     return lst;
 }

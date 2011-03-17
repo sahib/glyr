@@ -659,62 +659,62 @@ const char *umap[][2] =
 /* returns newly allocated string without unicode like expressions */
 char * strip_html_unicode(const char * string)
 {
-    if (string == NULL) return NULL;
+    if (string == NULL) 
+      return NULL;
 
-    char *p   = (char*)string;
+    // Total length, iterator and resultbuf
+    size_t sR_len = strlen(string), sR_i = 0;
+    char * sResult = calloc(sR_len+1,sizeof(char));
 
-    // Be safe.
-    size_t cpy_len = strlen(string);
-    char *cpy = malloc(cpy_len + 1);
-    memset(cpy,0,cpy_len+1);
-
-    int x = 0;
-    bool is_uc = false;
-
-    while (*p)
+    size_t aPos = 0;
+    for(   aPos = 0; aPos < sR_len; aPos++)
     {
-        char *sub = (char*)" ";
-        is_uc = false;
+  	if(string[aPos] == '&')
+	{
+	   char * semicolon = NULL;
+	   if(  (semicolon  = strchr(string+aPos,';')) != NULL)
+	   {
+		// The distance between '&' and ';'
+		size_t diff = semicolon - (string+aPos);
 
-        if (*p == '&')
-        {
-            int uit = 0;
-            char uit_buf[8];
-            char *p2 = p;
+		// copy that portion so we can find the translation
+		char cmp_buf[diff];
+		strncpy(cmp_buf, string + aPos + 1 ,diff);
+		cmp_buf[diff-1] = '\0';
 
-            // Skip silly "unwarned result" warning
-            p2 = p2 + sizeof(char);
+		// Now find the 'translation' of this code
+		// This is a bit slow for performance aware applications
+		// Glyr isn't because it has to wait for data from the internet most 
+		// of the time. You might want to add some sort of 'Hash'
+		size_t iter = 0;
+		while( umap[iter] != NULL )
+		{
+		    if(!strcmp(cmp_buf,umap[iter][0]))
+		    {
+			break;
+		    }	
+		    iter++;
+		}
 
-            while (*p2 && *p2 != ';')
-            {
-                uit_buf[uit++] = *p2++;
-            }
-            uit_buf[uit] = 0;
+		// If nothing found we just copy it
+		if(umap[iter] != NULL)
+		{
+			// Copy the translation to the string
+			size_t trans_len = strlen(umap[iter][1]);
+			strncpy(sResult + sR_i, umap[iter][1], trans_len);
 
-            if (*p2 == ';' && uit != 0)
-            {
-                int uma = 0;
-                while (umap[uma] && umap[uma][0])
-                {
-                    if (!strcmp(umap[uma][0],uit_buf))
-                    {
-                        sub = (char*)umap[uma][1];
-                        is_uc = true;
-                        p = p2;
-                        break;
-                    }
-                    uma++;
-                }
-            }
-        }
+			// Overjump next bytes.
+			sR_i += trans_len;
+			aPos += diff;
+			continue;
+		}
+	   }
+	}
 
-        if (is_uc == false) cpy[x++] = *p;
-        else  while (*sub) cpy[x++] = *sub++;
-
-        p = p + sizeof(char);
+	// Plain strcpy most of the time..
+	sResult[sR_i++] = string[aPos];
     }
-    cpy[x] = '\0';
-    return cpy;
+    return sResult;
 }
 
 

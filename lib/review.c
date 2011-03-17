@@ -56,8 +56,15 @@ static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings
 	{
             settings->callback.download(result->list[i],settings);
 	}
-	result->list[i]->type = TYPE_REVIEW;
-        DL_add_to_list(r_list,DL_copy(result->list[i]));
+	if(r_list->usersig == GLYRE_OK)
+	{
+		result->list[i]->type = TYPE_REVIEW;
+	        DL_add_to_list(r_list,DL_copy(result->list[i]));
+	}
+	else 
+	{
+		break;
+	}
     }
     return r_list;
 }

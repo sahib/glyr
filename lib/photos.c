@@ -45,19 +45,35 @@ GlyPlugin * glyr_get_photo_providers(void)
 
 static GlyCacheList * photo_callback(cb_object * capo)
 {
-    GlyCacheList * ls = DL_new_lst();
-    GlyMemCache * dl = DL_copy(capo->cache);
-    if(dl)
-    {
-        dl->dsrc = strdup(capo->url);
-	dl->type = TYPE_PHOTOS;
+    // in this 'pseudo' callback we copy
+    // the downloaded cache, and add the source url
+    GlyCacheList * ls = NULL;
+    GlyMemCache  * dl = DL_copy(capo->cache);
 
-        // call user defined callback
+    if(dl != NULL)
+    {
+	int usersig = GLYRE_OK;
+
+        dl->dsrc = strdup(capo->url);
+	if(dl->type == TYPE_NOIDEA)
+	    dl->type = TYPE_PHOTOS;
+
+        // call user defined callback if any
         if(capo->s->callback.download)
 	{
-            ls->usersig = capo->s->callback.download(dl,capo->s);
+            usersig = capo->s->callback.download(dl,capo->s);
 	}
-        DL_add_to_list(ls,dl);
+
+	if(usersig == GLYRE_OK)
+	{
+		ls = DL_new_lst();
+		ls->usersig = usersig; 
+        	DL_add_to_list(ls,dl);
+	}
+	else
+	{
+		DL_free(dl);
+	}
     }
     return ls;
 }

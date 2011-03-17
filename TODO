@@ -1,31 +1,19 @@
 Ideas:
 ------
 - Musicbrainz!
-
-Has
-- labels x
-- artists 
-- releases
-- tracks!
-
-Could:
-- tracklist
-- albumlist
-- review pages.. (at least the links.)
 - new plugins (wikipedia for ainfo - clementine)
-
-
-- type member in GlyMemcache  COVER_BACK, COVER_FRONT.. etc. still missing
 - at least two more review plugins
 - relation getter
 - photo:discogs
 - ainfo:discogs
 - update help textt
 - ainfo with correct formatting, perhaps also review
-- strerror
+
+Working:
+--------
+- More documentation!
+- type member in GlyMemcache  COVER_BACK, COVER_FRONT.. etc. still missing
 
 Missing:
 --------
-- check callback return 
-- More documentation!
 - photos:google

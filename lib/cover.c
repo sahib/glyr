@@ -76,22 +76,33 @@ static GlyCacheList * cover_callback(cb_object * capo)
 {
     // in this 'pseudo' callback we copy
     // the downloaded cache, and add the source url
-    GlyCacheList * ls = DL_new_lst();
-    GlyMemCache * dl = DL_copy(capo->cache);
+    GlyCacheList * ls = NULL;
+    GlyMemCache  * dl = DL_copy(capo->cache);
 
-    if(dl)
+    if(dl != NULL)
     {
+	int usersig = GLYRE_OK;
+
         dl->dsrc = strdup(capo->url);
 	if(dl->type == TYPE_NOIDEA)
 	    dl->type = TYPE_COVER;
 
-        // call user defined callback
+        // call user defined callback if any
         if(capo->s->callback.download)
 	{
-            ls->usersig = capo->s->callback.download(dl,capo->s);
+            usersig = capo->s->callback.download(dl,capo->s);
 	}
 
-        DL_add_to_list(ls,dl);
+	if(usersig == GLYRE_OK)
+	{
+		ls = DL_new_lst();
+		ls->usersig = usersig; 
+        	DL_add_to_list(ls,dl);
+	}
+	else
+	{
+		DL_free(dl);
+	}
     }
     return ls;
 }
@@ -100,7 +111,7 @@ static GlyCacheList * cover_callback(cb_object * capo)
 // Prefer to handle this in the plugin though!
 const char * URLblacklist[] =
 {
-    "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",
+    "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg", // blank image.
     NULL
 };
 

@@ -735,7 +735,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                     {
                         // Now try to parse what we downloaded
                         GlyCacheList * cl = capo->parser_callback(capo);
-                        if(cl && cl->list[0]->data)
+                        if(cl && cl->list && cl->list[0]->data)
                         {
                             if(!capo->batch)
                             {
@@ -789,6 +789,13 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                             }
                             if(cl != NULL) DL_free_lst(cl);
                         }
+			else if(capo->batch)
+			{
+				// If NULL is returned this means usually 
+				// that GLYRE_STOP_BY_CB was returned
+				// so we stop...
+				do_exit = true;
+			}
                     }
                     else
                     {

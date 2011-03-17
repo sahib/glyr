@@ -848,8 +848,8 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
+/* -------------------------------------------------------- */
+int aa = 0;
 static int cb(GlyMemCache * c, GlyQuery * s)
 {
     // This is just to demonstrate the callback option.
@@ -857,7 +857,16 @@ static int cb(GlyMemCache * c, GlyQuery * s)
     // a cache is 'ready' (i.e. ready for return)
     // See the glyr_set_dl_callback for more info
     // a custom pointer is in s->user_pointer
-    return (c && s) ? GLYRE_OK : GLYRE_STOP_BY_CB;
+    if(aa== 2)
+    {
+	puts(".....?");
+    	return GLYRE_STOP_BY_CB;
+    }
+
+puts("Caaaaaallleeeee!");
+aa++;
+	return GLYRE_OK;
+    //return (c && s) ? GLYRE_OK : GLYRE_STOP_BY_CB;
 }
 
 int main(int argc, char * argv[])
@@ -871,10 +880,11 @@ int main(int argc, char * argv[])
         Gly_init_query(&my_query);
 	GlyOpt_verbosity(&my_query,2);
 
+/*
         GlyOpt_call_direct_use(&my_query, true);
         GlyOpt_call_direct_provider(&my_query, "a");
         GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
-
+*/
         // Set the type..
         if(!set_get_type(&my_query, argv[1]))
         {
