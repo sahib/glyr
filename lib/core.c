@@ -820,7 +820,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 {
                     ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
-                    glyr_message(1,s,stderr,"#[%d]"C_R" %s.\n"C_,msg->data.result,curl_err ? curl_err : "Unknown Error");
+                    glyr_message(2,s,stderr,C_" %s "C_R"[errno:%d]\n"C_,msg->data.result,curl_err ? curl_err : "Unknown Error");
                 }
                 else if(!capo->batch)
                 {

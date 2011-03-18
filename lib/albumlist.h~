@@ -1,0 +1,7 @@
+#ifndef ALBUMLIST_H
+#define ALBUMLIST_H
+
+GlyPlugin * glyr_get_tracklist_providers(void);
+GlyCacheList * get_tracklist(GlyQuery * settings);
+
+#endif

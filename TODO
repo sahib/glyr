@@ -1,13 +1,11 @@
 Ideas:
 ------
-- Musicbrainz!
-- new plugins (wikipedia for ainfo - clementine)
+- Musicbrainz (relation/album getter)
+- new plugins (wikipedia for ainfo - like clementine)
 - at least two more review plugins
-- relation getter
-- photo:discogs
-- ainfo:discogs
-- update help textt
+- update help text
 
 Working:
 --------
 - More documentation!
+- COVER_SECONDARY_TYPE got lost somewhere in the commits. Re-get. 

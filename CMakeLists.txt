@@ -55,6 +55,7 @@ set (DIR_AINFO     ${DIR_ROOT}/ainfo                    )
 set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
 set (DIR_REVIEW    ${DIR_ROOT}/review                   )
 set (DIR_TRACKLIST ${DIR_ROOT}/tracklist                )
+set (DIR_ALBUMLIST ${DIR_ROOT}/albumlist                )
 
 SET(LIB_SOURCE_LOCATIONS 
 	"${DIR_ROOT}/glyr.c"
@@ -67,11 +68,13 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/photos.c"
 	"${DIR_ROOT}/review.c"
 	"${DIR_ROOT}/tracklist.c"
+	"${DIR_ROOT}/albumlist.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_SIMILIAR}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
+	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_COVER}/last_fm.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"

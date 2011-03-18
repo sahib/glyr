@@ -30,7 +30,7 @@ Use the github page to view the automated git generated brother.
 
 2011/03/14
 ----------
-+ Fixed a bug that made the itemcounter to be negative. (Got -21 images! he happily replied)
++ Fixed a bug that made the itemcounter to be negative. ("Got -21 images!" he happily replied)
 
 2011/03/17
 ----------
@@ -39,3 +39,9 @@ Use the github page to view the automated git generated brother.
 + Fixed an ugly bug in photos.c that crashed libglyr if ignoring a URL
 + added provider photos:google
 + reformatted due to trying anjuta as IDE (instead of pure gVim)
+
+2011/03/18
+----------
++ Replaced ugly remove_html_tags with a more generic version that works completely in-place
++ Removed a few redundant strlen()s
++ added (non-working) albumlist getter which gets all official albums from a certain artist

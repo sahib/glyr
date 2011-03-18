@@ -812,6 +812,16 @@ static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
 {
     return path_album_artist(s,save_dir,i,"track");
 }
+
+static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
+{
+    char * good_artist = correct_path(s->artist);
+	char * good_path   = strdup_printf("%s/%s_album_%d.txt",save_dir,good_artist,i);
+    if(good_artist)
+		free(good_artist);
+
+	return good_path;
+}
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
@@ -842,6 +852,9 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
     case GET_TRACKLIST:
         m_path = path_tracklist(s,sd,iter);
         break;
+	case GET_ALBUMLIST:
+		m_path = path_albumlist(s,sd,iter);
+		break;
     }
     return m_path;
 }

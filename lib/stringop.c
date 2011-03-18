@@ -706,49 +706,39 @@ char * strip_html_unicode(const char * string)
 }
 
 /* ------------------------------------------------------------- */
-/*
-H<a>W</a>!
-0123456789
-0123345677
-1111222223
-*/
-int m_remove_html_tags_from_string(char * string, size_t len)
+
+/* remove any tags inplace, as string gets only qual sized 
+ * or bigger. length can be -1, then it get's automatically 
+ * computed by strlen().
+ * Algorithm:
+ * Finds start tags, and tries to find ending tag ('>') from there
+ * All bytes after '>' are moved now to the start of '<'. 
+ * The total number of bytes the 0 byte moved is returned.
+ */
+size_t remove_tags_from_string(char * string, int length, char start, char end)
 {
-    size_t offset = 0;
-
-    if(string != NULL)
-    {
-        bool do_copy = true;
-        size_t pos = 0, i = 0, L = strlen(string);
-
-        for(i = 0; i < L; i++)
-        {
-            if(string[i] == '<')
-            {
-                do_copy = false;
-            }
-
-            bool is_end = string[i] == '>';
-
-            if(!do_copy)
-            {
-                offset++;
-            }
-
-            string[pos] = string[pos + offset];
-            pos++;
-            //string[i] = do_copy ? string[i] : ' ';
-
-            if(is_end)
-            {
-                do_copy = true;
-            }
-        }
-
-    }
-    return offset;
+     size_t ctr = 0;
+     if(string != NULL)
+     { 
+	   size_t l, L = (length < 0) ? strlen(string) : (size_t)length;
+	   for(l = L-1; l; --l)
+ 	   {
+			if(string[l] == start)
+			{
+				char * tagEnd = strchr(string+l+1,end);
+				if(tagEnd != NULL)
+				{
+					memmove(string+l,tagEnd+1,string+L - tagEnd);
+					ctr += tagEnd - string+l;
+				}
+	    	} 
+	    }
+     }
+     return ctr;
 }
 
+/* ------------------------------------------------------------- */
+/*
 char * remove_html_tags_from_string(const char * string, size_t len)
 {
     if(string == NULL)
@@ -771,7 +761,7 @@ char * remove_html_tags_from_string(const char * string, size_t len)
     new[x] = '\0';
     return new;
 }
-
+*/
 
 /* ------------------------------------------------------------- */
 
@@ -809,19 +799,15 @@ char * beautify_lyrics(const char * lyrics)
                 i = j+1;
             }
 
-            char * bye_html = remove_html_tags_from_string(unicode,len);
-            free(unicode);
-            if(bye_html)
-            {
-                char * trimd = calloc(1,sizeof(char) * (strlen(bye_html)+1));
-                if(trimd)
-                {
-                    trim_copy(bye_html,trimd);
-                }
+            len -= remove_tags_from_string(unicode,len,'<','>');
+			char * trimd = calloc(1,sizeof(char) * (len+1));
+			if(trimd)
+			{
+				trim_copy(unicode,trimd);
+				free(unicode);
+			}
 
-                result = trimd;
-                free(bye_html);
-            }
+			result = trimd;
         }
     }
     return result;

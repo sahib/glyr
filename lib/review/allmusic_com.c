@@ -56,16 +56,12 @@ GlyMemCache * parse_text(GlyMemCache * to_parse)
             char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
             if(text != NULL)
             {
-                char * cr = remove_html_tags_from_string(text,strlen(text));
-                if(cr != NULL)
-                {
-                    rche = DL_init();
-                    rche->data = strip_html_unicode(cr);
-                    rche->size = strlen(rche->data);
+                remove_tags_from_string(text,strlen(text),'<','>');
+				
+                rche = DL_init();
+                rche->data = strip_html_unicode(text);
+                rche->size = strlen(rche->data);
 
-                    free(cr);
-                    cr = NULL;
-                }
                 free(text);
                 text = NULL;
             }

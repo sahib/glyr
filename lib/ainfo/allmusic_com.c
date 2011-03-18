@@ -43,27 +43,20 @@ GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
             char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
             if(text != NULL)
             {
-                char * cr = remove_html_tags_from_string(text,strlen(text));
-                if(cr != NULL)
-                {
-                    char * null_marker = strstr(cr,"&hellip;&nbsp;&nbsp;");
-                    if(null_marker != NULL)
-                    {
-                        cr[null_marker - cr + 0] = '.';
-                        cr[null_marker - cr + 1] = '.';
-                        cr[null_marker - cr + 2] = '.';
-                        cr[null_marker - cr + 3] =   0;
-                    }
+                remove_tags_from_string(text,strlen(text),'<','>');
+				char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
+				if(null_marker != NULL)
+				{
+					text[null_marker - text + 0] = '.';
+					text[null_marker - text + 1] = '.';
+					text[null_marker - text + 2] = '.';
+					text[null_marker - text + 3] =   0;
+				}
 
-                    rche = DL_init();
-                    rche->data = strip_html_unicode(cr);
-                    rche->size = strlen(rche->data);
-                    if(rche->data)
-                        puts(rche->data);
-
-                    free(cr);
-                    cr = NULL;
-                }
+				rche = DL_init();
+				rche->data = strip_html_unicode(text);
+				rche->size = strlen(rche->data);
+				
                 free(text);
                 text = NULL;
             }
