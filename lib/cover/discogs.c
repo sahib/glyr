@@ -103,10 +103,16 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
                                 char * imgurl_begin = tmp_cache->data;
                                 while((imgurl_begin = strstr(imgurl_begin+1,IMGURL_BEGIN)) != NULL)
                                 {
-                                    // only use prmary images
+				    int img_type;
+
                                     char * is_primary = strstr(imgurl_begin,IMG_TYPE);
-                                    if(!is_primary || ((is_primary - imgurl_begin) > 42) )
+                                    if( ((is_primary - imgurl_begin) > 42) )
                                         continue;
+
+				    if(is_primary != NULL)
+					img_type = TYPE_COVER_PRI;
+				    else
+					img_type = TYPE_COVER_SEC;
 
                                     char * imgurl_endin = strstr(imgurl_begin,IMGURL_ENDIN);
                                     if(imgurl_endin)
@@ -134,6 +140,7 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
                                                             {
                                                                 result->data = url;
                                                                 result->size = uri_endin - (uri_begin + strlen(URL_BEGIN));
+								result->type = img_type;
 
                                                                 if(!r_list) r_list = DL_new_lst();
                                                                 DL_add_to_list(r_list,result);
