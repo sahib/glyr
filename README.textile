@@ -12,13 +12,13 @@ work as a standalone program which is able to download:
 * tracklists of an album
 * and a list of albums from a specific artist.
 
-Terminology:
+*Terminology*:
 To prevent disambiguation the following terms are used below: 	
 * _glyrc_ is the commandline interface to libglyr.
 * _libglyr_ is the library behind, which may be used by your program.
 * a _getter_ is a type of metadata to download, e.g. cover
 * a _provider_ is a source libglyr queries in order to find the data.
-* a __group__ is a collection of __provider__ with similiar attributes (e.g. __fast__)
+* a __group__ is a collection of __provider__ with similiar attributes (e.g. "__fast__")
 
 <h2>FEATURES</h2>
 * Always having more than fallback, and a hit rate of approx. 97% for coverdownload
@@ -33,10 +33,15 @@ To prevent disambiguation the following terms are used below:
 * Check for duplicate URLs, empty images and links known to be bad.
 * Licensed under the GPLv3
 
+<h2>
 
 <h2>USAGE</h2>
-glyrc GETTER [OPTIONS...]
 
+<h3>libglyr</h3>
+See the API Ref at __TODO__
+
+<h3>glyrc:</h3>
+glyrc GETTER [OPTIONS...]
 Please refer to @glyrc --usage@ which is more up-to-date.
 
 <h2>AUTHOR</h2>
@@ -51,4 +56,7 @@ or use the bugtracker at https://github.com/sahib/glyr/issues
 
 Thanks for any patches / feedback in advance!
      
+
+[1] Glyr has not been tested on Mac OSX yet. If you own such an Apple device any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes have to be done.
+
 Last modified: 20.3.2011
