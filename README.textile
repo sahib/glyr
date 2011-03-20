@@ -33,12 +33,10 @@ To prevent disambiguation the following terms are used below:
 * Check for duplicate URLs, empty images and links known to be bad.
 * Licensed under the GPLv3
 
-<h2>
-
-<h2>USAGE</h2>
+<h2>GETTING STARTED</h2>
 
 <h3>libglyr</h3>
-See the API Ref at __TODO__
+See the API Ref at https://github.com/sahib/glyr/wiki/API
 
 <h3>glyrc:</h3>
 glyrc GETTER [OPTIONS...]
