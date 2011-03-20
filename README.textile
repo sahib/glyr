@@ -1,6 +1,7 @@
-.h1 Glyr is a searcheninge for musicrelated metadata
+.hl Glyr is a searcheninge for musicrelated metadata
 
-It comes both in a commandline interface tool and as a C library
+It comes both in a commandline interface tool and as a C library with an easy to use interface.
+
 
 It was writte because the author was heavily annoyed by some musicplayers with broken or weird cover download.
 Therfore glyr can be used as a C library to provide routines to easily add features like cover/lyrics/photo download to your musicplayers.
