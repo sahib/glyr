@@ -707,61 +707,40 @@ char * strip_html_unicode(const char * string)
 
 /* ------------------------------------------------------------- */
 
-/* remove any tags inplace, as string gets only qual sized 
- * or bigger. length can be -1, then it get's automatically 
- * computed by strlen().
- * Algorithm:
- * Finds start tags, and tries to find ending tag ('>') from there
- * All bytes after '>' are moved now to the start of '<'. 
- * The total number of bytes the 0 byte moved is returned.
+/* 
+ * Remove all characters between the start tag $start and endtag $end.
+ * Works inplace by copying & moving parts of the string as needed.
+ * Returns number of bytes the 0 bytes has moved backward.
+ * "Hello <World>!" -> "Hello !"; returns 7;
  */
 size_t remove_tags_from_string(char * string, int length, char start, char end)
 {
+     char *tagEnd;
      size_t ctr = 0;
      if(string != NULL)
      { 
-	   size_t l, L = (length < 0) ? strlen(string) : (size_t)length;
-	   for(l = L-1; l; --l)
- 	   {
-			if(string[l] == start)
-			{
-				char * tagEnd = strchr(string+l+1,end);
-				if(tagEnd != NULL)
-				{
-					memmove(string+l,tagEnd+1,string+L - tagEnd);
-					ctr += tagEnd - string+l;
-				}
-	    	} 
-	    }
+	size_t n, L = (length < 0) ? strlen(string) : (size_t)length;
+	for(n = L-1; n; --n)
+	{
+	    if(string[n] == start)
+	    {
+		if( (tagEnd = strchr(string+n+1,end)) )
+		{
+		    char * Tpon = tagEnd + 1; 
+		    size_t tLen = Tpon - (string+n);
+		    size_t rest = string + L - tagEnd;
+
+		    tLen = (tLen < rest) ? tLen : rest;
+		    memcpy (string+n, Tpon, tLen);
+   		    memmove(Tpon,Tpon+tLen,rest-tLen);
+
+		    ctr += tLen;
+		}
+	    } 
+	}
      }
      return ctr;
 }
-
-/* ------------------------------------------------------------- */
-/*
-char * remove_html_tags_from_string(const char * string, size_t len)
-{
-    if(string == NULL)
-    {
-        return NULL;
-    }
-
-    size_t i = 0,iLen = (len>0) ? len : strlen(string);
-    int flag = 1, x = 0;
-
-    char * new = malloc(iLen + 1);
-
-    for(; i < iLen; i++)
-    {
-        if(string[i] == '<') flag = 0;
-        if(flag) new[x++] = string[i];
-        if(string[i] == '>') flag = 1;
-    }
-
-    new[x] = '\0';
-    return new;
-}
-*/
 
 /* ------------------------------------------------------------- */
 

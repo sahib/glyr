@@ -49,4 +49,6 @@ Use the github page to view the automated git generated brother.
 2011/03/19
 ----------
 + made albumlist getter working. Wohoo.
-+ Will do the more interesting 'relation' getter tomorrow
++ Fixed dumb shortcut bug in glyrc
++ Made finalize() of ainfo,similiar,review,tracklist,albumlist generic, i.e. only call the same function
+

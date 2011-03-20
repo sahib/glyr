@@ -44,29 +44,7 @@ GlyPlugin * glyr_get_review_providers(void)
 
 static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    if(!result) return NULL;
-
-    size_t i = 0;
-    GlyCacheList * r_list = DL_new_lst();
-
-    for(i = 0; i < result->size; i++)
-    {
-        // call user defined callback
-        if(settings->callback.download)
-        {
-            settings->callback.download(result->list[i],settings);
-        }
-        if(r_list->usersig == GLYRE_OK)
-        {
-            result->list[i]->type = TYPE_REVIEW;
-            DL_add_to_list(r_list,DL_copy(result->list[i]));
-        }
-        else
-        {
-            break;
-        }
-    }
-    return r_list;
+    return generic_finalizer(result,settings,TYPE_REVIEW);
 }
 
 GlyCacheList * get_review(GlyQuery * settings)

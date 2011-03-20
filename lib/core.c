@@ -1067,3 +1067,32 @@ const char * grp_id_to_name(int id)
 }
 
 /*--------------------------------------------------------*/
+
+GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type)
+{
+    if(!result) return NULL;
+
+    size_t i = 0;
+    GlyCacheList * r_list = DL_new_lst();
+
+    for(i = 0; i < result->size; i++)
+    {
+        // call user defined callback
+        if(settings->callback.download)
+        {
+            r_list->usersig = settings->callback.download(result->list[i],settings);
+        }
+        if(r_list->usersig == GLYRE_OK)
+        {
+            result->list[i]->type = type;
+            DL_add_to_list(r_list,DL_copy(result->list[i]));
+        }
+        else
+        {
+            break;
+        }
+    }
+    return r_list;
+}
+
+/*--------------------------------------------------------*/

@@ -104,6 +104,9 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
 int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 
-// ....
+// Basic placeholder doing the job for review,tracklist..
+GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type);
+
+// just for fromoption...
 const char * grp_id_to_name(int id);
 #endif
