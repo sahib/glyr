@@ -1,4 +1,4 @@
-.hl Glyr is a searcheninge for musicrelated metadata
+<h1>Glyr is a searcheninge for musicrelated metadata</h1>
 
 It comes both in a commandline interface tool and as a C library with an easy to use interface.
 
