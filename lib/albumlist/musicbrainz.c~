@@ -52,7 +52,7 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
 				collection = DL_new_lst();
 			}
 	
-			GlyMemCache c = DL_init();
+			GlyMemCache * c = DL_init();
 			c->data = beautify_lyrics(name);
 
 			if(c->data != NULL)

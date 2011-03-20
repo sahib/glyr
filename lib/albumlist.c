@@ -47,8 +47,13 @@ static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * setti
 
     size_t i = 0;
     GlyCacheList * r_list = DL_new_lst();
+	flag_double_urls(result, settings);
+	
     for(i = 0; i < result->size; i++)
     {
+		if(result->list[i]->error != GLYRE_OK)
+			continue;
+		
         // call user defined callback
         if(settings->callback.download)
         {

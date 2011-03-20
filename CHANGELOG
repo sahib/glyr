@@ -17,7 +17,7 @@ Use the github page to view the automated git generated brother.
 + added ability to stop searchengine by returning GLYRE_STOP_BY_CB in callback
 + Fixed a bug when using the google plugin and -D
 + Fixed google (and other) returning 404 Pages
-+ Added 'tracklist' getter
++ Added 'tracklist' getter12
 + Fixed all warnings occuring with highger warn level (Default now)
 
 2011/03/13
@@ -45,3 +45,8 @@ Use the github page to view the automated git generated brother.
 + Replaced ugly remove_html_tags with a more generic version that works completely in-place
 + Removed a few redundant strlen()s
 + added (non-working) albumlist getter which gets all official albums from a certain artist
+
+2011/03/19
+----------
++ made albumlist getter working. Wohoo.
++ Will do the more interesting 'relation' getter tomorrow

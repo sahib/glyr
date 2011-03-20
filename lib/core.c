@@ -428,7 +428,7 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 
     if(dp != 0)
     {
-        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d URL%sthat occure twice.\n",dp,dp>=1 ? " " : "s ");
+        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d Item%sthat occure twice.\n",dp,dp<2 ? " " : "s ");
         s->itemctr -= dp;
     }
     return dp;

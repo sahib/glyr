@@ -47,8 +47,13 @@ static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * setti
 
     size_t i = 0;
     GlyCacheList * r_list = DL_new_lst();
+	flag_double_urls(result, s);
+	
     for(i = 0; i < result->size; i++)
     {
+		if(result->list[i]->error != GLYRE_OK)
+			continue;
+		
         // call user defined callback
         if(settings->callback.download)
         {
@@ -56,7 +61,7 @@ static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * setti
         }
         if(r_list->usersig == GLYRE_OK)
         {
-            result->list[i]->type = TYPE_TRACK;
+            result->list[i]->type = TYPE_ALBUMLIST;
             DL_add_to_list(r_list,DL_copy(result->list[i]));
         }
         else

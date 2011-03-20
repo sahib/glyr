@@ -248,17 +248,18 @@ static void usage(GlyQuery * s)
 #undef OPT_C
 #undef GET_C
 
-//* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
+//* ------------------------------------------------------- */
+// -------------------------------------------------------- //
+/* -------------------------------------------------------- */
 
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
     bool result = true;
-
+	
     if(!arg)
+	{
         return result;
-
+	}
     // get list of avaliable commands
     GlyPlugin * plist = Gly_get_provider_by_id(-1);
     if(plist)
@@ -266,7 +267,7 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         int i = 0;
         for(; plist[i].name; i++)
         {
-            if(!strcmp(arg,plist[i].name) || *arg == *plist[i].name)
+            if(!strcmp(arg,plist[i].name) || !strcmp(arg,plist[i].key))
             {
                 GlyOpt_type(s,(long)plist[i].color);
                 free(plist);
