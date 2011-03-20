@@ -1,9 +1,10 @@
-<h1><i>Glyr</i> is a searcheninge for musicrelated metadata</h1>
+<h1>_Glyr_ is a searcheninge for musicrelated metadata</h1>
 
 It comes both in a commandline interface tool and as a C library, both with an easy to use interface.
 The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
 And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
-work as a standalone program whic is able to download <b>cover art</b>,<b>lyrics</b>,<b>bandphotos</b>,<b>artist biography</b>,<b>album reviews</b>,<b>tracklists of an album</b> and a list of <b>albums</b> from a specific artist.
+work as a standalone program whic is able to download:
+ <b>cover art</b>,<b>lyrics</b>,<b>bandphotos</b>,<b>artist biography</b>,<b>album reviews</b>,<b>tracklists of an album</b> and a list of <b>albums</b> from a specific artist.
  	
 
 It was writte because the author was heavily annoyed by some musicplayers with broken or weird cover download.
