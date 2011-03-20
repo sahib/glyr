@@ -227,7 +227,7 @@ FILES
                 $dir/$artist_similiar_$num.txt
                 $dir/$artist_$album_review_$num.txt
 
-AUTHOR 
+h2. AUTHOR
    
         See the AUTHORS file that comes in glyr's distribution.
         See also COPYING to know about your rights.
