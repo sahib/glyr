@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <libgen.h>
+#include <signal.h>
 
 #include "../lib/glyr.h"
 
@@ -136,7 +137,7 @@ static void usage(GlyQuery * s)
     list_provider_at_id(GET_TRACKLIST,12,s);
     glyr_message(-1,s,stdout,C_B"\nALBUMLIST\n"C_);
     glyr_message(-1,s,stdout,_S"Get a list of albums by artist given by -a\n");
-    list_provider_at_id(GET_ALBUMLIST,12,s)
+    list_provider_at_id(GET_ALBUMLIST,12,s);
     glyr_message(-1,s,stdout,C_B"\nGENERAL OPTIONS\n"C_);
     glyr_message(-1,s,stdout,OPT_A"-f --from <prov>\n"C_);
     glyr_message(-1,s,stdout,_S"Set the sources (providers) you want to query.\n");
@@ -268,6 +269,7 @@ static void sig_handler(int signal)
             glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
             break;
    }
+   exit(-1);
 }
 
 

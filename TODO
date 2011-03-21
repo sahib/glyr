@@ -1,11 +1,9 @@
 Ideas:
 ------
 - relation getter
-- new plugins (wikipedia for ainfo - like clementine)
 - at least two more review plugins
 - update help text
 
 Working:
 --------
 - More documentation!
-- rework ainfo. User should do the 'short' version himself (== speedup for allmusic_com.c)
