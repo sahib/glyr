@@ -131,6 +131,12 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" information about similiar artist to the one given with -a "OPT_C"-a"C_".\n");
     glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
     list_provider_at_id(GET_SIMILIAR,12,s);
+    glyr_message(-1,s,stdout,C_B"\nTRACKLIST\n"C_);
+    glyr_message(-1,s,stdout,_S"Get a list of tracks by artist given by -a and album by -b\n");
+    list_provider_at_id(GET_TRACKLIST,12,s);
+    glyr_message(-1,s,stdout,C_B"\nALBUMLIST\n"C_);
+    glyr_message(-1,s,stdout,_S"Get a list of albums by artist given by -a\n");
+    list_provider_at_id(GET_ALBUMLIST,12,s)
     glyr_message(-1,s,stdout,C_B"\nGENERAL OPTIONS\n"C_);
     glyr_message(-1,s,stdout,OPT_A"-f --from <prov>\n"C_);
     glyr_message(-1,s,stdout,_S"Set the sources (providers) you want to query.\n");
@@ -247,6 +253,23 @@ static void usage(GlyQuery * s)
 #undef S
 #undef OPT_C
 #undef GET_C
+
+//* ------------------------------------------------------- */
+
+static void sig_handler(int signal)
+{
+   switch(signal)
+   {
+        case SIGINT: 
+            glyr_message(-1,NULL,stderr,C_"Received keyboard interrupt!\n");
+            break;
+        case SIGSEGV :
+            glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
+            glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
+            break;
+   }
+}
+
 
 //* ------------------------------------------------------- */
 // -------------------------------------------------------- //
@@ -877,6 +900,10 @@ static int cb(GlyMemCache * c, GlyQuery * s)
 int main(int argc, char * argv[])
 {
     int result = EXIT_SUCCESS;
+
+    /* Warn on  crash */
+    signal(SIGSEGV, sig_handler); 
+    signal(SIGINT, sig_handler);
 
     if(argc >= 3)
     {
