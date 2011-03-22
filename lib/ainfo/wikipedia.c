@@ -17,52 +17,24 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
-
-#define _GNU_SOURCE
-
 #include <stdlib.h>
 #include <string.h>
-#include "musicbrainz.h"
-#include "../stringop.h"
-#include "../core.h"
+#include <stdbool.h>
 
-const char * albumlist_musicbrainz_url(GlyQuery * sets)
+#include "wikipedia.h"
+#include "../core.h"
+#include "../stringop.h"
+
+const char * ainfo_wikipedia_url(GlyQuery * s)
 {
-	return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
+	return strdup_printf("http://%s.wikipedia.org/wiki/%%artist%%_(Band)",s->lang);
+    
 }
 
-#define ALBUM_BEGIN "<release type=\"Album Official\""
-#define ALBUM_ENDIN "\" id=\""
-
-#define TITLE_BEGIN "<title>"
-#define TITLE_ENDIN "</title>"
-
-GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
+GlyCacheList * ainfo_wikipedia_parse(cb_object * capo)
 {
-	GlyCacheList * collection = NULL;
-	
-	char * node = capo->cache->data;
-	while( (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
-	{
-		char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
-		if(name != NULL)
-		{
-			if(!collection)
-			{
-				collection = DL_new_lst();
-			}
-	
-			GlyMemCache * c = DL_init();
-			c->data = beautify_lyrics(name);
-
-			if(c->data != NULL)
-			{
-				c->size = strlen(c->data);
-			}
-
-			DL_add_to_list(collection,c);
-			free(name);
-		}
-	}
-	return collection;
+    char * txt_begin = strstr(capo->cache->data,"<a href=\"#mw-head\"");
+	remove_tags_from_string(txt_begin,capo->cache->size - (txt_begin - capo->cache->data),'<','>');
+	puts(txt_begin);
+	return NULL;
 }

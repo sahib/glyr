@@ -44,8 +44,12 @@ int main(void)
     // Call the most important command: GET!
     // This returned a list of (GlyMemCache *)s
     // Each containing ONE item. (i.e. a songtext)
-    GlyCacheList * result_list = Gly_get(&q,NULL);
+	enum GLYR_ERROR err;
+    GlyCacheList * result_list = Gly_get(&q,&err);
 
+	if(err != GLYRE_OK)
+		Gly
+	
     // Now iterate through it...
     if(result_list != NULL)
     {

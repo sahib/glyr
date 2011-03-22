@@ -96,7 +96,7 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stdout,C_B"USAGE:\n"C_ _S"glyrc "C_Y"GETTER"C_" [OPTIONS...]\n\n");
     glyr_message(-1,s,stdout,"glyrc downloads variouse sorts of musicrelated metadata.\n");
     glyr_message(-1,s,stdout,C_Y"GETTER"C_" is the type of metadata to download, it must be one of: \n");
-    list_provider_at_id(-1, 10,s);
+    list_provider_at_id(GET_UNSURE, 10,s);
 
 #define GET_C C_G
 #define OPT_C C_C
@@ -286,7 +286,7 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         return result;
 	}
     // get list of avaliable commands
-    GlyPlugin * plist = Gly_get_provider_by_id(-1);
+    GlyPlugin * plist = Gly_get_provider_by_id(GET_UNSURE);
     if(plist)
     {
         int i = 0;
@@ -306,7 +306,7 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         glyr_message(2,s,stderr,"Avaliable getters are: \n");
         glyr_message(2,s,stderr,"---------------------- \n");
 
-        list_provider_at_id(-1,7,s);
+        list_provider_at_id(GET_UNSURE,7,s);
 
         bool dym = false;
         for(i = 0; plist[i].name; i++)
@@ -452,7 +452,7 @@ void help_short(GlyQuery * s)
     glyr_message(-1,s,stderr,"Usage: "
                  "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
 
-    list_provider_at_id(-1,10,s);
+    list_provider_at_id(GET_UNSURE,10,s);
 
     glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
                  "you probably want to view --usage, which has more details & examples\n");
@@ -502,6 +502,10 @@ void help_short(GlyQuery * s)
     list_provider_at_id(GET_SIMILIAR,13,s);
     glyr_message(-1,s,stderr,"\n"IN C_"# ainfo:\n");
     list_provider_at_id(GET_AINFO,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# tracklist:\n");
+    list_provider_at_id(GET_TRACKLIST,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"# albumlist:\n");
+    list_provider_at_id(GET_ALBUMLIST,13,s);
 
     glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
@@ -967,12 +971,12 @@ int main(int argc, char * argv[])
             if(!file_exist)
             {
                 // Now download everything
-                int get_error = GLYRE_OK;
+                enum GLYR_ERROR get_error = GLYRE_OK;
                 GlyCacheList * my_list= Gly_get(&my_query, &get_error);
                 if(my_list)
                 {
                     glyr_message(2,&my_query,stderr,"\n");
-                    GlyPlugin * table_copy = Gly_get_provider_by_id(-1);
+                    GlyPlugin * table_copy = Gly_get_provider_by_id(GET_UNSURE);
                     if(get_error == GLYRE_OK)
                     {
                         size_t i = 0;
@@ -999,6 +1003,10 @@ int main(int argc, char * argv[])
                     Gly_free_list(my_list);
                     free(table_copy);
                 }
+				else
+				{
+					glyr_message(1,s,stderr,"E: %s\n",Gly_strerror(get_error));
+				}
             }
             else
             {

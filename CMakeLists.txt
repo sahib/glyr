@@ -70,6 +70,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/tracklist.c"
 	"${DIR_ROOT}/albumlist.c"
 	"${DIR_AINFO}/lastfm.c"
+	"${DIR_AINFO}/wikipedia.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_SIMILIAR}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"

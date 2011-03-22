@@ -463,12 +463,14 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
                     size_t offset = 0, kick_me = false, flen = strlen(s->formats);
                     while(!kick_me && (f = get_next_word(s->formats,";",&offset,flen)))
                     {
-                        if(!strcmp(f,c_format))
+                        if(!strcmp(f,c_format) || !strcmp(f,"all"))
                         {
                             kick_me = true;
                         }
                         free(f);
                         f = NULL;
+
+			if(kick_me) break;
                     }
 
                     if(!kick_me)

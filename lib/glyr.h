@@ -34,7 +34,7 @@ extern "C"
     typedef void (*callback_t) (void *user_data, const char *other_data);
 
     // the actual main of glyr
-    GlyCacheList * Gly_get(GlyQuery * settings, int * error);
+    GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
 
     // Initialize settings struct to sane defaults
     void Gly_init_query(GlyQuery * glyrs);
@@ -51,7 +51,7 @@ extern "C"
 
     /* Gly_opt_* methods */
     int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp);
-    int GlyOpt_type(GlyQuery * s, int type);
+    int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
     int GlyOpt_artist(GlyQuery * s, char * artist);
     int GlyOpt_album(GlyQuery * s,  char * album);
     int GlyOpt_title(GlyQuery * s,  char * title);
@@ -82,7 +82,7 @@ extern "C"
     int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 
     // get information about available plugins
-    GlyPlugin * Gly_get_provider_by_id(int ID);
+    GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
 
     // Download a URL and sae it in Memcache
     GlyMemCache * Gly_download(const char * url, GlyQuery * s);
@@ -93,6 +93,9 @@ extern "C"
     // Returns the actual name of the group pointed by ID
     const char * Gly_groupname_by_id(int ID);
 
+	// Short descriptive version of an error ID
+    const char * Gly_strerror(enum GLYR_ERROR ID);
+	
 #ifdef _cplusplus
 }
 #endif

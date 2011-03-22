@@ -40,10 +40,31 @@
 
 #include "config.h"
 
-// prot
+const char * err_strings[] = {
+	"all okay",
+	"bad option",
+	"bad value for option",
+	"NULL pointer for struct",
+	"No provider specified",
+	"Unknown ID for getter",
+	"Stopped by callback",
+	NULL
+};
+
+// prototypes
 static int glyr_parse_from(const char * arg, GlyQuery * settings);
 static int glyr_set_info(GlyQuery * s, int at, const char * arg);
 static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value);
+
+// return a descriptive string on error ID
+const char * Gly_strerror(enum GLYR_ERROR ID)
+{
+	if(ID < (sizeof(err_strings)/sizeof(const char *)))
+	{
+		return err_strings[ID];
+	}
+	return NULL;
+}
 
 // Fill yours in here if you added a new one.
 // The rest is done for you quite automagically.
@@ -85,12 +106,12 @@ int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery 
 
 /*-----------------------------------------------*/
 
-int GlyOpt_type(GlyQuery * s, int type)
+int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    if(type >= GET_COVER && type < GET_UNSURE)
+    if(type < GET_UNSURE)
     {
-        s->type = ABS(type);
+        s->type = type;
         return GLYRE_OK;
     }
     return GLYRE_BAD_VALUE;
@@ -494,7 +515,7 @@ static GlyCacheList * call_parser_direct(GlyQuery * s)
 
 /*-----------------------------------------------*/
 
-GlyCacheList * Gly_get(GlyQuery * settings, int * e)
+GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
 {
     if(e) *e = GLYRE_OK;
     if(!settings)
@@ -606,7 +627,7 @@ int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * sa
 
 /*-----------------------------------------------*/
 
-GlyPlugin * Gly_get_provider_by_id(int ID)
+GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
 {
     switch(ID)
     {
@@ -626,7 +647,7 @@ GlyPlugin * Gly_get_provider_by_id(int ID)
         return glyr_get_tracklist_providers();
 	case GET_ALBUMLIST:
 		return glyr_get_albumlist_providers();
-    case -1       :
+    case GET_UNSURE   :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :
         return NULL;

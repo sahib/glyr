@@ -244,7 +244,7 @@ typedef struct GlyPlugin
 
 } GlyPlugin;
 
-enum GLYR_GET_TYPES
+enum GLYR_GET_TYPE
 {
     GET_COVER,
     GET_LYRIC,
