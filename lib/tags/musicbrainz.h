@@ -18,11 +18,11 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#ifndef I_MUSICBRAINZ_H
-#define I_MUSICBRAINT_H
+#ifndef TAGS_MUSICBRAINZ_H
+#define TAGS_MUSICBRAINT_H
 
 #include "../core.h"
-const char *   albumlist_musicbrainz_url(GlyQuery * s);
-GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo);
+const char *   tags_musicbrainz_url(GlyQuery * s);
+GlyCacheList * tags_musicbrainz_parse(cb_object * capo);
 
 #endif

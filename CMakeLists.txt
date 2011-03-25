@@ -56,6 +56,7 @@ set (DIR_SIMILIAR  ${DIR_ROOT}/similiar                 )
 set (DIR_REVIEW    ${DIR_ROOT}/review                   )
 set (DIR_TRACKLIST ${DIR_ROOT}/tracklist                )
 set (DIR_ALBUMLIST ${DIR_ROOT}/albumlist                )
+set (DIR_TAGS      ${DIR_ROOT}/tags                     )
 
 SET(LIB_SOURCE_LOCATIONS 
 	"${DIR_ROOT}/glyr.c"
@@ -68,6 +69,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/photos.c"
 	"${DIR_ROOT}/review.c"
 	"${DIR_ROOT}/tracklist.c"
+        "${DIR_ROOT}/tags.c"
 	"${DIR_ROOT}/albumlist.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/wikipedia.c"
@@ -76,6 +78,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
+	"${DIR_TAGS}/musicbrainz.c"
 	"${DIR_COVER}/last_fm.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
@@ -84,8 +87,8 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/allmusic_com.c"
 	"${DIR_COVER}/discogs.c"
 	"${DIR_COVER}/amazon.c"
-    "${DIR_LYRICS}/lyrdb.c"
-    "${DIR_LYRICS}/magistrix.c"
+        "${DIR_LYRICS}/lyrdb.c"
+        "${DIR_LYRICS}/magistrix.c"
   	"${DIR_LYRICS}/lyrix_at.c"
 	"${DIR_LYRICS}/lyricsvip.c"
    	"${DIR_LYRICS}/directlyrics.c"

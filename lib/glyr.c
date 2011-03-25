@@ -36,6 +36,7 @@
 #include "similiar.h"
 #include "review.h"
 #include "tracklist.h"
+#include "tags.h"
 #include "albumlist.h"
 
 #include "config.h"
@@ -76,7 +77,8 @@ GlyPlugin getwd_commands [] =
     {"ainfo",    "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"similiar", "s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"review",   "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
-	{"albumlist","i",  (char*)GET_ALBUMLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"albumlist","i",  (char*)GET_ALBUMLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"tags",     "t",  (char*)GET_TAGS     ,false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"tracklist","r",  (char*)GET_TRACKLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
     {NULL,   NULL, NULL,  42,                      {NULL, NULL, NULL, false}, GRP_NONE}
 };
@@ -570,12 +572,15 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
     case GET_REVIEW:
         result = get_review(settings);
         break;
+    case GET_TAGS:
+        result = get_tags(settings);
+        break;
     case GET_TRACKLIST:
         result =  get_tracklist(settings);
         break;
-	case GET_ALBUMLIST:
-		result = get_albumlist(settings);
-		break;
+    case GET_ALBUMLIST:
+	result = get_albumlist(settings);
+	break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
@@ -645,7 +650,9 @@ GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
         return glyr_get_review_providers();
     case GET_TRACKLIST:
         return glyr_get_tracklist_providers();
-	case GET_ALBUMLIST:
+    case GET_TAGS:
+        return glyr_get_tags_providers();
+    case GET_ALBUMLIST:
 		return glyr_get_albumlist_providers();
     case GET_UNSURE   :
         return copy_table(getwd_commands,sizeof(getwd_commands));

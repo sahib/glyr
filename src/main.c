@@ -265,7 +265,7 @@ static void sig_handler(int signal)
             glyr_message(-1,NULL,stderr,C_"Received keyboard interrupt!\n");
             break;
         case SIGSEGV :
-            glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
+            glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
             glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
             break;
    }
@@ -830,7 +830,7 @@ static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const
 }
 
 /* --------------------------------------------------------- */
-// --------------------------------------------------------- //
+// ---------------------- MISC ----------------------------- //
 /* --------------------------------------------------------- */
 
 static char * path_review(GlyQuery *s, const char * save_dir, int i)
@@ -851,6 +851,11 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 		free(good_artist);
 
 	return good_path;
+}
+
+static char * path_tags(GlyQuery *s, const char * save_dir, int i)
+{
+    return strdup("stdout");
 }
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
@@ -882,9 +887,12 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
     case GET_TRACKLIST:
         m_path = path_tracklist(s,sd,iter);
         break;
-	case GET_ALBUMLIST:
-		m_path = path_albumlist(s,sd,iter);
-		break;
+    case GET_ALBUMLIST:
+	m_path = path_albumlist(s,sd,iter);
+	break;
+    case GET_TAGS:
+	m_path = path_tags(s,sd,iter);
+	break;
     }
     return m_path;
 }
@@ -909,7 +917,7 @@ int main(int argc, char * argv[])
 
     /* Warn on  crash */
     signal(SIGSEGV, sig_handler); 
-    signal(SIGINT, sig_handler);
+    signal(SIGINT,  sig_handler);
 
     if(argc >= 3)
     {
@@ -1003,10 +1011,10 @@ int main(int argc, char * argv[])
                     Gly_free_list(my_list);
                     free(table_copy);
                 }
-				else
-				{
-					glyr_message(1,s,stderr,"E: %s\n",Gly_strerror(get_error));
-				}
+		else if(get_error != GLYRE_OK)
+		{
+		    glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
+		}
             }
             else
             {

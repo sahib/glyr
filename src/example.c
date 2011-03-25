@@ -48,7 +48,7 @@ int main(void)
     GlyCacheList * result_list = Gly_get(&q,&err);
 
 	if(err != GLYRE_OK)
-		Gly
+		fprintf(stderr,"E:%s\n",Gly_strerror(err));
 	
     // Now iterate through it...
     if(result_list != NULL)

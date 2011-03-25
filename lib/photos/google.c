@@ -33,7 +33,7 @@
 const char * photos_google_url(GlyQuery * s)
 {
     const char * result = NULL;
-    char * searchterm = strdup_printf("%s+band+photos",s->artist);
+    char * searchterm = strdup("%artist%+band+photos");
     if(searchterm != NULL)
     {
         result = generic_google_url(s,searchterm);

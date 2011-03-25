@@ -52,3 +52,9 @@ Use the github page to view the automated git generated brother.
 + Fixed dumb shortcut bug in glyrc
 + Made finalize() of ainfo,similiar,review,tracklist,albumlist generic, i.e. only call the same function
 
+2011/03/24
+----------
++ Fixed crash when libcurl put an error to stdout (ouch..)
++ Fixed google names when having spaces (ouch x 2)
++ 
+

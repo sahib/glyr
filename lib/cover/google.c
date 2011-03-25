@@ -78,7 +78,7 @@ const char * generic_google_url(GlyQuery * sets, const char * searchterm)
 const char * cover_google_url(GlyQuery * s)
 {
     const char * result = NULL;
-    char * searchterm = strdup_printf("%s+%s+album",s->artist,s->album);
+    char * searchterm = strdup("%artist%+%album%+album");
     if(searchterm != NULL)
     {
         result = generic_google_url(s,searchterm);

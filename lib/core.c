@@ -63,7 +63,7 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...)
             if(stream && fmt)
             {
                 va_start(param,fmt);
-                r = x_vasprintf (&tmp, fmt, param);
+                r = x_vasprintf (&tmp,fmt,param);
                 va_end(param);
 
                 if(r != -1 && tmp)
@@ -650,6 +650,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                                              oblist[Counter].s->artist,
                                              oblist[Counter].s->album,
                                              oblist[Counter].s->title);
+
         oblist[Counter].cache  = handle_init(cm,&oblist[Counter],s,timeout);
         if(track)
         {
@@ -822,7 +823,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 {
                     ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
-                    glyr_message(2,s,stderr,C_" %s "C_R"[errno:%d]\n"C_,msg->data.result,curl_err ? curl_err : "Unknown Error");
+                    glyr_message(2,s,stderr,C_" %s "C_R"[errno:%d]\n"C_,curl_err ? curl_err : "Unknown Error",msg->data.result);
                 }
                 else if(!capo->batch)
                 {
