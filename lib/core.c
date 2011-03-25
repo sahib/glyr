@@ -1087,7 +1087,9 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
         }
         if(r_list->usersig == GLYRE_OK)
         {
-            result->list[i]->type = type;
+	    if(result->list[i]->type == GLYRE_OK)
+                result->list[i]->type = type;
+
             DL_add_to_list(r_list,DL_copy(result->list[i]));
         }
         else

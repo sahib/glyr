@@ -38,26 +38,22 @@ artist && title -> title
 artist && album -> album
 */
 
-#define _TITLE  0
-#define _ALBUM  1
-#define _ARTIST 2
-
 // 'please' is important. gcc won't compile without.
 static int please_what_type(GlyQuery * s)
 {
 	int result = -1;
    	if(s->artist && !s->album && !s->title)
-	    result = _ARTIST;
+	    result = TYPE_TAG_ARTIST;
 	else if(!s->artist && !s->album && s->title)
-	    result = _TITLE;
+	    result = TYPE_TAG_TITLE;
 	else if(!s->artist && s->album && !s->title)
-	    result = _ALBUM;
+	    result = TYPE_TAG_ALBUM;
 	else if(s->artist && s->album && s->title)
-	    result = _TITLE;
+	    result = TYPE_TAG_TITLE;
 	else if(s->artist && !s->album && s->title)
-	    result = _TITLE;
+	    result = TYPE_TAG_TITLE;
 	else if(s->artist && s->album && !s->title)
-	    result = _ALBUM;
+	    result = TYPE_TAG_ALBUM;
 	else 
 	    result = -1;
 
@@ -73,9 +69,9 @@ const char * tags_musicbrainz_url(GlyQuery * sets)
 
     switch(please_what_type(sets))
     {
-	case _TITLE : return strdup_printf("http://musicbrainz.org/ws/1/track/?type=xml&title=%s&artist=%s&release=%s",wrap_t,wrap_a,wrap_b);
-	case _ALBUM : return strdup_printf("http://musicbrainz.org/ws/1/release/?type=xml&title=%s&artist=%s",wrap_b,wrap_a);
-	case _ARTIST: return strdup_printf("http://musicbrainz.org/ws/1/artist/?type=xml&name=%s",wrap_a);
+	case TYPE_TAG_TITLE : return strdup_printf("http://musicbrainz.org/ws/1/track/?type=xml&title=%s&artist=%s&release=%s",wrap_t,wrap_a,wrap_b);
+	case TYPE_TAG_ALBUM : return strdup_printf("http://musicbrainz.org/ws/1/release/?type=xml&title=%s&artist=%s",wrap_b,wrap_a);
+	case TYPE_TAG_ARTIST: return strdup_printf("http://musicbrainz.org/ws/1/artist/?type=xml&name=%s",wrap_a);
 	default:      return NULL;
     }
 }
@@ -88,9 +84,9 @@ const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
     const char * searchterm = NULL;
     switch(please_what_type(s))
     {
-	case _TITLE:  searchterm = "<track id=\""; break;
-	case _ALBUM:  searchterm = "<release type=\"Album Official\" id=\""; break;
-	case _ARTIST: searchterm = "<artist type=\"Group\" id=\""; break;
+	case TYPE_TAG_TITLE:  searchterm = "<track id=\""; break;
+	case TYPE_TAG_ALBUM:  searchterm = "<release type=\"Album Official\" id=\""; break;
+	case TYPE_TAG_ARTIST: searchterm = "<artist type=\"Group\" id=\""; break;
 	default: glyr_message(0,s,stderr,"Warning: (musicbrainz.c) Unable to determine type.\n");
     }
    
@@ -126,12 +122,14 @@ GlyCacheList * tags_musicbrainz_parse(cb_object * capo)
 	{
 		if(mbid != NULL)
 		{
+			int type_num = please_what_type(capo->s);			
+
 			const char * type = NULL;
-			switch(please_what_type(capo->s))
+			switch(type_num)
 			{
-			    case _TITLE: type = "track"; break;
-			    case _ALBUM: type = "release"; break;
-			    case _ARTIST:type = "artist"; break;
+			    case TYPE_TAG_TITLE:  type = "track";   break;
+			    case TYPE_TAG_ALBUM:  type = "release"; break;
+			    case TYPE_TAG_ARTIST: type = "artist";  break;
 			}
 
 			char * info_page_url = strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=tags",type,mbid);
@@ -159,7 +157,8 @@ GlyCacheList * tags_musicbrainz_parse(cb_object * capo)
 								GlyMemCache * tmp = DL_init();
 								tmp->data = value;
 								tmp->size = tag_endin - tag_begin;
-			
+								tmp->type = type_num;
+	
 								if(!r_list) r_list = DL_new_lst();
 								DL_add_to_list(r_list,tmp);
 							}

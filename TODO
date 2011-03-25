@@ -4,7 +4,6 @@ Ideas:
 - tag getter
 - at least two more review plugins
 - update help text
-
-Working on:
---------
 - More documentation!
+- Testing of the accuracy
+- Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..) 

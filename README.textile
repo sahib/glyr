@@ -11,14 +11,15 @@ work as a standalone program which is able to download:
 * album reviews 
 * tracklists of an album
 * and a list of albums from a specific artist.
+* Tags, either related to artist, album or title.
 
 *Terminology*:
 To prevent disambiguation the following terms are used below: 	
 * _glyrc_ is the commandline interface to libglyr.
 * _libglyr_ is the library behind, which may be used by your program.
-* a _getter_ is a type of metadata to download, e.g. cover
+* a _getter_ is a type of metadata to download, e.g. @cover@
 * a _provider_ is a source libglyr queries in order to find the data.
-* a __group__ is a collection of __provider__ with similiar attributes (e.g. "__fast__")
+* a __group__ is a collection of __provider__ with similiar attributes (e.g. "__fast__" or "__safe__")
 
 <h2>FEATURES</h2>
 * Always having more than fallback, and a hit rate of approx. 97% for coverdownload
@@ -29,9 +30,9 @@ To prevent disambiguation the following terms are used below:
 * Download of a user defined amount of items, glyrc cover -a Foo -b Bar -n 30 loads 30 covers of 'Bar' by 'Foo'
 * grouped download: Query providers by descending Accuray / Speed
 * Optional download of images, URL is returned otherwise
-* Prefers trustable sources (last.fm)
+* Prefers trustable sources (for example last.fm)
 * Check for duplicate URLs, empty images and links known to be bad.
-* Licensed under the GPLv3
+* Free Software licensed under the terms of the GPLv3
 
 <h2>GETTING STARTED</h2>
 
@@ -42,22 +43,45 @@ See the "compile page":https://github.com/sahib/glyr/wiki/Compiling.
 See the "API Reference":https://github.com/sahib/glyr/wiki/API
 
 <h3>glyrc:</h3>
-glyrc GETTER [OPTIONS...]
 Please refer to @glyrc --usage@ which is more up-to-date.
 
 <h2>AUTHOR</h2>
 See the AUTHORS file that comes in glyr's distribution.
 See also COPYING to know about your rights.
 
-<h2>BUGS</h2>
+<h2>CAN I HELP?</h2>
 Libglyr is no finished software, as I write it in my free time and the same version may work the one day, but not the other, as Online APIs are changing.
-(This is why I found fallbacks so important...)
-So: EXPECT BUGS and Report them to sahib@online.de
-or use the bugtracker at https://github.com/sahib/glyr/issues
+This is the reason why I found fallbacks so important, where possible more than one provider is queried.
 
-Thanks for any patches / feedback in advance!
+So: <b>Expect bugs!</b>
+
+<h3>BUGS</h3>
+If you found one: Not so good!
+If you file a bugreport: Good!
+
+Use the "Issue Tracker":https://github.com/sahib/glyr/issues to share your find.
+Alternatively you may drop me a mail at <sahib@online.de>
+
+<h3>PATCHES</h3>
+If you make one: Just perfect! :-)
+
+If you want to add new providers you should look at the existing provider prlugins to get an idea how to write one.
+Starting with lib/cover/lastfm.c isn't a bad idea either, because it is one of the very simple ones.
+
+Take the usual Git(Hub) approach:
+- Fork this project
+- Make your changes
+- Make a Pull request
+
+If you're not familiar with git, or just don't like it,
+you can also drop me a mail: <sahib@online.de>
+
+Thanks for any help in advance!
+
+
+
+
      
-
 [1] Glyr has not been tested on Mac OSX yet. If you own such an Apple device any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes have to be done.
 
-Last modified: 20.3.2011
+Last modified: 25.3.2011
