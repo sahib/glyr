@@ -23,14 +23,18 @@
 
 #include "lyricswiki.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=%artist%&song=%title%"
+
+/*--------------------------------------------------------*/
 
 const char * lyrics_lyricswiki_url(GlyQuery * settings)
 {
     return LW_URL;
 }
+
+/*--------------------------------------------------------*/
 
 // Compare response, so lyricswiki's search did not fool us
 // This is to prevent completely wrong results, therfore the quite high tolerance
@@ -70,10 +74,13 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 }
 
 
+/*--------------------------------------------------------*/
+
 GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GlyMemCache * result = NULL;
     GlyCacheList * r_list = NULL;
+    
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
         char *find, *endTag;
@@ -129,3 +136,5 @@ GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/

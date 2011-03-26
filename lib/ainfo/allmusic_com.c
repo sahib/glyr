@@ -19,7 +19,7 @@
 **************************************************************/
 #include <stdlib.h>
 #include <string.h>
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../core.h"
 #include "../glyr.h"
 

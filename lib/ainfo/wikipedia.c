@@ -23,7 +23,7 @@
 
 #include "wikipedia.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 const char * ainfo_wikipedia_url(GlyQuery * s)
 {

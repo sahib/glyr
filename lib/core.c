@@ -38,7 +38,7 @@
 #include <curl/multi.h>
 
 // Own headers:
-#include "stringop.h"
+#include "stringlib.h"
 #include "core.h"
 
 // Get user agent
@@ -403,7 +403,7 @@ bool continue_search(int iter, GlyQuery * s)
 
 int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 {
-    if(s->duplcheck == false)
+    if(!result || s->duplcheck == false)
         return 0;
 
     size_t i = 0, dp = 0;
@@ -543,14 +543,16 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
         return NULL;
     }
 
-    //fprintf(stderr,"Downloading <%s>\n",url);
-
     CURL *curl = NULL;
     CURLcode res = 0;
 
     // Init handles
     curl = curl_easy_init();
     GlyMemCache * dldata = DL_init();
+
+    // DL_buffer needs the 'end' mark.
+    // As I didnt want to introduce a new struct just for this
+    // I save it in ->dsrc
     if(end != NULL)
     {
         dldata->dsrc = strdup(end);
@@ -574,6 +576,13 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 
         // Handle without any use - clean up
         curl_easy_cleanup(curl);
+
+	// Set the source URL
+	if(dldata->dsrc != NULL)
+	    free(dldata->dsrc);
+
+	dldata->dsrc = strdup(url);
+
         return dldata;
     }
 
@@ -787,10 +796,10 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                             switch(err)
                             {
                             case NO_BEGIN_TAG:
-                                glyr_message(2,s,stderr,C_R"No begin tag found.\n"C_);
+                                glyr_message(2,s,stderr,C_R"No beginning tag found.\n"C_);
                                 break;
                             case NO_ENDIN_TAG:
-                                glyr_message(2,s,stderr,C_R"No endin tag found.\n"C_);
+                                glyr_message(2,s,stderr,C_R"No closing tag found.\n"C_);
                                 break;
                             default:
                                 glyr_message(2,s,stderr,C_R"failed.\n"C_);
@@ -823,7 +832,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 {
                     ALIGN(align_msg);
                     const char * curl_err = curl_easy_strerror(msg->data.result);
-                    glyr_message(2,s,stderr,C_" %s "C_R"[errno:%d]\n"C_,curl_err ? curl_err : "Unknown Error",msg->data.result);
+                    glyr_message(2,s,stderr,C_"%s "C_R"[errno:%d]\n"C_,curl_err ? curl_err : "Unknown Error",msg->data.result);
                 }
                 else if(!capo->batch)
                 {
@@ -1080,6 +1089,9 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 
     for(i = 0; i < result->size; i++)
     {
+	if(result->list[i]->error != ALL_OK)
+	    continue;
+
         // call user defined callback
         if(settings->callback.download)
         {

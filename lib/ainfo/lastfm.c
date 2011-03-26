@@ -23,7 +23,7 @@
 
 #include "lastfm.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define SUMMARY_BEGIN "<summary><![CDATA["
 #define SUMMARY_ENDIN "]]></summary>"

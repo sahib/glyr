@@ -23,7 +23,7 @@
 
 #include "flickr.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define LINE_BEGIN "<photo id="
 #define LINE_ENDIN "/>"

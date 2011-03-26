@@ -33,7 +33,7 @@
 // you shouldnt do this yourself, but
 // implementing functions twice is silly
 // (in this case at least )
-#include "../lib/stringop.h"
+#include "../lib/stringlib.h"
 
 #include <dirent.h>
 #include <sys/types.h>
@@ -846,7 +846,7 @@ static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
 static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-	char * good_path   = strdup_printf("%s/%s_album_%d.txt",save_dir,good_artist,i);
+    char * good_path   = strdup_printf("%s/%s_album_%d.txt",save_dir,good_artist,i);
     if(good_artist)
 		free(good_artist);
 
@@ -855,8 +855,26 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 
 static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 {
-    return strdup("stdout");
+    char * good_artist = correct_path(s->artist);
+    char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
+
+    if(good_artist)
+       free(good_artist);
+
+    return good_path;
 }
+
+static char * path_relations(GlyQuery *s, const char * save_dir, int i)
+{
+    char * good_artist = correct_path(s->artist);
+    char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
+
+    if(good_artist)
+       free(good_artist);
+
+    return good_path;
+}
+
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
@@ -893,6 +911,9 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
     case GET_TAGS:
 	m_path = path_tags(s,sd,iter);
 	break;
+    case GET_RELATIONS:
+	m_path = path_relations(s,sd,iter);
+	break;
     }
     return m_path;
 }
@@ -900,7 +921,6 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
-int aa = 0;
 static int cb(GlyMemCache * c, GlyQuery * s)
 {
     // This is just to demonstrate the callback option.
@@ -931,6 +951,7 @@ int main(int argc, char * argv[])
                 GlyOpt_call_direct_provider(&my_query, "a");
                 GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
         */
+
         // Set the type..
         if(!set_get_type(&my_query, argv[1]))
         {

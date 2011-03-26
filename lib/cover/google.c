@@ -25,7 +25,7 @@
 
 #include "google.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 
 #define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="

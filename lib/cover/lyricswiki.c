@@ -24,8 +24,7 @@
 #include <string.h>
 
 #include "lyricswiki.h"
-
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../core.h"
 
 const char * cover_lyricswiki_url(GlyQuery * sets)

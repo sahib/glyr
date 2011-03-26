@@ -26,7 +26,7 @@
 #include "photos.h"
 #include "core.h"
 #include "types.h"
-#include "stringop.h"
+#include "stringlib.h"
 
 #include "photos/flickr.h"
 #include "photos/lastfm.h"

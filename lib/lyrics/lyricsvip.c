@@ -23,7 +23,7 @@
 #include "lyricsvip.h"
 
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define LV_URL "http://www.lyricsvip.com/%s/%s-Lyrics.html"
 

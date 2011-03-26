@@ -89,6 +89,7 @@
 /* Group IDs */
 enum GLYR_GROUPS
 {
+    /* Groups are build by (a | b)*/
     GRP_NONE = 0 << 0, /* None    */
     GRP_SAFE = 1 << 0, /* Safe    */
     GRP_USFE = 1 << 1, /* Unsafe  */
@@ -254,6 +255,7 @@ enum GLYR_GET_TYPE
     GET_REVIEW,
     GET_TRACKLIST,
     GET_TAGS,
+    GET_RELATIONS,
     GET_ALBUMLIST,
     GET_UNSURE
 };
@@ -276,6 +278,7 @@ enum GLYR_DATA_TYPE
     TYPE_TAG_ARTIST,
     TYPE_TAG_ALBUM,
     TYPE_TAG_TITLE,
+    TYPE_RELATION,
     TYPE_TRACK
 };
 

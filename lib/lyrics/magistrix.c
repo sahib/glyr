@@ -21,7 +21,7 @@
 #include <string.h>
 #include "magistrix.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
 

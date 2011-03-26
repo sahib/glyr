@@ -22,8 +22,7 @@
 #include <string.h>
 
 #include "../core.h"
-#include "../stringop.h"
-#include "../core.h"
+#include "../stringlib.h"
 #include "../glyr.h"
 
 const char * cover_allmusic_url(GlyQuery * s)

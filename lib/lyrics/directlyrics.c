@@ -22,7 +22,7 @@
 
 #include "directlyrics.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 // directlyrics only offers google/javascipt powered search
 // Unable to use this via CGI without lots of pain..

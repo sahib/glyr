@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "musicbrainz.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../core.h"
 
 const char * tracklist_musicbrainz_url(GlyQuery * sets)

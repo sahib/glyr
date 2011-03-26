@@ -23,39 +23,40 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#include "types.h"
 #include "core.h"
+#include "types.h"
 #include "stringlib.h"
 
-#include "tracklist/musicbrainz.h"
+#include "relations/musicbrainz.h"
 
 // Add your's here
-GlyPlugin tracklist_providers[] =
+GlyPlugin relations_providers[] =
 {
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tracklist_musicbrainz_parse, tracklist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
+    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {relations_musicbrainz_parse,  relations_musicbrainz_url, NULL, true }, GRP_SAFE | GRP_FAST},
+    { NULL,        NULL, NULL,                  false,  {NULL,                         NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
 };
 
-GlyPlugin * glyr_get_tracklist_providers(void)
+GlyPlugin * glyr_get_relations_providers(void)
 {
-    return copy_table(tracklist_providers,sizeof(tracklist_providers));
+    return copy_table(relations_providers,sizeof(relations_providers));
 }
 
-static GlyCacheList * tracklist_finalize(GlyCacheList * result, GlyQuery * settings)
+static GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-     return generic_finalizer(result,settings,TYPE_TRACK);
+     flag_double_urls(result,settings);
+     return generic_finalizer(result,settings,TYPE_RELATION);
 }
 
-GlyCacheList * get_tracklist(GlyQuery * settings)
+GlyCacheList * get_relations(GlyQuery * settings)
 {
     GlyCacheList * result = NULL;
-    if(settings && settings->artist && settings->album)
+    if(settings && settings->artist)
     {
-        result = register_and_execute(settings, tracklist_finalize);
+        result = register_and_execute(settings, relations_finalize);
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist and Album is needed to retrieve a tracklist (o rly?).\n");
+        glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get relations.\n");
     }
     return result;
 }

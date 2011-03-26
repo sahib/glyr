@@ -42,7 +42,7 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 # set directories
 SET( SUBDIR_LIB lib)
 SET( SUBDIR_SRC src)
-SET( SUBDIR_BIND bind)
+SET( SUBDIR_SWIG swig)
 
 # find libcurl dependency
 FIND_PACKAGE(CURL REQUIRED)
@@ -57,11 +57,12 @@ set (DIR_REVIEW    ${DIR_ROOT}/review                   )
 set (DIR_TRACKLIST ${DIR_ROOT}/tracklist                )
 set (DIR_ALBUMLIST ${DIR_ROOT}/albumlist                )
 set (DIR_TAGS      ${DIR_ROOT}/tags                     )
+set (DIR_RELATIONS ${DIR_ROOT}/relations                )
 
 SET(LIB_SOURCE_LOCATIONS 
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
-	"${DIR_ROOT}/stringop.c"
+	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/ainfo.c"
 	"${DIR_ROOT}/cover.c"
 	"${DIR_ROOT}/similiar.c"
@@ -70,6 +71,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/review.c"
 	"${DIR_ROOT}/tracklist.c"
         "${DIR_ROOT}/tags.c"
+        "${DIR_ROOT}/relations.c"
 	"${DIR_ROOT}/albumlist.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/wikipedia.c"
@@ -78,6 +80,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
+	"${DIR_RELATIONS}/musicbrainz.c"
 	"${DIR_TAGS}/musicbrainz.c"
 	"${DIR_COVER}/last_fm.c"
 	"${DIR_COVER}/google.c"

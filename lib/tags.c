@@ -23,9 +23,9 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-#include "core.h"
 #include "types.h"
-#include "stringop.h"
+#include "types.h"
+#include "stringlib.h"
 
 #include "tags/musicbrainz.h"
 
@@ -43,6 +43,7 @@ GlyPlugin * glyr_get_tags_providers(void)
 
 static GlyCacheList * tags_finalize(GlyCacheList * result, GlyQuery * settings)
 {
+     flag_double_urls(result,settings);
      return generic_finalizer(result,settings,TYPE_TAGS);
 }
 

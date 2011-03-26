@@ -24,7 +24,7 @@
 
 #include "core.h"
 #include "types.h"
-#include "stringop.h"
+#include "stringlib.h"
 
 //Include plugins:
 #include "cover/last_fm.h"

@@ -21,11 +21,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "amazon.h"
+#include "albumart.h"
 
 // util
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 const char * cover_albumart_url(GlyQuery * sets)
 {

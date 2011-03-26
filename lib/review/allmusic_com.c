@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "allmusic_com.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../core.h"
 
 // begin of search results

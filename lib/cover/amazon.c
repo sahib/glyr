@@ -24,7 +24,7 @@
 #include "amazon.h"
 
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../glyr.h"
 
 // Example snippet of what we parse:

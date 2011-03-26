@@ -29,7 +29,7 @@
 
 // extended string lib
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 // Search URL
 #define ML_URL "http://www.metrolyrics.com/search.php?search=%artist%+%title%&category=artisttitle"

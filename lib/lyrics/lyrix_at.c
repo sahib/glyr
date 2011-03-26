@@ -22,7 +22,7 @@
 
 #include "magistrix.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define AT_URL "http://lyrix.at/lyrics-search/s-%artist%,,%title%,,any,1321,0.html"
 

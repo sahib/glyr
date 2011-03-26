@@ -25,4 +25,8 @@
 const char *   tags_musicbrainz_url(GlyQuery * s);
 GlyCacheList * tags_musicbrainz_parse(cb_object * capo);
 
+GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include);
+const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset);
+const char * generic_musicbrainz_url(GlyQuery * sets);
+
 #endif

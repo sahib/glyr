@@ -18,31 +18,11 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-
-// Own header
-#include "google.h"
-
-// Borrowing actual implementation from cover:google.c
-#include "../cover/google.h"
+#ifndef RELATIONS_MUSICBRAINZ_H
+#define RELATIONS_MUSICBRAINT_H
 
 #include "../core.h"
-#include "../stringlib.h"
+const char *   relations_musicbrainz_url(GlyQuery * s);
+GlyCacheList * relations_musicbrainz_parse(cb_object * capo);
 
-const char * photos_google_url(GlyQuery * s)
-{
-    const char * result = NULL;
-    char * searchterm = strdup("%artist%+band+photos");
-    if(searchterm != NULL)
-    {
-        result = generic_google_url(s,searchterm);
-        free(searchterm);
-    }
-    return result;
-}
-
-GlyCacheList * photos_google_parse(cb_object * capo)
-{
-    return generic_google_parse(capo);
-}
+#endif

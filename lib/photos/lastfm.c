@@ -23,7 +23,7 @@
 
 #include "lastfm.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 // No choice on format, because everything smaller is pratctically unusable
 #define SIZE_FO "<size name=\"extralarge\""

@@ -24,7 +24,7 @@
 
 #include "../core.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 const char * lyrics_songlyrics_url(GlyQuery * settings)
 {

@@ -25,7 +25,7 @@
 
 #include "discogs.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define RELEASE_ID  "<release id=\""
 #define RELEASE_END "\" "

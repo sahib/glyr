@@ -23,7 +23,7 @@
 
 #include "darklyrics.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define DARK_URL "http://darklyrics.com/lyrics/%artist%/%album%.html#1"
 

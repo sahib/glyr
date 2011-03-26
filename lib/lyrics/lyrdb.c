@@ -19,9 +19,10 @@
 **************************************************************/
 #include <stdlib.h>
 #include <string.h>
+
 #include "lyrdb.h"
 #include "../core.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 
 #define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=%artist%|%title%&for=match&agent=mpdbox"
 

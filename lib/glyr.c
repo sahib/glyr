@@ -24,7 +24,7 @@
 #include <unistd.h>
 #include <getopt.h>
 
-#include "stringop.h"
+#include "stringlib.h"
 #include "core.h"
 
 #include "glyr.h"
@@ -38,6 +38,7 @@
 #include "tracklist.h"
 #include "tags.h"
 #include "albumlist.h"
+#include "relations.h"
 
 #include "config.h"
 
@@ -52,10 +53,14 @@ const char * err_strings[] = {
 	NULL
 };
 
+/*--------------------------------------------------------*/
+
 // prototypes
 static int glyr_parse_from(const char * arg, GlyQuery * settings);
 static int glyr_set_info(GlyQuery * s, int at, const char * arg);
 static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value);
+
+/*--------------------------------------------------------*/
 
 // return a descriptive string on error ID
 const char * Gly_strerror(enum GLYR_ERROR ID)
@@ -68,7 +73,6 @@ const char * Gly_strerror(enum GLYR_ERROR ID)
 }
 
 // Fill yours in here if you added a new one.
-// The rest is done for you quite automagically.
 GlyPlugin getwd_commands [] =
 {
     {"cover" ,   "c",  (char*)GET_COVER,    false, {NULL, NULL, NULL, false}, GRP_NONE},
@@ -79,6 +83,7 @@ GlyPlugin getwd_commands [] =
     {"review",   "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"albumlist","i",  (char*)GET_ALBUMLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"tags",     "t",  (char*)GET_TAGS     ,false, {NULL, NULL, NULL, false}, GRP_NONE},
+    {"relations","n",  (char*)GET_RELATIONS,false, {NULL, NULL, NULL, false}, GRP_NONE},
     {"tracklist","r",  (char*)GET_TRACKLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
     {NULL,   NULL, NULL,  42,                      {NULL, NULL, NULL, false}, GRP_NONE}
 };
@@ -581,6 +586,9 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
     case GET_ALBUMLIST:
 	result = get_albumlist(settings);
 	break;
+    case GET_RELATIONS:
+	result = get_relations(settings);
+	break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
@@ -652,8 +660,10 @@ GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
         return glyr_get_tracklist_providers();
     case GET_TAGS:
         return glyr_get_tags_providers();
+    case GET_RELATIONS:
+	return glyr_get_relations_providers();
     case GET_ALBUMLIST:
-		return glyr_get_albumlist_providers();
+	return glyr_get_albumlist_providers();
     case GET_UNSURE   :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :

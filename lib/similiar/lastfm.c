@@ -25,7 +25,7 @@
 
 #include "lastfm.h"
 #include "../cover.h"
-#include "../stringop.h"
+#include "../stringlib.h"
 #include "../core.h"
 
 #define API_KEY API_KEY_LASTFM

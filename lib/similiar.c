@@ -25,7 +25,7 @@
 
 #include "core.h"
 #include "types.h"
-#include "stringop.h"
+#include "stringlib.h"
 
 #include "similiar/lastfm.h"
 
