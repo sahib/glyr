@@ -138,7 +138,7 @@ const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
 				    free((char*)mbid);
 				    mbid = NULL;
 				}
-			} else puts("Fuzzylogic failed.");
+			} 
 			free(to_compare);
 		}
 		node++;
