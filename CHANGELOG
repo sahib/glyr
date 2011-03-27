@@ -56,5 +56,10 @@ Use the github page to view the automated git generated brother.
 ----------
 + Fixed crash when libcurl put an error to stdout (ouch..)
 + Fixed google names when having spaces (ouch x 2)
-+ 
 
+2011/03/28
+----------
++ Did a lot of fixing regarding the API
++ Fixed "broken" review getter. Still slow; needs more sources.
++ Extended src/example.c to use more functions.
++ Tested API (It works, biaatch!)

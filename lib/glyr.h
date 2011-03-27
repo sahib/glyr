@@ -31,8 +31,6 @@ extern "C"
 {
 #endif
 
-    typedef void (*callback_t) (void *user_data, const char *other_data);
-
     // the actual main of glyr
     GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
 
@@ -42,15 +40,16 @@ extern "C"
     // free all memory that may been still allocated in struct
     void Gly_destroy_query(GlyQuery * sets);
 
-    // free results
+    // GlyCacheList related
     void Gly_free_list(GlyCacheList * lst);
-    void Gly_free_cache(GlyMemCache * c);
-    void Gly_push_to_list(GlyCacheList * l, GlyMemCache * c);
     GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter);
+
+    // Cache related
     GlyMemCache * Gly_new_cache(void);
+    void Gly_free_cache(GlyMemCache * c);
 
     /* Gly_opt_* methods */
-    int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp);
+    int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
     int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
     int GlyOpt_artist(GlyQuery * s, char * artist);
     int GlyOpt_album(GlyQuery * s,  char * album);
@@ -78,9 +77,6 @@ extern "C"
     // return library version
     const char * Gly_version(void);
 
-    // print method that works with verbosity
-    int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
-
     // get information about available plugins
     GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
 
@@ -93,7 +89,7 @@ extern "C"
     // Returns the actual name of the group pointed by ID
     const char * Gly_groupname_by_id(int ID);
 
-	// Short descriptive version of an error ID
+    // Short descriptive version of an error ID
     const char * Gly_strerror(enum GLYR_ERROR ID);
 	
 #ifdef _cplusplus

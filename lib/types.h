@@ -136,6 +136,7 @@ typedef struct GlyMemCache
     int   type;     // type of metadata
     int   error;    // error code - internal use only
     int   duration; // Duration of a song. Only for tracklist getter.
+    bool  is_image; // Wether it is an image or not
 } GlyMemCache;
 
 // list of GlyMemCaches
@@ -145,6 +146,7 @@ typedef struct GlyCacheList
     size_t size;
     int usersig;
 } GlyCacheList;
+    
 
 typedef struct GlyQuery
 {
@@ -219,6 +221,8 @@ typedef struct GlyQuery
     } call_direct;
 
 } GlyQuery;
+
+typedef int (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 
 // The struct that controls the beahaviour of glyr
 // It is passed as reference to the cover and lyric downloader

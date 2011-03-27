@@ -173,7 +173,7 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
 			if(info_page_url)
 			{
 				info = download_single(info_page_url,capo->s,NULL);
-				free(info_page_url); 
+				free(info_page_url);
 			}
 			free((char*)mbid);
 		}
@@ -211,6 +211,7 @@ GlyCacheList * tags_musicbrainz_parse(cb_object * capo)
 				tmp->data = value;
 				tmp->size = tag_endin - tag_begin;
 				tmp->type = type_num;
+				tmp->dsrc = info->dsrc ? strdup(info->dsrc) : NULL; 
 
 				if(!r_list) r_list = DL_new_lst();
 				DL_add_to_list(r_list,tmp);

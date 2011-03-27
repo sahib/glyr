@@ -60,6 +60,8 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
 				c->size = strlen(c->data);
 			}
 
+			
+			c->dsrc = strdup(capo->url);			
 			DL_add_to_list(collection,c);
 			free(name);
 		}

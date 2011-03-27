@@ -139,6 +139,10 @@ GlyMemCache * DL_copy(GlyMemCache * src)
                 dest->dsrc = strdup(src->dsrc);
             }
             dest->size = src->size;
+	    dest->duration = src->duration;
+	    dest->error = src->error;
+	    dest->is_image = src->is_image;
+	    dest->type = src->type;
         }
     }
     return dest;
@@ -211,6 +215,7 @@ GlyMemCache* DL_init(void)
         cache->error    = ALL_OK;
         cache->type     = TYPE_NOIDEA;
         cache->duration = 0;
+	cache->is_image = false;
     }
     else
     {
@@ -428,7 +433,7 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
 
     if(dp != 0)
     {
-        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d Item%sthat occure twice.\n",dp,dp<2 ? " " : "s ");
+        glyr_message(2,s,stderr,C_"- Ignoring %d Item%sthat occure twice.\n",dp,dp<2 ? " " : "s ");
         s->itemctr -= dp;
     }
     return dp;
@@ -490,7 +495,7 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
     }
     if(c != 0)
     {
-        glyr_message(2,s,stderr,C_R"* "C_"Ignoring %d images with unknown format.\n",c);
+        glyr_message(2,s,stderr,C_"- Ignoring %d images with unknown format.\n",c);
         s->itemctr -= c;
     }
     return c;
@@ -527,7 +532,7 @@ int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, Gly
     }
     if(ctr != 0)
     {
-        glyr_message(2,s,stderr,C_R"*"C_" Ignoring %d blacklisted URL%s.\n\n",ctr,ctr>=1 ? " " : "s ");
+        glyr_message(2,s,stderr,C_"- Ignoring %d blacklisted URL%s.\n\n",ctr,ctr>=1 ? " " : "s ");
         s->itemctr -= ctr;
     }
     return ctr;
@@ -867,7 +872,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
     }
 
     // erase "downloading [.] message"
-    if(oblist[0].batch) glyr_message(2,s,stderr,"%-25c\n",1);
+    if(oblist[0].batch) glyr_message(2,s,stderr,"%-25c\n",'\0');
     size_t I = 0;
     for(I = 0; I < Counter; I++)
     {
@@ -1005,10 +1010,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
                     if(subList != NULL)
                     {
                         glyr_message(3,query,stderr,"Adding %d items to resultList\n",subList->size);
-                        if(resultList == NULL)
-                        {
-                            resultList = DL_new_lst();
-                        }
+                        if(!resultList) resultList = DL_new_lst();
                         DL_push_sublist(resultList,subList);
                         DL_free_container(subList);
                     }
@@ -1085,27 +1087,32 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
     if(!result) return NULL;
 
     size_t i = 0;
-    GlyCacheList * r_list = DL_new_lst();
+    GlyCacheList * r_list = NULL;
 
     for(i = 0; i < result->size; i++)
     {
 	if(result->list[i]->error != ALL_OK)
 	    continue;
 
+        if(!r_list) r_list = DL_new_lst();
+	if(result->list[i]->type == TYPE_NOIDEA)
+            result->list[i]->type = type;
+
         // call user defined callback
         if(settings->callback.download)
         {
+	    // Call the usercallback
             r_list->usersig = settings->callback.download(result->list[i],settings);
         }
+
         if(r_list->usersig == GLYRE_OK)
         {
-	    if(result->list[i]->type == GLYRE_OK)
-                result->list[i]->type = type;
-
+	    // Now make a copy of the item and add it to the list
             DL_add_to_list(r_list,DL_copy(result->list[i]));
         }
         else
         {
+	    // Break if desired.
             break;
         }
     }

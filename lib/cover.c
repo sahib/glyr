@@ -85,6 +85,8 @@ static GlyCacheList * cover_callback(cb_object * capo)
         if(dl->type == TYPE_NOIDEA)
             dl->type = TYPE_COVER;
 
+	dl->is_image = true;
+
         // call user defined callback if any
         if(capo->s->callback.download)
         {
@@ -155,7 +157,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
                 if(dl_list != NULL)
                 {
-                    glyr_message(2,settings,stderr,C_G"* "C_"Succesfully downloaded %d image.\n",dl_list->size);
+                    glyr_message(2,settings,stderr,C_"- Succesfully downloaded %d image.\n",dl_list->size);
                 }
                 free(urlplug_list);
             }
@@ -173,11 +175,23 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
             size_t i = 0;
             for( i = 0; i < result->size; i++)
             {
-                if(result->list[i] && result->list[i]->error == ALL_OK)
+                if(result->list[i] && result->list[i]->error == ALL_OK && result->list[i]->data)
                 {
                     if(!dl_list) dl_list = DL_new_lst();
-                    GlyMemCache * r_copy = DL_copy(result->list[i]);
-                    DL_add_to_list(dl_list,r_copy);
+
+		    GlyMemCache * copy = DL_init();
+		    copy->is_image = true;
+		    copy->type = TYPE_COVER;
+		    copy->dsrc = strdup(result->list[i]->data);
+		    copy->size = copy->dsrc ? strlen(copy->dsrc) : 0;
+
+		    if(settings->callback.download)
+		        dl_list->usersig = settings->callback.download(copy,settings);
+
+		    if(dl_list->usersig == GLYRE_OK)
+                        DL_add_to_list(dl_list,copy);
+		    else
+			break;
                 }
             }
         }

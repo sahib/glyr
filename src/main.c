@@ -34,6 +34,8 @@
 // implementing functions twice is silly
 // (in this case at least )
 #include "../lib/stringlib.h"
+// For glyr_message. Also don't use it.
+#include "../lib/core.h"
 
 #include <dirent.h>
 #include <sys/types.h>
@@ -294,7 +296,7 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         {
             if(!strcmp(arg,plist[i].name) || !strcmp(arg,plist[i].key))
             {
-                GlyOpt_type(s,(long)plist[i].color);
+                GlyOpt_type(s,(long)plist[i].gid);
                 free(plist);
                 return result;
             }
@@ -490,22 +492,28 @@ void help_short(GlyQuery * s)
                  DEFAULT_FORMATS
                 );
 
-    glyr_message(-1,s,stderr,"\n"IN C_"# cover:\n");
+    if(s != NULL) s->color_output = false;
+
+    glyr_message(-1,s,stderr,"\n"IN C_"cover:\n");
     list_provider_at_id(GET_COVER,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# lyrics:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"lyrics:\n");
     list_provider_at_id(GET_LYRIC,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# photos:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"photos:\n");
     list_provider_at_id(GET_PHOTO,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# review:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"review:\n");
     list_provider_at_id(GET_REVIEW,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# similiar:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"similiar:\n");
     list_provider_at_id(GET_SIMILIAR,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# ainfo:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"ainfo:\n");
     list_provider_at_id(GET_AINFO,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# tracklist:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"tracklist:\n");
     list_provider_at_id(GET_TRACKLIST,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"# albumlist:\n");
+    glyr_message(-1,s,stderr,"\n"IN C_"albumlist:\n");
     list_provider_at_id(GET_ALBUMLIST,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"tags\n");
+    list_provider_at_id(GET_TAGS,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
+    list_provider_at_id(GET_RELATIONS,13,s);
 
     glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
@@ -1065,11 +1073,11 @@ int main(int argc, char * argv[])
         tmp.color_output = false;
         usage(&tmp);
     }
-    else if(argc >= 2 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"-ch")))
+    else if(argc >= 2 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"-ch") || !strcmp(argv[1],"-hc")))
     {
         help_short(NULL);
     }
-    else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-Ch")))
+    else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-Ch") || !strcmp(argv[1],"-hC")))
     {
         GlyQuery tmp;
         tmp.color_output = false;

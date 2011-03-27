@@ -720,23 +720,26 @@ size_t remove_tags_from_string(char * string, int length, char start, char end)
      if(string != NULL)
      { 
 	size_t n, L = (length < 0) ? strlen(string) : (size_t)length;
-	for(n = L-1; n; --n)
+	if(L != 0)
 	{
-	    if(string[n] == start)
-	    {
-		if( (tagEnd = strchr(string+n+1,end)) )
+		for(n = L-1; n; --n)
 		{
-		    char * Tpon = tagEnd + 1; 
-		    size_t tLen = Tpon - (string+n);
-		    size_t rest = string + L - tagEnd;
+		    if(string[n] == start)
+		    {
+			if( (tagEnd = strchr(string+n+1,end)) )
+			{
+			    char * Tpon = tagEnd + 1; 
+			    size_t tLen = Tpon - (string+n);
+			    size_t rest = string + L - tagEnd;
 
-		    tLen = (tLen < rest) ? tLen : rest;
-		    memcpy (string+n, Tpon, tLen);
-   		    memmove(Tpon,Tpon+tLen,rest-tLen);
+			    tLen = (tLen < rest) ? tLen : rest;
+			    memcpy (string+n, Tpon, tLen);
+			    memmove(Tpon,Tpon+tLen,rest-tLen);
 
-		    ctr += tLen;
-		}
-	    } 
+			    ctr += tLen;
+			}
+		    }
+		} 
 	}
      }
      return ctr;

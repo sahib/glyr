@@ -64,6 +64,8 @@ GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
 			GlyMemCache * tmp = DL_init();
 			tmp->data = strdup_printf("%s:%s",type,target);
 			tmp->size = strlen(tmp->data);
+			tmp->type = TYPE_RELATION;
+			tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL; 
 
 			if(!results) results = DL_new_lst();
 			DL_add_to_list(results,tmp);

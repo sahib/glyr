@@ -51,12 +51,12 @@ GlyMemCache * parse_text(GlyMemCache * to_parse)
     if(text_begin != NULL)
     {
         char * text_endin = strstr(text_begin,IMG_ENDIN);
-        if(text_endin != NULL)
+        if(text_endin != NULL && text_endin - (text_begin + strlen(IMG_BEGIN)) > 0)
         {
             char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
             if(text != NULL)
             {
-                remove_tags_from_string(text,strlen(text),'<','>');
+                remove_tags_from_string(text,-1,'<','>');
 				
                 rche = DL_init();
                 rche->data = strip_html_unicode(text);

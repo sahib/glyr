@@ -75,17 +75,17 @@ const char * Gly_strerror(enum GLYR_ERROR ID)
 // Fill yours in here if you added a new one.
 GlyPlugin getwd_commands [] =
 {
-    {"cover" ,   "c",  (char*)GET_COVER,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"lyrics",   "l",  (char*)GET_LYRIC,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"photos",   "p",  (char*)GET_PHOTO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"ainfo",    "a",  (char*)GET_AINFO,    false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"similiar", "s",  (char*)GET_SIMILIAR, false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"review",   "r",  (char*)GET_REVIEW,   false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"albumlist","i",  (char*)GET_ALBUMLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"tags",     "t",  (char*)GET_TAGS     ,false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"relations","n",  (char*)GET_RELATIONS,false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {"tracklist","r",  (char*)GET_TRACKLIST,false, {NULL, NULL, NULL, false}, GRP_NONE},
-    {NULL,   NULL, NULL,  42,                      {NULL, NULL, NULL, false}, GRP_NONE}
+    {"cover" ,   "c",  NULL, false, {NULL, NULL, NULL, false}, GET_COVER     },
+    {"lyrics",   "l",  NULL, false, {NULL, NULL, NULL, false}, GET_LYRIC     },
+    {"photos",   "p",  NULL, false, {NULL, NULL, NULL, false}, GET_PHOTO     },
+    {"ainfo",    "a",  NULL, false, {NULL, NULL, NULL, false}, GET_AINFO     },
+    {"similiar", "s",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR  },
+    {"review",   "r",  NULL, false, {NULL, NULL, NULL, false}, GET_REVIEW    },
+    {"albumlist","i",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUMLIST },
+    {"tags",     "t",  NULL, false, {NULL, NULL, NULL, false}, GET_TAGS      },
+    {"relations","n",  NULL, false, {NULL, NULL, NULL, false}, GET_RELATIONS },
+    {"tracklist","r",  NULL, false, {NULL, NULL, NULL, false}, GET_TRACKLIST },
+    {NULL,       NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE      }
 };
 
 /*-----------------------------------------------*/
@@ -100,7 +100,8 @@ const char * Gly_version(void)
 /*-----------------------------------------------*/
 
 // Seperate method because va_arg struggles with function pointers
-int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp)
+//int GlyOpt_dlcallback(GlyQuery * settings, int (*dl_cb)(GlyMemCache *, GlyQuery *), void * userp)
+int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp)
 {
     if(settings)
     {

@@ -118,6 +118,7 @@ GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
 
         DL_add_to_list(r_list,info_short);
         DL_add_to_list(r_list,info_long );
+	return r_list;
     }
 
     char * search_begin = NULL;
