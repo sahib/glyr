@@ -25,7 +25,7 @@
 #include "musicbrainz.h"
 #include "../stringlib.h"
 
-#include "../tags/musicbrainz.h" 
+#include "../tags/musicbrainz.h"
 
 /*--------------------------------------------------------*/
 
@@ -39,43 +39,43 @@ GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
 
     if(infobuf)
     {
-	size_t nlen = strlen(RELATION_BEGIN_TYPE);
-	char * node = strstr(infobuf->data,"<relation-list target-type=\"Url\">");
-	if(node != NULL)
-	{
-		while( (node = strstr(node+1,RELATION_BEGIN_TYPE)) )
-		{
-		    char * end_of_type = strchr(node+nlen,'"');
-		    if(!end_of_type)
-		      continue;
-		
-		    char * beg_of_target = strchr(end_of_type+1,'"');			
-		    if(!beg_of_target)
-		      continue;
+        size_t nlen = strlen(RELATION_BEGIN_TYPE);
+        char * node = strstr(infobuf->data,"<relation-list target-type=\"Url\">");
+        if(node != NULL)
+        {
+            while( (node = strstr(node+1,RELATION_BEGIN_TYPE)) )
+            {
+                char * end_of_type = strchr(node+nlen,'"');
+                if(!end_of_type)
+                    continue;
 
-		    char * end_of_target = strchr(beg_of_target+1,'"');
-		    if(!end_of_target)
-		      continue;
+                char * beg_of_target = strchr(end_of_type+1,'"');
+                if(!beg_of_target)
+                    continue;
 
-		    char * type = copy_value(node+nlen,end_of_type);
-		    char * target = copy_value(beg_of_target+1,end_of_target);
-		    if(type != NULL && target != NULL)
-		    {
-			GlyMemCache * tmp = DL_init();
-			tmp->data = strdup_printf("%s:%s",type,target);
-			tmp->size = strlen(tmp->data);
-			tmp->type = TYPE_RELATION;
-			tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL; 
+                char * end_of_target = strchr(beg_of_target+1,'"');
+                if(!end_of_target)
+                    continue;
 
-			if(!results) results = DL_new_lst();
-			DL_add_to_list(results,tmp);
+                char * type = copy_value(node+nlen,end_of_type);
+                char * target = copy_value(beg_of_target+1,end_of_target);
+                if(type != NULL && target != NULL)
+                {
+                    GlyMemCache * tmp = DL_init();
+                    tmp->data = strdup_printf("%s:%s",type,target);
+                    tmp->size = strlen(tmp->data);
+                    tmp->type = TYPE_RELATION;
+                    tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
 
-			free(type);
-			free(target);
-		    }
-		}
-	}
-	DL_free(infobuf);
+                    if(!results) results = DL_new_lst();
+                    DL_add_to_list(results,tmp);
+
+                    free(type);
+                    free(target);
+                }
+            }
+        }
+        DL_free(infobuf);
     }
     return results;
 }

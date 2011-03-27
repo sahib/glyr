@@ -85,7 +85,7 @@ static GlyCacheList * cover_callback(cb_object * capo)
         if(dl->type == TYPE_NOIDEA)
             dl->type = TYPE_COVER;
 
-	dl->is_image = true;
+        dl->is_image = true;
 
         // call user defined callback if any
         if(capo->s->callback.download)
@@ -179,19 +179,19 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(!dl_list) dl_list = DL_new_lst();
 
-		    GlyMemCache * copy = DL_init();
-		    copy->is_image = true;
-		    copy->type = TYPE_COVER;
-		    copy->dsrc = strdup(result->list[i]->data);
-		    copy->size = copy->dsrc ? strlen(copy->dsrc) : 0;
+                    GlyMemCache * copy = DL_init();
+                    copy->is_image = true;
+                    copy->type = TYPE_COVER;
+                    copy->dsrc = strdup(result->list[i]->data);
+                    copy->size = copy->dsrc ? strlen(copy->dsrc) : 0;
 
-		    if(settings->callback.download)
-		        dl_list->usersig = settings->callback.download(copy,settings);
+                    if(settings->callback.download)
+                        dl_list->usersig = settings->callback.download(copy,settings);
 
-		    if(dl_list->usersig == GLYRE_OK)
+                    if(dl_list->usersig == GLYRE_OK)
                         DL_add_to_list(dl_list,copy);
-		    else
-			break;
+                    else
+                        break;
                 }
             }
         }

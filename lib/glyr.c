@@ -42,15 +42,16 @@
 
 #include "config.h"
 
-const char * err_strings[] = {
-	"all okay",
-	"bad option",
-	"bad value for option",
-	"NULL pointer for struct",
-	"No provider specified",
-	"Unknown ID for getter",
-	"Stopped by callback",
-	NULL
+const char * err_strings[] =
+{
+    "all okay",
+    "bad option",
+    "bad value for option",
+    "NULL pointer for struct",
+    "No provider specified",
+    "Unknown ID for getter",
+    "Stopped by callback",
+    NULL
 };
 
 /*--------------------------------------------------------*/
@@ -65,11 +66,11 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 // return a descriptive string on error ID
 const char * Gly_strerror(enum GLYR_ERROR ID)
 {
-	if(ID < (sizeof(err_strings)/sizeof(const char *)))
-	{
-		return err_strings[ID];
-	}
-	return NULL;
+    if(ID < (sizeof(err_strings)/sizeof(const char *)))
+    {
+        return err_strings[ID];
+    }
+    return NULL;
 }
 
 // Fill yours in here if you added a new one.
@@ -585,11 +586,11 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
         result =  get_tracklist(settings);
         break;
     case GET_ALBUMLIST:
-	result = get_albumlist(settings);
-	break;
+        result = get_albumlist(settings);
+        break;
     case GET_RELATIONS:
-	result = get_relations(settings);
-	break;
+        result = get_relations(settings);
+        break;
     default:
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
@@ -662,9 +663,9 @@ GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
     case GET_TAGS:
         return glyr_get_tags_providers();
     case GET_RELATIONS:
-	return glyr_get_relations_providers();
+        return glyr_get_relations_providers();
     case GET_ALBUMLIST:
-	return glyr_get_albumlist_providers();
+        return glyr_get_albumlist_providers();
     case GET_UNSURE   :
         return copy_table(getwd_commands,sizeof(getwd_commands));
     default       :

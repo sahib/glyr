@@ -139,10 +139,10 @@ GlyMemCache * DL_copy(GlyMemCache * src)
                 dest->dsrc = strdup(src->dsrc);
             }
             dest->size = src->size;
-	    dest->duration = src->duration;
-	    dest->error = src->error;
-	    dest->is_image = src->is_image;
-	    dest->type = src->type;
+            dest->duration = src->duration;
+            dest->error = src->error;
+            dest->is_image = src->is_image;
+            dest->type = src->type;
         }
     }
     return dest;
@@ -215,7 +215,7 @@ GlyMemCache* DL_init(void)
         cache->error    = ALL_OK;
         cache->type     = TYPE_NOIDEA;
         cache->duration = 0;
-	cache->is_image = false;
+        cache->is_image = false;
     }
     else
     {
@@ -475,7 +475,7 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
                         free(f);
                         f = NULL;
 
-			if(kick_me) break;
+                        if(kick_me) break;
                     }
 
                     if(!kick_me)
@@ -582,11 +582,11 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
         // Handle without any use - clean up
         curl_easy_cleanup(curl);
 
-	// Set the source URL
-	if(dldata->dsrc != NULL)
-	    free(dldata->dsrc);
+        // Set the source URL
+        if(dldata->dsrc != NULL)
+            free(dldata->dsrc);
 
-	dldata->dsrc = strdup(url);
+        dldata->dsrc = strdup(url);
 
         return dldata;
     }
@@ -1091,28 +1091,28 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 
     for(i = 0; i < result->size; i++)
     {
-	if(result->list[i]->error != ALL_OK)
-	    continue;
+        if(result->list[i]->error != ALL_OK)
+            continue;
 
         if(!r_list) r_list = DL_new_lst();
-	if(result->list[i]->type == TYPE_NOIDEA)
+        if(result->list[i]->type == TYPE_NOIDEA)
             result->list[i]->type = type;
 
         // call user defined callback
         if(settings->callback.download)
         {
-	    // Call the usercallback
+            // Call the usercallback
             r_list->usersig = settings->callback.download(result->list[i],settings);
         }
 
         if(r_list->usersig == GLYRE_OK)
         {
-	    // Now make a copy of the item and add it to the list
+            // Now make a copy of the item and add it to the list
             DL_add_to_list(r_list,DL_copy(result->list[i]));
         }
         else
         {
-	    // Break if desired.
+            // Break if desired.
             break;
         }
     }

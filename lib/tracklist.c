@@ -43,7 +43,7 @@ GlyPlugin * glyr_get_tracklist_providers(void)
 
 static GlyCacheList * tracklist_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-     return generic_finalizer(result,settings,TYPE_TRACK);
+    return generic_finalizer(result,settings,TYPE_TRACK);
 }
 
 GlyCacheList * get_tracklist(GlyQuery * settings)

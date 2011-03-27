@@ -57,7 +57,7 @@ GlyMemCache * parse_text(GlyMemCache * to_parse)
             if(text != NULL)
             {
                 remove_tags_from_string(text,-1,'<','>');
-				
+
                 rche = DL_init();
                 rche->data = strip_html_unicode(text);
                 rche->size = strlen(rche->data);

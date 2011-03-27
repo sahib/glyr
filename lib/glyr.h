@@ -91,7 +91,7 @@ extern "C"
 
     // Short descriptive version of an error ID
     const char * Gly_strerror(enum GLYR_ERROR ID);
-	
+
 #ifdef _cplusplus
 }
 #endif

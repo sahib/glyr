@@ -32,46 +32,61 @@ static void print_item(GlyMemCache * cacheditem, int num)
     switch(cacheditem->type)
     {
     case TYPE_COVER:
-	fprintf(stderr,"cover"); break;
+        fprintf(stderr,"cover");
+        break;
     case TYPE_COVER_PRI:
-	fprintf(stderr,"cover (frontside)"); break;
+        fprintf(stderr,"cover (frontside)");
+        break;
     case TYPE_COVER_SEC:
-	fprintf(stderr,"cover (backside or inlet)"); break;
+        fprintf(stderr,"cover (backside or inlet)");
+        break;
     case TYPE_LYRICS:
-	fprintf(stderr,"songtext"); break;
+        fprintf(stderr,"songtext");
+        break;
     case TYPE_PHOTOS:
-	fprintf(stderr,"band photo"); break;
+        fprintf(stderr,"band photo");
+        break;
     case TYPE_REVIEW:
-	fprintf(stderr,"albumreview"); break;
+        fprintf(stderr,"albumreview");
+        break;
     case TYPE_AINFO:
-	fprintf(stderr,"artistbio"); break;
+        fprintf(stderr,"artistbio");
+        break;
     case TYPE_SIMILIAR:
-	fprintf(stderr,"similiar artist"); break;
+        fprintf(stderr,"similiar artist");
+        break;
     case TYPE_TRACK:
-	fprintf(stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60); break;
+        fprintf(stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60);
+        break;
     case TYPE_ALBUMLIST:
-	fprintf(stderr,"albumname"); break;
+        fprintf(stderr,"albumname");
+        break;
     case TYPE_TAGS:
-	fprintf(stderr,"some tag"); break;
+        fprintf(stderr,"some tag");
+        break;
     case TYPE_TAG_ARTIST:
-	fprintf(stderr,"artisttag"); break;
+        fprintf(stderr,"artisttag");
+        break;
     case TYPE_TAG_ALBUM:
-	fprintf(stderr,"albumtag"); break;
+        fprintf(stderr,"albumtag");
+        break;
     case TYPE_TAG_TITLE:
-	fprintf(stderr,"titletag"); break;
+        fprintf(stderr,"titletag");
+        break;
     case TYPE_RELATION:
-	fprintf(stderr,"relation"); break;
+        fprintf(stderr,"relation");
+        break;
     case TYPE_NOIDEA:
     default:
-	fprintf(stderr,"brunette giraffe..? No idea.");
+        fprintf(stderr,"brunette giraffe..? No idea.");
     }
 
     // Print the actual data.
     // This might have funny results if using cover/photos
     if(!cacheditem->is_image)
-      fprintf(stderr,"\nDATA:\n%s",cacheditem->data);
+        fprintf(stderr,"\nDATA:\n%s",cacheditem->data);
     else
-      fprintf(stderr,"\nDATA: <not printable>");
+        fprintf(stderr,"\nDATA: <not printable>");
 
     fprintf(stderr,"\n");
 }
@@ -97,24 +112,24 @@ int main(int argc, char * argv[])
     {
         GlyPlugin * list_of_getters = Gly_get_provider_by_id(GET_UNSURE);
         if(list_of_getters != NULL)
-	{
-	    int i;
+        {
+            int i;
 
-	    // The end of the commandlist is marked by a NULL in the name
-	    for(i = 0; list_of_getters[i].name; i++)
-	    {
-		// If it matches the argument...
-		if(!strcmp(list_of_getters[i].name,argv[1]))
-		{
-			//.. we set the type. The type is stored in the 'gid' variable
-			// (which stores informations about groups elsewhere)
-			type = list_of_getters[i].gid;
-			break;
-		}
-	    }
+            // The end of the commandlist is marked by a NULL in the name
+            for(i = 0; list_of_getters[i].name; i++)
+            {
+                // If it matches the argument...
+                if(!strcmp(list_of_getters[i].name,argv[1]))
+                {
+                    //.. we set the type. The type is stored in the 'gid' variable
+                    // (which stores informations about groups elsewhere)
+                    type = list_of_getters[i].gid;
+                    break;
+                }
+            }
             // The table is a dyn. allocated copy of the original -> free!
-	    free(list_of_getters);
-	}
+            free(list_of_getters);
+        }
     }
 
     // Now set the type we determined.
@@ -135,10 +150,10 @@ int main(int argc, char * argv[])
 
     // Download 5 items
     GlyOpt_number(&q,111);
-    
+
     // Just search
     GlyOpt_download(&q,1);
-  
+
     // Call the most important command: GET!
     // This returned a list of (GlyMemCache *)s
     // Each containing ONE item. (i.e. a songtext)
@@ -146,8 +161,8 @@ int main(int argc, char * argv[])
     GlyCacheList * result_list = Gly_get(&q,&err);
 
     if(err != GLYRE_OK)
-	fprintf(stderr,"E:%s\n",Gly_strerror(err));
-	
+        fprintf(stderr,"E:%s\n",Gly_strerror(err));
+
     // Now iterate through it...
     if(result_list != NULL)
     {
@@ -157,9 +172,9 @@ int main(int argc, char * argv[])
         size_t i = 0;
         for(i = 0; i < result_list->size; i++)
         {
-		// This has the same effect as in the callback,
-		// Just that it's executed just once after all DL is done.
-		//print_item(Gly_clist_at(result_list,i),(int)i);
+            // This has the same effect as in the callback,
+            // Just that it's executed just once after all DL is done.
+            //print_item(Gly_clist_at(result_list,i),(int)i);
         }
         // The contents of result_list are dynamically allocated.
         // So better free them if you're not keen on memoryleaks

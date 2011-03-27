@@ -27,14 +27,14 @@
 
 const char * ainfo_wikipedia_url(GlyQuery * s)
 {
-	return strdup_printf("http://%s.wikipedia.org/wiki/%%artist%%_(Band)",s->lang);
-    
+    return strdup_printf("http://%s.wikipedia.org/wiki/%%artist%%_(Band)",s->lang);
+
 }
 
 GlyCacheList * ainfo_wikipedia_parse(cb_object * capo)
 {
     char * txt_begin = strstr(capo->cache->data,"<a href=\"#mw-head\"");
-	remove_tags_from_string(txt_begin,capo->cache->size - (txt_begin - capo->cache->data),'<','>');
-	puts(txt_begin);
-	return NULL;
+    remove_tags_from_string(txt_begin,capo->cache->size - (txt_begin - capo->cache->data),'<','>');
+    puts(txt_begin);
+    return NULL;
 }

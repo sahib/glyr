@@ -261,17 +261,17 @@ static void usage(GlyQuery * s)
 
 static void sig_handler(int signal)
 {
-   switch(signal)
-   {
-        case SIGINT: 
-            glyr_message(-1,NULL,stderr,C_"Received keyboard interrupt!\n");
-            break;
-        case SIGSEGV :
-            glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
-            glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
-            break;
-   }
-   exit(-1);
+    switch(signal)
+    {
+    case SIGINT:
+        glyr_message(-1,NULL,stderr,C_"Received keyboard interrupt!\n");
+        break;
+    case SIGSEGV :
+        glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
+        glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
+        break;
+    }
+    exit(-1);
 }
 
 
@@ -282,11 +282,11 @@ static void sig_handler(int signal)
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
     bool result = true;
-	
+
     if(!arg)
-	{
+    {
         return result;
-	}
+    }
     // get list of avaliable commands
     GlyPlugin * plist = Gly_get_provider_by_id(GET_UNSURE);
     if(plist)
@@ -856,9 +856,9 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
     char * good_artist = correct_path(s->artist);
     char * good_path   = strdup_printf("%s/%s_album_%d.txt",save_dir,good_artist,i);
     if(good_artist)
-		free(good_artist);
+        free(good_artist);
 
-	return good_path;
+    return good_path;
 }
 
 static char * path_tags(GlyQuery *s, const char * save_dir, int i)
@@ -867,7 +867,7 @@ static char * path_tags(GlyQuery *s, const char * save_dir, int i)
     char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
 
     if(good_artist)
-       free(good_artist);
+        free(good_artist);
 
     return good_path;
 }
@@ -878,7 +878,7 @@ static char * path_relations(GlyQuery *s, const char * save_dir, int i)
     char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
 
     if(good_artist)
-       free(good_artist);
+        free(good_artist);
 
     return good_path;
 }
@@ -914,14 +914,14 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
         m_path = path_tracklist(s,sd,iter);
         break;
     case GET_ALBUMLIST:
-	m_path = path_albumlist(s,sd,iter);
-	break;
+        m_path = path_albumlist(s,sd,iter);
+        break;
     case GET_TAGS:
-	m_path = path_tags(s,sd,iter);
-	break;
+        m_path = path_tags(s,sd,iter);
+        break;
     case GET_RELATIONS:
-	m_path = path_relations(s,sd,iter);
-	break;
+        m_path = path_relations(s,sd,iter);
+        break;
     }
     return m_path;
 }
@@ -944,7 +944,7 @@ int main(int argc, char * argv[])
     int result = EXIT_SUCCESS;
 
     /* Warn on  crash */
-    signal(SIGSEGV, sig_handler); 
+    signal(SIGSEGV, sig_handler);
     signal(SIGINT,  sig_handler);
 
     if(argc >= 3)
@@ -1040,10 +1040,10 @@ int main(int argc, char * argv[])
                     Gly_free_list(my_list);
                     free(table_copy);
                 }
-		else if(get_error != GLYRE_OK)
-		{
-		    glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
-		}
+                else if(get_error != GLYRE_OK)
+                {
+                    glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
+                }
             }
             else
             {

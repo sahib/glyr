@@ -146,7 +146,7 @@ typedef struct GlyCacheList
     size_t size;
     int usersig;
 } GlyCacheList;
-    
+
 
 typedef struct GlyQuery
 {

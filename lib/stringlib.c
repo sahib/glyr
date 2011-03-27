@@ -707,7 +707,7 @@ char * strip_html_unicode(const char * string)
 
 /* ------------------------------------------------------------- */
 
-/* 
+/*
  * Remove all characters between the start tag $start and endtag $end.
  * Works inplace by copying & moving parts of the string as needed.
  * Returns number of bytes the 0 bytes has moved backward.
@@ -715,34 +715,34 @@ char * strip_html_unicode(const char * string)
  */
 size_t remove_tags_from_string(char * string, int length, char start, char end)
 {
-     char *tagEnd;
-     size_t ctr = 0;
-     if(string != NULL)
-     { 
-	size_t n, L = (length < 0) ? strlen(string) : (size_t)length;
-	if(L != 0)
-	{
-		for(n = L-1; n; --n)
-		{
-		    if(string[n] == start)
-		    {
-			if( (tagEnd = strchr(string+n+1,end)) )
-			{
-			    char * Tpon = tagEnd + 1; 
-			    size_t tLen = Tpon - (string+n);
-			    size_t rest = string + L - tagEnd;
+    char *tagEnd;
+    size_t ctr = 0;
+    if(string != NULL)
+    {
+        size_t n, L = (length < 0) ? strlen(string) : (size_t)length;
+        if(L != 0)
+        {
+            for(n = L-1; n; --n)
+            {
+                if(string[n] == start)
+                {
+                    if( (tagEnd = strchr(string+n+1,end)) )
+                    {
+                        char * Tpon = tagEnd + 1;
+                        size_t tLen = Tpon - (string+n);
+                        size_t rest = string + L - tagEnd;
 
-			    tLen = (tLen < rest) ? tLen : rest;
-			    memcpy (string+n, Tpon, tLen);
-			    memmove(Tpon,Tpon+tLen,rest-tLen);
+                        tLen = (tLen < rest) ? tLen : rest;
+                        memcpy (string+n, Tpon, tLen);
+                        memmove(Tpon,Tpon+tLen,rest-tLen);
 
-			    ctr += tLen;
-			}
-		    }
-		} 
-	}
-     }
-     return ctr;
+                        ctr += tLen;
+                    }
+                }
+            }
+        }
+    }
+    return ctr;
 }
 
 /* ------------------------------------------------------------- */
@@ -753,7 +753,7 @@ char * beautify_lyrics(const char * lyrics)
 {
     char * result = NULL;
 
-	// Strip numeric HTML unicodes 
+    // Strip numeric HTML unicodes
     char * strip = strip_html_unicode(lyrics);
     if(strip)
     {
@@ -782,14 +782,14 @@ char * beautify_lyrics(const char * lyrics)
             }
 
             len -= remove_tags_from_string(unicode,len,'<','>');
-			char * trimd = calloc(1,sizeof(char) * (len+1));
-			if(trimd)
-			{
-				trim_copy(unicode,trimd);
-				free(unicode);
-			}
+            char * trimd = calloc(1,sizeof(char) * (len+1));
+            if(trimd)
+            {
+                trim_copy(unicode,trimd);
+                free(unicode);
+            }
 
-			result = trimd;
+            result = trimd;
         }
     }
     return result;

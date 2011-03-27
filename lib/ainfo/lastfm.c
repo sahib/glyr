@@ -50,22 +50,22 @@ static char * fix_crappy_lastfm_txt(const char * txt)
     if(txt)
     {
         remove_tags_from_string((char*)txt,strlen(txt),'<','>');
-		char * no_unicode = strip_html_unicode(txt);
-		if(no_unicode)
-		{
-			char * no_unicode_at_all = unescape_html_UTF8(no_unicode);
-			if(no_unicode_at_all)
-			{
-				char * trim_buf = calloc(strlen(no_unicode_at_all)+1,sizeof(char));
-				if(trim_buf)
-				{
-					trim_copy(no_unicode_at_all,trim_buf);
-					result = trim_buf;
-				}
-				free(no_unicode_at_all);
-			}
-			free(no_unicode);
-		}
+        char * no_unicode = strip_html_unicode(txt);
+        if(no_unicode)
+        {
+            char * no_unicode_at_all = unescape_html_UTF8(no_unicode);
+            if(no_unicode_at_all)
+            {
+                char * trim_buf = calloc(strlen(no_unicode_at_all)+1,sizeof(char));
+                if(trim_buf)
+                {
+                    trim_copy(no_unicode_at_all,trim_buf);
+                    result = trim_buf;
+                }
+                free(no_unicode_at_all);
+            }
+            free(no_unicode);
+        }
     }
     return result;
 }

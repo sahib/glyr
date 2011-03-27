@@ -44,19 +44,19 @@ GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
             if(text != NULL)
             {
                 remove_tags_from_string(text,strlen(text),'<','>');
-				char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
-				if(null_marker != NULL)
-				{
-					text[null_marker - text + 0] = '.';
-					text[null_marker - text + 1] = '.';
-					text[null_marker - text + 2] = '.';
-					text[null_marker - text + 3] =   0;
-				}
+                char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
+                if(null_marker != NULL)
+                {
+                    text[null_marker - text + 0] = '.';
+                    text[null_marker - text + 1] = '.';
+                    text[null_marker - text + 2] = '.';
+                    text[null_marker - text + 3] =   0;
+                }
 
-				rche = DL_init();
-				rche->data = strip_html_unicode(text);
-				rche->size = strlen(rche->data);
-				
+                rche = DL_init();
+                rche->data = strip_html_unicode(text);
+                rche->size = strlen(rche->data);
+
                 free(text);
                 text = NULL;
             }
@@ -118,7 +118,7 @@ GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
 
         DL_add_to_list(r_list,info_short);
         DL_add_to_list(r_list,info_long );
-	return r_list;
+        return r_list;
     }
 
     char * search_begin = NULL;

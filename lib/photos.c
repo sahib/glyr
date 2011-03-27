@@ -60,7 +60,7 @@ static GlyCacheList * photo_callback(cb_object * capo)
         if(dl->type == TYPE_NOIDEA)
             dl->type = TYPE_PHOTOS;
 
-	dl->is_image = true;
+        dl->is_image = true;
 
         // call user defined callback if any
         if(capo->s->callback.download)
@@ -134,21 +134,21 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                     GlyMemCache * r_copy = DL_init();
                     r_copy->dsrc = strdup(result->list[i]->data);
                     r_copy->size = r_copy->dsrc ? strlen(r_copy->dsrc) : 0;
-		    r_copy->type = TYPE_PHOTOS;
-		    r_copy->is_image = true;
+                    r_copy->type = TYPE_PHOTOS;
+                    r_copy->is_image = true;
 
-		    if(settings->callback.download)
-		        dl_list->usersig = settings->callback.download(r_copy,settings);
+                    if(settings->callback.download)
+                        dl_list->usersig = settings->callback.download(r_copy,settings);
 
-		    if(dl_list->usersig == GLYRE_OK)
-		    {
+                    if(dl_list->usersig == GLYRE_OK)
+                    {
                         DL_add_to_list(dl_list,r_copy);
-                    	free(result->list[i]->data);
-		    }
-		    else
-  		    {
-			break;
-		    }
+                        free(result->list[i]->data);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
         }

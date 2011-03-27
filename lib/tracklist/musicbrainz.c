@@ -61,7 +61,7 @@ GlyCacheList * traverse_xml(const char * data, const char * url)
             cont->data = beautify_lyrics(value);
             cont->size = strlen(cont->data);
             cont->duration = atoi(durat) / 1e3;
-	    cont->dsrc = strdup(url);
+            cont->dsrc = strdup(url);
             DL_add_to_list(collection,cont);
 
             // free & jump to next

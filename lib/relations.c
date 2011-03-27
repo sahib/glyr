@@ -43,8 +43,8 @@ GlyPlugin * glyr_get_relations_providers(void)
 
 static GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-     flag_double_urls(result,settings);
-     return generic_finalizer(result,settings,TYPE_RELATION);
+    flag_double_urls(result,settings);
+    return generic_finalizer(result,settings,TYPE_RELATION);
 }
 
 GlyCacheList * get_relations(GlyQuery * settings)

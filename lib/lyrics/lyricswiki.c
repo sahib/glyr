@@ -80,7 +80,7 @@ GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GlyMemCache * result = NULL;
     GlyCacheList * r_list = NULL;
-    
+
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
         char *find, *endTag;
