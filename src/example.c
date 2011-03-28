@@ -97,6 +97,12 @@ static int funny_callback(GlyMemCache * c, GlyQuery * q)
 {
     // This is called whenever glyr gets a ready to use item
     print_item(c,callback_itemctr++);
+
+    if(strstr(c->data,"Friede") != NULL)
+    {
+	puts("!! Oh god, he said \"Friede\" !!");
+	return GLYRE_STOP_BY_CB; 
+    }
     return GLYRE_OK;
 }
 

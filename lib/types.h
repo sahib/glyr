@@ -30,7 +30,6 @@
 
 //Nifty defines:
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
-#define BETWEEN(val,low,up) (val >= low && val <= up)
 
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
@@ -52,11 +51,7 @@
 #define C_  "" // Reset
 #endif
 
-#define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
-
 // Change this if you really need more
-#define WHATEVER_MAX_PLUGIN 32
-
 #define DEFAULT_TIMEOUT  20L
 #define DEFAULT_REDIRECTS 1L
 #define DEFAULT_PARALLEL 4L
@@ -74,8 +69,6 @@
 #define DEFAULT_FORMATS "jpg;jpeg;png"
 #define DEFAULT_CALL_DIRECT_USE false
 #define DEFAULT_CALL_DIRECT_PROVIDER NULL
-
-#define PTR_SPACE 10
 
 #define API_KEY_DISCOGS "adff651383"
 #define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
@@ -153,7 +146,8 @@ typedef struct GlyQuery
     // get
     int type;
 
-    const char * info[PTR_SPACE];
+    // max ten slots, 5 are used now
+    const char * info[10];
 
     // of
     char * artist;

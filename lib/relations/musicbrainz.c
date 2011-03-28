@@ -43,7 +43,8 @@ GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
         char * node = strstr(infobuf->data,"<relation-list target-type=\"Url\">");
         if(node != NULL)
         {
-            while( (node = strstr(node+1,RELATION_BEGIN_TYPE)) )
+	    int ctr = 0;
+            while(continue_search(ctr,capo->s) && (node = strstr(node+1,RELATION_BEGIN_TYPE)) )
             {
                 char * end_of_type = strchr(node+nlen,'"');
                 if(!end_of_type)
@@ -69,6 +70,8 @@ GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
 
                     if(!results) results = DL_new_lst();
                     DL_add_to_list(results,tmp);
+
+		    ctr++;
 
                     free(type);
                     free(target);

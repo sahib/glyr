@@ -51,7 +51,6 @@ const char * cover_discogs_url(GlyQuery * sets)
     return NULL;
 }
 
-
 // The discogs.com parser is a little more complicated...
 GlyCacheList * cover_discogs_parse(cb_object * capo)
 {

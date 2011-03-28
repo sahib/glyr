@@ -62,7 +62,6 @@ extern "C"
     int GlyOpt_lang(GlyQuery * s, char * langcode);
     int GlyOpt_number(GlyQuery * s, unsigned int num);
     int GlyOpt_verbosity(GlyQuery * s, unsigned int level);
-    int GlyOpt_infoat(GlyQuery * s, int at, const char * value);
     int GlyOpt_from(GlyQuery * s, const char * from);
     int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
     int GlyOpt_plugmax(GlyQuery * s, int plugmax);

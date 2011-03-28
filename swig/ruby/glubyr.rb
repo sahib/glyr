@@ -68,7 +68,7 @@ class Glubyr
         def getReview( album )
                 @query.album = album
                 @query.type   = Glyr::GET_REVIEW
-                mall_ge
+                call_ge
         end
 
         def version

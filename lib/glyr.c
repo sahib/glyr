@@ -248,14 +248,6 @@ int GlyOpt_verbosity(GlyQuery * s, unsigned int level)
 
 /*-----------------------------------------------*/
 
-int GlyOpt_infoat(GlyQuery * s, int at, const char * value)
-{
-    if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    return glyr_set_info(s,at,value);
-}
-
-/*-----------------------------------------------*/
-
 int GlyOpt_from(GlyQuery * s, const char * from)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -411,7 +403,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->call_direct.url = NULL;
     glyrs->call_direct.use = DEFAULT_CALL_DIRECT_USE;
     glyrs->call_direct.provider = DEFAULT_CALL_DIRECT_PROVIDER;
-    memset(glyrs->info,0,sizeof(const char * ) * PTR_SPACE);
+    memset(glyrs->info,0,sizeof(const char * ) * 10);
 }
 
 /*-----------------------------------------------*/
@@ -428,7 +420,7 @@ void Gly_destroy_query(GlyQuery * sets)
     if(sets)
     {
         size_t i = 0;
-        for(; i < PTR_SPACE; i++)
+        for(; i < 10; i++)
         {
             if(sets->info[i])
             {
@@ -624,7 +616,6 @@ int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * sa
         }
         else
         {
-            glyr_message(1,s,stdout,""C_G"*"C_" Writing %s to %s\n",type,path);
             FILE * fp = fopen(path,"wb");
             if(fp)
             {
@@ -680,7 +671,7 @@ GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
 static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 {
     int result = GLYRE_OK;
-    if(s && arg && at >= 0 && at < PTR_SPACE)
+    if(s && arg && at >= 0 && at < 10)
     {
         if(s->info[at] != NULL)
             free((char*)s->info[at]);

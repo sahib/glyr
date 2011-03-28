@@ -162,7 +162,9 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
     const char * mbid = NULL;
     GlyMemCache * info = NULL;
 
-    while(!info && (mbid = get_mbid_from_xml(capo->s,capo->cache,&offset)) )
+    int ctr = 0;
+
+    while(continue_search(ctr,capo->s) && !info && (mbid = get_mbid_from_xml(capo->s,capo->cache,&offset)) )
     {
         if(mbid != NULL)
         {

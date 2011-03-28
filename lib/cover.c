@@ -38,6 +38,7 @@
 
 #define ALBE "<div id=\"pagination\""
 #define COLE "<div id=\"footer\">"
+#define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
 
 // Add yours here.
 GlyPlugin cover_providers[] =
@@ -57,9 +58,9 @@ GlyPlugin cover_providers[] =
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
-            (min == -1 && max >= sZ) ||
-            (min <= sZ && max == -1) ||
-            (min <= sZ && max >= sZ)  )
+       (min == -1 && max >= sZ) ||
+       (min <= sZ && max == -1) ||
+       (min <= sZ && max >= sZ)  )
         return true;
 
     return false;
@@ -117,16 +118,6 @@ const char * URLblacklist[] =
 
 static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    // Only NULL when finalizing()
-    if(result == NULL)
-    {
-        if(settings->itemctr)
-        {
-            glyr_message(2,settings,stderr,C_R"* "C_"Got in total %d images!\n",settings->itemctr);
-        }
-        return NULL;
-    }
-
     GlyCacheList * dl_list = NULL;
     if(result)
     {
@@ -157,7 +148,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
                 if(dl_list != NULL)
                 {
-                    glyr_message(2,settings,stderr,C_"- Succesfully downloaded %d image.\n",dl_list->size);
+                    glyr_message(2,settings,stderr,"- Succesfully downloaded %d image.\n",dl_list->size);
                 }
                 free(urlplug_list);
             }
@@ -189,9 +180,14 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                         dl_list->usersig = settings->callback.download(copy,settings);
 
                     if(dl_list->usersig == GLYRE_OK)
+		    {
                         DL_add_to_list(dl_list,copy);
+		    }
                     else
+		    {
+			DL_free(copy);
                         break;
+		    }
                 }
             }
         }

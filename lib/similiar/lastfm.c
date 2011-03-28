@@ -72,7 +72,7 @@ GlyCacheList * similiar_lastfm_parse(cb_object * capo)
     int urlc = 0;
 
     char * find = capo->cache->data;
-    while( (find = strstr(find+1, "<artist>")) != NULL && continue_search(urlc,capo->s) && continue_search(urlc,capo->s))
+    while( (find = strstr(find+1, "<artist>")) != NULL && continue_search(urlc,capo->s))
     {
         char * name  = in_tag(find,NAME_BEGIN,NAME_ENDIN);
         char * match = in_tag(find,MATCH_BEGIN,MATCH_ENDIN);

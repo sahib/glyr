@@ -32,6 +32,7 @@
 #include "photos/lastfm.h"
 #include "photos/google.h"
 
+#define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
 GlyPlugin photos_providers[] =
 {
     {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, NULL, false}, GRP_SAFE | GRP_FAST},
@@ -147,6 +148,7 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                     }
                     else
                     {
+			DL_free(r_copy);
                         break;
                     }
                 }

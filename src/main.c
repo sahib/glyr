@@ -1012,7 +1012,6 @@ int main(int argc, char * argv[])
                 GlyCacheList * my_list= Gly_get(&my_query, &get_error);
                 if(my_list)
                 {
-                    glyr_message(2,&my_query,stderr,"\n");
                     GlyPlugin * table_copy = Gly_get_provider_by_id(GET_UNSURE);
                     if(get_error == GLYRE_OK)
                     {
@@ -1025,6 +1024,7 @@ int main(int argc, char * argv[])
                                 char * path = get_path_by_type(&my_query,write_arg[j],i);
                                 if(path != NULL)
                                 {
+            		 	    glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name ,path);
                                     if(Gly_write_binary_file(path,my_list->list[i],write_arg[j], table_copy[my_query.type].name, &my_query) == -1)
                                     {
                                         result = EXIT_FAILURE;

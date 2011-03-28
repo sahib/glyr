@@ -29,7 +29,10 @@
 
 const char * cover_albumart_url(GlyQuery * sets)
 {
-    if(sets->cover.min_size <= 500 || sets->cover.min_size == -1)
+    int i = sets->cover.min_size;
+    int e = sets->cover.max_size;
+
+    if((e >= 50 || e==-1) && (i == -1 || i < 450))
         return "http://www.albumart.org/index.php?srchkey=%artist%+%album%&itempage=1&newsearch=1&searchindex=Music";
 
     return NULL;

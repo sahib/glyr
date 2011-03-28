@@ -41,11 +41,14 @@ const char * tracklist_musicbrainz_url(GlyQuery * sets)
 #define TIT_BEGIN "<title>"
 #define TIT_ENDIN "</title>"
 
-GlyCacheList * traverse_xml(const char * data, const char * url)
+static GlyCacheList * traverse_xml(const char * data, const char * url, cb_object * capo)
 {
     char * beg = (char*)data;
     GlyCacheList * collection = NULL;
-    while((beg = strstr(beg+1,TIT_BEGIN)) != NULL)
+
+    int ctr = 0;
+
+    while(continue_search(ctr,capo->s) && (beg = strstr(beg+1,TIT_BEGIN)) != NULL)
     {
         char * dy;
         char * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN)); // 1 UP
@@ -63,6 +66,8 @@ GlyCacheList * traverse_xml(const char * data, const char * url)
             cont->duration = atoi(durat) / 1e3;
             cont->dsrc = strdup(url);
             DL_add_to_list(collection,cont);
+
+	    ctr++;
 
             // free & jump to next
             free(value);
@@ -83,7 +88,7 @@ GlyCacheList * tracklist_musicbrainz_parse(cb_object * capo)
         GlyMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
         if(dlData)
         {
-            ls = traverse_xml(dlData->data,capo->url);
+            ls = traverse_xml(dlData->data,capo->url,capo);
             DL_free(dlData);
         }
         free(release_page_info_url);

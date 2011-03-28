@@ -871,8 +871,6 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
         }
     }
 
-    // erase "downloading [.] message"
-    if(oblist[0].batch) glyr_message(2,s,stderr,"%-25c\n",'\0');
     size_t I = 0;
     for(I = 0; I < Counter; I++)
     {
@@ -975,8 +973,10 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
             return NULL;
         }
 
+	enum GLYR_ERROR what_signal_we_got = GLYRE_OK;
+
         // Iterate through each group and makes sure we don't overiterate
-        for(iter = 0; GIDArray[iter] != -666 && query->itemctr < query->number; iter++)
+        for(iter = 0; GIDArray[iter] != -666 && query->itemctr < query->number && what_signal_we_got == GLYRE_OK; iter++)
         {
             size_t inner = 0, invCtr = 0;
             cb_object * invokeList = NULL;
@@ -1007,13 +1007,17 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
                 {
                     // Call the finalize call, so the items get validated and whatever
                     GlyCacheList * subList = finalizer(dlData,query);
+		    what_signal_we_got = GLYRE_OK;
                     if(subList != NULL)
                     {
                         glyr_message(3,query,stderr,"Adding %d items to resultList\n",subList->size);
                         if(!resultList) resultList = DL_new_lst();
                         DL_push_sublist(resultList,subList);
+
+			what_signal_we_got = subList->usersig;
                         DL_free_container(subList);
                     }
+
                     DL_free_lst(dlData);
                 }
             }

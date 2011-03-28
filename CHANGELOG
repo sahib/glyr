@@ -63,3 +63,8 @@ Use the github page to view the automated git generated brother.
 + Fixed "broken" review getter. Still slow; needs more sources.
 + Extended src/example.c to use more functions.
 + Tested API (It works, biaatch!)
+
+2011/03/29
+----------
++ Made 'return GLYRE_STOP_BY_CB;' work.
++ removed Gly_infoat, it was only for devs..

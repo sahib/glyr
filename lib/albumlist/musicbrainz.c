@@ -41,8 +41,10 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
 {
     GlyCacheList * collection = NULL;
 
+    int ctr = 0;
+
     char * node = capo->cache->data;
-    while( (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
+    while(continue_search(ctr,capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
     {
         char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
         if(name != NULL)
@@ -64,6 +66,7 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
             c->dsrc = strdup(capo->url);
             DL_add_to_list(collection,c);
             free(name);
+	    ctr++;
         }
     }
     return collection;
