@@ -1,6 +1,6 @@
-- at least two more review plugins
 - update help text
-- More documentation!
-- Test Test Test and Rest.
+- more providers for review and lyrics
 - Testing of the accuracy
 - Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
+- cmake install and cmake portable..
+- repair Glubyr
