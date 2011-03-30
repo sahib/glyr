@@ -11,44 +11,47 @@
  * (Honestly: Something else won't make much sense....)
 */
 
-void * call_get(void * p)
+static void * call_get(void * p)
 {
     return Gly_get(p,NULL);
 }
 
+static void configure(GlyQuery * s, enum GLYR_GET_TYPE type)
+{
+    Gly_init_query(s);
+    GlyOpt_artist(s,"Die Apokalyptischen Reiter");
+    GlyOpt_album (s,"Moral & Wahnsinn");
+    GlyOpt_title (s,"Die Boten");
+    GlyOpt_verbosity(s,2);
+    GlyOpt_type  (s,type);
+}
+
 int main(void)
 {
+        /* Init */
         Gly_init();
         atexit(Gly_cleanup);
 
-        pthread_t agent_long;
-        pthread_t agent_longer;
-        
-        GlyQuery query_long;
-        Gly_init_query(&query_long);
-        
-        GlyQuery query_longer;
-        Gly_init_query(&query_longer);
-
-        GlyOpt_artist(&query_long,"Equilibrium");
-        GlyOpt_artist(&query_longer,"Equilibrium");
-        GlyOpt_title(&query_longer,"Wurzelbert");
-
-        GlyOpt_type(&query_long,GET_SIMILIAR);
-        GlyOpt_type(&query_longer,GET_LYRIC);
-
-        GlyOpt_verbosity(&query_long,2);
-        GlyOpt_verbosity(&query_longer,2);
+        pthread_t agent_long,agent_longer;
+        GlyQuery query_long, query_longer;
+       
+        /* Fill some silly values */ 
+        configure(&query_long,GET_SIMILIAR);
+        configure(&query_longer,GET_LYRIC);
 
         GlyCacheList * a, * b;
+        
+        /* Create two threads */
         pthread_create(&agent_long,  NULL,call_get,&query_long  );
         pthread_create(&agent_longer,NULL,call_get,&query_longer);
 
-        pthread_join(agent_long,(void**)&a);
+        /* Wait for threads to join, get results */
+        pthread_join(agent_long,  (void**)&a);
         pthread_join(agent_longer,(void**)&b);
 
         if(a && b)
         {
+                /* Now print the results. */
                 size_t i = 0;
                 for(i = 0; i < a->size; i++)
                     Gly_write(&query_long,Gly_clist_at(a,i),"stdout");
@@ -59,5 +62,8 @@ int main(void)
                 Gly_free_list(a);
                 Gly_free_list(b);
         }
+
+        Gly_destroy_query(&query_long);
+        Gly_destroy_query(&query_longer);
         return EXIT_SUCCESS;
 }
