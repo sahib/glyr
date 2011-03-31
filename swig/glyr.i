@@ -102,6 +102,7 @@ enum GLYR_ERROR
 #define DEFAULT_CALL_DIRECT_USE false
 #define DEFAULT_CALL_DIRECT_PROVIDER NULL
 
+// Those are not restricted afaik
 #define API_KEY_DISCOGS "adff651383"
 #define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
 #define API_KEY_LASTFM  "7199021d9c8fbae507bf77d0a88533d7"
@@ -312,8 +313,6 @@ GlyPlugin * Gly_get_provider_by_id(int ID);
 %rename(download) Gly_download;
 GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
-%rename(BinaryWrite) Gly_write_binary_file;
-int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s);
 
 %rename(groupname_by_id) Gly_groupname_by_id;
 const char * Gly_groupname_by_id(int ID);

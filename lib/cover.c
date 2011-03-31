@@ -127,7 +127,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
             if(urlplug_list)
             {
                 /* Ignore double URLs */
-                flag_double_urls(result,settings);
+                flag_lint(result,settings);
 
                 /* Watch out for blacklisted URLs */
                 flag_blacklisted_urls(result,URLblacklist,settings);
@@ -156,7 +156,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
         else
         {
             /* Ignore double URLs */
-            flag_double_urls(result,settings);
+            flag_lint(result,settings);
 
             /* Watch out for blacklisted URLs */
             flag_blacklisted_urls(result,URLblacklist,settings);

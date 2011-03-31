@@ -406,8 +406,10 @@ bool continue_search(int iter, GlyQuery * s)
 /*--------------------------------------------------------*/
 
 
-int flag_double_urls(GlyCacheList * result, GlyQuery * s)
+int flag_lint(GlyCacheList * result, GlyQuery * s)
 {
+    // As author of rmlint I know that there are better ways
+    // to do fast duplicate finding... but well, it works ;-)
     if(!result || s->duplcheck == false)
         return 0;
 
@@ -421,11 +423,26 @@ int flag_double_urls(GlyCacheList * result, GlyQuery * s)
             {
                 if(i != j && result->list[i]->error == ALL_OK)
                 {
-                    if(!strcmp(result->list[i]->data,result->list[j]->data))
-                    {
-                        result->list[j]->error = DOUBLE_ITEM;
-                        dp++;
-                    }
+		    bool double_flag = false;
+		    if(result->list[i]->size == result->list[j]->size)
+		    {
+			double_flag = true;
+			size_t c = 0;
+			for(c = 0; c < result->list[i]->size; c++)
+			{
+				if(result->list[i]->data[c] != result->list[j]->data[c])
+				{
+					double_flag = false;
+					break;
+				}
+			}
+
+			if(double_flag)
+			{
+                        	result->list[j]->error = DOUBLE_ITEM;
+                        	dp++;
+			}
+		    }
                 }
             }
         }
@@ -1092,6 +1109,9 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 
     size_t i = 0;
     GlyCacheList * r_list = NULL;
+
+    /* Ignore double items if desired */
+    flag_lint(result,settings);
 
     for(i = 0; i < result->size; i++)
     {

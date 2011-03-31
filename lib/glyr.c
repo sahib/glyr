@@ -50,6 +50,7 @@ const char * err_strings[] =
     "NULL pointer for struct",
     "No provider specified",
     "Unknown ID for getter",
+    "Ignored cache",
     "Stopped by callback",
     NULL
 };
@@ -60,6 +61,14 @@ const char * err_strings[] =
 static int glyr_parse_from(const char * arg, GlyQuery * settings);
 static int glyr_set_info(GlyQuery * s, int at, const char * arg);
 static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value);
+
+/*--------------------------------------------------------*/
+
+GlyMemCache * Gly_copy_cache(GlyMemCache * source)
+{
+        return DL_copy(source);
+}
+
 
 /*--------------------------------------------------------*/
 
@@ -364,7 +373,7 @@ GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)
 
 /*-----------------------------------------------*/
 
-const char * Gly_groupname_by_id(int ID)
+const char * Gly_groupname_by_id(enum GLYR_GROUPS ID)
 {
     return grp_id_to_name(ID);
 }
@@ -516,6 +525,35 @@ static GlyCacheList * call_parser_direct(GlyQuery * s)
 
 /*-----------------------------------------------*/
 
+// !! NOT THREADSAFE !! //
+void Gly_init(void)
+{
+        static bool already_init = false;
+        if(already_init == false)
+        {
+                if(curl_global_init(CURL_GLOBAL_ALL))
+                {
+                    glyr_message(-1,NULL,stderr,"!! libcurl failed to init.\n");
+                }
+                already_init = true;
+        }
+}
+
+/*-----------------------------------------------*/
+
+// !! NOT THREADSAFE !! //
+void Gly_cleanup(void)
+{
+        static bool already_init = false;
+        if(already_init == false)
+        {
+                curl_global_cleanup();
+                already_init = true;
+        }
+}
+
+/*-----------------------------------------------*/
+
 GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
 {
     if(e) *e = GLYRE_OK;
@@ -543,11 +581,6 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
             if(e) *e = GLYRE_NO_PROVIDER;
             return NULL;
         }
-    }
-
-    if(curl_global_init(CURL_GLOBAL_ALL))
-    {
-        glyr_message(-1,NULL,stderr,"?? libcurl failed to init.\n");
     }
 
     GlyCacheList * result = NULL;
@@ -587,36 +620,39 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
         if(e) *e = GLYRE_UNKNOWN_GET;
     }
 
-
-    curl_global_cleanup();
     settings->itemctr = 0;
+    if(result != NULL && !result->size)
+    {
+        Gly_free_list(result);
+        result = NULL;
+    }
     return result;
 }
 
 /*-----------------------------------------------*/
 
-int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s)
+int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path)
 {
     int bytes = -1;
     if(path)
     {
-        if(!strcasecmp(save_dir,"null"))
+        if(!strcasecmp(path,"null"))
         {
             bytes = 0;
         }
-        else if(!strcasecmp(save_dir,"stdout"))
+        else if(!strcasecmp(path,"stdout"))
         {
             bytes=fwrite(data->data,1,data->size,stdout);
             fputc('\n',stdout);
         }
-        else if(!strcasecmp(save_dir,"stderr"))
+        else if(!strcasecmp(path,"stderr"))
         {
             bytes=fwrite(data->data,1,data->size,stderr);
             fputc('\n',stderr);
         }
         else
         {
-            FILE * fp = fopen(path,"wb");
+            FILE * fp = fopen(path,"wb" /* welcome back */);
             if(fp)
             {
                 bytes=fwrite(data->data,1,data->size,fp);
@@ -624,7 +660,7 @@ int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * sa
             }
             else
             {
-                glyr_message(-1,NULL,stderr,"Unable to write to '%s'!\n",path);
+                glyr_message(-1,NULL,stderr,"Gly_write: Unable to write to '%s'!\n",path);
             }
         }
     }

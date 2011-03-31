@@ -29,6 +29,8 @@
 
 #include "albumlist/musicbrainz.h"
 
+//-------------------------------------
+
 // Add your's here
 GlyPlugin albumlist_providers[] =
 {
@@ -36,16 +38,22 @@ GlyPlugin albumlist_providers[] =
     { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
 };
 
+//-------------------------------------
+
 GlyPlugin * glyr_get_albumlist_providers(void)
 {
     return copy_table(albumlist_providers,sizeof(albumlist_providers));
 }
 
+//-------------------------------------
+
 static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    flag_double_urls(result, settings);
+    flag_lint(result, settings);
     return generic_finalizer(result,settings,TYPE_ALBUMLIST);
 }
+
+//-------------------------------------
 
 GlyCacheList * get_albumlist(GlyQuery * settings)
 {
@@ -60,3 +68,4 @@ GlyCacheList * get_albumlist(GlyQuery * settings)
     }
     return result;
 }
+//-------------------------------------

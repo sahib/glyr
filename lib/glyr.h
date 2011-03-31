@@ -30,6 +30,12 @@
 extern "C"
 {
 #endif
+    // Call this at startup
+    // calling more than once it won't do anything
+    void Gly_init(void);
+
+    // call this once you called Gly_init and you're done
+    void Gly_cleanup(void);
 
     // the actual main of glyr
     GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
@@ -83,10 +89,10 @@ extern "C"
     GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
     // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
-    int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s);
+    int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
 
     // Returns the actual name of the group pointed by ID
-    const char * Gly_groupname_by_id(int ID);
+    const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
 
     // Short descriptive version of an error ID
     const char * Gly_strerror(enum GLYR_ERROR ID);

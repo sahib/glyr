@@ -100,7 +100,7 @@ GlyPlugin * copy_table(const GlyPlugin * o, size_t size);
 int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 
 // Control for bad items
-int flag_double_urls(GlyCacheList * result, GlyQuery * s);
+int flag_lint(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
 int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 

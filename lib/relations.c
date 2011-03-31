@@ -29,6 +29,8 @@
 
 #include "relations/musicbrainz.h"
 
+//-------------------------------------
+
 // Add your's here
 GlyPlugin relations_providers[] =
 {
@@ -36,16 +38,21 @@ GlyPlugin relations_providers[] =
     { NULL,        NULL, NULL,                  false,  {NULL,                         NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
 };
 
+//-------------------------------------
+
 GlyPlugin * glyr_get_relations_providers(void)
 {
     return copy_table(relations_providers,sizeof(relations_providers));
 }
 
+//-------------------------------------
+
 static GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    flag_double_urls(result,settings);
     return generic_finalizer(result,settings,TYPE_RELATION);
 }
+
+//-------------------------------------
 
 GlyCacheList * get_relations(GlyQuery * settings)
 {
@@ -60,3 +67,5 @@ GlyCacheList * get_relations(GlyQuery * settings)
     }
     return result;
 }
+
+//-------------------------------------

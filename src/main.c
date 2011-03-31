@@ -942,6 +942,9 @@ int main(int argc, char * argv[])
 {
     int result = EXIT_SUCCESS;
 
+    Gly_init();
+    atexit(Gly_cleanup);
+
     /* Warn on  crash */
     signal(SIGSEGV, sig_handler);
     signal(SIGINT,  sig_handler);

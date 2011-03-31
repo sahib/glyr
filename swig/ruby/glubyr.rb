@@ -1,10 +1,15 @@
 require 'rubygems'
 
 begin 
-	require './glyr'
+	require '../glyr'
 rescue LoadError
 	print "FATAL: glyr.so could not be loaded.. :-("
 end
+
+=begin
+= Simple libglyr wrapper with more Objectlike approach
+= as the pure bindings (which are actually the same as in C)
+=end
 
 class Glubyr
         # Called when object is destroyed
@@ -24,7 +29,7 @@ class Glubyr
                 ObjectSpace.define_finalizer(self,self.class.method(:finalize).to_proc)
         end 
 
-        ## -- PUBLIC -- ##
+        ## -- PUBLIC GET/SET ##
 
 	def reset
 		@query = nil
@@ -93,7 +98,7 @@ class Glubyr
 
         # return bytes written
         def writeBinaryCache( path, cache ) 
-                return Glyr::BinaryWrite(path, cache, ".", "data", @query)
+                return Glyr::write(path, cache, ".", "data", @query)
         end
 
         def number=( num )
@@ -154,11 +159,59 @@ class Glubyr
         def color=( boolean )
                 Glyr::GlyOpt_color(@query,boolean)
         end
-        
+       
+	def fuzzynes( fuzzval ) 
+		Glyr::GlyOpt_fuzzyness(@query,fuzzval)
+	end
+ 
+	def fuzzyness 
+		return @query.fuzzyness
+	end
+
         def color?
                 return @query.color
         end
 
+	def grouped_download?
+		return @query.grouped_download
+	end
+
+	def grouped_download( make_it_grouped )
+		Glyr::GlyOpt_groupedDL(@query,make_it_grouped)
+	end
+
+	def formats
+		return @query.formats
+	end
+
+	def formats( allowed_formats )
+		Glyr::GlyOpt_formats(@query, allowed_formats)
+	end
+
+	def call_direct_use
+		return @query.call_direct.use
+	end
+
+	def call_direct_use=(icall)
+		Glyr::GlyOpt_call_direct_use(@query,icall)
+	end
+
+	def call_direct_provider=(provider_string)
+		Glyr::GlyOpt_call_direct_provider(@query,provider_string)
+	end
+
+	def call_direct_provider
+		return @query.call_direct.provider
+	end
+
+	def call_direct_url
+		return @query.call_direct.url
+	end
+
+	def call_direct_url=(url_string)
+		return Glyr::GlyOpt_call_direct_url(url_string)
+	end
+	
         # ------ 
         private
         # ------
@@ -177,3 +230,8 @@ class Glubyr
                 return convert
         end
 end
+
+m = Glubyr.new
+puts m.call_direct_use = true
+puts m.call_direct_provider = "a"
+puts m.get_cover(
