@@ -77,9 +77,9 @@ static void list_provider_at_id(int id, int min_align,GlyQuery * s)
             for(a = 0; a < align; a++)
                 glyr_message(-1,s,stdout," ");
 
-            glyr_message(-1,s,stdout,C_" ["C_R"%s"C_"]%s",cp[i].key, (id == -1) ? "" : " in groups "C_Y"all"C_);
+            glyr_message(-1,s,stdout,C_" ["C_R"%s"C_"]%s",cp[i].key, (id == GET_UNSURE) ? "" : " in groups "C_Y"all"C_);
             int b = 1, j = 0;
-            for(b = 1, j = 0; b <= GRP_ALL; j++)
+            for(b = 1, j = 0; id != GET_UNSURE &&  b <= GRP_ALL; j++)
             {
                 if(b & cp[i].gid)
                 {
@@ -450,12 +450,13 @@ static bool check_if_dir(const char * path)
 //================================
 void help_short(GlyQuery * s)
 {
+    if(s != NULL) s->color_output = false;
     glyr_message(-1,s,stderr,"Usage: "
                  "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
 
     list_provider_at_id(GET_UNSURE,10,s);
 
-    glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
+    glyr_message(-1,s,stderr,C_"\nIf you're viewing this helptext the first time,\n"
                  "you probably want to view --usage, which has more details & examples\n");
 
 #define IN "\t"
@@ -564,12 +565,11 @@ void help_short(GlyQuery * s)
                  IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
                  IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
-                 "\nList of providers:\n",
+                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"C_,
                  DEFAULT_FORMATS
                 );
 
-    if(s != NULL) s->color_output = false;
-
+/*
     glyr_message(-1,s,stderr,"\n"IN C_"cover:\n");
     list_provider_at_id(GET_COVER,13,s);
     glyr_message(-1,s,stderr,"\n"IN C_"lyrics:\n");
@@ -590,7 +590,7 @@ void help_short(GlyQuery * s)
     list_provider_at_id(GET_TAGS,13,s);
     glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
     list_provider_at_id(GET_RELATIONS,13,s);
-
+*/
     glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
     exit(EXIT_FAILURE);
@@ -1256,13 +1256,12 @@ int main(int argc, char * argv[])
     {
         help_short(NULL);
     }
-    else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-Ch") || !strcmp(argv[1],"-hC")))
+    else
     {
         GlyQuery tmp;
         tmp.color_output = false;
         help_short(&tmp);
     }
-    else usage(NULL);
 
     // byebye
     return result;

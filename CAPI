@@ -1,90 +1,423 @@
-C API
-=====
-This document should give you both a reference and a quickstart into using libglyr from a C/C++ program.
-As you perhaps read 17x times and just in case you googled your way till this point:
+h1. API Reference for libglyr
 
-libglyr is a library that finds various sorts of music related metadata, as applications like musicplayers
-require (cover art,lyrics,similiar artists etc.).
+If you're looking for an example to get started:
+It is in src/example.c, this is the *reference*.
 
-If you hate reading such text: Look into src/example.c and you'll get the same results ;-)
+It is highly recomend that you viewed the README before. (the chapter about TERMINOLOGY e.g.)
+It is even higher recomend to read EVERYTHING in here, even if you think you won't need it.
+And it is most recomned that you excuse my poor english, thanks a lot. :-)
 
-INSTALL
-=======
-Install the dependencies:
-* libcurl - all network related stuff.
-* cmake   - Only needed to built glyr.
+h2. Types
+<p>
+libglyr uses a few datatypes which you should know about.
+Only fields that are supposed to be read are shown.
+With the only exception of GlyMemCache you should *never*
+write to any fields, especially in GlyQuery. Use the GlyOpt_ methods.
+</p>
 
-# Get the sources
-git clone https://sahib@github.com/sahib/glyr.git
-
-# Configure and compile
-cmake . && make
-
-# Install 
-sudo make install
-
-USING
-=====
-Now you can #incude <glyr/glyr.h> in your application.
-To compile you'll also need to link against libglyr by appending '-lglyr' to your Linker line
-Still here? Fine.
-
-If you ever tried to use glyrc (the cmdline interface) you have a rough image how the API works.
-The central place is the GlyQuery structure, which represents ONE job (or query) for libglyr.
-
-The usual usecase looks like this:
-----------------------------------
-- Create a variable of type GlyQuery x;
-- Init it with Gly_init_query(&x); (which just will set sane defaults)
-- configure it by calling the GlyOpt_ methods (see down)
-- call GlyCacheList * results = Gly_get(&x,&error);
-- Use the results.
-- Free the results.
-- Free the query.
-
-In code:
-
-// init
-GlyQuery query;
-Gly_init_query(&q);
-
-// configure
-GlyOpt_type(&q,GET_COVER);  // You normally set this as first opt
-GlyOpt_verbosity(&q,2);     // Normal verbosity, glyr will warn if you things get weird
-GlyOpt_artist(&q,"Cher");   // Don't make any assuptions on my musical taste here :-)
-GlyOpt_album(&q,"Believe"); // -"-       -"-        -"-   
-
-// Get it from all providers being in the group 'fast', but without 'coverhunt'
-// If you omit this option it will default to 'all'
-GlyOpt_from(&q,"fast;-coverhunt");
-
-// Get 3 covers.
-GlyOpt_number(&q,3);
-
-// Get! 
-int error;
-GlyCacheList * list = Gly_get(&q,&error);
-
-// Now you can use the list to work with the data:
-int i = 0;
-for(i = 0; i < list->size; i++)
+h3. GlyMemCache 
+__models an item__
+typedef struct GlyMemCache
 {
-	// Do something with result->list[i]->data
-	//                                  ->type
-	//                                  ->size
-	//                                  ->dsrc	
-}
+    char  *data;    // data buffer
+    size_t size;    // Size of data in bytes
+    char  *dsrc;    // Source of data (URL)
+    int   type;     // type of metadata
+    int   duration; // Duration of a song. Only for tracklist getter.
+    bool  is_image; // Wether it is an image or not.
+} GlyMemCache;
 
-// free
-Gly_free_list(list);
-Gly_free_query(query);
+h3. GlyCacheList 
+__strores several items__
+typedef struct GlyCacheList
+{
+    GlyMemCache ** list; // Array of GlyMemCache of..
+    size_t size;         // 'size' items long
+    int usersig;
+} GlyCacheList;
 
-Configuring the query is done via the GlyOpt-method family, and a few rules:
-- You should never set a member of GlyQuery explicitly
-- Getting is fine, all values have the same name as the corresponding GlyOpt_ call
-- For every metadata-type you'll need to set a few minimum fields (type, artist for usual)
-- Glyr will warn you if something's weird. Set the debug level to 2 therefore: GlyOpt_verbosity(&query,2)
+h3. GlyQuery
+__Control the behaviour of libglyr__
+typedef struct GlyQuery
+{
+    // get
+    int type;
+
+    // of
+    char * artist;
+    char * album;
+    char * title;
+
+    // number
+    int number;
+    int plugmax;
+
+    // cover
+    struct
+    {
+        int min_size;
+        int max_size;
+    } cover;
+
+    // libcurl control
+    long parallel;
+    long timeout;
+    long redirects;
+
+    // verbosity
+    int verbosity;
+    // use colored output?
+    bool color_output;
+
+    // return only urls without downloading?
+    // this converts glyr to a sort of search engines
+    bool download;
+
+    // Download group for group,
+    // or all in parallel? (faster, but less accurate)
+    bool groupedDL;
+
+    // Check for bad data?
+    bool duplcheck;
+
+    // Treshold for Levenshtein
+    size_t fuzzyness;
+
+    // allowed formats for images
+    const char * formats;
+
+    // language settings (for amazon / google / last.fm)
+    const char * lang;
+
+    struct callback
+    {
+        int  (* download)(GlyMemCache * dl, struct GlyQuery * s);
+        void  * user_pointer;
+    } callback;
+
+    struct call_direct
+    {
+        bool use;
+        const char * provider;
+        const char * url;
+    } call_direct;
+
+} GlyQuery;
+
+.h3 GlyPlugin
+__Model of a provider__
+typedef struct GlyPlugin
+{
+    const char * name;  // Full name
+    const char * key;   // A one-letter ID
+    const char * color; // Colored name
+    int use;            // Use this source?
+    unsigned char gid;  // What groups this belongs too
+} GlyPlugin;
 
 
+h2. Methods
 
+h4. __GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error)__
+    The actual main() method for glyr. If you're done with configuring call this to invoke the searchengine.
+    Arguments:
+      settings: A ptr to your GlyQuery
+      error : A ptr to an int storing an error code. // TODO: Replace this with enum GLYR_ERROR * error
 
+    Returns:
+      A GlyCacheList which is merely a container with pointers to the caches where the actual data is stored.
+      Free this with Gly_free_list() when done!
+
+h4. __void Gly_init_query(GlyQuery * glyrs)__
+     Init a query to the default settings.
+     Arguments:
+      glyrs: A ptr to a GlyQuery
+
+h4. __void Gly_destroy_query(GlyQuery * sets)__
+    Resets the GlyQuery to default values and frees memory that may still be in use.
+    Arguments:
+	sets: A ptr to a GlyQuery
+
+h4. __void Gly_free_list(GlyCacheList * lst)__
+    Free the resultlist of Gly_get()
+    You should do this unless you like _LARGE_ memoryleaks.
+
+    Arguments:
+	A ptr to a GlyCacheList 
+
+    It is safe to set the ptr to NULL.
+
+h4. __GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter)__
+    Return the cache at position 'iter' of the clist.
+    This is the safe version of accessing the GlyCacheList directly by myList->list[iter]
+    and was originally added for the scriptbindings. (which cant access ->list easily)
+
+h4. __GlyMemCache * Gly_new_cache(void)__
+   Initialize a newly allocated cache, with default values.
+
+h4. __void Gly_free_cache(GlyMemCache * c)__
+    Free a single member of a GlyCacheList.
+    
+    Arguments: 
+      A ptr to a GlyMemCache.
+
+h4. __GlyMemCache * Gly_copy_cache(GlyMemCache * source)__
+    Exact copy of a cache, with all buffers copied.
+    This is usually useful if you have the need to modify data in your callback, 
+    but don't want to modify the resulting list.
+    
+
+/////////////////////////////////////
+//////////// OPTIONS ////////////////
+/////////////////////////////////////
+
+Everything in libglyr is controlled by the following options.
+Every option takes a pointer to GlyQuery, and returns a GLYR_ERROR,
+which is GLYRE_OK if everything is fine, or an error indicator.
+The argument description only list other arguments than the first.
+
+/////////////////////////////////////
+
+int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp)
+	Call the callback DL_callback once a item was found.
+	
+	The callback has the following prototype:
+        __enum GLYR_ERROR * my_callback(GlyMemCache * dl, struct GlyQuery * s)___
+
+	The item is exactly the same that would be returned by Gly_get() later.
+	Arguments:
+	    - The callback.
+	    - A void pointer which can be accessed by s->callback.user_pointer 
+	
+int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
+	Tell libglyr what type of metadata to download.
+	Arguments:
+	    - a enum GLYR_GET_TYPE, see the corresponding 
+
+int GlyOpt_artist(GlyQuery * s, char * artist);
+	The artist option is required for ALL getters.
+	Must be a nullterminated pointer to char;
+	Example: GlyOpt_artist(&s,"Equilibrium");
+
+int GlyOpt_album(GlyQuery * s,  char * album);
+	Required for the following getters:
+	  - albumlist
+	  - cover
+	  - review 
+	  - tracklist
+	Optional for those:
+	  - tags
+	  - relations
+          - lyrics (might be used by a few providers)
+
+int GlyOpt_title(GlyQuery * s,  char * title)
+	Set the songtitle. 
+
+	Required for:
+	  - lyrics
+	Optional for:
+	  - tags
+	  - relations
+
+int GlyOpt_cmaxsize(GlyQuery * s, int size)
+	The maximum size a cover may have.
+	As cover have mostly a 1:1 aspect ratio only one size is given with 'size'.
+
+	This has no effect if specified with 'photos'.
+
+int GlyOpt_cminsize(GlyQuery * s, int size)
+	Same as GlyOpt_cmaxsize, but for the minimum size.
+
+int GlyOpt_parallel(GlyQuery * s, unsigned long val)
+	Maximum numbers of downloads which may be done in parallel.
+
+int GlyOpt_timeout(GlyQuery * s, unsigned long val)
+	Maximum number of seconds to wait before cancelling a download.
+
+int GlyOpt_redirects(GlyQuery * s, unsigned long val)
+	Maximum numbers of redirects allowed. 
+	By default on 1.
+
+int GlyOpt_lang(GlyQuery * s, char * langcode)
+	The language used for providers with multilingual content.
+	It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.	
+	
+	List of providers recognizing this option:
+	   * cover/amazon (which amazon server to query)
+	   * cover/google (which google server to query)
+	   * ainfo/lastfm (the language the biography shall be in)
+	   * (this list should get longer in future releases)
+
+	(Use only these providers if you really want ONLY localized content)
+	By default all search results are in english.
+
+int GlyOpt_number(GlyQuery * s, unsigned int num)
+	How many items to search for (1 to INT_MAX)
+	This is not the number of items actually returned then,
+	because:
+	  * libglyr is not able to find 300 songtexts of the same song.
+	  * A few getters 
+
+h4. __int GlyOpt_verbosity(GlyQuery * s, unsigned int level)__
+        Set the verbosity.
+
+        0) nothing but fatal errors.
+        1) warnings and important notes.
+        2) normal, additional information what libglyr does.
+        3) basic debug output.
+        4) libcurl debug output.
+
+int GlyOpt_from(GlyQuery * s, const char * from)
+        Use this to define what providers you want to use.
+        Every provider has a name and a key which is merely a shortcut for the name.
+        Specify all providers in a semicolon seperated list.
+        Type 'glyrc -H' for a complete list of all providers for each getter.
+
+          Example:
+            "amazon;google" 
+           "a;g" - same with keys
+
+        You can also prepend each word with a '+' or a '-' ('+' is assumend without),
+        which will add or remove this provider from the list respectively.
+        Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.
+        
+          Example:
+           "+fast;-amazon" which will enable last.fm and lyricswiki.
+
+int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife)
+         Only useful if you want colored console output.
+         Works only in terminals with color support.
+         (The MS commandline does not support it)       
+
+int GlyOpt_plugmax(GlyQuery * s, int plugmax)
+         Maximum number of items a provider may deliever.
+         Use this to scatter the searchresults, or set it
+         to -1 if you don't care (=> default).
+
+int GlyOpt_download(GlyQuery * s, bool download)
+         For image getters only.
+         If set to true images are also coviniently downloaded and returned.
+         Otherwise, just the URL is returned for your own use.
+
+         Default to to 'true', 'false' would be a bit more searchengine like.
+
+int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
+         If set false, this will disable the grouping of providers.
+         By default providers are grouped in categories like 'safe','unsafe','fast' etc., which
+         are queried in parallel, so the 'best' providers are queried first.
+         Disabling this behaviour will result in increasing speed, but as a result the searchresults
+         won't be sorted by quality, as it is normally the case.
+         
+         Use with care.
+
+int GlyOpt_formats(GlyQuery * s, const char * formats)
+        Awaits a string with a semicolon seperated list of allowed formats.
+        The case of the format is ignored.
+
+        Example:
+            "png;jpg;jpeg" would allow png and jpeg.
+
+        You can also specify "all", which disables this check.
+
+int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+	Set the maximum amount of inserts, edits and substitutions, a search results
+        may differ from the artist and/or album and/or title.
+        The difference between two strings is measured as the 'Levenshtein distance',
+        i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.
+        Example:
+          "Equilibrium" <=> "Aqilibriums" => Distance=3
+          With a fuzzyness of 3 this would pass the check, with 2 it won't.
+        
+       Higher values mean more search results, but more inaccuracy.  
+       Default is 4.
+
+int GlyOpt_call_direct_use(GlyQuery * s, bool use)
+       libglyr has the ability to call a certain parser directly, instead of letting it the internal engine do.
+       Set this to true if you already know where the interesting data is, and only want to call the parser on it.
+       Honestly enough, you shouldn't use this normally as libglyr is usually always better in finding things. ;-)
+
+int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider)
+       What parser to use (See GlyOpt_call_direct_use), 'provider' must be either a key or a name of a provider.        
+       Additionally only one is allowed.
+
+int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
+       Where the parseable data is stored in the internet.
+       Must be a vaild URL, also note that you have to choose 
+       yourself the fitting URL for each provider.
+
+h4. __GlyPlugin * Gly_get_provider_by_id(int ID)__
+   Return information about a certain provider.
+   ID is one of the enum GLYR_TYPES, e.g. GET_COVER
+   Information about the accessible getters are returned by passing GET_UNSURE.
+
+   The returned data is an array of GlyProvider structures and is terminated when the name value is NULL.
+
+   Pass result to free(3) if no longer used!
+
+   See also the documentation for GlyPlugin.
+
+h4. __GlyMemCache * Gly_download(const char * url, GlyQuery * s)__
+    Download the data at $url.
+    Arguments: 
+	- The URL.
+	- A GlyQuery s, where only the fields 'timeout' and 'redirects' are used. 
+
+    Returns:
+	- A ptr to GlyMemCache, with all data stored in cache->data.
+	  Pass the result to Gly_free_cache() if no longer used.
+
+h4.  __const char * Gly_groupname_by_id(enum GLYR_GROUPS ID)__
+    Returns a human readable string of the group pointed to by ID
+    Do not pass this to free(3). 
+
+    Use this to build the string of the "from" argument.
+
+    Arguments:
+	A group ID, for example: GRPN_FAST => "fast"
+
+h4 __const char * Gly_version(void)__
+    return a version string, which should not be passed to free(3).
+    Example:
+      Version 0.4 (Larcenous Locust (dev)) of [Mar 29 2011] compiled at [15:59:45]	
+
+h4. __int Gly_write_binary_file(const char * path, GlyMemCache * data, const char * save_dir, const char * type, GlyQuery *s)__
+
+h2. Results
+This chaper describes what results you actually get with a certain type.
+* cover/photos:
+  Unless you set the download option to false you'll get a large buffer full of unprintable data.
+  In other words: The raw data of an image in an unspecified format.
+  libglyr does not check the format, but you might look at the url in cache->dsrc to find out
+  what type of image you have there. Also you may be limit the format to e.g. 'jpg'.
+  
+  Everything you can actually do practically is writing the data to disk and let it be read from there.
+  
+  With the download option set to false you'll get only the URL where the data is stored.
+  You have to download it manually via @Gly_download@ or do something else with it.
+
+* lyrics/ainfo/review:
+  As simple as it is: A text. Possibly with multibyte characters.
+
+* tags/relations:
+  With tags you'll get an unpredictable string being somehwat related to your searchquery,
+  with relation you get an URL to external ressources like fanpages, discography entries, etc.
+
+* tracklist/ablumlist:
+  One (!) track/albumname per item.
+
+* similiar
+  A similiar artist per item looking like this:
+  1st line: Name of the artist.
+  2nd line: Match rate as float from 0.0 to 1.0
+  3rd line: last.fm page
+  3rd line till end: Image of the artist with increasing size. (last is the biggest)
+  Example for 'Equilibrium':
+
+        Ensiferum
+        1
+        www.last.fm/music/Ensiferum
+        http://userserve-ak.last.fm/serve/34/59348683.png
+        http://userserve-ak.last.fm/serve/64/59348683.png
+        http://userserve-ak.last.fm/serve/126/59348683.png
+        http://userserve-ak.last.fm/serve/252/59348683.png
+        http://userserve-ak.last.fm/serve/500/59348683/Ensiferum+PNG.png
