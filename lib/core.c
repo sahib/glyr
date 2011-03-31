@@ -450,7 +450,8 @@ int flag_lint(GlyCacheList * result, GlyQuery * s)
 
     if(dp != 0)
     {
-        glyr_message(2,s,stderr,C_"- Ignoring %d Item%sthat occure twice.\n",dp,dp<2 ? " " : "s ");
+        const char * plural = dp<2 ? " " : "s ";
+        glyr_message(2,s,stderr,C_"- Ignoring %d item%sthat occure%stwice.\n",dp,plural,plural);
         s->itemctr -= dp;
     }
     return dp;
@@ -1134,7 +1135,7 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
             // Now make a copy of the item and add it to the list
             DL_add_to_list(r_list,DL_copy(result->list[i]));
         }
-        else
+        else if(r_list->usersig == GLYRE_STOP_BY_CB)
         {
             // Break if desired.
             break;

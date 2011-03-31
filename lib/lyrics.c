@@ -89,7 +89,7 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
         {
             DL_add_to_list(lst,dl);
         }
-        else
+        else if(lst->usersig == GLYRE_STOP_BY_CB)
         {
             DL_free(dl);
             break;

@@ -66,9 +66,9 @@ enum GLYR_ERROR
     GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
     GLYRE_NO_PROVIDER,  // setttings->provider == NULL
     GLYRE_UNKNOWN_GET,  // settings->type is not valid
+    GLYRE_IGNORE,       // If returned by callback, cache is ignored
     GLYRE_STOP_BY_CB    // Callback returned stop signal.
 };
-
 
 // ----------
 //  DEFINES 
@@ -278,6 +278,8 @@ GlyMemCache * Gly_new_cache(void);
 %rename(freeCache) Gly_free_cache;
 void Gly_free_cache(GlyMemCache * c);
 
+%rename(copyCache) Gly_copy_cache;
+GlyMemCache * Gly_copy_cache(GlyMemCache * source);
 
 //-- setopts --//
 int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
@@ -300,6 +302,7 @@ int GlyOpt_download(GlyQuery * s, bool download);
 int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
 int GlyOpt_formats(GlyQuery * s, const char * formats);
 int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
 int GlyOpt_call_direct_use(GlyQuery * s, bool use);
 int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider);
 int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
@@ -313,6 +316,8 @@ GlyPlugin * Gly_get_provider_by_id(int ID);
 %rename(download) Gly_download;
 GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
+%rename(writeFile) Gly_write_binary_file;
+int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
 
 %rename(groupname_by_id) Gly_groupname_by_id;
 const char * Gly_groupname_by_id(int ID);

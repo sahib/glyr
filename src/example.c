@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// The one and only..
+// Only include this one
 #include "../lib/glyr.h"
 
 // Just print an item..
@@ -91,18 +91,25 @@ static void print_item(GlyMemCache * cacheditem, int num)
     fprintf(stderr,"\n");
 }
 
-int callback_itemctr = 0;
-
-static int funny_callback(GlyMemCache * c, GlyQuery * q)
+static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q)
 {
     // This is called whenever glyr gets a ready to use item
-    print_item(c,callback_itemctr++);
+
+    // You can pass a void pointer to the callback,
+    // by passing it as third argument to GlyOpt_dlcallback()
+    int * i = q->callback.user_pointer;
+    print_item(c,(*i = *i + 1));
 
     if(strstr(c->data,"Friede") != NULL)
     {
-	puts("!! Oh god, he said \"Friede\" !!");
+	puts("!! Oh my goat, he said \"Friede\" !!");
 	return GLYRE_STOP_BY_CB; 
     }
+    /*
+        You can also return:
+        - GLYRE_STOP_BY_CB which will stop libglyr
+        - GLYRE_IGNORE which will cause libglyr not to add this item to the results 
+    */
     return GLYRE_OK;
 }
 
@@ -112,10 +119,17 @@ int main(int argc, char * argv[])
     GlyQuery q;
     Gly_init_query(&q);
 
+    // make sure to init everything and destroy again at exit
+    Gly_init();
+    atexit(Gly_cleanup);
+
     // Default to lyrics..
     int type = GET_LYRIC;
     if(argc > 1)
     {
+        // This gets a list of provider_t which contains information about useable getters
+        // If passed e.g GET_COVER instead of GET_UNSURE you would get information about providers
+        // for cover download (name,key,groups and so on)
         GlyPlugin * list_of_getters = Gly_get_provider_by_id(GET_UNSURE);
         if(list_of_getters != NULL)
         {
@@ -149,7 +163,8 @@ int main(int argc, char * argv[])
     GlyOpt_title (&q,(char*)"Friede sei mit dir");
 
     // Execute a func when getting one item
-    GlyOpt_dlcallback(&q,funny_callback,NULL);
+    int this_be_my_counter = 0;
+    GlyOpt_dlcallback(&q,funny_callback,&this_be_my_counter);
 
     // For the start: Enable verbosity
     GlyOpt_verbosity(&q,2);

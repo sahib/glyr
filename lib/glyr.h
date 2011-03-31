@@ -37,6 +37,14 @@ extern "C"
     // call this once you called Gly_init and you're done
     void Gly_cleanup(void);
 
+    // Call this once you want to use libglyr
+    void Gly_init(void);
+    
+    // Cleanup curl, libglyr does not use any global vars,
+    // but libcurl does. That's the only reason why there is a init/cleanup:
+    // both aren't threadsafe.
+    void Gly_cleanup(void);
+
     // the actual main of glyr
     GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
 
@@ -52,9 +60,10 @@ extern "C"
 
     // Cache related
     GlyMemCache * Gly_new_cache(void);
+    GlyMemCache * Gly_copy_cache(GlyMemCache * source);
     void Gly_free_cache(GlyMemCache * c);
 
-    /* Gly_opt_* methods */
+    /* Gly_opt methods */
     int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
     int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
     int GlyOpt_artist(GlyQuery * s, char * artist);
@@ -75,12 +84,10 @@ extern "C"
     int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
     int GlyOpt_formats(GlyQuery * s, const char * formats);
     int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+    int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
     int GlyOpt_call_direct_use(GlyQuery * s, bool use);
     int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider);
     int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
-
-    // return library version
-    const char * Gly_version(void);
 
     // get information about available plugins
     GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
@@ -88,15 +95,19 @@ extern "C"
     // Download a URL and sae it in Memcache
     GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
-    // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
-    int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
+    // Short descriptive version of an error ID
+    const char * Gly_strerror(enum GLYR_ERROR ID);
 
     // Returns the actual name of the group pointed by ID
     const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
 
-    // Short descriptive version of an error ID
-    const char * Gly_strerror(enum GLYR_ERROR ID);
+    // return library version
+    const char * Gly_version(void);
 
+    // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
+    int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
+
+    
 #ifdef _cplusplus
 }
 #endif

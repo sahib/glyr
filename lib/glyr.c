@@ -42,6 +42,8 @@
 
 #include "config.h"
 
+/*--------------------------------------------------------*/
+
 const char * err_strings[] =
 {
     "all okay",
@@ -103,6 +105,13 @@ GlyPlugin getwd_commands [] =
 const char * Gly_version(void)
 {
     return "Version "glyr_VERSION_MAJOR"."glyr_VERSION_MINOR" ("glyr_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+}
+
+/*-----------------------------------------------*/
+
+GlyMemCache * Gly_copy_cache(GlyMemCache * source)
+{
+    return DL_copy(source);
 }
 
 /*-----------------------------------------------*/
@@ -623,8 +632,8 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
     settings->itemctr = 0;
     if(result != NULL && !result->size)
     {
-        Gly_free_list(result);
-        result = NULL;
+	Gly_free_list(result);
+	result = NULL;	
     }
     return result;
 }

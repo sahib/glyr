@@ -100,7 +100,7 @@ static GlyCacheList * cover_callback(cb_object * capo)
             ls->usersig = usersig;
             DL_add_to_list(ls,dl);
         }
-        else
+        else if(usersig == GLYRE_STOP_BY_CB)
         {
             DL_free(dl);
         }
@@ -183,7 +183,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 		    {
                         DL_add_to_list(dl_list,copy);
 		    }
-                    else
+                    else if(dl_list->usersig == GLYRE_STOP_BY_CB)
 		    {
 			DL_free(copy);
                         break;
