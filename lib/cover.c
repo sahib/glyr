@@ -36,9 +36,13 @@
 #include "cover/albumart.h"
 #include "cover/google.h"
 
+/* ------------------------------------- */
+
 #define ALBE "<div id=\"pagination\""
 #define COLE "<div id=\"footer\">"
 #define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
+
+/* ------------------------------------- */
 
 // Add yours here.
 GlyPlugin cover_providers[] =
@@ -55,6 +59,8 @@ GlyPlugin cover_providers[] =
     { NULL,        NULL, NULL,                false, {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
 
+/* ------------------------------------- */
+
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
@@ -66,10 +72,14 @@ bool size_is_okay(int sZ, int min, int max)
     return false;
 }
 
+/* ------------------------------------- */
+
 GlyPlugin * glyr_get_cover_providers(void)
 {
     return copy_table(cover_providers,sizeof(cover_providers));
 }
+
+/* ------------------------------------- */
 
 static GlyCacheList * cover_callback(cb_object * capo)
 {
@@ -107,6 +117,8 @@ static GlyCacheList * cover_callback(cb_object * capo)
     }
     return ls;
 }
+
+/* ------------------------------------- */
 
 // Place any bad URLs that should never ever get out
 // Prefer to handle this in the plugin though!
@@ -148,7 +160,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 dl_list = invoke(urlplug_list,ctr,settings->parallel,settings->timeout * ctr, settings);
                 if(dl_list != NULL)
                 {
-                    glyr_message(2,settings,stderr,"- Succesfully downloaded %d image.\n",dl_list->size);
+                    glyr_message(2,settings,stderr,"- Succesfully downloaded %d image(s).\n",dl_list->size);
                 }
                 free(urlplug_list);
             }
@@ -195,6 +207,8 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
     return dl_list;
 }
 
+/* ------------------------------------- */
+
 GlyCacheList * get_cover(GlyQuery * settings)
 {
     GlyCacheList * res = NULL;
@@ -215,3 +229,5 @@ GlyCacheList * get_cover(GlyQuery * settings)
     }
     return res;
 }
+
+/* ------------------------------------- */

@@ -100,7 +100,6 @@ enum GLYR_ERROR
     GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
     GLYRE_NO_PROVIDER,  // setttings->provider == NULL
     GLYRE_UNKNOWN_GET,  // settings->type is not valid
-    GLYRE_IGNORE,       // Ignore this cache when returned from callback
     GLYRE_IGNORE,       // If returned by callback, cache is ignored
     GLYRE_STOP_BY_CB    // Callback returned stop signal.
 };

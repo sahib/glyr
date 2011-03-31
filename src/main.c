@@ -267,8 +267,13 @@ static void sig_handler(int signal)
         glyr_message(-1,NULL,stderr,C_"Received keyboard interrupt!\n");
         break;
     case SIGSEGV :
-        glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault! :(\n");
-        glyr_message(-1,NULL,stderr,C_R"FATAL: "C_"Please file a bug report (See glyrc -h)\n");
+        glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault.\n");
+        glyr_message(-1,NULL,stderr,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n"); 
+        glyr_message(-1,NULL,stderr,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n"); 
+        glyr_message(-1,NULL,stderr,C_"       and throw hard words like 'backtrace', 'bug report' or even the 'command I issued' at them.\n");
+        glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling our hair.\n");
+
+        glyr_message(-1,NULL,stderr,C_"\n(Thanks, and Sorry for any bad feelings.)\n");
         break;
     }
     exit(-1);
@@ -447,82 +452,8 @@ static bool check_if_dir(const char * path)
     }
     return true;
 }
-//================================
-void help_short(GlyQuery * s)
-{
-    if(s != NULL) s->color_output = false;
-    glyr_message(-1,s,stderr,"Usage: "
-                 "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
 
-    list_provider_at_id(GET_UNSURE,10,s);
-
-    glyr_message(-1,s,stderr,C_"\nIf you're viewing this helptext the first time,\n"
-                 "you probably want to view --usage, which has more details & examples\n");
-
-#define IN "\t"
-    glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
-                 IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
-                 IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
-                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
-                 IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
-                 IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
-                 IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
-                 IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
-                 IN"-u --update           Also download metadata if files are already in path (given by -w or '.')\n"
-                 IN"-U --skip-update      Do not download data if already present.\n"
-                 IN"-h --help             This text you unlucky wanderer are viewing.\n"
-                 IN"-H --usage            A more detailed version of this text.\n"
-                 IN"-V --version          Print the version string.\n"
-                 IN"-c --color            Enable colored output (Unix only)\n"
-                 IN"-C --skip-color       Disable colored output. (Unix only)\n"
-                 IN"-d --download         Download Images.\n"
-                 IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
-                 IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
-                 IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n"
-		 IN"-y --twincheck        Check for duplicate URLs, yes by default\n"
-		 IN"-y --skip-twincheck   Disable URLduplicate check.\n"
-                 IN"-a --artist           Artist name (Used by all plugins)\n"
-                 IN"-b --album            Album name (Used by cover,review,lyrics)\n"
-                 IN"-t --title            Songname (used mainly by lyrics)\n"
-                 IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
-                 IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
-                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
-                 IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
-                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
-                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
-                 "\nList of providers:\n",
-                 DEFAULT_FORMATS
-                );
-
-    if(s != NULL) s->color_output = false;
-
-    glyr_message(-1,s,stderr,"\n"IN C_"cover:\n");
-    list_provider_at_id(GET_COVER,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"lyrics:\n");
-    list_provider_at_id(GET_LYRIC,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"photos:\n");
-    list_provider_at_id(GET_PHOTO,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"review:\n");
-    list_provider_at_id(GET_REVIEW,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"similiar:\n");
-    list_provider_at_id(GET_SIMILIAR,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"ainfo:\n");
-    list_provider_at_id(GET_AINFO,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"tracklist:\n");
-    list_provider_at_id(GET_TRACKLIST,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"albumlist:\n");
-    list_provider_at_id(GET_ALBUMLIST,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"tags\n");
-    list_provider_at_id(GET_TAGS,13,s);
-    glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
-    list_provider_at_id(GET_RELATIONS,13,s);
-
-    glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
-
-    exit(EXIT_FAILURE);
-}
-//================================
-
+/* --------------------------------------------------------- */
 
 void help_short(GlyQuery * s)
 {
@@ -595,6 +526,8 @@ void help_short(GlyQuery * s)
 
     exit(EXIT_FAILURE);
 }
+
+/* --------------------------------------------------------- */
 
 static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery * glyrs)
 {
@@ -1022,7 +955,7 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
     // type = Type of data
     // data = actual data
     // (error) - Don't use this. Only internal use
-    glyr_message(1,s,stderr,"----- ITEM #%d ------\n",num);
+    glyr_message(1,s,stderr,"------- ITEM #%d --------\n",num);
     glyr_message(1,s,stderr,"FROM: <%s>\n",cacheditem->dsrc);
     glyr_message(1,s,stderr,"SIZE: %d Bytes\n",(int)cacheditem->size);
     glyr_message(1,s,stderr,"TYPE: ");
@@ -1100,7 +1033,6 @@ static enum GLYR_ERROR cb(GlyMemCache * c, GlyQuery * s)
     // See the glyr_set_dl_callback for more info
     // a custom pointer is in s->callback.user_pointer
     int * i = s->callback.user_pointer;
-    if(i != NULL) printf("%d\n",*i); else puts(C_R"OH"C_);
     print_item(s,c,(*i = *i + 1));
     return GLYRE_OK;
 }
@@ -1110,9 +1042,6 @@ static enum GLYR_ERROR cb(GlyMemCache * c, GlyQuery * s)
 int main(int argc, char * argv[])
 {
     int result = EXIT_SUCCESS;
-
-    Gly_init();
-    atexit(Gly_cleanup);
 
     /* Warn on  crash */
     signal(SIGSEGV, sig_handler);
@@ -1205,7 +1134,6 @@ int main(int argc, char * argv[])
                 		      glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name,path);
 				    else
 				      glyr_message(2,&my_query,stderr,"------------\n");
-
 
                                     if(Gly_write(&my_query,my_list->list[i],path) == -1)
                                     {

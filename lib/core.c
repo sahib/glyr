@@ -634,7 +634,7 @@ static void print_progress(int status, GlyQuery * s)
         c ='|';
         break;
     }
-    glyr_message(2,s,stderr,C_"Downloading [%c] [#%d]\r",c,status+1);
+    glyr_message(2,s,stderr,C_"=> Downloading [%c] [#%d]\r",c,status+1);
 }
 
 
