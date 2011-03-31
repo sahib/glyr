@@ -172,9 +172,9 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stdout,C_B"\nLIBCURL OPTIONS\n"C_);
     glyr_message(-1,s,stdout,OPT_A"-p --parallel <int>\n"C_);
     glyr_message(-1,s,stdout,_S"Download max. <int> files in parallel if there's more than one to download.\n");
-    glyr_message(-1,s,stdout,_S"This is useful for downloading photos in line; Default is %d.\n", DEFAULT_PARALLEL);
+    glyr_message(-1,s,stdout,_S"Set to 1 for serial download; Default is %d.\n", DEFAULT_PARALLEL);
     glyr_message(-1,s,stdout,OPT_A"-r --redirects <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Allow max. <int> redirects. This is only used for Amazon and you should never need to use it.\n");
+    glyr_message(-1,s,stdout,_S"Allow max. <int> redirects. .\n");
     glyr_message(-1,s,stdout,_S"Default is %d.\n", DEFAULT_REDIRECTS);
     glyr_message(-1,s,stdout,OPT_A"-m --timeout <int>\n"C_);
     glyr_message(-1,s,stdout,_S"Maximum number of <int> seconds to wait before cancelling a download.\n");
@@ -447,6 +447,80 @@ static bool check_if_dir(const char * path)
     }
     return true;
 }
+//================================
+void help_short(GlyQuery * s)
+{
+    glyr_message(-1,s,stderr,"Usage: "
+                 "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
+
+    list_provider_at_id(GET_UNSURE,10,s);
+
+    glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
+                 "you probably want to view --usage, which has more details & examples\n");
+
+#define IN "\t"
+    glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
+                 IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
+                 IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
+                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
+                 IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
+                 IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
+                 IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
+                 IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
+                 IN"-u --update           Also download metadata if files are already in path (given by -w or '.')\n"
+                 IN"-U --skip-update      Do not download data if already present.\n"
+                 IN"-h --help             This text you unlucky wanderer are viewing.\n"
+                 IN"-H --usage            A more detailed version of this text.\n"
+                 IN"-V --version          Print the version string.\n"
+                 IN"-c --color            Enable colored output (Unix only)\n"
+                 IN"-C --skip-color       Disable colored output. (Unix only)\n"
+                 IN"-d --download         Download Images.\n"
+                 IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
+                 IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
+                 IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n"
+		 IN"-y --twincheck        Check for duplicate URLs, yes by default\n"
+		 IN"-y --skip-twincheck   Disable URLduplicate check.\n"
+                 IN"-a --artist           Artist name (Used by all plugins)\n"
+                 IN"-b --album            Album name (Used by cover,review,lyrics)\n"
+                 IN"-t --title            Songname (used mainly by lyrics)\n"
+                 IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
+                 IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
+                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
+                 IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
+                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
+                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+                 "\nList of providers:\n",
+                 DEFAULT_FORMATS
+                );
+
+    if(s != NULL) s->color_output = false;
+
+    glyr_message(-1,s,stderr,"\n"IN C_"cover:\n");
+    list_provider_at_id(GET_COVER,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"lyrics:\n");
+    list_provider_at_id(GET_LYRIC,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"photos:\n");
+    list_provider_at_id(GET_PHOTO,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"review:\n");
+    list_provider_at_id(GET_REVIEW,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"similiar:\n");
+    list_provider_at_id(GET_SIMILIAR,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"ainfo:\n");
+    list_provider_at_id(GET_AINFO,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"tracklist:\n");
+    list_provider_at_id(GET_TRACKLIST,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"albumlist:\n");
+    list_provider_at_id(GET_ALBUMLIST,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"tags\n");
+    list_provider_at_id(GET_TAGS,13,s);
+    glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
+    list_provider_at_id(GET_RELATIONS,13,s);
+
+    glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+
+    exit(EXIT_FAILURE);
+}
+//================================
 
 
 void help_short(GlyQuery * s)
@@ -479,14 +553,16 @@ void help_short(GlyQuery * s)
                  IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
                  IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
                  IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n"
+		 IN"-y --twincheck        Check for duplicate URLs, yes by default\n"
+		 IN"-y --skip-twincheck   Disable URLduplicate check.\n"
                  IN"-a --artist           Artist name (Used by all plugins)\n"
                  IN"-b --album            Album name (Used by cover,review,lyrics)\n"
                  IN"-t --title            Songname (used mainly by lyrics)\n"
-                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
-                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
                  IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
+                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
                  IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
+                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
                  "\nList of providers:\n",
                  DEFAULT_FORMATS
@@ -528,41 +604,43 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
 
     static struct option long_options[] =
     {
-        {"from",         required_argument, 0, 'f'},
-        {"write",        required_argument, 0, 'w'},
-        {"parallel",     required_argument, 0, 'p'},
-        {"redirects",    required_argument, 0, 'r'},
-        {"timeout",      required_argument, 0, 'm'},
-        {"plugmax",      required_argument, 0, 'x'},
-        {"verbosity",    required_argument, 0, 'v'},
-        {"update",       no_argument,       0, 'u'},
-        {"skip-update",  no_argument,       0, 'U'},
-        {"help",         no_argument,       0, 'h'},
-        {"usage",        no_argument,       0, 'H'},
-        {"version",      no_argument,       0, 'V'},
-        {"color",        no_argument,       0, 'c'},
-        {"skip-color",   no_argument,       0, 'C'},
-        {"download",     no_argument,       0, 'd'},
-        {"skip-download",no_argument,       0, 'D'},
-        {"groups",       no_argument,       0, 'g'},
-        {"skip-groups",  no_argument,       0, 'G'},
+        {"from",          required_argument, 0, 'f'},
+        {"write",         required_argument, 0, 'w'},
+        {"parallel",      required_argument, 0, 'p'},
+        {"redirects",     required_argument, 0, 'r'},
+        {"timeout",       required_argument, 0, 'm'},
+        {"plugmax",       required_argument, 0, 'x'},
+        {"verbosity",     required_argument, 0, 'v'},
+        {"update",        no_argument,       0, 'u'},
+        {"skip-update",   no_argument,       0, 'U'},
+        {"help",          no_argument,       0, 'h'},
+        {"usage",         no_argument,       0, 'H'},
+        {"version",       no_argument,       0, 'V'},
+        {"color",         no_argument,       0, 'c'},
+        {"skip-color",    no_argument,       0, 'C'},
+        {"download",      no_argument,       0, 'd'},
+        {"skip-download", no_argument,       0, 'D'},
+        {"groups",        no_argument,       0, 'g'},
+        {"skip-groups",   no_argument,       0, 'G'},
+        {"twincheck",     no_argument,       0, 'y'},
+        {"skip-twincheck",no_argument,       0, 'Y'},
         // -- plugin specific -- //
-        {"artist",       required_argument, 0, 'a'},
-        {"album",        required_argument, 0, 'b'},
-        {"title",        required_argument, 0, 't'},
-        {"minsize",      required_argument, 0, 'i'},
-        {"maxsize",      required_argument, 0, 'e'},
-        {"number",       required_argument, 0, 'n'},
-        {"lang",         required_argument, 0, 'l'},
-        {"fuzzyness",    required_argument, 0, 'z'},
-        {"prefer",       required_argument, 0, 'r'},
-        {0,              0,                 0, 'o'}
+        {"artist",        required_argument, 0, 'a'},
+        {"album",         required_argument, 0, 'b'},
+        {"title",         required_argument, 0, 't'},
+        {"minsize",       required_argument, 0, 'i'},
+        {"maxsize",       required_argument, 0, 'e'},
+        {"number",        required_argument, 0, 'n'},
+        {"lang",          required_argument, 0, 'l'},
+        {"fuzzyness",     required_argument, 0, 'z'},
+        {"prefer",        required_argument, 0, 'r'},
+        {0,               0,                 0, 'o'}
     };
 
     while (true)
     {
         int option_index = 0;
-        c = getopt_long(argc, argv, "uUVhHcCdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:",long_options, &option_index);
+        c = getopt_long(argc, argv, "uUVhHcCyYdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:",long_options, &option_index);
 
         // own error report
         opterr = 0;
@@ -621,6 +699,12 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             break;
         case 'U':
             update = false;
+            break;
+        case 'y':
+            GlyOpt_duplcheck(glyrs,true);
+            break;
+        case 'Y':
+            GlyOpt_duplcheck(glyrs,false);
             break;
         case 'g':
             GlyOpt_groupedDL(glyrs,true);
@@ -929,15 +1013,99 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
-static int cb(GlyMemCache * c, GlyQuery * s)
+
+static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
+{
+    // GlyMemcache members
+    // dsrc = Exact link to the location where the data came from
+    // size = size in bytes
+    // type = Type of data
+    // data = actual data
+    // (error) - Don't use this. Only internal use
+    glyr_message(1,s,stderr,"----- ITEM #%d ------\n",num);
+    glyr_message(1,s,stderr,"FROM: <%s>\n",cacheditem->dsrc);
+    glyr_message(1,s,stderr,"SIZE: %d Bytes\n",(int)cacheditem->size);
+    glyr_message(1,s,stderr,"TYPE: ");
+
+    // Each cache identfies it's data by a constant
+    switch(cacheditem->type)
+    {
+    case TYPE_COVER:
+        glyr_message(1,s,stderr,"cover");
+        break;
+    case TYPE_COVER_PRI:
+        glyr_message(1,s,stderr,"cover (frontside)");
+        break;
+    case TYPE_COVER_SEC:
+        glyr_message(1,s,stderr,"cover (backside or inlet)");
+        break;
+    case TYPE_LYRICS:
+        glyr_message(1,s,stderr,"songtext");
+        break;
+    case TYPE_PHOTOS:
+        glyr_message(1,s,stderr,"band photo");
+        break;
+    case TYPE_REVIEW:
+        glyr_message(1,s,stderr,"albumreview");
+        break;
+    case TYPE_AINFO:
+        glyr_message(1,s,stderr,"artistbio");
+        break;
+    case TYPE_SIMILIAR:
+        glyr_message(1,s,stderr,"similiar artist");
+        break;
+    case TYPE_TRACK:
+        glyr_message(1,s,stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60);
+        break;
+    case TYPE_ALBUMLIST:
+        glyr_message(1,s,stderr,"albumname");
+        break;
+    case TYPE_TAGS:
+        glyr_message(1,s,stderr,"some tag");
+        break;
+    case TYPE_TAG_ARTIST:
+        glyr_message(1,s,stderr,"artisttag");
+        break;
+    case TYPE_TAG_ALBUM:
+        glyr_message(1,s,stderr,"albumtag");
+        break;
+    case TYPE_TAG_TITLE:
+        glyr_message(1,s,stderr,"titletag");
+        break;
+    case TYPE_RELATION:
+        glyr_message(1,s,stderr,"relation");
+        break;
+    case TYPE_NOIDEA:
+    default:
+        glyr_message(1,s,stderr,"No idea...?");
+    }
+
+    // Print the actual data.
+    // This might have funny results if using cover/photos
+    if(!cacheditem->is_image)
+        glyr_message(1,s,stderr,"\nDATA:\n%s",cacheditem->data);
+    else
+        glyr_message(1,s,stderr,"\nDATA: <not printable>");
+
+    glyr_message(1,s,stderr,"\n");
+}
+
+/* --------------------------------------------------------- */
+
+static enum GLYR_ERROR cb(GlyMemCache * c, GlyQuery * s)
 {
     // This is just to demonstrate the callback option.
     // Put anything in here that you want to be executed when
     // a cache is 'ready' (i.e. ready for return)
     // See the glyr_set_dl_callback for more info
-    // a custom pointer is in s->user_pointer
+    // a custom pointer is in s->callback.user_pointer
+    int * i = s->callback.user_pointer;
+    if(i != NULL) printf("%d\n",*i); else puts(C_R"OH"C_);
+    print_item(s,c,(*i = *i + 1));
     return GLYRE_OK;
 }
+
+/* --------------------------------------------------------- */
 
 int main(int argc, char * argv[])
 {
@@ -949,15 +1117,20 @@ int main(int argc, char * argv[])
 
     if(argc >= 3)
     {
+        // make sure to init everything and destroy again
+        Gly_init();
+        atexit(Gly_cleanup);
+
         GlyQuery my_query;
         // glyr's control struct
         Gly_init_query(&my_query);
         GlyOpt_verbosity(&my_query,2);
 
         /*
-                GlyOpt_call_direct_use(&my_query, true);
-                GlyOpt_call_direct_provider(&my_query, "a");
-                GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
+        // Left as example
+        GlyOpt_call_direct_use(&my_query, true);
+        GlyOpt_call_direct_provider(&my_query, "a");
+        GlyOpt_call_direct_url(&my_query, "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId=AKIAJ6NEA642OU3FM24Q&Operation=ItemSearch&SearchIndex=Music&ResponseGroup=Images&Keywords=cher+believe");
         */
 
         // Set the type..
@@ -1002,7 +1175,8 @@ int main(int argc, char * argv[])
         }
 
         // Set (example) callback
-        GlyOpt_dlcallback(&my_query, cb, NULL);
+        int item_counter = 0;
+        GlyOpt_dlcallback(&my_query, cb, &item_counter);
         if(my_query.type != GET_UNSURE)
         {
             if(!file_exist)
@@ -1024,8 +1198,13 @@ int main(int argc, char * argv[])
                                 char * path = get_path_by_type(&my_query,write_arg[j],i);
                                 if(path != NULL)
                                 {
-            		 	    glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name ,path);
-                                    if(Gly_write_binary_file(path,my_list->list[i],write_arg[j], table_copy[my_query.type].name, &my_query) == -1)
+				    if(write_arg[j] && strcmp(write_arg[j],"stdout") && strcmp(write_arg[j],"stderr"))
+                		      glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name,path);
+				    else
+				      glyr_message(2,&my_query,stderr,"------------\n");
+
+
+                                    if(Gly_write(&my_query,my_list->list[i],path) == -1)
                                     {
                                         result = EXIT_FAILURE;
                                     }

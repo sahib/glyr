@@ -100,6 +100,7 @@ enum GLYR_ERROR
     GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
     GLYRE_NO_PROVIDER,  // setttings->provider == NULL
     GLYRE_UNKNOWN_GET,  // settings->type is not valid
+    GLYRE_IGNORE,       // If returned by callback, cache is ignored
     GLYRE_STOP_BY_CB    // Callback returned stop signal.
 };
 
@@ -203,7 +204,7 @@ typedef struct GlyQuery
 
     struct callback
     {
-        int  (* download)(GlyMemCache * dl, struct GlyQuery * s);
+        enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
         void  * user_pointer;
     } callback;
 
@@ -216,7 +217,7 @@ typedef struct GlyQuery
 
 } GlyQuery;
 
-typedef int (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
+typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 
 // The struct that controls the beahaviour of glyr
 // It is passed as reference to the cover and lyric downloader

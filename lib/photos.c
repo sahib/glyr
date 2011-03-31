@@ -75,7 +75,7 @@ static GlyCacheList * photo_callback(cb_object * capo)
             ls->usersig = usersig;
             DL_add_to_list(ls,dl);
         }
-        else
+        else if(usersig == GLYRE_STOP_BY_CB)
         {
             DL_free(dl);
         }
@@ -146,7 +146,7 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                         DL_add_to_list(dl_list,r_copy);
                         free(result->list[i]->data);
                     }
-                    else
+                    else if(dl_list->usersig == GLYRE_STOP_BY_CB)
                     {
 			DL_free(r_copy);
                         break;
