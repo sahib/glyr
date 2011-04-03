@@ -4,3 +4,7 @@
 - Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
 - cmake install and cmake portable..
 - repair Glubyr
+
+- paths for tag/relations..
+- default settings for getters (like number=-1 for track/albumlist)
+- ainfo/wikipedia.c still not working

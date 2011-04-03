@@ -49,7 +49,7 @@ GlyPlugin cover_providers[] =
 {
     // Start of safe group
     {"last.fm",    "l", C_"last"C_R"."C_"fm", false, {cover_lastfm_parse,      cover_lastfm_url,     NULL, false}, GRP_SAFE | GRP_FAST},
-    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     NULL, false}, GRP_SAFE | GRP_FAST},
+    {"amazon",     "a", C_Y"amazon",          false, {cover_amazon_parse,      cover_amazon_url,     NULL, true }, GRP_SAFE | GRP_FAST},
     {"lyricswiki", "w", C_C"lyricswiki",      false, {cover_lyricswiki_parse,  cover_lyricswiki_url, NULL, false}, GRP_SAFE | GRP_FAST},
     {"google",     "g", GOOGLE_COLOR,         false, {cover_google_parse,      cover_google_url,     NULL, true }, GRP_USFE | GRP_FAST},
     {"albumart",   "b", C_R"albumart",        false, {cover_albumart_parse,    cover_albumart_url,   ALBE, false}, GRP_USFE | GRP_FAST},

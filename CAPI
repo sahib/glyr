@@ -307,8 +307,6 @@ int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
          Disabling this behaviour will result in increasing speed, but as a result the searchresults
          won't be sorted by quality, as it is normally the case.
          
-         Use with care.
-
 int GlyOpt_formats(GlyQuery * s, const char * formats)
         Awaits a string with a semicolon seperated list of allowed formats.
         The case of the format is ignored.

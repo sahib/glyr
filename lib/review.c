@@ -28,12 +28,14 @@
 #include "stringlib.h"
 
 #include "review/allmusic_com.h"
+#include "review/amazon.h"
 
 // Add your's here
 GlyPlugin review_providers[] =
 {
 //  full name       key   coloredname          use?   parser callback          geturl callback         stop download after this?     free url?
-    {"allmusic",    "m",  C_"all"C_C"music"C_,false,  {review_allmusic_parse,  review_allmusic_url,    "<div id=\"right-sidebar\">", false},   GRP_SAFE | GRP_FAST},
+    {"allmusic",    "m",  C_"all"C_C"music"C_,false,  {review_allmusic_parse,  review_allmusic_url,    "<div id=\"right-sidebar\">", false},   GRP_SAFE | GRP_SLOW},
+    {"amazon",      "a",  "amazon",           false,  {review_amazon_parse,    review_amazon_url,      NULL,                         true },   GRP_SAFE | GRP_FAST},
     { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   NULL,                         false},   GRP_NONE | GRP_NONE},
 };
 

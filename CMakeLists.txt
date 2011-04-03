@@ -79,6 +79,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_SIMILIAR}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
+	"${DIR_REVIEW}/amazon.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"
 	"${DIR_TAGS}/musicbrainz.c"

@@ -533,7 +533,6 @@ void Gly_init(void)
         static bool already_init = false;
         if(already_init == false)
         {
-                puts("Initializing curl.");
                 if(curl_global_init(CURL_GLOBAL_ALL))
                 {
                     glyr_message(-1,NULL,stderr,"!! libcurl failed to init.\n");

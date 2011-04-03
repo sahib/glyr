@@ -49,7 +49,7 @@ const char * default_path = ".";
 
 static void print_version(GlyQuery * s)
 {
-    glyr_message(-1,s,stdout, C_G"%s\n\n"C_,Gly_version());
+    glyr_message(-1,s,stdout, C_"%s\n\n"C_,Gly_version());
     glyr_message(-1,s,stderr, C_"This is still beta software, expect quite a lot bugs.\n");
     glyr_message(-1,s,stderr, C_"Email bugs to <sahib@online.de> or use the bugtracker\n"
                  C_"at https://github.com/sahib/glyr/issues - Thank you! \n");
@@ -92,170 +92,7 @@ static void list_provider_at_id(int id, int min_align,GlyQuery * s)
         free(cp);
     }
 }
-/*
-static void usage(GlyQuery * s)
-{
-    glyr_message(-1,s,stdout,C_B"USAGE:\n"C_ _S"glyrc "C_Y"GETTER"C_" [OPTIONS...]\n\n");
-    glyr_message(-1,s,stdout,"glyrc downloads variouse sorts of musicrelated metadata.\n");
-    glyr_message(-1,s,stdout,C_Y"GETTER"C_" is the type of metadata to download, it must be one of: \n");
-    list_provider_at_id(GET_UNSURE, 10,s);
 
-#define GET_C C_G
-#define OPT_C C_C
-#define OPT_A OPT_C"\n    "
-    glyr_message(-1,s,stdout,"\nThe getter has to be always the very first argument given, and may require other arguments\n");
-    glyr_message(-1,s,stdout,"A short note to the terminology: a provider is a source glyrc may download data from.\n");
-    glyr_message(-1,s,stdout,"A group is a collection of providers, each getter has at least the groups all,safe and unsafe,\n");
-    glyr_message(-1,s,stdout,"Please note that providers and groups may differ heavily from getter to getter!\n");
-    glyr_message(-1,s,stdout,"you can modify glyrc's providerlist by passing the names (or their shortcuts) to --from.\n");
-    glyr_message(-1,s,stdout,"To find out what getter needs what argument see below: ("OPT_C"-n"C_" is the max number of items)\n");
-    glyr_message(-1,s,stdout,C_B"\nCOVER\n"C_);
-    glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" albumart images of the artist and album specified with "OPT_C"-a and -b\n"C_);
-    glyr_message(-1,s,stdout,_S"The filetype of the image is unspecified (as libglyr often could only vaguely guess)\n");
-    glyr_message(-1,s,stdout,_S"and may be determinded by its header; glyrc saves it as '.img in all cases.'\n");
-    glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
-    list_provider_at_id(GET_COVER,12,s);
-    glyr_message(-1,s,stdout,C_B"LYRICS\n"C_);
-    glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" lyrics of the artist and title specified with "OPT_C"-a"C_" and "OPT_C"-t\n"C_);
-    glyr_message(-1,s,stdout,_S"The album ("OPT_C"-b"C_") is optional and may be used by some plugins.\n");
-    glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
-    list_provider_at_id(GET_LYRIC,13,s);
-    glyr_message(-1,s,stdout,C_B"PHOTOS\n"C_);
-    glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" photos that are related to the artist given by "OPT_C"-a"C_".\n");
-    glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
-    list_provider_at_id(GET_PHOTO,12,s);
-    glyr_message(-1,s,stdout,C_B"AINFO\n"C_);
-    glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" artist descriptions of the artist given by "OPT_C"-a"C_".\n");
-    glyr_message(-1,s,stdout,_S"Apart from the name, a similiarity rating from 0.0 to 1.0, a URL to last.fm page\n");
-    glyr_message(-1,s,stdout,_S"and a bunch of URLs to images of the similiar artist in ascending size.\n");
-    glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
-    list_provider_at_id(GET_AINFO,12,s);
-    glyr_message(-1,s,stdout,C_B"\nSIMILIAR\n"C_);
-    glyr_message(-1,s,stdout,_S"Download "OPT_C"-n"C_" information about similiar artist to the one given with -a "OPT_C"-a"C_".\n");
-    glyr_message(-1,s,stdout,_S"Currently "OPT_C"--from"C_" takes the following strings here:\n\n");
-    list_provider_at_id(GET_SIMILIAR,12,s);
-    glyr_message(-1,s,stdout,C_B"\nTRACKLIST\n"C_);
-    glyr_message(-1,s,stdout,_S"Get a list of tracks by artist given by -a and album by -b\n");
-    list_provider_at_id(GET_TRACKLIST,12,s);
-    glyr_message(-1,s,stdout,C_B"\nALBUMLIST\n"C_);
-    glyr_message(-1,s,stdout,_S"Get a list of albums by artist given by -a\n");
-    list_provider_at_id(GET_ALBUMLIST,12,s);
-    glyr_message(-1,s,stdout,OPT_A"-f --from <prov>\n"C_);
-    glyr_message(-1,s,stdout,_S"Set the sources (providers) you want to query.\n");
-    glyr_message(-1,s,stdout,_S"The string you have to provide cotains the names of the providers or a group\n");
-    glyr_message(-1,s,stdout,_S"(or their shortcuts), seperated by a \"%s\" and prepended by a + or -,\n", DEFAULT_FROM_ARGUMENT_DELIM);
-    glyr_message(-1,s,stdout,_S"which adds or deletes this source to/from the current state.\n");
-    glyr_message(-1,s,stdout,_S"An example would be: \"+all%s-special%s+d\"\n",DEFAULT_FROM_ARGUMENT_DELIM,DEFAULT_FROM_ARGUMENT_DELIM );
-    glyr_message(-1,s,stdout,_S _S "+all     : adds everything.\n");
-    glyr_message(-1,s,stdout,_S _S "-special : subtract the members of group 'special'.\n");
-    glyr_message(-1,s,stdout,_S _S "+d       : add the provider 'd' (discogs, see above)\n");
-    glyr_message(-1,s,stdout,OPT_A"-n --number <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Maximum number of items a getter may download.\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n", DEFAULT_NUMBER);
-    glyr_message(-1,s,stdout,OPT_A"-x --plugmax <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Maximum number of items a plugin may download.\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n", DEFAULT_PLUGMAX);
-    glyr_message(-1,s,stdout,OPT_A"-u --update\n"C_);
-    glyr_message(-1,s,stdout,_S"Update file even if already present.\n");
-    glyr_message(-1,s,stdout,_S"Default is %s.\n",update ? "true" : "false");
-    glyr_message(-1,s,stdout,OPT_A"-d --nodownload\n"C_);
-    glyr_message(-1,s,stdout,_S"Do not download final result, only print URL.\n");
-    glyr_message(-1,s,stdout,_S"This only works for images, as lyrics and ainfo do not neccesarely have a concrete URL.\n");
-    glyr_message(-1,s,stdout,_S"Use this to turn glyrc into some sort of music-metadate search engine.\n");
-    glyr_message(-1,s,stdout,_S"Default is %s.\n",DEFAULT_DOWNLOAD ? "true" : "false");
-    glyr_message(-1,s,stdout,OPT_A"-w --write <dir>\n"C_);
-    glyr_message(-1,s,stdout,_S"Write all files to the directory <dir>\n");
-    glyr_message(-1,s,stdout,_S"The filenames itself is determined by the artist,album, title depending on <GET>, see the also the FILES section.\n");
-    glyr_message(-1,s,stdout,_S"The special value \"stdout\" will print the data directly to stdout, \"stderr\" to stderr\n"_S"and \"null\" will print nothing.\n");
-    glyr_message(-1,s,stdout,_S"Default is '%s'\n",default_path);
-    glyr_message(-1,s,stdout,C_B"\nLIBCURL OPTIONS\n"C_);
-    glyr_message(-1,s,stdout,OPT_A"-p --parallel <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Download max. <int> files in parallel if there's more than one to download.\n");
-    glyr_message(-1,s,stdout,_S"Set to 1 for serial download; Default is %d.\n", DEFAULT_PARALLEL);
-    glyr_message(-1,s,stdout,OPT_A"-r --redirects <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Allow max. <int> redirects. .\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n", DEFAULT_REDIRECTS);
-    glyr_message(-1,s,stdout,OPT_A"-m --timeout <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Maximum number of <int> seconds to wait before cancelling a download.\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n", DEFAULT_TIMEOUT);
-    glyr_message(-1,s,stdout,C_B"\nMISC OPTIONS\n"C_);
-    glyr_message(-1,s,stdout,OPT_A"-V --version\n"C_);
-    glyr_message(-1,s,stdout,_S"Print version string and exit.\n");
-    glyr_message(-1,s,stdout,OPT_A"-h --help\n"C_);
-    glyr_message(-1,s,stdout,_S"Print this help and exit.\n");
-    glyr_message(-1,s,stdout,OPT_A"-c --color\n"C_);
-    glyr_message(-1,s,stdout,_S"Enables colored console output (Unix only).\n");
-    glyr_message(-1,s,stdout,_S"Default is %s.\n", PRT_COLOR ? "true" : "false");
-    glyr_message(-1,s,stdout,OPT_A"-v --verbosity <int>\n"C_);
-    glyr_message(-1,s,stdout,_S"Level of verbosity:\n");
-    glyr_message(-1,s,stdout,_S _S"-v0: Print nothing but fatal errors.\n");
-    glyr_message(-1,s,stdout,_S _S"-v1: Print only basic information.\n");
-    glyr_message(-1,s,stdout,_S _S"-v2: Print informative output. (default)\n");
-    glyr_message(-1,s,stdout,_S _S"-v3: Enable debugging messages.\n");
-    glyr_message(-1,s,stdout,_S _S"-v4: Enable libcurl-debugging messages.\n");
-    glyr_message(-1,s,stdout,C_B"\nPLUGIN OPTIONS\n"C_);
-    glyr_message(-1,s,stdout,OPT_A"-a --artist <string>; -b --album <string>; -t --title <string>\n"C_);
-    glyr_message(-1,s,stdout,_S"Depending on the getter you have to provide information on what to search.\n");
-    glyr_message(-1,s,stdout,_S"Please refer to the getter description to find what argument is needed for what getter.\n");
-    glyr_message(-1,s,stdout,OPT_A"-i --minsize\n"C_);
-    glyr_message(-1,s,stdout,_S"For cover only: The minimum size a coverimage may have\n");
-    glyr_message(-1,s,stdout,_S"A value of -1 will disable the sizecheck.\n");
-    glyr_message(-1,s,stdout,_S"Note that this value is only a 'suggestion' for libglyr,\n");
-    glyr_message(-1,s,stdout,_S"but it should work in 95%% of all cases.\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n",DEFAULT_CMINSIZE);
-    glyr_message(-1,s,stdout,OPT_A"-e --maxsize\n"C_);
-    glyr_message(-1,s,stdout,_S"For cover only: The maximum size a coverimage may have (see above)\n");
-    glyr_message(-1,s,stdout,_S"A value of -1 will disable the sizecheck.\n");
-    glyr_message(-1,s,stdout,_S"Default is %d.\n",DEFAULT_CMAXSIZE);
-    glyr_message(-1,s,stdout,OPT_A"-l --lang <l>\n"C_);
-    glyr_message(-1,s,stdout,_S"For cover:\n"_S _S"decides which amazon / google server is queried,\n"_S _S"what may have impact on search results.\n\n");
-    glyr_message(-1,s,stdout,_S"For ainfo's last.fm plugin:\n"_S _S"Decide in which language results are returned.\n\n");
-    glyr_message(-1,s,stdout,_S"The language is given by ISO 639-1 codes;\n");
-    glyr_message(-1,s,stdout,_S"Examples are: us,ca,uk,fr,de,jp\n");
-    glyr_message(-1,s,stdout,C_B"\nEXAMPLES\n"C_);
-    glyr_message(-1,s,stdout,_S C_Y"glyrc cover -a Equilibrium -b \"Turis Fratyr\"\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Download the cover art of the album 'Turis Fratyr' by the band equilibrium,\n");
-    glyr_message(-1,s,stdout,_S _S"# save it to Equilibrium_Turis+Fratyr_0.img\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc cover -a Equilibrium -b Rekreatur -n 5 -i 100 -e 250 --from \"amazon\"\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Download 5x (different) images of 'Rekreatur',\n");
-    glyr_message(-1,s,stdout,_S _S"# with the dimensions in between 100x100 and 250x250 from amazon\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc lyrics -a Equilibrium -t \"Blut im Auge\"\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Download lyrics of the Song \"Blut im Auge\" by Equilibrium,\n");
-    glyr_message(-1,s,stdout,_S _S"# show it in stdout, and write it to Equilibrium_Blut+im+Auge_0.lyrics\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc ainfo -a \"Justin Bieber\"\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# This produces nothing interesting (but hopefully a Segfault).\n");
-    glyr_message(-1,s,stdout,_S _S"# If not it will print all the things you always wanted to know about Justin Bieber.\n");
-    glyr_message(-1,s,stdout,_S _S"# (In german Language)\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc photos -a \"Die Apokalyptischen Reiter\" -v0 -n 5\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Downloads 5 photos showing the band \"Die Apokalyptischen Reiter\"\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc review -a \"Equilibrium\" -b \"Sagas\" -w stdout -v0\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Dumps the review of Equilibrium Sagas to stdout\n");
-    glyr_message(-1,s,stdout,_S C_Y"glyrc similiar -a \"Equilibrium\" -w stdout -v0 -n 5\n"C_);
-    glyr_message(-1,s,stdout,_S _S"# Show the 5 most similiar artist to Equilibrium (according to last.fm...)\n");
-    glyr_message(-1,s,stdout,_S _S"# Every set includes the name, matchrate (from 0.0 to 1.0),\n");
-    glyr_message(-1,s,stdout,_S _S"# a link to the last.fm page, and a link to a pressphoto (different sizes)\n");
-    glyr_message(-1,s,stdout,C_B"\nFILES\n"C_);
-    glyr_message(-1,s,stdout,_S"Everything is stored in a file with the pattern $save_dir/$artist_($album|$title)_suffix.type\n");
-    glyr_message(-1,s,stdout,_S"Spaces and Slashes in artist/album/title are escaped with a '+'. ($num is the itemcounter)\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_$album_cover_$num.jpg\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_$title_lyrics_$num.txt\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_photos_$num.jpg\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_ainfo_$num.txt\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_similiar_$num.txt\n");
-    glyr_message(-1,s,stdout,_S _S"$dir/$artist_$album_review_$num.txt\n");
-    glyr_message(-1,s,stdout,C_B"\nAUTHOR\n"C_);
-    glyr_message(-1,s,stdout,_S"(C) Christopher Pahl - 2011\n");
-    glyr_message(-1,s,stdout,_S"See the AUTHORS file that comes in glyr's distribution for a complete list.\n");
-    glyr_message(-1,s,stdout,_S"See also COPYING to know about your rights.\n");
-    glyr_message(-1,s,stdout,_S"\n");
-
-    print_version(s);
-    exit(0);
-}
-#undef S
-#undef OPT_C
-#undef GET_C
-*/
 //* ------------------------------------------------------- */
 
 static void sig_handler(int signal)
@@ -504,8 +341,9 @@ void help_short(GlyQuery * s)
 
 static void usage(GlyQuery * s)
 {
-    glyr_message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n"
-   		 C_B"\nGENERAL OPTIONS\n"C_
+    glyr_message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
+    		 list_provider_at_id(GET_UNSURE,10,s);
+    glyr_message(-1,s,stderr,C_B"\nGENERAL OPTIONS\n"C_
                  IN C_C"-f --from  <providerstring>\n"C_
 		 IN IN"Use this to define what providers you want to use.\n"
 		 IN IN"Every provider has a name and a key which is merely a shortcut for the name.\n"
@@ -520,6 +358,18 @@ static void usage(GlyQuery * s)
 		 IN IN"Example:\n"
 		 IN IN"  \"+fast;-amazon\" which will enable last.fm and lyricswiki.\n\n"
                  IN C_C"-w --write <dir>\n"C_
+		 IN IN"The directory to write files too, filenames are built like this:\n"
+		 IN IN"  $dir/$artist_$album_cover_$num.jpg\n"
+		 IN IN"  $dir/$artist_photo_$num.jpg\n"
+		 IN IN"  $dir/$artist_$title_lyrics_$num.txt\n"
+		 IN IN"  $dir/$artist_$album_review_$num.txt\n"
+		 IN IN"  $dir/$artist_url_$num.txt\n"
+		 IN IN"  $dir/$artist_tag_$num.txt\n"
+		 IN IN"  $dir/$artist_$album_tracktitle_$num.txt\n"
+		 IN IN"  $dir/$artist_albumtitle_$num.txt\n"
+		 IN IN"  $dir/$artist_similiar_$num.txt\n"
+		 IN IN"  $dir/$artist_ainfo_$num.txt\n"
+		 IN IN"Note: This might change again in future releases.\n"
                  IN C_C"-x --plugmax\n"C_
          	 IN IN"Maximum number of items a provider may deliever.\n"
          	 IN IN"Use this to scatter the searchresults, or set it\n"
@@ -539,13 +389,16 @@ static void usage(GlyQuery * s)
 		 IN C_C"-y --twincheck\n"C_
 	         IN IN"Will check for duplicate items if given.\n"
    		 C_B"\nLIBCURL OPTIONS\n"C_
-                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
-                 IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
-                 IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
+                 IN C_C"-p --parallel <int>\n"C_
+		 IN IN"Integer. Define the number of downloads that may be performed in parallel.\n"
+                 IN C_C"-r --redirects <int>\n"C_
+		 IN IN"Integer. Define the number of redirects that are allowed.\n"
+                 IN C_C"-m --timeout\n"C_
+		 IN IN"Integer. Define the maximum number in seconds after which a download is cancelled.\n"
    		 C_B"\nPLUGIN SPECIFIC OPTIONS\n"C_
-                 IN C_Y"-a --artist\n"C_
+                 IN C_C"-a --artist\n"C_
 		 IN IN"The artist option is required for ALL getters.\n"
-                 IN"-b --album\n"
+                 IN C_C"-b --album\n"C_
 		 IN IN"Required for the following getters:\n"
 		 IN IN IN" - albumlist\n"
 		 IN IN IN" - cover\n"
@@ -555,26 +408,31 @@ static void usage(GlyQuery * s)
 		 IN IN IN" - tags\n"
 		 IN IN IN" - relations\n"
 		 IN IN IN" - lyrics (might be used by a few providers)\n"
-                 IN"-t --title\n"
+                 IN C_C"-t --title\n"C_
 		 IN IN"Set the songtitle.\n\n" 
 		 IN IN"Required for:\n"
 	         IN IN"- lyrics\n"
 		 IN IN"Optional for:\n"
 	         IN IN"- tags\n"
 	         IN IN"- relations\n"
-                 IN"-e --maxsize\n"
+                 IN C_C"-e --maxsize\n"C_
 		 IN IN"The maximum size a cover may have.\n"
 	         IN IN"As cover have mostly a 1:1 aspect ratio only one size is given with 'size'.\n"
 		 IN IN"This has no effect if specified with 'photos'.\n"
-                 IN"-i --minsize\n"
+                 IN C_C"-i --minsize\n"C_
 		 IN IN"Same as --maxsize, just for the minimum size.\n"
-                 IN"-n --number\n"
+                 IN C_C"-n --number\n"C_
 		 IN IN"How many items to search for (at least 1)\n"
 		 IN IN"This is mostly not the number of items actually returned then,\n"
 	  	 IN IN"because libglyr is not able to find 300 songtexts of the same song,\n"
 		 IN IN"or glyr filters duplicate items before returning.\n"
-                 IN"-o --prefer           (images only) Only allow certain formats\n"
-                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
+                 IN C_C"-o --prefer\n"C_
+		 IN IN"Awaits a string with a semicolon seperated list of allowed formats.\n"
+		 IN IN"The case of the format is ignored.\n\n"
+		 IN IN"Example:\n"
+		 IN IN"    \"png;jpg;jpeg\" would allow png and jpeg.\n\n"
+		 IN IN"You can also specify \"all\", which disables this check.\n"
+                 IN C_C"-t --lang\n"C_
 		 IN IN"The language used for providers with multilingual content.\n"
 		 IN IN"It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.\n"	
 		 IN IN"List of providers recognizing this option:\n"
@@ -584,31 +442,40 @@ static void usage(GlyQuery * s)
 		 IN IN"  * (this list should get longer in future releases)\n"
 		 IN IN"(Use only these providers if you really want ONLY localized content)\n"
 		 IN IN"By default all search results are in english.\n"
-                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+                 IN C_C"-f --fuzzyness\n"C_
+		 IN IN"Set the maximum amount of inserts, edits and substitutions, a search results\n"
+        	 IN IN"may differ from the artist and/or album and/or title.\n"
+		 IN IN"The difference between two strings is measured as the 'Levenshtein distance',\n"
+		 IN IN"i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.\n"
+		 IN IN"Example:\n"
+		 IN IN"  \"Equilibrium\" <=> \"Aqilibriums\" => Distance=3\n"
+	 	 IN IN"  With a fuzzyness of 3 this would pass the check, with 2 it won't.\n"
+	         IN IN" Higher values mean more search results, but more inaccuracy.\n"
+	         IN IN" Default is 4.\n"
    		 C_B"\nMISC OPTIONS\n"C_
-                 IN"-h --help\n"
+                 IN C_C"-h --help\n"C_
 		 IN IN"A shorter version of this text.\n"
-                 IN"-H --usage\n"
+                 IN C_C"-H --usage\n"C_
 		 IN IN"The text just jumping through your eyes in search for meaning.\n"
-                 IN"-V --version\n"
+                 IN C_C"-V --version\n"C_
 		 IN IN"Print the version string, it's also at the end of this text.\n"
-                 IN"-c --color            Enable colored output (Unix only)\n"
+                 IN C_C"-c --color\n"C_
          	 IN IN"Maximum number of items a provider may deliever.\n"
                  IN IN"Use this to scatter the searchresults, or set it\n"
                  IN IN"to -1 if you don't care (=> default).\n"
-                 IN"-v --verbosity\n"
+                 IN C_C"-v --verbosity\n"C_
 		 IN IN"Set the verbosity level from 0-4, where:\n"
-       		 IN IN"  0) nothing but fatal errors.\n"
-                 IN IN"  1) warnings and important notes.\n"
-                 IN IN"  2) normal, additional information what libglyr does.\n"
-                 IN IN"  3) basic debug output.\n"
-                 IN IN"  4) libcurl debug output.\n"
+       		 IN IN"0) nothing but fatal errors.\n"
+                 IN IN"1) warnings and important notes.\n"
+                 IN IN"2) normal, additional information what libglyr does.\n"
+                 IN IN"3) basic debug output.\n"
+                 IN IN"4) libcurl debug output.\n"
 		 "\n"
-                 IN"-u --update\n"
+                 IN C_C"-u --update\n"C_
 		 IN IN"If files are already present in the path given by --write (or '.' if none given),\n"
 	 	 IN IN"no searching is performed by default. Use this flag to disable this behaviour.\n"
-		 "\n\n\n"
-		 IN"The boolean options -u,-c,-y,-g,-d  have an uppercase version which is inversing it's effect.(the long names are prepended by '--skip')\n"
+		 "\n\n"
+		 "The boolean options -u,-c,-y,-g,-d  have an uppercase version,\nwhich is inversing it's effect. The long names are prepended by '--skip'\n\n"
                 );
     
 
@@ -635,9 +502,13 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
     list_provider_at_id(GET_RELATIONS,13,s);
 
-
+	
+    glyr_message(-1,s,stderr,"\n\n");
     print_version(s);
 }
+
+/*
+*/
 
 /* --------------------------------------------------------- */
 
@@ -702,7 +573,7 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
             size_t elemct = 0;
 
             char * c_arg = NULL;
-            while( (c_arg = get_next_word(optarg,";",&offset,length)) != NULL)
+            while( (c_arg = get_next_word(optarg,DEFAULT_FROM_ARGUMENT_DELIM,&offset,length)) != NULL)
             {
                 const char * element = NULL;
                 if(*c_arg && strcasecmp(c_arg,"stdout") && strcasecmp(c_arg,"stderr") && strcasecmp(c_arg,"null"))
@@ -713,7 +584,11 @@ static char ** parse_commandline_general(int argc, char * const * argv, GlyQuery
                     }
                     else
                     {
-                        element = dirname(c_arg);
+			size_t word_len = strlen(c_arg);
+			if(c_arg[word_len-1] == '/')
+			    c_arg[word_len-1] = '\0';
+	
+			element = c_arg;
                     }
                 }
                 else if(*c_arg)
@@ -977,13 +852,13 @@ static char * path_review(GlyQuery *s, const char * save_dir, int i)
 
 static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
 {
-    return path_album_artist(s,save_dir,i,"track");
+    return path_album_artist(s,save_dir,i,"tracktitle");
 }
 
 static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s/%s_album_%d.txt",save_dir,good_artist,i);
+    char * good_path   = strdup_printf("%s/%s_albumtitle_%d.txt",save_dir,good_artist,i);
     if(good_artist)
         free(good_artist);
 
@@ -993,7 +868,7 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
+    char * good_path   = strdup_printf("%s/%s_tag_%d.txt",save_dir,s->artist,i);
 
     if(good_artist)
         free(good_artist);
@@ -1004,7 +879,7 @@ static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 static char * path_relations(GlyQuery *s, const char * save_dir, int i)
 {
     char * good_artist = correct_path(s->artist);
-    char * good_path   = strdup_printf("%s/%s_tags_%d.txt",save_dir,s->artist,i);
+    char * good_path   = strdup_printf("%s/%s_url_%d.txt",save_dir,s->artist,i);
 
     if(good_artist)
         free(good_artist);
@@ -1242,15 +1117,24 @@ int main(int argc, char * argv[])
                                 char * path = get_path_by_type(&my_query,write_arg[j],i);
                                 if(path != NULL)
                                 {
+				    bool write_a_file = true;
 				    if(write_arg[j] && strcmp(write_arg[j],"stdout") && strcmp(write_arg[j],"stderr"))
-                		      glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name,path);
+				    {
+                		        glyr_message(1,&my_query,stdout,C_"- Writing %s to %s\n", table_copy[my_query.type].name,path);
+				    }
 				    else
-				      glyr_message(2,&my_query,stderr,"------------\n");
+				    {
+				        write_a_file = false;
+				        glyr_message(2,&my_query,stderr,"------------\n");
+				    }
 
-                                    if(Gly_write(&my_query,my_list->list[i],path) == -1)
-                                    {
-                                        result = EXIT_FAILURE;
-                                    }
+				    if(write_a_file)
+				    {
+					    if(Gly_write(&my_query,my_list->list[i],path) == -1)
+					    {
+						result = EXIT_FAILURE;
+					    }
+				    }
                                     free(path);
                                     path = NULL;
                                 }
