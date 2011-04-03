@@ -92,7 +92,7 @@ static void list_provider_at_id(int id, int min_align,GlyQuery * s)
         free(cp);
     }
 }
-
+/*
 static void usage(GlyQuery * s)
 {
     glyr_message(-1,s,stdout,C_B"USAGE:\n"C_ _S"glyrc "C_Y"GETTER"C_" [OPTIONS...]\n\n");
@@ -140,7 +140,6 @@ static void usage(GlyQuery * s)
     glyr_message(-1,s,stdout,C_B"\nALBUMLIST\n"C_);
     glyr_message(-1,s,stdout,_S"Get a list of albums by artist given by -a\n");
     list_provider_at_id(GET_ALBUMLIST,12,s);
-    glyr_message(-1,s,stdout,C_B"\nGENERAL OPTIONS\n"C_);
     glyr_message(-1,s,stdout,OPT_A"-f --from <prov>\n"C_);
     glyr_message(-1,s,stdout,_S"Set the sources (providers) you want to query.\n");
     glyr_message(-1,s,stdout,_S"The string you have to provide cotains the names of the providers or a group\n");
@@ -256,7 +255,7 @@ static void usage(GlyQuery * s)
 #undef S
 #undef OPT_C
 #undef GET_C
-
+*/
 //* ------------------------------------------------------- */
 
 static void sig_handler(int signal)
@@ -271,7 +270,7 @@ static void sig_handler(int signal)
         glyr_message(-1,NULL,stderr,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n"); 
         glyr_message(-1,NULL,stderr,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n"); 
         glyr_message(-1,NULL,stderr,C_"       and throw hard words like 'backtrace', 'bug report' or even the 'command I issued' at them.\n");
-        glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling our hair.\n");
+        glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
 
         glyr_message(-1,NULL,stderr,C_"\n(Thanks, and Sorry for any bad feelings.)\n");
         break;
@@ -457,15 +456,14 @@ static bool check_if_dir(const char * path)
 
 void help_short(GlyQuery * s)
 {
-    glyr_message(-1,s,stderr,"Usage: "
-                 "glyrc [GETTER] (options)\n\n[GETTER] must be one of:\n");
+    glyr_message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
 
     list_provider_at_id(GET_UNSURE,10,s);
 
     glyr_message(-1,s,stderr,"\nIf you're viewing this helptext the first time,\n"
                  "you probably want to view --usage, which has more details & examples\n");
 
-#define IN "\t"
+#define IN "    "
     glyr_message(-1,s,stderr,"\n\nOPTIONS:\n"
                  IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
                  IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
@@ -490,17 +488,132 @@ void help_short(GlyQuery * s)
                  IN"-a --artist           Artist name (Used by all plugins)\n"
                  IN"-b --album            Album name (Used by cover,review,lyrics)\n"
                  IN"-t --title            Songname (used mainly by lyrics)\n"
-                 IN"-t --maxsize          (cover only) The maximum size a cover may have.\n"
-                 IN"-t --minsize          (cover only) The minimum size a cover may have.\n"
+                 IN"-e --maxsize          (cover only) The maximum size a cover may have.\n"
+                 IN"-i --minsize          (cover only) The minimum size a cover may have.\n"
                  IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
                  IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
                  IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
-                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"C_,
                  DEFAULT_FORMATS
                 );
 
-/*
+    glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+    exit(EXIT_FAILURE);
+}
+
+
+static void usage(GlyQuery * s)
+{
+    glyr_message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n"
+   		 C_B"\nGENERAL OPTIONS\n"C_
+                 IN C_C"-f --from  <providerstring>\n"C_
+		 IN IN"Use this to define what providers you want to use.\n"
+		 IN IN"Every provider has a name and a key which is merely a shortcut for the name.\n"
+		 IN IN"Specify all providers in a semicolon seperated list.\n"
+		 IN IN"See the list down for a complete list of all providers.\n"
+		 IN IN"Example:\n"
+		 IN IN"  \"amazon;google\"\n" 
+		 IN IN"  \"a;g\" - same, just with keys\n\n"
+		 IN IN"You can also prepend each word with a '+' or a '-' ('+' is assumend without),\n"
+		 IN IN"which will add or remove this provider from the list respectively.\n"
+		 IN IN"Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.\n\n"
+		 IN IN"Example:\n"
+		 IN IN"  \"+fast;-amazon\" which will enable last.fm and lyricswiki.\n\n"
+                 IN C_C"-w --write <dir>\n"C_
+                 IN C_C"-x --plugmax\n"C_
+         	 IN IN"Maximum number of items a provider may deliever.\n"
+         	 IN IN"Use this to scatter the searchresults, or set it\n"
+         	 IN IN"to -1 if you don't care (=> default).\n\n"
+                 IN C_C"-d --download\n"C_
+         	 IN IN"For image getters only.\n"
+         	 IN IN"If set to true images are also coviniently downloaded and returned.\n"
+                 IN IN"otherwise, just the URL is returned for your own use. (specify -D)\n\n"
+                 IN IN"Default to to 'true', 'false' would be a bit more searchengine like.\n"
+                 IN C_C"-g --groups\n"C_
+         	 IN IN"If set false (by -G), this will disable the grouping of providers.\n"
+         	 IN IN"By default providers are grouped in categories like 'safe','unsafe','fast' etc., which\n"
+                 IN IN"are queried in parallel, so the 'best' providers are queried first.\n"
+                 IN IN"Disabling this behaviour will result in increasing speed, but as a result the searchresults\n"
+		 IN IN"won't be sorted by quality, as it is normally the case.\n\n"
+         	 IN IN"Use with care.\n\n"
+		 IN C_C"-y --twincheck\n"C_
+	         IN IN"Will check for duplicate items if given.\n"
+   		 C_B"\nLIBCURL OPTIONS\n"C_
+                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
+                 IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
+                 IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
+   		 C_B"\nPLUGIN SPECIFIC OPTIONS\n"C_
+                 IN C_Y"-a --artist\n"C_
+		 IN IN"The artist option is required for ALL getters.\n"
+                 IN"-b --album\n"
+		 IN IN"Required for the following getters:\n"
+		 IN IN IN" - albumlist\n"
+		 IN IN IN" - cover\n"
+		 IN IN IN" - review\n"
+		 IN IN IN" - tracklist\n"
+		 IN IN"Optional for those:\n"
+		 IN IN IN" - tags\n"
+		 IN IN IN" - relations\n"
+		 IN IN IN" - lyrics (might be used by a few providers)\n"
+                 IN"-t --title\n"
+		 IN IN"Set the songtitle.\n\n" 
+		 IN IN"Required for:\n"
+	         IN IN"- lyrics\n"
+		 IN IN"Optional for:\n"
+	         IN IN"- tags\n"
+	         IN IN"- relations\n"
+                 IN"-e --maxsize\n"
+		 IN IN"The maximum size a cover may have.\n"
+	         IN IN"As cover have mostly a 1:1 aspect ratio only one size is given with 'size'.\n"
+		 IN IN"This has no effect if specified with 'photos'.\n"
+                 IN"-i --minsize\n"
+		 IN IN"Same as --maxsize, just for the minimum size.\n"
+                 IN"-n --number\n"
+		 IN IN"How many items to search for (at least 1)\n"
+		 IN IN"This is mostly not the number of items actually returned then,\n"
+	  	 IN IN"because libglyr is not able to find 300 songtexts of the same song,\n"
+		 IN IN"or glyr filters duplicate items before returning.\n"
+                 IN"-o --prefer           (images only) Only allow certain formats\n"
+                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
+		 IN IN"The language used for providers with multilingual content.\n"
+		 IN IN"It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.\n"	
+		 IN IN"List of providers recognizing this option:\n"
+		 IN IN"  * cover/amazon (which amazon server to query)\n"
+		 IN IN"  * cover/google (which google server to query)\n"
+		 IN IN"  * ainfo/lastfm (the language the biography shall be in)\n"
+		 IN IN"  * (this list should get longer in future releases)\n"
+		 IN IN"(Use only these providers if you really want ONLY localized content)\n"
+		 IN IN"By default all search results are in english.\n"
+                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+   		 C_B"\nMISC OPTIONS\n"C_
+                 IN"-h --help\n"
+		 IN IN"A shorter version of this text.\n"
+                 IN"-H --usage\n"
+		 IN IN"The text just jumping through your eyes in search for meaning.\n"
+                 IN"-V --version\n"
+		 IN IN"Print the version string, it's also at the end of this text.\n"
+                 IN"-c --color            Enable colored output (Unix only)\n"
+         	 IN IN"Maximum number of items a provider may deliever.\n"
+                 IN IN"Use this to scatter the searchresults, or set it\n"
+                 IN IN"to -1 if you don't care (=> default).\n"
+                 IN"-v --verbosity\n"
+		 IN IN"Set the verbosity level from 0-4, where:\n"
+       		 IN IN"  0) nothing but fatal errors.\n"
+                 IN IN"  1) warnings and important notes.\n"
+                 IN IN"  2) normal, additional information what libglyr does.\n"
+                 IN IN"  3) basic debug output.\n"
+                 IN IN"  4) libcurl debug output.\n"
+		 "\n"
+                 IN"-u --update\n"
+		 IN IN"If files are already present in the path given by --write (or '.' if none given),\n"
+	 	 IN IN"no searching is performed by default. Use this flag to disable this behaviour.\n"
+		 "\n\n\n"
+		 IN"The boolean options -u,-c,-y,-g,-d  have an uppercase version which is inversing it's effect.(the long names are prepended by '--skip')\n"
+                );
+    
+
+
+    glyr_message(-1,s,stderr, "A list of providers you can specify with --from folows:\n");
     glyr_message(-1,s,stderr,"\n"IN C_"cover:\n");
     list_provider_at_id(GET_COVER,13,s);
     glyr_message(-1,s,stderr,"\n"IN C_"lyrics:\n");
@@ -521,10 +634,9 @@ void help_short(GlyQuery * s)
     list_provider_at_id(GET_TAGS,13,s);
     glyr_message(-1,s,stderr,"\n"IN C_"relations\n");
     list_provider_at_id(GET_RELATIONS,13,s);
-*/
-    glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
 
-    exit(EXIT_FAILURE);
+
+    print_version(s);
 }
 
 /* --------------------------------------------------------- */

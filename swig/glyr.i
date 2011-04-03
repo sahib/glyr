@@ -4,6 +4,12 @@
 #include "../lib/glyr.h"
 %}
 
+// Make sure libcurl woke up
+%init %{
+  Gly_init();
+  atexit(Gly_cleanup);
+%}
+
 //------------------------------------//
 //------------ DECLARATION -----------//
 //------------------------------------//
@@ -24,7 +30,6 @@ enum GLYR_GET_TYPE
 };
 
 // This is not a duplicate of GLYR_GET_TYPE
-// (more to follow)
 enum GLYR_DATA_TYPE
 {
     TYPE_NOIDEA,
@@ -258,7 +263,7 @@ typedef struct GlyPlugin
 //------------------------------------//
 
 %rename(get) Gly_get;
-GlyCacheList * Gly_get(GlyQuery * settings, int * error);
+GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
 
 %rename(initQuery) Gly_init_query;
 void Gly_init_query(GlyQuery * glyrs);

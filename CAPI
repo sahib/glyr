@@ -254,9 +254,8 @@ int GlyOpt_lang(GlyQuery * s, char * langcode)
 int GlyOpt_number(GlyQuery * s, unsigned int num)
 	How many items to search for (1 to INT_MAX)
 	This is not the number of items actually returned then,
-	because:
-	  * libglyr is not able to find 300 songtexts of the same song.
-	  * A few getters 
+	because libglyr is not able to find 300 songtexts of the same song,
+	or libglyr filters duplicate items before returning.
 
 h4. __int GlyOpt_verbosity(GlyQuery * s, unsigned int level)__
         Set the verbosity.
@@ -299,7 +298,7 @@ int GlyOpt_download(GlyQuery * s, bool download)
          If set to true images are also coviniently downloaded and returned.
          Otherwise, just the URL is returned for your own use.
 
-         Default to to 'true', 'false' would be a bit more searchengine like.
+         Default to 'true', 'false' would be a bit more searchengine like.
 
 int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
          If set false, this will disable the grouping of providers.
