@@ -20,9 +20,6 @@
 #ifndef GLYR_H
 #define GLYR_H
 
-// va_list for Gly_setopt()
-#include <stdarg.h>
-
 // all structs used by glyr are here
 #include "types.h"
 

@@ -24,6 +24,7 @@
 
 #define nextTag(X) while(*X && *X++ != '>')
 size_t levenshtein_strcmp(const char * s, const char * t);
+size_t levenshtein_strcasecmp(const char * s, const char * t);
 char * escape_slashes(const char * in);
 char * ascii_strdown_modify(char * string);
 char * ascii_strdown (const char * string);

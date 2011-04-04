@@ -1,19 +1,17 @@
 cmake_minimum_required(VERSION 2.6)
 PROJECT( glyr C )
 
-if(CMAKE_COMPILER_IS_GCC)
-    SET(CSTANDARD "-std=gnu99")
-    SET(CDEBUG "-ggdb3")
-    SET(CWARN "-Wall -Wstrict-prototypes")
-    SET(COPT "-Os -march=native -fomit-frame-pointer")
-endif()
+SET(CSTANDARD "-std=gnu99")
+SET(CDEBUG "-ggdb3")
+SET(CWARN "-Wall -Wstrict-prototypes")
+SET(COPT "-Os -march=native -fomit-frame-pointer")
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
 else()
-	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
-#	SET(CFLAGS "${COPT} ${CWARN} ${CSTANDARD}")
-#        SET(CMAKE_EXE_LINKER_FLAGS "-s") 
+	#SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
+	SET(CFLAGS "${COPT} ${CWARN} ${CSTANDARD}")
+        SET(CMAKE_EXE_LINKER_FLAGS "-s") 
 endif()
 
 SET(CMAKE_C_FLAGS ${CFLAGS})
@@ -100,6 +98,7 @@ SET(LIB_SOURCE_LOCATIONS
    	"${DIR_LYRICS}/darklyrics.c"
    	"${DIR_LYRICS}/metrolyrics.c"
    	"${DIR_LYRICS}/lyricswiki.c"
+	"${DIR_LYRICS}/lyricstime.c"
    	"${DIR_PHOTOS}/flickr.c"
    	"${DIR_PHOTOS}/lastfm.c"
    	"${DIR_PHOTOS}/google.c"

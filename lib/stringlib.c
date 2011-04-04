@@ -114,6 +114,22 @@ size_t levenshtein_strcmp(const char * s, const char * t)
 
 /* ------------------------------------------------------------- */
 
+size_t levenshtein_strcasecmp(const char * s, const char * t)
+{
+	size_t r = 0;
+	if(s && t)
+	{
+		char * d_s = ascii_strdown(s);
+		char * d_t = ascii_strdown(t);
+		r = levenshtein_strcmp(d_s,d_t);
+		free(d_s);
+		free(d_t);
+	}	
+	return r;
+}
+
+/* ------------------------------------------------------------- */
+
 char * ascii_strdown(const char * string)
 {
     return (char*)((string) ? ascii_strdown_modify(strdup(string)) : NULL);

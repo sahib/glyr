@@ -11,6 +11,15 @@ configure_file (
 
 ADD_DEFINITIONS( -ggdb3 -Wall )
 ADD_LIBRARY(glyr SHARED	${LIB_SOURCE_LOCATIONS})
-TARGET_LINK_LIBRARIES(glyr curl) 
-#TARGET_LINK_LIBRARIES(glyr curl ws2_32) 
-#INSTALL(TARGETS glyr LIBRARY DESTINATION lib)
+
+if(WIN32)
+  TARGET_LINK_LIBRARIES(glyr curl ws2_32) 
+else()
+  TARGET_LINK_LIBRARIES(glyr curl) 
+endif()
+
+# Install header
+INSTALL(FILES glyr.h DESTINATION include)
+
+# Install library 
+INSTALL(TARGETS glyr LIBRARY DESTINATION lib)
