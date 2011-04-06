@@ -596,15 +596,16 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
             DL_free(dldata);
             dldata = NULL;
         }
+	else
+	{
+		// Set the source URL
+	    if(dldata->dsrc != NULL)
+	        free(dldata->dsrc);
 
+	     dldata->dsrc = strdup(url);
+	}
         // Handle without any use - clean up
         curl_easy_cleanup(curl);
-
-        // Set the source URL
-        if(dldata->dsrc != NULL)
-            free(dldata->dsrc);
-
-        dldata->dsrc = strdup(url);
 
         return dldata;
     }

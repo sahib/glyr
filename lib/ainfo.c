@@ -28,9 +28,13 @@
 
 #include "ainfo/lastfm.h"
 #include "ainfo/allmusic_com.h"
-#include "ainfo/wikipedia.h"
+#include "ainfo/wikipedia.h" // currently disabled
+#include "ainfo/lyricsreg.h"
 
 #define WKED "<ol class=\"references\">"
+//#define LGED "<div class=\"sidebar\">"
+#define LGED NULL
+
 
 // Add your's here
 GlyPlugin ainfo_providers[] =
@@ -39,6 +43,7 @@ GlyPlugin ainfo_providers[] =
     {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       NULL, true }, GRP_SAFE | GRP_FAST},
 //  {"wikipedia",   "w", "wikipedia",         false,  {ainfo_wikipedia_parse,  ainfo_wikipedia_url,    WKED, false}, GRP_SAFE | GRP_FAST}, // not working yet.
     {"allmusic",    "m", C_"all"C_C"music",   false,  {ainfo_allmusic_parse,   ainfo_allmusic_url,     NULL, false}, GRP_USFE | GRP_SLOW},
+    {"lyricsreg",   "r", C_"lyricsreg",       false,  {ainfo_lyricsreg_parse,  ainfo_lyricsreg_url,    LGED, false}, GRP_USFE | GRP_FAST},
     { NULL,         NULL,NULL,                false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 

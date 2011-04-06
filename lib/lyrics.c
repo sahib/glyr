@@ -37,6 +37,7 @@
 #include "lyrics/lyrdb.h"
 #include "lyrics/metrolyrics.h"
 #include "lyrics/lyricstime.h"
+#include "lyrics/lyricsreg.h"
 
 #define LATE "<div id='d_navigation'"
 #define DIRE "<!-- google_ad_section_start(weight=ignore) -->"
@@ -52,6 +53,7 @@ GlyPlugin lyric_providers[] =
     {"lyrix.at",    "a", "lyrix.at",    false, {lyrics_lyrixat_parse,      lyrics_lyrixat_url,      LATE, false}, GRP_SAFE | GRP_SLOW},
     {"magistrix",   "x", "magistrix",   false, {lyrics_magistrix_parse,    lyrics_magistrix_url,    NULL, false}, GRP_USFE | GRP_FAST},
     {"lyricstime",  "t", "lyricstime",  false, {lyrics_lyricstime_parse,   lyrics_lyricstime_url,   NULL, false}, GRP_SAFE | GRP_FAST},
+    {"lyricsreg",   "r", "lyricsreg",   false, {lyrics_lyricsreg_parse,    lyrics_lyricsreg_url,    NULL, false}, GRP_USFE | GRP_FAST},
     {"directlyrics","i", "directlyrics",false, {lyrics_directlyrics_parse, lyrics_directlyrics_url, DIRE, true }, GRP_SAFE | GRP_FAST},
     {"lyricsvip",   "v", "lyricsvip",   false, {lyrics_lyricsvip_parse,    lyrics_lyricsvip_url,    VIPE, true }, GRP_USFE | GRP_FAST},
     {"songlyrics",  "s", "songlyrics",  false, {lyrics_songlyrics_parse,   lyrics_songlyrics_url,   NULL, true }, GRP_SPCL | GRP_SLOW},

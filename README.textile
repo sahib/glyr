@@ -45,6 +45,24 @@ See the "API Reference":https://github.com/sahib/glyr/wiki/API
 <h3>glyrc:</h3>
 Please refer to @glyrc --usage@ which is more up-to-date.
 
+<h2>FAQ</h2>
+* <h3>Glyr.. such a silly name! Why?</h3>
+The name probably (I actually don't know for sure, as my memory seems to have holes :-)) derives 
+from the german word 'klirrn' which describes the sound of breaking dishes on the ground pretty well.
+As free software starts often with a 'g', and I heard the song "Tanzwut - Im Rausch", which has the word 'klirrn'
+in it, while thinking of a name I chose it. The 'k' was replaced by a 'g' (ofcourse) and the 'n' was removed in favour
+of ease of pronouncing. 
+
+It is pronounced exactly like breaking dishes btw. (don't do weird things in your kitchen now :-))
+
+*<h3>Isn't there musicbrainz already?</h3>
+1) The kind of metadata downloaded by glyr differs heavily from musicbrainz.
+   i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
+
+2) Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
+   Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
+   You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
+
 <h2>AUTHOR</h2>
 See the AUTHORS file that comes in glyr's distribution.
 See also COPYING to know about your rights.

@@ -1187,7 +1187,7 @@ int main(int argc, char * argv[])
     {
         GlyQuery tmp;
         tmp.color_output = false;
-        help_short(&tmp);
+        usage(&tmp);
     }
 
     // byebye

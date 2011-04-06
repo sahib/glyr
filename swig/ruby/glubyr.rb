@@ -219,19 +219,21 @@ class Glubyr
         def call_get
                 @cache_list = Glyr::get(@query,nil)
 
-                convert = []
+                convert = nil
+                unless @cache_list == nil 
+                        convert = []
 
-                # convert to a normal Ruby Array
-                # cachelist is of no use in such a powerful language
-                @cache_list.size.times do |iter|
-                       convert << Glyr::list_at(@cache_list,iter) 
+                        # convert to a normal Ruby Array
+                        # cachelist is of no use in such a powerful language
+                        @cache_list.size.times do |iter|
+                               convert << Glyr::list_at(@cache_list,iter) 
+                        end
                 end
-
                 return convert
         end
 end
 
+=begin
 m = Glubyr.new
-puts m.call_direct_use = true
-puts m.call_direct_provider = "a"
-puts m.get_cover(
+puts m.getCover("Equilibrium","Sagas")
+=end
