@@ -321,7 +321,7 @@ GlyPlugin * Gly_get_provider_by_id(int ID);
 %rename(download) Gly_download;
 GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
-%rename(writeFile) Gly_write_binary_file;
+%rename(writeFile) Gly_write;
 int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
 
 %rename(groupname_by_id) Gly_groupname_by_id;

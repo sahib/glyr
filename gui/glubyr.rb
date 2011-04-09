@@ -1,7 +1,7 @@
 require 'rubygems'
 
 begin 
-	require '../glyr'
+	require './glyr'
 rescue LoadError
 	print "FATAL: glyr.so could not be loaded.. :-("
 end
@@ -72,33 +72,62 @@ class Glubyr
 
         def getReview( album )
                 @query.album = album
-                @query.type   = Glyr::GET_REVIEW
-                call_ge
+                @query.type  = Glyr::GET_REVIEW
+                call_get
         end
+
+	def getTracklist( artist, album )
+		@query.artist = artist
+		@query.album  = album
+		@query.type   = Glyr::GET_TRACKLIST
+                call_get
+	end
+
+	def getAlbumlist( artist )
+		@query.artist = artist
+		@query.type   = Glyr::GET_ALBUMLIST
+                call_get
+	end
+
+	def getTags( artist, album, title )
+		@query.artist = artist unless artist == nil
+		@query.album  = album  unless album  == nil
+		@query.title  = title  unless title  == nil
+		@query.type = Glyr::GET_TAGS;
+                call_get
+	end
+
+	def getRelations( artist, album, title )
+		@query.artist = artist unless artist == nil
+		@query.album  = album  unless album  == nil
+		@query.title  = title  unless title  == nil
+		@query.type = Glyr::GET_RELATIONS
+                call_get
+	end
+
+	def getByType( type, artist,album,title )
+		@query.artist = artist unless artist == nil
+		@query.album  = album  unless album  == nil
+		@query.title  = title  unless title  == nil
+		@query.type   = type
+                call_get
+	end
 
         def version
                 return Glyr::version()
         end
 
-        def quiet!
-                @query.verbosity = 0
+        def verbosity=( level ) 
+                @query.verbosity = level
         end
-
-        def verbose! 
-                @query.verbosity = 2
-        end
-
-        def debug! 
-                @query.verbosity = 3
-        end       
 
 	def type
 		return @query.type
 	end
 
         # return bytes written
-        def writeBinaryCache( path, cache ) 
-                return Glyr::write(path, cache, ".", "data", @query)
+        def writeFile( path, cache ) 
+                return Glyr::writeFile(@query,cache,path)
         end
 
         def number=( num )
