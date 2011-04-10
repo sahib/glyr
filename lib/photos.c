@@ -56,10 +56,12 @@ static GlyCacheList * photo_callback(cb_object * capo)
     if(dl != NULL)
     {
         int usersig = GLYRE_OK;
-
         dl->dsrc = strdup(capo->url);
         if(dl->type == TYPE_NOIDEA)
             dl->type = TYPE_PHOTOS;
+
+	if(capo->provider_name)
+	    dl->prov = strdup(capo->provider_name);
 
         dl->is_image = true;
 
@@ -104,7 +106,9 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(result->list[i] && result->list[i]->data && result->list[i]->error == ALL_OK)
                     {
-                        plugin_init(&urlplug_list[ctr], result->list[i]->data, photo_callback, settings, NULL, NULL, true);
+			GlyPlugin pass_provider;
+			pass_provider.name = result->list[i]->prov;
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, photo_callback, settings, NULL, NULL, result->list[i]->prov, true);
                         ctr++;
                     }
 

@@ -136,9 +136,11 @@ typedef struct GlyMemCache
     char  *data;    // data buffer
     size_t size;    // Size of data
     char  *dsrc;    // Source of data
+    char  *prov;    // Provider that delievered this 
     int   type;     // type of metadata
     int   error;    // error code - internal use only
     int   duration; // Duration of a song. Only for tracklist getter.
+        
     bool  is_image; // Wether it is an image or not
 } GlyMemCache;
 

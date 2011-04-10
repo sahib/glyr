@@ -243,9 +243,8 @@ int GlyOpt_lang(GlyQuery * s, char * langcode)
 int GlyOpt_number(GlyQuery * s, unsigned int num)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    s->number = num;
+    s->number = num == 0 ? UINT_MAX : num;
     return GLYRE_OK;
-
 }
 
 /*-----------------------------------------------*/
@@ -506,7 +505,7 @@ static GlyCacheList * call_parser_direct(GlyQuery * s)
                     if(c != NULL)
                     {
                         cb_object capo;
-                        plugin_init(&capo,NULL,NULL,s,NULL,NULL,0);
+                        plugin_init(&capo,NULL,NULL,s,NULL,NULL,NULL,false);
                         capo.cache = c;
 
                         re = cPlug[iter].plug.parser_callback(&capo);

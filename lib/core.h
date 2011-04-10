@@ -56,6 +56,12 @@ typedef struct cb_object
 
     const char * endmark;
 
+    // This is only used for cover/photo
+    // to fill the 'prov' field of memcache
+    // This is a bit hackish, but well...
+    // no valid reason to change it just because this ;)
+    const char * provider_name;
+
 } cb_object;
 
 // Internal list of errors
@@ -75,7 +81,7 @@ bool continue_search(int iter, GlyQuery * s);
 
 // This needs to be called for each getter in the get_$getter() call. It sets up everything invoke() needs
 GlyCacheList * register_and_execute(GlyQuery * settings, GlyCacheList * (* finalizer) (GlyCacheList *, GlyQuery *));
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, bool batch);
+void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, const char * prov_name, bool batch);
 
 // download related methods
 GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s);

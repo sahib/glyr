@@ -83,6 +83,9 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
         dl->dsrc = strdup(result->list[i]->dsrc);
         dl->type = TYPE_LYRICS;
 
+	if(result->list[i]->prov)
+	  dl->prov = strdup(result->list[i]->prov);
+
         // call user defined callback
         if(settings->callback.download)
         {

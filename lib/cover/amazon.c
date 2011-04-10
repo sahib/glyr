@@ -111,8 +111,6 @@ GlyCacheList * cover_amazon_parse(cb_object *capo)
 #undef MAX
 #undef MIN
 
-    if(capo->cache == NULL) puts("Wootz?");
-
     int urlc = 0;
     GlyCacheList * r_list = NULL;
 

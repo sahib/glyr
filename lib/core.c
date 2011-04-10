@@ -132,12 +132,21 @@ GlyMemCache * DL_copy(GlyMemCache * src)
             if(src->data)
             {
                 dest->data = calloc(src->size+1,sizeof(char));
+		if(!dest->data)
+		{
+			glyr_message(-1,NULL,stderr,"fatal: Allocation of cachecopy failed in DL_copy()\n");
+			return NULL;
+		}
                 memcpy(dest->data,src->data,src->size);
             }
             if(src->dsrc)
             {
                 dest->dsrc = strdup(src->dsrc);
             }
+	    if(src->prov)
+	    {
+		dest->prov = strdup(src->prov);
+	    }
             dest->size = src->size;
             dest->duration = src->duration;
             dest->error = src->error;
@@ -184,13 +193,19 @@ void DL_free(GlyMemCache *cache)
         if(cache->size && cache->data)
         {
             free(cache->data);
-            cache->data   = NULL;
+            cache->data = NULL;
         }
         if(cache->dsrc)
         {
             free(cache->dsrc);
-            cache->dsrc   = NULL;
+            cache->dsrc = NULL;
         }
+	
+	if(cache->prov)
+	{
+	    free(cache->prov);
+	    cache->prov = NULL;
+	}
 
         cache->size = 0;
         cache->type = TYPE_NOIDEA;
@@ -216,6 +231,7 @@ GlyMemCache* DL_init(void)
         cache->type     = TYPE_NOIDEA;
         cache->duration = 0;
         cache->is_image = false;
+	cache->prov     = NULL;
     }
     else
     {
@@ -783,6 +799,13 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                                 ALIGN(align_msg);
                                 glyr_message(2,s,stderr,C_G"found!"C_" ["C_R"%d item%c"C_"%s]\n",cl->size,cl->size == 1 ? ' ' : 's',cl->size>9 ? "" : " ");
                                 s->itemctr += cl->size;
+
+				/* Copy also the exact provider string 
+				 * This makes displaying the 'author' easier
+				 */
+				size_t cl_list_iter;
+				for(cl_list_iter = 0; cl_list_iter < cl->size; cl_list_iter++)
+				    cl->list[cl_list_iter]->prov = strdup(capo->plug->name); 
                             }
                             else
                             {
@@ -799,7 +822,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 
                             // Are we finally done?
                             if((capo->batch && cl->usersig == GLYRE_STOP_BY_CB) || n_sources >= CNT ||
-                                    (!capo->batch ? s->number <= s->itemctr : s->number <= (int)result_lst->size))
+                               (!capo->batch ? s->number <= s->itemctr : s->number <= (int)result_lst->size))
                             {
                                 do_exit = true;
                             }
@@ -915,7 +938,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 
 /*--------------------------------------------------------*/
 
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, bool batch)
+void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, const char * prov_name, bool batch)
 {
     ref->url = url ? strdup(url) : NULL;
     ref->parser_callback = callback;
@@ -924,6 +947,7 @@ void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_o
     ref->batch = batch;
     ref->endmark = endmark;
     ref->s = s;
+    ref->provider_name = prov_name;
     ref->handle = NULL;
 }
 
@@ -967,7 +991,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
                 break;
             }
 
-            plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter], pList[iter].plug.endmarker, false);
+            plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter], pList[iter].plug.endmarker, NULL, false);
 
             // If the plugin uses dynamic memory it should set plug.free_url to TRUE
             // So it is free'd here. plugin_init strdups the URL and invoke handles all URLs equally.
@@ -1024,6 +1048,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
 
                 if(dlData != NULL)
                 {
+
                     // Call the finalize call, so the items get validated and whatever
                     GlyCacheList * subList = finalizer(dlData,query);
 		    what_signal_we_got = GLYRE_OK;

@@ -113,6 +113,10 @@ class Glubyr
                 call_get
 	end
 
+	def download_url( url )
+		return Glyr::download(URL,@query)
+	end	
+
         def version
                 return Glyr::version()
         end
@@ -240,6 +244,7 @@ class Glubyr
 	def call_direct_url=(url_string)
 		return Glyr::GlyOpt_call_direct_url(url_string)
 	end
+
 	
         # ------ 
         private

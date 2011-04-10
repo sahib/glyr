@@ -96,6 +96,9 @@ static GlyCacheList * cover_callback(cb_object * capo)
         if(dl->type == TYPE_NOIDEA)
             dl->type = TYPE_COVER;
 
+	if(capo->provider_name)
+	    dl->prov = strdup(capo->provider_name);
+
         dl->is_image = true;
 
         // call user defined callback if any
@@ -152,7 +155,7 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
                 {
                     if(!result->list[i]->error)
                     {
-                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, true);
+                        plugin_init(&urlplug_list[ctr], result->list[i]->data, cover_callback, settings, NULL, NULL, result->list[i]->prov, true);
                         ctr++;
                     }
                 }

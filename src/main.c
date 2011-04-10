@@ -944,6 +944,7 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
     // (error) - Don't use this. Only internal use
     glyr_message(1,s,stderr,"------- ITEM #%d --------\n",num);
     glyr_message(1,s,stderr,"FROM: <%s>\n",cacheditem->dsrc);
+    glyr_message(1,s,stderr,"PROV: %s\n",cacheditem->prov);
     glyr_message(1,s,stderr,"SIZE: %d Bytes\n",(int)cacheditem->size);
     glyr_message(1,s,stderr,"TYPE: ");
 
