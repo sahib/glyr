@@ -5,8 +5,7 @@ require './glubyr.rb'
 # This works for the moment only for Linux 64bit out of the box,
 # as glyr.so is compiled like this, you'd have to recompile it.
 
-
-# Simple imageviewer calss that's shown when clicking on a image
+# Simple imageviewer that's shown when clicking on a image
 class ImageViewer < Gtk::Window
      @@imageViewer_active = false
      def initialize(pixbuf)
@@ -39,14 +38,20 @@ class ItemView < Gtk::EventBox
 
 	def initialize(path, data, artist, album, title)
 		super()
+
+		# Box containing all other widgets
 		hbox = Gtk::HBox.new(false,5)
 		vbox = Gtk::VBox.new(false,2)
-		@save_button  = Gtk::Button.new("Save").set_size_request(50,30)
-		@source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc}' ><small>(Source:#{data.prov})</small></a>")
-		self.add(hbox)
-		
-
 		hbox.pack_start(vbox,true,true,0)
+		self.add(hbox)
+	
+		# Button to save an item
+		@save_button  = Gtk::Button.new("Save").set_size_request(50,30)
+
+		# Where the item came from
+		@source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc}' ><small>(Source:#{data.prov})</small></a>")
+	
+		# Delegate task to subroutines	
 		if data.is_image
 		    init_as_image(path, data, artist, album, title, vbox)
 		elsif data.type == Glyr::TYPE_SIMILIAR
@@ -59,6 +64,7 @@ class ItemView < Gtk::EventBox
 		    init_as_text(path, data, artist, album, title, vbox) 
 		end
 	
+		# Seperate and show
 		vbox.pack_start(Gtk::HSeparator.new,false,false,2)
 		hbox.show_all
 		return self
@@ -72,9 +78,7 @@ class ItemView < Gtk::EventBox
 		    image = Gtk::Image.new(pixbuf.scale(150,150)) unless pixbuf == nil
 		    click_box = Gtk::EventBox.new
 		    click_box.add(image)
-		    click_box.signal_connect("button_press_event") do
-			ImageViewer.new(pixbuf)
-		    end
+		    click_box.signal_connect("button_press_event") { ImageViewer.new(pixbuf) }
 		rescue 
 		    puts "Cannot load image: '#{path}'"
 		end
@@ -82,7 +86,6 @@ class ItemView < Gtk::EventBox
 		internLayout.modify_bg(Gtk::STATE_NORMAL,Gdk::Color.parse("white"))
 		internLayout.put(click_box,10,10) unless click_box == nil
 
-		puts data.type
 		if data.type == Glyr::TYPE_PHOTOS
 		  internLayout.put(Gtk::Label.new.set_markup("Images related to <b>#{artist}</b>"),185,30)
 		else
@@ -146,13 +149,31 @@ class ItemView < Gtk::EventBox
 		layout.put(Gtk::Label.new.set_markup("<big><b>#{infos[0]}</b></big>"),185,30)
 		puts infos,"---",links
 
-		pixbuf = load_image_from_url(links[4])
-		layout.put(Gtk::Image.new(pixbuf.scale(150,150)),10,10)
+		# Sort by length of string, thus prefer large image(s)
+		links.sort! { |a,b| b.size - a.size }
+
+		# Download this image..
+		pixbuf = load_image_from_url(links[0])
+		unless pixbuf == nil
+		    eb = Gtk::EventBox.new
+		    im = Gtk::Image.new(pixbuf.scale(150,150))
+		    eb.add(im)
+	
+		    # show the large image when clicking
+		    eb.signal_connect("button_press_event") do
+			ImageViewer.new(pixbuf)
+		    end
+		    layout.put(eb,10,10)
+		end
+		similiarity = (infos[1].to_f * 100.0).round(2)
+		layout.put(Gtk::Label.new.set_markup("Similiarity: <i>#{similiarity}%</i>"),185,50)
+		layout.put(@source_label,185,70)
+		layout.put(Gtk::Label.new.set_markup("| <a href=\"#{infos[2]}\">last.fm page</a>"),210,70)
+		layout.put(@save_button,185,120)
 	end
 end
 
 class VR_gui
-
   @@getterHash = 
   {
 	:Cover     => { :name => "Cover Art",       :type => Glyr::GET_COVER,    :active => [true, true,false]},
