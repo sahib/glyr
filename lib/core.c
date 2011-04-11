@@ -975,34 +975,39 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
     size_t iter = 0, plugCtr = 0;
     for(iter = 0; pList[iter].name != NULL; ++iter)
     {
-        // Call the URLcallback of the plugin
-        char * pUrl = (char*)pList[iter].plug.url_callback(query);
-        if(pUrl != NULL)
-        {
-            // make debuggin little easier
-            glyr_message(3,query,stderr,"plugin=%s | url=<%s>\n",pList[iter].name,pUrl);
+	
 
-            // enlarge URLContainer
-            URLContainer = realloc(URLContainer, sizeof(cb_object) * (plugCtr+1));
-            if(URLContainer == NULL)
-            {
-                glyr_message(-1,NULL,stderr,C_R"FATAL:"C_" No memory to allocate URLContainer!\n");
-                URLContainer = NULL;
-                break;
-            }
+	if(pList[iter].plug.url_callback != NULL)
+	{
+		// Call the URLcallback of the plugin
+		char * pUrl = (char*)pList[iter].plug.url_callback(query);
+		if(pUrl != NULL)
+		{
+		    // make debuggin little easier
+		    glyr_message(3,query,stderr,"plugin=%s | url=<%s>\n",pList[iter].name,pUrl);
 
-            plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter], pList[iter].plug.endmarker, NULL, false);
+		    // enlarge URLContainer
+		    URLContainer = realloc(URLContainer, sizeof(cb_object) * (plugCtr+1));
+		    if(URLContainer == NULL)
+		    {
+			glyr_message(-1,NULL,stderr,C_R"FATAL:"C_" No memory to allocate URLContainer!\n");
+			URLContainer = NULL;
+			break;
+		    }
 
-            // If the plugin uses dynamic memory it should set plug.free_url to TRUE
-            // So it is free'd here. plugin_init strdups the URL and invoke handles all URLs equally.
-            if(pList[iter].plug.free_url)
-            {
-                free(pUrl);
-                pUrl = NULL;
-            }
-            // Make sure we don't use $iter as URLContainer iterator (creepy consequences if URLCallbacks returns NULL)
-            plugCtr++;
-        }
+		    plugin_init( &URLContainer[plugCtr], pUrl, pList[iter].plug.parser_callback, query, &pList[iter], pList[iter].plug.endmarker, NULL, false);
+
+		    // If the plugin uses dynamic memory it should set plug.free_url to TRUE
+		    // So it is free'd here. plugin_init strdups the URL and invoke handles all URLs equally.
+		    if(pList[iter].plug.free_url)
+		    {
+			free(pUrl);
+			pUrl = NULL;
+		    }
+		    // Make sure we don't use $iter as URLContainer iterator (creepy consequences if URLCallbacks returns NULL)
+		    plugCtr++;
+		}
+	}
     }
     if(plugCtr != 0)
     {

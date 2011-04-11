@@ -8,4 +8,8 @@
 - paths for tag/relations..
 - default settings for getters (like number=-1 for track/albumlist)
 - ainfo/wikipedia.c still not working
+
 - writeFile: remove the silly GlyQuery param (not needed at all)
+- test lyrics (klingeltöne...)
+- ruby callback..
+- full amazon support

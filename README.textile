@@ -53,7 +53,7 @@ As free software starts often with a 'g', and I heard the song "Tanzwut - Im Rau
 in it, while thinking of a name I chose it. The 'k' was replaced by a 'g' (ofcourse) and the 'n' was removed in favour
 of ease of pronouncing. 
 
-It is pronounced exactly like breaking dishes btw. (don't do weird things in your kitchen now :-))
+It is pronounced exactly like breaking dishes btw. (don't do strange things in your kitchen now :-))
 
 <h3>Isn't there musicbrainz already?</h3>
 1) The kind of metadata downloaded by glyr differs heavily from musicbrainz.

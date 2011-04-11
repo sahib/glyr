@@ -92,7 +92,6 @@ GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
                 char * wiki_page_url = copy_value(find,endTag);
                 if(wiki_page_url)
                 {
-		puts(wiki_page_url);
                     GlyMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
                     if(new_cache)
                     {

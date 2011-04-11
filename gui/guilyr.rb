@@ -36,6 +36,12 @@ end
 class ItemView < Gtk::EventBox
 	@@similiar_photo_count = 0
 
+	def get_new_layout(x,y)
+		layout = Gtk::Layout.new.set_size_request(x,y)
+		layout.modify_bg(Gtk::STATE_NORMAL,Gdk::Color.parse("white"))
+		return layout
+	end
+
 	def initialize(path, data, artist, album, title)
 		super()
 
@@ -47,19 +53,32 @@ class ItemView < Gtk::EventBox
 	
 		# Button to save an item
 		@save_button  = Gtk::Button.new("Save").set_size_request(50,30)
+		@save_button.signal_connect("clicked") do
+		  dialog = Gtk::FileChooserDialog.new("Save File",
+						       nil,
+						       Gtk::FileChooser::ACTION_SAVE,
+						       nil,
+						       [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
+						       [Gtk::Stock::SAVE, Gtk::Dialog::RESPONSE_ACCEPT])
+		  
+		  if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
+		    puts "filename = #{dialog.filename}"
+		  end
+		  dialog.destroy
+		end
 
 		# Where the item came from
-		@source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc}' ><small>(Source:#{data.prov})</small></a>")
+		@source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc.gsub(/&/,"&amp;")}'><small>(Source:#{data.prov})</small></a>")
 	
 		# Delegate task to subroutines	
 		if data.is_image
 		    init_as_image(path, data, artist, album, title, vbox)
 		elsif data.type == Glyr::TYPE_SIMILIAR
 		    init_as_similiar_artist(path,data,artist,vbox)
-		elsif data.type == Glyr::GET_TAGS or data.type == Glyr::GET_RELATIONS
-
-		elsif data.type == Glyr::GET_ALBUMLIST or data.type == Glyr::GET_TRACKLIST
-
+		elsif data.type == Glyr::TYPE_TAGS or data.type == Glyr::TYPE_RELATION
+		    init_as_oneliner(data,artist,album,vbox)
+		elsif data.type == Glyr::TYPE_TRACK or data.type == Glyr::TYPE_ALBUMLIST
+		    init_as_oneliner(data,artist,album,vbox)
 		else #lyrics,review,bio
 		    init_as_text(path, data, artist, album, title, vbox) 
 		end
@@ -68,6 +87,37 @@ class ItemView < Gtk::EventBox
 		vbox.pack_start(Gtk::HSeparator.new,false,false,2)
 		hbox.show_all
 		return self
+	end
+
+	def init_as_oneliner(data, artist, album, vbox)
+		lo = get_new_layout(150,30)
+		label = nil
+		if data.type == Glyr::TYPE_TRACK
+		    label = Gtk::Label.new.set_markup("#{data.data} <small>#{data.duration / 60}:#{data.duration % 60}</small>")
+		elsif data.type == Glyr::TYPE_ALBUMLIST
+		    label = Gtk::Label.new.set_markup("#{data.data}")
+		elsif data.type == Glyr::TYPE_TAGS
+		    label = Gtk::Label.new.set_markup("#{data.data}")
+		elsif data.type == Glyr::TYPE_RELATION
+		    splitted = data.data.split(":")
+		    typename = splitted.shift
+		    label = Gtk::Label.new.set_markup("<a href='#{splitted.join.gsub(/&/,"&amp;")}'>#{typename}</a>")
+		end
+
+		lo.put(label,0,0)
+		lo.put(@source_label,350,0)
+		vbox.pack_start(lo,true,false,0)
+	end
+
+	def bytes_to_human_readable( bytes = 0)
+		quad = (1024 ** 2).to_f
+		if bytes >= (quad) / 2
+		     return "#{(bytes / (quad)).round 2} MB"
+		elsif bytes >= 1024 / 2
+		     return "#{(bytes / (1024.0)).round 2} KB"
+		else
+		     return "#{bytes} Bytes"
+		end
 	end
 
 	def init_as_image(path, data, artist, album, title, vbox)
@@ -92,7 +142,7 @@ class ItemView < Gtk::EventBox
 		  internLayout.put(Gtk::Label.new.set_markup("<b>#{album}</b> <i>by</i> <b>#{artist}</b>"),185,30)
 		end
 
-	        internLayout.put(Gtk::Label.new.set_markup("<b>Size:</b> #{pixbuf.width}x#{pixbuf.height} <small>(#{data.size} Bytes)</small>"),185,50)
+	        internLayout.put(Gtk::Label.new.set_markup("<b>Size:</b> #{pixbuf.width}x#{pixbuf.height} <small>(#{bytes_to_human_readable data.size})</small>"),185,50)
 		internLayout.put(@source_label, 185,70)
 		internLayout.put(@save_button,180,130)
 		vbox.pack_start(internLayout,true,false,0)
@@ -109,7 +159,7 @@ class ItemView < Gtk::EventBox
 		vbox.pack_start(layout,false,false,0)
 		layout.put(@save_button,0,0)
 		layout.put(@source_label,60,10)
-		layout.put(Gtk::Label.new.set_markup("<b>#{title}</b> <i>by</i> <b>#{artist}</b>"),120,10)
+		layout.put(Gtk::Label.new.set_markup("<b>#{title}</b> <i>by</i> <b>#{artist}</b>"),200,10)
 	end
 
 	def load_image_from_url( url )
@@ -141,16 +191,13 @@ class ItemView < Gtk::EventBox
 		    end
 		    i += 1
 		end
+		# Sort by length of string, thus prefer large image(s)
+		links.sort! { |a,b| b.size - a.size }
 
 		layout = Gtk::Layout.new.set_size_request(150,170)
 		layout.modify_bg(Gtk::STATE_NORMAL,Gdk::Color.parse("white"))
-		vbox.pack_start(layout,false,false,0)
-
 		layout.put(Gtk::Label.new.set_markup("<big><b>#{infos[0]}</b></big>"),185,30)
-		puts infos,"---",links
-
-		# Sort by length of string, thus prefer large image(s)
-		links.sort! { |a,b| b.size - a.size }
+		vbox.pack_start(layout,false,false,0)
 
 		# Download this image..
 		pixbuf = load_image_from_url(links[0])
@@ -167,9 +214,9 @@ class ItemView < Gtk::EventBox
 		end
 		similiarity = (infos[1].to_f * 100.0).round(2)
 		layout.put(Gtk::Label.new.set_markup("Similiarity: <i>#{similiarity}%</i>"),185,50)
-		layout.put(@source_label,185,70)
-		layout.put(Gtk::Label.new.set_markup("| <a href=\"#{infos[2]}\">last.fm page</a>"),210,70)
-		layout.put(@save_button,185,120)
+		layout.put(Gtk::Label.new.set_markup("<small><a href='#{infos[2]}'>last.fm page</a> | </small>"),185,70)
+		layout.put(@source_label,270,70)
+		layout.put(@save_button,185,100)
 	end
 end
 
@@ -243,7 +290,15 @@ class VR_gui
       # Fill the entry variables
       @artistEntry = builder.get_object("artistEntry") 
       @albumEntry  = builder.get_object("albumEntry")      
-      @titleEntry  = builder.get_object("titleEntry")      
+      @titleEntry  = builder.get_object("titleEntry")
+
+      # Settingscontrol
+      @sbp_number = builder.get_object("sbp_number")
+      @sbp_number.adjustment = Gtk::Adjustment.new(50.0, 0.0, 100.0, 1.0, 5.0, 0.0)
+      @sbp_fuzzyness = builder.get_object("sbp_fuzzyness")
+      @sbp_fuzzyness.adjustment = Gtk::Adjustment.new(50.0, 0.0, 100.0, 1.0, 5.0, 0.0)
+      @provider_entry = builder.get_object("provider_entry")
+      @lang_entry = builder.get_object("lang_entry")
     end
   end
 
@@ -262,8 +317,23 @@ class VR_gui
   def on_searchButton_clicked
 	puts "Wait a second.."
 	m = Glubyr.new
-	m.number = 1
+	m.number = @sbp_number.value.to_i
+	m.fuzzyness = @sbp_fuzzyness.value.to_i
 	m.verbosity = 2
+	
+	prov_string = @provider_entry.text
+	if prov_string.size == 0
+	    m.from = prov_string 
+	else
+	    m.from = "all"
+	end
+
+	lang_string = @lang_entry.text
+	if lang_string.size == 0
+	    m.lang = "en"
+	else
+	    m.lang = lang_string
+	end
 
 	results = nil
 	boxText = @combo_box.active_text()
@@ -275,7 +345,7 @@ class VR_gui
 				break
 			end
 		end
-		
+	
 		i = 0
 		@statusbar.push(@statusbar_info,"Searching..")
 		results = m.getByType(data_type,@artistEntry.text,@albumEntry.text,@titleEntry.text)
@@ -285,6 +355,9 @@ class VR_gui
 				m.writeFile(path,c) if c.is_image
 				self.add_item(path,c, @artistEntry.text, @albumEntry.text, @titleEntry.text)
 			end
+		        @statusbar.push(@statusbar_info,"Done: found #{results.size} item(s)")
+		else
+			@statusbar.push(@statusbar_info,"Done: nothing found")
 		end
 	end
   end

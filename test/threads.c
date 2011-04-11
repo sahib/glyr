@@ -2,7 +2,8 @@
 #include <stdio.h>
 
 #include <pthread.h>
-#include "<glyr.h>"
+#include "../lib/glyr.h"
+#include "../lib/types.h"
 
 /* 
  * Example program showing how to use libglyr with multiple threads.
@@ -22,8 +23,9 @@ static void configure(GlyQuery * s, enum GLYR_GET_TYPE type)
     GlyOpt_artist(s,"Die Apokalyptischen Reiter");
     GlyOpt_album (s,"Moral & Wahnsinn");
     GlyOpt_title (s,"Die Boten");
-    GlyOpt_verbosity(s,2);
+    GlyOpt_verbosity(s,1);
     GlyOpt_type  (s,type);
+    GlyOpt_from(s,"fast");
 }
 
 int main(void)

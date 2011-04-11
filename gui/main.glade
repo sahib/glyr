@@ -236,8 +236,30 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxEntry" id="lang_field">
+                      <object class="GtkHBox" id="hbox6">
                         <property name="visible">True</property>
+                        <child>
+                          <object class="GtkEntry" id="provider_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">&#x25CF;</property>
+                            <property name="text" translatable="yes">all</property>
+                          </object>
+                          <packing>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkEntry" id="lang_entry">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="invisible_char">&#x25CF;</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
                       </object>
                       <packing>
                         <property name="position">2</property>
@@ -254,13 +276,14 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkSpinButton" id="spb_fuzzyness">
+                      <object class="GtkSpinButton" id="sbp_fuzzyness">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Set the fuzzyness parameter</property>
                         <property name="invisible_char">&#x25CF;</property>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">4</property>
                       </packing>
                     </child>
@@ -280,9 +303,12 @@
                         <property name="can_focus">True</property>
                         <property name="tooltip_text" translatable="yes">Set the number to download</property>
                         <property name="invisible_char">&#x25CF;</property>
+                        <property name="activates_default">True</property>
+                        <property name="progress_pulse_step">1</property>
                         <property name="numeric">True</property>
                       </object>
                       <packing>
+                        <property name="expand">False</property>
                         <property name="position">6</property>
                       </packing>
                     </child>

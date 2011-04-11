@@ -1,3 +1,4 @@
+#!/usr/bin/ruby
 require 'rubygems'
 
 begin 
@@ -24,7 +25,8 @@ class Glubyr
         def initialize
                 @cache_list = nil
                 @query = Glyr::GlyQuery.new
-               
+		@providers = "all"               
+
                 # Register finalize to be called on death of object (Gevatter GarbageCollector)
                 ObjectSpace.define_finalizer(self,self.class.method(:finalize).to_proc)
         end 
@@ -98,17 +100,17 @@ class Glubyr
 	end
 
 	def getRelations( artist, album, title )
-		@query.artist = artist unless artist == nil
-		@query.album  = album  unless album  == nil
-		@query.title  = title  unless title  == nil
+		@query.artist = artist if set_value? artist
+		@query.album  = album  if set_value? album
+		@query.title  = title  if set_value? title
 		@query.type = Glyr::GET_RELATIONS
                 call_get
 	end
 
 	def getByType( type, artist,album,title )
-		@query.artist = artist unless artist == nil
-		@query.album  = album  unless album  == nil
-		@query.title  = title  unless title  == nil
+		@query.artist = artist if set_value? artist
+		@query.album  = album  if set_value? album
+		@query.title  = title  if set_value? title
 		@query.type   = type
                 call_get
 	end
@@ -178,7 +180,7 @@ class Glubyr
         end
 
         def from=( argstring )
-                Glyr::GlyOpt_from(@query,argstring)
+		@providers = argstring
         end
 
         def download=( boolean )
@@ -193,7 +195,7 @@ class Glubyr
                 Glyr::GlyOpt_color(@query,boolean)
         end
        
-	def fuzzynes( fuzzval ) 
+	def fuzzyness=( fuzzval ) 
 		Glyr::GlyOpt_fuzzyness(@query,fuzzval)
 	end
  
@@ -250,7 +252,12 @@ class Glubyr
         private
         # ------
         
+	def set_value?(string)
+	    return (string == nil or string.size == 0) ? false : true
+	end
+
         def call_get
+                Glyr::GlyOpt_from(@query,@provider)
                 @cache_list = Glyr::get(@query,nil)
 
                 convert = nil

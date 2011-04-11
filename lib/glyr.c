@@ -782,6 +782,12 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
     int result = GLYRE_OK;
     if(settings && arg)
     {
+	if(settings->type == GET_UNSURE)
+	{
+	    glyr_message(-1,NULL,stderr,C_R"*"C_" You have to set the type value before setting 'from'! (taking default)\n");
+	    return GLYRE_NO_PROVIDER;
+	}
+
         GlyPlugin * what_pair = Gly_get_provider_by_id(settings->type);
         if(settings->providers != NULL)
         {
