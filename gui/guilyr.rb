@@ -47,7 +47,7 @@ class ItemView < Gtk::EventBox
 
 		# Box containing all other widgets
 		hbox = Gtk::HBox.new(false,5)
-		vbox = Gtk::VBox.new(false,2)
+		vbox = Gtk::VBox.new(true,2)
 		hbox.pack_start(vbox,true,true,0)
 		self.add(hbox)
 	
@@ -60,13 +60,15 @@ class ItemView < Gtk::EventBox
 		  
 		  if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
 		    puts "filename = #{dialog.filename}"
-		    Glyr::writeFile(Glyr::GlyQuery.new,cache,path)
+		    Glyr::writeFile(Glyr::GlyQuery.new,data,dialog.filename)
 		  end
 		  dialog.destroy
 		end
 
 		# Where the item came from
-		@source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc.gsub(/&/,"&amp;")}'><small>(Source:#{data.prov})</small></a>")
+		unless data.dsrc == nil
+		    @source_label = Gtk::Label.new.set_markup("<a href='#{data.dsrc.gsub(/&/,"&amp;")}'><small>(Source:#{data.prov})</small></a>")
+		end
 	
 		# Delegate task to subroutines	
 		if data.is_image
@@ -81,8 +83,13 @@ class ItemView < Gtk::EventBox
 		    init_as_text(path, data, artist, album, title, vbox) 
 		end
 	
+		# register some signals on the whole area:
+		self.signal_connect("key-press-event") do
+			puts "Clicked"
+		end
+
 		# Seperate and show
-		vbox.pack_start(Gtk::HSeparator.new,false,false,2)
+		vbox.pack_start(Gtk::HSeparator.new,false,false,1)
 		hbox.show_all
 		return self
 	end
@@ -143,7 +150,7 @@ class ItemView < Gtk::EventBox
 	        internLayout.put(Gtk::Label.new.set_markup("<b>Size:</b> #{pixbuf.width}x#{pixbuf.height} <small>(#{bytes_to_human_readable data.size})</small>"),185,50)
 		internLayout.put(@source_label, 185,70)
 		internLayout.put(@save_button,180,130)
-		vbox.pack_start(internLayout,true,false,0)
+		vbox.pack_start(internLayout,true,true,0)
 	end
 
 	def init_as_text(path, data, artist, album, title, vbox)
@@ -151,10 +158,11 @@ class ItemView < Gtk::EventBox
 		view.buffer.text = data.data
 		sc_win = Gtk::ScrolledWindow.new.set_size_request(100,300).add(view)
 		sc_win.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC)
-		vbox.pack_start(sc_win,true,true,0)
+		text_vbox = Gtk::VBox.new(false,1)
+		text_vbox.pack_start(sc_win,true,true,0)
 		layout = Gtk::Layout.new.set_size_request(150,30)
 		layout.modify_bg(Gtk::STATE_NORMAL,Gdk::Color.parse("white"))
-		vbox.pack_start(layout,false,false,0)
+		text_vbox.pack_start(layout,false,false,0)
 		layout.put(@save_button,0,0)
 		layout.put(@source_label,60,10)
 
@@ -164,6 +172,8 @@ class ItemView < Gtk::EventBox
 		else
 		    info_label = Gtk::Label.new.set_markup("<small>Review of album</small><b>#{album}</b><i>by</i><b>#{album}</b>")
 		end
+
+		vbox.add(text_vbox)
 	end
 
 	def load_image_from_url( url )
@@ -241,7 +251,6 @@ class VR_gui
 
   def fill_combobox( box )
      @@getterHash.values.each { |subhash| box.append_text(subhash[:name]) }
-     box.active = 0
 
      # make fields insensitive
      box.signal_connect("changed") do 
@@ -255,7 +264,26 @@ class VR_gui
 	     end
 	end 
      end
+     box.active = 0
      return box
+  end
+
+  def get_abtname( type )
+      case type 
+	when 0 
+	    @artistEntry.text = (`mpc current -f "%artist%"`).chomp
+	when 1 
+	    @albumEntry.text = (`mpc current -f "%album%"`).chomp
+	when 2 
+	    @titleEntry.text = (`mpc current -f "%title%"`).chomp
+	else puts "w00t?"
+      end
+  end
+ 
+  def register_autocomplete_callback( builder )
+      builder.get_object("evb_artist").signal_connect("button-press-event") { |w,e| get_abtname 0 }
+      builder.get_object("evb_album" ).signal_connect("button-press-event") { |w,e| get_abtname 1 }
+      builder.get_object("evb_title" ).signal_connect("button-press-event") { |w,e| get_abtname 2 }
   end
 
   def initialize
@@ -283,24 +311,28 @@ class VR_gui
       @statusbar_info = @statusbar.get_context_id("Info")
       @statusbar.push(  @statusbar_info, "This is not supposed to be used yet." )
 
-      # Fill the comboxbox with all chocies
-      @combo_box = fill_combobox(Gtk::ComboBox.new(true))
-
       # Pack the rest and make sure everything is shown
       @mVBox = builder.get_object("hbox4")
-      @mVBox.pack_start(@combo_box,true,true,2)
-      @mVBox.show_all
-
       # Fill the entry variables
       @artistEntry = builder.get_object("artistEntry") 
       @albumEntry  = builder.get_object("albumEntry")      
       @titleEntry  = builder.get_object("titleEntry")
 
+      # Fill the comboxbox with all chocies
+      @combo_box = fill_combobox(Gtk::ComboBox.new(true))
+      @mVBox.pack_start(@combo_box,true,true,2)
+      @mVBox.show_all
+
+      # get automated mpc
+      register_autocomplete_callback(builder)
+
       # Settingscontrol
       @sbp_number = builder.get_object("sbp_number")
       @sbp_number.adjustment = Gtk::Adjustment.new(50.0, 0.0, 100.0, 1.0, 5.0, 0.0)
+      @sbp_number.value = 1
       @sbp_fuzzyness = builder.get_object("sbp_fuzzyness")
       @sbp_fuzzyness.adjustment = Gtk::Adjustment.new(50.0, 0.0, 100.0, 1.0, 5.0, 0.0)
+      @sbp_fuzzyness.value = Glyr::DEFAULT_FUZZYNESS
       @provider_entry = builder.get_object("provider_entry")
       @lang_entry = builder.get_object("lang_entry")
     end
@@ -326,17 +358,18 @@ class VR_gui
 	m.verbosity = 2
 	
 	prov_string = @provider_entry.text
-	if prov_string.size == 0
+	unless prov_string.size == 0
+	    puts prov_string
 	    m.from = prov_string 
 	else
 	    m.from = "all"
 	end
 
 	lang_string = @lang_entry.text
-	if lang_string.size == 0
-	    m.lang = "en"
-	else
+	unless lang_string.size == 0
 	    m.lang = lang_string
+	else
+	    m.lang = "en"
 	end
 
 	results = nil
@@ -364,8 +397,7 @@ class VR_gui
 			@statusbar.push(@statusbar_info,"Done: nothing found")
 		end
 	end
-	m = ni
-	m = nill
+	m = nil
   end
 
   def cleanup_itemlist
@@ -384,6 +416,7 @@ class VR_gui
 
   def cleanup
     Gtk.main_quit()
+    return false
   end
 
 end

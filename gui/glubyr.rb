@@ -19,7 +19,7 @@ class Glubyr
         # because it was created in libglyr by a call to malloc()
         def Glubyr.finalize(id)
                 #puts "Object #{id} dying at #{Time.new}"
-                Glyr::freeList(@cache_list)
+                Glyr::freeList(@cache_list) unless @cache_list == nil
         end
 
         def initialize
@@ -219,7 +219,7 @@ class Glubyr
 		return @query.formats
 	end
 
-	def formats( allowed_formats )
+	def formats=( allowed_formats )
 		Glyr::GlyOpt_formats(@query, allowed_formats)
 	end
 
@@ -257,7 +257,7 @@ class Glubyr
 	end
 
         def call_get
-                Glyr::GlyOpt_from(@query,@provider)
+                Glyr::GlyOpt_from(@query,@providers)
                 @cache_list = Glyr::get(@query,nil)
 
                 convert = nil
