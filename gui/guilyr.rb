@@ -54,15 +54,13 @@ class ItemView < Gtk::EventBox
 		# Button to save an item
 		@save_button  = Gtk::Button.new("Save").set_size_request(50,30)
 		@save_button.signal_connect("clicked") do
-		  dialog = Gtk::FileChooserDialog.new("Save File",
-						       nil,
-						       Gtk::FileChooser::ACTION_SAVE,
-						       nil,
-						       [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
-						       [Gtk::Stock::SAVE, Gtk::Dialog::RESPONSE_ACCEPT])
+		  dialog = Gtk::FileChooserDialog.new("Save File",nil,Gtk::FileChooser::ACTION_SAVE,nil,
+						      [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
+						      [Gtk::Stock::SAVE, Gtk::Dialog::RESPONSE_ACCEPT])
 		  
 		  if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
 		    puts "filename = #{dialog.filename}"
+		    Glyr::writeFile(Glyr::GlyQuery.new,cache,path)
 		  end
 		  dialog.destroy
 		end
@@ -159,7 +157,13 @@ class ItemView < Gtk::EventBox
 		vbox.pack_start(layout,false,false,0)
 		layout.put(@save_button,0,0)
 		layout.put(@source_label,60,10)
-		layout.put(Gtk::Label.new.set_markup("<b>#{title}</b> <i>by</i> <b>#{artist}</b>"),200,10)
+
+		info_label = nil
+		if Glyr::TYPE_LYRICS
+		    layout.put(Gtk::Label.new.set_markup("<b>#{title}</b> <i>by</i> <b>#{artist}</b>"),200,10)
+		else
+		    info_label = Gtk::Label.new.set_markup("<small>Review of album</small><b>#{album}</b><i>by</i><b>#{album}</b>")
+		end
 	end
 
 	def load_image_from_url( url )
@@ -360,6 +364,8 @@ class VR_gui
 			@statusbar.push(@statusbar_info,"Done: nothing found")
 		end
 	end
+	m = ni
+	m = nill
   end
 
   def cleanup_itemlist
