@@ -23,6 +23,7 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <getopt.h>
+#include <libgen.h>
 
 #include "stringlib.h"
 #include "core.h"
@@ -637,16 +638,19 @@ int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path)
     int bytes = -1;
     if(path)
     {
-        if(!strcasecmp(path,"null"))
+	char * copypath = strdup(path);
+	char * dir_path = dirname(copypath);
+
+        if(!strcasecmp(dir_path,"null"))
         {
             bytes = 0;
         }
-        else if(!strcasecmp(path,"stdout"))
+        else if(!strcasecmp(dir_path,"stdout"))
         {
             bytes=fwrite(data->data,1,data->size,stdout);
             fputc('\n',stdout);
         }
-        else if(!strcasecmp(path,"stderr"))
+        else if(!strcasecmp(dir_path,"stderr"))
         {
             bytes=fwrite(data->data,1,data->size,stderr);
             fputc('\n',stderr);
@@ -664,6 +668,7 @@ int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path)
                 glyr_message(-1,NULL,stderr,"Gly_write: Unable to write to '%s'!\n",path);
             }
         }
+	free(copypath);
     }
     return bytes;
 }

@@ -1,15 +1,15 @@
-- update help text
+- update help text -- done
 - more providers for review and lyrics
-- Testing of the accuracy
 - Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
-- cmake install and cmake portable..
-- repair Glubyr
+- cmake install -- done
+- cmake portable.. 
+- repair Glubyr -- done
 
 - paths for tag/relations..
 - default settings for getters (like number=-1 for track/albumlist)
 - ainfo/wikipedia.c still not working
 
-- writeFile: remove the silly GlyQuery param (not needed at all)
-- test lyrics (klingeltöne...)
+- test lyrics (klingeltöne... *chrm*)
 - ruby callback..
 - full amazon support
+- fix up glyrc
