@@ -30,32 +30,28 @@
 #include "tracklist/musicbrainz.h"
 
 // Add your's here
-GlyPlugin tracklist_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tracklist_musicbrainz_parse, tracklist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
+GlyPlugin tracklist_providers[] = {
+        {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tracklist_musicbrainz_parse, tracklist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
+        { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 GlyPlugin * glyr_get_tracklist_providers(void)
 {
-    return copy_table(tracklist_providers,sizeof(tracklist_providers));
+        return copy_table(tracklist_providers,sizeof(tracklist_providers));
 }
 
 static GlyCacheList * tracklist_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    return generic_finalizer(result,settings,TYPE_TRACK);
+        return generic_finalizer(result,settings,TYPE_TRACK);
 }
 
 GlyCacheList * get_tracklist(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
-    if(settings && settings->artist && settings->album)
-    {
-        result = register_and_execute(settings, tracklist_finalize);
-    }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist and Album is needed to retrieve a tracklist (o rly?).\n");
-    }
-    return result;
+        GlyCacheList * result = NULL;
+        if(settings && settings->artist && settings->album) {
+                result = register_and_execute(settings, tracklist_finalize);
+        } else {
+                glyr_message(2,settings,stderr,C_R"* "C_"Artist and Album is needed to retrieve a tracklist (o rly?).\n");
+        }
+        return result;
 }

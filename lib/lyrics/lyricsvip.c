@@ -29,56 +29,47 @@
 
 const char * lyrics_lyricsvip_url(GlyQuery * settings)
 {
-    char * result = NULL;
-    char * artist_clean = strreplace(settings->artist, " ", "-");
-    if(artist_clean)
-    {
-        char * title_clean =  strreplace(settings->title, " ", "-");
-        if(title_clean)
-        {
-            result = strdup_printf(LV_URL, artist_clean, title_clean);
-            free(title_clean);
+        char * result = NULL;
+        char * artist_clean = strreplace(settings->artist, " ", "-");
+        if(artist_clean) {
+                char * title_clean =  strreplace(settings->title, " ", "-");
+                if(title_clean) {
+                        result = strdup_printf(LV_URL, artist_clean, title_clean);
+                        free(title_clean);
+                }
+                free(artist_clean);
         }
-        free(artist_clean);
-    }
-    return result;
+        return result;
 }
 
 GlyCacheList * lyrics_lyricsvip_parse(cb_object *capo)
 {
-    char * start = NULL;
-    char * end = NULL;
-    char * content = NULL;
+        char * start = NULL;
+        char * end = NULL;
+        char * content = NULL;
 
-    GlyMemCache * r_cache = NULL;
-    GlyCacheList * r_list  = NULL;
+        GlyMemCache * r_cache = NULL;
+        GlyCacheList * r_list  = NULL;
 
-    if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL)
-    {
-        if ((end = strstr(start,"</table>")) != NULL)
-        {
-            if (ABS(end-start) > 0)
-            {
-                *(end) = 0;
-                content = strreplace(start,"<br />",NULL);
-                if(content)
-                {
-                    r_cache = DL_init();
-                    r_cache->data = content;
-                    r_cache->size = strlen(content);
-                    r_cache->dsrc = strdup(capo->url);
-                }
-            }
+        if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL) {
+                if ((end = strstr(start,"</table>")) != NULL) {
+                        if (ABS(end-start) > 0) {
+                                *(end) = 0;
+                                content = strreplace(start,"<br />",NULL);
+                                if(content) {
+                                        r_cache = DL_init();
+                                        r_cache->data = content;
+                                        r_cache->size = strlen(content);
+                                        r_cache->dsrc = strdup(capo->url);
+                                }
+                        }
+                } else r_cache = DL_error(NO_ENDIN_TAG);
+        } else r_cache = DL_error(NO_BEGIN_TAG);
+
+        if(r_cache) {
+                r_list = DL_new_lst();
+                DL_add_to_list(r_list,r_cache);
         }
-        else r_cache = DL_error(NO_ENDIN_TAG);
-    }
-    else r_cache = DL_error(NO_BEGIN_TAG);
-
-    if(r_cache)
-    {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,r_cache);
-    }
-    return r_list;
+        return r_list;
 }
 

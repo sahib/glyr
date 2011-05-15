@@ -32,7 +32,7 @@
 
 const char * similiar_lastfm_url(GlyQuery * sets)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=%artist%&api_key="API_KEY;
+        return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=%artist%&api_key="API_KEY;
 }
 
 #define NAME_BEGIN "<name>"
@@ -53,70 +53,66 @@ const char * similiar_lastfm_url(GlyQuery * sets)
 
 static char * in_tag(const char * string, const char * begin, const char * endin)
 {
-    char * bp = strstr(string,begin);
-    if(bp != NULL)
-    {
-        char * ep = strstr(bp,endin);
-        if(ep != NULL && ep > bp)
-        {
-            return copy_value(bp+strlen(begin),ep);
+        char * bp = strstr(string,begin);
+        if(bp != NULL) {
+                char * ep = strstr(bp,endin);
+                if(ep != NULL && ep > bp) {
+                        return copy_value(bp+strlen(begin),ep);
+                }
         }
-    }
-    return NULL;
+        return NULL;
 }
 
 GlyCacheList * similiar_lastfm_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+        GlyCacheList * r_list = NULL;
 
-    int urlc = 0;
+        int urlc = 0;
 
-    char * find = capo->cache->data;
-    while( (find = strstr(find+1, "<artist>")) != NULL && continue_search(urlc,capo->s))
-    {
-        char * name  = in_tag(find,NAME_BEGIN,NAME_ENDIN);
-        char * match = in_tag(find,MATCH_BEGIN,MATCH_ENDIN);
-        char * url   = in_tag(find,URL_BEGIN,URL_ENDIN);
+        char * find = capo->cache->data;
+        while( (find = strstr(find+1, "<artist>")) != NULL && continue_search(urlc,capo->s)) {
+                char * name  = in_tag(find,NAME_BEGIN,NAME_ENDIN);
+                char * match = in_tag(find,MATCH_BEGIN,MATCH_ENDIN);
+                char * url   = in_tag(find,URL_BEGIN,URL_ENDIN);
 
-        char * img_s = in_tag(find,IMAGE_S_BEGIN,IMAGE_ENDIN);
-        char * img_m = in_tag(find,IMAGE_M_BEGIN,IMAGE_ENDIN);
-        char * img_l = in_tag(find,IMAGE_L_BEGIN,IMAGE_ENDIN);
-        char * img_e = in_tag(find,IMAGE_E_BEGIN,IMAGE_ENDIN);
-        char * img_x = in_tag(find,IMAGE_X_BEGIN,IMAGE_ENDIN);
+                char * img_s = in_tag(find,IMAGE_S_BEGIN,IMAGE_ENDIN);
+                char * img_m = in_tag(find,IMAGE_M_BEGIN,IMAGE_ENDIN);
+                char * img_l = in_tag(find,IMAGE_L_BEGIN,IMAGE_ENDIN);
+                char * img_e = in_tag(find,IMAGE_E_BEGIN,IMAGE_ENDIN);
+                char * img_x = in_tag(find,IMAGE_X_BEGIN,IMAGE_ENDIN);
 
-        char * composed = strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",name,match,url,img_s,img_m,img_l,img_e,img_x);
+                char * composed = strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",name,match,url,img_s,img_m,img_l,img_e,img_x);
 
-        if(composed != NULL)
-        {
-            GlyMemCache * result = DL_init();
-            if(!r_list) r_list = DL_new_lst();
+                if(composed != NULL) {
+                        GlyMemCache * result = DL_init();
+                        if(!r_list) r_list = DL_new_lst();
 
-            result->data = composed;
-            result->size = strlen(composed);
-            result->dsrc = strdup(capo->url);
+                        result->data = composed;
+                        result->size = strlen(composed);
+                        result->dsrc = strdup(capo->url);
 
-            DL_add_to_list(r_list, result);
+                        DL_add_to_list(r_list, result);
 
-            urlc++;
+                        urlc++;
+                }
+
+                if(name)
+                        free(name);
+                if(match)
+                        free(match);
+                if(url)
+                        free(url);
+                if(img_s)
+                        free(img_s);
+                if(img_m)
+                        free(img_m);
+                if(img_l)
+                        free(img_l);
+                if(img_e)
+                        free(img_e);
+                if(img_x)
+                        free(img_x);
+
         }
-
-        if(name)
-            free(name);
-        if(match)
-            free(match);
-        if(url)
-            free(url);
-        if(img_s)
-            free(img_s);
-        if(img_m)
-            free(img_m);
-        if(img_l)
-            free(img_l);
-        if(img_e)
-            free(img_e);
-        if(img_x)
-            free(img_x);
-
-    }
-    return r_list;
+        return r_list;
 }

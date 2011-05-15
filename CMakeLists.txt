@@ -58,6 +58,7 @@ set (DIR_TAGS      ${DIR_ROOT}/tags                     )
 set (DIR_RELATIONS ${DIR_ROOT}/relations                )
 
 SET(LIB_SOURCE_LOCATIONS 
+	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/stringlib.c"
@@ -71,6 +72,9 @@ SET(LIB_SOURCE_LOCATIONS
         "${DIR_ROOT}/tags.c"
         "${DIR_ROOT}/relations.c"
 	"${DIR_ROOT}/albumlist.c"
+	"${DIR_ROOT}/translate.c"
+	"${DIR_ROOT}/md5.c"
+	# extensions
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/wikipedia.c"
 	"${DIR_AINFO}/allmusic_com.c"
@@ -106,7 +110,8 @@ SET(LIB_SOURCE_LOCATIONS
    	"${DIR_PHOTOS}/google.c"
 )
 
-ADD_DEFINITIONS( -Wall -Winline -W -Wwrite-strings -Werror -Wno-unused-parameter )
+#ADD_DEFINITIONS( -Wall -Winline -W -Wwrite-strings -Werror -Wno-unused-parameter )
+ADD_DEFINITIONS(-Wall -W -Wno-unused-parameter)
 
 # go on with subdirs
 ADD_SUBDIRECTORY( ${SUBDIR_LIB}  )

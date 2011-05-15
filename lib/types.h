@@ -30,6 +30,9 @@
 
 //Nifty defines:
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
+#define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
+#define CALC_MD5SUMS 1
 
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
@@ -69,7 +72,7 @@
 #define DEFAULT_FORMATS "jpg;jpeg;png"
 #define DEFAULT_CALL_DIRECT_USE false
 #define DEFAULT_CALL_DIRECT_PROVIDER NULL
- 
+
 #define API_KEY_DISCOGS "adff651383"
 #define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
 #define API_KEY_LASTFM  "7199021d9c8fbae507bf77d0a88533d7"
@@ -80,28 +83,26 @@
 /* --------------------------- */
 
 /* Group IDs */
-enum GLYR_GROUPS
-{
-    /* Groups are build by (a | b)*/
-    GRP_NONE = 0 << 0, /* None    */
-    GRP_SAFE = 1 << 0, /* Safe    */
-    GRP_USFE = 1 << 1, /* Unsafe  */
-    GRP_SPCL = 1 << 2, /* Special */
-    GRP_FAST = 1 << 3, /* Fast    */
-    GRP_SLOW = 1 << 4, /* Slow    */
-    GRP_ALL  = 1 << 5  /* All!    */
+enum GLYR_GROUPS {
+        /* Groups are build by (a | b)*/
+        GRP_NONE = 0 << 0, /* None    */
+        GRP_SAFE = 1 << 0, /* Safe    */
+        GRP_USFE = 1 << 1, /* Unsafe  */
+        GRP_SPCL = 1 << 2, /* Special */
+        GRP_FAST = 1 << 3, /* Fast    */
+        GRP_SLOW = 1 << 4, /* Slow    */
+        GRP_ALL  = 1 << 5  /* All!    */
 };
 
-enum GLYR_ERROR
-{
-    GLYRE_OK,           // everything is fine
-    GLYRE_BAD_OPTION,   // you passed a bad option to Gly_setopt()
-    GLYRE_BAD_VALUE,    // Invalid value in va_list
-    GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
-    GLYRE_NO_PROVIDER,  // setttings->provider == NULL
-    GLYRE_UNKNOWN_GET,  // settings->type is not valid
-    GLYRE_IGNORE,       // If returned by callback, cache is ignored
-    GLYRE_STOP_BY_CB    // Callback returned stop signal.
+enum GLYR_ERROR {
+        GLYRE_OK,           // everything is fine
+        GLYRE_BAD_OPTION,   // you passed a bad option to Gly_setopt()
+        GLYRE_BAD_VALUE,    // Invalid value in va_list
+        GLYRE_EMPTY_STRUCT, // you passed an empty struct to Gly_setopt()
+        GLYRE_NO_PROVIDER,  // setttings->provider == NULL
+        GLYRE_UNKNOWN_GET,  // settings->type is not valid
+        GLYRE_IGNORE,       // If returned by callback, cache is ignored
+        GLYRE_STOP_BY_CB    // Callback returned stop signal.
 };
 
 /* Group names */
@@ -122,99 +123,94 @@ struct cb_object;
 // GlyQuery -> cb_object e.g.
 
 // Internal buffer model
-typedef struct GlyMemCache
-{
-    char  *data;    // data buffer
-    size_t size;    // Size of data
-    char  *dsrc;    // Source of data
-    char  *prov;    // Provider that delievered this 
-    int   type;     // type of metadata
-    int   error;    // error code - internal use only
-    int   duration; // Duration of a song. Only for tracklist getter.
-    bool  is_image; // Wether it is an image or not
+typedef struct GlyMemCache {
+        char  *data;    // data buffer
+        size_t size;    // Size of data
+        char  *dsrc;    // Source of data
+        char  *prov;    // Provider that delievered this
+        int   type;     // type of metadata
+        int   error;    // error code - internal use only
+        int   duration; // Duration of a song. Only for tracklist getter.
+        bool  is_image; // Wether it is an image or plain text
+        unsigned char md5sum[16];
 } GlyMemCache;
 
 // list of GlyMemCaches
-typedef struct GlyCacheList
-{
-    GlyMemCache ** list;
-    size_t size;
-    int usersig;
+typedef struct GlyCacheList {
+        GlyMemCache ** list;
+        size_t size;
+        int usersig;
 } GlyCacheList;
 
 
-typedef struct GlyQuery
-{
-    // get
-    int type;
+typedef struct GlyQuery {
+        // get
+        int type;
 
-    // max ten slots, 5 are used now
-    const char * info[10];
+        // max ten slots, 5 are used now
+        const char * info[10];
 
-    // of
-    char * artist;
-    char * album;
-    char * title;
+        // of
+        char * artist;
+        char * album;
+        char * title;
 
-    // number
-    int number;
-    int plugmax;
+        // number
+        int number;
+        int plugmax;
 
-    // cover
-    struct
-    {
-        int min_size;
-        int max_size;
-    } cover;
+        // cover
+        struct {
+                int min_size;
+                int max_size;
+        } cover;
 
-    // from (as void because I didnt manage to prototype GlyPlugin... *?*)
-    void * providers;
+        // from (as void because I didnt manage to prototype GlyPlugin... *?*)
+        void * providers;
 
-    // invoke() control
-    long parallel;
-    long timeout;
-    long redirects;
+        // invoke() control
+        long parallel;
+        long timeout;
+        long redirects;
 
-    // verbosity
-    int verbosity;
-    // use colored output?
-    bool color_output;
+        // verbosity
+        int verbosity;
+        // use colored output?
+        bool color_output;
 
-    // return only urls without downloading?
-    // this converts glyr to a sort of search engines
-    bool download;
+        // return only urls without downloading?
+        // this converts glyr to a sort of search engines
+        bool download;
 
-    // Download group for group,
-    // or all in parallel? (faster, but less accurate)
-    bool groupedDL;
+        // Download group for group,
+        // or all in parallel? (faster, but less accurate)
+        bool groupedDL;
 
-    // Check for bad data?
-    bool duplcheck;
+        // Check for bad data?
+        bool duplcheck;
 
-    // language settings (for amazon / google / last.fm)
-    const char * lang;
+        // language settings (for amazon / google / last.fm)
+        const char * lang;
 
-    // count of dl'd items, starting from 0
-    int itemctr;
+        // count of dl'd items, starting from 0
+        int itemctr;
 
-    // Treshold for Levenshtein
-    size_t fuzzyness;
+        // Treshold for Levenshtein
+        size_t fuzzyness;
 
-    // allowed formats for images
-    const char * formats;
+        // allowed formats for images
+        const char * formats;
 
-    struct callback
-    {
-        enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
-        void  * user_pointer;
-    } callback;
+        struct callback {
+                enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
+                void  * user_pointer;
+        } callback;
 
-    struct call_direct
-    {
-        bool use;
-        const char * provider;
-        const char * url;
-    } call_direct;
+	// settings for google translator
+	struct gtrans {
+		const char * target;
+		const char * source;
+	} gtrans;
 
 } GlyQuery;
 
@@ -225,61 +221,57 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 // Also the descriptive argumentstring is internally converted to a
 // GlyQuery first
 
-typedef struct GlyPlugin
-{
-    const char * name;  // Full name
-    const char * key;   // A one-letter ID
-    const char * color; // Colored name
-    int use;            // Use this source?
+typedef struct GlyPlugin {
+        const char * name;  // Full name
+        const char * key;   // A one-letter ID
+        const char * color; // Colored name
+        int use;            // Use this source?
 
-    struct
-    {
-        // Passed to the corresponding cb_object and is called...perhaps
-        GlyCacheList * (* parser_callback) (struct cb_object *);
-        const char *   (* url_callback)    (GlyQuery  *);
-        const char *  endmarker; // Stop download if containing this string
-        bool free_url; // pass result of url_callback to free()?
-    } plug;
+        struct {
+                // Passed to the corresponding cb_object and is called...perhaps
+                GlyCacheList * (* parser_callback) (struct cb_object *);
+                const char *   (* url_callback)    (GlyQuery  *);
+                const char *  endmarker; // Stop download if containing this string
+                bool free_url; // pass result of url_callback to free()?
+        } plug;
 
-    unsigned char gid;
+        unsigned char gid;
 
 } GlyPlugin;
 
-enum GLYR_GET_TYPE
-{
-    GET_COVER,
-    GET_LYRIC,
-    GET_PHOTO,
-    GET_AINFO,
-    GET_SIMILIAR,
-    GET_REVIEW,
-    GET_TRACKLIST,
-    GET_TAGS,
-    GET_RELATIONS,
-    GET_ALBUMLIST,
-    GET_UNSURE
+enum GLYR_GET_TYPE {
+        GET_COVER,
+        GET_LYRIC,
+        GET_PHOTO,
+        GET_AINFO,
+        GET_SIMILIAR,
+        GET_REVIEW,
+        GET_TRACKLIST,
+        GET_TAGS,
+        GET_RELATIONS,
+        GET_ALBUMLIST,
+        GET_UNSURE
 };
 
 // This is not a duplicate of GLYR_GET_TYPE
 // (more to follow)
-enum GLYR_DATA_TYPE
-{
-    TYPE_NOIDEA,
-    TYPE_LYRICS,
-    TYPE_REVIEW,
-    TYPE_PHOTOS,
-    TYPE_COVER,
-    TYPE_COVER_PRI,
-    TYPE_COVER_SEC,
-    TYPE_AINFO,
-    TYPE_SIMILIAR,
-    TYPE_ALBUMLIST,
-    TYPE_TAGS,
-    TYPE_TAG_ARTIST,
-    TYPE_TAG_ALBUM,
-    TYPE_TAG_TITLE,
-    TYPE_RELATION,
-    TYPE_TRACK
+enum GLYR_DATA_TYPE {
+        TYPE_NOIDEA,
+        TYPE_LYRICS,
+        TYPE_REVIEW,
+        TYPE_PHOTOS,
+        TYPE_COVER,
+        TYPE_COVER_PRI,
+        TYPE_COVER_SEC,
+        TYPE_AINFO,
+        TYPE_SIMILIAR,
+        TYPE_ALBUMLIST,
+        TYPE_TAGS,
+        TYPE_TAG_ARTIST,
+        TYPE_TAG_ALBUM,
+        TYPE_TAG_TITLE,
+        TYPE_RELATION,
+        TYPE_TRACK
 };
 
 #endif

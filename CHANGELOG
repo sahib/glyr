@@ -68,3 +68,14 @@ Use the github page to view the automated git generated brother.
 ----------
 + Made 'return GLYRE_STOP_BY_CB;' work.
 + removed Gly_infoat, it was only for devs..
+
+2011/05/15
+----------
+Found some time to work a bit here :-)
++ Added support for google translator (new 'gtrans' getter), lyrics/text can bew translated directly now.
+  It is a bit restricted atm. as only 100.000 chars are allowed per day per IP address. But I already 
+  requested more. (20x times as much), hopefully it will get through. Also language detecting works.
++ Glyr does now checksumming. This is useful for developers which want to make sure the data is unique.
+  For normal users: Well, the duplicate check is now as fast as rmlint :-P
++ getopt_long is now getopt_long_only (no --arguments, just -argument or -a)
++ removed call_direct. It's of no use. Not even for devs.

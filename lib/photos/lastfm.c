@@ -34,40 +34,36 @@
 
 const char * photos_lastfm_url(GlyQuery * settings)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY;
+        return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY;
 }
 
 GlyCacheList * photos_lastfm_parse(cb_object * capo)
 {
-    char * root = capo->cache->data;
-    GlyCacheList * r_list = NULL;
-    size_t urlc = 0;
+        char * root = capo->cache->data;
+        GlyCacheList * r_list = NULL;
+        size_t urlc = 0;
 
-    while ( (root = strstr(root,SIZE_FO)) != NULL && continue_search(urlc,capo->s))
-    {
-        char * begin = strstr(root,URL_BEGIN);
-        if(begin)
-        {
-            begin += strlen(URL_BEGIN);
-            char * endin = strstr(begin,URL_ENDIN);
-            if(endin)
-            {
-                char * urlb = copy_value(begin,endin);
-                if(urlb)
-                {
-                    // init list if not done yet
-                    if(!r_list) r_list = DL_new_lst();
+        while ( (root = strstr(root,SIZE_FO)) != NULL && continue_search(urlc,capo->s)) {
+                char * begin = strstr(root,URL_BEGIN);
+                if(begin) {
+                        begin += strlen(URL_BEGIN);
+                        char * endin = strstr(begin,URL_ENDIN);
+                        if(endin) {
+                                char * urlb = copy_value(begin,endin);
+                                if(urlb) {
+                                        // init list if not done yet
+                                        if(!r_list) r_list = DL_new_lst();
 
-                    GlyMemCache * cache = DL_init();
-                    cache->data = urlb;
-                    DL_add_to_list(r_list,cache);
-                    urlc++;
+                                        GlyMemCache * cache = DL_init();
+                                        cache->data = urlb;
+                                        DL_add_to_list(r_list,cache);
+                                        urlc++;
 
+                                }
+                        }
                 }
-            }
-        }
 
-        root += strlen(SIZE_FO) - 1;
-    }
-    return r_list;
+                root += strlen(SIZE_FO) - 1;
+        }
+        return r_list;
 }

@@ -30,30 +30,26 @@
 
 const char * lyrics_directlyrics_url(GlyQuery * settings)
 {
-    char * url   = NULL;
+        char * url   = NULL;
 
-    char * esc_a = ascii_strdown(settings->artist);
-    if(esc_a)
-    {
-        char * esc_t = ascii_strdown(settings->title);
-        if(esc_t)
-        {
-            char * rep_a = strreplace(esc_a," ","-");
-            if(rep_a)
-            {
-                char * rep_t = strreplace(esc_t," ","-");
-                if(rep_t)
-                {
-                    url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
-                    free(rep_t);
+        char * esc_a = ascii_strdown(settings->artist);
+        if(esc_a) {
+                char * esc_t = ascii_strdown(settings->title);
+                if(esc_t) {
+                        char * rep_a = strreplace(esc_a," ","-");
+                        if(rep_a) {
+                                char * rep_t = strreplace(esc_t," ","-");
+                                if(rep_t) {
+                                        url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
+                                        free(rep_t);
+                                }
+                                free(rep_a);
+                        }
+                        free(esc_t);
                 }
-                free(rep_a);
-            }
-            free(esc_t);
+                free(esc_a);
         }
-        free(esc_a);
-    }
-    return url;
+        return url;
 }
 
 #define START "<div id=\"lyricsContent\"><p>"
@@ -61,44 +57,35 @@ const char * lyrics_directlyrics_url(GlyQuery * settings)
 
 GlyCacheList * lyrics_directlyrics_parse(cb_object * capo)
 {
-    char * f_entry;
-    GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+        char * f_entry;
+        GlyMemCache * result = NULL;
+        GlyCacheList * r_list = NULL;
 
-    if( (f_entry = strstr(capo->cache->data,START)) )
-    {
-        char * f_end = NULL;
-        f_entry += strlen(START);
-        if( (f_end = strstr(f_entry,ENDIN)) )
-        {
-            char * buf = copy_value(f_entry,f_end);
-            if(buf)
-            {
-                // replace nonsense brs that glyr would expand to newlines
-                char * brtagged = strreplace(buf,"<br>","");
-                if(brtagged)
-                {
-                    result = DL_init();
-                    result->data = brtagged;
-                    result->size = strlen(brtagged);
-                    result->dsrc = strdup(capo->url);
+        if( (f_entry = strstr(capo->cache->data,START)) ) {
+                char * f_end = NULL;
+                f_entry += strlen(START);
+                if( (f_end = strstr(f_entry,ENDIN)) ) {
+                        char * buf = copy_value(f_entry,f_end);
+                        if(buf) {
+                                // replace nonsense brs that glyr would expand to newlines
+                                char * brtagged = strreplace(buf,"<br>","");
+                                if(brtagged) {
+                                        result = DL_init();
+                                        result->data = brtagged;
+                                        result->size = strlen(brtagged);
+                                        result->dsrc = strdup(capo->url);
+                                }
+                                free(buf);
+                        }
+                } else {
+                        result = DL_error(NO_ENDIN_TAG);
                 }
-                free(buf);
-            }
+        } else {
+                result = DL_error(NO_BEGIN_TAG);
         }
-        else
-        {
-            result = DL_error(NO_ENDIN_TAG);
+        if(result) {
+                r_list = DL_new_lst();
+                DL_add_to_list(r_list,result);
         }
-    }
-    else
-    {
-        result = DL_error(NO_BEGIN_TAG);
-    }
-    if(result)
-    {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
-    }
-    return r_list;
+        return r_list;
 }

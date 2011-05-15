@@ -28,55 +28,48 @@
 
 const char * lyrics_lyrdb_url(GlyQuery * settings)
 {
-    return LYRDB_URL;
+        return LYRDB_URL;
 }
 
 GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
 {
-    GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+        GlyMemCache * result = NULL;
+        GlyCacheList * r_list = NULL;
 
-    char *slash;
-    if( (slash = strchr(capo->cache->data,'\\')) )
-    {
-        char * uID = copy_value(capo->cache->data,slash);
-        if(uID)
-        {
-            char * lyr_url = strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
-            if(lyr_url)
-            {
-                GlyMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
-                if(new_cache)
-                {
-                    char *buffer = malloc(new_cache->size+1);
+        char *slash;
+        if( (slash = strchr(capo->cache->data,'\\')) ) {
+                char * uID = copy_value(capo->cache->data,slash);
+                if(uID) {
+                        char * lyr_url = strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
+                        if(lyr_url) {
+                                GlyMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
+                                if(new_cache) {
+                                        char *buffer = malloc(new_cache->size+1);
 
-                    size_t i;
-                    for(i=0; i < new_cache->size; i++)
-                        buffer[i] = (new_cache->data[i] == '\r') ? ' ' : new_cache->data[i];
+                                        size_t i;
+                                        for(i=0; i < new_cache->size; i++)
+                                                buffer[i] = (new_cache->data[i] == '\r') ? ' ' : new_cache->data[i];
 
-                    buffer[i] = 0;
+                                        buffer[i] = 0;
 
-                    result = DL_init();
-                    result->data = buffer;
-                    result->size = i;
-                    result->dsrc = strdup(lyr_url);
+                                        result = DL_init();
+                                        result->data = buffer;
+                                        result->size = i;
+                                        result->dsrc = strdup(lyr_url);
 
-                    DL_free(new_cache);
+                                        DL_free(new_cache);
+                                }
+                                free(lyr_url);
+                        }
+                        free(uID);
                 }
-                free(lyr_url);
-            }
-            free(uID);
+        } else {
+                result = DL_error(NO_BEGIN_TAG);
         }
-    }
-    else
-    {
-        result = DL_error(NO_BEGIN_TAG);
-    }
 
-    if(result)
-    {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
-    }
-    return r_list;
+        if(result) {
+                r_list = DL_new_lst();
+                DL_add_to_list(r_list,result);
+        }
+        return r_list;
 }

@@ -38,7 +38,7 @@
 
 const char * review_allmusic_url(GlyQuery * s)
 {
-    return "http://www.allmusic.com/search/album/%album%";
+        return "http://www.allmusic.com/search/album/%album%";
 }
 
 #define IMG_BEGIN "<p class=\"text\">"
@@ -46,96 +46,82 @@ const char * review_allmusic_url(GlyQuery * s)
 
 GlyMemCache * parse_text(GlyMemCache * to_parse)
 {
-    GlyMemCache * rche = NULL;
-    char * text_begin = strstr(to_parse->data,IMG_BEGIN);
-    if(text_begin != NULL)
-    {
-        char * text_endin = strstr(text_begin,IMG_ENDIN);
-        if(text_endin != NULL && text_endin - (text_begin + strlen(IMG_BEGIN)) > 0)
-        {
-            char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
-            if(text != NULL)
-            {
-                remove_tags_from_string(text,-1,'<','>');
+        GlyMemCache * rche = NULL;
+        char * text_begin = strstr(to_parse->data,IMG_BEGIN);
+        if(text_begin != NULL) {
+                char * text_endin = strstr(text_begin,IMG_ENDIN);
+                if(text_endin != NULL && text_endin - (text_begin + strlen(IMG_BEGIN)) > 0) {
+                        char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
+                        if(text != NULL) {
+                                remove_tags_from_string(text,-1,'<','>');
 
-                rche = DL_init();
-                rche->data = strip_html_unicode(text);
-                rche->size = strlen(rche->data);
+                                rche = DL_init();
+                                rche->data = strip_html_unicode(text);
+                                rche->size = strlen(rche->data);
 
-                free(text);
-                text = NULL;
-            }
+                                free(text);
+                                text = NULL;
+                        }
+                }
         }
-    }
-    return rche;
+        return rche;
 }
 
 
 GlyCacheList * review_allmusic_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
-    if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
-    {
-        GlyMemCache * result = parse_text(capo->cache);
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list, result);
-        return r_list;
-    }
-
-    char * search_begin = NULL;
-    if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
-    {
-        return NULL;
-    }
-
-    int urlc = 0;
-    char *  node = search_begin;
-    while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
-    {
-        char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
-        if(url != NULL)
-        {
-            // We have the URL - now check the artist to be the one
-            char * rr = strstr(node+1,ARTIST_PART);
-            if(rr != NULL)
-            {
-                char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
-                if(artist != NULL)
-                {
-                    char * orig_artist = strdup(capo->s->artist);
-                    if(orig_artist)
-                    {
-                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/)
-                        {
-                            char * review_url = strdup_printf("%s/review",url);
-                            if(review_url)
-                            {
-                                GlyMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
-                                if(dl != NULL)
-                                {
-                                    GlyMemCache * result = parse_text(dl);
-                                    if(result != NULL)
-                                    {
-                                        if(!r_list) r_list = DL_new_lst();
-                                        DL_add_to_list(r_list,result);
-                                        urlc++;
-                                    }
-                                    DL_free(dl);
-                                }
-                                free(review_url);
-                                review_url = NULL;
-                            }
-                        }
-                        free(orig_artist);
-                        orig_artist=NULL;
-                    }
-                }
-                free(artist);
-                artist=NULL;
-            }
-            free(url);
-            url=NULL;
+        GlyCacheList * r_list = NULL;
+        if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") ) {
+                GlyMemCache * result = parse_text(capo->cache);
+                r_list = DL_new_lst();
+                DL_add_to_list(r_list, result);
+                return r_list;
         }
-    }
-    return r_list;
+
+        char * search_begin = NULL;
+        if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL) {
+                return NULL;
+        }
+
+        int urlc = 0;
+        char *  node = search_begin;
+        while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s)) {
+                char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
+                if(url != NULL) {
+                        // We have the URL - now check the artist to be the one
+                        char * rr = strstr(node+1,ARTIST_PART);
+                        if(rr != NULL) {
+                                char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
+                                if(artist != NULL) {
+                                        char * orig_artist = strdup(capo->s->artist);
+                                        if(orig_artist) {
+                                                if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/) {
+                                                        char * review_url = strdup_printf("%s/review",url);
+                                                        if(review_url) {
+                                                                GlyMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
+                                                                if(dl != NULL) {
+                                                                        GlyMemCache * result = parse_text(dl);
+                                                                        if(result != NULL) {
+                                                                                if(!r_list) r_list = DL_new_lst();
+                                                                                DL_add_to_list(r_list,result);
+                                                                                urlc++;
+                                                                        }
+                                                                        DL_free(dl);
+                                                                }
+                                                                free(review_url);
+                                                                review_url = NULL;
+                                                        }
+                                                }
+                                                free(orig_artist);
+                                                orig_artist=NULL;
+                                        }
+                                }
+                                free(artist);
+                                artist=NULL;
+                        }
+                        free(url);
+                        url=NULL;
+                }
+        }
+        return r_list;
 }

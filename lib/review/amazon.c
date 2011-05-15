@@ -31,42 +31,39 @@
 
 const char * review_amazon_url(GlyQuery * settings)
 {
-	return generic_amazon_url(settings,"EditorialReview");
+        return generic_amazon_url(settings,"EditorialReview");
 }
 
 #define TheContent "<Content>"
 #define TheEndofCt "</Content>"
 GlyCacheList * review_amazon_parse(cb_object * capo)
 {
-	char * node = capo->cache->data;
-	size_t clen = strlen(TheContent);
+        char * node = capo->cache->data;
+        size_t clen = strlen(TheContent);
 
-	GlyCacheList * cList = NULL;
+        GlyCacheList * cList = NULL;
 
-	size_t iter = 0;
-	while( (node = strstr(node+1,TheContent)) != NULL && continue_search(iter,capo->s))
-	{
-		char * endOfText = strstr(node+clen,TheEndofCt);
-		char * text = copy_value(node+clen,endOfText);
-		if(text)
-		{
-			// Ignore reviews with 300 chars
-			// as mostly just advertisement
-			if((endOfText - (node+clen)) > 350)
-			{
-				if(!cList) cList = DL_new_lst();
+        size_t iter = 0;
+        while( (node = strstr(node+1,TheContent)) != NULL && continue_search(iter,capo->s)) {
+                char * endOfText = strstr(node+clen,TheEndofCt);
+                char * text = copy_value(node+clen,endOfText);
+                if(text) {
+                        // Ignore reviews with 300 chars
+                        // as mostly just advertisement
+                        if((endOfText - (node+clen)) > 350) {
+                                if(!cList) cList = DL_new_lst();
 
-				GlyMemCache * tmp = DL_init();
-				tmp->data = beautify_lyrics(text);
-				tmp->size = tmp->data ? strlen(tmp->data) : 0;
-				tmp->dsrc = strdup(capo->url);
+                                GlyMemCache * tmp = DL_init();
+                                tmp->data = beautify_lyrics(text);
+                                tmp->size = tmp->data ? strlen(tmp->data) : 0;
+                                tmp->dsrc = strdup(capo->url);
 
-				iter++;
+                                iter++;
 
-				DL_add_to_list(cList,tmp);
-			}
-			free(text);
-		}
-	}
-	return cList;
+                                DL_add_to_list(cList,tmp);
+                        }
+                        free(text);
+                }
+        }
+        return cList;
 }

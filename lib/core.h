@@ -28,52 +28,50 @@
 // Other parts of the program shall not use this struct
 // GlyMemCache is what you're searching
 // It models the data that one plugin needs.
-typedef struct cb_object
-{
-    // What callback to call
-    GlyCacheList * (* parser_callback) (struct cb_object *);
+typedef struct cb_object {
+        // What callback to call
+        GlyCacheList * (* parser_callback) (struct cb_object *);
 
-    // What url to download before the callback is called
-    char *url;
+        // What url to download before the callback is called
+        char *url;
 
-    // Storage of the --of argument
-    const char ** info;
+        // Storage of the --of argument
+        const char ** info;
 
-    // pointer to settings struct (artist,album,etc)
-    GlyQuery * s;
+        // pointer to settings struct (artist,album,etc)
+        GlyQuery * s;
 
-    // What curl handle this is attached
-    CURL *handle;
+        // What curl handle this is attached
+        CURL *handle;
 
-    GlyPlugin * plug;
+        GlyPlugin * plug;
 
-    // internal cache attached to this url
-    GlyMemCache *cache;
+        // internal cache attached to this url
+        GlyMemCache *cache;
 
-    // shall invoke() use a batch-like mode?
-    // This usually only affects the output
-    bool batch;
+        // shall invoke() use a batch-like mode?
+        // This usually only affects the output
+        bool batch;
 
-    const char * endmark;
+        const char * endmark;
 
-    // This is only used for cover/photo
-    // to fill the 'prov' field of memcache
-    // This is a bit hackish, but well...
-    // no valid reason to change it just because this ;)
-    const char * provider_name;
+        // This is only used for cover/photo
+        // to fill the 'prov' field of memcache
+        // This is a bit hackish, but well...
+        // no valid reason to change it just because this ;)
+        const char * provider_name;
 
 } cb_object;
 
 // Internal list of errors
 // Use those with DL_error(ecode)
-enum CORE_ERR
-{
-    ALL_OK,
-    NO_BEGIN_TAG,
-    NO_ENDIN_TAG,
-    DOUBLE_ITEM,
-    BAD_FORMAT,
-    BLACKLISTED
+enum CORE_ERR {
+        ALL_OK,
+        NO_BEGIN_TAG,
+        NO_ENDIN_TAG,
+        DOUBLE_ITEM,
+        BAD_FORMAT,
+        BLACKLISTED
 };
 
 // Check if a plugin needs to search more items
@@ -92,6 +90,9 @@ GlyMemCache * DL_init(void);
 GlyMemCache * DL_error(int eid);
 GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
+
+// Calculate a md5sum of the data
+void Gly_update_md5sum(GlyMemCache * c);
 
 // cacheList related methods
 GlyCacheList * DL_new_lst(void);

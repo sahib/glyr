@@ -32,40 +32,36 @@
 //-------------------------------------
 
 // Add your's here
-GlyPlugin albumlist_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {albumlist_musicbrainz_parse, albumlist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
+GlyPlugin albumlist_providers[] = {
+        {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {albumlist_musicbrainz_parse, albumlist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
+        { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 //-------------------------------------
 
 GlyPlugin * glyr_get_albumlist_providers(void)
 {
-    return copy_table(albumlist_providers,sizeof(albumlist_providers));
+        return copy_table(albumlist_providers,sizeof(albumlist_providers));
 }
 
 //-------------------------------------
 
 static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    flag_lint(result, settings);
-    return generic_finalizer(result,settings,TYPE_ALBUMLIST);
+        flag_lint(result, settings);
+        return generic_finalizer(result,settings,TYPE_ALBUMLIST);
 }
 
 //-------------------------------------
 
 GlyCacheList * get_albumlist(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
-    if(settings && settings->artist)
-    {
-        result = register_and_execute(settings, albumlist_finalize);
-    }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to retrieve a albumlist (o rly?).\n");
-    }
-    return result;
+        GlyCacheList * result = NULL;
+        if(settings && settings->artist) {
+                result = register_and_execute(settings, albumlist_finalize);
+        } else {
+                glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to retrieve a albumlist (o rly?).\n");
+        }
+        return result;
 }
 //-------------------------------------

@@ -30,32 +30,28 @@
 #include "tags/musicbrainz.h"
 
 // Add your's here
-GlyPlugin tags_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tags_musicbrainz_parse,  tags_musicbrainz_url, NULL, true }, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
+GlyPlugin tags_providers[] = {
+        {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tags_musicbrainz_parse,  tags_musicbrainz_url, NULL, true }, GRP_SAFE | GRP_FAST},
+        { NULL,        NULL, NULL,                  false,  {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
 };
 
 GlyPlugin * glyr_get_tags_providers(void)
 {
-    return copy_table(tags_providers,sizeof(tags_providers));
+        return copy_table(tags_providers,sizeof(tags_providers));
 }
 
 static GlyCacheList * tags_finalize(GlyCacheList * result, GlyQuery * settings)
 {
-    return generic_finalizer(result,settings,TYPE_TAGS);
+        return generic_finalizer(result,settings,TYPE_TAGS);
 }
 
 GlyCacheList * get_tags(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
-    if(settings && settings->artist)
-    {
-        result = register_and_execute(settings, tags_finalize);
-    }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get tags.\n");
-    }
-    return result;
+        GlyCacheList * result = NULL;
+        if(settings && settings->artist) {
+                result = register_and_execute(settings, tags_finalize);
+        } else {
+                glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get tags.\n");
+        }
+        return result;
 }

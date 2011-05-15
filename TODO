@@ -1,15 +1,16 @@
-- update help text -- done
-- more providers for review and lyrics
+-------- future
 - Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
 - cmake install -- done
 - cmake portable.. 
-- repair Glubyr -- done
+- docu
 
-- paths for tag/relations..
+------ plans
+- paths for tag/relations in glyrc
 - default settings for getters (like number=-1 for track/albumlist)
 - ainfo/wikipedia.c still not working
 
+------- urgent
 - test lyrics (klingeltöne... *chrm*)
-- ruby callback..
+- rewrite of GUI in C and gtk3 (Modi get your ass here!)
 - full amazon support
-- fix up glyrc
+- update swig

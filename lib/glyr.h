@@ -27,84 +27,86 @@
 extern "C"
 {
 #endif
-    // Call this at startup
-    // calling more than once it won't do anything
-    void Gly_init(void);
+        // Call this at startup
+        // calling more than once it won't do anything
+        void Gly_init(void);
 
-    // call this once you called Gly_init and you're done
-    void Gly_cleanup(void);
+        // call this once you called Gly_init and you're done
+        void Gly_cleanup(void);
 
-    // Call this once you want to use libglyr
-    void Gly_init(void);
-    
-    // Cleanup curl, libglyr does not use any global vars,
-    // but libcurl does. That's the only reason why there is a init/cleanup:
-    // both aren't threadsafe.
-    void Gly_cleanup(void);
+        // Call this once you want to use libglyr
+        void Gly_init(void);
 
-    // the actual main of glyr
-    GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
+        // Cleanup curl, libglyr does not use any global vars,
+        // but libcurl does. That's the only reason why there is a init/cleanup:
+        // both aren't threadsafe.
+        void Gly_cleanup(void);
 
-    // Initialize settings struct to sane defaults
-    void Gly_init_query(GlyQuery * glyrs);
+        // the actual main of glyr
+        GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
 
-    // free all memory that may been still allocated in struct
-    void Gly_destroy_query(GlyQuery * sets);
+        // Initialize settings struct to sane defaults
+        void Gly_init_query(GlyQuery * glyrs);
 
-    // GlyCacheList related
-    void Gly_free_list(GlyCacheList * lst);
-    GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter);
+        // free all memory that may been still allocated in struct
+        void Gly_destroy_query(GlyQuery * sets);
 
-    // Cache related
-    GlyMemCache * Gly_new_cache(void);
-    GlyMemCache * Gly_copy_cache(GlyMemCache * source);
-    void Gly_free_cache(GlyMemCache * c);
+        // GlyCacheList related
+        void Gly_free_list(GlyCacheList * lst);
+        GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter);
 
-    /* Gly_opt methods */
-    int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
-    int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
-    int GlyOpt_artist(GlyQuery * s, char * artist);
-    int GlyOpt_album(GlyQuery * s,  char * album);
-    int GlyOpt_title(GlyQuery * s,  char * title);
-    int GlyOpt_cmaxsize(GlyQuery * s, int size);
-    int GlyOpt_cminsize(GlyQuery * s, int size);
-    int GlyOpt_parallel(GlyQuery * s, unsigned long val);
-    int GlyOpt_timeout(GlyQuery * s, unsigned long val);
-    int GlyOpt_redirects(GlyQuery * s, unsigned long val);
-    int GlyOpt_lang(GlyQuery * s, char * langcode);
-    int GlyOpt_number(GlyQuery * s, unsigned int num);
-    int GlyOpt_verbosity(GlyQuery * s, unsigned int level);
-    int GlyOpt_from(GlyQuery * s, const char * from);
-    int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
-    int GlyOpt_plugmax(GlyQuery * s, int plugmax);
-    int GlyOpt_download(GlyQuery * s, bool download);
-    int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
-    int GlyOpt_formats(GlyQuery * s, const char * formats);
-    int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
-    int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
-    int GlyOpt_call_direct_use(GlyQuery * s, bool use);
-    int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider);
-    int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
+        // Cache related
+        GlyMemCache * Gly_new_cache(void);
+        GlyMemCache * Gly_copy_cache(GlyMemCache * source);
+        void Gly_free_cache(GlyMemCache * c);
 
-    // get information about available plugins
-    GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
+        /* Gly_opt methods */
+        int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
+        int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
+        int GlyOpt_artist(GlyQuery * s, char * artist);
+        int GlyOpt_album(GlyQuery * s,  char * album);
+        int GlyOpt_title(GlyQuery * s,  char * title);
+        int GlyOpt_cmaxsize(GlyQuery * s, int size);
+        int GlyOpt_cminsize(GlyQuery * s, int size);
+        int GlyOpt_parallel(GlyQuery * s, unsigned long val);
+        int GlyOpt_timeout(GlyQuery * s, unsigned long val);
+        int GlyOpt_redirects(GlyQuery * s, unsigned long val);
+        int GlyOpt_lang(GlyQuery * s, char * langcode);
+        int GlyOpt_number(GlyQuery * s, unsigned int num);
+        int GlyOpt_verbosity(GlyQuery * s, unsigned int level);
+        int GlyOpt_from(GlyQuery * s, const char * from);
+        int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
+        int GlyOpt_plugmax(GlyQuery * s, int plugmax);
+        int GlyOpt_download(GlyQuery * s, bool download);
+        int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
+        int GlyOpt_formats(GlyQuery * s, const char * formats);
+        int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+        int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
+        int GlyOpt_call_direct_use(GlyQuery * s, bool use);
+        int GlyOpt_call_direct_provider(GlyQuery * s, const char * provider);
+        int GlyOpt_call_direct_url(GlyQuery * s, const char * URL);
+	int GlyOpt_gtrans_source_lang(GlyQuery * s, const char * source);
+	int GlyOpt_gtrans_target_lang(GlyQuery * s, const char * target);
 
-    // Download a URL and sae it in Memcache
-    GlyMemCache * Gly_download(const char * url, GlyQuery * s);
+        // get information about available plugins
+        GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
 
-    // Short descriptive version of an error ID
-    const char * Gly_strerror(enum GLYR_ERROR ID);
+        // Download a URL and sae it in Memcache
+        GlyMemCache * Gly_download(const char * url, GlyQuery * s);
 
-    // Returns the actual name of the group pointed by ID
-    const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
+        // Short descriptive version of an error ID
+        const char * Gly_strerror(enum GLYR_ERROR ID);
 
-    // return library version
-    const char * Gly_version(void);
+        // Returns the actual name of the group pointed by ID
+        const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
 
-    // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
-    int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
+        // return library version
+        const char * Gly_version(void);
 
-    
+        // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
+        int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
+
+
 #ifdef _cplusplus
 }
 #endif

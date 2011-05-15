@@ -29,31 +29,29 @@
 
 const char * ainfo_lyricsreg_url(GlyQuery * s)
 {
-    return "http://www.lyricsreg.com/biography/%artist%/";
+        return "http://www.lyricsreg.com/biography/%artist%/";
 }
 
 GlyCacheList * ainfo_lyricsreg_parse(cb_object * capo)
 {
-    GlyCacheList * ls = NULL;
-    size_t ib_len = strlen(INFO_BEGIN);
-    char * point_to_start = strstr(capo->cache->data,INFO_BEGIN);
-    if(point_to_start != NULL)
-    {
-	point_to_start += ib_len;
-	char * mend = strstr(point_to_start, INFO_ENDIN);
- 	char * info = copy_value(point_to_start, mend); 	
-	if(info != NULL && (mend-point_to_start) > 150)
-	{
-		ls = DL_new_lst();
-		GlyMemCache * tmp = DL_init();
-		tmp->data = beautify_lyrics(info);
-		tmp->size = (tmp->data) ? strlen(tmp->data) : 0;
-		tmp->dsrc = strdup(capo->url);
-	
-		DL_add_to_list(ls,tmp);
-	
-		free(info);
-	}
-    }
-    return ls;
+        GlyCacheList * ls = NULL;
+        size_t ib_len = strlen(INFO_BEGIN);
+        char * point_to_start = strstr(capo->cache->data,INFO_BEGIN);
+        if(point_to_start != NULL) {
+                point_to_start += ib_len;
+                char * mend = strstr(point_to_start, INFO_ENDIN);
+                char * info = copy_value(point_to_start, mend);
+                if(info != NULL && (mend-point_to_start) > 150) {
+                        ls = DL_new_lst();
+                        GlyMemCache * tmp = DL_init();
+                        tmp->data = beautify_lyrics(info);
+                        tmp->size = (tmp->data) ? strlen(tmp->data) : 0;
+                        tmp->dsrc = strdup(capo->url);
+
+                        DL_add_to_list(ls,tmp);
+
+                        free(info);
+                }
+        }
+        return ls;
 }
