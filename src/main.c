@@ -28,7 +28,6 @@
 #include <signal.h>
 
 #include "../lib/glyr.h"
-#include "../lib/translate.h"
 #include "../lib/md5.h"
 
 // also includes glyr's stringlib
@@ -509,18 +508,18 @@ static const char ** parse_commandline_general(int argc, char * const * argv, Gl
                 {"plugmax",       required_argument, 0, 'x'},
                 {"verbosity",     required_argument, 0, 'v'},
                 {"update",        no_argument,       0, 'u'},
-                {"skip-update",   no_argument,       0, 'U'},
+                {"no-update",     no_argument,       0, 'U'},
                 {"help",          no_argument,       0, 'h'},
                 {"usage",         no_argument,       0, 'H'},
                 {"version",       no_argument,       0, 'V'},
                 {"color",         no_argument,       0, 'c'},
-                {"skip-color",    no_argument,       0, 'C'},
+                {"no-color",      no_argument,       0, 'C'},
                 {"download",      no_argument,       0, 'd'},
-                {"skip-download", no_argument,       0, 'D'},
+                {"no-download",   no_argument,       0, 'D'},
                 {"groups",        no_argument,       0, 'g'},
-                {"skip-groups",   no_argument,       0, 'G'},
+                {"no-groups",     no_argument,       0, 'G'},
                 {"twincheck",     no_argument,       0, 'y'},
-                {"skip-twincheck",no_argument,       0, 'Y'},
+                {"no-twincheck",  no_argument,       0, 'Y'},
                 // -- plugin specific -- //
                 {"artist",        required_argument, 0, 'a'},
                 {"album",         required_argument, 0, 'b'},
@@ -1009,7 +1008,7 @@ static void make_translation_work(GlyQuery * s, GlyMemCache * to_translate)
 {
 	if(s && to_translate && !to_translate->is_image && s->gtrans.target) {
 			if(!s->gtrans.source || strcmp(s->gtrans.target,s->gtrans.source)) {
-				Gly_translate_text(s,to_translate);
+				Gly_gtrans_translate(s,to_translate);
 			} else {
 				glyr_message(1,s,stderr,"- The target lang is the same as the source lang - Ignore'd.");
 			}
@@ -1074,7 +1073,7 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 static void print_suppported_languages(GlyQuery * s)
 {
 	size_t i = 0;
-	char ** lang_list = Gly_list_supported_languages(s);
+	char ** lang_list = Gly_gtrans_list(s);
 
 	// Print all in a calendarstyle format
 	while(lang_list[i]) {
@@ -1106,15 +1105,19 @@ int main(int argc, char * argv[])
         signal(SIGSEGV, sig_handler);
         signal(SIGINT,  sig_handler);
 
-        if(argc >= 3 && strcmp(argv[1],"gtrans") != 0) {
-                // make sure to init everything and destroy again
-                Gly_init();
-                atexit(Gly_cleanup);
+        // make sure to init everything and destroy again
+        Gly_init();
+        atexit(Gly_cleanup);
 
+	/* Go firth unless the user demeands translation */
+        if(argc >= 3 && strcmp(argv[1],"gtrans") != 0) {
+		// The struct that control this beast
                 GlyQuery my_query;
-                // glyr's control struct
+
+                // set it on default values
                 Gly_init_query(&my_query);
 
+		// Good enough for glyrc
                 GlyOpt_verbosity(&my_query,2);
 
                 // Set the type..
@@ -1130,8 +1133,9 @@ int main(int argc, char * argv[])
                         write_arg[1] = NULL;
                 }
 
+		// Special cases
                 if(my_query.type == GET_AINFO)
-                        my_query.number *= 2;
+			GlyOpt_number(&my_query,my_query.number*2);
 
                 // Check if files do already exist
                 bool file_exist = false;
@@ -1152,27 +1156,37 @@ int main(int argc, char * argv[])
                         }
                 }
 
-                // Set (example) callback
+		if(my_query.type == GET_TRACKLIST)
+			GlyOpt_number(&my_query,0);
+
+		if(my_query.type == GET_ALBUMLIST)
+			GlyOpt_number(&my_query,0);
+
+                // Set the callback - it will do all the actual work
                 int item_counter = 0;
                 GlyOpt_dlcallback(&my_query, callback, &item_counter);
+
                 if(my_query.type != GET_UNSURE) {
                         if(!file_exist) {
+
+				// Get information about available getters
                                 command_copy =  Gly_get_provider_by_id(GET_UNSURE);
 
-                                // Now start searching...
+                                // Now start searching!
                                 enum GLYR_ERROR get_error = GLYRE_OK;
                                 GlyCacheList * my_list= Gly_get(&my_query, &get_error);
 
+				// The struct needs to be free'd again
                                 if(command_copy) {
                                         free(command_copy);
                                 }
 
                                 if(my_list) {
                                         if(get_error == GLYRE_OK) {
-                                                // to be removed completely?
                                                 /* This is the place where you would work with the cachelist *
                                                    As the callback is used in glyrc this is just plain empty *
                                                    Useful if you need to cache the data (e.g. for batch jobs *
+						   Left only for the reader's informatiom, no functions here *
                                                 */
                                         }
 
@@ -1185,6 +1199,7 @@ int main(int argc, char * argv[])
                                 glyr_message(1,&my_query,stderr,C_B"*"C_" File(s) already exist. Use -u to update.\n");
                         }
 
+			// free pathes
                         size_t x = 0;
                         for( x = 0; write_arg[x]; x++) {
                                 free((char*)write_arg[x]);
@@ -1197,7 +1212,7 @@ int main(int argc, char * argv[])
                         Gly_destroy_query( &my_query);
                 }
 	/* Translator mode - simple interface to google translator */
-	} else if(argc >= 2 && !strcmp(argv[1],"gtrans")) {
+	} else if(argc >= 3 && !strcmp(argv[1],"gtrans")) {
 		GlyQuery settings;
 		Gly_init_query(&settings);
 		GlyOpt_verbosity(&settings,2);
@@ -1207,16 +1222,16 @@ int main(int argc, char * argv[])
 			print_suppported_languages(&settings);
 
 		/* detect language snippet given as argument */
-		} else if(!strcmp(argv[2],"detect") && argc >= 3) {
+		} else if(!strcmp(argv[2],"detect") && argc >= 4) {
 			float correctness = 0.0;
-			char * lang_guess = Gly_lookup_language(&settings,argv[3],&correctness);
+			char * lang_guess = Gly_gtrans_lookup(&settings,argv[3],&correctness);
 			if(lang_guess != NULL) {
 				glyr_message(2,&settings,stdout,"%s (%3.2f%% probability)\n",lang_guess,correctness*100.0);
 				free(lang_guess);
 			}
 
 		/* Translation */
-		} else if(argc >= 3) {
+		} else if(argc >= 4) {
 			GlyMemCache * buffer = Gly_new_cache();
 			if(buffer != NULL) {
 				buffer->data = strdup(argv[2]);
@@ -1229,12 +1244,17 @@ int main(int argc, char * argv[])
 				/* set target language */
 				GlyOpt_gtrans_target_lang(&settings,argv[4]);
 
-				Gly_translate_text(&settings,buffer);
+				Gly_gtrans_translate(&settings,buffer);
 				glyr_message(2,&settings,stdout,"%s\n",buffer->data);
 
 				/* all done - bye! */
 				Gly_free_cache(buffer);
 			}
+		} else { /* usage */
+			glyr_message(-1,NULL,stderr,"Usage:\n");
+			glyr_message(-1,NULL,stderr,"  glyrc gtrans list\n");
+			glyr_message(-1,NULL,stderr,"  glyrc gtrans [text] [sourcelang|auto] [targetlang]\n");
+			glyr_message(-1,NULL,stderr,"  glyrc gtrans detect [text]\n\n");
 		}
 
 		/* free all registers */

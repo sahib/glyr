@@ -236,7 +236,7 @@ int GlyOpt_lang(GlyQuery * s, char * langcode)
 int GlyOpt_number(GlyQuery * s, unsigned int num)
 {
         if(s == NULL) return GLYRE_EMPTY_STRUCT;
-        s->number = num == 0 ? UINT_MAX : num;
+        s->number = num == 0 ? INT_MAX : num;
         return GLYRE_OK;
 }
 

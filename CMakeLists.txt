@@ -76,7 +76,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/md5.c"
 	# extensions
 	"${DIR_AINFO}/lastfm.c"
-	"${DIR_AINFO}/wikipedia.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_AINFO}/lyricsreg.c"
 	"${DIR_SIMILIAR}/lastfm.c"

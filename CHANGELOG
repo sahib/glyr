@@ -79,3 +79,7 @@ Found some time to work a bit here :-)
   For normal users: Well, the duplicate check is now as fast as rmlint :-P
 + getopt_long is now getopt_long_only (no --arguments, just -argument or -a)
 + removed call_direct. It's of no use. Not even for devs.
+
+2011/05/16
+----------
++ removed wikipedia.c for ainfo - never worked. Better provide a link and (relation getter) and let the user render the site (too many information would get lost if glyr would need to parse it)

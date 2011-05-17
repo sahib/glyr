@@ -39,7 +39,7 @@ extern "C"
 
         // Cleanup curl, libglyr does not use any global vars,
         // but libcurl does. That's the only reason why there is a init/cleanup:
-        // both aren't threadsafe.
+        // both aren't threadsafe. (It's safe to Init at programstart and to do atexit(Gly_cleanup))
         void Gly_cleanup(void);
 
         // the actual main of glyr
@@ -105,6 +105,9 @@ extern "C"
 
         // write binary file, this is for use in language bindings mainly, which partly can't easily write them themself
         int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path);
+
+	// Also include the translation API
+	#include "translate.h"
 
 
 #ifdef _cplusplus

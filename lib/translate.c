@@ -14,8 +14,10 @@
 #include "types.h"
 #include "core.h"
 
+// Please use your own key if you copy this - it's free!
 #define GOOGLE_TRANSLATE_API_KEY "AIzaSyDzfBNb-W5G9pvZY6KGbEoRK4JvOIhUsjI"
 
+/* Module prototypes */
 static const char * gtrans_get_trans_url(const char * input, const char * from, const char * to);
 static const char * gtrans_get_detector_url(const char * input);
 static char * json_get_single_value(char * sval, size_t keylen);
@@ -32,7 +34,7 @@ static const char * gtrans_get_trans_url(const char * input, const char * from, 
                 if(escape_input != NULL) {
                         resultURL = strdup_printf("https://www.googleapis.com/language/translate/v2?key=%s%s%s&target=%s&prettyprint=true&q=%s",
 						  GOOGLE_TRANSLATE_API_KEY,
-						  (from==NULL) ? "" : "&source=", // &source field can be omitted
+						  (from==NULL) ? "" : "&source=", // &source field can be omitted, autodetect then.
 						  (from==NULL) ? "" : from,
 						  to,escape_input
 						 );
@@ -148,11 +150,15 @@ static char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctnes
 #define BLOCK_BUF 500
 #define NEWLINE_MARKUP "__"
 /* Modifies $to_translate with the translation */
-void Gly_translate_text(GlyQuery * s, GlyMemCache * to_translate)
+void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
 {
         char * concat_chain = NULL;
         char block_buf[BLOCK_BUF+2];
         if(s && to_translate && s->gtrans.target) {
+
+		// so yesterday I translated an image. O RLY?
+		if(to_translate->is_image)
+			return;
 
 		// no need to translate, eh?	
 		if(s->gtrans.source && !strcmp(s->gtrans.target,s->gtrans.source))
@@ -243,7 +249,7 @@ void Gly_translate_text(GlyQuery * s, GlyMemCache * to_translate)
 /* ------------------------------------------------------------------- */
 
 /* Ask google translator what language we are dealing with, NULL if unknown */
-char * Gly_lookup_language(GlyQuery * s, const char * snippet, float * correctness)
+char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness)
 {
         char * result_lang = NULL;
         if(s  && snippet) {
@@ -262,7 +268,7 @@ char * Gly_lookup_language(GlyQuery * s, const char * snippet, float * correctne
 
 /* ------------------------------------------------------------------- */
 
-char ** Gly_list_supported_languages(GlyQuery * s)
+char ** Gly_gtrans_list(GlyQuery * s)
 {
         char ** result_list = NULL;
         if(s != NULL) {
