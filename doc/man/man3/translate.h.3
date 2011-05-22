@@ -34,7 +34,16 @@ List all supported languages. \fBParameters:\fP
 \fIs\fP The \fBGlyQuery\fP needed to determine the source/target language
 .RE
 .PP
-Queries google for a list of all supported languages Returned as a list of char pointers, free both the single strings and the return value. If you only want to know all languages: 'glyrc gtrans list' does the same.
+Queries google for a list of all supported languages 
+.br
+ Returned as a list of char pointers, free both the 
+.br
+ single strings and the return value. 
+.br
+ If you only want to know all languages: 
+.br
+ 'glyrc gtrans list' does the same. 
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -46,14 +55,27 @@ a list of strings, containg the language codes
 .PP
 Lookup the language a certain snippet may be in. \fBParameters:\fP
 .RS 4
-\fIs\fP The \fBGlyQuery\fP needed to determine the source/target language 
+\fIs\fP The \fBGlyQuery\fP needed to determine the source/target language
 .br
-\fIsnippet\fP a short snippet (less than 500 signs) in the questionable language 
+ 
+.br
+\fIsnippet\fP a short snippet (less than 500 signs) in the questionable language
+.br
+ 
 .br
 \fIcorrectness\fP an optional pointer storing the correctness, or NULL
+.br
 .RE
 .PP
-Ask google what language the snippet given as const char is written in Optionally you can give a float pointer where the probability of the result being correct is stored in, (from 0.0 to 1.0), long snippets usually give better results. The result is returned as newly allocated char * - free it.
+Ask google what language the snippet given as const char is written in 
+.br
+ Optionally you can give a float pointer where the probability of the 
+.br
+ result being correct is stored in, (from 0.0 to 1.0), long snippets 
+.br
+ usually give better results. The result is returned as newly allocated 
+.br
+ char * - free it.
 .PP
 \fBReturns:\fP
 .RS 4
@@ -70,7 +92,17 @@ Initiate translating. \fBParameters:\fP
 \fIto_translate\fP Cache that gets modified with the translation.
 .RE
 .PP
-Takes the cache struct to_translate and translate the text according to the setting stored in the \fBGlyQuery\fP s It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit being at the moment at 100,000 chars per day and IP. The buffer is directly modified so make copies before if you need. 
+Takes the cache struct to_translate and translate the text according to the setting stored in the \fBGlyQuery\fP s 
+.br
+ It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, 
+.br
+ and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit 
+.br
+ being at the moment at 100,000 chars per day and IP.
+.br
+ The buffer is directly modified so make copies before if you need.
+.br
+ 
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for libglyr from the source code.

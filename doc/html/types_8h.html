@@ -156,8 +156,6 @@ Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a8bc82045218fbd655329f26daca16f43">DEFAULT_DUPLCHECK</a>&#160;&#160;&#160;true</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a4029b4a226246aed03aecba69fccace1">DEFAULT_FUZZYNESS</a>&#160;&#160;&#160;4</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#ac2903a99a05b74da2602f638a975e891">DEFAULT_FORMATS</a>&#160;&#160;&#160;&quot;jpg;jpeg;png&quot;</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a12321f191d1d1e4d5c03321b93ed27b5">DEFAULT_CALL_DIRECT_USE</a>&#160;&#160;&#160;false</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a848026cd13bef3756e5150e2373af8cb">DEFAULT_CALL_DIRECT_PROVIDER</a>&#160;&#160;&#160;NULL</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#aa3bc79e2f5187cd0bc4c9ca54263c11d">API_KEY_DISCOGS</a>&#160;&#160;&#160;&quot;adff651383&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a114981570a7d391c6a71336a5a808266">API_KEY_AMAZON</a>&#160;&#160;&#160;&quot;AKIAJ6NEA642OU3FM24Q&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a4c2528d9d2086f90b692ed0455b98cdf">API_KEY_LASTFM</a>&#160;&#160;&#160;&quot;7199021d9c8fbae507bf77d0a88533d7&quot;</td></tr>
@@ -244,6 +242,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a200d8ea69ed0805680aa7585c3ea749a">TYPE_TRACK</a>
 <br/>
  }</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">All possible values the type field of <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> can have.  <a href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2">More...</a><br/></td></tr>
 </table>
 <hr/><h2>Define Documentation</h2>
 <a class="anchor" id="ae2f08dc603ae93c402abd918ba4e23e1"></a><!-- doxytag: member="types.h::ABS" ref="ae2f08dc603ae93c402abd918ba4e23e1" args="(a)" -->
@@ -445,32 +444,6 @@ Enumerations</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td>&#160;&#160;&#160;(((x) &gt; (high)) ? (high) : (((x) &lt; (low)) ? (low) : (x)))</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a848026cd13bef3756e5150e2373af8cb"></a><!-- doxytag: member="types.h::DEFAULT_CALL_DIRECT_PROVIDER" ref="a848026cd13bef3756e5150e2373af8cb" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFAULT_CALL_DIRECT_PROVIDER&#160;&#160;&#160;NULL</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a12321f191d1d1e4d5c03321b93ed27b5"></a><!-- doxytag: member="types.h::DEFAULT_CALL_DIRECT_USE" ref="a12321f191d1d1e4d5c03321b93ed27b5" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFAULT_CALL_DIRECT_USE&#160;&#160;&#160;false</td>
         </tr>
       </table>
 </div>
@@ -831,6 +804,7 @@ Enumerations</h2></td></tr>
 <div class="memdoc">
 
 <p>Represents a single item. </p>
+<p>It's used </p>
 
 </div>
 </div>
@@ -846,6 +820,7 @@ Enumerations</h2></td></tr>
 <div class="memdoc">
 
 <p>Structure holding information about built-in getters and providers. </p>
+<p>Holding information about plugin-name, shortcut (key = "a" =&gt; "amazon"), a colored version of the name. You shouldn't bother with the rest </p>
 
 </div>
 </div>
@@ -861,6 +836,7 @@ Enumerations</h2></td></tr>
 <div class="memdoc">
 
 <p>Structure controlling all of libglyr's options. </p>
+<p>You should modify this with the GlyOpt_* methods, You can read all members directly </p>
 
 </div>
 </div>
@@ -875,6 +851,8 @@ Enumerations</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>All possible values the type field of <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> can have. </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a2f9a38bb3f043054227ba0de6ee4f96f"></a><!-- doxytag: member="TYPE_NOIDEA" ref="aed6a85dbaccaf17531f2b57700ea23c2a2f9a38bb3f043054227ba0de6ee4f96f" args="" -->TYPE_NOIDEA</em>&nbsp;</td><td>
 </td></tr>
@@ -959,6 +937,7 @@ Enumerations</h2></td></tr>
 <div class="memdoc">
 
 <p>Enumeration of all getters, <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> is initalized to GET_UNSURE. </p>
+<p>The type of metadata to get, names are selfexplanatory </p>
 <dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
 <tr><td valign="top"><em><a class="anchor" id="a10514a32d3df08c9165d5ed7d15589a9ab5b9eb3acb25764c7937010dcde72984"></a><!-- doxytag: member="GET_COVER" ref="a10514a32d3df08c9165d5ed7d15589a9ab5b9eb3acb25764c7937010dcde72984" args="" -->GET_COVER</em>&nbsp;</td><td>
 </td></tr>
@@ -1034,7 +1013,7 @@ Enumerations</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 22:04:22 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:18:10 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

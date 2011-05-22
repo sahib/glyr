@@ -138,7 +138,7 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#af469a8463bc1de321b2fd0d0778875ea">GlyOpt_type</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> type)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.  <a href="#af469a8463bc1de321b2fd0d0778875ea"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a3a891d624103d7bda2aacc1722b47220">GlyOpt_artist</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *artist)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The artist field. libglyr will try to format it to fit the best. This field is required for all getters.  <a href="#a3a891d624103d7bda2aacc1722b47220"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The artist field. libglyr will try to format it to fit the best.  <a href="#a3a891d624103d7bda2aacc1722b47220"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#acbb829fbe0c767c17e6ac94118a3cfcf">GlyOpt_album</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *album)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The album field. libglyr will try to format it to fit the best.  <a href="#acbb829fbe0c767c17e6ac94118a3cfcf"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aaf1e49ee09c412504c1a05e96d7d40a8">GlyOpt_title</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *title)</td></tr>
@@ -190,7 +190,7 @@ Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aaf1ebbe2db15c30a3dc329d25ace2279">Gly_version</a> (void)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns versioning information, including compiletime.  <a href="#aaf1ebbe2db15c30a3dc329d25ace2279"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#addc3e50e99d595eb14e1c76500d93f95">Gly_write</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *data, const char *path)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data to the path $path, mostly there to make languagebindings easier.  <a href="#addc3e50e99d595eb14e1c76500d93f95"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data to a specified path.  <a href="#addc3e50e99d595eb14e1c76500d93f95"></a><br/></td></tr>
 </table>
 <hr/><h2>Function Documentation</h2>
 <a class="anchor" id="a705e9f8709f3e53a6566e37a3317548e"></a><!-- doxytag: member="glyr.h::Gly_cleanup" ref="a705e9f8709f3e53a6566e37a3317548e" args="(void)" -->
@@ -420,7 +420,10 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>It takes a pointer to a <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> struct filled to your needs via the GlyOpt_* methods, Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter. After return all items are listed in a <a class="el" href="structGlyCacheList.html" title="The return type of Gly_get, a list of GlyMemCaches.">GlyCacheList</a> ready to be accessed, remember to delete it with Gly_free_list when done.</p>
+<p>It takes a pointer to a <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> struct filled to your needs via the GlyOpt_* methods,<br/>
+ Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.<br/>
+ After return all items are listed in a <a class="el" href="structGlyCacheList.html" title="The return type of Gly_get, a list of GlyMemCaches.">GlyCacheList</a> ready to be accessed, remember to delete it with Gly_free_list when done.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A <a class="el" href="structGlyCacheList.html" title="The return type of Gly_get, a list of GlyMemCaches.">GlyCacheList</a> containing all found data. See the struct reference for further details. </dd></dl>
 
 </div>
@@ -615,7 +618,7 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Writes data to the path $path, mostly there to make languagebindings easier. </p>
+<p>Writes data to a specified path. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">data</td><td>The data to write. </td></tr>
@@ -623,6 +626,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',<br/>
+ which are pretty selfexplaining.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>An error id. </dd></dl>
 
 </div>
@@ -699,7 +704,7 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>The artist field. libglyr will try to format it to fit the best. This field is required for all getters. </p>
+<p>The artist field. libglyr will try to format it to fit the best. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in </td></tr>
@@ -707,6 +712,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
+<p>This field is required for all getters. You are required to fill it.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -822,7 +828,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Colored output only works in terminal with standard color support, which means, non standard terminals like the MS commandline do not work.</p>
+<p>Colored output only works in terminal with standard color support,<br/>
+ which means, non standard terminals like the MS commandline do not work.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>always GLYRE_OK </dd></dl>
 
 </div>
@@ -900,11 +907,15 @@ Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">download</td><td>For image getters only. If set to true images are also coviniently downloaded and returned. Otherwise, just the URL is returned for your own use.</td></tr>
+    <tr><td class="paramname">download</td><td>For image getters only.<br/>
+ If set to true images are also coviniently downloaded and returned.<br/>
+ Otherwise, just the URL is returned for your own use.<br/>
+</td></tr>
   </table>
   </dd>
 </dl>
-<p>Default to 'true', 'false' would be a bit more searchengine like.</p>
+<p>Default to 'true', 'false' would be a bit more searchengine like.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -942,8 +953,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Actually there is no valid reason to set this to false.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+<p>Actually there is no valid reason to set this to false,<br/>
+ except duplicate items are okay for you.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
@@ -980,9 +992,14 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Awaits a string with a semicolon seperated list of allowed formats. The case of the format is ignored.</p>
-<p>Example: "png;jpg;jpeg" would allow png and jpeg.</p>
-<p>You can also specify "all", which disables this check.</p>
+<p>Awaits a string with a semicolon seperated list of allowed formats.<br/>
+ The case of the format is ignored.<br/>
+</p>
+<p>Example:<br/>
+ "png;jpg;jpeg" would allow png and jpeg.<br/>
+</p>
+<p>You can also specify "all", which disables this check.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1020,10 +1037,22 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Use this to define what providers you want to use. Every provider has a name and a key which is merely a shortcut for the name. Specify all providers in a semicolon seperated list. Type 'glyrc -H' for a complete list of all providers for each getter.</p>
-<p>Example: "amazon;google" "a;g" - same with keys</p>
-<p>You can also prepend each word with a '+' or a '-' ('+' is assumend without), which will add or remove this provider from the list respectively. Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.</p>
-<p>Example: "+fast;-amazon" which will enable last.fm and lyricswiki.</p>
+<p>Use this to define what providers you want to use.<br/>
+ Every provider has a name and a key which is merely a shortcut for the name.<br/>
+ Specify all providers in a semicolon seperated list.<br/>
+ Type 'glyrc -H' for a complete list of all providers for each getter.<br/>
+</p>
+<p>Example:<br/>
+ "amazon;google" <br/>
+ "a;g" - same with keys<br/>
+</p>
+<p>You can also prepend each word with a '+' or a '-' ('+' is assumend without),<br/>
+ which will add or remove this provider from the list respectively.<br/>
+ Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.<br/>
+</p>
+<p>Example:<br/>
+ "+fast;-amazon" which will enable last.fm and lyricswiki.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1057,13 +1086,21 @@ Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">fuzz</td><td>Set the maximum amount of inserts, edits and substitutions, a search results may differ from the artist and/or album and/or title. The difference between two strings is measured as the 'Levenshtein distance', i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.</td></tr>
+    <tr><td class="paramname">fuzz</td><td>Set the maximum amount of inserts, edits and substitutions, a search results<br/>
+ may differ from the artist and/or album and/or title.<br/>
+ The difference between two strings is measured as the 'Levenshtein distance',<br/>
+ i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.<br/>
+</td></tr>
   </table>
   </dd>
 </dl>
-<p>Example: "Equilibrium" &lt;=&gt; "Aqilibriums" =&gt; Distance=3 With a fuzzyness of 3 this would pass the check, with 2 it won't.</p>
-<p>Higher values mean more search results, but more inaccuracy. Default is 4.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+<p>Example:<br/>
+ "Equilibrium" &lt;=&gt; "Aqilibriums" =&gt; Distance=3<br/>
+ With a fuzzyness of 3 this would pass the check, with 2 it won't.<br/>
+</p>
+<p>Higher values mean more search results, but more inaccuracy. <br/>
+ Default is 4.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
@@ -1100,7 +1137,12 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>If set false, this will disable the grouping of providers. By default providers are grouped in categories like 'safe','unsafe','fast' etc., which are queried in parallel, so the 'best' providers are queried first. Disabling this behaviour will result in increasing speed, but as a result the searchresults won't be sorted by quality, as it is normally the case.</p>
+<p>If set false, this will disable the grouping of providers.<br/>
+ By default providers are grouped in categories like 'safe','unsafe','fast' etc., which<br/>
+ are queried in parallel, so the 'best' providers are queried first.<br/>
+ Disabling this behaviour will result in increasing speed, but as a result the searchresults<br/>
+ won't be sorted by quality, as it is normally the case.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1138,7 +1180,8 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>You can use 'glyrc gtrans list' or the <a class="el" href="translate_8h.html#a6433f428fdde8dc5d1380ce0487d578e" title="List all supported languages.">Gly_gtrans_list()</a> method, to get a list of all valid values.</p>
+<p>You can use 'glyrc gtrans list' or the <a class="el" href="translate_8h.html#a6433f428fdde8dc5d1380ce0487d578e" title="List all supported languages.">Gly_gtrans_list()</a> method,<br/>
+ to get a list of all valid values.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1172,7 +1215,8 @@ Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">target</td><td>By default this feature is disabled (target == NULL) Use the methods in <a class="el" href="translate_8h.html">lib/translate.h</a> to use the corresponding methods directly.</td></tr>
+    <tr><td class="paramname">target</td><td>By default this feature is disabled (target == NULL)<br/>
+ Use the methods in <a class="el" href="translate_8h.html">lib/translate.h</a> to use the corresponding methods directly.</td></tr>
   </table>
   </dd>
 </dl>
@@ -1208,14 +1252,16 @@ Functions</h2></td></tr>
 <p>Set the language the items should be in. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td></td></tr>
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
     <tr><td class="paramname">langcode</td><td>The language used for providers with multilingual content. It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.</td></tr>
   </table>
   </dd>
 </dl>
-<p>List of providers recognizing this option: * cover/amazon (which amazon server to query) * cover/google (which google server to query) * ainfo/lastfm (the language the biography shall be in)</p>
-<p>(Use only these providers if you really want ONLY localized content) By default all search results are in english.</p>
+<p>List of providers recognizing this option:<br/>
+ * cover/amazon (which amazon server to query) * cover/google (which google server to query) * ainfo/lastfm (the language the biography shall be in)<br/>
+</p>
+<p>(Use only these providers if you really want ONLY localized content)<br/>
+ If no language specified the language defaults to english ("en")</p>
 <p>Note1: This only works with a few providers, which should be set via <a class="el" href="glyr_8h.html#a4bccabbf53716603c8586fea4a7732c3" title="Define the providers you want to use.">GlyOpt_from()</a> Note2: Don't coinfuse this with the built-in google translator's settings.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
@@ -1254,7 +1300,11 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>How many items to search for (1 to INT_MAX) This is not the number of items actually returned then, because libglyr is not able to find 300 songtexts of the same song, or libglyr filters duplicate items before returning.</p>
+<p>How many items to search for (1 to INT_MAX)<br/>
+ This is not the number of items actually returned then,<br/>
+ because libglyr is not able to find 300 songtexts of the same song,<br/>
+ or libglyr filters duplicate items before returning.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1325,7 +1375,8 @@ Functions</h2></td></tr>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">plugmax</td><td>Use this to scatter the results over more providers, to get different results. You can set it also to -1 what allows an infinite number of items (=&gt; default)</td></tr>
+    <tr><td class="paramname">plugmax</td><td>Use this to scatter the results over more providers, to get different results.<br/>
+ You can set it also to -1 what allows an infinite number of items (=&gt; default)</td></tr>
   </table>
   </dd>
 </dl>
@@ -1361,13 +1412,14 @@ Functions</h2></td></tr>
 <p>Max number of redirects to. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td></td></tr>
     <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">val</td><td>A value of 0 is allowed, but may break certain plugins. Default of 1 second.</td></tr>
+    <tr><td class="paramname">val</td><td>an unsigned integer</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+<p>A value of 0 is allowed, but may break certain plugins.<br/>
+ Default = 1</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
@@ -1404,8 +1456,9 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>If more than one item is downloaded in parallel, the timeout will be changed accordingly. Default is 20 seconds.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+<p>If more than one item is downloaded in parallel, the timeout will be changed accordingly.<br/>
+ Default is 20 seconds.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
@@ -1522,7 +1575,12 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>0) nothing but fatal errors. 1) warnings and important notes. 2) normal, additional information what libglyr does. 3) basic debug output. 4) libcurl debug output.</p>
+<p>0) nothing but fatal errors.<br/>
+ 1) warnings and important notes.<br/>
+ 2) normal, additional information what libglyr does.<br/>
+ 3) basic debug output.<br/>
+ 4) libcurl debug output.<br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
@@ -1542,7 +1600,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 22:04:22 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:18:10 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
