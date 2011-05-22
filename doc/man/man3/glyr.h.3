@@ -65,7 +65,7 @@ lib/glyr.h \-
 .ti -1c
 .RI "int \fBGlyOpt_artist\fP (\fBGlyQuery\fP *s, char *artist)"
 .br
-.RI "\fIThe artist field. libglyr will try to format it to fit the best. This field is required for all getters. \fP"
+.RI "\fIThe artist field. libglyr will try to format it to fit the best. \fP"
 .ti -1c
 .RI "int \fBGlyOpt_album\fP (\fBGlyQuery\fP *s, char *album)"
 .br
@@ -161,7 +161,7 @@ lib/glyr.h \-
 .ti -1c
 .RI "const char * \fBGly_groupname_by_id\fP (enum \fBGLYR_GROUPS\fP ID)"
 .br
-.RI "\fIForget this one. \fP"
+.RI "\fIGet the name of a group as string. \fP"
 .ti -1c
 .RI "const char * \fBGly_version\fP (void)"
 .br
@@ -169,7 +169,7 @@ lib/glyr.h \-
 .ti -1c
 .RI "int \fBGly_write\fP (\fBGlyMemCache\fP *data, const char *path)"
 .br
-.RI "\fIWrites data to the path $path, mostly there to make languagebindings easier. \fP"
+.RI "\fIWrites data to a specified path. \fP"
 .in -1c
 .SH "Function Documentation"
 .PP 
@@ -252,7 +252,12 @@ The 'main' method of glyr. It starts the searching according to the settings in 
 \fIerror\fP An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
 .RE
 .PP
-It takes a pointer to a \fBGlyQuery\fP struct filled to your needs via the GlyOpt_* methods, Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter. After return all items are listed in a \fBGlyCacheList\fP ready to be accessed, remember to delete it with Gly_free_list when done.
+It takes a pointer to a \fBGlyQuery\fP struct filled to your needs via the GlyOpt_* methods,
+.br
+ Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.
+.br
+ After return all items are listed in a \fBGlyCacheList\fP ready to be accessed, remember to delete it with Gly_free_list when done.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -275,14 +280,16 @@ A newly allocated \fBGlyPlugin\fP struct, pass it to free when done.
 
 .SS "const char* Gly_groupname_by_id (enum \fBGLYR_GROUPS\fPID)"
 .PP
-Forget this one. \fBParameters:\fP
+Get the name of a group as string. \fBParameters:\fP
 .RS 4
-\fIID\fP 
+\fIID\fP a member of the GLYR_GROUPS enum
 .RE
+.PP
+GRP_FAST gets to 'fast', you really don't need it, as it's only used in glyrc.
 .PP
 \fBReturns:\fP
 .RS 4
-A string..todo 
+A groupname as string or NULL if not found 
 .RE
 .PP
 
@@ -320,7 +327,11 @@ A descriptive nullterminated string, do not pass to free
 
 .SS "const char* Gly_version (void)"
 .PP
-Returns versioning information, including compiletime. \fBReturns:\fP
+Returns versioning information, including compiletime. Example: 
+.br
+ Version 0.4 (Larcenous Locust (dev)) of [May 20 2011] compiled at [19:12:37]
+.PP
+\fBReturns:\fP
 .RS 4
 A nullterminated string, do not free 
 .RE
@@ -328,12 +339,16 @@ A nullterminated string, do not free
 
 .SS "int Gly_write (\fBGlyMemCache\fP *data, const char *path)"
 .PP
-Writes data to the path $path, mostly there to make languagebindings easier. \fBParameters:\fP
+Writes data to a specified path. \fBParameters:\fP
 .RS 4
 \fIdata\fP The data to write. 
 .br
 \fIpath\fP The path to write data at.
 .RE
+.PP
+Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',
+.br
+ which are pretty selfexplaining.
 .PP
 \fBReturns:\fP
 .RS 4
@@ -365,7 +380,7 @@ tags
 relations
 .PP
 .PP
-lyrics (might be used by a few providers)
+lyrics
 .PP
 \fBReturns:\fP
 .RS 4
@@ -375,12 +390,14 @@ an errorID
 
 .SS "int GlyOpt_artist (\fBGlyQuery\fP *s, char *artist)"
 .PP
-The artist field. libglyr will try to format it to fit the best. This field is required for all getters. \fBParameters:\fP
+The artist field. libglyr will try to format it to fit the best. \fBParameters:\fP
 .RS 4
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in 
 .br
 \fIartist\fP A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
 .RE
+.PP
+This field is required for all getters. You are required to fill it.
 .PP
 \fBReturns:\fP
 .RS 4
@@ -397,7 +414,10 @@ Maximum size a cover may have (assuming the cover is quadratic, only one size is
 \fIsize\fP The max. size in pixel
 .RE
 .PP
-Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers, but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!
+Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers,
+.br
+ but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -431,7 +451,9 @@ Enable colored log output. (Debug) \fBParameters:\fP
 \fIiLikeColorInMyLife\fP a boolean
 .RE
 .PP
-Colored output only works in terminal with standard color support, which means, non standard terminals like the MS commandline do not work.
+Colored output only works in terminal with standard color support,
+.br
+ which means, non standard terminals like the MS commandline do not work.
 .PP
 \fBReturns:\fP
 .RS 4
@@ -462,10 +484,16 @@ Define if image items (i.e, covers, photos) are downloaded. \fBParameters:\fP
 .RS 4
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
-\fIdownload\fP For image getters only. If set to true images are also coviniently downloaded and returned. Otherwise, just the URL is returned for your own use.
+\fIdownload\fP For image getters only.
+.br
+ If set to true images are also coviniently downloaded and returned.
+.br
+ Otherwise, just the URL is returned for your own use.
+.br
 .RE
 .PP
 Default to 'true', 'false' would be a bit more searchengine like.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -482,10 +510,13 @@ Enable/Disable check for duplicate items. \fBParameters:\fP
 \fIduplcheck\fP boolean flag, true enables, false disables
 .RE
 .PP
-Actually there is no valid reason to set this to false.
+Actually there is no valid reason to set this to false,
+.br
+ except duplicate items are okay for you.
 .PP
 \fBReturns:\fP
 .RS 4
+an errorID 
 .RE
 .PP
 
@@ -498,11 +529,18 @@ Define allowed image formats. \fBParameters:\fP
 \fIformats\fP A comma seperated list of format specifiers, e.g. 'png;jpg;jpeg'
 .RE
 .PP
-Awaits a string with a semicolon seperated list of allowed formats. The case of the format is ignored.
+Awaits a string with a semicolon seperated list of allowed formats.
+.br
+ The case of the format is ignored.
+.br
 .PP
-Example: 'png;jpg;jpeg' would allow png and jpeg.
+Example:
+.br
+ 'png;jpg;jpeg' would allow png and jpeg.
+.br
 .PP
 You can also specify 'all', which disables this check.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -519,13 +557,33 @@ Define the providers you want to use. \fBParameters:\fP
 \fIfrom\fP a string, see below
 .RE
 .PP
-Use this to define what providers you want to use. Every provider has a name and a key which is merely a shortcut for the name. Specify all providers in a semicolon seperated list. Type 'glyrc -H' for a complete list of all providers for each getter.
+Use this to define what providers you want to use.
+.br
+ Every provider has a name and a key which is merely a shortcut for the name.
+.br
+ Specify all providers in a semicolon seperated list.
+.br
+ Type 'glyrc -H' for a complete list of all providers for each getter.
+.br
 .PP
-Example: 'amazon;google' 'a;g' - same with keys
+Example:
+.br
+ 'amazon;google' 
+.br
+ 'a;g' - same with keys
+.br
 .PP
-You can also prepend each word with a '+' or a '-' ('+' is assumend without), which will add or remove this provider from the list respectively. Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.
+You can also prepend each word with a '+' or a '-' ('+' is assumend without),
+.br
+ which will add or remove this provider from the list respectively.
+.br
+ Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.
+.br
 .PP
-Example: '+fast;-amazon' which will enable last.fm and lyricswiki.
+Example:
+.br
+ '+fast;-amazon' which will enable last.fm and lyricswiki.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -539,15 +597,30 @@ Set the max. tolerance for fuzzy matching. \fBParameters:\fP
 .RS 4
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
-\fIfuzz\fP Set the maximum amount of inserts, edits and substitutions, a search results may differ from the artist and/or album and/or title. The difference between two strings is measured as the 'Levenshtein distance', i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.
+\fIfuzz\fP Set the maximum amount of inserts, edits and substitutions, a search results
+.br
+ may differ from the artist and/or album and/or title.
+.br
+ The difference between two strings is measured as the 'Levenshtein distance',
+.br
+ i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.
+.br
 .RE
 .PP
-Example: 'Equilibrium' <=> 'Aqilibriums' => Distance=3 With a fuzzyness of 3 this would pass the check, with 2 it won't.
+Example:
+.br
+ 'Equilibrium' <=> 'Aqilibriums' => Distance=3
+.br
+ With a fuzzyness of 3 this would pass the check, with 2 it won't.
+.br
 .PP
-Higher values mean more search results, but more inaccuracy. Default is 4.
+Higher values mean more search results, but more inaccuracy. 
+.br
+ Default is 4.
 .PP
 \fBReturns:\fP
 .RS 4
+an errorID 
 .RE
 .PP
 
@@ -560,7 +633,16 @@ Define wether searching happens in groups or everything or parallel (= false) \f
 \fIgroupedDL\fP boolean to toggle this
 .RE
 .PP
-If set false, this will disable the grouping of providers. By default providers are grouped in categories like 'safe','unsafe','fast' etc., which are queried in parallel, so the 'best' providers are queried first. Disabling this behaviour will result in increasing speed, but as a result the searchresults won't be sorted by quality, as it is normally the case.
+If set false, this will disable the grouping of providers.
+.br
+ By default providers are grouped in categories like 'safe','unsafe','fast' etc., which
+.br
+ are queried in parallel, so the 'best' providers are queried first.
+.br
+ Disabling this behaviour will result in increasing speed, but as a result the searchresults
+.br
+ won't be sorted by quality, as it is normally the case.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -577,7 +659,9 @@ Set the source language for google translator or NULL to autodetect. \fBParamete
 \fIsource\fP A nullterminated pointer to char.
 .RE
 .PP
-You can use 'glyrc gtrans list' or the \fBGly_gtrans_list()\fP method, to get a list of all valid values.
+You can use 'glyrc gtrans list' or the \fBGly_gtrans_list()\fP method,
+.br
+ to get a list of all valid values.
 .PP
 \fBReturns:\fP
 .RS 4
@@ -591,7 +675,9 @@ Set the target language for google translator or NULL to disable. \fBParameters:
 .RS 4
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
-\fItarget\fP By default this feature is disabled (target == NULL) Use the methods in \fBlib/translate.h\fP to use the corresponding methods directly.
+\fItarget\fP By default this feature is disabled (target == NULL)
+.br
+ Use the methods in \fBlib/translate.h\fP to use the corresponding methods directly.
 .RE
 .PP
 \fBReturns:\fP
@@ -604,16 +690,19 @@ an errorID
 .PP
 Set the language the items should be in. \fBParameters:\fP
 .RS 4
-\fIs\fP 
-.br
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
 \fIlangcode\fP The language used for providers with multilingual content. It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.
 .RE
 .PP
-List of providers recognizing this option: * cover/amazon (which amazon server to query) * cover/google (which google server to query) * ainfo/lastfm (the language the biography shall be in)
+List of providers recognizing this option:
+.br
+ * cover/amazon (which amazon server to query) * cover/google (which google server to query) * ainfo/lastfm (the language the biography shall be in)
+.br
 .PP
-(Use only these providers if you really want ONLY localized content) By default all search results are in english.
+(Use only these providers if you really want ONLY localized content)
+.br
+ If no language specified the language defaults to english ('en')
 .PP
 Note1: This only works with a few providers, which should be set via \fBGlyOpt_from()\fP Note2: Don't coinfuse this with the built-in google translator's settings.
 .PP
@@ -632,7 +721,14 @@ Set the number of items to search. \fBParameters:\fP
 \fInum\fP the number as an integer
 .RE
 .PP
-How many items to search for (1 to INT_MAX) This is not the number of items actually returned then, because libglyr is not able to find 300 songtexts of the same song, or libglyr filters duplicate items before returning.
+How many items to search for (1 to INT_MAX)
+.br
+ This is not the number of items actually returned then,
+.br
+ because libglyr is not able to find 300 songtexts of the same song,
+.br
+ or libglyr filters duplicate items before returning.
+.br
 .PP
 \fBReturns:\fP
 .RS 4
@@ -661,7 +757,9 @@ Define the maximum number of items a provider may download. \fBParameters:\fP
 .RS 4
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
-\fIplugmax\fP Use this to scatter the results over more providers, to get different results. You can set it also to -1 what allows an infinite number of items (=> default)
+\fIplugmax\fP Use this to scatter the results over more providers, to get different results.
+.br
+ You can set it also to -1 what allows an infinite number of items (=> default)
 .RE
 .PP
 \fBReturns:\fP
@@ -674,15 +772,18 @@ an errorID
 .PP
 Max number of redirects to. \fBParameters:\fP
 .RS 4
-\fIs\fP 
-.br
 \fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
 .br
-\fIval\fP A value of 0 is allowed, but may break certain plugins. Default of 1 second.
+\fIval\fP an unsigned integer
 .RE
+.PP
+A value of 0 is allowed, but may break certain plugins.
+.br
+ Default = 1
 .PP
 \fBReturns:\fP
 .RS 4
+an errorID 
 .RE
 .PP
 
@@ -695,10 +796,13 @@ Amout of seconds to wait before cancelling an download. \fBParameters:\fP
 \fIval\fP Timeout in seconds.
 .RE
 .PP
-If more than one item is downloaded in parallel, the timeout will be changed accordingly. Default is 20 seconds.
+If more than one item is downloaded in parallel, the timeout will be changed accordingly.
+.br
+ Default is 20 seconds.
 .PP
 \fBReturns:\fP
 .RS 4
+an errorID 
 .RE
 .PP
 
@@ -722,6 +826,7 @@ relations
 .PP
 \fBReturns:\fP
 .RS 4
+an errorID 
 .RE
 .PP
 
@@ -744,10 +849,21 @@ an errorID
 .PP
 Set libglyr's verbosity level (debug) \fBParameters:\fP
 .RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
 \fIlevel\fP The level as an integer, see description below
 .RE
 .PP
-0) nothing but fatal errors. 1) warnings and important notes. 2) normal, additional information what libglyr does. 3) basic debug output. 4) libcurl debug output.
+0) nothing but fatal errors.
+.br
+ 1) warnings and important notes.
+.br
+ 2) normal, additional information what libglyr does.
+.br
+ 3) basic debug output.
+.br
+ 4) libcurl debug output.
+.br
 .PP
 \fBReturns:\fP
 .RS 4

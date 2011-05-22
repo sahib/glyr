@@ -6,13 +6,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript">
-$(document).ready(initResizable);
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
 <body onload='searchBox.OnSelectItem(0);'>
@@ -100,20 +93,12 @@ function toggleVisibility(linkObj) {
       <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
-</div>
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
+  <div id="nav-path" class="navpath">
+    <ul>
+      <li class="navelem"><a class="el" href="dir_2dc4c6fbea07b9bc3ab918a9951ebb66.html">lib</a>      </li>
+    </ul>
   </div>
 </div>
-<script type="text/javascript">
-  initNavTree('translate_8h.html','');
-</script>
-<div id="doc-content">
 <div class="header">
   <div class="summary">
 <a href="#func-members">Functions</a>  </div>
@@ -157,7 +142,12 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Queries google for a list of all supported languages Returned as a list of char pointers, free both the single strings and the return value. If you only want to know all languages: 'glyrc gtrans list' does the same.</p>
+<p>Queries google for a list of all supported languages <br/>
+ Returned as a list of char pointers, free both the <br/>
+ single strings and the return value. <br/>
+ If you only want to know all languages: <br/>
+ 'glyrc gtrans list' does the same. <br/>
+</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>a list of strings, containg the language codes </dd></dl>
 
 </div>
@@ -196,13 +186,20 @@ Functions</h2></td></tr>
 <p>Lookup the language a certain snippet may be in. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> needed to determine the source/target language </td></tr>
-    <tr><td class="paramname">snippet</td><td>a short snippet (less than 500 signs) in the questionable language </td></tr>
-    <tr><td class="paramname">correctness</td><td>an optional pointer storing the correctness, or NULL</td></tr>
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> needed to determine the source/target language<br/>
+ </td></tr>
+    <tr><td class="paramname">snippet</td><td>a short snippet (less than 500 signs) in the questionable language<br/>
+ </td></tr>
+    <tr><td class="paramname">correctness</td><td>an optional pointer storing the correctness, or NULL<br/>
+</td></tr>
   </table>
   </dd>
 </dl>
-<p>Ask google what language the snippet given as const char is written in Optionally you can give a float pointer where the probability of the result being correct is stored in, (from 0.0 to 1.0), long snippets usually give better results. The result is returned as newly allocated char * - free it.</p>
+<p>Ask google what language the snippet given as const char is written in <br/>
+ Optionally you can give a float pointer where the probability of the <br/>
+ result being correct is stored in, (from 0.0 to 1.0), long snippets <br/>
+ usually give better results. The result is returned as newly allocated <br/>
+ char * - free it.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>the language code ("en",de",..) </dd></dl>
 
 </div>
@@ -240,20 +237,16 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Takes the cache struct to_translate and translate the text according to the setting stored in the <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> s It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit being at the moment at 100,000 chars per day and IP. The buffer is directly modified so make copies before if you need. </p>
+<p>Takes the cache struct to_translate and translate the text according to the setting stored in the <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> s <br/>
+ It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, <br/>
+ and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit <br/>
+ being at the moment at 100,000 chars per day and IP.<br/>
+ The buffer is directly modified so make copies before if you need.<br/>
+ </p>
 
 </div>
 </div>
 </div>
-</div>
-  <div id="nav-path" class="navpath">
-    <ul>
-      <li class="navelem"><a class="el" href="translate_8h.html">translate.h</a>      </li>
-      <li class="footer">Generated on Sun May 22 2011 14:22:53 for libglyr by&#160;
-<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
-    </ul>
-  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -268,6 +261,8 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-
+<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:18:10 for libglyr by&#160;
+<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
 </html>

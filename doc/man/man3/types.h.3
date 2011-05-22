@@ -122,12 +122,6 @@ lib/types.h \-
 .RI "#define \fBDEFAULT_FORMATS\fP   'jpg;jpeg;png'"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_CALL_DIRECT_USE\fP   false"
-.br
-.ti -1c
-.RI "#define \fBDEFAULT_CALL_DIRECT_PROVIDER\fP   NULL"
-.br
-.ti -1c
 .RI "#define \fBAPI_KEY_DISCOGS\fP   'adff651383'"
 .br
 .ti -1c
@@ -200,6 +194,7 @@ lib/types.h \-
 .ti -1c
 .RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_TRACK\fP }"
 .br
+.RI "\fIAll possible values the type field of \fBGlyMemCache\fP can have. \fP"
 .in -1c
 .SH "Define Documentation"
 .PP 
@@ -217,8 +212,6 @@ lib/types.h \-
 .SS "#define C_Y   '\\x1b[33;01m'"
 .SS "#define CALC_MD5SUMS   true"
 .SS "#define CLAMP(x, low, high)   (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))"
-.SS "#define DEFAULT_CALL_DIRECT_PROVIDER   NULL"
-.SS "#define DEFAULT_CALL_DIRECT_USE   false"
 .SS "#define DEFAULT_CMAXSIZE   -1"
 .SS "#define DEFAULT_CMINSIZE   125"
 .SS "#define DEFAULT_DOWNLOAD   true"
@@ -251,16 +244,18 @@ lib/types.h \-
 The return type of Gly_get, a list of GlyMemCaches. 
 .SS "typedef struct \fBGlyMemCache\fP  \fBGlyMemCache\fP"
 .PP
-Represents a single item. 
+Represents a single item. It's used 
 .SS "typedef struct \fBGlyPlugin\fP  \fBGlyPlugin\fP"
 .PP
-Structure holding information about built-in getters and providers. 
+Structure holding information about built-in getters and providers. Holding information about plugin-name, shortcut (key = 'a' => 'amazon'), a colored version of the name. You shouldn't bother with the rest 
 .SS "typedef struct \fBGlyQuery\fP  \fBGlyQuery\fP"
 .PP
-Structure controlling all of libglyr's options. 
+Structure controlling all of libglyr's options. You should modify this with the GlyOpt_* methods, You can read all members directly 
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBGLYR_DATA_TYPE\fP"
+.PP
+All possible values the type field of \fBGlyMemCache\fP can have. 
 .PP
 \fBEnumerator: \fP
 .in +1c
@@ -320,7 +315,7 @@ Structure controlling all of libglyr's options.
 
 .SS "enum \fBGLYR_GET_TYPE\fP"
 .PP
-Enumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. 
+Enumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. The type of metadata to get, names are selfexplanatory 
 .PP
 \fBEnumerator: \fP
 .in +1c
