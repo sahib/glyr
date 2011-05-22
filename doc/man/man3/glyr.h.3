@@ -17,11 +17,17 @@ lib/glyr.h \-
 .ti -1c
 .RI "void \fBGly_init\fP (void)"
 .br
-.RI "\fIcall this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. \fP"
+.RI "\fIcall this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init
+.br
+ Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.
+.br
+ \fP"
 .ti -1c
 .RI "void \fBGly_cleanup\fP (void)"
 .br
-.RI "\fICall this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP Not threadsafe also. \fP"
+.RI "\fICall this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP
+.br
+ Not threadsafe also. \fP"
 .ti -1c
 .RI "\fBGlyCacheList\fP * \fBGly_get\fP (\fBGlyQuery\fP *settings, enum \fBGLYR_ERROR\fP *error)"
 .br
@@ -175,7 +181,9 @@ lib/glyr.h \-
 .PP 
 .SS "void Gly_cleanup (void)"
 .PP
-Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP Not threadsafe also. 
+Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP
+.br
+ Not threadsafe also. 
 .SS "\fBGlyMemCache\fP* Gly_clist_at (\fBGlyCacheList\fP *clist, intiter)"
 .PP
 Returns the \fBGlyMemCache\fP in the \fBGlyCacheList\fP clist at position iter. The same as clist->list[iter] with validation check. Mainly there to make SWIG bindings for other languages than C easier. \fBParameters:\fP
@@ -295,7 +303,11 @@ A groupname as string or NULL if not found
 
 .SS "void Gly_init (void)"
 .PP
-call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. 
+call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init
+.br
+ Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.
+.br
+ 
 .SS "void Gly_init_query (\fBGlyQuery\fP *glyrs)"
 .PP
 Init's the \fBGlyQuery\fP structure to sane defaults. Call this after creating the variable. \fBParameters:\fP

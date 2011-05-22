@@ -114,9 +114,12 @@ function toggleVisibility(linkObj) {
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c">Gly_init</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.  <a href="#a356fe1b104c5cae22323954cde41622c"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init<br/>
+ Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.<br/>
+  <a href="#a356fe1b104c5cae22323954cde41622c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a705e9f8709f3e53a6566e37a3317548e">Gly_cleanup</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a> Not threadsafe also.  <a href="#a705e9f8709f3e53a6566e37a3317548e"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a><br/>
+ Not threadsafe also.  <a href="#a705e9f8709f3e53a6566e37a3317548e"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyCacheList.html">GlyCacheList</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a8ac2c056e5db8139b233b20c1319dffe">Gly_get</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *settings, enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> *error)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The 'main' method of glyr. It starts the searching according to the settings in the settings param.  <a href="#a8ac2c056e5db8139b233b20c1319dffe"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a2398522a3dc5d296bd61eba5b25475d5">Gly_init_query</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *glyrs)</td></tr>
@@ -208,7 +211,8 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a> Not threadsafe also. </p>
+<p>Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a><br/>
+ Not threadsafe also. </p>
 
 </div>
 </div>
@@ -496,7 +500,9 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. </p>
+<p>call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init<br/>
+ Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.<br/>
+ </p>
 
 </div>
 </div>
@@ -1600,7 +1606,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:18:10 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:31:51 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
