@@ -1,0 +1,69 @@
+.TH "GlyPlugin" 3 "Sun May 22 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GlyPlugin \- 
+.PP
+Structure holding information about built-in getters and providers.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <types.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBname\fP"
+.br
+.ti -1c
+.RI "const char * \fBkey\fP"
+.br
+.ti -1c
+.RI "const char * \fBcolor\fP"
+.br
+.ti -1c
+.RI "int \fBuse\fP"
+.br
+.ti -1c
+.RI "struct {"
+.br
+.ti -1c
+.RI "   \fBGlyCacheList\fP *(* \fBparser_callback\fP )(struct cb_object *)"
+.br
+.ti -1c
+.RI "   const char *(* \fBurl_callback\fP )(\fBGlyQuery\fP *)"
+.br
+.ti -1c
+.RI "   const char * \fBendmarker\fP"
+.br
+.ti -1c
+.RI "   bool \fBfree_url\fP"
+.br
+.ti -1c
+.RI "} \fBplug\fP"
+.br
+.ti -1c
+.RI "unsigned char \fBgid\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure holding information about built-in getters and providers. 
+.SH "Field Documentation"
+.PP 
+.SS "const char* \fBGlyPlugin::color\fP"
+.SS "const char* \fBGlyPlugin::endmarker\fP"
+.SS "bool \fBGlyPlugin::free_url\fP"
+.SS "unsigned char \fBGlyPlugin::gid\fP"
+.SS "const char* \fBGlyPlugin::key\fP"
+.SS "const char* \fBGlyPlugin::name\fP"
+.SS "\fBGlyCacheList\fP*(*  \fBGlyPlugin::parser_callback\fP)(struct cb_object *)"
+.SS "struct { ... }   \fBGlyPlugin::plug\fP"
+.SS "const char*(*  \fBGlyPlugin::url_callback\fP)(\fBGlyQuery\fP *)"
+.SS "int \fBGlyPlugin::use\fP"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libglyr from the source code.

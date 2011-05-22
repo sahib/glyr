@@ -1,0 +1,371 @@
+.TH "lib/types.h" 3 "Sun May 22 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+lib/types.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdlib.h>\fP
+.br
+\fC#include <stdio.h>\fP
+.br
+\fC#include <stdbool.h>\fP
+.br
+\fC#include <curl/curl.h>\fP
+.br
+\fC#include 'config.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBGlyMemCache\fP"
+.br
+.RI "\fIRepresents a single item. \fP"
+.ti -1c
+.RI "struct \fBGlyCacheList\fP"
+.br
+.RI "\fIThe return type of Gly_get, a list of GlyMemCaches. \fP"
+.ti -1c
+.RI "struct \fBGlyQuery\fP"
+.br
+.RI "\fIStructure controlling all of libglyr's options. \fP"
+.ti -1c
+.RI "struct \fBGlyPlugin\fP"
+.br
+.RI "\fIStructure holding information about built-in getters and providers. \fP"
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBABS\fP(a)   (((a) < 0) ? -(a) : (a))"
+.br
+.ti -1c
+.RI "#define \fBCLAMP\fP(x, low, high)   (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))"
+.br
+.ti -1c
+.RI "#define \fBCALC_MD5SUMS\fP   true"
+.br
+.ti -1c
+.RI "#define \fBPRT_COLOR\fP   glyr_USE_COLOR"
+.br
+.ti -1c
+.RI "#define \fBUSE_COLOR\fP"
+.br
+.ti -1c
+.RI "#define \fBC_B\fP   '\\x1b[34;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_M\fP   '\\x1b[35;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_C\fP   '\\x1b[36;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_R\fP   '\\x1b[31;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_G\fP   '\\x1b[32;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_Y\fP   '\\x1b[33;01m'"
+.br
+.ti -1c
+.RI "#define \fBC_\fP   '\\x1b[0m'"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_TIMEOUT\fP   20L"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_REDIRECTS\fP   1L"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_PARALLEL\fP   4L"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_CMINSIZE\fP   125"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_CMAXSIZE\fP   -1"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_VERBOSITY\fP   0"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_NUMBER\fP   1"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_PLUGMAX\fP   -1"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_LANG\fP   'en'"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_DOWNLOAD\fP   true"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_GROUPEDL\fP   true"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_FROM_ARGUMENT_DELIM\fP   ';'"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_DUPLCHECK\fP   true"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_FUZZYNESS\fP   4"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_FORMATS\fP   'jpg;jpeg;png'"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_CALL_DIRECT_USE\fP   false"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_CALL_DIRECT_PROVIDER\fP   NULL"
+.br
+.ti -1c
+.RI "#define \fBAPI_KEY_DISCOGS\fP   'adff651383'"
+.br
+.ti -1c
+.RI "#define \fBAPI_KEY_AMAZON\fP   'AKIAJ6NEA642OU3FM24Q'"
+.br
+.ti -1c
+.RI "#define \fBAPI_KEY_LASTFM\fP   '7199021d9c8fbae507bf77d0a88533d7'"
+.br
+.ti -1c
+.RI "#define \fBAPI_KEY_FLICKR\fP   'b5af0c3230fb478d53b20835223d57a4'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_NONE\fP   'none'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_SAFE\fP   'safe'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_USFE\fP   'unsafe'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_SPCL\fP   'special'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_FAST\fP   'fast'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_SLOW\fP   'slow'"
+.br
+.ti -1c
+.RI "#define \fBGRPN_ALL\fP   'all'"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef struct \fBGlyMemCache\fP \fBGlyMemCache\fP"
+.br
+.RI "\fIRepresents a single item. \fP"
+.ti -1c
+.RI "typedef struct \fBGlyCacheList\fP \fBGlyCacheList\fP"
+.br
+.RI "\fIThe return type of Gly_get, a list of GlyMemCaches. \fP"
+.ti -1c
+.RI "typedef struct \fBGlyQuery\fP \fBGlyQuery\fP"
+.br
+.RI "\fIStructure controlling all of libglyr's options. \fP"
+.ti -1c
+.RI "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP )(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.br
+.ti -1c
+.RI "typedef struct \fBGlyPlugin\fP \fBGlyPlugin\fP"
+.br
+.RI "\fIStructure holding information about built-in getters and providers. \fP"
+.in -1c
+.SS "Enumerations"
+
+.in +1c
+.ti -1c
+.RI "enum \fBGLYR_GROUPS\fP { \fBGRP_NONE\fP =  0 << 0, \fBGRP_SAFE\fP =  1 << 0, \fBGRP_USFE\fP =  1 << 1, \fBGRP_SPCL\fP =  1 << 2, \fBGRP_FAST\fP =  1 << 3, \fBGRP_SLOW\fP =  1 << 4, \fBGRP_ALL\fP =  1 << 5 }"
+.br
+.ti -1c
+.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_IGNORE\fP, \fBGLYRE_STOP_BY_CB\fP }"
+.br
+.ti -1c
+.RI "enum \fBGLYR_GET_TYPE\fP { \fBGET_COVER\fP, \fBGET_LYRIC\fP, \fBGET_PHOTO\fP, \fBGET_AINFO\fP, \fBGET_SIMILIAR\fP, \fBGET_REVIEW\fP, \fBGET_TRACKLIST\fP, \fBGET_TAGS\fP, \fBGET_RELATIONS\fP, \fBGET_ALBUMLIST\fP, \fBGET_UNSURE\fP }"
+.br
+.RI "\fIEnumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. \fP"
+.ti -1c
+.RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_TRACK\fP }"
+.br
+.in -1c
+.SH "Define Documentation"
+.PP 
+.SS "#define ABS(a)   (((a) < 0) ? -(a) : (a))"
+.SS "#define API_KEY_AMAZON   'AKIAJ6NEA642OU3FM24Q'"
+.SS "#define API_KEY_DISCOGS   'adff651383'"
+.SS "#define API_KEY_FLICKR   'b5af0c3230fb478d53b20835223d57a4'"
+.SS "#define API_KEY_LASTFM   '7199021d9c8fbae507bf77d0a88533d7'"
+.SS "#define C_   '\\x1b[0m'"
+.SS "#define C_B   '\\x1b[34;01m'"
+.SS "#define C_C   '\\x1b[36;01m'"
+.SS "#define C_G   '\\x1b[32;01m'"
+.SS "#define C_M   '\\x1b[35;01m'"
+.SS "#define C_R   '\\x1b[31;01m'"
+.SS "#define C_Y   '\\x1b[33;01m'"
+.SS "#define CALC_MD5SUMS   true"
+.SS "#define CLAMP(x, low, high)   (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))"
+.SS "#define DEFAULT_CALL_DIRECT_PROVIDER   NULL"
+.SS "#define DEFAULT_CALL_DIRECT_USE   false"
+.SS "#define DEFAULT_CMAXSIZE   -1"
+.SS "#define DEFAULT_CMINSIZE   125"
+.SS "#define DEFAULT_DOWNLOAD   true"
+.SS "#define DEFAULT_DUPLCHECK   true"
+.SS "#define DEFAULT_FORMATS   'jpg;jpeg;png'"
+.SS "#define DEFAULT_FROM_ARGUMENT_DELIM   ';'"
+.SS "#define DEFAULT_FUZZYNESS   4"
+.SS "#define DEFAULT_GROUPEDL   true"
+.SS "#define DEFAULT_LANG   'en'"
+.SS "#define DEFAULT_NUMBER   1"
+.SS "#define DEFAULT_PARALLEL   4L"
+.SS "#define DEFAULT_PLUGMAX   -1"
+.SS "#define DEFAULT_REDIRECTS   1L"
+.SS "#define DEFAULT_TIMEOUT   20L"
+.SS "#define DEFAULT_VERBOSITY   0"
+.SS "#define GRPN_ALL   'all'"
+.SS "#define GRPN_FAST   'fast'"
+.SS "#define GRPN_NONE   'none'"
+.SS "#define GRPN_SAFE   'safe'"
+.SS "#define GRPN_SLOW   'slow'"
+.SS "#define GRPN_SPCL   'special'"
+.SS "#define GRPN_USFE   'unsafe'"
+.SS "#define PRT_COLOR   glyr_USE_COLOR"
+.SS "#define USE_COLOR"
+.SH "Typedef Documentation"
+.PP 
+.SS "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.SS "typedef struct \fBGlyCacheList\fP  \fBGlyCacheList\fP"
+.PP
+The return type of Gly_get, a list of GlyMemCaches. 
+.SS "typedef struct \fBGlyMemCache\fP  \fBGlyMemCache\fP"
+.PP
+Represents a single item. 
+.SS "typedef struct \fBGlyPlugin\fP  \fBGlyPlugin\fP"
+.PP
+Structure holding information about built-in getters and providers. 
+.SS "typedef struct \fBGlyQuery\fP  \fBGlyQuery\fP"
+.PP
+Structure controlling all of libglyr's options. 
+.SH "Enumeration Type Documentation"
+.PP 
+.SS "enum \fBGLYR_DATA_TYPE\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fITYPE_NOIDEA \fP\fP
+.TP
+\fB\fITYPE_LYRICS \fP\fP
+.TP
+\fB\fITYPE_REVIEW \fP\fP
+.TP
+\fB\fITYPE_PHOTOS \fP\fP
+.TP
+\fB\fITYPE_COVER \fP\fP
+.TP
+\fB\fITYPE_COVER_PRI \fP\fP
+.TP
+\fB\fITYPE_COVER_SEC \fP\fP
+.TP
+\fB\fITYPE_AINFO \fP\fP
+.TP
+\fB\fITYPE_SIMILIAR \fP\fP
+.TP
+\fB\fITYPE_ALBUMLIST \fP\fP
+.TP
+\fB\fITYPE_TAGS \fP\fP
+.TP
+\fB\fITYPE_TAG_ARTIST \fP\fP
+.TP
+\fB\fITYPE_TAG_ALBUM \fP\fP
+.TP
+\fB\fITYPE_TAG_TITLE \fP\fP
+.TP
+\fB\fITYPE_RELATION \fP\fP
+.TP
+\fB\fITYPE_TRACK \fP\fP
+
+.SS "enum \fBGLYR_ERROR\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIGLYRE_OK \fP\fP
+.TP
+\fB\fIGLYRE_BAD_OPTION \fP\fP
+.TP
+\fB\fIGLYRE_BAD_VALUE \fP\fP
+.TP
+\fB\fIGLYRE_EMPTY_STRUCT \fP\fP
+.TP
+\fB\fIGLYRE_NO_PROVIDER \fP\fP
+.TP
+\fB\fIGLYRE_UNKNOWN_GET \fP\fP
+.TP
+\fB\fIGLYRE_IGNORE \fP\fP
+.TP
+\fB\fIGLYRE_STOP_BY_CB \fP\fP
+
+.SS "enum \fBGLYR_GET_TYPE\fP"
+.PP
+Enumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. 
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIGET_COVER \fP\fP
+.TP
+\fB\fIGET_LYRIC \fP\fP
+.TP
+\fB\fIGET_PHOTO \fP\fP
+.TP
+\fB\fIGET_AINFO \fP\fP
+.TP
+\fB\fIGET_SIMILIAR \fP\fP
+.TP
+\fB\fIGET_REVIEW \fP\fP
+.TP
+\fB\fIGET_TRACKLIST \fP\fP
+.TP
+\fB\fIGET_TAGS \fP\fP
+.TP
+\fB\fIGET_RELATIONS \fP\fP
+.TP
+\fB\fIGET_ALBUMLIST \fP\fP
+.TP
+\fB\fIGET_UNSURE \fP\fP
+
+.SS "enum \fBGLYR_GROUPS\fP"
+.PP
+\fBEnumerator: \fP
+.in +1c
+.TP
+\fB\fIGRP_NONE \fP\fP
+.TP
+\fB\fIGRP_SAFE \fP\fP
+.TP
+\fB\fIGRP_USFE \fP\fP
+.TP
+\fB\fIGRP_SPCL \fP\fP
+.TP
+\fB\fIGRP_FAST \fP\fP
+.TP
+\fB\fIGRP_SLOW \fP\fP
+.TP
+\fB\fIGRP_ALL \fP\fP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libglyr from the source code.

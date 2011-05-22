@@ -1,0 +1,151 @@
+.TH "GlyQuery" 3 "Sun May 22 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GlyQuery \- 
+.PP
+Structure controlling all of libglyr's options.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <types.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBtype\fP"
+.br
+.ti -1c
+.RI "const char * \fBinfo\fP [10]"
+.br
+.ti -1c
+.RI "char * \fBartist\fP"
+.br
+.ti -1c
+.RI "char * \fBalbum\fP"
+.br
+.ti -1c
+.RI "char * \fBtitle\fP"
+.br
+.ti -1c
+.RI "int \fBnumber\fP"
+.br
+.ti -1c
+.RI "int \fBplugmax\fP"
+.br
+.ti -1c
+.RI "struct {"
+.br
+.ti -1c
+.RI "   int \fBmin_size\fP"
+.br
+.ti -1c
+.RI "   int \fBmax_size\fP"
+.br
+.ti -1c
+.RI "} \fBcover\fP"
+.br
+.ti -1c
+.RI "void * \fBproviders\fP"
+.br
+.ti -1c
+.RI "long \fBparallel\fP"
+.br
+.ti -1c
+.RI "long \fBtimeout\fP"
+.br
+.ti -1c
+.RI "long \fBredirects\fP"
+.br
+.ti -1c
+.RI "int \fBverbosity\fP"
+.br
+.ti -1c
+.RI "bool \fBcolor_output\fP"
+.br
+.ti -1c
+.RI "bool \fBdownload\fP"
+.br
+.ti -1c
+.RI "bool \fBgroupedDL\fP"
+.br
+.ti -1c
+.RI "bool \fBduplcheck\fP"
+.br
+.ti -1c
+.RI "const char * \fBlang\fP"
+.br
+.ti -1c
+.RI "int \fBitemctr\fP"
+.br
+.ti -1c
+.RI "size_t \fBfuzzyness\fP"
+.br
+.ti -1c
+.RI "const char * \fBformats\fP"
+.br
+.ti -1c
+.RI "struct {"
+.br
+.ti -1c
+.RI "   enum \fBGLYR_ERROR\fP(* \fBdownload\fP )(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.br
+.ti -1c
+.RI "   void * \fBuser_pointer\fP"
+.br
+.ti -1c
+.RI "} \fBcallback\fP"
+.br
+.ti -1c
+.RI "struct {"
+.br
+.ti -1c
+.RI "   const char * \fBtarget\fP"
+.br
+.ti -1c
+.RI "   const char * \fBsource\fP"
+.br
+.ti -1c
+.RI "} \fBgtrans\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Structure controlling all of libglyr's options. 
+.SH "Field Documentation"
+.PP 
+.SS "char* \fBGlyQuery::album\fP"
+.SS "char* \fBGlyQuery::artist\fP"
+.SS "struct { ... }   \fBGlyQuery::callback\fP"
+.SS "bool \fBGlyQuery::color_output\fP"
+.SS "struct { ... }   \fBGlyQuery::cover\fP"
+.SS "bool \fBGlyQuery::download\fP"
+.SS "enum \fBGLYR_ERROR\fP(*  \fBGlyQuery::download\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.SS "bool \fBGlyQuery::duplcheck\fP"
+.SS "const char* \fBGlyQuery::formats\fP"
+.SS "size_t \fBGlyQuery::fuzzyness\fP"
+.SS "bool \fBGlyQuery::groupedDL\fP"
+.SS "struct { ... }   \fBGlyQuery::gtrans\fP"
+.SS "const char* \fBGlyQuery::info\fP[10]"
+.SS "int \fBGlyQuery::itemctr\fP"
+.SS "const char* \fBGlyQuery::lang\fP"
+.SS "int \fBGlyQuery::max_size\fP"
+.SS "int \fBGlyQuery::min_size\fP"
+.SS "int \fBGlyQuery::number\fP"
+.SS "long \fBGlyQuery::parallel\fP"
+.SS "int \fBGlyQuery::plugmax\fP"
+.SS "void* \fBGlyQuery::providers\fP"
+.SS "long \fBGlyQuery::redirects\fP"
+.SS "const char* \fBGlyQuery::source\fP"
+.SS "const char* \fBGlyQuery::target\fP"
+.SS "long \fBGlyQuery::timeout\fP"
+.SS "char* \fBGlyQuery::title\fP"
+.SS "int \fBGlyQuery::type\fP"
+.SS "void* \fBGlyQuery::user_pointer\fP"
+.SS "int \fBGlyQuery::verbosity\fP"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libglyr from the source code.
