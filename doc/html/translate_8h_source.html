@@ -6,13 +6,6 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/search.js"></script>
-<link href="navtree.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="jquery.js"></script>
-<script type="text/javascript" src="navtree.js"></script>
-<script type="text/javascript" src="resize.js"></script>
-<script type="text/javascript">
-$(document).ready(initResizable);
-</script>
 <link href="doxygen.css" rel="stylesheet" type="text/css"/>
 </head>
 <body onload='searchBox.OnSelectItem(0);'>
@@ -100,20 +93,12 @@ function toggleVisibility(linkObj) {
       <li><a href="globals.html"><span>Globals</span></a></li>
     </ul>
   </div>
-</div>
-<div id="side-nav" class="ui-resizable side-nav-resizable">
-  <div id="nav-tree">
-    <div id="nav-tree-contents">
-    </div>
-  </div>
-  <div id="splitbar" style="-moz-user-select:none;" 
-       class="ui-resizable-handle">
+  <div id="nav-path" class="navpath">
+    <ul>
+      <li class="navelem"><a class="el" href="dir_2dc4c6fbea07b9bc3ab918a9951ebb66.html">lib</a>      </li>
+    </ul>
   </div>
 </div>
-<script type="text/javascript">
-  initNavTree('translate_8h.html','');
-</script>
-<div id="doc-content">
 <div class="header">
   <div class="headertitle">
 <div class="title">translate.h</div>  </div>
@@ -134,14 +119,6 @@ function toggleVisibility(linkObj) {
 <a name="l00055"></a>00055 <span class="preprocessor">#endif</span>
 </pre></div></div>
 </div>
-  <div id="nav-path" class="navpath">
-    <ul>
-      <li class="navelem"><a class="el" href="translate_8h.html">translate.h</a>      </li>
-      <li class="footer">Generated on Sun May 22 2011 14:22:53 for libglyr by&#160;
-<a href="http://www.doxygen.org/index.html">
-<img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </li>
-    </ul>
-  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -156,6 +133,8 @@ function toggleVisibility(linkObj) {
 </iframe>
 </div>
 
-
+<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 22:04:22 for libglyr by&#160;
+<a href="http://www.doxygen.org/index.html">
+<img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
 </html>

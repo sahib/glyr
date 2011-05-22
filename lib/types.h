@@ -57,7 +57,7 @@
 	#define C_  "" // Reset
 #endif
 
-// Change this if you really need more
+/* Defaults */
 #define DEFAULT_TIMEOUT  20L
 #define DEFAULT_REDIRECTS 1L
 #define DEFAULT_PARALLEL 4L
@@ -73,9 +73,8 @@
 #define DEFAULT_DUPLCHECK true
 #define DEFAULT_FUZZYNESS 4
 #define DEFAULT_FORMATS "jpg;jpeg;png"
-#define DEFAULT_CALL_DIRECT_USE false
-#define DEFAULT_CALL_DIRECT_PROVIDER NULL
 
+/* Please register your own keys if you fork parts of this code */
 #define API_KEY_DISCOGS "adff651383"
 #define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
 #define API_KEY_LASTFM  "7199021d9c8fbae507bf77d0a88533d7"
@@ -117,16 +116,14 @@ enum GLYR_ERROR {
 #define GRPN_SLOW "slow"
 #define GRPN_ALL  "all"
 
-// Prototype cb_object struct
+// Prototype cb_object struct (cyclic dependency)
 struct cb_object;
 
-// Note:
-// you will notice that some structs share the same data,
-// the more specialized the struct gets the more obsucre members it have
-// GlyQuery -> cb_object e.g.
 
 /**
 * @brief Represents a single item.
+*
+* It's used 
 */
 typedef struct GlyMemCache {
         char  *data;    /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
@@ -152,6 +149,9 @@ typedef struct GlyCacheList {
 
 /**
 * @brief Structure controlling all of libglyr's options
+* 
+* You should modify this with the GlyOpt_* methods,
+* You can read all members directly
 */
 typedef struct GlyQuery {
         // get
@@ -160,7 +160,7 @@ typedef struct GlyQuery {
         // max ten slots, 5 are used now
         const char * info[10];
 
-        // of
+	// main fields
         char * artist;
         char * album;
         char * title;
@@ -175,7 +175,7 @@ typedef struct GlyQuery {
                 int max_size;
         } cover;
 
-        // from (as void because I didnt manage to prototype GlyPlugin... *?*)
+        // from
         void * providers;
 
         // invoke() control
@@ -211,6 +211,7 @@ typedef struct GlyQuery {
         // allowed formats for images
         const char * formats;
 
+	// used internally, you should not use this
         struct {
                 enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
                 void  * user_pointer;
@@ -228,13 +229,12 @@ typedef struct GlyQuery {
 // Define the callback (so we don't have to write the full for all the time)
 typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 
-// The struct that controls the beahaviour of glyr
-// It is passed as reference to the cover and lyric downloader
-// Also the descriptive argumentstring is internally converted to a
-// GlyQuery first
-
 /**
 * @brief Structure holding information about built-in getters and providers
+*
+* Holding information about plugin-name, shortcut (key = "a" => "amazon"), a colored version of the name.
+* You shouldn't bother with the rest
+*  
 */
 typedef struct GlyPlugin {
         const char * name;  // Full name
@@ -256,6 +256,8 @@ typedef struct GlyPlugin {
 
 /**
 * @brief Enumeration of all getters, GlyQuery is initalized to GET_UNSURE
+*
+*  The type of metadata to get, names are selfexplanatory
 */
 enum GLYR_GET_TYPE {
         GET_COVER,
@@ -271,8 +273,9 @@ enum GLYR_GET_TYPE {
         GET_UNSURE
 };
 
-// This is not a duplicate of GLYR_GET_TYPE
-// (more to follow)
+/**
+* @brief All possible values the type field of GlyMemCache can have
+*/
 enum GLYR_DATA_TYPE {
         TYPE_NOIDEA,
         TYPE_LYRICS,

@@ -50,9 +50,9 @@ extern "C"
 * @param settings The setting struct controlling glyr. (See the GlyOpt_* methods)
 * @param error An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
 *
-* It takes a pointer to a GlyQuery struct filled to your needs via the GlyOpt_* methods,
-* Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.
-* After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with Gly_free_list when done.
+* It takes a pointer to a GlyQuery struct filled to your needs via the GlyOpt_* methods,\n
+* Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.\n
+* After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with Gly_free_list when done.\n
 *
 * @return A GlyCacheList containing all found data. See the struct reference for further details.
 */
@@ -141,10 +141,11 @@ extern "C"
         int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
 /**
 * @brief The artist field. libglyr will try to format it to fit the best.
-*        This field is required for all getters.
 *
 * @param s The GlyQuery settings struct to store this option in
 * @param artist A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
+*
+* This field is required for all getters. You are required to fill it.
 *
 * @return an errorID
 */
@@ -163,7 +164,9 @@ extern "C"
 *	Optional for those:
 *	  - tags
 *	  - relations
-*         - lyrics (might be used by a few providers)
+*         - lyrics 
+*
+*	
 *
 * @return an errorID
 */
@@ -180,7 +183,7 @@ extern "C"
 *	  - tags
 *	  - relations
 *
-* @return 
+* @return an errorID
 */
         int GlyOpt_title(GlyQuery * s,  char * title);
 /**
@@ -189,8 +192,8 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param size The max. size in pixel
 *
-* Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers, 
-* but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!
+* Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers,\n 
+* but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!\n
 *
 * @return an errorID
 */
@@ -221,41 +224,39 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param val Timeout in seconds.
 *
-* If more than one item is downloaded in parallel, the timeout will be changed accordingly.
+* If more than one item is downloaded in parallel, the timeout will be changed accordingly.\n
 * Default is 20 seconds.
 *
-* @return 
+* @return an errorID 
 */
         int GlyOpt_timeout(GlyQuery * s, unsigned long val);
 /**
 * @brief Max number of redirects to 
 *
-* @param s
 * @param s The GlyQuery settings struct to store this option in.
-* @param val
+* @param val an unsigned integer  
 * 
-* A value of 0 is allowed, but may break certain plugins.
-* Default of 1 second.
+* A value of 0 is allowed, but may break certain plugins.\n
+* Default = 1
 *
-* @return 
+* @return an errorID 
 */
         int GlyOpt_redirects(GlyQuery * s, unsigned long val);
 /**
 * @brief Set the language the items should be in.
 *
-* @param s
 * @param s The GlyQuery settings struct to store this option in.
 * @param langcode
 *	The language used for providers with multilingual content.
 *	It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.	
 *	
-*	List of providers recognizing this option:
+*	List of providers recognizing this option:\n
 *	   * cover/amazon (which amazon server to query)
 *	   * cover/google (which google server to query)
-*	   * ainfo/lastfm (the language the biography shall be in)
+*	   * ainfo/lastfm (the language the biography shall be in)\n
 *
-*	(Use only these providers if you really want ONLY localized content)
-*	By default all search results are in english.
+*	(Use only these providers if you really want ONLY localized content)\n
+*	If no language specified the language defaults to english ("en")
 *
 * Note1: This only works with a few providers, which should be set via GlyOpt_from()
 * Note2: Don't coinfuse this with the built-in google translator's settings.
@@ -269,10 +270,10 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param num the number as an integer
 *
-*	How many items to search for (1 to INT_MAX)
-*	This is not the number of items actually returned then,
-*	because libglyr is not able to find 300 songtexts of the same song,
-*	or libglyr filters duplicate items before returning.
+*	How many items to search for (1 to INT_MAX)\n
+*	This is not the number of items actually returned then,\n
+*	because libglyr is not able to find 300 songtexts of the same song,\n
+*	or libglyr filters duplicate items before returning.\n
 *
 * @return an errorID
 */
@@ -280,13 +281,14 @@ extern "C"
 /**
 * @brief Set libglyr's verbosity level (debug) 
 *
+* @param s The GlyQuery settings struct to store this option in.
 * @param level The level as an integer, see description below
 *
-*        0) nothing but fatal errors.
-*        1) warnings and important notes.
-*        2) normal, additional information what libglyr does.
-*        3) basic debug output.
-*        4) libcurl debug output.
+*        0) nothing but fatal errors.\n
+*        1) warnings and important notes.\n
+*        2) normal, additional information what libglyr does.\n
+*        3) basic debug output.\n
+*        4) libcurl debug output.\n
 *
 * @return an errorID
 */
@@ -297,21 +299,21 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param from a string, see below
 *
-*        Use this to define what providers you want to use.
-*        Every provider has a name and a key which is merely a shortcut for the name.
-*        Specify all providers in a semicolon seperated list.
-*        Type 'glyrc -H' for a complete list of all providers for each getter.
+*        Use this to define what providers you want to use.\n
+*        Every provider has a name and a key which is merely a shortcut for the name.\n
+*        Specify all providers in a semicolon seperated list.\n
+*        Type 'glyrc -H' for a complete list of all providers for each getter.\n
 *
-*          Example:
-*            "amazon;google" 
-*           "a;g" - same with keys
+*          Example:\n
+*            "amazon;google" \n
+*           "a;g" - same with keys\n
 *
-*        You can also prepend each word with a '+' or a '-' ('+' is assumend without),
-*        which will add or remove this provider from the list respectively.
-*        Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.
+*        You can also prepend each word with a '+' or a '-' ('+' is assumend without),\n
+*        which will add or remove this provider from the list respectively.\n
+*        Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.\n
 *        
-*          Example:
-*           "+fast;-amazon" which will enable last.fm and lyricswiki.
+*          Example:\n
+*           "+fast;-amazon" which will enable last.fm and lyricswiki.\n
 *
 *
 * @return an errorID
@@ -323,7 +325,7 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param iLikeColorInMyLife a boolean
 *
-*	Colored output only works in terminal with standard color support,
+*	Colored output only works in terminal with standard color support,\n
 *	which means, non standard terminals like the MS commandline do not work.
 *
 * @return always GLYRE_OK
@@ -335,7 +337,7 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param plugmax
 *
-*	Use this to scatter the results over more providers, to get different results.
+*	Use this to scatter the results over more providers, to get different results.\n
 *	You can set it also to -1 what allows an infinite number of items (=> default)
 *
 * @return an errorID 
@@ -347,11 +349,11 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param download
 *
-*        For image getters only.
-*        If set to true images are also coviniently downloaded and returned.
-*        Otherwise, just the URL is returned for your own use.
+*        For image getters only.\n
+*        If set to true images are also coviniently downloaded and returned.\n
+*        Otherwise, just the URL is returned for your own use.\n
 *
-*        Default to 'true', 'false' would be a bit more searchengine like.
+*        Default to 'true', 'false' would be a bit more searchengine like.\n
 *
 * @return an errorID 
 */
@@ -362,11 +364,11 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param groupedDL boolean to toggle this
 *
-*        If set false, this will disable the grouping of providers.
-*        By default providers are grouped in categories like 'safe','unsafe','fast' etc., which
-*        are queried in parallel, so the 'best' providers are queried first.
-*        Disabling this behaviour will result in increasing speed, but as a result the searchresults
-*        won't be sorted by quality, as it is normally the case.
+*        If set false, this will disable the grouping of providers.\n
+*        By default providers are grouped in categories like 'safe','unsafe','fast' etc., which\n
+*        are queried in parallel, so the 'best' providers are queried first.\n
+*        Disabling this behaviour will result in increasing speed, but as a result the searchresults\n
+*        won't be sorted by quality, as it is normally the case.\n
 *
 * @return an errorID
 */
@@ -378,13 +380,13 @@ extern "C"
 * @param formats A comma seperated list of format specifiers, e.g. "png;jpg;jpeg"
 *
 * 
-*       Awaits a string with a semicolon seperated list of allowed formats.
-*       The case of the format is ignored.
+*       Awaits a string with a semicolon seperated list of allowed formats.\n
+*       The case of the format is ignored.\n
 *
-*        Example:
-*           "png;jpg;jpeg" would allow png and jpeg.
+*        Example:\n
+*           "png;jpg;jpeg" would allow png and jpeg.\n
 *
-*        You can also specify "all", which disables this check.
+*        You can also specify "all", which disables this check.\n
 *
 * @return an errorID
 */
@@ -395,19 +397,19 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param fuzz
 *
-*	Set the maximum amount of inserts, edits and substitutions, a search results
-*       may differ from the artist and/or album and/or title.
-*       The difference between two strings is measured as the 'Levenshtein distance',
-*       i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.
+*	Set the maximum amount of inserts, edits and substitutions, a search results\n
+*       may differ from the artist and/or album and/or title.\n
+*       The difference between two strings is measured as the 'Levenshtein distance',\n
+*       i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.\n
 *
-*       Example:
-*          "Equilibrium" <=> "Aqilibriums" => Distance=3
-*          With a fuzzyness of 3 this would pass the check, with 2 it won't.
+*       Example:\n
+*          "Equilibrium" <=> "Aqilibriums" => Distance=3\n
+*          With a fuzzyness of 3 this would pass the check, with 2 it won't.\n
 *        
-*       Higher values mean more search results, but more inaccuracy.  
+*       Higher values mean more search results, but more inaccuracy. \n
 *       Default is 4.
 *
-* @return 
+* @return an errorID 
 */
         int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
 /**
@@ -416,9 +418,10 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param duplcheck boolean flag, true enables, false disables
 *
-*	Actually there is no valid reason to set this to false.
+*	Actually there is no valid reason to set this to false,\n
+*	except duplicate items are okay for you.
 *
-* @return 
+* @return an errorID 
 */
         int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
 
@@ -428,7 +431,7 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param source A nullterminated pointer to char.
 *
-*	You can use 'glyrc gtrans list' or the Gly_gtrans_list() method,
+*	You can use 'glyrc gtrans list' or the Gly_gtrans_list() method,\n
 *	to get a list of all valid values.
 *
 * @return an errorID
@@ -440,7 +443,7 @@ extern "C"
 * @param s The GlyQuery settings struct to store this option in.
 * @param target
 *
-*	By default this feature is disabled (target == NULL)
+*	By default this feature is disabled (target == NULL)\n
 *	Use the methods in lib/translate.h to use the corresponding methods directly.
 *	
 *
@@ -481,11 +484,13 @@ extern "C"
         const char * Gly_strerror(enum GLYR_ERROR ID);
 
 /**
-* @brief Forget this one.
+* @brief Get the name of a group as string
 *
-* @param ID 
+* @param ID a member of the GLYR_GROUPS enum
 *
-* @return A string..todo
+*	GRP_FAST gets to "fast", you really don't need it, as it's only used in glyrc.
+*
+* @return A groupname as string or NULL if not found
 */
         const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
 
@@ -493,16 +498,22 @@ extern "C"
 /**
 * @brief Returns versioning information, including compiletime
 *
+*  Example: \n
+*    Version 0.4 (Larcenous Locust (dev)) of [May 20 2011] compiled at [19:12:37]
+*
 * @return A nullterminated string, do not free 
 */
         const char * Gly_version(void);
 
 /**
-* @brief Writes data to the path $path, mostly there to make languagebindings easier. 
+* @brief Writes data to a specified path
 *
 * @param data The data to write. 
 * @param path The path to write data at.
 *
+* Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',\n
+* which are pretty selfexplaining.
+* 
 * @return An error id.
 */
         int Gly_write(GlyMemCache * data, const char * path);
