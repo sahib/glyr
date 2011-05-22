@@ -1,0 +1,760 @@
+.TH "lib/glyr.h" 3 "Sun May 22 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+lib/glyr.h \- 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'types.h'\fP
+.br
+\fC#include 'translate.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBGly_init\fP (void)"
+.br
+.RI "\fIcall this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. \fP"
+.ti -1c
+.RI "void \fBGly_cleanup\fP (void)"
+.br
+.RI "\fICall this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP Not threadsafe also. \fP"
+.ti -1c
+.RI "\fBGlyCacheList\fP * \fBGly_get\fP (\fBGlyQuery\fP *settings, enum \fBGLYR_ERROR\fP *error)"
+.br
+.RI "\fIThe 'main' method of glyr. It starts the searching according to the settings in the settings param. \fP"
+.ti -1c
+.RI "void \fBGly_init_query\fP (\fBGlyQuery\fP *glyrs)"
+.br
+.RI "\fIInit's the \fBGlyQuery\fP structure to sane defaults. Call this after creating the variable. \fP"
+.ti -1c
+.RI "void \fBGly_destroy_query\fP (\fBGlyQuery\fP *sets)"
+.br
+.RI "\fIFree all memory associated with this query, and restore default settings. Do this always when you're done with this one. \fP"
+.ti -1c
+.RI "void \fBGly_free_list\fP (\fBGlyCacheList\fP *lst)"
+.br
+.RI "\fIFree the memory in the \fBGlyCacheList\fP returned by Gly_get. \fP"
+.ti -1c
+.RI "\fBGlyMemCache\fP * \fBGly_clist_at\fP (\fBGlyCacheList\fP *clist, int iter)"
+.br
+.RI "\fIReturns the \fBGlyMemCache\fP in the \fBGlyCacheList\fP clist at position iter. The same as clist->list[iter] with validation check. Mainly there to make SWIG bindings for other languages than C easier. \fP"
+.ti -1c
+.RI "\fBGlyMemCache\fP * \fBGly_new_cache\fP (void)"
+.br
+.RI "\fIReturns a newly allocated and initialized \fBGlyMemCache\fP, mostly for use with Gly_gtrans_* Don't forget to free it with Gly_free_cache. \fP"
+.ti -1c
+.RI "\fBGlyMemCache\fP * \fBGly_copy_cache\fP (\fBGlyMemCache\fP *source)"
+.br
+.RI "\fIProduces an exact copy of the \fBGlyMemCache\fP source. \fP"
+.ti -1c
+.RI "void \fBGly_free_cache\fP (\fBGlyMemCache\fP *c)"
+.br
+.RI "\fIFree the \fBGlyMemCache\fP pointed to by c. You should set it to NULL also, as using it after this will crash your program. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_dlcallback\fP (\fBGlyQuery\fP *settings, \fBDL_callback\fP dl_cb, void *userp)"
+.br
+.RI "\fISet the callback that is executed once an item is ready downloaded. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_type\fP (\fBGlyQuery\fP *s, enum \fBGLYR_GET_TYPE\fP type)"
+.br
+.RI "\fIWhat type of metadata to search for. Must be one of GLYR_GET_TYPE enum. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_artist\fP (\fBGlyQuery\fP *s, char *artist)"
+.br
+.RI "\fIThe artist field. libglyr will try to format it to fit the best. This field is required for all getters. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_album\fP (\fBGlyQuery\fP *s, char *album)"
+.br
+.RI "\fIThe album field. libglyr will try to format it to fit the best. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_title\fP (\fBGlyQuery\fP *s, char *title)"
+.br
+.RI "\fIThe title field. libglyr will try to format it to fit the best. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_cmaxsize\fP (\fBGlyQuery\fP *s, int size)"
+.br
+.RI "\fIMaximum size a cover may have (assuming the cover is quadratic, only one size is required) \fP"
+.ti -1c
+.RI "int \fBGlyOpt_cminsize\fP (\fBGlyQuery\fP *s, int size)"
+.br
+.RI "\fIMinimum size a cover may have (assuming the cover is quadratic, only one size is required) \fP"
+.ti -1c
+.RI "int \fBGlyOpt_parallel\fP (\fBGlyQuery\fP *s, unsigned long val)"
+.br
+.RI "\fIThe number of items that may be downloaded in parallel. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_timeout\fP (\fBGlyQuery\fP *s, unsigned long val)"
+.br
+.RI "\fIAmout of seconds to wait before cancelling an download. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_redirects\fP (\fBGlyQuery\fP *s, unsigned long val)"
+.br
+.RI "\fIMax number of redirects to. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_lang\fP (\fBGlyQuery\fP *s, char *langcode)"
+.br
+.RI "\fISet the language the items should be in. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_number\fP (\fBGlyQuery\fP *s, unsigned int num)"
+.br
+.RI "\fISet the number of items to search. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_verbosity\fP (\fBGlyQuery\fP *s, unsigned int level)"
+.br
+.RI "\fISet libglyr's verbosity level (debug) \fP"
+.ti -1c
+.RI "int \fBGlyOpt_from\fP (\fBGlyQuery\fP *s, const char *from)"
+.br
+.RI "\fIDefine the providers you want to use. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_color\fP (\fBGlyQuery\fP *s, bool iLikeColorInMyLife)"
+.br
+.RI "\fIEnable colored log output. (Debug) \fP"
+.ti -1c
+.RI "int \fBGlyOpt_plugmax\fP (\fBGlyQuery\fP *s, int plugmax)"
+.br
+.RI "\fIDefine the maximum number of items a provider may download. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_download\fP (\fBGlyQuery\fP *s, bool download)"
+.br
+.RI "\fIDefine if image items (i.e, covers, photos) are downloaded. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_groupedDL\fP (\fBGlyQuery\fP *s, bool groupedDL)"
+.br
+.RI "\fIDefine wether searching happens in groups or everything or parallel (= false) \fP"
+.ti -1c
+.RI "int \fBGlyOpt_formats\fP (\fBGlyQuery\fP *s, const char *formats)"
+.br
+.RI "\fIDefine allowed image formats. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_fuzzyness\fP (\fBGlyQuery\fP *s, int fuzz)"
+.br
+.RI "\fISet the max. tolerance for fuzzy matching. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_duplcheck\fP (\fBGlyQuery\fP *s, bool duplcheck)"
+.br
+.RI "\fIEnable/Disable check for duplicate items. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_gtrans_source_lang\fP (\fBGlyQuery\fP *s, const char *source)"
+.br
+.RI "\fISet the source language for google translator or NULL to autodetect. \fP"
+.ti -1c
+.RI "int \fBGlyOpt_gtrans_target_lang\fP (\fBGlyQuery\fP *s, const char *target)"
+.br
+.RI "\fISet the target language for google translator or NULL to disable. \fP"
+.ti -1c
+.RI "\fBGlyPlugin\fP * \fBGly_get_provider_by_id\fP (enum \fBGLYR_GET_TYPE\fP ID)"
+.br
+.RI "\fIGet information about usable providers and also about getters. \fP"
+.ti -1c
+.RI "\fBGlyMemCache\fP * \fBGly_download\fP (const char *url, \fBGlyQuery\fP *s)"
+.br
+.RI "\fIA convinience method to download the content at the URl $url, according to the settings in $s Actually only the redirect and timeout parameters are used here. \fP"
+.ti -1c
+.RI "const char * \fBGly_strerror\fP (enum \fBGLYR_ERROR\fP ID)"
+.br
+.RI "\fIMany methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print. \fP"
+.ti -1c
+.RI "const char * \fBGly_groupname_by_id\fP (enum \fBGLYR_GROUPS\fP ID)"
+.br
+.RI "\fIForget this one. \fP"
+.ti -1c
+.RI "const char * \fBGly_version\fP (void)"
+.br
+.RI "\fIReturns versioning information, including compiletime. \fP"
+.ti -1c
+.RI "int \fBGly_write\fP (\fBGlyMemCache\fP *data, const char *path)"
+.br
+.RI "\fIWrites data to the path $path, mostly there to make languagebindings easier. \fP"
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "void Gly_cleanup (void)"
+.PP
+Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after \fBGly_init()\fP Not threadsafe also. 
+.SS "\fBGlyMemCache\fP* Gly_clist_at (\fBGlyCacheList\fP *clist, intiter)"
+.PP
+Returns the \fBGlyMemCache\fP in the \fBGlyCacheList\fP clist at position iter. The same as clist->list[iter] with validation check. Mainly there to make SWIG bindings for other languages than C easier. \fBParameters:\fP
+.RS 4
+\fIclist\fP The \fBGlyCacheList\fP to access 
+.br
+\fIiter\fP The position to return
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A \fBGlyMemCache\fP 
+.RE
+.PP
+
+.SS "\fBGlyMemCache\fP* Gly_copy_cache (\fBGlyMemCache\fP *source)"
+.PP
+Produces an exact copy of the \fBGlyMemCache\fP source. \fBParameters:\fP
+.RS 4
+\fIsource\fP The \fBGlyMemCache\fP to copy
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A newly allocated \fBGlyMemCache\fP 
+.RE
+.PP
+
+.SS "void Gly_destroy_query (\fBGlyQuery\fP *sets)"
+.PP
+Free all memory associated with this query, and restore default settings. Do this always when you're done with this one. \fBParameters:\fP
+.RS 4
+\fIsets\fP The \fBGlyQuery\fP to be destroyed 
+.RE
+.PP
+
+.SS "\fBGlyMemCache\fP* Gly_download (const char *url, \fBGlyQuery\fP *s)"
+.PP
+A convinience method to download the content at the URl $url, according to the settings in $s Actually only the redirect and timeout parameters are used here. \fBParameters:\fP
+.RS 4
+\fIurl\fP The url to download as nullterminated string. Must be a vaild URL. 
+.br
+\fIs\fP A \fBGlyQuery\fP with the timeout and redirect values filled to your needs.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A \fBGlyMemCache\fP containing the data 
+.RE
+.PP
+
+.SS "void Gly_free_cache (\fBGlyMemCache\fP *c)"
+.PP
+Free the \fBGlyMemCache\fP pointed to by c. You should set it to NULL also, as using it after this will crash your program. \fBParameters:\fP
+.RS 4
+\fIc\fP An allocated \fBGlyMemCache\fP 
+.RE
+.PP
+
+.SS "void Gly_free_list (\fBGlyCacheList\fP *lst)"
+.PP
+Free the memory in the \fBGlyCacheList\fP returned by Gly_get. \fBParameters:\fP
+.RS 4
+\fIlst\fP The \fBGlyCacheList\fP to be free'd 
+.RE
+.PP
+
+.SS "\fBGlyCacheList\fP* Gly_get (\fBGlyQuery\fP *settings, enum \fBGLYR_ERROR\fP *error)"
+.PP
+The 'main' method of glyr. It starts the searching according to the settings in the settings param. \fBParameters:\fP
+.RS 4
+\fIsettings\fP The setting struct controlling glyr. (See the GlyOpt_* methods) 
+.br
+\fIerror\fP An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
+.RE
+.PP
+It takes a pointer to a \fBGlyQuery\fP struct filled to your needs via the GlyOpt_* methods, Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter. After return all items are listed in a \fBGlyCacheList\fP ready to be accessed, remember to delete it with Gly_free_list when done.
+.PP
+\fBReturns:\fP
+.RS 4
+A \fBGlyCacheList\fP containing all found data. See the struct reference for further details. 
+.RE
+.PP
+
+.SS "\fBGlyPlugin\fP* Gly_get_provider_by_id (enum \fBGLYR_GET_TYPE\fPID)"
+.PP
+Get information about usable providers and also about getters. \fBParameters:\fP
+.RS 4
+\fIID\fP What information to get, use GET_UNSURE to get a list of available getters.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A newly allocated \fBGlyPlugin\fP struct, pass it to free when done. 
+.RE
+.PP
+
+.SS "const char* Gly_groupname_by_id (enum \fBGLYR_GROUPS\fPID)"
+.PP
+Forget this one. \fBParameters:\fP
+.RS 4
+\fIID\fP 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A string..todo 
+.RE
+.PP
+
+.SS "void Gly_init (void)"
+.PP
+call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. 
+.SS "void Gly_init_query (\fBGlyQuery\fP *glyrs)"
+.PP
+Init's the \fBGlyQuery\fP structure to sane defaults. Call this after creating the variable. \fBParameters:\fP
+.RS 4
+\fIglyrs\fP The fresh \fBGlyQuery\fP to be init'd. 
+.RE
+.PP
+
+.SS "\fBGlyMemCache\fP* Gly_new_cache (void)"
+.PP
+Returns a newly allocated and initialized \fBGlyMemCache\fP, mostly for use with Gly_gtrans_* Don't forget to free it with Gly_free_cache. \fBReturns:\fP
+.RS 4
+A newly allocated \fBGlyMemCache\fP 
+.RE
+.PP
+
+.SS "const char* Gly_strerror (enum \fBGLYR_ERROR\fPID)"
+.PP
+Many methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print. \fBParameters:\fP
+.RS 4
+\fIID\fP The returned error
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A descriptive nullterminated string, do not pass to free 
+.RE
+.PP
+
+.SS "const char* Gly_version (void)"
+.PP
+Returns versioning information, including compiletime. \fBReturns:\fP
+.RS 4
+A nullterminated string, do not free 
+.RE
+.PP
+
+.SS "int Gly_write (\fBGlyMemCache\fP *data, const char *path)"
+.PP
+Writes data to the path $path, mostly there to make languagebindings easier. \fBParameters:\fP
+.RS 4
+\fIdata\fP The data to write. 
+.br
+\fIpath\fP The path to write data at.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+An error id. 
+.RE
+.PP
+
+.SS "int GlyOpt_album (\fBGlyQuery\fP *s, char *album)"
+.PP
+The album field. libglyr will try to format it to fit the best. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIalbum\fP A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
+.RE
+.PP
+Required for the following getters:
+.IP "\(bu" 2
+albumlist
+.IP "\(bu" 2
+cover
+.IP "\(bu" 2
+review
+.IP "\(bu" 2
+tracklist Optional for those:
+.IP "\(bu" 2
+tags
+.IP "\(bu" 2
+relations
+.PP
+.PP
+lyrics (might be used by a few providers)
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_artist (\fBGlyQuery\fP *s, char *artist)"
+.PP
+The artist field. libglyr will try to format it to fit the best. This field is required for all getters. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in 
+.br
+\fIartist\fP A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_cmaxsize (\fBGlyQuery\fP *s, intsize)"
+.PP
+Maximum size a cover may have (assuming the cover is quadratic, only one size is required) \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIsize\fP The max. size in pixel
+.RE
+.PP
+Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers, but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_cminsize (\fBGlyQuery\fP *s, intsize)"
+.PP
+Minimum size a cover may have (assuming the cover is quadratic, only one size is required) \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIsize\fP The min. size in pixel
+.RE
+.PP
+Note: Also see \fBGlyOpt_cmaxsize()\fP
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_color (\fBGlyQuery\fP *s, booliLikeColorInMyLife)"
+.PP
+Enable colored log output. (Debug) \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIiLikeColorInMyLife\fP a boolean
+.RE
+.PP
+Colored output only works in terminal with standard color support, which means, non standard terminals like the MS commandline do not work.
+.PP
+\fBReturns:\fP
+.RS 4
+always GLYRE_OK 
+.RE
+.PP
+
+.SS "int GlyOpt_dlcallback (\fBGlyQuery\fP *settings, \fBDL_callback\fPdl_cb, void *userp)"
+.PP
+Set the callback that is executed once an item is ready downloaded. \fBParameters:\fP
+.RS 4
+\fIsettings\fP The \fBGlyQuery\fP settings struct to store this option in 
+.br
+\fIdl_cb\fP The callback to register, must have a prototype like this: enum GLYR_ERROR my_callback(GlyMemCache * dl, struct GlyQuery * s); 
+.br
+\fIuserp\fP A pointer to a custom variable you can access inside the callback via s->callback.user_pointer;
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_download (\fBGlyQuery\fP *s, booldownload)"
+.PP
+Define if image items (i.e, covers, photos) are downloaded. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIdownload\fP For image getters only. If set to true images are also coviniently downloaded and returned. Otherwise, just the URL is returned for your own use.
+.RE
+.PP
+Default to 'true', 'false' would be a bit more searchengine like.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_duplcheck (\fBGlyQuery\fP *s, boolduplcheck)"
+.PP
+Enable/Disable check for duplicate items. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIduplcheck\fP boolean flag, true enables, false disables
+.RE
+.PP
+Actually there is no valid reason to set this to false.
+.PP
+\fBReturns:\fP
+.RS 4
+.RE
+.PP
+
+.SS "int GlyOpt_formats (\fBGlyQuery\fP *s, const char *formats)"
+.PP
+Define allowed image formats. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIformats\fP A comma seperated list of format specifiers, e.g. 'png;jpg;jpeg'
+.RE
+.PP
+Awaits a string with a semicolon seperated list of allowed formats. The case of the format is ignored.
+.PP
+Example: 'png;jpg;jpeg' would allow png and jpeg.
+.PP
+You can also specify 'all', which disables this check.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_from (\fBGlyQuery\fP *s, const char *from)"
+.PP
+Define the providers you want to use. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIfrom\fP a string, see below
+.RE
+.PP
+Use this to define what providers you want to use. Every provider has a name and a key which is merely a shortcut for the name. Specify all providers in a semicolon seperated list. Type 'glyrc -H' for a complete list of all providers for each getter.
+.PP
+Example: 'amazon;google' 'a;g' - same with keys
+.PP
+You can also prepend each word with a '+' or a '-' ('+' is assumend without), which will add or remove this provider from the list respectively. Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.
+.PP
+Example: '+fast;-amazon' which will enable last.fm and lyricswiki.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_fuzzyness (\fBGlyQuery\fP *s, intfuzz)"
+.PP
+Set the max. tolerance for fuzzy matching. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIfuzz\fP Set the maximum amount of inserts, edits and substitutions, a search results may differ from the artist and/or album and/or title. The difference between two strings is measured as the 'Levenshtein distance', i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.
+.RE
+.PP
+Example: 'Equilibrium' <=> 'Aqilibriums' => Distance=3 With a fuzzyness of 3 this would pass the check, with 2 it won't.
+.PP
+Higher values mean more search results, but more inaccuracy. Default is 4.
+.PP
+\fBReturns:\fP
+.RS 4
+.RE
+.PP
+
+.SS "int GlyOpt_groupedDL (\fBGlyQuery\fP *s, boolgroupedDL)"
+.PP
+Define wether searching happens in groups or everything or parallel (= false) \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIgroupedDL\fP boolean to toggle this
+.RE
+.PP
+If set false, this will disable the grouping of providers. By default providers are grouped in categories like 'safe','unsafe','fast' etc., which are queried in parallel, so the 'best' providers are queried first. Disabling this behaviour will result in increasing speed, but as a result the searchresults won't be sorted by quality, as it is normally the case.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_gtrans_source_lang (\fBGlyQuery\fP *s, const char *source)"
+.PP
+Set the source language for google translator or NULL to autodetect. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIsource\fP A nullterminated pointer to char.
+.RE
+.PP
+You can use 'glyrc gtrans list' or the \fBGly_gtrans_list()\fP method, to get a list of all valid values.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_gtrans_target_lang (\fBGlyQuery\fP *s, const char *target)"
+.PP
+Set the target language for google translator or NULL to disable. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fItarget\fP By default this feature is disabled (target == NULL) Use the methods in \fBlib/translate.h\fP to use the corresponding methods directly.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_lang (\fBGlyQuery\fP *s, char *langcode)"
+.PP
+Set the language the items should be in. \fBParameters:\fP
+.RS 4
+\fIs\fP 
+.br
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIlangcode\fP The language used for providers with multilingual content. It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.
+.RE
+.PP
+List of providers recognizing this option: * cover/amazon (which amazon server to query) * cover/google (which google server to query) * ainfo/lastfm (the language the biography shall be in)
+.PP
+(Use only these providers if you really want ONLY localized content) By default all search results are in english.
+.PP
+Note1: This only works with a few providers, which should be set via \fBGlyOpt_from()\fP Note2: Don't coinfuse this with the built-in google translator's settings.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_number (\fBGlyQuery\fP *s, unsigned intnum)"
+.PP
+Set the number of items to search. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fInum\fP the number as an integer
+.RE
+.PP
+How many items to search for (1 to INT_MAX) This is not the number of items actually returned then, because libglyr is not able to find 300 songtexts of the same song, or libglyr filters duplicate items before returning.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_parallel (\fBGlyQuery\fP *s, unsigned longval)"
+.PP
+The number of items that may be downloaded in parallel. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIval\fP the number as unsigned long
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_plugmax (\fBGlyQuery\fP *s, intplugmax)"
+.PP
+Define the maximum number of items a provider may download. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIplugmax\fP Use this to scatter the results over more providers, to get different results. You can set it also to -1 what allows an infinite number of items (=> default)
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_redirects (\fBGlyQuery\fP *s, unsigned longval)"
+.PP
+Max number of redirects to. \fBParameters:\fP
+.RS 4
+\fIs\fP 
+.br
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIval\fP A value of 0 is allowed, but may break certain plugins. Default of 1 second.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+.RE
+.PP
+
+.SS "int GlyOpt_timeout (\fBGlyQuery\fP *s, unsigned longval)"
+.PP
+Amout of seconds to wait before cancelling an download. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIval\fP Timeout in seconds.
+.RE
+.PP
+If more than one item is downloaded in parallel, the timeout will be changed accordingly. Default is 20 seconds.
+.PP
+\fBReturns:\fP
+.RS 4
+.RE
+.PP
+
+.SS "int GlyOpt_title (\fBGlyQuery\fP *s, char *title)"
+.PP
+The title field. libglyr will try to format it to fit the best. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fItitle\fP A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
+.RE
+.PP
+Required for:
+.IP "\(bu" 2
+lyrics Optional for:
+.IP "\(bu" 2
+tags
+.IP "\(bu" 2
+relations
+.PP
+.PP
+\fBReturns:\fP
+.RS 4
+.RE
+.PP
+
+.SS "int GlyOpt_type (\fBGlyQuery\fP *s, enum \fBGLYR_GET_TYPE\fPtype)"
+.PP
+What type of metadata to search for. Must be one of GLYR_GET_TYPE enum. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in 
+.br
+\fItype\fP A member of the GLYR_GET_TYPE enum, set this before you set anything else.
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SS "int GlyOpt_verbosity (\fBGlyQuery\fP *s, unsigned intlevel)"
+.PP
+Set libglyr's verbosity level (debug) \fBParameters:\fP
+.RS 4
+\fIlevel\fP The level as an integer, see description below
+.RE
+.PP
+0) nothing but fatal errors. 1) warnings and important notes. 2) normal, additional information what libglyr does. 3) basic debug output. 4) libcurl debug output.
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libglyr from the source code.

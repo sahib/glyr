@@ -709,6 +709,11 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                                         // Here is where the actual callback shall be executed
                                         if(capo->parser_callback) {
 
+						// Getters like cover and photo display the item in the callback. Therefore we need to calculate the checksum before.
+						if(capo->batch) {
+							Gly_update_md5sum(capo->cache);
+						}
+						
                                                 // Now try to parse what we downloaded
                                                 GlyCacheList * cl = capo->parser_callback(capo);
                                                 if(cl && cl->list && cl->list[0]->data) {
@@ -828,10 +833,15 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                 memset(&oblist[I],0,sizeof(cb_object));
         }
 
-        glyr_message(2,s,stderr,"- Calculating checksums\n");
 	if(result_lst != NULL) {
+        	glyr_message(2,s,stderr,"- Calculating checksums\n");
+		unsigned char empty_sum[16];
+		memset(empty_sum,0,16);
 		for(I = 0; I < result_lst->size; I++) {
-			Gly_update_md5sum(result_lst->list[I]);
+			// Only update if not still empty.
+			if(memcmp(result_lst->list[I]->md5sum, empty_sum,16)) {
+				Gly_update_md5sum(result_lst->list[I]);
+			}
 		}
 	}
 
@@ -909,7 +919,7 @@ GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer
  	// Now execute those...
         if(plugCtr != 0) {
                 // Internal Order in whic we visit groups
-                int GIDArray[] = {GRP_SAFE,  GRP_FAST, GRP_USFE,  GRP_SPCL,  GRP_SLOW,  -666 /* Negative evil */};
+                int GIDArray[] = {GRP_SAFE | GRP_FAST, GRP_SAFE, GRP_FAST, GRP_USFE,  GRP_SPCL,  GRP_SLOW,  -666 /* Negative evil */};
                 // Mark a plugin if visited if it's in multiple groups
                 bool * visitList = calloc(plugCtr,sizeof(char));
                 if(visitList == NULL) {
@@ -1001,6 +1011,8 @@ const char * grp_id_to_name(int id)
         switch(id) {
         case GRP_SAFE:
                 return GRPN_SAFE;
+	case GRP_SAFE | GRP_FAST:
+		return "safe & fast";
         case GRP_USFE:
                 return GRPN_USFE;
         case GRP_FAST:

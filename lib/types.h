@@ -28,30 +28,33 @@
 // cmake -Dglyr_USE_COLOR
 #include "config.h"
 
-//Nifty defines:
+// Nifty defines:
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
 #define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
-#define CALC_MD5SUMS 1
+// libglyr uses checksums to filter double items
+// Also you can use those as easy comparasion method
+// There is no valid reason to diasable this actually
+#define CALC_MD5SUMS true
 
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
 #ifdef  USE_COLOR
-#define C_B "\x1b[34;01m" // blue
-#define C_M "\x1b[35;01m" // magenta
-#define C_C "\x1b[36;01m" // Cyan
-#define C_R "\x1b[31;01m" // Red
-#define C_G "\x1b[32;01m" // Green
-#define C_Y "\x1b[33;01m" // Yellow
-#define C_  "\x1b[0m"     // Reset
+	#define C_B "\x1b[34;01m" // blue
+	#define C_M "\x1b[35;01m" // magenta
+	#define C_C "\x1b[36;01m" // Cyan
+	#define C_R "\x1b[31;01m" // Red
+	#define C_G "\x1b[32;01m" // Green
+	#define C_Y "\x1b[33;01m" // Yellow
+	#define C_  "\x1b[0m"     // Reset
 #else
-#define C_B "" // blue
-#define C_M "" // magenta
-#define C_C "" // Cyan
-#define C_R "" // Red
-#define C_G "" // Green
-#define C_Y "" // Yellow
-#define C_  "" // Reset
+	#define C_B "" // blue
+	#define C_M "" // magenta
+	#define C_C "" // Cyan
+	#define C_R "" // Red
+	#define C_G "" // Green
+	#define C_Y "" // Yellow
+	#define C_  "" // Reset
 #endif
 
 // Change this if you really need more
@@ -122,27 +125,34 @@ struct cb_object;
 // the more specialized the struct gets the more obsucre members it have
 // GlyQuery -> cb_object e.g.
 
-// Internal buffer model
+/**
+* @brief Represents a single item.
+*/
 typedef struct GlyMemCache {
-        char  *data;    // data buffer
-        size_t size;    // Size of data
-        char  *dsrc;    // Source of data
-        char  *prov;    // Provider that delievered this
-        int   type;     // type of metadata
-        int   error;    // error code - internal use only
-        int   duration; // Duration of a song. Only for tracklist getter.
-        bool  is_image; // Wether it is an image or plain text
-        unsigned char md5sum[16];
+        char  *data;    /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
+        size_t size;    /*!< Size of data, cahnge this if you changed the data field. */
+        char  *dsrc;    /*!< Source of data, i.e. an exact URL to the place where it has been found. */
+        char  *prov;    /*!< The name of the provider which found this item */
+        int   type;     /*!< The metadata type, is one of the GLYR_GET_TYPE enum */
+        int   error;    /*!< error code - internal use only */
+        int   duration; /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
+        bool  is_image; /*!< Wether it is an image or a textitem */
+        unsigned char md5sum[16]; /*!< A checksum of generated from the data field, used internally for duplicate checking, useable as identifier */
 } GlyMemCache;
 
-// list of GlyMemCaches
+/**
+* @brief The return type of Gly_get, a list of GlyMemCaches
+*/
 typedef struct GlyCacheList {
-        GlyMemCache ** list;
-        size_t size;
-        int usersig;
+        GlyMemCache ** list; /*!< A list of pointers to GlyMemCache instances, use Gly_clist_at to access those. */
+        size_t size;	     /*!< Total number of items */
+        int usersig;	     /*!< Do not use. */
 } GlyCacheList;
 
 
+/**
+* @brief Structure controlling all of libglyr's options
+*/
 typedef struct GlyQuery {
         // get
         int type;
@@ -201,19 +211,21 @@ typedef struct GlyQuery {
         // allowed formats for images
         const char * formats;
 
-        struct callback {
+        struct {
                 enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
                 void  * user_pointer;
         } callback;
 
 	// settings for google translator
-	struct gtrans {
+	struct {
 		const char * target;
 		const char * source;
 	} gtrans;
 
 } GlyQuery;
 
+
+// Define the callback (so we don't have to write the full for all the time)
 typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 
 // The struct that controls the beahaviour of glyr
@@ -221,6 +233,9 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 // Also the descriptive argumentstring is internally converted to a
 // GlyQuery first
 
+/**
+* @brief Structure holding information about built-in getters and providers
+*/
 typedef struct GlyPlugin {
         const char * name;  // Full name
         const char * key;   // A one-letter ID
@@ -239,6 +254,9 @@ typedef struct GlyPlugin {
 
 } GlyPlugin;
 
+/**
+* @brief Enumeration of all getters, GlyQuery is initalized to GET_UNSURE
+*/
 enum GLYR_GET_TYPE {
         GET_COVER,
         GET_LYRIC,

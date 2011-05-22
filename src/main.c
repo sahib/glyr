@@ -66,11 +66,10 @@ static void print_version(GlyQuery * s)
 /* --------------------------------------------------------- */
 
 #define _S "\t"
-static void list_provider_at_id(int id, int min_align,GlyQuery * s)
+static void list_provider_at_id(int id, int min_align, GlyQuery * s)
 {
         GlyPlugin * cp = Gly_get_provider_by_id(id);
         s->color_output = false;
-
 
         if(cp != NULL) {
                 int i = 0;
@@ -1039,7 +1038,7 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
                         if(path != NULL) {
                                 glyr_message(1,s,stderr,"- Writing '%s' to %s\n",get_type_string(s),path);
 
-                                if(Gly_write(s,c,path) == -1) {
+                                if(Gly_write(c,path) == -1) {
                                         glyr_message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
                                 }
                         }

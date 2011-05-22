@@ -555,7 +555,7 @@ GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e)
 
 /*-----------------------------------------------*/
 
-int Gly_write(GlyQuery * s, GlyMemCache * data, const char * path)
+int Gly_write(GlyMemCache * data, const char * path)
 {
         int bytes = -1;
         if(path) {
