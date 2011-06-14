@@ -119,10 +119,12 @@ Data Fields</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyMemCache.html#a47052fbf969756343111515ebf5ffba2">duration</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyMemCache.html#a2cafa98f895ff66ef4d1808a47590611">is_image</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">unsigned char&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyMemCache.html#aff314f2f88da8449a40395fc96782826">md5sum</a> [16]</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyMemCache.html#aecf1bb5f7afb26879840e58a284b4bc7">next</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyMemCache.html#a6be0fd2cbd6a94d25f64e2a49920e129">prev</a></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Represents a single item. </p>
-<p>It's used </p>
+<p>It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr. </p>
 </div><hr/><h2>Field Documentation</h2>
 <a class="anchor" id="aeab256f3b8668bd75272bee8c742d61c"></a><!-- doxytag: member="GlyMemCache::data" ref="aeab256f3b8668bd75272bee8c742d61c" args="" -->
 <div class="memitem">
@@ -204,7 +206,35 @@ Data Fields</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>A checksum of generated from the data field, used internally for duplicate checking, useable as identifier </p>
+<p>A checksum of generated from the data field, used internally for duplicate checking, useable as identifier from data </p>
+
+</div>
+</div>
+<a class="anchor" id="aecf1bb5f7afb26879840e58a284b4bc7"></a><!-- doxytag: member="GlyMemCache::next" ref="aecf1bb5f7afb26879840e58a284b4bc7" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a>* <a class="el" href="structGlyMemCache.html#aecf1bb5f7afb26879840e58a284b4bc7">GlyMemCache::next</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Pointer to next cache in list, or NULL </p>
+
+</div>
+</div>
+<a class="anchor" id="a6be0fd2cbd6a94d25f64e2a49920e129"></a><!-- doxytag: member="GlyMemCache::prev" ref="a6be0fd2cbd6a94d25f64e2a49920e129" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a>* <a class="el" href="structGlyMemCache.html#a6be0fd2cbd6a94d25f64e2a49920e129">GlyMemCache::prev</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Pointer to prev cache in list, or NULL </p>
 
 </div>
 </div>
@@ -268,7 +298,7 @@ Data Fields</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sun May 22 2011 23:18:10 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Tue Jun 14 2011 23:35:36 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

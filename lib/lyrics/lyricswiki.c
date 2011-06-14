@@ -31,7 +31,7 @@
 
 const char * lyrics_lyricswiki_url(GlyQuery * settings)
 {
-        return LW_URL;
+    return LW_URL;
 }
 
 /*--------------------------------------------------------*/
@@ -40,31 +40,37 @@ const char * lyrics_lyricswiki_url(GlyQuery * settings)
 // This is to prevent completely wrong results, therfore the quite high tolerance
 bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * capo)
 {
-        bool res = false;
-        if(to_artist && to_title && capo) {
-                char * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
-                if(tmp_artist) {
-                        ascii_strdown_modify(tmp_artist);
-                        char * tmp_title  = copy_value(to_title, strstr(to_title ,"</song>" ));
-                        if(tmp_title) {
-                                ascii_strdown_modify(tmp_title);
-                                char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo->s->artist));
-                                if(cmp_a) {
-                                        char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title));
-                                        if(cmp_t) {
-                                                if((levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness) {
-                                                        res = true;
-                                                }
-                                                free(cmp_t);
-                                        }
-                                        free(cmp_a);
-                                }
-                                free(tmp_title);
+    bool res = false;
+    if(to_artist && to_title && capo)
+    {
+        char * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
+        if(tmp_artist)
+        {
+            ascii_strdown_modify(tmp_artist);
+            char * tmp_title  = copy_value(to_title, strstr(to_title ,"</song>" ));
+            if(tmp_title)
+            {
+                ascii_strdown_modify(tmp_title);
+                char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo->s->artist));
+                if(cmp_a)
+                {
+                    char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title));
+                    if(cmp_t)
+                    {
+                        if((levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness)
+                        {
+                            res = true;
                         }
-                        free(tmp_artist);
+                        free(cmp_t);
+                    }
+                    free(cmp_a);
                 }
+                free(tmp_title);
+            }
+            free(tmp_artist);
         }
-        return res;
+    }
+    return res;
 }
 
 
@@ -72,51 +78,63 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 
 GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
 {
-        GlyMemCache * result = NULL;
-        GlyCacheList * r_list = NULL;
+    GlyMemCache * result = NULL;
+    GlyCacheList * r_list = NULL;
 
-        if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo)) {
-                char *find, *endTag;
-                if( (find = strstr(capo->cache->data,"<url>"))) {
-                        nextTag(find);
-                        if( (endTag = strstr(find, "</url>"))) {
-                                char * wiki_page_url = copy_value(find,endTag);
-                                if(wiki_page_url) {
-                                        GlyMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
-                                        if(new_cache) {
-                                                char *lyr_begin, *lyr_end;
-                                                if( (lyr_begin = strstr(new_cache->data, "'17'/></a></div>")) ) {
-                                                        nextTag(lyr_begin);
-                                                        nextTag(lyr_begin);
-                                                        nextTag(lyr_begin);
+    if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
+    {
+        char *find, *endTag;
+        if( (find = strstr(capo->cache->data,"<url>")))
+        {
+            nextTag(find);
+            if( (endTag = strstr(find, "</url>")))
+            {
+                char * wiki_page_url = copy_value(find,endTag);
+                if(wiki_page_url)
+                {
+                    GlyMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
+                    if(new_cache)
+                    {
+                        char *lyr_begin, *lyr_end;
+                        if( (lyr_begin = strstr(new_cache->data, "'17'/></a></div>")) )
+                        {
+                            nextTag(lyr_begin);
+                            nextTag(lyr_begin);
+                            nextTag(lyr_begin);
 
-                                                        if( (lyr_end = strstr(lyr_begin, "<!--")) ) {
-                                                                char * lyr = copy_value(lyr_begin,lyr_end);
-                                                                if(lyr) {
-                                                                        result = DL_init();
-                                                                        result->data = lyr;
-                                                                        result->size = ABS(lyr_end - lyr_begin);
-                                                                        result->dsrc = strdup(wiki_page_url);
-                                                                }
-                                                                lyr_end=NULL;
-                                                        }
-                                                        lyr_begin=NULL;
-                                                }
-                                                DL_free(new_cache);
-                                        }
-                                        free(wiki_page_url);
+                            if( (lyr_end = strstr(lyr_begin, "<!--")) )
+                            {
+                                char * lyr = copy_value(lyr_begin,lyr_end);
+                                if(lyr)
+                                {
+                                    result = DL_init();
+                                    result->data = lyr;
+                                    result->size = ABS(lyr_end - lyr_begin);
+                                    result->dsrc = strdup(wiki_page_url);
                                 }
-                                endTag=NULL;
-                        } else result = DL_error(NO_ENDIN_TAG);
-                        find=NULL;
-                } else result = DL_error(NO_BEGIN_TAG);
-        } else result = DL_error(NO_BEGIN_TAG);
-
-        if(result) {
-                r_list = DL_new_lst();
-                DL_add_to_list(r_list,result);
+                                lyr_end=NULL;
+                            }
+                            lyr_begin=NULL;
+                        }
+                        DL_free(new_cache);
+                    }
+                    free(wiki_page_url);
+                }
+                endTag=NULL;
+            }
+            else result = DL_error(NO_ENDIN_TAG);
+            find=NULL;
         }
-        return r_list;
+        else result = DL_error(NO_BEGIN_TAG);
+    }
+    else result = DL_error(NO_BEGIN_TAG);
+
+    if(result)
+    {
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,result);
+    }
+    return r_list;
 }
 
 /*--------------------------------------------------------*/

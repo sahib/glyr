@@ -83,3 +83,8 @@ Found some time to work a bit here :-)
 2011/05/16
 ----------
 + removed wikipedia.c for ainfo - never worked. Better provide a link and (relation getter) and let the user render the site (too many information would get lost if glyr would need to parse it)
+
+2011/06/14
+----------
++ added support for proxy. (only basic libcurl support, should be suffiecient for 99% of all cases)
++ made API *much* slicker & nicer

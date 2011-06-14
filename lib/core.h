@@ -22,56 +22,143 @@
 #define CORE_H
 
 #include "types.h"
+#include "apikeys.h"
+#include "config.h"
+
+/* libcurl */
+#include <curl/curl.h>
+
+// Nifty defines
+#define ABS(a)  (((a) < 0) ? -(a) : (a))
+#define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
+
+#define PRT_COLOR glyr_USE_COLOR
+#define USE_COLOR
+#ifdef  USE_COLOR
+#define C_B "\x1b[34;01m" // blue
+#define C_M "\x1b[35;01m" // magenta
+#define C_C "\x1b[36;01m" // Cyan
+#define C_R "\x1b[31;01m" // Red
+#define C_G "\x1b[32;01m" // Green
+#define C_Y "\x1b[33;01m" // Yellow
+#define C_  "\x1b[0m"     // Reset
+#else
+#define C_B "" // blue
+#define C_M "" // magenta
+#define C_C "" // Cyan
+#define C_R "" // Red
+#define C_G "" // Green
+#define C_Y "" // Yellow
+#define C_  "" // Reset
+#endif
+
+/* Group names */
+#define GRPN_NONE "none"
+#define GRPN_SAFE "safe"
+#define GRPN_USFE "unsafe"
+#define GRPN_SPCL "special"
+#define GRPN_FAST "fast"
+#define GRPN_SLOW "slow"
+#define GRPN_ALL  "all"
+
+
+// libglyr uses checksums to filter double items
+// Also you can use those as easy comparasion method
+// There is no valid reason to diasable this actually
+#define CALC_MD5SUMS true
+
+struct cb_object;
+
+/**
+* @brief The return type of Gly_get, a list of GlyMemCaches
+*/
+typedef struct GlyCacheList
+{
+    GlyMemCache ** list; /*!< A list of pointers to GlyMemCache instances, use Gly_clist_at to access those. */
+    size_t size;	     /*!< Total number of items */
+    int usersig;	     /*!< Do not use. */
+} GlyCacheList;
+
+
+/**
+* @brief Structure holding information about built-in getters and providers
+*
+* Holding information about plugin-name, shortcut (key = "a" => "amazon"), a colored version of the name.
+* You shouldn't bother with the rest
+*
+*/
+typedef struct GlyPlugin
+{
+    const char * name;  // Full name
+    const char * key;   // A one-letter ID
+    const char * color; // Colored name
+    int use;            // Use this source?
+
+    struct
+    {
+        // Passed to the corresponding cb_object and is called...perhaps
+        GlyCacheList * (* parser_callback) (struct cb_object *);
+        const char *   (* url_callback)    (GlyQuery  *);
+        const char *  endmarker; // Stop download if containing this string
+        bool free_url; // pass result of url_callback to free()?
+    } plug;
+
+    unsigned char gid;
+
+} GlyPlugin;
+
 
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
 // Other parts of the program shall not use this struct
 // GlyMemCache is what you're searching
 // It models the data that one plugin needs.
-typedef struct cb_object {
-        // What callback to call
-        GlyCacheList * (* parser_callback) (struct cb_object *);
+typedef struct cb_object
+{
+    // What callback to call
+    GlyCacheList * (* parser_callback) (struct cb_object *);
 
-        // What url to download before the callback is called
-        char *url;
+    // What url to download before the callback is called
+    char *url;
 
-        // Storage of the --of argument
-        const char ** info;
+    // Storage of the --of argument
+    const char ** info;
 
-        // pointer to settings struct (artist,album,etc)
-        GlyQuery * s;
+    // pointer to settings struct (artist,album,etc)
+    GlyQuery * s;
 
-        // What curl handle this is attached
-        CURL *handle;
+    // What curl handle this is attached
+    CURL *handle;
 
-        GlyPlugin * plug;
+    GlyPlugin * plug;
 
-        // internal cache attached to this url
-        GlyMemCache *cache;
+    // internal cache attached to this url
+    GlyMemCache *cache;
 
-        // shall invoke() use a batch-like mode?
-        // This usually only affects the output
-        bool batch;
+    // shall invoke() use a batch-like mode?
+    // This usually only affects the output
+    bool batch;
 
-        const char * endmark;
+    const char * endmark;
 
-        // This is only used for cover/photo
-        // to fill the 'prov' field of memcache
-        // This is a bit hackish, but well...
-        // no valid reason to change it just because this ;)
-        const char * provider_name;
+    // This is only used for cover/photo
+    // to fill the 'prov' field of memcache
+    // This is a bit hackish, but well...
+    // no valid reason to change it just because this ;)
+    const char * provider_name;
 
 } cb_object;
 
 // Internal list of errors
 // Use those with DL_error(ecode)
-enum CORE_ERR {
-        ALL_OK,
-        NO_BEGIN_TAG,
-        NO_ENDIN_TAG,
-        DOUBLE_ITEM,
-        BAD_FORMAT,
-        BLACKLISTED
+enum CORE_ERR
+{
+    ALL_OK,
+    NO_BEGIN_TAG,
+    NO_ENDIN_TAG,
+    DOUBLE_ITEM,
+    BAD_FORMAT,
+    BLACKLISTED
 };
 
 // Check if a plugin needs to search more items

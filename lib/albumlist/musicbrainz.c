@@ -28,7 +28,7 @@
 
 const char * albumlist_musicbrainz_url(GlyQuery * sets)
 {
-        return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
+    return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
 }
 
 #define ALBUM_BEGIN "<release type=\"Album Official\""
@@ -39,31 +39,35 @@ const char * albumlist_musicbrainz_url(GlyQuery * sets)
 
 GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
 {
-        GlyCacheList * collection = NULL;
+    GlyCacheList * collection = NULL;
 
-        int ctr = 0;
+    int ctr = 0;
 
-        char * node = capo->cache->data;
-        while(continue_search(ctr,capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL) {
-                char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
-                if(name != NULL) {
-                        if(!collection) {
-                                collection = DL_new_lst();
-                        }
+    char * node = capo->cache->data;
+    while(continue_search(ctr,capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
+    {
+        char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
+        if(name != NULL)
+        {
+            if(!collection)
+            {
+                collection = DL_new_lst();
+            }
 
-                        GlyMemCache * c = DL_init();
-                        c->data = beautify_lyrics(name);
+            GlyMemCache * c = DL_init();
+            c->data = beautify_lyrics(name);
 
-                        if(c->data != NULL) {
-                                c->size = strlen(c->data);
-                        }
+            if(c->data != NULL)
+            {
+                c->size = strlen(c->data);
+            }
 
 
-                        c->dsrc = strdup(capo->url);
-                        DL_add_to_list(collection,c);
-                        free(name);
-                        ctr++;
-                }
+            c->dsrc = strdup(capo->url);
+            DL_add_to_list(collection,c);
+            free(name);
+            ctr++;
         }
-        return collection;
+    }
+    return collection;
 }

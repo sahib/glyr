@@ -1,7 +1,15 @@
+/**
+* @file translate.h
+* @brief (do not use yet) Methods to interact directly with google translator
+*
+* Do not use those yet. They should work fine, but are limited to 100000 chars/day(/IP?)
+*
+* @author Christopher Pahl
+* @version 0.6
+* @date 2011-06-14
+*/
 #ifndef G_TRANSLATE_H
 #define G_TRANSLATE_H
-
-// gtrans method family
 
 #include "types.h"
 /**
@@ -10,8 +18,8 @@
 * @param s The GlyQuery needed to determine the source/target language
 * @param to_translate Cache that gets modified with the translation.
 *
-*  Takes the cache struct to_translate and translate the text according to the setting stored in the GlyQuery s \n 
-*  It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang,   \n  
+*  Takes the cache struct to_translate and translate the text according to the setting stored in the GlyQuery s \n
+*  It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang,   \n
 *  and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit \n
 *  being at the moment at 100,000 chars per day and IP.\n
 *  The buffer is directly modified so make copies before if you need.\n
@@ -37,7 +45,7 @@ void  Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate);
 char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness);
 
 /**
-* @brief List all supported languages 
+* @brief List all supported languages
 *
 * @param s The GlyQuery needed to determine the source/target language
 *
@@ -45,7 +53,7 @@ char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness
 * Returned as a list of char pointers, free both the   \n
 * single strings and the return value.                 \n
 * If you only want to know all languages:            \n
-* 'glyrc gtrans list' does the same.                  \n 
+* 'glyrc gtrans list' does the same.                  \n
 *
 * @return a list of strings, containg the language codes
 */

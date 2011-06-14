@@ -44,11 +44,12 @@
 #include <stdint.h>
 
 /* Data structure for MD5 (Message Digest) computation */
-typedef struct {
-        uint64_t i[2];                   /* number of _bits_ handled mod 2^64 */
-        uint64_t buf[4];                 /* scratch buffer                    */
-        unsigned char in[64];           /* input buffer                      */
-        unsigned char digest[16];       /* actual digest after MD5Final call */
+typedef struct
+{
+    uint64_t i[2];                   /* number of _bits_ handled mod 2^64 */
+    uint64_t buf[4];                 /* scratch buffer                    */
+    unsigned char in[64];           /* input buffer                      */
+    unsigned char digest[16];       /* actual digest after MD5Final call */
 } MD5_CTX;
 
 /* ------------------------------------------------------------- */

@@ -32,16 +32,17 @@
 
 const char * photos_google_url(GlyQuery * s)
 {
-        const char * result = NULL;
-        char * searchterm = strdup("%artist%+band+photos");
-        if(searchterm != NULL) {
-                result = generic_google_url(s,searchterm);
-                free(searchterm);
-        }
-        return result;
+    const char * result = NULL;
+    char * searchterm = strdup("%artist%+band+photos");
+    if(searchterm != NULL)
+    {
+        result = generic_google_url(s,searchterm);
+        free(searchterm);
+    }
+    return result;
 }
 
 GlyCacheList * photos_google_parse(cb_object * capo)
 {
-        return generic_google_parse(capo);
+    return generic_google_parse(capo);
 }

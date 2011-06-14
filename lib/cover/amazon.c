@@ -68,32 +68,34 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 #define rg_markup "__RESPONSE_GROUP__"
 const char * generic_amazon_url(GlyQuery * sets, const char * response_group)
 {
-        const char * lang_link = NULL;
-        if(sets->cover.min_size <= 500 || sets->cover.min_size) {
-                if(!strcmp(sets->lang,"us"))
-                        lang_link =  "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else if(!strcmp(sets->lang,"ca"))
-                        lang_link =  "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else if(!strcmp(sets->lang,"uk"))
-                        lang_link =  "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else if(!strcmp(sets->lang,"fr"))
-                        lang_link =  "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else if(!strcmp(sets->lang,"de"))
-                        lang_link =  "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else if(!strcmp(sets->lang,"jp"))
-                        lang_link =  "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-                else
-                        lang_link =  "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        }
-        if(lang_link != NULL) {
-                return strreplace(lang_link,rg_markup,response_group);
-        }
-        return NULL;
+    const char * lang_link = NULL;
+    if(sets->cover.min_size <= 500 || sets->cover.min_size)
+    {
+        if(!strcmp(sets->lang,"us"))
+            lang_link =  "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else if(!strcmp(sets->lang,"ca"))
+            lang_link =  "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else if(!strcmp(sets->lang,"uk"))
+            lang_link =  "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else if(!strcmp(sets->lang,"fr"))
+            lang_link =  "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else if(!strcmp(sets->lang,"de"))
+            lang_link =  "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else if(!strcmp(sets->lang,"jp"))
+            lang_link =  "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+        else
+            lang_link =  "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+    }
+    if(lang_link != NULL)
+    {
+        return strreplace(lang_link,rg_markup,response_group);
+    }
+    return NULL;
 }
 
 const char * cover_amazon_url(GlyQuery * sets)
 {
-        return generic_amazon_url(sets,"Images");
+    return generic_amazon_url(sets,"Images");
 }
 
 #define MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
@@ -101,36 +103,39 @@ const char * cover_amazon_url(GlyQuery * sets)
 
 GlyCacheList * cover_amazon_parse(cb_object *capo)
 {
-        const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
-                                (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
-                                (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
-                                (MAX(150) && MIN(70)) ? "<MediumImage>" :
-                                "<LargeImage>"  ;
+    const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
+                            (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
+                            (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
+                            (MAX(150) && MIN(70)) ? "<MediumImage>" :
+                            "<LargeImage>"  ;
 #undef MAX
 #undef MIN
 
-        int urlc = 0;
-        GlyCacheList * r_list = NULL;
+    int urlc = 0;
+    GlyCacheList * r_list = NULL;
 
-        char * find = capo->cache->data;
-        while( (find = strstr(find +1, tag_ssize)) != NULL && continue_search(urlc,capo->s)) {
-                /* Next two XML tags not relevant */
-                nextTag(find);
-                nextTag(find);
-                char * endTag = NULL;
-                if( (endTag = strstr(find, "</URL>")) != NULL) {
-                        char * result_url = copy_value(find,endTag);
-                        if(result_url) {
-                                if(!r_list) r_list = DL_new_lst();
+    char * find = capo->cache->data;
+    while( (find = strstr(find +1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
+    {
+        /* Next two XML tags not relevant */
+        nextTag(find);
+        nextTag(find);
+        char * endTag = NULL;
+        if( (endTag = strstr(find, "</URL>")) != NULL)
+        {
+            char * result_url = copy_value(find,endTag);
+            if(result_url)
+            {
+                if(!r_list) r_list = DL_new_lst();
 
-                                GlyMemCache * result_cache = DL_init();
-                                result_cache->data = result_url;
-                                result_cache->size = strlen(result_url);
+                GlyMemCache * result_cache = DL_init();
+                result_cache->data = result_url;
+                result_cache->size = strlen(result_url);
 
-                                DL_add_to_list(r_list,result_cache);
-                                urlc++;
-                        }
-                }
+                DL_add_to_list(r_list,result_cache);
+                urlc++;
+            }
         }
-        return r_list;
+    }
+    return r_list;
 }

@@ -25,7 +25,7 @@
 
 const char * ainfo_allmusic_url(GlyQuery * s)
 {
-        return "http://www.allmusic.com/search/artist/%artist%";
+    return "http://www.allmusic.com/search/artist/%artist%";
 }
 
 #define IMG_BEGIN "<p class=\"text\">"
@@ -33,32 +33,36 @@ const char * ainfo_allmusic_url(GlyQuery * s)
 
 GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
 {
-        GlyMemCache * rche = NULL;
-        char * text_begin = strstr(to_parse->data,IMG_BEGIN);
-        if(text_begin != NULL) {
-                char * text_endin = strstr(text_begin,IMG_ENDIN);
-                if(text_endin != NULL) {
-                        char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
-                        if(text != NULL) {
-                                remove_tags_from_string(text,strlen(text),'<','>');
-                                char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
-                                if(null_marker != NULL) {
-                                        text[null_marker - text + 0] = '.';
-                                        text[null_marker - text + 1] = '.';
-                                        text[null_marker - text + 2] = '.';
-                                        text[null_marker - text + 3] =   0;
-                                }
-
-                                rche = DL_init();
-                                rche->data = strip_html_unicode(text);
-                                rche->size = strlen(rche->data);
-
-                                free(text);
-                                text = NULL;
-                        }
+    GlyMemCache * rche = NULL;
+    char * text_begin = strstr(to_parse->data,IMG_BEGIN);
+    if(text_begin != NULL)
+    {
+        char * text_endin = strstr(text_begin,IMG_ENDIN);
+        if(text_endin != NULL)
+        {
+            char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
+            if(text != NULL)
+            {
+                remove_tags_from_string(text,strlen(text),'<','>');
+                char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
+                if(null_marker != NULL)
+                {
+                    text[null_marker - text + 0] = '.';
+                    text[null_marker - text + 1] = '.';
+                    text[null_marker - text + 2] = '.';
+                    text[null_marker - text + 3] =   0;
                 }
+
+                rche = DL_init();
+                rche->data = strip_html_unicode(text);
+                rche->size = strlen(rche->data);
+
+                free(text);
+                text = NULL;
+            }
         }
-        return rche;
+    }
+    return rche;
 }
 
 #define ROOT "<div id=\"tabs\">"
@@ -66,30 +70,35 @@ GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
 
 GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
 {
-        GlyMemCache * rche = NULL;
-        char * root = strstr(to_parse->data,ROOT);
-        if(root) {
-                char * url_root = strstr(root,ROOT_URL);
-                if(url_root != NULL) {
-                        char * id = copy_value(url_root + strlen(ROOT_URL),strstr(url_root,"\">"));
-                        if(id != NULL) {
-                                char * url = strdup_printf(ROOT_URL"%s",id);
-                                if(url != NULL) {
-                                        GlyMemCache * dl = download_single(url,s,NULL);
-                                        if(dl != NULL) {
-                                                rche = parse_bio_short(dl);
-                                                DL_free(dl);
-                                                dl=NULL;
-                                        }
-                                        free(url);
-                                        url=NULL;
-                                }
-                                free(id);
-                                id=NULL;
-                        }
+    GlyMemCache * rche = NULL;
+    char * root = strstr(to_parse->data,ROOT);
+    if(root)
+    {
+        char * url_root = strstr(root,ROOT_URL);
+        if(url_root != NULL)
+        {
+            char * id = copy_value(url_root + strlen(ROOT_URL),strstr(url_root,"\">"));
+            if(id != NULL)
+            {
+                char * url = strdup_printf(ROOT_URL"%s",id);
+                if(url != NULL)
+                {
+                    GlyMemCache * dl = download_single(url,s,NULL);
+                    if(dl != NULL)
+                    {
+                        rche = parse_bio_short(dl);
+                        DL_free(dl);
+                        dl=NULL;
+                    }
+                    free(url);
+                    url=NULL;
                 }
+                free(id);
+                id=NULL;
+            }
         }
-        return rche;
+    }
+    return rche;
 }
 
 // begin of search results
@@ -100,48 +109,55 @@ GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
 
 GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
 {
-        GlyCacheList * r_list = NULL;
-        if( strstr(capo->cache->data, "<!--Begin Biography -->") ) {
-                r_list = DL_new_lst();
-                GlyMemCache * info_short = parse_bio_short(capo->cache);
-                GlyMemCache * info_long  = parse_bio_long (capo->cache,capo->s);
+    GlyCacheList * r_list = NULL;
+    if( strstr(capo->cache->data, "<!--Begin Biography -->") )
+    {
+        r_list = DL_new_lst();
+        GlyMemCache * info_short = parse_bio_short(capo->cache);
+        GlyMemCache * info_long  = parse_bio_long (capo->cache,capo->s);
 
-                DL_add_to_list(r_list,info_short);
-                DL_add_to_list(r_list,info_long );
-                return r_list;
-        }
-
-        char * search_begin = NULL;
-        if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL) {
-                return NULL;
-        }
-
-        int urlc = 0;
-        char *  node = search_begin;
-        while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s)) {
-                char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
-                if(url != NULL) {
-                        GlyMemCache * dl = download_single(url,capo->s,NULL);
-                        if(dl != NULL) {
-                                if(!r_list) r_list = DL_new_lst();
-                                GlyMemCache * info_short = parse_bio_short(dl);
-                                if(info_short != NULL) {
-                                        DL_add_to_list(r_list,info_short);
-                                }
-
-                                GlyMemCache * info_long  = parse_bio_long (dl,capo->s);
-                                if(info_long != NULL) {
-                                        DL_add_to_list(r_list,info_long );
-                                }
-
-                                DL_free(dl);
-
-                                if(info_short || info_long)
-                                        urlc++;
-                        }
-                        free(url);
-                        url=NULL;
-                }
-        }
+        DL_add_to_list(r_list,info_short);
+        DL_add_to_list(r_list,info_long );
         return r_list;
+    }
+
+    char * search_begin = NULL;
+    if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
+    {
+        return NULL;
+    }
+
+    int urlc = 0;
+    char *  node = search_begin;
+    while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
+    {
+        char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
+        if(url != NULL)
+        {
+            GlyMemCache * dl = download_single(url,capo->s,NULL);
+            if(dl != NULL)
+            {
+                if(!r_list) r_list = DL_new_lst();
+                GlyMemCache * info_short = parse_bio_short(dl);
+                if(info_short != NULL)
+                {
+                    DL_add_to_list(r_list,info_short);
+                }
+
+                GlyMemCache * info_long  = parse_bio_long (dl,capo->s);
+                if(info_long != NULL)
+                {
+                    DL_add_to_list(r_list,info_long );
+                }
+
+                DL_free(dl);
+
+                if(info_short || info_long)
+                    urlc++;
+            }
+            free(url);
+            url=NULL;
+        }
+    }
+    return r_list;
 }

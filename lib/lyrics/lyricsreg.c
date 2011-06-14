@@ -29,36 +29,40 @@
 
 const char * lyrics_lyricsreg_url(GlyQuery * s)
 {
-        return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
+    return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
 }
 
 GlyCacheList * lyrics_lyricsreg_parse(cb_object * capo)
 {
-        GlyCacheList * ls = NULL;
-        size_t info_s_len = strlen(INFO_BEGIN);
+    GlyCacheList * ls = NULL;
+    size_t info_s_len = strlen(INFO_BEGIN);
 
-        char * ptr = strstr(capo->cache->data, INFO_BEGIN);
-        if(ptr != NULL) {
-                ptr += info_s_len;
-                char * end = strstr(ptr,INFO_ENDIN);
-                if(end != NULL) {
-                        char * text_seg = copy_value(ptr,end);
-                        if(text_seg != NULL) {
-                                char * no_br_tags = strreplace(text_seg,"<br />",NULL);
-                                if(no_br_tags) {
-                                        ls = DL_new_lst();
-                                        GlyMemCache * tmp = DL_init();
-                                        tmp->data = beautify_lyrics(no_br_tags);
-                                        tmp->size = tmp->data ? strlen(tmp->data) : 0;
-                                        tmp->dsrc = strdup(capo->url);
+    char * ptr = strstr(capo->cache->data, INFO_BEGIN);
+    if(ptr != NULL)
+    {
+        ptr += info_s_len;
+        char * end = strstr(ptr,INFO_ENDIN);
+        if(end != NULL)
+        {
+            char * text_seg = copy_value(ptr,end);
+            if(text_seg != NULL)
+            {
+                char * no_br_tags = strreplace(text_seg,"<br />",NULL);
+                if(no_br_tags)
+                {
+                    ls = DL_new_lst();
+                    GlyMemCache * tmp = DL_init();
+                    tmp->data = beautify_lyrics(no_br_tags);
+                    tmp->size = tmp->data ? strlen(tmp->data) : 0;
+                    tmp->dsrc = strdup(capo->url);
 
-                                        DL_add_to_list(ls,tmp);
+                    DL_add_to_list(ls,tmp);
 
-                                        free(no_br_tags);
-                                }
-                                free(text_seg);
-                        }
+                    free(no_br_tags);
                 }
+                free(text_seg);
+            }
         }
-        return ls;
+    }
+    return ls;
 }

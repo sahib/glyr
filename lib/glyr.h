@@ -20,12 +20,21 @@
 #ifndef GLYR_H
 #define GLYR_H
 
+/**
+* @file glyr.h
+* @brief All method declaration here. You should only need to include this file.
+*
+* All stable API of libglyr is right here. 
+*
+* @author Christopher Pahl
+* @version 0.6
+* @date 2011-06-14
+*/
+
+
 /* All structs used by glyr are here */
 #include "types.h"
 	
-/* Also include the translation API */
-#include "translate.h"
-
 /* */
 #ifdef __cplusplus
 extern "C"
@@ -49,6 +58,7 @@ extern "C"
 *
 * @param settings The setting struct controlling glyr. (See the GlyOpt_* methods)
 * @param error An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
+* @param length An optional pointer storing the length of the returned list
 *
 * It takes a pointer to a GlyQuery struct filled to your needs via the GlyOpt_* methods,\n
 * Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.\n
@@ -56,7 +66,7 @@ extern "C"
 *
 * @return A GlyCacheList containing all found data. See the struct reference for further details.
 */
-        GlyCacheList * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error);
+        GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error, int * length);
 
 /**
 * @brief Init's the GlyQuery structure to sane defaults. 
@@ -76,21 +86,9 @@ extern "C"
 /**
 * @brief Free the memory in the GlyCacheList returned by Gly_get
 *
-* @param lst The GlyCacheList to be free'd
+* @param head The GlyCacheList to be free'd
 */
-        void Gly_free_list(GlyCacheList * lst);
-
-/**
-* @brief Returns the GlyMemCache in the GlyCacheList clist at position iter.
-* The same as clist->list[iter] with validation check. 
-* Mainly there to make SWIG bindings for other languages than C easier.
-*
-* @param clist The GlyCacheList to access
-* @param iter The position to return
-*
-* @return A GlyMemCache
-*/
-        GlyMemCache * Gly_clist_at(GlyCacheList * clist, int iter);
+	void Gly_free_list(GlyMemCache * head);
 
 /**
 * @brief Returns a newly allocated and initialized GlyMemCache, mostly for use with Gly_gtrans_*
@@ -123,13 +121,18 @@ extern "C"
 * @brief Set the callback that is executed once an item is ready downloaded
 *
 * @param settings The GlyQuery settings struct to store this option in
-* @param dl_cb The callback to register, must have a prototype like this:
+* @param dl_cb The callback to register, must have a prototype like this:\n
   	       enum GLYR_ERROR my_callback(GlyMemCache * dl, struct GlyQuery * s);
 * @param userp A pointer to a custom variable you can access inside the callback via s->callback.user_pointer;
 *
+* Note that you can return a certain integer in the callback:\n
+* GLYRE_IGNORE: To not add this item to the results.
+* GLYRE_OK: To add this item to the results and continue happily.
+* GLYRE_STOP_BY_CB: To stop right now and return the results. The last element will NOT be added.
+*
 * @return an errorID
 */
-        int GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
+        enum GLYR_ERROR GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
 /**
 * @brief What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.
 *
@@ -138,7 +141,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
+        enum GLYR_ERROR GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
 /**
 * @brief The artist field. libglyr will try to format it to fit the best.
 *
@@ -149,7 +152,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_artist(GlyQuery * s, char * artist);
+        enum GLYR_ERROR GlyOpt_artist(GlyQuery * s, char * artist);
 /**
 * @brief The album field. libglyr will try to format it to fit the best.
 *
@@ -161,6 +164,7 @@ extern "C"
 *	  - cover
 *	  - review 
 *	  - tracklist
+*\n
 *	Optional for those:
 *	  - tags
 *	  - relations
@@ -170,7 +174,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_album(GlyQuery * s,  char * album);
+        enum GLYR_ERROR GlyOpt_album(GlyQuery * s,  char * album);
 /**
 * @brief The title field. libglyr will try to format it to fit the best.
 *
@@ -185,7 +189,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_title(GlyQuery * s,  char * title);
+        enum GLYR_ERROR GlyOpt_title(GlyQuery * s,  char * title);
 /**
 * @brief Maximum size a cover may have (assuming the cover is quadratic, only one size is required) 
 *
@@ -197,7 +201,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_cmaxsize(GlyQuery * s, int size);
+        enum GLYR_ERROR GlyOpt_cmaxsize(GlyQuery * s, int size);
 /**
 * @brief Minimum size a cover may have (assuming the cover is quadratic, only one size is required) 
 *
@@ -208,7 +212,7 @@ extern "C"
 * 
 * @return an errorID
 */
-        int GlyOpt_cminsize(GlyQuery * s, int size);
+        enum GLYR_ERROR GlyOpt_cminsize(GlyQuery * s, int size);
 /**
 * @brief The number of items that may be downloaded in parallel
 *
@@ -217,7 +221,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_parallel(GlyQuery * s, unsigned long val);
+        enum GLYR_ERROR GlyOpt_parallel(GlyQuery * s, unsigned long val);
 /**
 * @brief Amout of seconds to wait before cancelling an download 
 *
@@ -229,7 +233,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_timeout(GlyQuery * s, unsigned long val);
+        enum GLYR_ERROR GlyOpt_timeout(GlyQuery * s, unsigned long val);
 /**
 * @brief Max number of redirects to 
 *
@@ -241,7 +245,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_redirects(GlyQuery * s, unsigned long val);
+        enum GLYR_ERROR GlyOpt_redirects(GlyQuery * s, unsigned long val);
 /**
 * @brief Set the language the items should be in.
 *
@@ -263,7 +267,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_lang(GlyQuery * s, char * langcode);
+        enum GLYR_ERROR GlyOpt_lang(GlyQuery * s, char * langcode);
 /**
 * @brief Set the number of items to search.
 *
@@ -277,7 +281,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_number(GlyQuery * s, unsigned int num);
+        enum GLYR_ERROR GlyOpt_number(GlyQuery * s, unsigned int num);
 /**
 * @brief Set libglyr's verbosity level (debug) 
 *
@@ -292,7 +296,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_verbosity(GlyQuery * s, unsigned int level);
+        enum GLYR_ERROR GlyOpt_verbosity(GlyQuery * s, unsigned int level);
 /**
 * @brief Define the providers you want to use 
 *
@@ -318,7 +322,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_from(GlyQuery * s, const char * from);
+        enum GLYR_ERROR GlyOpt_from(GlyQuery * s, const char * from);
 /**
 * @brief Enable colored log output. (Debug) 
 *
@@ -330,7 +334,7 @@ extern "C"
 *
 * @return always GLYRE_OK
 */
-        int GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
+        enum GLYR_ERROR GlyOpt_color(GlyQuery * s, bool iLikeColorInMyLife);
 /**
 * @brief Define the maximum number of items a provider may download 
 *
@@ -342,7 +346,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_plugmax(GlyQuery * s, int plugmax);
+        enum GLYR_ERROR GlyOpt_plugmax(GlyQuery * s, int plugmax);
 /**
 * @brief Define if image items (i.e, covers, photos) are downloaded.
 *
@@ -357,7 +361,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_download(GlyQuery * s, bool download);
+        enum GLYR_ERROR GlyOpt_download(GlyQuery * s, bool download);
 /**
 * @brief Define wether searching happens in groups or everything or parallel (= false)
 *
@@ -372,7 +376,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
+        enum GLYR_ERROR GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
 /**
 * @brief Define allowed image formats 
 *
@@ -390,7 +394,7 @@ extern "C"
 *
 * @return an errorID
 */
-        int GlyOpt_formats(GlyQuery * s, const char * formats);
+        enum GLYR_ERROR GlyOpt_formats(GlyQuery * s, const char * formats);
 /**
 * @brief Set the max. tolerance for fuzzy matching 
 *
@@ -411,7 +415,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+        enum GLYR_ERROR GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
 /**
 * @brief Enable/Disable check for duplicate items. 
 *
@@ -423,7 +427,7 @@ extern "C"
 *
 * @return an errorID 
 */
-        int GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
+        enum GLYR_ERROR GlyOpt_duplcheck(GlyQuery * s, bool duplcheck);
 
 /**
 * @brief Set the source language for google translator or NULL to autodetect  
@@ -436,7 +440,7 @@ extern "C"
 *
 * @return an errorID
 */
-	int GlyOpt_gtrans_source_lang(GlyQuery * s, const char * source);
+	enum GLYR_ERROR GlyOpt_gtrans_source_lang(GlyQuery * s, const char * source);
 /**
 * @brief Set the target language for google translator or NULL to disable
 *
@@ -449,18 +453,64 @@ extern "C"
 *
 * @return an errorID 
 */
-	int GlyOpt_gtrans_target_lang(GlyQuery * s, const char * target);
+	enum GLYR_ERROR GlyOpt_gtrans_target_lang(GlyQuery * s, const char * target);
 
-        
+            
 /**
-* @brief Get information about usable providers and also about getters.
+* @brief Set the proxy to use
 *
-* @param ID What information to get, use GET_UNSURE to get a list of available getters.
+* @param s The GlyQuery settings struct to store this option in.
+* @param proxystring the proxy setting.
 *
-* @return A newly allocated GlyPlugin struct, pass it to free when done.
+*  NULL for none, otherwise see the documentation of curl_easy_setopt(CURLOPT_PROXY) how to set this.
+*  Synatx: [protocol://][user:pass@]Domain[:port] 
+*  Example: "http://Proxy.fh-hof.de:3128"
+* 
+* If empty the global env $http_proxy shall be used, if present.
+*
+* @return an errorID
 */
-        GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
+	enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring);
 
+/**
+* @brief Get a nullterminated list of available providers 
+*
+* @param ID What type to get, or GET_UNSURE for a list of getters
+*
+* A list is returned with all providernames for this type.\n
+* Example:\n
+* {"last.fm","amazon",...,"coverhunt",NULL}; \n
+* You can use this in GlyOpt_from()\n
+*
+* @return a nullterminated list of available providers
+*/
+	const char ** GlyPlug_get_name_by_id(enum GLYR_GET_TYPE ID);
+/**
+* @brief Get a nullterminated list of available providers, with their name as key
+*
+* @param ID What type to get, or GET_UNSURE for a list of getters
+*
+* A string is returned with all keys of this getter.\n
+* Example: \n
+* "lawgbdmc\\0", where 'a' stands for amazon.\n
+* You can use them (or their full names is GlyOpt_from()\n
+*
+* @return a nullterminated list of available providers
+*/
+	const char *  GlyPlug_get_key_by_id(enum GLYR_GET_TYPE ID);
+/**
+* @brief Get a list of GroupIDs 
+*
+* @param ID What type to get, or GET_UNSURE for a list of getters
+*
+* You can use the groupid to determine in whatt group this provider is.\n
+* You will not use this function in 99.9% of all cases, but it can be useful to translate user input\n
+* to glyr's represantation, or to list groups as glyrc does. 
+* GET_UNSURE will result in a list of all GET_* enumerators (i.e. GET_COVER...GET_UNSURE)\n
+*
+* @return ..
+*/
+	unsigned char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID);
 
 /**
 * @brief A convinience method to download the content at the URl $url, according to the settings in $s 
@@ -488,7 +538,8 @@ extern "C"
 *
 * @param ID a member of the GLYR_GROUPS enum
 *
-*	GRP_FAST gets to "fast", you really don't need it, as it's only used in glyrc.
+* GRP_FAST gets to "fast",GRP_ALL to "all" etc.\n
+* Use this to make strings from GlyPlug_get_gid_by_id()\n
 *
 * @return A groupname as string or NULL if not found
 */

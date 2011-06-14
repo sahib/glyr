@@ -21,6 +21,7 @@
 #define PHOTOS_H
 
 #include "types.h"
+#include "core.h"
 
 GlyPlugin   * glyr_get_photo_providers(void);
 GlyCacheList * get_photos(GlyQuery * settings);

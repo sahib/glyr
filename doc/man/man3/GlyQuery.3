@@ -1,4 +1,4 @@
-.TH "GlyQuery" 3 "Sun May 22 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "GlyQuery" 3 "Tue Jun 14 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -15,10 +15,7 @@ Structure controlling all of libglyr's options.
 
 .in +1c
 .ti -1c
-.RI "int \fBtype\fP"
-.br
-.ti -1c
-.RI "const char * \fBinfo\fP [10]"
+.RI "enum \fBGLYR_GET_TYPE\fP \fBtype\fP"
 .br
 .ti -1c
 .RI "char * \fBartist\fP"
@@ -36,6 +33,12 @@ Structure controlling all of libglyr's options.
 .RI "int \fBplugmax\fP"
 .br
 .ti -1c
+.RI "int \fBverbosity\fP"
+.br
+.ti -1c
+.RI "size_t \fBfuzzyness\fP"
+.br
+.ti -1c
 .RI "struct {"
 .br
 .ti -1c
@@ -48,9 +51,6 @@ Structure controlling all of libglyr's options.
 .RI "} \fBcover\fP"
 .br
 .ti -1c
-.RI "void * \fBproviders\fP"
-.br
-.ti -1c
 .RI "long \fBparallel\fP"
 .br
 .ti -1c
@@ -58,9 +58,6 @@ Structure controlling all of libglyr's options.
 .br
 .ti -1c
 .RI "long \fBredirects\fP"
-.br
-.ti -1c
-.RI "int \fBverbosity\fP"
 .br
 .ti -1c
 .RI "bool \fBcolor_output\fP"
@@ -78,13 +75,10 @@ Structure controlling all of libglyr's options.
 .RI "const char * \fBlang\fP"
 .br
 .ti -1c
-.RI "int \fBitemctr\fP"
-.br
-.ti -1c
-.RI "size_t \fBfuzzyness\fP"
-.br
-.ti -1c
 .RI "const char * \fBformats\fP"
+.br
+.ti -1c
+.RI "const char * \fBproxy\fP"
 .br
 .ti -1c
 .RI "struct {"
@@ -97,6 +91,15 @@ Structure controlling all of libglyr's options.
 .br
 .ti -1c
 .RI "} \fBcallback\fP"
+.br
+.ti -1c
+.RI "const char * \fBinfo\fP [10]"
+.br
+.ti -1c
+.RI "void * \fBproviders\fP"
+.br
+.ti -1c
+.RI "int \fBitemctr\fP"
 .br
 .ti -1c
 .RI "struct {"
@@ -115,38 +118,43 @@ Structure controlling all of libglyr's options.
 .PP 
 Structure controlling all of libglyr's options. 
 
-You should modify this with the GlyOpt_* methods, You can read all members directly 
+You should modify this with the GlyOpt_* methods,
+.br
+ You can read all members directly.
+.br
+ Look up the corresponding GlyOpt_$name methods for more details. 
 .SH "Field Documentation"
 .PP 
-.SS "char* \fBGlyQuery::album\fP"
-.SS "char* \fBGlyQuery::artist\fP"
+.SS "char* \fBGlyQuery::album\fP"album field 
+.SS "char* \fBGlyQuery::artist\fP"artist field 
 .SS "struct { ... }   \fBGlyQuery::callback\fP"
 .SS "bool \fBGlyQuery::color_output\fP"
 .SS "struct { ... }   \fBGlyQuery::cover\fP"
-.SS "bool \fBGlyQuery::download\fP"
+.SS "bool \fBGlyQuery::download\fP"return only urls without downloading, converting glyr to a sort of search engine 
 .SS "enum \fBGLYR_ERROR\fP(*  \fBGlyQuery::download\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
-.SS "bool \fBGlyQuery::duplcheck\fP"
-.SS "const char* \fBGlyQuery::formats\fP"
-.SS "size_t \fBGlyQuery::fuzzyness\fP"
-.SS "bool \fBGlyQuery::groupedDL\fP"
+.SS "bool \fBGlyQuery::duplcheck\fP"Check for bad data? 
+.SS "const char* \fBGlyQuery::formats\fP"Format settings 
+.SS "size_t \fBGlyQuery::fuzzyness\fP"Treshold for Levenshtein algorithm 
+.SS "bool \fBGlyQuery::groupedDL\fP"Download group for group, or all in parallel (faster, but less accurate) 
 .SS "struct { ... }   \fBGlyQuery::gtrans\fP"
 .SS "const char* \fBGlyQuery::info\fP[10]"
 .SS "int \fBGlyQuery::itemctr\fP"
-.SS "const char* \fBGlyQuery::lang\fP"
-.SS "int \fBGlyQuery::max_size\fP"
-.SS "int \fBGlyQuery::min_size\fP"
-.SS "int \fBGlyQuery::number\fP"
-.SS "long \fBGlyQuery::parallel\fP"
-.SS "int \fBGlyQuery::plugmax\fP"
+.SS "const char* \fBGlyQuery::lang\fP"language settings (for amazon / google / last.fm) 
+.SS "int \fBGlyQuery::max_size\fP"Max size a cover may have 
+.SS "int \fBGlyQuery::min_size\fP"Min size a cover may have 
+.SS "int \fBGlyQuery::number\fP"Number of items to download 
+.SS "long \fBGlyQuery::parallel\fP"Max parallel downloads 
+.SS "int \fBGlyQuery::plugmax\fP"Number of items a single provider may download 
 .SS "void* \fBGlyQuery::providers\fP"
-.SS "long \fBGlyQuery::redirects\fP"
+.SS "const char* \fBGlyQuery::proxy\fP"Proxy settings 
+.SS "long \fBGlyQuery::redirects\fP"Max redirects for downloads 
 .SS "const char* \fBGlyQuery::source\fP"
 .SS "const char* \fBGlyQuery::target\fP"
-.SS "long \fBGlyQuery::timeout\fP"
-.SS "char* \fBGlyQuery::title\fP"
-.SS "int \fBGlyQuery::type\fP"
+.SS "long \fBGlyQuery::timeout\fP"Max timeout for downloads 
+.SS "char* \fBGlyQuery::title\fP"title field 
+.SS "enum \fBGLYR_GET_TYPE\fP \fBGlyQuery::type\fP"What type of data to get 
 .SS "void* \fBGlyQuery::user_pointer\fP"
-.SS "int \fBGlyQuery::verbosity\fP"
+.SS "int \fBGlyQuery::verbosity\fP"See \fBGlyOpt_verbosity()\fP for all levels 
 
 .SH "Author"
 .PP 

@@ -27,44 +27,50 @@
 
 const char * lyrics_magistrix_url(GlyQuery * settings)
 {
-        return MG_URL;
+    return MG_URL;
 }
 
 static GlyMemCache * parse_lyric_page(const char * buffer)
 {
-        GlyMemCache * result = NULL;
-        if(buffer) {
-                char * begin = strstr(buffer,"<div id='songtext'>");
-                if(begin) {
-                        begin = strstr(begin,"</div>");
-                        {
-                                char * end = strstr(begin+1,"</div>");
-                                if(end) {
-                                        char * lyr = copy_value(begin,end);
-                                        if(lyr) {
-                                                result = DL_init();
-                                                result->data = strreplace(lyr,"<br />","");
-                                                result->size = strlen(result->data);
-                                                free(lyr);
-                                        }
-                                }
-                        }
+    GlyMemCache * result = NULL;
+    if(buffer)
+    {
+        char * begin = strstr(buffer,"<div id='songtext'>");
+        if(begin)
+        {
+            begin = strstr(begin,"</div>");
+            {
+                char * end = strstr(begin+1,"</div>");
+                if(end)
+                {
+                    char * lyr = copy_value(begin,end);
+                    if(lyr)
+                    {
+                        result = DL_init();
+                        result->data = strreplace(lyr,"<br />","");
+                        result->size = strlen(result->data);
+                        free(lyr);
+                    }
                 }
+            }
         }
-        return result;
+    }
+    return result;
 }
 
 static bool approve_content(char * content, const char * compare, size_t fuzz)
 {
-        if(compare) {
-                char * tmp = strdup(compare);
-                if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= fuzz) {
-                        free(tmp);
-                        return true;
-                }
-                free(tmp);
+    if(compare)
+    {
+        char * tmp = strdup(compare);
+        if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= fuzz)
+        {
+            free(tmp);
+            return true;
         }
-        return false;
+        free(tmp);
+    }
+    return false;
 }
 
 #define ARTIST_BEGIN "class=\"artistIcon bgMove\">"
@@ -75,63 +81,80 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
 
 GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
 {
-        GlyCacheList * r_list=NULL;
-        if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL) { // No songtext page?
-                if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL) { // Are we not on the search result page?
-                        GlyMemCache * result = parse_lyric_page(capo->cache->data);
-                        if(result) {
-                                result->dsrc = strdup(capo->url);
-                                if(!r_list) r_list = DL_new_lst();
-                                DL_add_to_list(r_list,result);
-                        }
-                } else {
-                        char * node = capo->cache->data;
-                        int ctr = 0, urlc = 0;
-                        while( (node = strstr(node+1,"<tr class='topLine'>")) && MAX_TRIES >= ctr && continue_search(urlc,capo->s)) {
-                                ctr++;
-                                char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
-                                if(artist) {
-                                        if(approve_content(artist,capo->s->artist,capo->s->fuzzyness)) {
-                                                char * title_begin = strstr(node,TITLE_BEGIN);
-                                                if(title_begin) {
-                                                        char * title = copy_value(title_begin+strlen(TITLE_BEGIN),strstr(title_begin,"</a>"));
-                                                        if(title) {
-                                                                if(approve_content(title,capo->s->title,capo->s->fuzzyness)) {
-                                                                        char * url_begin = strstr(node,URL_BEGIN);
-                                                                        if(url_begin) {
-                                                                                url_begin = strstr(url_begin+1,URL_BEGIN);
-                                                                                if(url_begin) {
-                                                                                        char * url = copy_value(url_begin+strlen(URL_BEGIN),title_begin);
-                                                                                        if(url) {
-                                                                                                char * dl_url = strdup_printf("www.magistrix.de%s",url);
-                                                                                                if(dl_url) {
-                                                                                                        // We don't need the ugly comments
-                                                                                                        GlyMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
-                                                                                                        if(dl_cache) {
-                                                                                                                GlyMemCache * result = parse_lyric_page(dl_cache->data);
-                                                                                                                if(result) {
-                                                                                                                        urlc++;
-                                                                                                                        result->dsrc = strdup(dl_url);
-                                                                                                                        if(!r_list) r_list = DL_new_lst();
-                                                                                                                        DL_add_to_list(r_list,result);
-                                                                                                                }
-                                                                                                                DL_free(dl_cache);
-                                                                                                        }
-                                                                                                        free(dl_url);
-                                                                                                }
-                                                                                                free(url);
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                }
-                                                                free(title);
-                                                        }
-                                                }
-                                        }
-                                        free(artist);
-                                }
-                        }
-                }
+    GlyCacheList * r_list=NULL;
+    if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   // No songtext page?
+    {
+        if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   // Are we not on the search result page?
+        {
+            GlyMemCache * result = parse_lyric_page(capo->cache->data);
+            if(result)
+            {
+                result->dsrc = strdup(capo->url);
+                if(!r_list) r_list = DL_new_lst();
+                DL_add_to_list(r_list,result);
+            }
         }
-        return r_list;
+        else
+        {
+            char * node = capo->cache->data;
+            int ctr = 0, urlc = 0;
+            while( (node = strstr(node+1,"<tr class='topLine'>")) && MAX_TRIES >= ctr && continue_search(urlc,capo->s))
+            {
+                ctr++;
+                char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
+                if(artist)
+                {
+                    if(approve_content(artist,capo->s->artist,capo->s->fuzzyness))
+                    {
+                        char * title_begin = strstr(node,TITLE_BEGIN);
+                        if(title_begin)
+                        {
+                            char * title = copy_value(title_begin+strlen(TITLE_BEGIN),strstr(title_begin,"</a>"));
+                            if(title)
+                            {
+                                if(approve_content(title,capo->s->title,capo->s->fuzzyness))
+                                {
+                                    char * url_begin = strstr(node,URL_BEGIN);
+                                    if(url_begin)
+                                    {
+                                        url_begin = strstr(url_begin+1,URL_BEGIN);
+                                        if(url_begin)
+                                        {
+                                            char * url = copy_value(url_begin+strlen(URL_BEGIN),title_begin);
+                                            if(url)
+                                            {
+                                                char * dl_url = strdup_printf("www.magistrix.de%s",url);
+                                                if(dl_url)
+                                                {
+                                                    // We don't need the ugly comments
+                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
+                                                    if(dl_cache)
+                                                    {
+                                                        GlyMemCache * result = parse_lyric_page(dl_cache->data);
+                                                        if(result)
+                                                        {
+                                                            urlc++;
+                                                            result->dsrc = strdup(dl_url);
+                                                            if(!r_list) r_list = DL_new_lst();
+                                                            DL_add_to_list(r_list,result);
+                                                        }
+                                                        DL_free(dl_cache);
+                                                    }
+                                                    free(dl_url);
+                                                }
+                                                free(url);
+                                            }
+                                        }
+                                    }
+                                }
+                                free(title);
+                            }
+                        }
+                    }
+                    free(artist);
+                }
+            }
+        }
+    }
+    return r_list;
 }
