@@ -49,13 +49,13 @@ Please refer to @glyrc --usage@ which is more up-to-date.
 
 <h2>FAQ</h2>
 <h3>Glyr.. such a silly name! Why?</h3>
-The name probably (I actually don't know for sure, as my memory seems to have holes :-)) derives 
-from the german word 'klirrn' which describes the sound of breaking dishes on the ground pretty well.
-As free software starts often with a 'g', and I heard the song "Tanzwut - Im Rausch", which has the word 'klirrn'
-in it, while thinking of a name I chose it. The 'k' was replaced by a 'g' (ofcourse) and the 'n' was removed in favour
-of ease of pronouncing. 
+Indeed. Should have named it 'Glyros'.
 
-It is pronounced exactly like breaking dishes btw. (don't do strange things in your kitchen now :-))
+<h3>How..how am I suppose to be used to it?<h3>
+Well, as normal user you could use @glyrc@ to retrieve some metadata in a batchlike fashion.
+As developers you have lots of option, you could write glyr-plugins for musicplayers (gmpc!), set up a webserver with this,
+hack up little scripts showing covers on the desktop.. everything related to musicmetadat is possible here.
+You could also extend libglyr itself but that's a little harder.
 
 <h3>Isn't there musicbrainz already?</h3>
 1) The kind of metadata downloaded by glyr differs heavily from musicbrainz.
@@ -87,7 +87,7 @@ If you hacked one: Excellent! Send it to me via mail or see below.
 If you want to add new providers you should look at the existing provider prlugins to get an idea how to write one.
 Starting with lib/cover/lastfm.c isn't a bad idea either, because it is one of the very simple ones.
 
-@Take the usual Git(Hub) approach:@
+__Take the usual Git(Hub) approach:__
 - Fork this project
 - Make your changes
 - Make a Pull request
@@ -103,5 +103,9 @@ You also might consider a small (CS-Students are already motivated by 1 Cent <im
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
 (For now only possible via Flattr, you gonna need an account there - Sorry)
 
-     
+
+
+
+
+<h4>@footnotes@</h4>     
 [1] Glyr has not been tested on Mac OSX yet. If you own such an Apple device any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes have to be done.
