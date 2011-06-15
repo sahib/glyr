@@ -1,10 +1,8 @@
 -------- future
 - Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
 - cmake portable.. 
-- docu
 
 ------- urgent
 - test lyrics (klingeltöne... *chrm*)
 - rewrite of GUI in C and gtk3 (Modi get your ass here!)
-- full amazon support *sigh* - this API just sucks and is applied Brain-BDSM
 - update swig

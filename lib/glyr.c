@@ -66,6 +66,22 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg);
 static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value);
 static GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
 
+// Fill yours in here if you added a new one.
+GlyPlugin getwd_commands [] =
+{
+    {"cover" ,   "c",  NULL, false, {NULL, NULL, NULL, false}, GET_COVERART         },
+    {"lyrics",   "l",  NULL, false, {NULL, NULL, NULL, false}, GET_LYRICS           },
+    {"photos",   "p",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTIST_PHOTOS    },
+    {"ainfo",    "a",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTISTBIO        },
+    {"similiar", "s",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR_ARTISTS },
+    {"review",   "r",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUM_REVIEW     },
+    {"albumlist","i",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUMLIST        },
+    {"tags",     "t",  NULL, false, {NULL, NULL, NULL, false}, GET_TAGS             },
+    {"relations","n",  NULL, false, {NULL, NULL, NULL, false}, GET_RELATIONS        },
+    {"tracklist","r",  NULL, false, {NULL, NULL, NULL, false}, GET_TRACKLIST        },
+    {NULL,       NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE             }
+};
+
 /*--------------------------------------------------------*/
 
 GlyMemCache * Gly_copy_cache(GlyMemCache * source)
@@ -86,21 +102,12 @@ const char * Gly_strerror(enum GLYR_ERROR ID)
     return NULL;
 }
 
-// Fill yours in here if you added a new one.
-GlyPlugin getwd_commands [] =
+/*-----------------------------------------------*/
+
+void Gly_update_md5sum(GlyMemCache * cache) 
 {
-    {"cover" ,   "c",  NULL, false, {NULL, NULL, NULL, false}, GET_COVERART         },
-    {"lyrics",   "l",  NULL, false, {NULL, NULL, NULL, false}, GET_LYRICS           },
-    {"photos",   "p",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTIST_PHOTOS    },
-    {"ainfo",    "a",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTISTBIO        },
-    {"similiar", "s",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR_ARTISTS },
-    {"review",   "r",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUM_REVIEW     },
-    {"albumlist","i",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUMLIST        },
-    {"tags",     "t",  NULL, false, {NULL, NULL, NULL, false}, GET_TAGS             },
-    {"relations","n",  NULL, false, {NULL, NULL, NULL, false}, GET_RELATIONS        },
-    {"tracklist","r",  NULL, false, {NULL, NULL, NULL, false}, GET_TRACKLIST        },
-    {NULL,       NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE             }
-};
+	update_md5sum(cache);
+}
 
 /*-----------------------------------------------*/
 

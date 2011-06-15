@@ -164,7 +164,7 @@ extern "C"
 *	  - cover
 *	  - review 
 *	  - tracklist
-*\n
+*
 *	Optional for those:
 *	  - tags
 *	  - relations
@@ -568,6 +568,14 @@ extern "C"
 * @return An error id.
 */
         int Gly_write(GlyMemCache * data, const char * path);
+
+
+/**
+* @brief Updates the md5sum field of the cache c 
+*
+* @param c a valid memcahe
+*/
+	void Gly_update_md5sum(GlyMemCache * c);
 
 #ifdef _cplusplus
 }

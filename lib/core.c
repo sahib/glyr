@@ -692,7 +692,7 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
         // Handle without any use - clean up
         curl_easy_cleanup(curl);
 
-        Gly_update_md5sum(dldata);
+        update_md5sum(dldata);
         return dldata;
     }
 
@@ -864,7 +864,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
                         // Getters like cover and photo display the item in the callback. Therefore we need to calculate the checksum before.
                         if(capo->batch)
                         {
-                            Gly_update_md5sum(capo->cache);
+                            update_md5sum(capo->cache);
                         }
 
                         // Now try to parse what we downloaded
@@ -1022,7 +1022,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
             // Only update if not still empty.
             if(memcmp(result_lst->list[I]->md5sum, empty_sum,16))
             {
-                Gly_update_md5sum(result_lst->list[I]);
+                update_md5sum(result_lst->list[I]);
             }
         }
     }
@@ -1276,7 +1276,7 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 
 /*--------------------------------------------------------*/
 
-void Gly_update_md5sum(GlyMemCache * c)
+void update_md5sum(GlyMemCache * c)
 {
     if(c && c->data && c->size)
     {

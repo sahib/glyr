@@ -179,7 +179,7 @@ GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
 
 // Calculate a md5sum of the data
-void Gly_update_md5sum(GlyMemCache * c);
+void update_md5sum(GlyMemCache * c);
 
 // cacheList related methods
 GlyCacheList * DL_new_lst(void);

@@ -24,10 +24,10 @@
 #include <stdbool.h>
 
 /* Default values */
-#define DEFAULT_TIMEOUT  20L
-#define DEFAULT_REDIRECTS 1L
-#define DEFAULT_PARALLEL 4L
-#define DEFAULT_CMINSIZE 125
+#define DEFAULT_TIMEOUT  20L /*! default timeout */
+#define DEFAULT_REDIRECTS 1L /*! default redirects */
+#define DEFAULT_PARALLEL 4L  /*! default parallel */
+#define DEFAULT_CMINSIZE 125 /*! default minsize of cover */
 #define DEFAULT_CMAXSIZE -1
 #define DEFAULT_VERBOSITY 0
 #define DEFAULT_NUMBER 1
