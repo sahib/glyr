@@ -97,7 +97,6 @@ you can also drop me a mail: <sahib@online.de>
 Thanks for any help in advance!
 
 You also might consider a small (I'm already motivated by 1 Cent ;-)) donation if you use any of my software in a commercial environement:
-<head>
 <script type="text/javascript">
 /* <![CDATA[ */
     (function() {
@@ -109,12 +108,9 @@ You also might consider a small (I'm already motivated by 1 Cent ;-)) donation i
     })();
 /* ]]> */
 </script>
-<p>Thank you. Already for coming here.</p>
-<p>If you want to donate please flattr me:</p>
 <a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://github.com/sahib/glyr"></a>
 <noscript><a href="http://flattr.com/thing/302682/libglyr" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
-</head>
 
 
      
