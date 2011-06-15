@@ -51,7 +51,7 @@ Please refer to @glyrc --usage@ which is more up-to-date.
 <h3>Glyr.. such a silly name! Why?</h3>
 Indeed. Should have named it 'Glyros'.
 
-<h3>How..how am I suppose to be used to it?<h3>
+<h3>How..how am I suppose to be used to it?</h3>
 Well, as normal user you could use @glyrc@ to retrieve some metadata in a batchlike fashion.
 As developers you have lots of option, you could write glyr-plugins for musicplayers (gmpc!), set up a webserver with this,
 hack up little scripts showing covers on the desktop.. everything related to musicmetadat is possible here.
@@ -104,8 +104,10 @@ You also might consider a small (CS-Students are already motivated by 1 Cent <im
 (For now only possible via Flattr, you gonna need an account there - Sorry)
 
 
-
-
-
+<br>
+<br>
+<br>
+<br>
+<h3></h3>
 <h4>@footnotes@</h4>     
 [1] Glyr has not been tested on Mac OSX yet. If you own such an Apple device any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes have to be done.
