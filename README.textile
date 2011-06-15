@@ -41,7 +41,7 @@ To prevent disambiguation the following terms are used below:
 See the "compile page":https://github.com/sahib/glyr/wiki/Compiling.
 
 <h3>libglyr</h3>
-See the "API Reference":https://github.com/sahib/glyr/wiki/API
+See the "API Reference":http://sahib.github.com/glyr/doc/html/glyr_8h.html
 Please note: The Api won't be guaranteed to be stable before version 0.9.
 
 <h3>glyrc:</h3>
