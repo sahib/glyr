@@ -26,7 +26,7 @@ static void configure(GlyQuery * s, enum GLYR_GET_TYPE type)
     GlyOpt_title (s,"Die Boten");
     GlyOpt_verbosity(s,1);
     GlyOpt_type  (s,type);
-    GlyOpt_from(s,"safe+fast");
+    GlyOpt_from(s,"fast");
 }
 
 static void printme(GlyMemCache * start)

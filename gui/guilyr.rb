@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'gtk2'
-require './glubyr.rb'
+
+# Use glyr's ruby module
+require '../swig/ruby/glyros.rb'
 
 # This works for the moment only for Linux 64bit out of the box,
 # as glyr.so is compiled like this, you'd have to recompile it.
@@ -60,7 +62,7 @@ class ItemView < Gtk::EventBox
 		  
 		  if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
 		    puts "filename = #{dialog.filename}"
-		    Glyr::writeFile(Glyr::GlyQuery.new,data,dialog.filename)
+		    Glyros::writeFile(Glyros::GlyQuery.new,data,dialog.filename)
 		  end
 		  dialog.destroy
 		end
@@ -73,11 +75,11 @@ class ItemView < Gtk::EventBox
 		# Delegate task to subroutines	
 		if data.is_image
 		    init_as_image(path, data, artist, album, title, vbox)
-		elsif data.type == Glyr::TYPE_SIMILIAR
+		elsif data.type == Glyros::TYPE_SIMILIAR
 		    init_as_similiar_artist(path,data,artist,vbox)
-		elsif data.type == Glyr::TYPE_TAGS or data.type == Glyr::TYPE_RELATION
+		elsif data.type == Glyros::TYPE_TAGS or data.type == Glyros::TYPE_RELATION
 		    init_as_oneliner(data,artist,album,vbox)
-		elsif data.type == Glyr::TYPE_TRACK or data.type == Glyr::TYPE_ALBUMLIST
+		elsif data.type == Glyros::TYPE_TRACK or data.type == Glyros::TYPE_ALBUMLIST
 		    init_as_oneliner(data,artist,album,vbox)
 		else #lyrics,review,bio
 		    init_as_text(path, data, artist, album, title, vbox) 
@@ -97,13 +99,13 @@ class ItemView < Gtk::EventBox
 	def init_as_oneliner(data, artist, album, vbox)
 		lo = get_new_layout(150,30)
 		label = nil
-		if data.type == Glyr::TYPE_TRACK
+		if data.type == Glyros::TYPE_TRACK
 		    label = Gtk::Label.new.set_markup("#{data.data} <small>#{data.duration / 60}:#{data.duration % 60}</small>")
-		elsif data.type == Glyr::TYPE_ALBUMLIST
+		elsif data.type == Glyros::TYPE_ALBUMLIST
 		    label = Gtk::Label.new.set_markup("#{data.data}")
-		elsif data.type == Glyr::TYPE_TAGS
+		elsif data.type == Glyros::TYPE_TAGS
 		    label = Gtk::Label.new.set_markup("#{data.data}")
-		elsif data.type == Glyr::TYPE_RELATION
+		elsif data.type == Glyros::TYPE_RELATION
 		    splitted = data.data.split(":")
 		    typename = splitted.shift
 		    label = Gtk::Label.new.set_markup("<a href='#{splitted.join.gsub(/&/,"&amp;")}'>#{typename}</a>")
@@ -141,7 +143,7 @@ class ItemView < Gtk::EventBox
 		internLayout.modify_bg(Gtk::STATE_NORMAL,Gdk::Color.parse("white"))
 		internLayout.put(click_box,10,10) unless click_box == nil
 
-		if data.type == Glyr::TYPE_PHOTOS
+		if data.type == Glyros::TYPE_PHOTOS
 		  internLayout.put(Gtk::Label.new.set_markup("Images related to <b>#{artist}</b>"),185,30)
 		else
 		  internLayout.put(Gtk::Label.new.set_markup("<b>#{album}</b> <i>by</i> <b>#{artist}</b>"),185,30)
@@ -167,7 +169,7 @@ class ItemView < Gtk::EventBox
 		layout.put(@source_label,60,10)
 
 		info_label = nil
-		if Glyr::TYPE_LYRICS
+		if Glyros::TYPE_LYRICS
 		    layout.put(Gtk::Label.new.set_markup("<b>#{title}</b> <i>by</i> <b>#{artist}</b>"),200,10)
 		else
 		    info_label = Gtk::Label.new.set_markup("<small>Review of album</small><b>#{album}</b><i>by</i><b>#{album}</b>")
@@ -177,10 +179,10 @@ class ItemView < Gtk::EventBox
 	end
 
 	def load_image_from_url( url )
-		q = Glyr::GlyQuery.new
-		cache = Glyr::download(url,q)
+		q = Glyros::GlyQuery.new
+		cache = Glyros::download(url,q)
 		path = "/tmp/guilyr_simphoto_#{@@similiar_photo_count}.img"
-		Glyr::writeFile(q,cache,path)
+		Glyros::writeFile(q,cache,path)
 		@@similiar_photo_count += 1
 
 		pixbuf = nil
@@ -237,16 +239,16 @@ end
 class VR_gui
   @@getterHash = 
   {
-	:Cover     => { :name => "Cover Art",       :type => Glyr::GET_COVER,    :active => [true, true,false]},
-	:Lyrics	   => { :name => "Lyrics",          :type => Glyr::GET_LYRIC,    :active => [true, true, true]}, 
-	:Photos    => { :name => "Bandphotos",      :type => Glyr::GET_PHOTO,    :active => [true,false,false]},
-	:Ainfo     => { :name => "Artist Biography",:type => Glyr::GET_AINFO,    :active => [true,false,false]},
-	:Similiar  => { :name => "Similiar artists",:type => Glyr::GET_SIMILIAR, :active => [true,false,false]},
-	:Review    => { :name => "Albumreview",     :type => Glyr::GET_REVIEW,   :active => [true, true,false]},
-	:Albumlist => { :name => "List of Albums",  :type => Glyr::GET_ALBUMLIST,:active => [true,false,false]},
-	:Tracklist => { :name => "List of Tracks",  :type => Glyr::GET_TRACKLIST,:active => [true, true,false]},
-	:Tags	   => { :name => "Random Tags",     :type => Glyr::GET_TAGS,     :active => [true, true, true]},
-	:Relations => { :name => "Random Relations",:type => Glyr::GET_RELATIONS,:active => [true, true, true]}
+	:Cover     => { :name => "Cover Art",       :type => Glyros::GET_COVERART, :active => [true, true,false]},
+	:Lyrics	   => { :name => "Lyrics",          :type => Glyros::GET_LYRICS,    :active => [true, true, true]}, 
+	:Photos    => { :name => "Bandphotos",      :type => Glyros::GET_ARTIST_PHOTOS,    :active => [true,false,false]},
+	:Ainfo     => { :name => "Artist Biography",:type => Glyros::GET_ARTISTBIO,    :active => [true,false,false]},
+	:Similiar  => { :name => "Similiar artists",:type => Glyros::GET_SIMILIAR_ARTISTS, :active => [true,false,false]},
+	:Review    => { :name => "Albumreview",     :type => Glyros::GET_ALBUM_REVIEW,   :active => [true, true,false]},
+	:Albumlist => { :name => "List of Albums",  :type => Glyros::GET_ALBUMLIST,:active => [true,false,false]},
+	:Tracklist => { :name => "List of Tracks",  :type => Glyros::GET_TRACKLIST,:active => [true, true,false]},
+	:Tags	   => { :name => "Random Tags",     :type => Glyros::GET_TAGS,     :active => [true, true, true]},
+	:Relations => { :name => "Random Relations",:type => Glyros::GET_RELATIONS,:active => [true, true, true]}
   }
 
   def fill_combobox( box )
@@ -332,7 +334,7 @@ class VR_gui
       @sbp_number.value = 1
       @sbp_fuzzyness = builder.get_object("sbp_fuzzyness")
       @sbp_fuzzyness.adjustment = Gtk::Adjustment.new(50.0, 0.0, 100.0, 1.0, 5.0, 0.0)
-      @sbp_fuzzyness.value = Glyr::DEFAULT_FUZZYNESS
+      @sbp_fuzzyness.value = Glyros::DEFAULT_FUZZYNESS
       @provider_entry = builder.get_object("provider_entry")
       @lang_entry = builder.get_object("lang_entry")
     end
@@ -352,7 +354,7 @@ class VR_gui
 
   def on_searchButton_clicked
 	puts "Wait a second.."
-	m = Glubyr.new
+	m = GlyrosSpit.new
 	m.number = @sbp_number.value.to_i
 	m.fuzzyness = @sbp_fuzzyness.value.to_i
 	m.verbosity = 2
@@ -385,11 +387,16 @@ class VR_gui
 	
 		i = 0
 		@statusbar.push(@statusbar_info,"Searching..")
-		results = m.getByType(data_type,@artistEntry.text,@albumEntry.text,@titleEntry.text)
-		unless results == nil
+
+                m.artist = @artistEntry.text
+                m.album  = @albumEntry.text
+                m.title  = @titleEntry.text
+                results  = m.get(data_type)
+
+		unless results.size == 0
 			results.each do |c|
 				path = "/tmp/guilyr_item_#{i}.img" 
-				m.writeFile(path,c) if c.is_image
+				m.write_file(path,c) if c.is_image
 				self.add_item(path,c, @artistEntry.text, @albumEntry.text, @titleEntry.text)
 			end
 		        @statusbar.push(@statusbar_info,"Done: found #{results.size} item(s)")

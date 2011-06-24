@@ -138,7 +138,7 @@ int main(int argc, char * argv[])
         // If passed e.g GET_COVER instead of GET_UNSURE you would get information about providers
         // available for cover download. The list is NULL-terminated
         const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
-        unsigned char * cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
+        char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
 
         if(cp_name && cp_gids)
         {

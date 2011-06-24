@@ -471,12 +471,21 @@ GlyMemCache * Gly_download(const char * url, GlyQuery * s)
 
 void Gly_free_list(GlyMemCache * head)
 {
-    GlyMemCache * next = head;
-    while(next != NULL)
-    {
-        GlyMemCache * p = next;
-        next = next->next;
-        DL_free(p);
+    if(head != NULL) {
+	    GlyMemCache * next = head;
+	    GlyMemCache * prev = head->prev;
+
+	    while(next != NULL) {
+		GlyMemCache * p = next;
+		next = next->next;
+		DL_free(p);
+	    }
+
+	    while(prev != NULL) {
+		GlyMemCache * p = prev;
+		prev = prev->prev;
+		DL_free(p);
+	    }
     }
 }
 
@@ -716,16 +725,16 @@ const char * GlyPlug_get_key_by_id(enum GLYR_GET_TYPE ID)
 
 /*-----------------------------------------------*/
 
-unsigned char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID)
+char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID)
 {
-    unsigned char * result = 0;
+    char * result = 0;
     GlyPlugin * plug = Gly_get_provider_by_id(ID);
     if(plug != NULL)
     {
         size_t i = 0;
         while(plug[i].name != NULL)
         {
-            result = realloc(result, sizeof(unsigned char) * (i+2));
+            result = realloc(result, sizeof(char) * (i+2));
             result[i  ] = plug[i].gid;
             result[++i] = '\0';
         }

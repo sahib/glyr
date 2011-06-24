@@ -31,6 +31,10 @@
 * @date 2011-06-14
 */
 
+#ifdef SWIG_IS_WORKING
+    #error "olol"
+#endif 
+
 
 /* All structs used by glyr are here */
 #include "types.h"
@@ -510,7 +514,7 @@ extern "C"
 *
 * @return ..
 */
-	unsigned char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID);
+	char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID);
 
 /**
 * @brief A convinience method to download the content at the URl $url, according to the settings in $s 

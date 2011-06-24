@@ -1,2 +1,20 @@
+# Ignore object files
 *.o
+
+# Ignore documentation, local working directory
 child/
+
+# Ignore CMake output
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+Makefile
+
+# swig
+*_wrap.c
+
+# vim swap files
+*.swp
+*.swo
+*.swn

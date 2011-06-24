@@ -12,16 +12,14 @@
 /* module name */
 %module glyros
 
-/* Inform headers */
 #define COMING_FROM_SWIG
 
 /* let wrapper file compile */
 %{ #include "../lib/glyr.h" %}
-
+  
 /* parse headers */
 %include "../lib/glyr.h"
 %include "../lib/types.h"
-
 
 /* make sure libglyr wakes  up */
 %init 

@@ -83,7 +83,7 @@ static void list_provider_at_id(int id, int min_align, GlyQuery * s)
 {
 	const char **   cp_name = GlyPlug_get_name_by_id(id);
 	const char *    cp_keys = GlyPlug_get_key_by_id(id);
-	unsigned char * cp_gids = GlyPlug_get_gid_by_id(id);
+	char *          cp_gids = GlyPlug_get_gid_by_id(id);
 
         s->color_output = false;
 
@@ -155,7 +155,7 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         // get list of avaliable commands
 	const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
 	const char *    cp_keys = GlyPlug_get_key_by_id(GET_UNSURE);
-	unsigned char * cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
+	char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
 
         if(cp_name && cp_keys && cp_gids) {
                 int i = 0;
@@ -1039,14 +1039,14 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 static const char * get_type_string(GlyQuery * s)
 {
 	const char **   cp_names = GlyPlug_get_name_by_id(GET_UNSURE);
-	unsigned char * cp_gids  = GlyPlug_get_gid_by_id(GET_UNSURE);	
+	char *          cp_gids  = GlyPlug_get_gid_by_id(GET_UNSURE);	
 
 	const char * result = NULL;
 
         if(s && cp_names && cp_gids) {
                 int i = 0;
                 for(i = 0; cp_names[i] != NULL && !result; i++) {
-                        if(s->type == cp_gids[i]) {
+                        if(s->type == (unsigned char)cp_gids[i]) {
                                 result = strdup(cp_names[i]);
                         }
                 }

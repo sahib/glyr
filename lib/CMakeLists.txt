@@ -1,9 +1,10 @@
 # configure
 set( GLYR_VERSION_MAJOR "0")
-set( GLYR_VERSION_MINOR "4")
-set( GLYR_VERSION_NAME  "Larcenous Locust (dev)")
+set( GLYR_VERSION_MINOR "7")
+set( GLYR_VERSION_NAME  "Engaging Sloth (dev)")
 set( GLYR_COLORED_OUTPUT true)
 
+# Configuration for Version /versionnam
 configure_file (
   "${DIR_ROOT}/config.h.in"
   "${DIR_ROOT}/config.h"
@@ -12,14 +13,18 @@ configure_file (
 ADD_DEFINITIONS( -ggdb3 -Wall )
 ADD_LIBRARY(glyr SHARED	${LIB_SOURCE_LOCATIONS})
 
+# Win32 needs that socket library for libcurl
 if(WIN32)
   TARGET_LINK_LIBRARIES(glyr curl ws2_32) 
-else()
+else() # otherwise we have an okay system
   TARGET_LINK_LIBRARIES(glyr curl) 
-endif()
+endif(WIN32)
 
-# Install header
-INSTALL(FILES glyr.h DESTINATION include)
+# Install headeas
+INSTALL(FILES glyr.h DESTINATION include/glyr)
+INSTALL(FILES stringlib.h DESTINATION include/glyr)
+INSTALL(FILES types.h DESTINATION include/glyr)
+INSTALL(FILES translate.h DESTINATION include/glyr)
 
 # Install library 
 INSTALL(TARGETS glyr LIBRARY DESTINATION lib)

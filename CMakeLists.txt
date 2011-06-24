@@ -109,10 +109,33 @@ SET(LIB_SOURCE_LOCATIONS
    	"${DIR_PHOTOS}/google.c"
 )
 
-#ADD_DEFINITIONS( -Wall -Winline -W -Wwrite-strings -Werror -Wno-unused-parameter )
-ADD_DEFINITIONS(-Wall -W -Wno-unused-parameter)
+# Pretty high warnlevel
+ADD_DEFINITIONS(-Wall -W -Wno-unused-parameter -Wno-strict-prototypes)
 
 # go on with subdirs
 ADD_SUBDIRECTORY( ${SUBDIR_LIB}  )
 ADD_SUBDIRECTORY( ${SUBDIR_SRC}  )
-#ADD_SUBDIRECTORY( ${SUBDIR_BIND} )
+
+IF(SWIG_RUBY)
+        SET(INTERFACE_FILE "swig/glyros.i")
+        FIND_PACKAGE(SWIG REQUIRED)
+        INCLUDE(${SWIG_USE_FILE})
+
+        FIND_PACKAGE(Ruby)
+        INCLUDE_DIRECTORIES(${RUBY_INCLUDE_PATH})
+
+        INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+
+        SET(CMAKE_SWIG_FLAGS "")
+
+        SWIG_ADD_MODULE(glyros ruby ${INTERFACE_FILE} ${LIB_SOURCE_LOCATIONS})
+        SWIG_LINK_LIBRARIES(glyros ${RUBY_LIBRARY} ${CURL_LIBRARY})
+
+        ADD_DEFINITIONS(-Wno-unused-but-set-variable)
+        
+        ADD_CUSTOM_COMMAND (
+             TARGET glyros
+             POST_BUILD
+             COMMAND ${CMAKE_COMMAND} -E rename bin/libglyros.so bin/ruby/glyros.so
+        )
+ENDIF(SWIG_RUBY)

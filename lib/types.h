@@ -158,6 +158,10 @@ typedef struct GlyMemCache {
 * Look up the corresponding GlyOpt_$name methods for more details. 
 */
 typedef struct GlyQuery {
+#ifdef COMING_FROM_SWIG
+  /* Make this fields immutable for languaging supporting it */
+  %immutable {
+#endif
         enum GLYR_GET_TYPE type; /*!< What type of data to get */
         char * artist; /*!< artist field */
         char * album;  /*!< album field */
@@ -186,7 +190,6 @@ typedef struct GlyQuery {
         bool groupedDL; /*!< Download group for group, or all in parallel (faster, but less accurate) */
         bool duplcheck; /*!< Check for bad data? */
 
-
         const char * lang; /*!< language settings (for amazon / google / last.fm) */
         const char * formats; /*!<  Format settings */
 	const char * proxy; /*!< Proxy settings */
@@ -197,6 +200,7 @@ typedef struct GlyQuery {
                 void  * user_pointer;
         } callback;
   
+
         const char * info[10];
         void * providers;
         int itemctr;
@@ -210,7 +214,9 @@ typedef struct GlyQuery {
 		const char * target; /*< Target language (may not be NULL) */
 		const char * source; /*< Source language (may be NULL )*/
 	} gtrans;
-
+#ifdef COMING_FROM_SWIG
+  %}
+#endif
 
 } GlyQuery;
 
@@ -222,6 +228,38 @@ typedef struct GlyQuery {
 * @return possibly an error or GLYRE_OK 
 */
 typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
+
+#ifdef COMING_FROM_SWIG
+	%extend GlyQuery
+	{
+		GlyQuery()
+		{
+			GlyQuery my_query;
+			Gly_init_query(&my_query);
+			GlyQuery * copy = malloc(sizeof(GlyQuery));
+			memcpy(copy,&my_query,sizeof(GlyQuery));
+			return copy;
+		}
+		~GlyQuery()
+		{
+			Gly_destroy_query($self);
+			if($self != NULL)
+			    free($self);
+		}
+	}
+
+	%extend GlyMemCache
+	{
+		GlyMemCache()
+		{
+			return Gly_new_cache();
+		}
+		~GlyMemCache()
+		{
+			Gly_free_cache($self);
+		}
+	}
+#endif
 
 
 #endif

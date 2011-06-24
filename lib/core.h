@@ -103,7 +103,7 @@ typedef struct GlyPlugin
         bool free_url; // pass result of url_callback to free()?
     } plug;
 
-    unsigned char gid;
+    char gid;
 
 } GlyPlugin;
 
