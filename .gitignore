@@ -4,6 +4,8 @@
 # Ignore documentation, local working directory
 child/
 
+bin/
+
 # Ignore CMake output
 CMakeCache.txt
 CMakeFiles/
