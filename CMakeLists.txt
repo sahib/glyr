@@ -36,6 +36,8 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
    CACHE PATH
    "Single Directory for all static libraries."
    )
+        
+
 
 # set directories
 SET( SUBDIR_LIB lib)
@@ -132,7 +134,12 @@ IF(SWIG_RUBY)
         SWIG_LINK_LIBRARIES(glyros ${RUBY_LIBRARY} ${CURL_LIBRARY})
 
         ADD_DEFINITIONS(-Wno-unused-but-set-variable)
-        
+
+        ADD_CUSTOM_COMMAND (
+                TARGET glyros
+                POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E make_directory bin/ruby
+        )
         ADD_CUSTOM_COMMAND (
              TARGET glyros
              POST_BUILD
