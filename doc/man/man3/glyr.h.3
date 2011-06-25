@@ -1,4 +1,4 @@
-.TH "lib/glyr.h" 3 "Wed Jun 15 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/glyr.h" 3 "Sat Jun 25 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -152,11 +152,15 @@ All method declaration here. You should only need to include this file.
 .br
 .RI "\fIGet a nullterminated list of available providers. \fP"
 .ti -1c
+.RI "const char * \fBGlyPlug_get_single_name_by_id\fP (enum \fBGLYR_GET_TYPE\fP ID)"
+.br
+.RI "\fISame as GlyPlug_get_name_by_id, but returns single string. \fP"
+.ti -1c
 .RI "const char * \fBGlyPlug_get_key_by_id\fP (enum \fBGLYR_GET_TYPE\fP ID)"
 .br
 .RI "\fIGet a nullterminated list of available providers, with their name as key. \fP"
 .ti -1c
-.RI "unsigned char * \fBGlyPlug_get_gid_by_id\fP (enum \fBGLYR_GET_TYPE\fP ID)"
+.RI "char * \fBGlyPlug_get_gid_by_id\fP (enum \fBGLYR_GET_TYPE\fP ID)"
 .br
 .RI "\fIGet a list of GroupIDs. \fP"
 .ti -1c
@@ -179,6 +183,10 @@ All method declaration here. You should only need to include this file.
 .RI "int \fBGly_write\fP (\fBGlyMemCache\fP *data, const char *path)"
 .br
 .RI "\fIWrites data to a specified path. \fP"
+.ti -1c
+.RI "void \fBGly_update_md5sum\fP (\fBGlyMemCache\fP *c)"
+.br
+.RI "\fIUpdates the md5sum field of the cache c. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -333,6 +341,14 @@ A descriptive nullterminated string, do not pass to free
 .RE
 .PP
 
+.SS "void Gly_update_md5sum (\fBGlyMemCache\fP *c)"
+.PP
+Updates the md5sum field of the cache c. \fBParameters:\fP
+.RS 4
+\fIc\fP a valid memcahe 
+.RE
+.PP
+
 .SS "const char* Gly_version (void)"
 .PP
 Returns versioning information, including compiletime. Example: 
@@ -381,9 +397,10 @@ cover
 .IP "\(bu" 2
 review
 .IP "\(bu" 2
-tracklist 
-.br
- Optional for those:
+tracklist
+.PP
+.PP
+Optional for those:
 .IP "\(bu" 2
 tags
 .IP "\(bu" 2
@@ -906,7 +923,7 @@ an errorID
 .RE
 .PP
 
-.SS "unsigned char* GlyPlug_get_gid_by_id (enum \fBGLYR_GET_TYPE\fPID)"
+.SS "char* GlyPlug_get_gid_by_id (enum \fBGLYR_GET_TYPE\fPID)"
 .PP
 Get a list of GroupIDs. \fBParameters:\fP
 .RS 4
@@ -967,6 +984,19 @@ A list is returned with all providernames for this type.
 \fBReturns:\fP
 .RS 4
 a nullterminated list of available providers 
+.RE
+.PP
+
+.SS "const char* GlyPlug_get_single_name_by_id (enum \fBGLYR_GET_TYPE\fPID)"
+.PP
+Same as GlyPlug_get_name_by_id, but returns single string. \fBParameters:\fP
+.RS 4
+\fIID\fP What type to get, or GET_UNSURE for a list of getters
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+a nullterminated string of providers, seperated with '|' 
 .RE
 .PP
 

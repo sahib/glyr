@@ -183,10 +183,12 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the proxy to use.  <a href="#a641253c631f2f0a54831bce84f9b532c"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a58d98290aeb979d17f0d43855a68747c">GlyPlug_get_name_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a nullterminated list of available providers.  <a href="#a58d98290aeb979d17f0d43855a68747c"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ab067ea8cbd2145e22d3d3cef45c69d96">GlyPlug_get_single_name_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as GlyPlug_get_name_by_id, but returns single string.  <a href="#ab067ea8cbd2145e22d3d3cef45c69d96"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a82e74ef9c730f56597bc73916357a015">GlyPlug_get_key_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a nullterminated list of available providers, with their name as key.  <a href="#a82e74ef9c730f56597bc73916357a015"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">unsigned char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#afe15160fb8d1e941a20f3fb32edba28f">GlyPlug_get_gid_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of GroupIDs.  <a href="#afe15160fb8d1e941a20f3fb32edba28f"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a2f502063416ee5252a8268f9237e2f03">GlyPlug_get_gid_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of GroupIDs.  <a href="#a2f502063416ee5252a8268f9237e2f03"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a5477f0f7e49419413a18be93d0c49cd7">Gly_download</a> (const char *url, <a class="el" href="structGlyQuery.html">GlyQuery</a> *s)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A convinience method to download the content at the URl $url, according to the settings in $s Actually only the redirect and timeout parameters are used here.  <a href="#a5477f0f7e49419413a18be93d0c49cd7"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a390b0873fe96aedc11957f26f2ec5d84">Gly_strerror</a> (enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> ID)</td></tr>
@@ -197,6 +199,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns versioning information, including compiletime.  <a href="#aaf1ebbe2db15c30a3dc329d25ace2279"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#addc3e50e99d595eb14e1c76500d93f95">Gly_write</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *data, const char *path)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data to a specified path.  <a href="#addc3e50e99d595eb14e1c76500d93f95"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aa408467eac9814fc3d683e5ac882617a">Gly_update_md5sum</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *c)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the md5sum field of the cache c.  <a href="#aa408467eac9814fc3d683e5ac882617a"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>All method declaration here. You should only need to include this file. </p>
@@ -433,7 +437,7 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <p>GRP_FAST gets to "fast",GRP_ALL to "all" etc.<br/>
- Use this to make strings from <a class="el" href="glyr_8h.html#afe15160fb8d1e941a20f3fb32edba28f" title="Get a list of GroupIDs.">GlyPlug_get_gid_by_id()</a><br/>
+ Use this to make strings from <a class="el" href="glyr_8h.html#a2f502063416ee5252a8268f9237e2f03" title="Get a list of GroupIDs.">GlyPlug_get_gid_by_id()</a><br/>
 </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A groupname as string or NULL if not found </dd></dl>
 
@@ -526,6 +530,31 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A descriptive nullterminated string, do not pass to free </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aa408467eac9814fc3d683e5ac882617a"></a><!-- doxytag: member="glyr.h::Gly_update_md5sum" ref="aa408467eac9814fc3d683e5ac882617a" args="(GlyMemCache *c)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Gly_update_md5sum </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Updates the md5sum field of the cache c. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">c</td><td>a valid memcahe </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -628,8 +657,10 @@ Functions</h2></td></tr>
 <li>albumlist</li>
 <li>cover</li>
 <li>review</li>
-<li>tracklist <br/>
- Optional for those:</li>
+<li>tracklist</li>
+</ul>
+<p>Optional for those:</p>
+<ul>
 <li>tags</li>
 <li>relations</li>
 </ul>
@@ -1586,12 +1617,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="afe15160fb8d1e941a20f3fb32edba28f"></a><!-- doxytag: member="glyr.h::GlyPlug_get_gid_by_id" ref="afe15160fb8d1e941a20f3fb32edba28f" args="(enum GLYR_GET_TYPE ID)" -->
+<a class="anchor" id="a2f502063416ee5252a8268f9237e2f03"></a><!-- doxytag: member="glyr.h::GlyPlug_get_gid_by_id" ref="a2f502063416ee5252a8268f9237e2f03" args="(enum GLYR_GET_TYPE ID)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">unsigned char* GlyPlug_get_gid_by_id </td>
+          <td class="memname">char* GlyPlug_get_gid_by_id </td>
           <td>(</td>
           <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
           <td class="paramname"><em>ID</em></td><td>)</td>
@@ -1678,6 +1709,32 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ab067ea8cbd2145e22d3d3cef45c69d96"></a><!-- doxytag: member="glyr.h::GlyPlug_get_single_name_by_id" ref="ab067ea8cbd2145e22d3d3cef45c69d96" args="(enum GLYR_GET_TYPE ID)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* GlyPlug_get_single_name_by_id </td>
+          <td>(</td>
+          <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
+          <td class="paramname"><em>ID</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Same as GlyPlug_get_name_by_id, but returns single string. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ID</td><td>What type to get, or GET_UNSURE for a list of getters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>a nullterminated string of providers, seperated with '|' </dd></dl>
+
+</div>
+</div>
 </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -1693,7 +1750,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Wed Jun 15 2011 00:19:09 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 16:52:26 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
