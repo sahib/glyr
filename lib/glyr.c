@@ -665,7 +665,7 @@ int Gly_write(GlyMemCache * data, const char * path)
         }
         else
         {
-            FILE * fp = fopen(path,"wb" /* welcome back */);
+            FILE * fp = fopen(path,"w" /* welcome back */);
             if(fp)
             {
                 if(data->data != NULL)
@@ -697,6 +697,34 @@ const char ** GlyPlug_get_name_by_id(enum GLYR_GET_TYPE ID)
             result = realloc(result,sizeof(char *) * (i+2));
             result[i  ] = strdup(plug[i].name);
             result[++i] = NULL;
+        }
+        free(plug);
+    }
+    return result;
+}
+
+/*-----------------------------------------------*/
+
+const char * GlyPlug_get_single_name_by_id(enum GLYR_GET_TYPE ID)
+{
+    const char * result = NULL;
+    GlyPlugin * plug = Gly_get_provider_by_id(ID);
+    if(plug != NULL)
+    {
+        size_t i = 0;
+        while(plug[i].name != NULL)
+        {
+						const char * old = result;
+						result = strdup_printf("%s%s%s",(old == NULL) ? "" : old 
+																					 ,(old == NULL) ? "" : "|"
+																				   ,plug[i].name);
+
+
+						if(old != NULL) {
+								free((char*)old);
+						}
+
+						i++;
         }
         free(plug);
     }

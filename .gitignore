@@ -13,6 +13,9 @@ cmake_install.cmake
 install_manifest.txt
 Makefile
 
+# testoutput
+test/out/*
+
 # swig
 *_wrap.c
 

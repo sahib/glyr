@@ -62,7 +62,7 @@ class ItemView < Gtk::EventBox
 		  
 		  if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
 		    puts "filename = #{dialog.filename}"
-		    Glyros::writeFile(Glyros::GlyQuery.new,data,dialog.filename)
+        data.write_file(filename)
 		  end
 		  dialog.destroy
 		end
@@ -182,7 +182,7 @@ class ItemView < Gtk::EventBox
 		q = Glyros::GlyQuery.new
 		cache = Glyros::download(url,q)
 		path = "/tmp/guilyr_simphoto_#{@@similiar_photo_count}.img"
-		Glyros::writeFile(q,cache,path)
+    cache.write_file(path)
 		@@similiar_photo_count += 1
 
 		pixbuf = nil
@@ -395,8 +395,8 @@ class VR_gui
 
 		unless results.size == 0
 			results.each do |c|
-				path = "/tmp/guilyr_item_#{i}.img" 
-				m.write_file(path,c) if c.is_image
+				path = "/tmp/guilyr_item_#{i}.img"
+        c.write_file(path) if c.is_image 
 				self.add_item(path,c, @artistEntry.text, @albumEntry.text, @titleEntry.text)
 			end
 		        @statusbar.push(@statusbar_info,"Done: found #{results.size} item(s)")

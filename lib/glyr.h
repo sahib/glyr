@@ -489,6 +489,16 @@ extern "C"
 * @return a nullterminated list of available providers
 */
 	const char ** GlyPlug_get_name_by_id(enum GLYR_GET_TYPE ID);
+
+/**
+* @brief Same as GlyPlug_get_name_by_id, but returns single string
+*
+* @param ID What type to get, or GET_UNSURE for a list of getters
+*
+* @return a nullterminated string of providers, seperated with '|'
+*/
+  const char * GlyPlug_get_single_name_by_id(enum GLYR_GET_TYPE ID);
+
 /**
 * @brief Get a nullterminated list of available providers, with their name as key
 *
@@ -548,7 +558,6 @@ extern "C"
 * @return A groupname as string or NULL if not found
 */
         const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
-
 
 /**
 * @brief Returns versioning information, including compiletime

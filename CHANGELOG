@@ -88,3 +88,7 @@ Found some time to work a bit here :-)
 ----------
 + added support for proxy. (only basic libcurl support, should be suffiecient for 99% of all cases)
 + made API *much* slicker & nicer
+
+2011/06/25
+----------
+- CHANGELOG discontinued, use the git commit history instead

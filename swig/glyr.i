@@ -8,7 +8,7 @@
  * + By using SWIG you just can use the compile.sh by replacing 'ruby' with <your_lang>
  * + Ruby bindings e.g. are so incredible easy to use after writing a wrapper class 
 */
-
+ 
 /* module name */
 %module glyros
 
@@ -21,7 +21,6 @@
 /* parse headers */
 %include "../lib/glyr.h"
 %include "../lib/types.h"
-
 
 /* make sure libglyr wakes  up */
 %init 

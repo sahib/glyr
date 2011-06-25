@@ -5,10 +5,11 @@ require 'rubygems'
 
 begin
   # Load C library 
-  require "glyros"
+  require_relative "../bin/ruby/glyros"
 rescue LoadError => e
   puts "-- Error while loading Glyr's ruby module"
-  puts "-- It is supposed to be in the same path as this script"
+  puts "-- It is supposed to be in the bin/ruby directory"
+  puts "-- ..did you build it? (cmake . -DSWIG_RUBY)"
   exit(-1)
 end
 
@@ -32,6 +33,10 @@ class Glyros::GlyMemCache
 	def self.instance_by_copy(copy_me)
 	    copy = (copy_me.nil?) ? nil : Glyros::Gly_copy_cache(copy_me)
 	    return copy.register_free
+	end
+
+	def write_file(path) 
+		return Glyros::Gly_write(self,path)
 	end
 
 	# disable ctor
@@ -66,7 +71,7 @@ class Glyros::GlyQuery
 end
 
 
-class GlyrosQuery
+class GlyrosSpit
 	# members
 	@query = nil
 	@providers = nil
@@ -96,20 +101,19 @@ class GlyrosQuery
 		return Glyros::Gly_version()
 	end
 
-	def key_by_id(get_id)
+	def self.key_by_id(get_id)
 		return Glyros::GlyPlug_get_key_by_id(get_id)
 	end
 
-	def gid_by_id(get_id)
+	def self.gid_by_id(get_id)
 		return Glyros::GlyPlug_get_gid_by_id(get_id)
 	end
 
-	# not working yet
-	def name_by_id(get_id)
-		return Glyros::GlyPlug_get_key_by_id(get_id)
+	def self.name_by_id(get_id)
+		return Glyros::GlyPlug_get_single_name_by_id(get_id)
 	end
 
-	def groupname_by_id(get_id)
+	def self.groupname_by_id(get_id)
 		return Glyros::Gly_groupname_by_id(get_id)
 	end
 =begin 
@@ -149,10 +153,6 @@ class GlyrosQuery
 
 	def type
 		return @query.type
-	end
-
-	def write_file( path, cache ) 
-		return Glyros::Gly_write(cache,path)
 	end
 	
 	def number=(num)
@@ -320,7 +320,7 @@ end
 def test_me
 	# Note the dots at the end.
 	
-	q = GlyrosQuery.new
+	q = GlyrosSpit.new
 	q.artist = "Die Apokalyptischen Reiter"
 	q.album  = "Moral & Wahnsinn"
 	q.title  = "Die Boten"
@@ -330,11 +330,11 @@ def test_me
 end
 
 def use_strange_functions 
-	puts GlyrosQuery.new.key_by_id(Glyros::GET_LYRICS)
-	puts GlyrosQuery.new.name_by_id(Glyros::GET_LYRICS)
-	GlyrosQuery.new.gid_by_id(Glyros::GET_LYRICS).each_byte { |int| print "#{int} " }
-	puts "\n",GlyrosQuery.new.groupname_by_id(Glyros::GRP_FAST)
+	puts GlyrosSpit.new.key_by_id(Glyros::GET_LYRICS)
+	puts GlyrosSpit.new.name_by_id(Glyros::GET_LYRICS)
+	GlyrosSpit.new.gid_by_id(Glyros::GET_LYRICS).each_byte { |int| print "#{int} " }
+	puts "\n",GlyrosSpit.new.groupname_by_id(Glyros::GRP_FAST)
 end
 
-test_me()
-use_strange_functions()
+#test_me()
+#use_strange_functions()

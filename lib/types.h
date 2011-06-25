@@ -92,17 +92,17 @@ enum GLYR_ERROR {
 *  Requirements are given in braces, [] means optional.
 */
 enum GLYR_GET_TYPE {
-        GET_COVERART, /*!< Get coverart for (artist|album) */
-        GET_LYRICS, /*!< Get lyrics for (artist|[album]|artist) */
-        GET_ARTIST_PHOTOS, /*!< Get pics for (artist) */
-        GET_ARTISTBIO, /*!< Get bio of (artist) */
-        GET_SIMILIAR_ARTISTS, /*!< Get similiar artists to (artist) */
-        GET_ALBUM_REVIEW, /*!< Get album review to (artist|album) */
-        GET_TRACKLIST, /*!< Get list of tracks for album (artist|album) */
-        GET_TAGS, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
-        GET_RELATIONS, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
-        GET_ALBUMLIST, /*!< Get a list of albums by (artist) */
-        GET_UNSURE /*!< Do nothing but relax */
+        GET_COVERART = 1, /*!< Get coverart for (artist|album) */
+        GET_LYRICS = 2, /*!< Get lyrics for (artist|[album]|artist) */
+        GET_ARTIST_PHOTOS = 3, /*!< Get pics for (artist) */
+        GET_ARTISTBIO = 4, /*!< Get bio of (artist) */
+        GET_SIMILIAR_ARTISTS = 5, /*!< Get similiar artists to (artist) */
+        GET_ALBUM_REVIEW = 6, /*!< Get album review to (artist|album) */
+        GET_TRACKLIST = 7, /*!< Get list of tracks for album (artist|album) */
+        GET_TAGS = 8, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
+        GET_RELATIONS = 9, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
+        GET_ALBUMLIST= 10, /*!< Get a list of albums by (artist) */
+        GET_UNSURE = 11 /*!< Do nothing but relax */
 };
 
 /**
@@ -234,7 +234,7 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 	{
 		GlyQuery()
 		{
-			GlyQuery my_query;
+			GlyQuery my_query; 
 			Gly_init_query(&my_query);
 			GlyQuery * copy = malloc(sizeof(GlyQuery));
 			memcpy(copy,&my_query,sizeof(GlyQuery));
