@@ -3,10 +3,10 @@
 #include <stdio.h>
 
 /* you have only to include this. */
-//#include "../lib/glyr.h"
+#include "../lib/glyr.h"
 
 /* use this include path for your project, or directly clone libglyr to your project */
-#include <glyr/glyr.h>
+//#include <glyr/glyr.h>
 
 
 int main(void) {
