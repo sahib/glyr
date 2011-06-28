@@ -3,16 +3,17 @@
 # should be there
 require 'rubygems'
 
-begin 
-  require File.dirname(__FILE__) + "/../../bin/ruby/glyros"
+begin
+  # Load C library 
+  require_relative "../../bin/ruby/glyros"
 rescue LoadError => e
   puts "-- Error while loading Glyr's ruby module"
-  puts "-- It is supposed to be in the same path as this script"
-  puts "-- Exact message: #{e}"
+  puts "-- It is supposed to be in the bin/ruby directory"
+  puts "-- ..did you build it? (cmake . -DSWIG_RUBY)"
   exit(-1)
 end
 
-# Mixin free routines
+# Mixin free/
 class Glyros::GlyMemCache
 	# You don't need to do this yourself
 	def register_free
@@ -32,6 +33,10 @@ class Glyros::GlyMemCache
 	def self.instance_by_copy(copy_me)
 	    copy = (copy_me.nil?) ? nil : Glyros::Gly_copy_cache(copy_me)
 	    return copy.register_free
+	end
+
+	def write_file(path) 
+		return Glyros::Gly_write(self,path)
 	end
 
 	# disable ctor
@@ -65,6 +70,7 @@ class Glyros::GlyQuery
 	end
 end
 
+
 class GlyrosSpit
 	# members
 	@query = nil
@@ -95,29 +101,28 @@ class GlyrosSpit
 		return Glyros::Gly_version()
 	end
 
-	def key_by_id(get_id)
+	def self.key_by_id(get_id)
 		return Glyros::GlyPlug_get_key_by_id(get_id)
 	end
 
-	def gid_by_id(get_id)
+	def self.gid_by_id(get_id)
 		return Glyros::GlyPlug_get_gid_by_id(get_id)
 	end
 
-	# not working yet
-	def name_by_id(get_id)
-		return Glyros::GlyPlug_get_key_by_id(get_id)
+	def self.name_by_id(get_id)
+		return Glyros::GlyPlug_get_single_name_by_id(get_id).split(/\|/)
 	end
 
-	def groupname_by_id(get_id)
+	def self.groupname_by_id(get_id)
 		return Glyros::Gly_groupname_by_id(get_id)
 	end
 =begin 
 =| GETTER|SETTER |=
 =end
-    	def verbosity=(level)
-                Glyros::GlyOpt_verbosity(@query,level) 
+  def verbosity=(level) 
+  	@query.verbosity = level
 		self
-    	end
+  end
 
 	def artist 
 		return @query.artist
@@ -129,7 +134,7 @@ class GlyrosSpit
 	end
 
 	def album 
-		return @query.artist
+		return @query.album
 	end
 
 	def album=(album)
@@ -148,10 +153,6 @@ class GlyrosSpit
 
 	def type
 		return @query.type
-	end
-
-	def write_file( path, cache ) 
-		return Glyros::Gly_write(cache,path)
 	end
 	
 	def number=(num)

@@ -158,10 +158,6 @@ typedef struct GlyMemCache {
 * Look up the corresponding GlyOpt_$name methods for more details. 
 */
 typedef struct GlyQuery {
-#ifdef COMING_FROM_SWIG
-  /* Make this fields immutable for languaging supporting it */
-  %immutable {
-#endif
         enum GLYR_GET_TYPE type; /*!< What type of data to get */
         char * artist; /*!< artist field */
         char * album;  /*!< album field */
@@ -190,9 +186,13 @@ typedef struct GlyQuery {
         bool groupedDL; /*!< Download group for group, or all in parallel (faster, but less accurate) */
         bool duplcheck; /*!< Check for bad data? */
 
+#ifdef COMING_FROM_SWIG
+  /* Make this fields immutable for languaging supporting it */
+  %immutable {
+#endif
         const char * lang; /*!< language settings (for amazon / google / last.fm) */
         const char * formats; /*!<  Format settings */
-	const char * proxy; /*!< Proxy settings */
+				const char * proxy; /*!< Proxy settings */
 
 	// used internally, you should not use the following members
         struct {

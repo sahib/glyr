@@ -28,6 +28,10 @@
 #include "../stringlib.h"
 #include "../core.h"
 
+/*
+ * Provider will be removed if down any longer..
+*/
+
 
 const char * cover_coverhunt_url(GlyQuery * sets)
 {
@@ -76,6 +80,7 @@ GlyCacheList * cover_coverhunt_parse(cb_object *capo)
     }
 
     int urlc = 0;
+
 
     while( (table_start = strstr(table_start + 1,NODE_BEGIN)) && continue_search(urlc,capo->s))
     {

@@ -1,8 +1,4 @@
--------- future
-- Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..)
-- cmake portable.. 
-
-------- urgent
-- test lyrics (klingeltöne... *chrm*)
-- rewrite of GUI in C and gtk3 (Modi get your ass here!)
-- update swig
+- Take a random musicplayer project and devel a glyr-plugin (hi there gmpc..) -- in progress
+- test lyrics (klingeltöne... *chrm*) -- progress
+- fix various providers, with help of testscript -- progress
+- update swig -- done

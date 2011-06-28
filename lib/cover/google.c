@@ -28,8 +28,9 @@
 #include "../stringlib.h"
 
 
-#define FIRST_RESULT "<td align=left valign=bottom width=23% style=\"padding-top:1px\"><a href=/imgres?imgurl="
-#define END_OF_URL   "&imgrefurl="
+#define FIRST_RESULT "<a href=\"/imgres?imgurl="
+#define END_OF_URL "&amp;imgrefurl="
+
 const char * generic_google_url(GlyQuery * sets, const char * searchterm)
 {
     const char * lang = NULL;
@@ -93,6 +94,7 @@ GlyCacheList * generic_google_parse(cb_object * capo)
 
     size_t urlc = 0;
     char * find = capo->cache->data;
+
     while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && continue_search(urlc,capo->s))
     {
         char * end_of_url;
