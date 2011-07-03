@@ -97,12 +97,13 @@ enum GLYR_GET_TYPE {
         GET_ARTIST_PHOTOS = 3, /*!< Get pics for (artist) */
         GET_ARTISTBIO = 4, /*!< Get bio of (artist) */
         GET_SIMILIAR_ARTISTS = 5, /*!< Get similiar artists to (artist) */
-        GET_ALBUM_REVIEW = 6, /*!< Get album review to (artist|album) */
-        GET_TRACKLIST = 7, /*!< Get list of tracks for album (artist|album) */
-        GET_TAGS = 8, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
-        GET_RELATIONS = 9, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
-        GET_ALBUMLIST= 10, /*!< Get a list of albums by (artist) */
-        GET_UNSURE = 11 /*!< Do nothing but relax */
+        GET_SIMILIAR_SONGS = 6, /*!< Get similiar songs (artist|title) */
+        GET_ALBUM_REVIEW = 7, /*!< Get album review to (artist|album) */
+        GET_TRACKLIST = 8, /*!< Get list of tracks for album (artist|album) */
+        GET_TAGS = 9, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
+        GET_RELATIONS = 10, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
+        GET_ALBUMLIST= 11, /*!< Get a list of albums by (artist) */
+        GET_UNSURE = 12 /*!< Do nothing but relax */
 };
 
 /**
@@ -118,6 +119,7 @@ enum GLYR_DATA_TYPE {
         TYPE_COVER_SEC, /*!< A cover known to be the backside, inlet etc. */
         TYPE_AINFO,  /*!< Artist bio */
         TYPE_SIMILIAR, /*!< Similiar artists */
+        TYPE_SIMILIAR_SONG, /*!< Similar songs */
         TYPE_ALBUMLIST, /*!< List of albums, each cache containing one name */
         TYPE_TAGS,	/*!< List of (random) tags, each cache containing one name */
         TYPE_TAG_ARTIST,/*!< Tag associated with the artist */

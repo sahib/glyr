@@ -148,7 +148,7 @@ static void sig_handler(int signal)
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
         bool result = false;
-
+puts(arg);
         if(!arg) {
                 return true;
         }
@@ -160,7 +160,8 @@ static bool set_get_type(GlyQuery * s, const char * arg)
         if(cp_name && cp_keys && cp_gids) {
                 int i = 0;
                 for(; cp_name[i]; i++) {
-                        if(!strcmp(arg,cp_name[i]) || *arg == cp_keys[i]) {
+                        if(!strcmp(arg,cp_name[i])/* || *arg == cp_keys[i] */) {
+                                puts(cp_name[i]);
                                 GlyOpt_type(s,cp_gids[i]);
                                 result = true;
                         }
@@ -509,8 +510,10 @@ static void usage(GlyQuery * s)
         list_provider_at_id(GET_ARTIST_PHOTOS,13,s);
         glyr_message(-1,s,stderr,"\n"IN C_"review:\n");
         list_provider_at_id(GET_ALBUM_REVIEW,13,s);
-        glyr_message(-1,s,stderr,"\n"IN C_"similiar:\n");
+        glyr_message(-1,s,stderr,"\n"IN C_"similiar artists:\n");
         list_provider_at_id(GET_SIMILIAR_ARTISTS,13,s);
+        glyr_message(-1,s,stderr,"\n"IN C_"similia songs:\n");
+        list_provider_at_id(GET_SIMILIAR_SONGS,13,s);
         glyr_message(-1,s,stderr,"\n"IN C_"ainfo:\n");
         list_provider_at_id(GET_ARTISTBIO,13,s);
         glyr_message(-1,s,stderr,"\n"IN C_"tracklist:\n");
@@ -925,6 +928,9 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
         case GET_SIMILIAR_ARTISTS:
                 m_path = path_similiar(s,sd,iter);
                 break;
+        case GET_SIMILIAR_SONGS:
+                m_path = path_similiar(s,sd,iter);
+                break;
         case GET_ALBUM_REVIEW:
                 m_path = path_review(s,sd,iter);
                 break;
@@ -996,6 +1002,9 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
                 break;
         case TYPE_SIMILIAR:
                 glyr_message(1,s,stderr,"similiar artist");
+                break;
+        case TYPE_SIMILIAR_SONG:
+                glyr_message(1,s,stderr,"similiar song");
                 break;
         case TYPE_TRACK:
                 glyr_message(1,s,stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60);
