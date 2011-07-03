@@ -6,6 +6,8 @@ SET(CDEBUG "-ggdb3")
 SET(CWARN "-Wall -Wstrict-prototypes")
 SET(COPT "-Os -march=native -fomit-frame-pointer")
 
+SET(CMAKE_INSTALL_PREFIX "/usr")
+
 if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
 else()
@@ -36,8 +38,6 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 	CACHE PATH
 	"Single Directory for all static libraries."
 	)
-
-
 
 # set directories
 SET( SUBDIR_LIB lib)
