@@ -148,7 +148,6 @@ static void sig_handler(int signal)
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
         bool result = false;
-puts(arg);
         if(!arg) {
                 return true;
         }
@@ -161,7 +160,6 @@ puts(arg);
                 int i = 0;
                 for(; cp_name[i]; i++) {
                         if(!strcmp(arg,cp_name[i])/* || *arg == cp_keys[i] */) {
-                                puts(cp_name[i]);
                                 GlyOpt_type(s,cp_gids[i]);
                                 result = true;
                         }
