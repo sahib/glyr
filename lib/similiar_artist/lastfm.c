@@ -84,7 +84,7 @@ GlyCacheList * similiar_lastfm_parse(cb_object * capo)
         char * img_e = in_tag(find,IMAGE_E_BEGIN,IMAGE_ENDIN);
         char * img_x = in_tag(find,IMAGE_X_BEGIN,IMAGE_ENDIN);
 
-        char * composed = strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",name,match,url,img_s,img_m,img_l,img_e,img_x);
+        char * composed = strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",name,match,url,img_s,img_m,img_l,img_e,img_x);
 
         if(composed != NULL)
         {

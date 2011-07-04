@@ -34,7 +34,8 @@
 #include "lyrics.h"
 #include "photos.h"
 #include "ainfo.h"
-#include "similiar.h"
+#include "similiar_artist.h"
+#include "similiar_song.h"
 #include "review.h"
 #include "tracklist.h"
 #include "tags.h"
@@ -69,17 +70,18 @@ static GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID);
 // Fill yours in here if you added a new one.
 GlyPlugin getwd_commands [] =
 {
-    {"cover" ,   "c",  NULL, false, {NULL, NULL, NULL, false}, GET_COVERART         },
-    {"lyrics",   "l",  NULL, false, {NULL, NULL, NULL, false}, GET_LYRICS           },
-    {"photos",   "p",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTIST_PHOTOS    },
-    {"ainfo",    "a",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTISTBIO        },
-    {"similiar", "s",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR_ARTISTS },
-    {"review",   "r",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUM_REVIEW     },
-    {"albumlist","i",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUMLIST        },
-    {"tags",     "t",  NULL, false, {NULL, NULL, NULL, false}, GET_TAGS             },
-    {"relations","n",  NULL, false, {NULL, NULL, NULL, false}, GET_RELATIONS        },
-    {"tracklist","r",  NULL, false, {NULL, NULL, NULL, false}, GET_TRACKLIST        },
-    {NULL,       NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE             }
+    {"cover" ,         "c",  NULL, false, {NULL, NULL, NULL, false}, GET_COVERART         },
+    {"lyrics",         "l",  NULL, false, {NULL, NULL, NULL, false}, GET_LYRICS           },
+    {"photos",         "p",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTIST_PHOTOS    },
+    {"ainfo",          "a",  NULL, false, {NULL, NULL, NULL, false}, GET_ARTISTBIO        },
+    {"similiar_artist","s",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR_ARTISTS },
+    {"similiar_song",  "m",  NULL, false, {NULL, NULL, NULL, false}, GET_SIMILIAR_SONGS   },
+    {"review",         "r",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUM_REVIEW     },
+    {"albumlist",      "i",  NULL, false, {NULL, NULL, NULL, false}, GET_ALBUMLIST        },
+    {"tags",           "t",  NULL, false, {NULL, NULL, NULL, false}, GET_TAGS             },
+    {"relations",      "n",  NULL, false, {NULL, NULL, NULL, false}, GET_RELATIONS        },
+    {"tracklist",      "r",  NULL, false, {NULL, NULL, NULL, false}, GET_TRACKLIST        },
+    {NULL,             NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE             }
 };
 
 /*--------------------------------------------------------*/
@@ -583,6 +585,9 @@ GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
     case GET_SIMILIAR_ARTISTS:
         result = get_similiar(settings);
         break;
+    case GET_SIMILIAR_SONGS:
+        result = get_similiar_song(settings);
+        break;
     case GET_ALBUM_REVIEW:
         result = get_review(settings);
         break;
@@ -787,6 +792,8 @@ static GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
         return glyr_get_ainfo_providers();
     case GET_SIMILIAR_ARTISTS:
         return glyr_get_similiar_providers();
+    case GET_SIMILIAR_SONGS:
+        return glyr_get_similiar_song_providers();
     case GET_ALBUM_REVIEW:
         return glyr_get_review_providers();
     case GET_TRACKLIST:

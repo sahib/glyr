@@ -27,7 +27,7 @@
 #include "types.h"
 #include "stringlib.h"
 
-#include "similiar/lastfm.h"
+#include "similiar_artist/lastfm.h"
 
 // Add your's here
 GlyPlugin similiar_providers[] =
