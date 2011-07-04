@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 PROJECT( glyr C )
 
+# Change default dir
+SET(CMAKE_INSTALL_PREFIX "/usr")
+
 SET(CSTANDARD "-std=gnu99")
 SET(CDEBUG "-ggdb3")
 SET(CWARN "-Wall -Wstrict-prototypes")
