@@ -108,6 +108,18 @@ typedef struct GlyPlugin
 } GlyPlugin;
 
 
+typedef struct GlyGetter
+{
+    GlyPlugin * provider;
+    enum GLYR_GET_TYPE type;
+    const char * name;
+
+    GlyCacheList * (* get_callback) (GlyQuery * q); 
+    GlyCacheList * (* finalize) (GlyCacheList * result, GlyQuery * settings);
+    
+} GlyGetter;
+
+
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
 // Other parts of the program shall not use this struct

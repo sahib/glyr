@@ -31,11 +31,6 @@
 * @date 2011-06-14
 */
 
-#ifdef SWIG_IS_WORKING
-    #error "olol"
-#endif 
-
-
 /* All structs used by glyr are here */
 #include "types.h"
 	

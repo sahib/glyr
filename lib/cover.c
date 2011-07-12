@@ -235,3 +235,12 @@ GlyCacheList * get_cover(GlyQuery * settings)
 }
 
 /* ------------------------------------- */
+
+GlyGetter cover_plugin = {
+	.name = "cover",
+	.type = GET_COVERART,
+	.provider = cover_providers,
+	.get_callback = get_cover,
+	.finalize = cover_finalize
+};
+
