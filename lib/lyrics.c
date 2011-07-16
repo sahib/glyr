@@ -38,6 +38,7 @@
 #include "lyrics/metrolyrics.h"
 #include "lyrics/lyricstime.h"
 #include "lyrics/lyricsreg.h"
+#include "lyrics/lipwalk.h"
 
 // endmarks
 #define LATE "<div id='d_navigation'"
@@ -60,6 +61,7 @@ GlyPlugin lyric_providers[] =
     {"songlyrics",  "s", "songlyrics",  false, {lyrics_songlyrics_parse,   lyrics_songlyrics_url,   NULL, true }, GRP_SPCL | GRP_SLOW},
     {"darklyrics",  "y", "darklyrics",  false, {lyrics_darklyrics_parse,   lyrics_darklyrics_url,   DARE, false}, GRP_SAFE | GRP_FAST},
     {"metrolyrics", "m", "metrolyrics", false, {lyrics_metrolyrics_parse,  lyrics_metrolyrics_url,  NULL, false}, GRP_SPCL | GRP_SLOW},
+    {"lipwalk",     "z", "lipwalk",     false, {lyrics_lipwalk_parse,      lyrics_lipwalk_url,      NULL, false}, GRP_SPCL | GRP_SLOW},
     { NULL,         NULL, NULL,         false, {NULL,                      NULL,                    NULL, false}, GRP_NONE | GRP_NONE}
 };
 
