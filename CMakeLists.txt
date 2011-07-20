@@ -44,8 +44,11 @@ SET( SUBDIR_LIB lib)
 SET( SUBDIR_SRC src)
 SET( SUBDIR_SWIG swig)
 
-# find libcurl dependency
+# Find deps
 FIND_PACKAGE(CURL REQUIRED)
+# Gtk for now, too lazy to find the glib pack
+FIND_PACKAGE(GTK2 REQUIRED)
+INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
 
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
 set (DIR_COVER ${DIR_ROOT}/cover )

@@ -169,3 +169,13 @@ GlyCacheList * get_photos(GlyQuery * settings)
 
     return NULL;
 }
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_artistphotos = {
+	.name = "ArtistPhoto Fetcher",
+	.type = GET_ARTIST_PHOTOS,
+	.get  = get_photos,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

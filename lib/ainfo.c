@@ -45,15 +45,21 @@ GlyPlugin ainfo_providers[] =
     { NULL,         NULL,NULL,                false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 
+/*-------------------------------------*/
+
 GlyPlugin * glyr_get_ainfo_providers(void)
 {
     return copy_table(ainfo_providers,sizeof(ainfo_providers));
 }
 
+/*-------------------------------------*/
+
 static GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     return generic_finalizer(result,settings,TYPE_AINFO);
 }
+
+/*-------------------------------------*/
 
 GlyCacheList * get_ainfo(GlyQuery * settings)
 {
@@ -68,3 +74,15 @@ GlyCacheList * get_ainfo(GlyQuery * settings)
     }
     return result;
 }
+
+/*-------------------------------------*/
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_artistbio = {
+	.name = "ArtistInfo Fetcher",
+	.type = GET_ARTISTBIO,
+	.get  = get_ainfo,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

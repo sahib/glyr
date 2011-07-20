@@ -59,3 +59,13 @@ GlyCacheList * get_tracklist(GlyQuery * settings)
     }
     return result;
 }
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_tracklist = {
+	.name = "Tracklist Fetcher",
+	.type = GET_TRACKLIST,
+	.get  = get_tracklist,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

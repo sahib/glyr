@@ -59,4 +59,14 @@ GlyCacheList * get_similiar(GlyQuery * settings)
         glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to find similiar artist (o rly?).\n");
     }
     return result;
-}
+} 
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_similiar_artists = {
+	.name = "SimilarArtist Fetcher",
+	.type = GET_SIMILIAR_ARTISTS,
+	.get  = get_similiar,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

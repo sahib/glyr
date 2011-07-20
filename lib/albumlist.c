@@ -69,3 +69,13 @@ GlyCacheList * get_albumlist(GlyQuery * settings)
     return result;
 }
 //-------------------------------------
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_albumlist = {
+	.name = "ArtistInfo Fetcher",
+	.type = GET_ALBUMLIST,
+	.get  = get_albumlist,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

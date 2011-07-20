@@ -62,3 +62,13 @@ GlyCacheList * get_review(GlyQuery * settings)
     }
     return result;
 }
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_review = {
+	.name = "Review Fetcher",
+	.type = GET_ALBUM_REVIEW,
+	.get  = get_review,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

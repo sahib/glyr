@@ -59,3 +59,13 @@ GlyCacheList * get_tags(GlyQuery * settings)
     }
     return result;
 }
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_tags = {
+	.name = "Tag Fetcher",
+	.type = GET_TAGS,
+	.get  = get_tags,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

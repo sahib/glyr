@@ -60,3 +60,13 @@ GlyCacheList * get_similiar_song(GlyQuery * settings)
     }
     return result;
 }
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_similar_song = {
+	.name = "SimilarSong Fetcher",
+	.type = GET_SIMILIAR_SONGS,
+	.get  = get_similiar_song,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

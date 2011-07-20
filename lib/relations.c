@@ -69,3 +69,13 @@ GlyCacheList * get_relations(GlyQuery * settings)
 }
 
 //-------------------------------------
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_relations = {
+	.name = "Relation Fetcher",
+	.type = GET_RELATIONS,
+	.get  = get_relations,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};

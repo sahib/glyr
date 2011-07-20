@@ -107,6 +107,24 @@ typedef struct GlyPlugin
 
 } GlyPlugin;
 
+// Internal representation of one metadataprovider
+typedef struct MetaDataFetcher
+{
+   /* cover, lyrics, stuff */
+   const char * name;
+ 
+   /* will be replaced */
+   GlyPlugin * provider;
+
+   /* what this thing delievers */
+   enum GLYR_GET_TYPE type; 
+
+   /* callbacks */
+   GlyCacheList * (*get)(GlyQuery *); 
+   void (*init)(void);  
+   void (*destroy)(void);  
+
+} MetaDataFetcher;
 
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins

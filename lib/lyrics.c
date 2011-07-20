@@ -63,10 +63,14 @@ GlyPlugin lyric_providers[] =
     { NULL,         NULL, NULL,         false, {NULL,                      NULL,                    NULL, false}, GRP_NONE | GRP_NONE}
 };
 
+/* ------------------------------------- */
+
 GlyPlugin * glyr_get_lyric_providers(void)
 {
     return copy_table(lyric_providers,sizeof(lyric_providers));
 }
+
+/* ------------------------------------- */
 
 static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings)
 {
@@ -124,6 +128,8 @@ static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings
     return lst;
 }
 
+/* ------------------------------------- */
+
 GlyCacheList * get_lyrics(GlyQuery * settings)
 {
     GlyCacheList * result = NULL;
@@ -137,3 +143,17 @@ GlyCacheList * get_lyrics(GlyQuery * settings)
     }
     return result;
 }
+
+/* ------------------------------------- */
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_lyrics = {
+	.name = "Lyrics Fetcher",
+	.type = GET_LYRICS,
+	.get  = get_lyrics,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};
+
+/* ------------------------------------- */

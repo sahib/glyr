@@ -235,3 +235,16 @@ GlyCacheList * get_cover(GlyQuery * settings)
 }
 
 /* ------------------------------------- */
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_cover = {
+	.name = "Cover Fetcher",
+	.type = GET_COVERART,
+	.get  = get_cover,
+	/* CTor | DTor */
+	.init    = NULL,
+	.destroy = NULL
+};
+
+/* ------------------------------------- */
+
