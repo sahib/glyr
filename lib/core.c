@@ -431,37 +431,6 @@ static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery 
 }
 
 /*--------------------------------------------------------*/
-
-// Init a callback object and a curl_easy_handle
-static GlyMemCache * handle_init(CURLM * cm, cb_object * capo, GlyQuery *s, long timeout)
-{
-	// You did sth. wrong..
-	if(!capo || !capo->url)
-	    return NULL;
-
-	// Init handle
-	CURL *eh = curl_easy_init();
-
-	// Init cache
-	GlyMemCache *dlcache = DL_init();
-	if(capo && capo->plug && capo->plug->plug.endmarker)
-	{
-		dlcache->dsrc = strdup(capo->plug->plug.endmarker);
-	}
-
-	// Set handle
-	capo->handle = eh;
-
-	// Configure curl
-	DL_setopt(eh, dlcache, capo->url, s,(void*)capo,timeout);
-
-	// Add handle to multihandle
-	curl_multi_add_handle(cm, eh);
-	return dlcache;
-}
-
-/*--------------------------------------------------------*/
-
 // return a memcache only with error field set (for error report)
 GlyMemCache * DL_error(int eid)
 {
@@ -703,40 +672,35 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 
 /*--------------------------------------------------------*/
 
-static void print_progress(int status, GlyQuery * s)
+// Init a callback object and a curl_easy_handle
+static GlyMemCache * handle_init(CURLM * cm, cb_object * capo, GlyQuery *s, long timeout)
 {
-	char c = 0;
-	switch(status % 4)
+	GlyMemCache * dlcache = NULL;
+	if(capo && capo->url) 
 	{
-		case 0:
-			c ='\\';
-			break;
-		case 1:
-			c ='-';
-			break;
-		case 2:
-			c ='/';
-			break;
-		case 3:
-			c ='|';
-			break;
+		/* Init handle */
+		CURL *eh = curl_easy_init();
+
+		/* Init cache */
+		dlcache = DL_init();
+
+		if(capo && capo->plug && capo->plug->plug.endmarker){
+		    dlcache->dsrc = strdup(capo->plug->plug.endmarker);
+		}
+
+		/* Remind this handle */
+		capo->handle = eh;
+
+		/* Configure this handle */
+		DL_setopt(eh, dlcache, capo->url, s,(void*)capo,timeout);
+
+		/* Add handle to multihandle */
+		curl_multi_add_handle(cm, eh);
 	}
-	glyr_message(2,s,stderr,C_"=> Downloading [%c] [#%d]\r",c,status+1);
+	return dlcache;
 }
 
-
-// macro to align console output..
-#define ALIGN(m)                                      \
-	if(m > 0) {                                   \
-		int i = 0;                            \
-		int d = ABS(20-m);                    \
-		glyr_message(2,s,stderr,C_);          \
-		for(;i<d;i++) {                       \
-			glyr_message(2,s,stderr,"."); \
-		}  }                                  \
-
-
-
+/*--------------------------------------------------------*/
 GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac)
 {
 	/* Storage for result items */
@@ -755,19 +719,17 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 	
 		/* Curl Handlers (~ container for easy handlers) */	
 		CURLM   * cmHandle = curl_multi_init();
-		CURLMsg * msg;
-		
-		curl_multi_setopt(cmHandle, CURLMOPT_MAXCONNECTS, (long)(s->parallel * parallel_fac));
+		curl_multi_setopt(cmHandle, CURLMOPT_MAXCONNECTS,abs_parallel);
 		curl_multi_setopt(cmHandle, CURLMOPT_PIPELINING, 1L);
 		
-		GList * cb_list = NULL;
+		GList * elem, * cb_list = NULL;
 
 		/* Now create cb_objects */
 		for (elem = url_list; elem; elem = elem->next) {
 			cb_object * obj = malloc(sizeof(cb_object));
-			obj.cache = handle_init(cmHandle,obj,s,timeout);
-			obj.url   = (gchar*)(elem->data);
-			cb_list   = g_list_prepend(cb_list,obj); 
+			obj->url   = (gchar*)(elem->data);
+			obj->cache = handle_init(cmHandle,obj,s,abs_timeout);
+			cb_list    = g_list_prepend(cb_list,obj); 
 		}
 
 		while(U != 0) {
@@ -775,6 +737,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 			CURLMcode merr;
 			if((merr = curl_multi_perform(cmHandle, &U)) != CURLM_OK)
 			    return NULL;	
+
 			if(U != 0) {
 				FD_ZERO(&ReadFDS);
 				FD_ZERO(&WriteFDS);
@@ -800,14 +763,16 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 					/* Now block till something interesting happens with the download */
 					if (select(M+1, &ReadFDS, &WriteFDS, &ErrorFDS, &Tmax) == -1)
 					{
-						glyr_message(-1,NULL,stderr, "E: select(%i ... %li): %i: %s\n",M+1, L, errno, strerror(errno));
+						glyr_message(-1,NULL,stderr, "E: select(%i ... %li): %i: %s\n",
+									     M+1, wait_time, errno, strerror(errno));
 						return NULL;
 					}
 				}
 			}
 
 			/* select() returned. There might be some fresh flesh! - Check. */
-			while ((msg = curl_multi_info_read(cm, &Q)))
+			CURLMsg * msg;
+			while ((msg = curl_multi_info_read(cmHandle, &Q)))
 			{
 				/* That download is ready to be viewed */
 				if (msg->msg == CURLMSG_DONE)
@@ -817,20 +782,18 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 
 					/* Get the callback object associated with the curl handle
 					 * for some odd reason curl requires a char * pointer */
-					const char * p_pass = NULL;
-					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, &p_pass);
+					cb_object * capo;
+					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, (const char*)&capo);
 
-					/* Cast to actual object, 
-					   capo contains now the downloaded cache, ready to parse */
-					cb_object * capo = (cb_object *) p_pass;
-
-					if(msg->data.result == CURLE_OK && capo && capo->cacahe && capo->callback)
+					/* capo contains now the downloaded cache, ready to parse */
+					if(msg->data.result == CURLE_OK && capo && capo->cache)
 					{
 						/* Do something.. */
+						puts(capo->cache->data);
 
 					} else {
 						/* Something in this download was wrong. Tell us what. */
-						char * errstring = curl_easy_strerror(msg->data.result);
+						char * errstring = (char*)curl_easy_strerror(msg->data.result);
 						fprintf(stderr, "glyrE: Downloaderror: %s [errno:%d]\n",
 							        errstring ? errstring : "Unknown Error",
 							        msg->data.result);
@@ -845,10 +808,14 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 					fprintf(stderr,"glyrE: multiDL-errorcode: %d\n",msg->msg);
 				}
 			}
+		}
+		curl_multi_cleanup(cmHandle);
 	}
 	return item_list;
 } 
 
+GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s) {}
+#if 0
 GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s)
 {
 	// curl multi handles
@@ -950,10 +917,8 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 				// Cast to actual object
 				cb_object * capo = (cb_object *) p_pass;
 
-				int align_msg = 0;
 				if(!capo->batch)
 				{
-					align_msg = strlen(capo->plug->name);
 					glyr_message(2,s,stderr,"Query: %s",capo->plug->color);
 				}
 
@@ -975,13 +940,11 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 						{
 							if(!capo->batch)
 							{
-								ALIGN(align_msg);
 								glyr_message(2,s,stderr,C_G"found!"C_" ["C_R"%d item%c"C_"%s]\n",cl->size,cl->size == 1 ? ' ' : 's',cl->size>9 ? "" : " ");
 								s->itemctr += cl->size;
 
-								/* Copy also the exact provider string
-								 * This makes displaying the 'author' easier
-								 */
+								// Copy also the exact provider string
+								// This makes displaying the 'author' easier
 								size_t cl_list_iter;
 								for(cl_list_iter = 0; cl_list_iter < cl->size; cl_list_iter++)
 								{
@@ -990,7 +953,6 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 							}
 							else
 							{
-								print_progress(n_sources, s);
 							}
 
 							if(!result_lst)
@@ -1019,7 +981,6 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 						}
 						else if(!capo->batch)
 						{
-							ALIGN(align_msg);
 							int err = (!cl) ? -1 : cl->list[0]->error;
 							switch(err)
 							{
@@ -1044,7 +1005,6 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 					}
 					else
 					{
-						ALIGN(align_msg);
 						glyr_message(1,s,stderr,"WARN: Unable to exec callback (=NULL)\n");
 					}
 
@@ -1058,13 +1018,11 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 				}
 				else if(!capo->batch && msg->data.result != CURLE_OK)
 				{
-					ALIGN(align_msg);
 					const char * curl_err = curl_easy_strerror(msg->data.result);
 					glyr_message(2,s,stderr,C_"%s "C_R"[errno:%d]\n"C_,curl_err ? curl_err : "Unknown Error",msg->data.result);
 				}
 				else if(!capo->batch)
 				{
-					ALIGN(align_msg);
 					glyr_message(2,s,stderr,C_R"failed.\n"C_);
 				}
 
@@ -1132,6 +1090,7 @@ GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, 
 	curl_multi_cleanup(cm);
 	return result_lst;
 }
+#endif 
 
 /*--------------------------------------------------------*/
 
@@ -1153,6 +1112,7 @@ void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_o
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 {
 	GHashTable * url_table = g_hash_table_new(g_str_hash,g_int_equal);	
+	GList * url_list = NULL;
 
 	/* Iterate over all sources for this fetcher  */
 	for(GList * source = fetcher->provider; source != NULL; source = source->next)
@@ -1172,10 +1132,9 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 						query->album,
 						query->title);
 
-				printf("Key %c\n",item->key);
-
 				/* add it to the hash table and relate it to the sourcekey */
 				g_hash_table_insert(url_table,(gpointer)&item->key,(gpointer)prepared);
+				url_list = g_list_prepend(url_list,(gpointer)prepared);
 
 				/* If the URL was dyn. allocated, we should go and free it */
 				if(item->free_url == true)
@@ -1185,6 +1144,8 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 			}
 		}
 	}
+
+	async_download(url_list,query,1,1);
 
 	/* The providers are *always* sorted by priority */
 	for(GList * source = fetcher->provider; source != NULL; source = source->next)
@@ -1208,7 +1169,7 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 GlyCacheList * register_and_execute(GlyQuery * query, GlyCacheList * (*finalizer)(GlyCacheList *, GlyQuery *))
 {
 	// Get the providers
-	GlyPlugin * pList = query->providers;
+	GlyPlugin * pList = (GlyPlugin *)query->providers;
 	if(pList == NULL)
 	{
 		glyr_message(-1,NULL,stderr,C_R"FATAL:"C_" Empty provider. Unable to register nor execute!\n");
