@@ -71,3 +71,15 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
     }
     return collection;
 }
+
+/*-----------------------------*/
+
+MetaDataSource albumlist_musicbrainz_src = {
+	.name = "musicbrainz",
+	.key = 'm',
+	.free_url = false,
+	.parser  = albumlist_musicbrainz_parse,
+	.get_url = albumlist_musicbrainz_url,
+	.type      = GET_ALBUMLIST,
+	.endmarker = NULL
+};

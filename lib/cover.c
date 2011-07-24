@@ -213,9 +213,8 @@ static GlyCacheList * cover_finalize(GlyCacheList * result, GlyQuery * settings)
 
 /* ------------------------------------- */
 
-GlyCacheList * get_cover(GlyQuery * settings)
+bool vdt_cover(GlyQuery * settings)
 {
-    GlyCacheList * res = NULL;
     if (settings && settings->artist && settings->album)
     {
         // validate size
@@ -225,13 +224,12 @@ GlyCacheList * get_cover(GlyQuery * settings)
         if(settings->cover.max_size <= 0)
             settings->cover.max_size = -1;
 
-        res = register_and_execute(settings, cover_finalize);
+        return true;
     }
     else
     {
-        glyr_message(1,settings,stderr,C_R"* "C_"%s is needed to download covers.\n",settings->artist ? "Album" : "Artist");
+		return false;
     }
-    return res;
 }
 
 /* ------------------------------------- */
@@ -240,10 +238,10 @@ GlyCacheList * get_cover(GlyQuery * settings)
 MetaDataFetcher glyrFetcher_cover = {
 	.name = "Cover Fetcher",
 	.type = GET_COVERART,
-	.get  = get_cover,
-	/* CTor | DTor */
+	.validate = vdt_cover,
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = cover_finalize
 };
 
 /* ------------------------------------- */

@@ -27,6 +27,7 @@
 
 /* libcurl */
 #include <curl/curl.h>
+#include <glib.h>
 
 // Nifty defines
 #define ABS(a)  (((a) < 0) ? -(a) : (a))
@@ -107,6 +108,8 @@ typedef struct GlyPlugin
 
 } GlyPlugin;
 
+/*------------------------------------------------------*/
+
 // Internal representation of one metadataprovider
 typedef struct MetaDataFetcher
 {
@@ -114,17 +117,40 @@ typedef struct MetaDataFetcher
    const char * name;
  
    /* will be replaced */
-   GlyPlugin * provider;
+   GList * provider;
 
    /* what this thing delievers */
    enum GLYR_GET_TYPE type; 
 
    /* callbacks */
-   GlyCacheList * (*get)(GlyQuery *); 
+   bool (*validate)(GlyQuery *); 
    void (*init)(void);  
-   void (*destroy)(void);  
+   void (*destroy)(void);
+   GlyCacheList* (*finalize)(GlyCacheList*,GlyQuery*);
 
 } MetaDataFetcher;
+
+/*------------------------------------------------------*/
+
+// Internal representation of one provider
+typedef struct MetaDataSource {
+      const char * name; /* Name of this provider            */
+      char key; 	 /* A key that may be used in --from */
+      
+      GlyCacheList * (* parser) (struct cb_object *); /* called when parsing is needed                  */
+      const char   * (* get_url)(GlyQuery *); 	      /* called when the url of this provider is needed */
+      const char   * endmarker;                       /* Download stops if this mark is found           */
+
+      enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
+
+      int priority;  /* What priority this plugin has            */
+
+      bool isUsed;   /* is used in searching? - set by .init     */
+      bool free_url; /* URL is dyn. allocated - set this always! */
+
+} MetaDataSource;
+
+/*------------------------------------------------------*/
 
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
@@ -138,9 +164,6 @@ typedef struct cb_object
 
     // What url to download before the callback is called
     char *url;
-
-    // Storage of the --of argument
-    const char ** info;
 
     // pointer to settings struct (artist,album,etc)
     GlyQuery * s;
@@ -167,6 +190,8 @@ typedef struct cb_object
 
 } cb_object;
 
+/*------------------------------------------------------*/
+
 // Internal list of errors
 // Use those with DL_error(ecode)
 enum CORE_ERR
@@ -178,6 +203,8 @@ enum CORE_ERR
     BAD_FORMAT,
     BLACKLISTED
 };
+
+/*------------------------------------------------------*/
 
 // Check if a plugin needs to search more items
 bool continue_search(int iter, GlyQuery * s);
@@ -218,6 +245,7 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 
 // Basic placeholder doing the job for review,tracklist..
 GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type);
+GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
 
 // just for fromoption...
 const char * grp_id_to_name(int id);

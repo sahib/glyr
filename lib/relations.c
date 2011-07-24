@@ -54,18 +54,17 @@ static GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * setti
 
 //-------------------------------------
 
-GlyCacheList * get_relations(GlyQuery * settings)
+bool vdt_relations(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist)
     {
-        result = register_and_execute(settings, relations_finalize);
+        return true;
     }
     else
     {
         glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get relations.\n");
+        return false;
     }
-    return result;
 }
 
 //-------------------------------------
@@ -74,8 +73,8 @@ GlyCacheList * get_relations(GlyQuery * settings)
 MetaDataFetcher glyrFetcher_relations = {
 	.name = "Relation Fetcher",
 	.type = GET_RELATIONS,
-	.get  = get_relations,
-	/* CTor | DTor */
+	.validate  = vdt_relations,
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = relations_finalize
 };

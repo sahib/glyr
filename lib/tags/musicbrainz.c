@@ -248,3 +248,13 @@ const char * tags_musicbrainz_url(GlyQuery * sets)
 }
 
 /*--------------------------------------------------------*/
+
+MetaDataSource tags_musicbrainz_src = {
+	.name = "musicbrainz",
+	.key  = 'm',
+	.parser    = tags_musicbrainz_parse,
+	.get_url   = tags_musicbrainz_url,
+	.endmarker = NULL, 
+	.free_url  = true,
+	.type      = GET_TAGS
+};

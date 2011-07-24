@@ -139,3 +139,13 @@ GlyCacheList * cover_amazon_parse(cb_object *capo)
     }
     return r_list;
 }
+
+MetaDataSource cover_amazon_src = {
+	.name      = "amazon",
+	.key       = 'a',
+	.parser    = cover_amazon_parse,
+	.get_url   = cover_amazon_url,
+	.type      = GET_COVERART,
+	.endmarker = NULL,
+	.free_url  = true
+};

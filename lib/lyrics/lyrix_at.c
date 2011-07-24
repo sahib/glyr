@@ -113,3 +113,14 @@ GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
     }
     return r_list;
 }
+/*--------------------------------------------------------*/
+
+MetaDataSource lyrics_lyrix_src = {
+	.name = "lyrix",
+	.key  = 'a',
+	.parser    = lyrics_lyrixat_parse,
+	.get_url   = lyrics_lyrixat_url,
+	.type      = GET_LYRICS,
+	.endmarker = "<div id='d_navigation'",
+	.free_url  = false
+};

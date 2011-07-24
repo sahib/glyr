@@ -123,3 +123,13 @@ GlyCacheList * cover_google_parse(cb_object * capo)
 {
     return generic_google_parse(capo);
 }
+
+MetaDataSource cover_google_src = {
+	.name      = "google",
+	.key       = 'g',
+	.parser    = cover_google_parse,
+	.get_url   = cover_google_url,
+	.type      = GET_COVERART,
+	.endmarker = NULL,
+	.free_url  = true
+};

@@ -93,3 +93,13 @@ GlyCacheList * cover_lastfm_parse(cb_object *capo)
     }
     return r_list;
 }
+
+MetaDataSource cover_lastfm_src = {
+	.name      = "lastfm",
+	.key       = 'l',
+	.parser    = cover_lastfm_parse,
+	.get_url   = cover_lastfm_url,
+	.type      = GET_COVERART,
+	.endmarker = NULL,
+	.free_url  = false
+};

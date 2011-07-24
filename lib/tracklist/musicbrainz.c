@@ -96,3 +96,16 @@ GlyCacheList * tracklist_musicbrainz_parse(cb_object * capo)
     }
     return ls;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource tracklist_musicbrainz_src = {
+	.name = "musicbrainz",
+	.key  = 'm',
+	.parser    = tracklist_musicbrainz_parse,
+	.get_url   = tracklist_musicbrainz_url,
+	.endmarker = NULL, 
+	.free_url  = false,
+	.type      = GET_TRACKLIST
+};
+

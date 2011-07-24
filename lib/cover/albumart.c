@@ -86,3 +86,13 @@ GlyCacheList * cover_albumart_parse(cb_object * capo)
     }
     return r_list;
 }
+
+MetaDataSource cover_albumart_src = {
+	.name      = "albumart",
+	.key       = 'b',
+	.parser    = cover_albumart_parse,
+	.get_url   = cover_albumart_url,
+	.type      = GET_COVERART,
+	.endmarker = "<div id=\"pagination\"",
+	.free_url  = false
+};

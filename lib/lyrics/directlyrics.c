@@ -102,3 +102,15 @@ GlyCacheList * lyrics_directlyrics_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*---------------------------------------------------*/
+
+MetaDataSource lyrics_directlyrics_src = {
+	.name = "directlyrics",
+	.key  = 'i',
+	.parser    = lyrics_directlyrics_parse,
+	.get_url   = lyrics_directlyrics_url,
+	.type      = GET_LYRICS,
+	.endmarker = "<!-- google_ad_section_start(weight=ignore) -->",
+	.free_url  = true
+};

@@ -135,3 +135,15 @@ GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*-----------------------------------------------*/
+
+MetaDataSource cover_lyricswiki_src = {
+	.name      = "lyricswiki",
+	.key       = 'w',
+	.parser    = cover_lyricswiki_parse,
+	.get_url   = cover_lyricswiki_url,
+	.type      = GET_COVERART,
+	.endmarker = NULL,
+	.free_url  = false
+};

@@ -71,3 +71,15 @@ GlyCacheList * photos_lastfm_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource photos_lastfm_src = {
+	.name = "lastfm",
+	.key  = 'l',
+	.parser    = photos_lastfm_parse,
+	.get_url   = photos_lastfm_url,
+	.type      = GET_ARTIST_PHOTOS,
+	.endmarker = NULL,
+	.free_url  = false 
+};

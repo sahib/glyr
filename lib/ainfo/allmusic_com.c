@@ -161,3 +161,15 @@ GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*-------------------------------------*/
+
+MetaDataSource ainfo_allmusic_src = {
+	.name      = "allmusic",
+	.key       = 'm',
+	.free_url  = false,
+	.type      = GET_ARTISTBIO,
+	.parser    = ainfo_allmusic_parse,
+	.get_url   = ainfo_allmusic_url,
+	.endmarker = NULL
+};

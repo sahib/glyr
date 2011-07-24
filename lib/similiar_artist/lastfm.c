@@ -120,3 +120,15 @@ GlyCacheList * similiar_lastfm_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource similar_artist_lastfm_src = {
+	.name = "lastfm",
+	.key  = 'l',
+	.parser    = similiar_lastfm_parse,
+	.get_url   = similiar_lastfm_url,
+	.endmarker = NULL, 
+	.free_url  = true,
+	.type      = GET_SIMILIAR_ARTISTS
+};

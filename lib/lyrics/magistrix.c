@@ -158,3 +158,14 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
     }
     return r_list;
 }
+/*--------------------------------------------------------*/
+
+MetaDataSource lyrics_magistrix_src = {
+	.name = "magistrix",
+	.key  = 'x',
+	.parser    = lyrics_magistrix_parse,
+	.get_url   = lyrics_magistrix_url,
+	.type      = GET_LYRICS,
+	.endmarker = NULL,
+	.free_url  = false
+};

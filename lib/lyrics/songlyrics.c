@@ -92,4 +92,16 @@ GlyCacheList * lyrics_songlyrics_parse(cb_object * capo)
         DL_add_to_list(r_list, result);
     }
     return r_list;
-}
+}  
+
+/*--------------------------------------------------------*/
+
+MetaDataSource lyrics_songlyrics_src = {
+	.name = "songlyrics",
+	.key  = 's',
+	.parser    = lyrics_songlyrics_parse,
+	.get_url   = lyrics_songlyrics_url,
+	.type      = GET_LYRICS,
+	.endmarker = NULL,
+	.free_url  = true
+};

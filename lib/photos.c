@@ -160,22 +160,23 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
 }
 
 
-GlyCacheList * get_photos(GlyQuery * settings)
+bool vdt_photos(GlyQuery * settings)
 {
-    if (settings && settings->artist)
-        return register_and_execute(settings,photo_finalize);
-    else
+    if (settings && settings->artist) {
+        return true;
+    } else {
         glyr_message(2,settings,stderr,C_R"*"C_" Artist is needed to download artist-related photos!\n");
-
-    return NULL;
+		return false;
+    }
 }
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistphotos = {
 	.name = "ArtistPhoto Fetcher",
 	.type = GET_ARTIST_PHOTOS,
-	.get  = get_photos,
+	.validate  = vdt_photos,
 	/* CTor | DTor */
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = photo_finalize
 };

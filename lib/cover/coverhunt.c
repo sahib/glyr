@@ -135,3 +135,13 @@ GlyCacheList * cover_coverhunt_parse(cb_object *capo)
     }
     return r_list;
 }
+
+MetaDataSource cover_coverhunt_src = {
+	.name      = "coverhunt",
+	.key       = 'c',
+	.parser    = cover_coverhunt_parse,
+	.get_url   = cover_coverhunt_url,
+	.type      = GET_COVERART,
+	.endmarker = "<div id=\"footer\">",
+	.free_url  = false
+};

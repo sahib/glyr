@@ -80,3 +80,15 @@ GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*---------------------------------------------------*/
+
+MetaDataSource lyrics_lyrdb_src = {
+	.name = "lyrdb",
+	.key  = 'd',
+	.parser    = lyrics_lyrdb_parse,
+	.get_url   = lyrics_lyrdb_url,
+	.type      = GET_LYRICS,
+	.endmarker = NULL,
+	.free_url  = false
+};

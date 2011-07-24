@@ -46,26 +46,21 @@ static GlyCacheList * tracklist_finalize(GlyCacheList * result, GlyQuery * setti
     return generic_finalizer(result,settings,TYPE_TRACK);
 }
 
-GlyCacheList * get_tracklist(GlyQuery * settings)
+bool vdt_tracklist(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist && settings->album)
     {
-        result = register_and_execute(settings, tracklist_finalize);
+        return true;
     }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist and Album is needed to retrieve a tracklist (o rly?).\n");
-    }
-    return result;
+    return false;
 }
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tracklist = {
 	.name = "Tracklist Fetcher",
 	.type = GET_TRACKLIST,
-	.get  = get_tracklist,
-	/* CTor | DTor */
+	.validate  = vdt_tracklist,
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = tracklist_finalize
 };

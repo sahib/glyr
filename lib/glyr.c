@@ -26,6 +26,7 @@
 #include <libgen.h>
 #include <glib.h>
 
+#include "register_plugins.h"
 #include "stringlib.h"
 #include "core.h"
 
@@ -86,49 +87,7 @@ GlyPlugin getwd_commands [] =
         {NULL,             NULL, NULL, 42,    {NULL, NULL, NULL, false}, GRP_NONE             }
 };
 
-/* List of MetaDataFetchers */
-GList * glyrMetaDataPluginList = NULL;
-
-/* Externalized fetcher vars, add yours here */
-extern MetaDataFetcher glyrFetcher_cover;
-extern MetaDataFetcher glyrFetcher_lyrics;
-extern MetaDataFetcher glyrFetcher_artistphotos;
-extern MetaDataFetcher glyrFetcher_artistbio;
-extern MetaDataFetcher glyrFetcher_similiar_artists;
-extern MetaDataFetcher glyrFetcher_similar_song;
-extern MetaDataFetcher glyrFetcher_review;
-extern MetaDataFetcher glyrFetcher_albumlist;
-extern MetaDataFetcher glyrFetcher_tags;
-extern MetaDataFetcher glyrFetcher_relations;
-extern MetaDataFetcher glyrFetcher_tracklist;
-
-/*-----------------------------------------------*/
-
-void registerGlyrMetaDataFetcher(MetaDataFetcher * plug)
-{
-	if(plug != NULL) {
-	    glyrMetaDataPluginList = g_list_append(glyrMetaDataPluginList,(void*)plug);
-	}
-}
-
-/*-----------------------------------------------*/
-
-/* Register fetchers */
-void register_fetcher_plugins(void)
-{
-	/* add ypurs here */
-	registerGlyrMetaDataFetcher(&glyrFetcher_cover);
-	registerGlyrMetaDataFetcher(&glyrFetcher_lyrics);
-	registerGlyrMetaDataFetcher(&glyrFetcher_artistphotos);
-	registerGlyrMetaDataFetcher(&glyrFetcher_artistbio);
-	registerGlyrMetaDataFetcher(&glyrFetcher_similiar_artists);
-	registerGlyrMetaDataFetcher(&glyrFetcher_similar_song);
-	registerGlyrMetaDataFetcher(&glyrFetcher_review);
-	registerGlyrMetaDataFetcher(&glyrFetcher_albumlist);
-	registerGlyrMetaDataFetcher(&glyrFetcher_tags);
-	registerGlyrMetaDataFetcher(&glyrFetcher_relations);
-	registerGlyrMetaDataFetcher(&glyrFetcher_tracklist);
-}
+extern MetaDataSource tags_musicbrainz_src;
 
 /*--------------------------------------------------------*/
 /*-------------------- OTHER -----------------------------*/
@@ -139,17 +98,16 @@ GlyMemCache * Gly_copy_cache(GlyMemCache * source)
         return DL_copy(source);
 }
 
-
 /*--------------------------------------------------------*/
 
 // return a descriptive string on error ID
 const char * Gly_strerror(enum GLYR_ERROR ID)
 {
-        if(ID < (sizeof(err_strings)/sizeof(const char *)))
-        {
-                return err_strings[ID];
-        }
-        return NULL;
+	if(ID < (sizeof(err_strings)/sizeof(const char *)))
+	{
+		return err_strings[ID];
+	}
+	return NULL;
 }
 
 /*-----------------------------------------------*/
@@ -186,13 +144,14 @@ enum GLYR_ERROR GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void *
 
 enum GLYR_ERROR GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
 {
-        if(s == NULL) return GLYRE_EMPTY_STRUCT;
-        if(type < GET_UNSURE)
-        {
-                s->type = type;
-                return GLYRE_OK;
-        }
-        return GLYRE_BAD_VALUE;
+
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	if(type < GET_UNSURE)
+	{
+		s->type = type;
+		return GLYRE_OK;
+	}
+	return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
@@ -498,16 +457,11 @@ void Gly_destroy_query(GlyQuery * sets)
                                 sets->info[i] = NULL;
                         }
                 }
-
-                if(sets->providers != NULL)
-                {
-                        free(sets->providers);
-                        sets->providers = NULL;
-                }
 	
 		/* Reset query so it can be used again */
                 set_query_on_defaults(sets);
         }
+
 }
 
 /*-----------------------------------------------*/
@@ -558,10 +512,10 @@ GlyMemCache * Gly_new_cache(void)
 void Gly_add_to_list(GlyCacheList * l, GlyMemCache * c)
 {
         DL_add_to_list(l,c);
+
 }
 
 /*-----------------------------------------------*/
-
 
 // !! NOT THREADSAFE !! //
 void Gly_init(void)
@@ -594,20 +548,13 @@ void Gly_cleanup(void)
                 already_init = true;
         }
 
-	/* Destroy all fetchers */
-	if(!glyrMetaDataPluginList) {
-		GList * elem;
-		for(elem = glyrMetaDataPluginList; elem != NULL; elem = elem->next) {
-			MetaDataFetcher * item = elem->data;
-			if(item->destroy != NULL) {
-				item->destroy();
-			}
-		}
+puts("Flush..");
 
-		g_list_free_full(glyrMetaDataPluginList,NULL);
-		glyrMetaDataPluginList = NULL;
-	}
+	/* Destroy all fetchers */
+	unregister_fetcher_plugins();
 }
+
+
 
 /*-----------------------------------------------*/
 
@@ -627,34 +574,29 @@ GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 			glyr_message(2,settings,stderr,"Title: %s\n",settings->title);
 		}
 
-		if(!settings->providers)
-		{
-			GlyPlugin * p = Gly_get_provider_by_id(settings->type);
-			if(p != NULL)
-			{
-				glyr_register_group(p,GRP_ALL,true);
-				settings->providers = p;
-			}
-			else
-			{
-				if(e) *e = GLYRE_NO_PROVIDER;
-				return NULL;
-			}
-		}
-
 		GList * elem;
 		GlyCacheList * result = NULL;
 		if(e) *e = GLYRE_UNKNOWN_GET;
-		for(elem = glyrMetaDataPluginList; elem; elem = elem->next) { 
+		for(elem = r_getFList(); elem; elem = elem->next) { 
 			MetaDataFetcher * item = elem->data;
 			if(settings->type == item->type) {
-				if(item->get != NULL) {
-					glyr_message(2,settings,stderr,"Type:  %s\n",item->name);
+
+				/* validate may be NULL, default to true */
+				bool isValid = true;
+				if(item->validate != NULL) {
+				    isValid = item->validate(settings);   
+				} 
+
+				if(isValid) {
 					if(e) *e = GLYRE_OK;
-					result = item->get(settings);
+					glyr_message(2,settings,stderr,"Type:  %s\n",item->name);
+					
+					/* Now start your engines, gentlemen */
+					start_engine(settings,item);
 					break;
+
 				} else {
-					glyr_message(0,settings,stderr,C_R"get() callback is empty. This is a bug.\n"C_);
+					glyr_message(2,settings,stderr,C_R"Insufficient amount of data supplied for this fetcher.\n"C_);
 				}
 			}
 		}
@@ -757,7 +699,6 @@ const char ** GlyPlug_get_name_by_id(enum GLYR_GET_TYPE ID)
 			result[i  ] = strdup(plug[i].name);
 			result[++i] = NULL;
 		}
-		free(plug);
 	}
 	return result;
 }
@@ -805,7 +746,6 @@ const char * GlyPlug_get_key_by_id(enum GLYR_GET_TYPE ID)
 			result[i  ] = plug[i].key[0];
 			result[++i] = '\0';
 		}
-		free(plug);
 	}
 	return result;
 }
@@ -825,7 +765,6 @@ char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID)
 			result[i  ] = plug[i].gid;
 			result[++i] = '\0';
 		}
-		free(plug);
 	}
 	return result;
 }
@@ -834,35 +773,21 @@ char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID)
 
 static GlyPlugin * Gly_get_provider_by_id(enum GLYR_GET_TYPE ID)
 {
-	switch(ID)
-	{
-		case GET_COVERART:
-			return glyr_get_cover_providers();
-		case GET_LYRICS:
-			return glyr_get_lyric_providers();
-		case GET_ARTIST_PHOTOS:
-			return glyr_get_photo_providers();
-		case GET_ARTISTBIO:
-			return glyr_get_ainfo_providers();
-		case GET_SIMILIAR_ARTISTS:
-			return glyr_get_similiar_providers();
-		case GET_SIMILIAR_SONGS:
-			return glyr_get_similiar_song_providers();
-		case GET_ALBUM_REVIEW:
-			return glyr_get_review_providers();
-		case GET_TRACKLIST:
-			return glyr_get_tracklist_providers();
-		case GET_TAGS:
-			return glyr_get_tags_providers();
-		case GET_RELATIONS:
-			return glyr_get_relations_providers();
-		case GET_ALBUMLIST:
-			return glyr_get_albumlist_providers();
-		case GET_UNSURE   :
-			return copy_table(getwd_commands,sizeof(getwd_commands));
-		default       :
-			return NULL;
+/*
+	if(ID != GET_UNSURE) {
+		GList * elem;
+		for(elem = r_getFList(); elem; elem = elem->next)
+		{
+			MetaDataFetcher * item = elem->data;
+			if(item->type == ID) {
+				return item->providers;
+			}
+		}
+	} else {
+		return getwd_commands;
 	}
+*/
+	return NULL;
 }
 
 /*-----------------------------------------------*/
@@ -914,8 +839,9 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 
 static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask, bool value)
 {
+/*
 	int i = 0;
-	if(GIDmask == GRP_ALL)   /* (Un)Register ALL */
+	if(GIDmask == GRP_ALL)  
 	{
 		while(providers[i].name)
 		{
@@ -927,7 +853,7 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 		}
 		return;
 	}
-	else     /* Register a specific Group */
+	else 
 	{
 		while(providers[i].name)
 		{
@@ -938,6 +864,7 @@ static void glyr_register_group(GlyPlugin * providers, enum GLYR_GROUPS GIDmask,
 			i++;
 		}
 	}
+*/
 }
 
 /*-----------------------------------------------*/
@@ -958,7 +885,6 @@ static int glyr_parse_from(const char * arg, GlyQuery * settings)
 		{
 			free(settings->providers);
 		}
-		settings->providers = what_pair;
 
 		if(what_pair)
 		{

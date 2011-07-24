@@ -110,3 +110,15 @@ GlyCacheList * photos_flickr_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource photos_flickr_src = {
+	.name = "flickr",
+	.key  = 'f',
+	.parser    = photos_flickr_parse,
+	.get_url   = photos_flickr_url,
+	.type      = GET_ARTIST_PHOTOS,
+	.endmarker = NULL,
+	.free_url  = true
+};

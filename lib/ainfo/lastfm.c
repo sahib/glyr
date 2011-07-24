@@ -101,3 +101,15 @@ GlyCacheList * ainfo_lastfm_parse(cb_object * capo)
     }
     return r_lst;
 }
+
+/*-------------------------------------*/
+
+MetaDataSource ainfo_lastfm_src = {
+	.name      = "lastfm",
+	.key       = 'l',
+	.free_url  = true,
+	.type      = GET_ARTISTBIO,
+	.parser    = ainfo_lastfm_parse,
+	.get_url   = ainfo_lastfm_url,
+	.endmarker = NULL
+};

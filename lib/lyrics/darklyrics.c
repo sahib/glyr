@@ -89,3 +89,15 @@ GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*---------------------------------------------------*/
+
+MetaDataSource lyrics_darklyrics_src = {
+	.name = "darklyrics",
+	.key  = 'y',
+	.parser    = lyrics_darklyrics_parse,
+	.get_url   = lyrics_darklyrics_url,
+	.type      = GET_LYRICS,
+	.endmarker = "<div class=\"note\">",
+	.free_url  = true
+};

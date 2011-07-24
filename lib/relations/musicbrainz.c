@@ -91,3 +91,13 @@ const char * relations_musicbrainz_url(GlyQuery * sets)
 }
 
 /*--------------------------------------------------------*/
+
+MetaDataSource relations_musicbrainz_src = {
+	.name = "musicbrainz",
+	.key  = 'm',
+	.parser    = relations_musicbrainz_parse,
+	.get_url   = relations_musicbrainz_url,
+	.type      = GET_RELATIONS,
+	.endmarker = NULL,
+	.free_url  = true 
+};

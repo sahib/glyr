@@ -30,18 +30,13 @@
 #include "ainfo/allmusic_com.h"
 #include "ainfo/lyricsreg.h"
 
-#define WKED "<ol class=\"references\">"
-//#define LGED "<div class=\"sidebar\">"
-#define LGED NULL
-
-
 // Add your's here
 GlyPlugin ainfo_providers[] =
 {
     //  full name   key  coloredname          use?   parser callback           geturl callback         free url?
     {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       NULL, true }, GRP_SAFE | GRP_FAST},
     {"allmusic",    "m", C_"all"C_C"music",   false,  {ainfo_allmusic_parse,   ainfo_allmusic_url,     NULL, false}, GRP_USFE | GRP_SLOW},
-    {"lyricsreg",   "r", C_"lyricsreg",       false,  {ainfo_lyricsreg_parse,  ainfo_lyricsreg_url,    LGED, false}, GRP_USFE | GRP_FAST},
+    {"lyricsreg",   "r", C_"lyricsreg",       false,  {ainfo_lyricsreg_parse,  ainfo_lyricsreg_url,    NULL, false}, GRP_USFE | GRP_FAST},
     { NULL,         NULL,NULL,                false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
 };
 
@@ -61,18 +56,13 @@ static GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
 
 /*-------------------------------------*/
 
-GlyCacheList * get_ainfo(GlyQuery * settings)
+bool vdt_ainfo(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist)
     {
-        result = register_and_execute(settings, ainfo_finalize);
+        return true;
     }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R":: "C_"Artist is needed to download artist description.\n");
-    }
-    return result;
+    return false;
 }
 
 /*-------------------------------------*/
@@ -81,8 +71,8 @@ GlyCacheList * get_ainfo(GlyQuery * settings)
 MetaDataFetcher glyrFetcher_artistbio = {
 	.name = "ArtistInfo Fetcher",
 	.type = GET_ARTISTBIO,
-	.get  = get_ainfo,
-	/* CTor | DTor */
-	.init    = NULL,
-	.destroy = NULL
+	.validate  = vdt_ainfo,
+	.init      = NULL,
+	.destroy   = NULL,
+	.finalize  = ainfo_finalize,
 };

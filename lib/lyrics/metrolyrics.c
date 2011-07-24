@@ -150,3 +150,15 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource lyrics_metrolyrics_src = {
+	.name = "metrolyrics",
+	.key  = 'm',
+	.parser    = lyrics_metrolyrics_parse,
+	.get_url   = lyrics_metrolyrics_url,
+	.type      = GET_LYRICS,
+	.endmarker = NULL,
+	.free_url  = false
+};

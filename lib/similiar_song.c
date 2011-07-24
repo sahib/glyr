@@ -47,26 +47,22 @@ static GlyCacheList * similiar_song_finalize(GlyCacheList * result, GlyQuery * s
     return generic_finalizer(result,settings,TYPE_SIMILIAR_SONG);
 }
 
-GlyCacheList * get_similiar_song(GlyQuery * settings)
+bool vdt_similar_song(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist && settings->title)
     {
-        result = register_and_execute(settings, similiar_song_finalize);
+		return true;
     }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to find similiar artist (o rly?).\n");
-    }
-    return result;
+    return false;
 }
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_similar_song = {
-	.name = "SimilarSong Fetcher",
+	.name = "similar",
 	.type = GET_SIMILIAR_SONGS,
-	.get  = get_similiar_song,
+	.validate = vdt_similar_song,
 	/* CTor | DTor */
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = similiar_song_finalize
 };

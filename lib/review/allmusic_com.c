@@ -139,3 +139,15 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
     }
     return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource review_allmusic_src = {
+	.name = "allmusic",
+	.key  = 'm',
+	.parser    = review_allmusic_parse,
+	.get_url   = review_allmusic_url,
+	.endmarker = "<div id=\"right-sidebar\">",
+	.free_url  = false,
+	.type      = GET_ALBUM_REVIEW
+};

@@ -20,60 +20,65 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include "lipwalk.h"
 
 #include "../core.h"
 #include "../stringlib.h"
 
-#define INFO_BEGIN "</div><div style=\"text-align:center;\""
-#define INFO_ENDIN " <a href=\""
+#define LIPWALK_URL "http://www.lipwalklyrics.com/component/lyrics/search/index.php?search=%artist%%20%title%"
+#define START "<div id=\"lyric\">"
+#define END "</div>"
 
-const char * lyrics_lyricsreg_url(GlyQuery * s)
+const char * lyrics_lipwalk_url(GlyQuery * settings)
 {
-    return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
+	return LIPWALK_URL;
 }
 
-GlyCacheList * lyrics_lyricsreg_parse(cb_object * capo)
+GlyCacheList * lyrics_lipwalk_parse(cb_object *capo)
 {
-    GlyCacheList * ls = NULL;
-    size_t info_s_len = strlen(INFO_BEGIN);
+    char * start = NULL;
+    char * end = NULL;
+    char * content = NULL;
 
-    char * ptr = strstr(capo->cache->data, INFO_BEGIN);
-    if(ptr != NULL)
+    GlyMemCache * r_cache = NULL;
+    GlyCacheList * r_list  = NULL;
+
+    if ((start = strstr(capo->cache->data,START)) != NULL)
     {
-        ptr += info_s_len;
-        char * end = strstr(ptr,INFO_ENDIN);
-        if(end != NULL)
+        if ((end = strstr(start,END)) != NULL)
         {
-            char * text_seg = copy_value(ptr,end);
-            if(text_seg != NULL)
+            if (ABS(end-start) > 0)
             {
-                char * no_br_tags = strreplace(text_seg,"<br />",NULL);
-                if(no_br_tags)
+                *(end) = 0;
+                content = strreplace(start,"<br />",NULL);
+                if(content)
                 {
-                    ls = DL_new_lst();
-                    GlyMemCache * tmp = DL_init();
-                    tmp->data = beautify_lyrics(no_br_tags);
-                    tmp->size = tmp->data ? strlen(tmp->data) : 0;
-                    tmp->dsrc = strdup(capo->url);
-
-                    DL_add_to_list(ls,tmp);
-
-                    free(no_br_tags);
+                    r_cache = DL_init();
+                    r_cache->data = content;
+                    r_cache->size = strlen(content);
+                    r_cache->dsrc = strdup(capo->url);
                 }
-                free(text_seg);
             }
         }
+        else r_cache = DL_error(NO_ENDIN_TAG);
     }
-    return ls;
+    else r_cache = DL_error(NO_BEGIN_TAG);
+
+    if(r_cache)
+    {
+        r_list = DL_new_lst();
+        DL_add_to_list(r_list,r_cache);
+    }
+    return r_list;
 }
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_lyricsreg_src = {
-	.name = "lyricsreg",
-	.key  = 'r',
-	.parser    = lyrics_lyricsreg_parse,
-	.get_url   = lyrics_lyricsreg_url,
+MetaDataSource lyrics_lipwalk_src = {
+	.name = "lipwalk",
+	.key  = 'z',
+	.parser    = lyrics_lipwalk_parse,
+	.get_url   = lyrics_lipwalk_url,
 	.type      = GET_LYRICS,
 	.endmarker = NULL,
 	.free_url  = false

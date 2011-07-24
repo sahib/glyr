@@ -152,9 +152,9 @@ static bool set_get_type(GlyQuery * s, const char * arg)
                 return true;
         }
         // get list of avaliable commands
-	const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
-	const char *    cp_keys = GlyPlug_get_key_by_id(GET_UNSURE);
-	char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
+		const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
+		const char *    cp_keys = GlyPlug_get_key_by_id(GET_UNSURE);
+		char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
 
         if(cp_name && cp_keys && cp_gids) {
                 int i = 0;
@@ -165,27 +165,27 @@ static bool set_get_type(GlyQuery * s, const char * arg)
                         }
                 }
 
-		if(result == false) {
-			glyr_message(2,s,stderr,"Sorry, I don't know of a getter called '%s'...\n\n",arg);
-			glyr_message(2,s,stderr,"Avaliable getters are: \n");
-			glyr_message(2,s,stderr,"---------------------- \n");
+				if(result == false) {
+					glyr_message(2,s,stderr,"Sorry, I don't know of a getter called '%s'...\n\n",arg);
+					glyr_message(2,s,stderr,"Avaliable getters are: \n");
+					glyr_message(2,s,stderr,"---------------------- \n");
 
-			list_provider_at_id(GET_UNSURE,7,s);
+					list_provider_at_id(GET_UNSURE,7,s);
 
-			bool dym = false;
-			for(i = 0; cp_name[i]; i++) {
-				if(levenshtein_strcmp(arg,cp_name[i]) <= 4) {
-					if(!dym) glyr_message(2,s,stderr,"\nPerhaps you've meant");
-					glyr_message(2,s,stderr,"%s '%s'",dym?" or":" ",cp_name[i]);
-					dym=true;
+					bool dym = false;
+					for(i = 0; cp_name[i]; i++) {
+						if(levenshtein_strcmp(arg,cp_name[i]) <= 4) {
+							if(!dym) glyr_message(2,s,stderr,"\nPerhaps you've meant");
+							glyr_message(2,s,stderr,"%s '%s'",dym?" or":" ",cp_name[i]);
+							dym=true;
+						}
+					}
+					if(dym) glyr_message(2,s,stderr,"?\n");
 				}
-			}
-			if(dym) glyr_message(2,s,stderr,"?\n");
-		}
-		
-		free_name_list(cp_name);
-		free((char*)cp_keys);
-		free(cp_gids);
+				
+				free_name_list(cp_name);
+				free((char*)cp_keys);
+				free(cp_gids);
         }
         return result;
 }
@@ -1180,7 +1180,7 @@ int main(int argc, char * argv[])
         Gly_init();
         atexit(Gly_cleanup);
 
-	/* Go firth unless the user demeands translation */
+	    /* Go furth unless the user demeands translation */
         if(argc >= 3 && strcmp(argv[1],"gtrans") != 0) {
 		// The struct that control this beast
                 GlyQuery my_query;
@@ -1188,14 +1188,18 @@ int main(int argc, char * argv[])
                 // set it on default values
                 Gly_init_query(&my_query);
 
-		// Good enough for glyrc
+				// Good enough for glyrc
                 GlyOpt_verbosity(&my_query,2);
 
                 // Set the type..
+/*
                 if(!set_get_type(&my_query, argv[1])) {
+			puts("Cannot set type. This is a bug.");
                         Gly_destroy_query( &my_query );
                         return EXIT_FAILURE;
                 }
+*/
+		my_query.type = GET_COVERART;
 
                 write_arg = parse_commandline_general(argc-1, argv+1, &my_query);
                 if(write_arg == NULL) {
@@ -1204,9 +1208,9 @@ int main(int argc, char * argv[])
                         write_arg[1] = NULL;
                 }
 
-		// Special cases
+				// Special cases
                 if(my_query.type == GET_ARTISTBIO)
-			GlyOpt_number(&my_query,my_query.number*2);
+					GlyOpt_number(&my_query,my_query.number*2);
 
                 // Check if files do already exist
                 bool file_exist = false;

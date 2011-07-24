@@ -146,3 +146,15 @@ GlyCacheList * similiar_song_lastfm_parse(cb_object * capo)
         }
         return r_list;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource similar_song_lastfm_src = {
+	.name = "lastfm",
+	.key  = 'l',
+	.parser    = similiar_song_lastfm_parse,
+	.get_url   = similiar_song_lastfm_url,
+	.endmarker = NULL, 
+	.free_url  = true,
+	.type      = GET_SIMILIAR_SONGS
+};

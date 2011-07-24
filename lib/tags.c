@@ -46,26 +46,27 @@ static GlyCacheList * tags_finalize(GlyCacheList * result, GlyQuery * settings)
     return generic_finalizer(result,settings,TYPE_TAGS);
 }
 
-GlyCacheList * get_tags(GlyQuery * settings)
+bool vdt_tags(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
-    if(settings && settings->artist)
+    if(settings && settings->artist &&
+	 !(settings && settings->artist && /* Impossible to get tags of a title without album */
+	   settings->album == NULL &&
+	   settings->title != NULL
+	   )
+	  )
     {
-        result = register_and_execute(settings, tags_finalize);
+		return true;
     }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get tags.\n");
-    }
-    return result;
+    return false;
 }
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tags = {
 	.name = "Tag Fetcher",
 	.type = GET_TAGS,
-	.get  = get_tags,
+	.validate = vdt_tags,
 	/* CTor | DTor */
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = tags_finalize
 };

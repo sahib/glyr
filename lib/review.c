@@ -49,26 +49,26 @@ static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings
     return generic_finalizer(result,settings,TYPE_REVIEW);
 }
 
-GlyCacheList * get_review(GlyQuery * settings)
+bool vdt_review(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist && settings->album)
     {
-        result = register_and_execute(settings, review_finalize);
+        return true;
     }
     else
     {
         glyr_message(2,settings,stderr,C_R"* "C_"Artist and album is needed to retrieve reviews (o rly?).\n");
+        return false;
     }
-    return result;
 }
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_review = {
 	.name = "Review Fetcher",
 	.type = GET_ALBUM_REVIEW,
-	.get  = get_review,
+	.validate  = vdt_review,
 	/* CTor | DTor */
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = review_finalize
 };

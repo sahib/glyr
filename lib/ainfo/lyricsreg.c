@@ -57,3 +57,15 @@ GlyCacheList * ainfo_lyricsreg_parse(cb_object * capo)
     }
     return ls;
 }
+
+/*-------------------------------------*/
+
+MetaDataSource ainfo_lyricsreg_src = {
+	.name      = "lyricsreg",
+	.key       = 'r',
+	.free_url  = false,
+	.type      = GET_ARTISTBIO,
+	.parser    = ainfo_lyricsreg_parse,
+	.get_url   = ainfo_lyricsreg_url,
+	.endmarker = NULL
+};

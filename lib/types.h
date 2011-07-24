@@ -194,7 +194,7 @@ typedef struct GlyQuery {
 #endif
         const char * lang; /*!< language settings (for amazon / google / last.fm) */
         const char * formats; /*!<  Format settings */
-				const char * proxy; /*!< Proxy settings */
+	const char * proxy; /*!< Proxy settings */
 
 	// used internally, you should not use the following members
         struct {
@@ -204,7 +204,7 @@ typedef struct GlyQuery {
   
 
         const char * info[10];
-        void * providers;
+        char * providers;
         int itemctr;
 
 /**

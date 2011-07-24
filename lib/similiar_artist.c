@@ -47,26 +47,22 @@ static GlyCacheList * similiar_finalize(GlyCacheList * result, GlyQuery * settin
     return generic_finalizer(result,settings,TYPE_SIMILIAR);
 }
 
-GlyCacheList * get_similiar(GlyQuery * settings)
+bool vdt_similiar(GlyQuery * settings)
 {
-    GlyCacheList * result = NULL;
     if(settings && settings->artist)
     {
-        result = register_and_execute(settings, similiar_finalize);
+        return true;
     }
-    else
-    {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to find similiar artist (o rly?).\n");
-    }
-    return result;
+    return false;
 } 
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_similiar_artists = {
 	.name = "SimilarArtist Fetcher",
 	.type = GET_SIMILIAR_ARTISTS,
-	.get  = get_similiar,
+	.validate  = vdt_similiar,
 	/* CTor | DTor */
 	.init    = NULL,
-	.destroy = NULL
+	.destroy = NULL,
+	.finalize = similiar_finalize
 };

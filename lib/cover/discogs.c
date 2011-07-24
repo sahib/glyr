@@ -185,3 +185,13 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
 
     return r_list;
 }
+
+MetaDataSource cover_discogs_src = {
+	.name      = "discogs",
+	.key       = 'd',
+	.parser    = cover_discogs_parse,
+	.get_url   = cover_discogs_url,
+	.type      = GET_COVERART,
+	.endmarker = NULL,
+	.free_url  = false
+};

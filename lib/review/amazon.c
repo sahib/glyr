@@ -70,3 +70,15 @@ GlyCacheList * review_amazon_parse(cb_object * capo)
     }
     return cList;
 }
+
+/*--------------------------------------------------------*/
+
+MetaDataSource review_amazon_src = {
+	.name = "amazon",
+	.key  = 'a',
+	.parser    = review_amazon_parse,
+	.get_url   = review_amazon_url,
+	.type      = GET_ALBUM_REVIEW,
+	.endmarker = NULL, 
+	.free_url  = true
+};

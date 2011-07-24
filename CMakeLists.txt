@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.6)
 PROJECT( glyr C )
 
+# Change default dir
+SET(CMAKE_INSTALL_PREFIX "/usr")
+
 SET(CSTANDARD "-std=gnu99")
 SET(CDEBUG "-ggdb3")
 SET(CWARN "-Wall -Wstrict-prototypes")
@@ -67,6 +70,7 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
+	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/ainfo.c"
 	"${DIR_ROOT}/cover.c"
@@ -112,6 +116,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_LYRICS}/lyricswiki.c"
 	"${DIR_LYRICS}/lyricstime.c"
 	"${DIR_LYRICS}/lyricsreg.c"
+	"${DIR_LYRICS}/lipwalk.c"
 	"${DIR_PHOTOS}/flickr.c"
 	"${DIR_PHOTOS}/lastfm.c"
 	"${DIR_PHOTOS}/google.c"

@@ -82,3 +82,14 @@ GlyCacheList * lyrics_lyricsvip_parse(cb_object *capo)
     return r_list;
 }
 
+/*--------------------------------------------------------*/
+
+MetaDataSource lyrics_lyricsvip_src = {
+	.name = "lyricsvip",
+	.key  = 'v',
+	.parser    = lyrics_lyricsvip_parse,
+	.get_url   = lyrics_lyricsvip_url,
+	.type      = GET_LYRICS,
+	.endmarker = "</td></tr></table>",
+	.free_url  = true
+};
