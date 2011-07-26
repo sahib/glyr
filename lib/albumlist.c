@@ -18,40 +18,8 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
 #include "core.h"
-#include "types.h"
 #include "stringlib.h"
-
-#include "albumlist/musicbrainz.h"
-
-//-------------------------------------
-
-// Add your's here
-GlyPlugin albumlist_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {albumlist_musicbrainz_parse, albumlist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
-};
-
-//-------------------------------------
-
-GlyPlugin * glyr_get_albumlist_providers(void)
-{
-    return copy_table(albumlist_providers,sizeof(albumlist_providers));
-}
-
-//-------------------------------------
-
-static GlyCacheList * albumlist_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    flag_lint(result, settings);
-    return generic_finalizer(result,settings,TYPE_ALBUMLIST);
-}
 
 //-------------------------------------
 
@@ -67,6 +35,11 @@ bool get_albumlist(GlyQuery * settings)
 	return false;
     }
 }
+
+//-------------------------------------
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
 //-------------------------------------
 
 /* PlugStruct */
@@ -74,8 +47,7 @@ MetaDataFetcher glyrFetcher_albumlist = {
 	.name = "ArtistInfo Fetcher",
 	.type = GET_ALBUMLIST,
 	.validate  = get_albumlist,
-	/* CTor | DTor */
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = albumlist_finalize
+	.finalize = factory 
 };

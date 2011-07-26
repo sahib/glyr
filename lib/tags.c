@@ -18,33 +18,10 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
-#include "types.h"
-#include "types.h"
+#include "core.h"
 #include "stringlib.h"
 
-#include "tags/musicbrainz.h"
-
-// Add your's here
-GlyPlugin tags_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tags_musicbrainz_parse,  tags_musicbrainz_url, NULL, true }, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                    NULL,                 NULL, false}, GRP_NONE | GRP_NONE},
-};
-
-GlyPlugin * glyr_get_tags_providers(void)
-{
-    return copy_table(tags_providers,sizeof(tags_providers));
-}
-
-static GlyCacheList * tags_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_TAGS);
-}
+/*----------------------------------------------------------------*/
 
 bool vdt_tags(GlyQuery * settings)
 {
@@ -60,6 +37,10 @@ bool vdt_tags(GlyQuery * settings)
     return false;
 }
 
+/*----------------------------------------------------------------*/
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tags = {
 	.name = "Tag Fetcher",
@@ -68,5 +49,5 @@ MetaDataFetcher glyrFetcher_tags = {
 	/* CTor | DTor */
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = tags_finalize
+	.finalize = factory
 };

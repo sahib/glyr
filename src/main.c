@@ -78,168 +78,34 @@ static void free_name_list(const char ** ptr) {
 
 /* --------------------------------------------------------- */
 
+//TODO
 #define _S "\t"
 static void list_provider_at_id(int id, int min_align, GlyQuery * s)
 {
-	const char **   cp_name = GlyPlug_get_name_by_id(id);
-	const char *    cp_keys = GlyPlug_get_key_by_id(id);
-	char *          cp_gids = GlyPlug_get_gid_by_id(id);
 
-        s->color_output = false;
-
-        if(cp_name != NULL) {
-                int i = 0;
-                for(i = 0; cp_name[i] != NULL; i++) {
-                        int align = min_align - strlen(cp_name[i]);
-                        int a = 0;
-                        glyr_message(-1,s,stdout,C_G _S"%s"C_,cp_name[i]);
-                        for(a = 0; a < align; a++)
-                                glyr_message(-1,s,stdout," ");
-
-                        glyr_message(-1,s,stdout,C_" ["C_R"%c"C_"]%s",cp_keys[i], (id == GET_UNSURE) ? "" : " in groups "C_Y"all"C_);
-                        int b = 1, j = 0;
-                        for(b = 1, j = 0; id != GET_UNSURE &&  b <= GRP_ALL; j++) {
-                                if(b & cp_gids[i]) {
-                                        glyr_message(-1,s,stdout,C_","C_Y"%s",Gly_groupname_by_id(b));
-                                }
-                                b <<= 1;
-                        }
-                        glyr_message(-1,s,stdout,"\n");
-                }
-        }
-
-	free_name_list(cp_name);
-
-	if(cp_keys) {
-	    free((char*)cp_keys);
-	}
-
-	if(cp_gids) {
-	    free(cp_gids);
-	}
 }
 
-//* ------------------------------------------------------- */
-
-static void sig_handler(int signal)
-{
-        switch(signal) {
-        case SIGINT:
-                glyr_message(-1,NULL,stderr,C_" Received keyboard interrupt!\n");
-                break;
-        case SIGSEGV : /* sigh */
-                glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault.\n");
-                glyr_message(-1,NULL,stderr,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
-                glyr_message(-1,NULL,stderr,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
-                glyr_message(-1,NULL,stderr,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
-                glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
-
-                glyr_message(-1,NULL,stderr,C_"\n(Thanks, and Sorry for any bad feelings.)\n");
-                break;
-        }
-        exit(-1);
-}
 
 
 //* ------------------------------------------------------- */
 // -------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
+//TODO
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
         bool result = false;
-        if(!arg) {
-                return true;
-        }
-        // get list of avaliable commands
-		const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
-		const char *    cp_keys = GlyPlug_get_key_by_id(GET_UNSURE);
-		char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
-
-        if(cp_name && cp_keys && cp_gids) {
-                int i = 0;
-                for(; cp_name[i]; i++) {
-                        if(!strcmp(arg,cp_name[i])/* || *arg == cp_keys[i] */) {
-                                GlyOpt_type(s,cp_gids[i]);
-                                result = true;
-                        }
-                }
-
-				if(result == false) {
-					glyr_message(2,s,stderr,"Sorry, I don't know of a getter called '%s'...\n\n",arg);
-					glyr_message(2,s,stderr,"Avaliable getters are: \n");
-					glyr_message(2,s,stderr,"---------------------- \n");
-
-					list_provider_at_id(GET_UNSURE,7,s);
-
-					bool dym = false;
-					for(i = 0; cp_name[i]; i++) {
-						if(levenshtein_strcmp(arg,cp_name[i]) <= 4) {
-							if(!dym) glyr_message(2,s,stderr,"\nPerhaps you've meant");
-							glyr_message(2,s,stderr,"%s '%s'",dym?" or":" ",cp_name[i]);
-							dym=true;
-						}
-					}
-					if(dym) glyr_message(2,s,stderr,"?\n");
-				}
-				
-				free_name_list(cp_name);
-				free((char*)cp_keys);
-				free(cp_gids);
-        }
-        return result;
+	return result;
 }
 
 //* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
+//TODO
 static void search_similiar_providers(const char * providers, GlyQuery * s)
 {
-	const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
-	const char *    cp_keys = GlyPlug_get_key_by_id(GET_UNSURE);
-
-        if(cp_name && cp_keys) {
-                size_t length = strlen(providers);
-                size_t offset = 0;
-                char * name = NULL;
-
-                while( (name = get_next_word(providers,DEFAULT_FROM_ARGUMENT_DELIM,&offset,length))) {
-                        int j;
-
-                        bool f = false;
-                        for(j = 0; cp_name[j]; j++) {
-                                if(!strcasecmp(cp_name[j],name) || (cp_keys[j] == *name)) {
-                                        f = true;
-                                        break;
-                                }
-                        }
-                        if(!f) {
-                                bool dym = true;
-                                for(j = 0; cp_name[j]; j++) {
-                                        if(levenshtein_strcmp(name,cp_name[j]) < 3) {
-                                                if(dym) {
-                                                        glyr_message(2,s,stderr,C_R"* "C_"Did you mean");
-                                                }
-
-                                                glyr_message(2,s,stderr,"%s "C_G"%s"C_" ",dym?"":" or",cp_name[j]);
-
-                                                dym = false;
-                                        }
-                                }
-                                if(!dym) glyr_message(2,s,stderr,"?\n",name);
-                        }
-                        free(name);
-                        name=NULL;
-                }
-
-                glyr_message(2,s,stderr,C_R"* "C_"Must be one of:\n");
-                list_provider_at_id(s->type,15,s);
-                glyr_message(2,s,stderr,"\n");
-
-		free_name_list(cp_name);
-		free((char*) cp_keys);
-        }
+	
 }
 
 //* --------------------------------------------------------- */
@@ -1043,25 +909,10 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 
 /* --------------------------------------------------------- */
 
+//TODO
 static const char * get_type_string(GlyQuery * s)
 {
-	const char **   cp_names = GlyPlug_get_name_by_id(GET_UNSURE);
-	char *          cp_gids  = GlyPlug_get_gid_by_id(GET_UNSURE);	
-
-	const char * result = NULL;
-
-        if(s && cp_names && cp_gids) {
-                int i = 0;
-                for(i = 0; cp_names[i] != NULL && !result; i++) {
-                        if(s->type == (unsigned char)cp_gids[i]) {
-                                result = strdup(cp_names[i]);
-                        }
-                }
-
-		free_name_list(cp_names);
-		free(cp_gids);
-        }
-        return result;
+	return "";
 }
 
 /* --------------------------------------------------------- */
@@ -1103,7 +954,8 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 				const char * data_type = get_type_string(s);
 				if(data_type != NULL) {
                                 	glyr_message(1,s,stderr,"- Writing '%s' to %s\n",data_type,path);
-					free((char*)data_type);
+					/*TODO*/
+					//free((char*)data_type);
 				}
 
                                 if(Gly_write(c,path) == -1) {
@@ -1172,10 +1024,6 @@ int main(int argc, char * argv[])
 {
         int result = EXIT_SUCCESS;
 
-        /* Warn on  crash */
-        signal(SIGSEGV, sig_handler);
-        signal(SIGINT,  sig_handler);
-
         // make sure to init everything and destroy again
         Gly_init();
         atexit(Gly_cleanup);
@@ -1210,7 +1058,7 @@ int main(int argc, char * argv[])
 
 				// Special cases
                 if(my_query.type == GET_ARTISTBIO)
-					GlyOpt_number(&my_query,my_query.number*2);
+		    GlyOpt_number(&my_query,my_query.number*2);
 
                 // Check if files do already exist
                 bool file_exist = false;

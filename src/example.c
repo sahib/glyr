@@ -130,39 +130,8 @@ int main(int argc, char * argv[])
     Gly_init();
     atexit(Gly_cleanup);
 
-    // Default to lyrics..
+    // Say we want lyrics.
     enum GLYR_GET_TYPE type = GET_LYRICS;
-    if(argc > 1)
-    {
-        // This gets a list of strings which contains information about useable getters
-        // If passed e.g GET_COVER instead of GET_UNSURE you would get information about providers
-        // available for cover download. The list is NULL-terminated
-        const char **   cp_name = GlyPlug_get_name_by_id(GET_UNSURE);
-        char *          cp_gids = GlyPlug_get_gid_by_id(GET_UNSURE);
-
-        if(cp_name && cp_gids)
-        {
-            int i;
-
-            // The end of the commandlist is marked by a NULL in the name
-            for(i = 0; cp_name[i]; i++)
-            {
-                // If it matches the argument...
-                if(!strcmp(cp_name[i],argv[1]))
-                {
-                    //.. we set the type. The type is stored in the 'gid' variable
-                    // (which stores informations about groups elsewhere)
-                    type = cp_gids[i];
-                    break;
-                }
-
-                free((char*)cp_name[i]);
-            }
-
-            free((char*)cp_name);
-            free(cp_gids);
-        }
-    }
 
     // Now set the type we determined.
     GlyOpt_type(&q,type);

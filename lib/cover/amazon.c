@@ -98,15 +98,15 @@ const char * cover_amazon_url(GlyQuery * sets)
     return generic_amazon_url(sets,"Images");
 }
 
-#define MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
-#define MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
+#define C_MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
+#define C_MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
 
 GlyCacheList * cover_amazon_parse(cb_object *capo)
 {
     const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
-                            (MAX( 30) && MIN(-1)) ? "<SwatchImage>" :
-                            (MAX( 70) && MIN(30)) ? "<SmallImage>"  :
-                            (MAX(150) && MIN(70)) ? "<MediumImage>" :
+                            (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :
+                            (C_MAX( 70) && C_MIN(30)) ? "<SmallImage>"  :
+                            (C_MAX(150) && C_MIN(70)) ? "<MediumImage>" :
                             "<LargeImage>"  ;
 #undef MAX
 #undef MIN

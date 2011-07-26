@@ -58,20 +58,6 @@
 */
 
 /**
-* @brief 
-*/
-enum GLYR_GROUPS {
-        /* Groups are build by (a | b)*/
-        GRP_NONE = 0 << 0, /**< None    */
-        GRP_SAFE = 1 << 0, /**< Safe    */
-        GRP_USFE = 1 << 1, /**< Unsafe,  */
-        GRP_SPCL = 1 << 2, /**< Special, unsual providers */
-        GRP_FAST = 1 << 3, /**< Fast, maybe unsafe    */
-        GRP_SLOW = 1 << 4, /**< Slow, exec'd at last */
-        GRP_ALL  = 1 << 5  /**< All, when no groups are used */
-};
-
-/**
 * @brief All possible errors that may be returned
 */
 enum GLYR_ERROR {
@@ -126,6 +112,8 @@ enum GLYR_DATA_TYPE {
         TYPE_TAG_ALBUM, /*!< Tag associated with the album */
         TYPE_TAG_TITLE, /*!< Tag associated with the album */
         TYPE_RELATION,  /*!< Random relation, each cache containing one link */
+	TYPE_IMG_URL,   /*!< URL pointing to an image */
+	TYPE_TXT_URL,   /*!< URL pointing to some text content */
         TYPE_TRACK	/*!< List of tracknames, each cache containing one name */
 };
 
@@ -157,13 +145,11 @@ typedef struct GlyMemCache {
 * 
 * You should modify this with the GlyOpt_* methods,\n
 * You can read all members directly.\n
-* Look up the corresponding GlyOpt_$name methods for more details. 
+* Look up the corresponding GlyOpt_$name methods for more details.
+* For reading: Dynamically allocated members are stored in '.alloc'! 
 */
 typedef struct GlyQuery {
         enum GLYR_GET_TYPE type; /*!< What type of data to get */
-        char * artist; /*!< artist field */
-        char * album;  /*!< album field */
-        char * title;  /*!< title field */
 
         int number; /*!< Number of items to download */
         int plugmax; /*!< Number of items a single provider may download */
@@ -195,8 +181,12 @@ typedef struct GlyQuery {
         const char * lang; /*!< language settings (for amazon / google / last.fm) */
         const char * formats; /*!<  Format settings */
 	const char * proxy; /*!< Proxy settings */
+        char * artist; /*!< artist field */
+        char * album;  /*!< album field */
+        char * title;  /*!< title field */
+        char * from;   /*!< String passed to GlyOpt_from() */
 
-	// used internally, you should not use the following members
+	/* Callback and userpointer */
         struct {
                 enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
                 void  * user_pointer;
@@ -204,8 +194,6 @@ typedef struct GlyQuery {
   
 
         const char * info[10];
-        char * providers;
-        int itemctr;
 
 /**
 * @brief anonymous struct holding the source and target lang for gtrans

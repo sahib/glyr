@@ -18,33 +18,11 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
-#include "photos.h"
-#include "types.h"
+#include "core.h"
 #include "stringlib.h"
 
-#include "photos/flickr.h"
-#include "photos/lastfm.h"
-#include "photos/google.h"
-
-#define GOOGLE_COLOR C_B"g"C_R"o"C_Y"o"C_B"g"C_G"l"C_R"e"
-GlyPlugin photos_providers[] =
-{
-    {"lastfm", "l",  C_"last"C_R"."C_"fm",  false, {photos_lastfm_parse, photos_lastfm_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    {"google", "g",  GOOGLE_COLOR,          false, {photos_google_parse, photos_google_url, NULL, true }, GRP_SPCL | GRP_FAST},
-    {"flickr", "f",  C_C"flick"C_R"r",      false, {photos_flickr_parse, photos_flickr_url, NULL, true }, GRP_USFE | GRP_SLOW},
-    {NULL,     NULL, NULL,                  false, {NULL,                NULL,              NULL, false}, GRP_NONE | GRP_NONE}
-};
-
-GlyPlugin * glyr_get_photo_providers(void)
-{
-    return copy_table(photos_providers,sizeof(photos_providers));
-}
-
+/*--------------------------------*/
+#if 0
 static GlyCacheList * photo_callback(cb_object * capo)
 {
     // in this 'pseudo' callback we copy
@@ -84,7 +62,9 @@ static GlyCacheList * photo_callback(cb_object * capo)
     return ls;
 }
 
-static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
+/*--------------------------------*/
+
+GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     if(!result) return NULL;
 
@@ -158,7 +138,8 @@ static GlyCacheList * photo_finalize(GlyCacheList * result, GlyQuery * settings)
     }
     return dl_list;
 }
-
+#endif
+/*--------------------------------*/
 
 bool vdt_photos(GlyQuery * settings)
 {
@@ -170,6 +151,12 @@ bool vdt_photos(GlyQuery * settings)
     }
 }
 
+/*--------------------------------*/
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
+/*--------------------------------*/
+
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistphotos = {
 	.name = "ArtistPhoto Fetcher",
@@ -178,5 +165,5 @@ MetaDataFetcher glyrFetcher_artistphotos = {
 	/* CTor | DTor */
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = photo_finalize
+	.finalize = factory
 };

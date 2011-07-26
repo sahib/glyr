@@ -20,13 +20,10 @@
 
 #define _GNU_SOURCE
 
-#include <stdlib.h>
-#include <string.h>
-
 #include "lastfm.h"
-#include "../cover.h"
 #include "../stringlib.h"
 #include "../core.h"
+#include "../utils.h"
 
 #define API_KEY API_KEY_LASTFM
 
@@ -49,7 +46,7 @@ const char * similiar_lastfm_url(GlyQuery * sets)
 #define IMAGE_L_BEGIN "<image size=\"large\">"
 #define IMAGE_E_BEGIN "<image size=\"extralarge\">"
 #define IMAGE_X_BEGIN "<image size=\"mega\">"
-#define IMAGE_ENDIN "</image>"
+#define IMAGE_ENDIN   "</image>"
 
 static char * in_tag(const char * string, const char * begin, const char * endin)
 {

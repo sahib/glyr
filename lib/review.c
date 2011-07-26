@@ -18,36 +18,10 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
 #include "core.h"
-#include "types.h"
 #include "stringlib.h"
 
-#include "review/allmusic_com.h"
-#include "review/amazon.h"
-
-// Add your's here
-GlyPlugin review_providers[] =
-{
-//  full name       key   coloredname          use?   parser callback          geturl callback         stop download after this?     free url?
-    {"allmusic",    "m",  C_"all"C_C"music"C_,false,  {review_allmusic_parse,  review_allmusic_url,    "<div id=\"right-sidebar\">", false},   GRP_SAFE | GRP_SLOW},
-    {"amazon",      "a",  "amazon",           false,  {review_amazon_parse,    review_amazon_url,      NULL,                         true },   GRP_SAFE | GRP_FAST},
-    { NULL,         NULL, NULL,               false,  {NULL,                   NULL,                   NULL,                         false},   GRP_NONE | GRP_NONE},
-};
-
-GlyPlugin * glyr_get_review_providers(void)
-{
-    return copy_table(review_providers,sizeof(review_providers));
-}
-
-static GlyCacheList * review_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_REVIEW);
-}
+/*----------------------------------------------------------------*/
 
 bool vdt_review(GlyQuery * settings)
 {
@@ -62,13 +36,18 @@ bool vdt_review(GlyQuery * settings)
     }
 }
 
+/*----------------------------------------------------------------*/
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
+/*----------------------------------------------------------------*/
+
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_review = {
 	.name = "Review Fetcher",
 	.type = GET_ALBUM_REVIEW,
 	.validate  = vdt_review,
-	/* CTor | DTor */
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = review_finalize
+	.finalize = factory 
 };

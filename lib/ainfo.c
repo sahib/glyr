@@ -17,39 +17,13 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
 
 #include "core.h"
-#include "types.h"
 #include "stringlib.h"
 
-#include "ainfo/lastfm.h"
-#include "ainfo/allmusic_com.h"
-#include "ainfo/lyricsreg.h"
-
-// Add your's here
-GlyPlugin ainfo_providers[] =
-{
-    //  full name   key  coloredname          use?   parser callback           geturl callback         free url?
-    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {ainfo_lastfm_parse,     ainfo_lastfm_url,       NULL, true }, GRP_SAFE | GRP_FAST},
-    {"allmusic",    "m", C_"all"C_C"music",   false,  {ainfo_allmusic_parse,   ainfo_allmusic_url,     NULL, false}, GRP_USFE | GRP_SLOW},
-    {"lyricsreg",   "r", C_"lyricsreg",       false,  {ainfo_lyricsreg_parse,  ainfo_lyricsreg_url,    NULL, false}, GRP_USFE | GRP_FAST},
-    { NULL,         NULL,NULL,                false,  {NULL,                   NULL,                   NULL, false}, GRP_NONE | GRP_NONE},
-};
-
 /*-------------------------------------*/
 
-GlyPlugin * glyr_get_ainfo_providers(void)
-{
-    return copy_table(ainfo_providers,sizeof(ainfo_providers));
-}
-
-/*-------------------------------------*/
-
-static GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
+GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     return generic_finalizer(result,settings,TYPE_AINFO);
 }
@@ -65,6 +39,8 @@ bool vdt_ainfo(GlyQuery * settings)
     return false;
 }
 
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
 /*-------------------------------------*/
 
 /* PlugStruct */
@@ -74,5 +50,5 @@ MetaDataFetcher glyrFetcher_artistbio = {
 	.validate  = vdt_ainfo,
 	.init      = NULL,
 	.destroy   = NULL,
-	.finalize  = ainfo_finalize,
+	.finalize  = factory
 };

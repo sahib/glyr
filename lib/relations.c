@@ -18,36 +18,12 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
 #include "core.h"
-#include "types.h"
 #include "stringlib.h"
 
-#include "relations/musicbrainz.h"
-
 //-------------------------------------
 
-// Add your's here
-GlyPlugin relations_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {relations_musicbrainz_parse,  relations_musicbrainz_url, NULL, true }, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                         NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
-};
-
-//-------------------------------------
-
-GlyPlugin * glyr_get_relations_providers(void)
-{
-    return copy_table(relations_providers,sizeof(relations_providers));
-}
-
-//-------------------------------------
-
-static GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
+GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
 {
     return generic_finalizer(result,settings,TYPE_RELATION);
 }
@@ -67,6 +43,8 @@ bool vdt_relations(GlyQuery * settings)
     }
 }
 
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
 //-------------------------------------
 
 /* PlugStruct */
@@ -76,5 +54,5 @@ MetaDataFetcher glyrFetcher_relations = {
 	.validate  = vdt_relations,
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = relations_finalize
+	.finalize = factory
 };

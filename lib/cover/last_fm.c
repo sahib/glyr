@@ -24,7 +24,7 @@
 #include <string.h>
 #include "last_fm.h"
 
-#include "../cover.h"
+#include "../utils.h"
 #include "../stringlib.h"
 #include "../core.h"
 

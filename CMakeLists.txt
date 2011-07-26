@@ -70,8 +70,12 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
+	"${DIR_ROOT}/translate.c"
+	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
+	"${DIR_ROOT}/utils.c"
+	# fetcher
 	"${DIR_ROOT}/ainfo.c"
 	"${DIR_ROOT}/cover.c"
 	"${DIR_ROOT}/similiar_artist.c"
@@ -83,8 +87,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/tags.c"
 	"${DIR_ROOT}/relations.c"
 	"${DIR_ROOT}/albumlist.c"
-	"${DIR_ROOT}/translate.c"
-	"${DIR_ROOT}/md5.c"
 	# extensions
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"

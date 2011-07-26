@@ -161,7 +161,17 @@ void register_fetcher_plugins(void)
 	glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_tags);
 	glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_relations);
 	glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_tracklist);
-	
+
+	/* call init() */
+	for(GList * elem = glyrMetaDataPluginList; elem; elem = elem->next)
+	{
+		MetaDataFetcher * fetch = elem->data;
+		if(fetch->init != NULL) 
+		{
+			fetch->init();
+		}
+	}
+
 	/* le plugins */
 	register_provider_plugins();
 

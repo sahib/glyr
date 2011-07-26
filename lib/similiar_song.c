@@ -18,34 +18,10 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
 #include "core.h"
-#include "types.h"
 #include "stringlib.h"
 
-#include "similiar_song/lastfm.h"
-
-// Add your's here
-GlyPlugin similiar_song_providers[] =
-{
-//  full name       key  coloredname          use?   parser callback           geturl callback         free url?
-    {"lastfm",      "l", "last"C_R"."C_"fm",  false,  {similiar_song_lastfm_parse,  similiar_song_lastfm_url,  NULL, false}, GRP_SAFE | GRP_FAST},
-    {NULL,          NULL, NULL,               false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE}
-};
-
-GlyPlugin * glyr_get_similiar_song_providers(void)
-{
-    return copy_table(similiar_song_providers,sizeof(similiar_song_providers));
-}
-
-static GlyCacheList * similiar_song_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_SIMILIAR_SONG);
-}
+/*----------------------------------------------------------------*/
 
 bool vdt_similar_song(GlyQuery * settings)
 {
@@ -56,13 +32,18 @@ bool vdt_similar_song(GlyQuery * settings)
     return false;
 }
 
+/*----------------------------------------------------------------*/
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
+/*----------------------------------------------------------------*/
+
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_similar_song = {
 	.name = "similar",
 	.type = GET_SIMILIAR_SONGS,
 	.validate = vdt_similar_song,
-	/* CTor | DTor */
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = similiar_song_finalize
+	.finalize = factory 
 };

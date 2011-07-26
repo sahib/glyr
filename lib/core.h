@@ -25,43 +25,30 @@
 #include "apikeys.h"
 #include "config.h"
 
-/* libcurl */
+/* Global */
+#include <string.h>
 #include <curl/curl.h>
 #include <glib.h>
-
-// Nifty defines
-#define ABS(a)  (((a) < 0) ? -(a) : (a))
-#define CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
 
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
 #ifdef  USE_COLOR
-#define C_B "\x1b[34;01m" // blue
-#define C_M "\x1b[35;01m" // magenta
-#define C_C "\x1b[36;01m" // Cyan
-#define C_R "\x1b[31;01m" // Red
-#define C_G "\x1b[32;01m" // Green
-#define C_Y "\x1b[33;01m" // Yellow
-#define C_  "\x1b[0m"     // Reset
+  #define C_B "\x1b[34;01m" // blue
+  #define C_M "\x1b[35;01m" // magenta
+  #define C_C "\x1b[36;01m" // Cyan
+  #define C_R "\x1b[31;01m" // Red
+  #define C_G "\x1b[32;01m" // Green
+  #define C_Y "\x1b[33;01m" // Yellow
+  #define C_  "\x1b[0m"     // Reset
 #else
-#define C_B "" // blue
-#define C_M "" // magenta
-#define C_C "" // Cyan
-#define C_R "" // Red
-#define C_G "" // Green
-#define C_Y "" // Yellow
-#define C_  "" // Reset
+  #define C_B "" // blue
+  #define C_M "" // magenta
+  #define C_C "" // Cyan
+  #define C_R "" // Red
+  #define C_G "" // Green
+  #define C_Y "" // Yellow
+  #define C_  "" // Reset
 #endif
-
-/* Group names */
-#define GRPN_NONE "none"
-#define GRPN_SAFE "safe"
-#define GRPN_USFE "unsafe"
-#define GRPN_SPCL "special"
-#define GRPN_FAST "fast"
-#define GRPN_SLOW "slow"
-#define GRPN_ALL  "all"
-
 
 // libglyr uses checksums to filter double items
 // Also you can use those as easy comparasion method
@@ -81,33 +68,6 @@ typedef struct GlyCacheList
 } GlyCacheList;
 
 
-/**
-* @brief Structure holding information about built-in getters and providers
-*
-* Holding information about plugin-name, shortcut (key = "a" => "amazon"), a colored version of the name.
-* You shouldn't bother with the rest
-*
-*/
-typedef struct GlyPlugin
-{
-    const char * name;  // Full name
-    const char * key;   // A one-letter ID
-    const char * color; // Colored name
-    int use;            // Use this source?
-
-    struct
-    {
-        // Passed to the corresponding cb_object and is called...perhaps
-        GlyCacheList * (* parser_callback) (struct cb_object *);
-        const char *   (* url_callback)    (GlyQuery  *);
-        const char *  endmarker; // Stop download if containing this string
-        bool free_url; // pass result of url_callback to free()?
-    } plug;
-
-    char gid;
-
-} GlyPlugin;
-
 /*------------------------------------------------------*/
 
 // Internal representation of one metadataprovider
@@ -126,7 +86,7 @@ typedef struct MetaDataFetcher
    bool (*validate)(GlyQuery *); 
    void (*init)(void);  
    void (*destroy)(void);
-   GlyCacheList* (*finalize)(GlyCacheList*,GlyQuery*);
+   GList* (*finalize)(GlyQuery*,GList*);
 
 } MetaDataFetcher;
 
@@ -145,7 +105,6 @@ typedef struct MetaDataSource {
 
       int priority;  /* What priority this plugin has            */
 
-      bool isUsed;   /* is used in searching? - set by .init     */
       bool free_url; /* URL is dyn. allocated - set this always! */
 
 } MetaDataSource;
@@ -159,9 +118,6 @@ typedef struct MetaDataSource {
 // It models the data that one plugin needs.
 typedef struct cb_object
 {
-    // What callback to call
-    GlyCacheList * (* parser_callback) (struct cb_object *);
-
     // What url to download before the callback is called
     char *url;
 
@@ -171,22 +127,8 @@ typedef struct cb_object
     // What curl handle this is attached
     CURL *handle;
 
-    GlyPlugin * plug;
-
     // internal cache attached to this url
     GlyMemCache *cache;
-
-    // shall invoke() use a batch-like mode?
-    // This usually only affects the output
-    bool batch;
-
-    const char * endmark;
-
-    // This is only used for cover/photo
-    // to fill the 'prov' field of memcache
-    // This is a bit hackish, but well...
-    // no valid reason to change it just because this ;)
-    const char * provider_name;
 
 } cb_object;
 
@@ -209,12 +151,7 @@ enum CORE_ERR
 // Check if a plugin needs to search more items
 bool continue_search(int iter, GlyQuery * s);
 
-// This needs to be called for each getter in the get_$getter() call. It sets up everything invoke() needs
-GlyCacheList * register_and_execute(GlyQuery * settings, GlyCacheList * (* finalizer) (GlyCacheList *, GlyQuery *));
-void plugin_init(cb_object *ref, const char *url, GlyCacheList * (callback)(cb_object*), GlyQuery * s, GlyPlugin * plug, const char * endmark, const char * prov_name, bool batch);
-
 // download related methods
-GlyCacheList * invoke(cb_object *oblist, long CNT, long parallel, long timeout, GlyQuery * s);
 GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
 
 // cache related functions
@@ -232,10 +169,7 @@ void DL_free_lst(GlyCacheList * c);
 void DL_add_to_list(GlyCacheList * l, GlyMemCache * c);
 void DL_free_container(GlyCacheList * c);
 
-// Copy a plugin_t * struct to a newly alloc'd bufer
-GlyPlugin * copy_table(const GlyPlugin * o, size_t size);
-
-// Verbosity fix
+// Verbosity aware printf
 int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
 
 // Control for bad items
@@ -247,6 +181,7 @@ int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
 GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type);
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
 
-// just for fromoption...
-const char * grp_id_to_name(int id);
+GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, 
+		       GList * (*callback)(cb_object*,void*,bool*), void* userptr);
+
 #endif

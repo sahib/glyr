@@ -472,56 +472,6 @@ extern "C"
 	enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring);
 
 /**
-* @brief Get a nullterminated list of available providers 
-*
-* @param ID What type to get, or GET_UNSURE for a list of getters
-*
-* A list is returned with all providernames for this type.\n
-* Example:\n
-* {"last.fm","amazon",...,"coverhunt",NULL}; \n
-* You can use this in GlyOpt_from()\n
-*
-* @return a nullterminated list of available providers
-*/
-	const char ** GlyPlug_get_name_by_id(enum GLYR_GET_TYPE ID);
-
-/**
-* @brief Same as GlyPlug_get_name_by_id, but returns single string
-*
-* @param ID What type to get, or GET_UNSURE for a list of getters
-*
-* @return a nullterminated string of providers, seperated with '|'
-*/
-  const char * GlyPlug_get_single_name_by_id(enum GLYR_GET_TYPE ID);
-
-/**
-* @brief Get a nullterminated list of available providers, with their name as key
-*
-* @param ID What type to get, or GET_UNSURE for a list of getters
-*
-* A string is returned with all keys of this getter.\n
-* Example: \n
-* "lawgbdmc\\0", where 'a' stands for amazon.\n
-* You can use them (or their full names is GlyOpt_from()\n
-*
-* @return a nullterminated list of available providers
-*/
-	const char *  GlyPlug_get_key_by_id(enum GLYR_GET_TYPE ID);
-/**
-* @brief Get a list of GroupIDs 
-*
-* @param ID What type to get, or GET_UNSURE for a list of getters
-*
-* You can use the groupid to determine in whatt group this provider is.\n
-* You will not use this function in 99.9% of all cases, but it can be useful to translate user input\n
-* to glyr's represantation, or to list groups as glyrc does. 
-* GET_UNSURE will result in a list of all GET_* enumerators (i.e. GET_COVER...GET_UNSURE)\n
-*
-* @return ..
-*/
-	char * GlyPlug_get_gid_by_id(enum GLYR_GET_TYPE ID);
-
-/**
 * @brief A convinience method to download the content at the URl $url, according to the settings in $s 
 * Actually only the redirect and timeout parameters are used here. 
 *
@@ -541,18 +491,6 @@ extern "C"
 * @return A descriptive nullterminated string, do not pass to free 
 */
         const char * Gly_strerror(enum GLYR_ERROR ID);
-
-/**
-* @brief Get the name of a group as string
-*
-* @param ID a member of the GLYR_GROUPS enum
-*
-* GRP_FAST gets to "fast",GRP_ALL to "all" etc.\n
-* Use this to make strings from GlyPlug_get_gid_by_id()\n
-*
-* @return A groupname as string or NULL if not found
-*/
-        const char * Gly_groupname_by_id(enum GLYR_GROUPS ID);
 
 /**
 * @brief Returns versioning information, including compiletime

@@ -18,33 +18,10 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-
-#include "types.h"
 #include "core.h"
 #include "stringlib.h"
 
-#include "tracklist/musicbrainz.h"
-
-// Add your's here
-GlyPlugin tracklist_providers[] =
-{
-    {"musicbrainz","m",  C_Y"music"C_"brainz",  false,  {tracklist_musicbrainz_parse, tracklist_musicbrainz_url, NULL, false}, GRP_SAFE | GRP_FAST},
-    { NULL,        NULL, NULL,                  false,  {NULL,                        NULL,                      NULL, false}, GRP_NONE | GRP_NONE},
-};
-
-GlyPlugin * glyr_get_tracklist_providers(void)
-{
-    return copy_table(tracklist_providers,sizeof(tracklist_providers));
-}
-
-static GlyCacheList * tracklist_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_TRACK);
-}
+/*----------------------------------------------------------------*/
 
 bool vdt_tracklist(GlyQuery * settings)
 {
@@ -55,6 +32,12 @@ bool vdt_tracklist(GlyQuery * settings)
     return false;
 }
 
+/*----------------------------------------------------------------*/
+
+static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+
+/*----------------------------------------------------------------*/
+
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tracklist = {
 	.name = "Tracklist Fetcher",
@@ -62,5 +45,5 @@ MetaDataFetcher glyrFetcher_tracklist = {
 	.validate  = vdt_tracklist,
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = tracklist_finalize
+	.finalize = factory
 };
