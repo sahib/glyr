@@ -34,6 +34,8 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 
 		gchar * prov_name = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
 		capo->cache->prov = (prov_name) ? g_strdup(prov_name) : NULL;
+
+		capo->s->callback.download(capo->cache,capo->s);
 	}
 	return NULL;
 }

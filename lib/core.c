@@ -427,51 +427,81 @@ bool continue_search(int iter, GlyQuery * s)
 /*--------------------------------------------------------*/
 
 
-int flag_lint(GlyCacheList * result, GlyQuery * s)
+gint delete_dupes(GList * result, GlyQuery * s)
 {
 	// As author of rmlint I know that there are better ways
 	// to do fast duplicate finding... but well, it works ;-)
 	if(!result || s->duplcheck == false)
 		return 0;
 
-	size_t i = 0, dp = 0;
-	for(i = 0; i < result->size; i++)
+	unsigned char empty_md5sum[16];
+	memset(empty_md5sum,0,16);
+
+puts("----------------------------------------------------------");
+
+	for(GList * elem = result; elem; elem = elem->next)
 	{
-		size_t j = 0;
-		if(result->list[i]->error == ALL_OK)
+					GlyMemCache * a = elem->data;
+					fprintf(stderr,"%s\n",a->data);
+		
+	}
+fprintf(stderr,"Items: %d\n",g_list_length(result));
+puts("----------------------------------------------------------");
+
+	gint double_items = 0;
+	for(GList * inode = result; inode; inode = inode->next)
+	{
+		for(GList * jnode = result; jnode; jnode = jnode->next)
 		{
-			for(j = 0; j < result->size; j++)
+			bool is_duplicate  = false;
+			GlyMemCache * lval = inode->data;
+			GlyMemCache * rval = jnode->data;
+
+			if(lval && rval && rval != lval && lval->size == rval->size)
 			{
-				if(i != j && result->list[i]->error == ALL_OK)
+				/* Compare via checkums */
+				if(CALC_MD5SUMS == false || 
+				  (!memcmp(lval->md5sum,empty_md5sum,16)||
+				   !memcmp(rval->md5sum,empty_md5sum,16)))
 				{
-					if(result->list[i]->size == result->list[j]->size)
+					fprintf(stderr,"glyr: warning: empty checksum found.\n");
+					if(!memcmp(lval->data,rval->data,rval->size))
 					{
-						/* Use by default checksums, lotsa faster */
-#if !CALC_MD5SUMS
-						if(!memcmp(result->list[i]->data,result->list[j]->data,result->list[i]->size))
-						{
-							result->list[j]->error = DOUBLE_ITEM;
-							dp++;
-						}
-#else
-						if(!memcmp(result->list[i]->md5sum,result->list[j]->md5sum,16))
-						{
-							result->list[j]->error = DOUBLE_ITEM;
-							dp++;
-						}
-#endif
+						is_duplicate = true;
 					}
+					
+				} else {
+					if(!memcmp(lval->md5sum,rval->md5sum,16))
+					{
+						is_duplicate = true;
+						MDPrintArr(lval->md5sum); printf(" - ");
+						MDPrintArr(rval->md5sum);
+						fprintf(stderr,"=> <%s>\n",rval->data);
+					}
+				}
+
+				/* Delete this element.. */
+				if(is_duplicate == true) 
+				{
+					GlyMemCache * a = jnode->data;
+					fprintf(stderr,"Del: %s\n",a->data);
+					result = g_list_delete_link(result,jnode);
+					double_items++;
 				}
 			}
 		}
 	}
 
-	if(dp != 0)
+puts("----------------------------------------------------------");
+	for(GList * elem = result; elem; elem = elem->next)
 	{
-		const char * plural = (dp < 2) ? " " : "s ";
-		glyr_message(2,s,stderr,C_"- Ignoring %d item%sthat occure%stwice.\n",dp,plural,plural);
+					GlyMemCache * a = elem->data;
+					fprintf(stderr,"%s\n",a->data);
+		
 	}
-	return dp;
+fprintf(stderr,"Items: %d\n",g_list_length(result));
+exit(0);
+	return double_items;
 }
 
 /*--------------------------------------------------------*/
@@ -621,7 +651,6 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 		}
 		// Handle without any use - clean up
 		curl_easy_cleanup(curl);
-
 		update_md5sum(dldata);
 		return dldata;
 	}
@@ -761,6 +790,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 
 						/* Set origin */
 						capo->cache->dsrc = g_strdup(capo->url);
+						update_md5sum(capo->cache);
 
 						/* Call it if present */
 						if(callback != NULL) {
@@ -895,6 +925,24 @@ bool provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 
 /*--------------------------------------------------------*/
 
+void checksum_all_in_list(GList * list)
+{
+	if(list != NULL)
+	{
+		for(GList * elem = list; elem; elem = elem->next)
+		{
+			GlyMemCache * item = elem->data;
+			update_md5sum(item);
+//			fprintf(stderr,"%s: Check <%s> => ",item->prov,item->data);
+//			MDPrintArr(item->md5sum);
+//			fprintf(stderr,"\n");
+		}
+	} 
+}
+
+
+/*--------------------------------------------------------*/
+
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 {
 	GList * url_list = NULL;
@@ -931,10 +979,26 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 		}
 	}
 
+
 	/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
 	GList * raw_parsed = async_download(url_list,query,g_list_length(url_list)/2,1,call_provider_callback,url_table);
+	checksum_all_in_list(raw_parsed);	
+
+	/* Kill duplicates before finalizing */
+	glyr_message(2,query,stderr,"- Prefiltering double data... ");
+	int pre_less = delete_dupes(raw_parsed,query);
+	glyr_message(2,query,stderr,"%d elements less.\n",pre_less);
+
+	/* Call finalize to sanitize data, or download given URLs */
 	GList * ready_caches = fetcher->finalize(query, raw_parsed);
+	checksum_all_in_list(ready_caches);
 	
+	/* Kill duplicates after finalizing */
+	glyr_message(2,query,stderr,"- Postfiltering double data... ");
+	int post_less = delete_dupes(ready_caches,query);
+	glyr_message(2,query,stderr,"%d elements less.\n",post_less);
+
+
 	/* Raw data not needed anymore */
 	g_list_free(raw_parsed);
 	raw_parsed = NULL;
@@ -947,19 +1011,6 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	g_list_free(url_list);
 	url_list = NULL;	
 
-	if(ready_caches != NULL)
-	{
-		for(GList * elem = ready_caches; elem; elem = elem->next)
-		{
-			GlyMemCache * item = elem->data;
-
-			/* md5sum is missing. */
-			update_md5sum(item);
-
-			/* Call the callback late, i.e. here. */
-			query->callback.download(item,query);
-		}
-	} 
 	
 	g_hash_table_destroy(url_table);
 	return ready_caches;
@@ -974,8 +1025,6 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 	size_t i = 0;
 	GlyCacheList * r_list = NULL;
 
-	/* Ignore double items if desired */
-	flag_lint(result,settings);
 
 	for(i = 0; i < result->size; i++)
 	{

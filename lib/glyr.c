@@ -435,8 +435,6 @@ static void set_query_on_defaults(GlyQuery * glyrs)
         glyrs->formats = DEFAULT_FORMATS;
         glyrs->proxy = DEFAULT_PROXY;
 
-	while(1) glyrs++;
-
         // gtrans - do no translation by default
         glyrs->gtrans.target = NULL;
         glyrs->gtrans.source = NULL;
