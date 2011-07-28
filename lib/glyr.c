@@ -17,26 +17,22 @@
  * You should have received a copy of the GNU General Public License
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-#include <unistd.h>
-#include <getopt.h>
-#include <libgen.h>
+
 #include <glib.h>
 
-#include "glyr.h"
-#include "config.h"
+#ifndef WIN32
+  /* Backtrace*/
+  #include <execinfo.h>
+#endif
 
+#include "glyr.h"
 #include "register_plugins.h"
-#include "stringlib.h"
 #include "core.h"
 
-/* Backtracing */
-#include <execinfo.h>
 
 //* ------------------------------------------------------- */
+
+#ifndef WIN32
 
 #define STACK_FRAME_SIZE 20
 /* Obtain a backtrace and print it to stdout. */
@@ -57,20 +53,28 @@ void print_trace(void)
 	free(bt_info_list);
 }
 
+#endif
+
 //* ------------------------------------------------------- */
 
 static void sig_handler(int signal)
 {
         switch(signal) {
+	case SIGABRT :
+	case SIGFPE  :
         case SIGSEGV : /* sigh */
-                glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr crashed due to a Segmentation fault.\n");
+                glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
                 glyr_message(-1,NULL,stderr,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
                 glyr_message(-1,NULL,stderr,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
                 glyr_message(-1,NULL,stderr,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
                 glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
+#ifndef WIN32
 		glyr_message(-1,NULL,stderr,C_"\nA list of the last called functions follows, please add this to your report:\n");
-		print_trace();	
+		print_trace();
+#endif
                 glyr_message(-1,NULL,stderr,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
+
+		g_on_error_stack_trace("glyr");
                 break;
         }
         exit(-1);
@@ -430,6 +434,8 @@ static void set_query_on_defaults(GlyQuery * glyrs)
         glyrs->duplcheck = DEFAULT_DUPLCHECK;
         glyrs->formats = DEFAULT_FORMATS;
         glyrs->proxy = DEFAULT_PROXY;
+
+	while(1) glyrs++;
 
         // gtrans - do no translation by default
         glyrs->gtrans.target = NULL;

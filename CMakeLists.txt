@@ -54,17 +54,18 @@ FIND_PACKAGE(GTK2 REQUIRED)
 INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
 
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
-set (DIR_COVER ${DIR_ROOT}/cover )
-set (DIR_LYRICS ${DIR_ROOT}/lyrics )
-set (DIR_PHOTOS ${DIR_ROOT}/photos )
-set (DIR_AINFO ${DIR_ROOT}/ainfo )
-set (DIR_SIMILIAR ${DIR_ROOT}/similiar_artist )
-set (DIR_SIMILISO ${DIR_ROOT}/similiar_song )
-set (DIR_REVIEW ${DIR_ROOT}/review )
-set (DIR_TRACKLIST ${DIR_ROOT}/tracklist )
-set (DIR_ALBUMLIST ${DIR_ROOT}/albumlist )
-set (DIR_TAGS ${DIR_ROOT}/tags )
-set (DIR_RELATIONS ${DIR_ROOT}/relations )
+set (DIR_INTERN ${DIR_ROOT}/intern )
+set (DIR_COVER ${DIR_INTERN}/cover )
+set (DIR_LYRICS ${DIR_INTERN}/lyrics )
+set (DIR_PHOTOS ${DIR_INTERN}/photos )
+set (DIR_AINFO ${DIR_INTERN}/ainfo )
+set (DIR_SIMILIAR ${DIR_INTERN}/similiar_artist )
+set (DIR_SIMILISO ${DIR_INTERN}/similiar_song )
+set (DIR_REVIEW ${DIR_INTERN}/review )
+set (DIR_TRACKLIST ${DIR_INTERN}/tracklist )
+set (DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
+set (DIR_TAGS ${DIR_INTERN}/tags )
+set (DIR_RELATIONS ${DIR_INTERN}/relations )
 
 SET(LIB_SOURCE_LOCATIONS
 	# core
@@ -76,17 +77,17 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/utils.c"
 	# fetcher
-	"${DIR_ROOT}/ainfo.c"
-	"${DIR_ROOT}/cover.c"
-	"${DIR_ROOT}/similiar_artist.c"
-	"${DIR_ROOT}/similiar_song.c"
-	"${DIR_ROOT}/lyrics.c"
-	"${DIR_ROOT}/photos.c"
-	"${DIR_ROOT}/review.c"
-	"${DIR_ROOT}/tracklist.c"
-	"${DIR_ROOT}/tags.c"
-	"${DIR_ROOT}/relations.c"
-	"${DIR_ROOT}/albumlist.c"
+	"${DIR_INTERN}/ainfo.c"
+	"${DIR_INTERN}/cover.c"
+	"${DIR_INTERN}/similiar_artist.c"
+	"${DIR_INTERN}/similiar_song.c"
+	"${DIR_INTERN}/lyrics.c"
+	"${DIR_INTERN}/photos.c"
+	"${DIR_INTERN}/review.c"
+	"${DIR_INTERN}/tracklist.c"
+	"${DIR_INTERN}/tags.c"
+	"${DIR_INTERN}/relations.c"
+	"${DIR_INTERN}/albumlist.c"
 	# extensions
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"

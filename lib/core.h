@@ -57,6 +57,7 @@
 
 struct cb_object;
 
+
 /**
 * @brief The return type of Gly_get, a list of GlyMemCaches
 */
@@ -148,40 +149,27 @@ enum CORE_ERR
 
 /*------------------------------------------------------*/
 
-// Check if a plugin needs to search more items
+typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,bool*);
+
+/*------------------------------------------------------*/
+
 bool continue_search(int iter, GlyQuery * s);
-
-// download related methods
 GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
-
-// cache related functions
 GlyMemCache * DL_init(void);
 GlyMemCache * DL_error(int eid);
 GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
-
-// Calculate a md5sum of the data
 void update_md5sum(GlyMemCache * c);
-
-// cacheList related methods
 GlyCacheList * DL_new_lst(void);
 void DL_free_lst(GlyCacheList * c);
 void DL_add_to_list(GlyCacheList * l, GlyMemCache * c);
 void DL_free_container(GlyCacheList * c);
-
-// Verbosity aware printf
 int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
-
-// Control for bad items
 int flag_lint(GlyCacheList * result, GlyQuery * s);
 int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s);
 int flag_invalid_format(GlyCacheList * result, GlyQuery * s);
-
-// Basic placeholder doing the job for review,tracklist..
 GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type);
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
-
-GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, 
-		       GList * (*callback)(cb_object*,void*,bool*), void* userptr);
+GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
 
 #endif

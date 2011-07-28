@@ -1097,6 +1097,7 @@ int main(int argc, char * argv[])
                                 enum GLYR_ERROR get_error = GLYRE_OK;
                                 GlyMemCache * my_list= Gly_get(&my_query, &get_error, &length);
 
+GlyMemCache * a =my_list;
                                 if(my_list) {
                                         if(get_error == GLYRE_OK) {
                                                 /* This is the place where you would work with the cachelist *
@@ -1104,11 +1105,16 @@ int main(int argc, char * argv[])
                                                    Useful if you need to cache the data (e.g. for batch jobs *
 						   Left only for the reader's informatiom, no functions here *
                                                 */
+while(my_list != NULL)
+{
+	puts(my_list->dsrc);
+	my_list = my_list->next;
+}
 						glyr_message(2,&my_query,stderr,"In total %d items found.\n",length);
                                         }
 
                                         // Free all downloaded buffers
-                                        Gly_free_list(my_list);
+                                        Gly_free_list(a);
                                 } else if(get_error != GLYRE_OK) {
                                         glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
                                 }

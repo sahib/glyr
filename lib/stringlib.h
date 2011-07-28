@@ -20,7 +20,7 @@
 #ifndef STRINGOP_H
 #define STRINGOP_H
 
-#include <stdarg.h>
+#include <glib.h>
 
 #define nextTag(X) while(*X && *X++ != '>')
 size_t levenshtein_strcmp(const char * s, const char * t);

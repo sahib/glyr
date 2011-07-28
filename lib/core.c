@@ -18,31 +18,16 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-#define _GNU_SOURCE
-
 #include <errno.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdbool.h>
-#include <string.h>
-
-// Handle non-standardized systems:
-#ifndef WIN32
-#include <unistd.h>
-#else
-#include <time.h>
-#endif
-
-// All curl stuff we need:
 #include <curl/multi.h>
 
-// Own headers:
 #include "stringlib.h"
 #include "core.h"
+
+/* Checkumming */
 #include "md5.h"
 
-// Get user agent
+/* Get user agent string */
 #include "config.h"
 
 /*--------------------------------------------------------*/
@@ -96,30 +81,6 @@ int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...)
 }
 
 #undef remove_color
-
-/*--------------------------------------------------------*/
-
-// Sleep usec microseconds
-static int DL_usleep(long usec)
-{
-#ifndef WIN32 // posix
-	struct timespec req;
-	memset(&req,0,sizeof(struct timespec));
-	time_t sec = (int) (usec / 1e6L);
-
-	usec = usec - (sec*1e6L);
-	req.tv_sec  = (sec);
-	req.tv_nsec = (usec*1e3L);
-
-	while(nanosleep(&req , &req) == -1)
-	{
-		continue;
-	}
-#else // Windooza 
-	Sleep(usec / 1e3L);
-#endif
-	return 0;
-}
 
 /*--------------------------------------------------------*/
 
@@ -379,7 +340,7 @@ static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery 
 	curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
 	// last.fm and discogs require an useragent (wokrs without too)
-	curl_easy_setopt(eh, CURLOPT_USERAGENT, glyr_VERSION_NAME );
+	curl_easy_setopt(eh, CURLOPT_USERAGENT, "liblyr ("glyr_VERSION_NAME")");
 	curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
 	// Pass vars to curl
@@ -706,8 +667,7 @@ static GlyMemCache * handle_init(CURLM * cm, cb_object * capo, GlyQuery *s, long
 /* ----------------- THE HEART OF GOLD ------------------ */
 /*--------------------------------------------------------*/
 
-GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, 
-		       GList * (*callback)(cb_object*,void*,bool*), void* userptr)
+GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr)
 {
 	/* Storage for result items */
 	GList * item_list = NULL;	
@@ -733,7 +693,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 		/* Now create cb_objects */
 		for (elem = url_list; elem; elem = elem->next) {
 			cb_object * obj = calloc(1,sizeof(cb_object));
-			obj->url   = (gchar*)(elem->data);
+			obj->url   = g_strdup((gchar*)(elem->data));
 			obj->cache = handle_init(cmHandle,obj,s,abs_timeout);
 			obj->s     = s;
 			cb_list    = g_list_prepend(cb_list,obj); 
@@ -762,7 +722,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 
 				/* Nothing happens.. */
 				if (M == -1) {
-					DL_usleep(wait_time * 100);
+					g_usleep(wait_time * 100);
 				} else {
 					struct timeval Tmax;
 					Tmax.tv_sec  = (wait_time/1000);
@@ -796,28 +756,34 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 					if(msg->data.result == CURLE_OK && capo && capo->cache)
 					{
 						bool stop_download = false;
+						bool add_item = true;
 						GList * cb_results = NULL;
+
+						/* Set origin */
+						capo->cache->dsrc = g_strdup(capo->url);
+
+						/* Call it if present */
 						if(callback != NULL) {
-						
-							/* Add parsed results or nothing if pared result is empty */
-							cb_results = callback(capo,userptr,&stop_download);
-							if(cb_results != NULL) {
-				
-								/* Fill in the source filed (dsrc) if not already done */
-								for(GList * elem = cb_results; elem; elem = elem->next)
+							/* Add parsed results or nothing if parsed result is empty */
+							cb_results = callback(capo,userptr,&stop_download,&add_item);
+						}
+
+						if(cb_results != NULL) {
+
+							/* Fill in the source filed (dsrc) if not already done */
+							for(GList * elem = cb_results; elem; elem = elem->next)
+							{
+								GlyMemCache * item = elem->data;
+								if(item->dsrc == NULL)
 								{
-									GlyMemCache * item = elem->data;
-									if(item->dsrc == NULL)
-									{
-										/* Plugin didn't do any special download */
-										item->dsrc = g_strdup(capo->url);
-									}
+									/* Plugin didn't do any special download */
+									item->dsrc = g_strdup(capo->url);
 								}
-								item_list = g_list_concat(item_list,cb_results);
 							}
-						} else {
+							item_list = g_list_concat(item_list,cb_results);
+						
+						} else if(add_item != false) {
 							/* Add it as raw data */
-							capo->cache->dsrc = g_strdup(capo->url);
 							item_list = g_list_prepend(item_list,capo->cache);
 						}
 					} else {
@@ -856,7 +822,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 /*--------------------------------------------------------*/
 
 /* The actual call to the metadata provider here, coming from the downloader, triggered by start_engine() */
-GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download)
+GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, bool * add_item)
 {
 	GList * parsed = NULL;
 	if(userptr != NULL) {
@@ -880,8 +846,21 @@ GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_dow
 				DL_free_container(sub);
 			}
 		} else {
-			fprintf(stderr,"glyr: Empty hashmap received. Cannot call plugin => Bug.\n");
+			fprintf(stderr,"glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
 		}
+	}
+
+	/* We replace the cache with a new one -> free the old one */
+	if(capo->cache != NULL)
+	{
+		DL_free(capo->cache);
+	}
+
+
+	/* Do not add the 'raw' cache */
+	if(parsed == NULL)
+	{
+		*add_item = false;
 	}
 	return parsed;
 }
@@ -897,20 +876,19 @@ bool provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 	bool isFound = false;
 
 	/* split string */
-	gchar ** tokens = g_strsplit(s->from,DEFAULT_FROM_ARGUMENT_DELIM,0);
-	if(tokens != NULL)
+	if(f->name != NULL) 
 	{
-		int it = 0;
-		while(tokens[it] != NULL && isFound == false) {
-			if(tokens[it][0] == f->key      || 
-                          !strcasecmp(tokens[it],f->name))
-			     isFound = true;
+		size_t len = strlen(s->from);
+		size_t offset = 0;
 
-			tokens[it] = NULL;
-			it++;
+		char * token = NULL;
+		while((token = get_next_word(s->from,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) && isFound == false)
+		{
+			if(token[0] == f->key || !strcasecmp(token,f->name))
+				isFound = true;
+
+			free(token);
 		}
-		g_strfreev(tokens);
-		tokens = NULL;
 	}
 	return isFound;
 }
@@ -920,7 +898,7 @@ bool provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 {
 	GList * url_list = NULL;
-	GHashTable * url_table = g_hash_table_new(NULL,NULL);
+	GHashTable * url_table = g_hash_table_new(g_str_hash,g_str_equal);
 
 	/* Iterate over all sources for this fetcher  */
 	for(GList * source = fetcher->provider; source != NULL; source = source->next)
@@ -956,13 +934,18 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
 	GList * raw_parsed = async_download(url_list,query,g_list_length(url_list)/2,1,call_provider_callback,url_table);
 	GList * ready_caches = fetcher->finalize(query, raw_parsed);
-
 	
 	/* Raw data not needed anymore */
 	g_list_free(raw_parsed);
 	raw_parsed = NULL;
 
-
+	/* Same goes for url list */
+	for(GList * elem = url_list; elem; elem = elem->next)
+	{
+		g_free((gchar*)elem->data);
+	}
+	g_list_free(url_list);
+	url_list = NULL;	
 
 	if(ready_caches != NULL)
 	{
