@@ -653,7 +653,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 							for(GList * elem = cb_results; elem; elem = elem->next)
 							{
 								GlyMemCache * item = elem->data;
-								if(item->dsrc == NULL)
+								if(item && item->dsrc == NULL)
 								{
 									/* Plugin didn't do any special download */
 									item->dsrc = g_strdup(capo->url);
@@ -701,7 +701,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 /*--------------------------------------------------------*/
 
 /* The actual call to the metadata provider here, coming from the downloader, triggered by start_engine() */
-GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, bool * add_item)
+static GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, bool * add_item)
 {
 	GList * parsed = NULL;
 	if(userptr != NULL) {
@@ -713,15 +713,17 @@ GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_dow
 		if(plugin != NULL) {
 
 			/* Call the parserplugin */
-			GList * parsed_data = plugin->parser(capo);
-			for(GList * elem = parsed_data; elem; elem = elem->next)
+			GList * raw_parsed_data = plugin->parser(capo);
+			for(GList * elem = raw_parsed_data; elem; elem = elem->next)
 			{
 				GlyMemCache * item = elem->data;
 				if(item != NULL)
 				{
 					item->prov = g_strdup(plugin->name);
+					parsed = g_list_prepend(parsed,item);
 				}
 			}
+			g_list_free(raw_parsed_data);
 
 		} else {
 			fprintf(stderr,"glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
@@ -745,7 +747,7 @@ GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_dow
 
 /*--------------------------------------------------------*/
 
-gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
+static gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 {
 	/* Assume 'all we have' */
 	if(s->from == NULL)
@@ -830,7 +832,7 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	checksum_all_in_list(raw_parsed);	
 
 	/* Kill duplicates before finalizing */
-	glyr_message(2,query,stderr,"- Prefiltering double data... ");
+	glyr_message(2,query,stderr,"- Prefiltering  double data... ");
 	int pre_less = delete_dupes(raw_parsed,query);
 	glyr_message(2,query,stderr,"%d elements less.\n",pre_less);
 
