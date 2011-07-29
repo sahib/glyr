@@ -72,9 +72,9 @@ static GlyMemCache * parse_page(GlyMemCache * dl, cb_object * capo)
 
 #define SPAN_BEGIN "<span class"
 
-GlyCacheList * lyrics_lyricstime_parse(cb_object * capo)
+GList * lyrics_lyricstime_parse(cb_object * capo)
 {
-    GlyCacheList * rList = NULL;
+    GList * rList = NULL;
     char * start = capo->cache->data;
     if(start != NULL)
     {
@@ -129,9 +129,7 @@ GlyCacheList * lyrics_lyricstime_parse(cb_object * capo)
                             GlyMemCache * r_cache = parse_page(dl_cache,capo);
                             if(r_cache)
                             {
-                                if(!rList) rList = DL_new_lst();
-                                DL_add_to_list(rList,r_cache);
-
+                                rList = g_list_prepend(rList,r_cache);
                                 ctr++;
                             }
                             DL_free(dl_cache);
@@ -155,6 +153,8 @@ MetaDataSource lyrics_lyricstime_src = {
 	.parser    = lyrics_lyricstime_parse,
 	.get_url   = lyrics_lyricstime_url,
 	.type      = GET_LYRICS,
+	.quality   = 50,
+	.speed     = 60,
 	.endmarker = NULL,
 	.free_url  = false
 };

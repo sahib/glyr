@@ -32,23 +32,16 @@ const char * albumlist_musicbrainz_url(GlyQuery * sets)
 #define TITLE_BEGIN "<title>"
 #define TITLE_ENDIN "</title>"
 
-GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
+GList * albumlist_musicbrainz_parse(cb_object * capo)
 {
-    GlyCacheList * collection = NULL;
-
+    GList * collection = NULL;
     int ctr = 0;
-
     char * node = capo->cache->data;
     while(continue_search(ctr,capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
     {
         char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
         if(name != NULL)
         {
-            if(!collection)
-            {
-                collection = DL_new_lst();
-            }
-
             GlyMemCache * c = DL_init();
             c->data = beautify_lyrics(name);
 
@@ -59,7 +52,7 @@ GlyCacheList * albumlist_musicbrainz_parse(cb_object * capo)
 
 
             c->dsrc = strdup(capo->url);
-            DL_add_to_list(collection,c);
+            collection = g_list_prepend(collection,c);
             free(name);
             ctr++;
         }
@@ -75,6 +68,8 @@ MetaDataSource albumlist_musicbrainz_src = {
 	.free_url = false,
 	.parser  = albumlist_musicbrainz_parse,
 	.get_url = albumlist_musicbrainz_url,
-	.type      = GET_ALBUMLIST,
+	.type    = GET_ALBUMLIST,
+	.quality = 95,
+	.speed   = 95,  
 	.endmarker = NULL
 };

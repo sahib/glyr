@@ -82,9 +82,9 @@ const char * cover_google_url(GlyQuery * s)
     return result;
 }
 
-GlyCacheList * generic_google_parse(cb_object * capo)
+GList * generic_google_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     size_t urlc = 0;
     char * find = capo->cache->data;
@@ -98,14 +98,10 @@ GlyCacheList * generic_google_parse(cb_object * capo)
             char * url = copy_value(find,end_of_url);
             if(url)
             {
-                if(!r_list) r_list = DL_new_lst();
-
                 GlyMemCache * result = DL_init();
                 result->data = url;
                 result->size = strlen(url);
-
-                DL_add_to_list(r_list,result);
-
+                r_list = g_list_prepend(r_list,result);
                 urlc++;
             }
         }
@@ -113,7 +109,7 @@ GlyCacheList * generic_google_parse(cb_object * capo)
     return r_list;
 }
 
-GlyCacheList * cover_google_parse(cb_object * capo)
+GList * cover_google_parse(cb_object * capo)
 {
     return generic_google_parse(capo);
 }
@@ -124,6 +120,8 @@ MetaDataSource cover_google_src = {
 	.parser    = cover_google_parse,
 	.get_url   = cover_google_url,
 	.type      = GET_COVERART,
+	.quality   = 35,
+	.speed     = 100,
 	.endmarker = NULL,
 	.free_url  = true
 };

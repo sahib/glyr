@@ -50,10 +50,10 @@ const char * lyrics_songlyrics_url(GlyQuery * settings)
     return url;
 }
 
-GlyCacheList * lyrics_songlyrics_parse(cb_object * capo)
+GList * lyrics_songlyrics_parse(cb_object * capo)
 {
     GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     char * find_tag, * find_end;
 
     if( (find_tag = strstr(capo->cache->data,"<p id=\"songLyricsDiv\"")) != NULL)
@@ -82,8 +82,7 @@ GlyCacheList * lyrics_songlyrics_parse(cb_object * capo)
     }
     if(result)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list, result);
+        r_list = g_list_prepend(r_list, result);
     }
     return r_list;
 }  
@@ -96,6 +95,8 @@ MetaDataSource lyrics_songlyrics_src = {
 	.parser    = lyrics_songlyrics_parse,
 	.get_url   = lyrics_songlyrics_url,
 	.type      = GET_LYRICS,
+	.quality   = 20,
+	.speed     = 30,
 	.endmarker = NULL,
 	.free_url  = true
 };

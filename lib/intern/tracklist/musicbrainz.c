@@ -35,10 +35,10 @@ const char * tracklist_musicbrainz_url(GlyQuery * sets)
 #define TIT_BEGIN "<title>"
 #define TIT_ENDIN "</title>"
 
-static GlyCacheList * traverse_xml(const char * data, const char * url, cb_object * capo)
+static GList * traverse_xml(const char * data, const char * url, cb_object * capo)
 {
     char * beg = (char*)data;
-    GlyCacheList * collection = NULL;
+    GList * collection = NULL;
 
     int ctr = 0;
 
@@ -49,17 +49,12 @@ static GlyCacheList * traverse_xml(const char * data, const char * url, cb_objec
         char * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN))); // 1 UP
         if(value && durat)
         {
-            if(!collection)
-            {
-                collection = DL_new_lst();
-            }
-
             GlyMemCache * cont = DL_init();
             cont->data = beautify_lyrics(value);
             cont->size = strlen(cont->data);
             cont->duration = atoi(durat) / 1e3;
             cont->dsrc = strdup(url);
-            DL_add_to_list(collection,cont);
+            collection = g_list_prepend(collection,cont);
 
             ctr++;
 
@@ -72,9 +67,9 @@ static GlyCacheList * traverse_xml(const char * data, const char * url, cb_objec
     return collection;
 }
 
-GlyCacheList * tracklist_musicbrainz_parse(cb_object * capo)
+GList * tracklist_musicbrainz_parse(cb_object * capo)
 {
-    GlyCacheList * ls = NULL;
+    GList * ls = NULL;
     char * release_ID = NULL;
     if( (release_ID = copy_value(strstr(capo->cache->data,REL_ID_BEGIN)+strlen(REL_ID_BEGIN),strstr(capo->cache->data,REL_ID_ENDIN))) != NULL)
     {
@@ -98,6 +93,8 @@ MetaDataSource tracklist_musicbrainz_src = {
 	.key  = 'm',
 	.parser    = tracklist_musicbrainz_parse,
 	.get_url   = tracklist_musicbrainz_url,
+	.quality   = 90,
+	.speed     = 90,
 	.endmarker = NULL, 
 	.free_url  = false,
 	.type      = GET_TRACKLIST

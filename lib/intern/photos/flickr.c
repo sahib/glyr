@@ -60,12 +60,12 @@ static char * get_field_by_name(const char * string, const char * name)
     return NULL;
 }
 
-GlyCacheList * photos_flickr_parse(cb_object * capo)
+GList * photos_flickr_parse(cb_object * capo)
 {
     // Needed: ID,secret,server,farm
     char * ph_begin = capo->cache->data;
     size_t urlc = 0;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && continue_search(urlc,capo->s))
     {
@@ -85,10 +85,9 @@ GlyCacheList * photos_flickr_parse(cb_object * capo)
                 free(linebf);
                 linebf = NULL;
 
-                if(!r_list) r_list = DL_new_lst();
                 GlyMemCache * cache = DL_init();
                 cache->data = strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
-                DL_add_to_list(r_list,cache);
+                r_list = g_list_prepend(r_list,cache);
 
                 if(ID)
                     free(ID);
@@ -114,6 +113,8 @@ MetaDataSource photos_flickr_src = {
 	.parser    = photos_flickr_parse,
 	.get_url   = photos_flickr_url,
 	.type      = GET_ARTIST_PHOTOS,
+	.quality   = 60,
+	.speed     = 75,
 	.endmarker = NULL,
 	.free_url  = true
 };

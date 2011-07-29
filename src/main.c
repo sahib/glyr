@@ -64,7 +64,7 @@ static void print_version(GlyQuery * s)
 //* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
-
+/*
 static void free_name_list(const char ** ptr) {
 	if(ptr != NULL) {
 		size_t i = 0;
@@ -74,7 +74,7 @@ static void free_name_list(const char ** ptr) {
 		free(ptr);
 	}
 }
-
+*/
 
 /* --------------------------------------------------------- */
 
@@ -92,11 +92,13 @@ static void list_provider_at_id(int id, int min_align, GlyQuery * s)
 /* -------------------------------------------------------- */
 
 //TODO
+/*
 static bool set_get_type(GlyQuery * s, const char * arg)
 {
         bool result = false;
 	return result;
 }
+*/
 
 //* --------------------------------------------------------- */
 // --------------------------------------------------------- //
@@ -204,13 +206,11 @@ void help_short(GlyQuery * s)
                      IN"-e --maxsize          (cover only) The maximum size a cover may have.\n"
                      IN"-i --minsize          (cover only) The minimum size a cover may have.\n"
                      IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
-                     IN"-o --prefer           (images only) Only allow certain formats (Default: %s)\n"
                      IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                      IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
                      IN"-j --callback         Set a bash command to be executed when a item is finished downloading;\n"
 		     IN"-k --proxy	      Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
-                     IN"                      The special string <path> is expanded with the actual path to the data.\n",
-                     DEFAULT_FORMATS
+                     IN"                      The special string <path> is expanded with the actual path to the data.\n"
                     );
 
         glyr_message(-1,s,stdout,C_"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
@@ -311,12 +311,6 @@ static void usage(GlyQuery * s)
                      IN IN"This is mostly not the number of items actually returned then,\n"
                      IN IN"because libglyr is not able to find 300 songtexts of the same song,\n"
                      IN IN"or glyr filters duplicate items before returning.\n"
-                     IN C_C"-o --prefer\n"C_
-                     IN IN"Awaits a string with a semicolon seperated list of allowed formats.\n"
-                     IN IN"The case of the format is ignored.\n\n"
-                     IN IN"Example:\n"
-                     IN IN"    \"png;jpg;jpeg\" would allow png and jpeg.\n\n"
-                     IN IN"You can also specify \"all\", which disables this check.\n"
                      IN C_C"-t --lang\n"C_
                      IN IN"The language used for providers with multilingual content.\n"
                      IN IN"It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.\n"
@@ -423,7 +417,7 @@ static const char ** parse_commandline_general(int argc, char * const * argv, Gl
                 {"no-groups",     no_argument,       0, 'G'},
                 {"twincheck",     no_argument,       0, 'y'},
                 {"no-twincheck",  no_argument,       0, 'Y'},
-                // ------- plugin specific ------- //
+                // ---------- plugin specific ------------ //
                 {"artist",        required_argument, 0, 'a'},
                 {"album",         required_argument, 0, 'b'},
                 {"title",         required_argument, 0, 't'},
@@ -570,9 +564,6 @@ static const char ** parse_commandline_general(int argc, char * const * argv, Gl
                         break;
                 case 'z':
                         GlyOpt_fuzzyness(glyrs,atoi(optarg));
-                        break;
-                case 'o':
-                        GlyOpt_formats(glyrs,optarg);
                         break;
                 case 'j':
                         exec_on_call = optarg;
@@ -917,19 +908,6 @@ static const char * get_type_string(GlyQuery * s)
 
 /* --------------------------------------------------------- */
 
-// Increaase to get correcter results, but causes more traffic
-static void make_translation_work(GlyQuery * s, GlyMemCache * to_translate)
-{
-	if(s && to_translate && !to_translate->is_image && s->gtrans.target) {
-			if(!s->gtrans.source || strcmp(s->gtrans.target,s->gtrans.source)) {
-				Gly_gtrans_translate(s,to_translate);
-			} else {
-				glyr_message(1,s,stderr,"- The target lang is the same as the source lang - Ignore'd.");
-			}
-	}
-}
-/* --------------------------------------------------------- */
-
 static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 {
         // This is just to demonstrate the callback option.
@@ -938,9 +916,6 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
         // See the glyr_set_dl_callback for more info
         // a custom pointer is in s->callback.user_pointer
         int * i = s->callback.user_pointer;
-
-	// Realtime translation (fun, but mostly useless)
-	make_translation_work(s,c);
 
 	// Text Represantation of this item
         print_item(s,c,(*i));
@@ -989,33 +964,6 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 		glyr_message(-1,NULL,stderr,"warning: Empty counterpointer!\n");
 	}
         return GLYRE_OK;
-}
-
-/* --------------------------------------------------------- */
-
-static void print_suppported_languages(GlyQuery * s)
-{
-	size_t i = 0;
-	char ** lang_list = Gly_gtrans_list(s);
-
-	// Print all in a calendarstyle format
-	while(lang_list[i]) {
-		if(i % 10 == 0) {
-			glyr_message(2,s,stderr,"\n");
-		}
-		glyr_message(2,s,stderr,"%s ",lang_list[i]);
-
-		// free this field
-		free(lang_list[i]);
-		lang_list[i] = NULL;
-
-		i++;
-	}
-	if(lang_list != NULL) {
-		free(lang_list);
-	}
-
-	glyr_message(2,s,stderr,"\n\n");
 }
 
 /* --------------------------------------------------------- */
@@ -1136,6 +1084,8 @@ while(my_list != NULL)
                 }
 	/* Translator mode - simple interface to google translator */
 	} else if(argc >= 3 && !strcmp(argv[1],"gtrans")) {
+// Broken
+#if 0
 		GlyQuery settings;
 		Gly_init_query(&settings);
 		GlyOpt_verbosity(&settings,2);
@@ -1182,6 +1132,7 @@ while(my_list != NULL)
 
 		/* free all registers */
 		Gly_destroy_query(&settings);
+#endif
 
 	/*  making glyrc -h works (*sigh*) */
         } else if(argc >= 2 && !strcmp(argv[1],"-V")) {

@@ -28,12 +28,12 @@ const char * review_amazon_url(GlyQuery * settings)
 
 #define TheContent "<Content>"
 #define TheEndofCt "</Content>"
-GlyCacheList * review_amazon_parse(cb_object * capo)
+GList * review_amazon_parse(cb_object * capo)
 {
     char * node = capo->cache->data;
     size_t clen = strlen(TheContent);
 
-    GlyCacheList * cList = NULL;
+    GList * cList = NULL;
 
     size_t iter = 0;
     while( (node = strstr(node+1,TheContent)) != NULL && continue_search(iter,capo->s))
@@ -46,8 +46,6 @@ GlyCacheList * review_amazon_parse(cb_object * capo)
             // as mostly just advertisement
             if((endOfText - (node+clen)) > 350)
             {
-                if(!cList) cList = DL_new_lst();
-
                 GlyMemCache * tmp = DL_init();
                 tmp->data = beautify_lyrics(text);
                 tmp->size = tmp->data ? strlen(tmp->data) : 0;
@@ -55,7 +53,7 @@ GlyCacheList * review_amazon_parse(cb_object * capo)
 
                 iter++;
 
-                DL_add_to_list(cList,tmp);
+                cList = g_list_prepend(cList,tmp);
             }
             free(text);
         }
@@ -71,6 +69,8 @@ MetaDataSource review_amazon_src = {
 	.parser    = review_amazon_parse,
 	.get_url   = review_amazon_url,
 	.type      = GET_ALBUM_REVIEW,
+	.quality   = 45,
+	.speed     = 70,
 	.endmarker = NULL, 
 	.free_url  = true
 };

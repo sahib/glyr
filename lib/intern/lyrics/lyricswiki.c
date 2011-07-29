@@ -71,10 +71,10 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 
 /*--------------------------------------------------------*/
 
-GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
+GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
@@ -126,8 +126,7 @@ GlyCacheList * lyrics_lyricswiki_parse(cb_object * capo)
 
     if(result)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
+        r_list = g_list_prepend(r_list,result);
     }
     return r_list;
 }
@@ -140,6 +139,8 @@ MetaDataSource lyrics_lyricswiki_src = {
 	.parser    = lyrics_lyricswiki_parse,
 	.get_url   = lyrics_lyricswiki_url,
 	.type      = GET_LYRICS,
+	.quality   = 95,
+	.speed     = 95,
 	.endmarker = NULL,
 	.free_url  = false
 };

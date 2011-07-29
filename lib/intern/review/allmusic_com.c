@@ -66,14 +66,13 @@ GlyMemCache * parse_text(GlyMemCache * to_parse)
 }
 
 
-GlyCacheList * review_allmusic_parse(cb_object * capo)
+GList * review_allmusic_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
     {
         GlyMemCache * result = parse_text(capo->cache);
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list, result);
+        r_list = g_list_prepend(r_list, result);
         return r_list;
     }
 
@@ -111,8 +110,7 @@ GlyCacheList * review_allmusic_parse(cb_object * capo)
                                     GlyMemCache * result = parse_text(dl);
                                     if(result != NULL)
                                     {
-                                        if(!r_list) r_list = DL_new_lst();
-                                        DL_add_to_list(r_list,result);
+                                        r_list = g_list_prepend(r_list,result);
                                         urlc++;
                                     }
                                     DL_free(dl);
@@ -143,6 +141,8 @@ MetaDataSource review_allmusic_src = {
 	.parser    = review_allmusic_parse,
 	.get_url   = review_allmusic_url,
 	.endmarker = "<div id=\"right-sidebar\">",
+	.quality   = 75,
+	.speed     = 40,
 	.free_url  = false,
 	.type      = GET_ALBUM_REVIEW
 };

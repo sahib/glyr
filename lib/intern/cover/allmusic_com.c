@@ -71,14 +71,13 @@ GlyMemCache * parse_cover_page(GlyMemCache * dl)
     return rc;
 }
 
-GlyCacheList * cover_allmusic_parse(cb_object * capo)
+GList * cover_allmusic_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
     {
         GlyMemCache * result = parse_cover_page(capo->cache);
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list, result);
+        r_list = g_list_prepend(r_list, result);
         return r_list;
     }
 
@@ -113,8 +112,7 @@ GlyCacheList * cover_allmusic_parse(cb_object * capo)
                                 GlyMemCache * result = parse_cover_page(dl);
                                 if(result != NULL && result->data)
                                 {
-                                    if(!r_list) r_list = DL_new_lst();
-                                    DL_add_to_list(r_list,result);
+                                    r_list = g_list_prepend(r_list,result);
                                     urlc++;
                                 }
                                 DL_free(dl);
@@ -140,6 +138,8 @@ MetaDataSource cover_allmusic_src = {
 	.parser    = cover_allmusic_parse,
 	.get_url   = cover_allmusic_url,
 	.type      = GET_COVERART,
+	.quality   = 65,
+	.speed     = 50,
 	.endmarker = NULL,
 	.free_url  = false
 };

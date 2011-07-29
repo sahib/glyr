@@ -76,6 +76,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/utils.c"
+	"${DIR_ROOT}/blacklist.c"
 	# fetcher
 	"${DIR_INTERN}/ainfo.c"
 	"${DIR_INTERN}/cover.c"

@@ -376,24 +376,7 @@ extern "C"
 * @return an errorID
 */
         enum GLYR_ERROR GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
-/**
-* @brief Define allowed image formats 
-*
-* @param s The GlyQuery settings struct to store this option in.
-* @param formats A comma seperated list of format specifiers, e.g. "png;jpg;jpeg"
-*
-* 
-*       Awaits a string with a semicolon seperated list of allowed formats.\n
-*       The case of the format is ignored.\n
-*
-*        Example:\n
-*           "png;jpg;jpeg" would allow png and jpeg.\n
-*
-*        You can also specify "all", which disables this check.\n
-*
-* @return an errorID
-*/
-        enum GLYR_ERROR GlyOpt_formats(GlyQuery * s, const char * formats);
+
 /**
 * @brief Set the max. tolerance for fuzzy matching 
 *

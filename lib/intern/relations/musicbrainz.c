@@ -25,9 +25,9 @@
 #define RELATION_BEGIN_TYPE "<relation type=\""
 
 /* Wrap around the (a bit more) generic versions */
-GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
+GList * relations_musicbrainz_parse(cb_object * capo)
 {
-    GlyCacheList * results = NULL;
+    GList * results = NULL;
     GlyMemCache  * infobuf = generic_musicbrainz_parse(capo,"url-rels");
 
     if(infobuf)
@@ -60,10 +60,7 @@ GlyCacheList * relations_musicbrainz_parse(cb_object * capo)
                     tmp->size = strlen(tmp->data);
                     tmp->type = TYPE_RELATION;
                     tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
-
-                    if(!results) results = DL_new_lst();
-                    DL_add_to_list(results,tmp);
-
+                    results = g_list_prepend(results,tmp);
                     ctr++;
 
                     free(type);
@@ -91,6 +88,8 @@ MetaDataSource relations_musicbrainz_src = {
 	.parser    = relations_musicbrainz_parse,
 	.get_url   = relations_musicbrainz_url,
 	.type      = GET_RELATIONS,
+	.quality   = 80,
+	.speed     = 80,
 	.endmarker = NULL,
 	.free_url  = true 
 };

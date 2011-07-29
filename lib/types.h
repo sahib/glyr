@@ -38,7 +38,6 @@
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
 #define DEFAULT_DUPLCHECK true
 #define DEFAULT_FUZZYNESS 4
-#define DEFAULT_FORMATS "jpg;jpeg;png"
 #define DEFAULT_PROXY NULL 
 
 /* --------------------------- */
@@ -178,35 +177,32 @@ typedef struct GlyQuery {
   /* Make this fields immutable for languaging supporting it */
   %immutable {
 #endif
+
+	/* Callback and userpointer */
+        struct {
+           enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
+           void  * user_pointer;
+        } callback;
+  
+/**
+* @brief anonymous struct holding the source and target lang for gtrans
+* If source is NULL, autodetection will be enabled,\n
+* target has to be !NULL to enable translating
+*/
+
+#ifdef COMING_FROM_SWIG
+  %}
+#endif
+	/* Dynamic allocated */
         const char * lang; /*!< language settings (for amazon / google / last.fm) */
-        const char * formats; /*!<  Format settings */
 	const char * proxy; /*!< Proxy settings */
         char * artist; /*!< artist field */
         char * album;  /*!< album field */
         char * title;  /*!< title field */
         char * from;   /*!< String passed to GlyOpt_from() */
 
-	/* Callback and userpointer */
-        struct {
-                enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
-                void  * user_pointer;
-        } callback;
-  
-
-        const char * info[10];
-
-/**
-* @brief anonymous struct holding the source and target lang for gtrans
-* If source is NULL, autodetection will be enabled,\n
-* target has to be !NULL to enable translating
-*/
-	struct {
-		const char * target; /*< Target language (may not be NULL) */
-		const char * source; /*< Source language (may be NULL )*/
-	} gtrans;
-#ifdef COMING_FROM_SWIG
-  %}
-#endif
+	
+	char * info[10]; /*!<A register where porinters to all dynamic alloc. fields are saved. Do not use. */
 
 } GlyQuery;
 

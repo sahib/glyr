@@ -25,7 +25,6 @@
  * Provider will be removed if down any longer..
 */
 
-
 const char * cover_coverhunt_url(GlyQuery * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size == -1)
@@ -61,9 +60,9 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
 // Take the first link we find.
 // coverhunt sadly offers  no way to check if the
 // image is really related to the query we're searching for
-GlyCacheList * cover_coverhunt_parse(cb_object *capo)
+GList * cover_coverhunt_parse(cb_object *capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     // navigate to start of search results
     char * table_start;
@@ -104,14 +103,10 @@ GlyCacheList * cover_coverhunt_parse(cb_object *capo)
                                         char * url = copy_value(img_start,img_end);
                                         if(url)
                                         {
-                                            if(!r_list) r_list = DL_new_lst();
-
                                             GlyMemCache * shell = DL_init();
                                             shell->data = url;
                                             shell->size = img_end - img_start;
-
-                                            DL_add_to_list(r_list,shell);
-
+                                            r_list = g_list_prepend(r_list,shell);
                                             urlc++;
                                         }
                                     }
@@ -136,5 +131,7 @@ MetaDataSource cover_coverhunt_src = {
 	.get_url   = cover_coverhunt_url,
 	.type      = GET_COVERART,
 	.endmarker = "<div id=\"footer\">",
+	.quality   = 70,
+	.speed     = 40,
 	.free_url  = false
 };

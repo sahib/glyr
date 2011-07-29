@@ -23,13 +23,6 @@
 
 //-------------------------------------
 
-GlyCacheList * relations_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_RELATION);
-}
-
-//-------------------------------------
-
 bool vdt_relations(GlyQuery * settings)
 {
     if(settings && settings->artist)

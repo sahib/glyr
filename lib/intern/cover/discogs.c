@@ -46,9 +46,9 @@ const char * cover_discogs_url(GlyQuery * sets)
 }
 
 // The discogs.com parser is a little more complicated...
-GlyCacheList * cover_discogs_parse(cb_object * capo)
+GList * cover_discogs_parse(cb_object * capo)
 {
-    GlyCacheList * r_list=NULL;
+    GList * r_list=NULL;
 
     // Go through all release node
     int urlc = 0;
@@ -134,10 +134,7 @@ GlyCacheList * cover_discogs_parse(cb_object * capo)
                                                                 result->data = url;
                                                                 result->size = uri_endin - (uri_begin + strlen(URL_BEGIN));
                                                                 result->type = img_type;
-
-                                                                if(!r_list) r_list = DL_new_lst();
-                                                                DL_add_to_list(r_list,result);
-
+                                                                r_list = g_list_prepend(r_list,result);
                                                                 urlc++;
                                                             }
                                                             else
@@ -186,6 +183,8 @@ MetaDataSource cover_discogs_src = {
 	.parser    = cover_discogs_parse,
 	.get_url   = cover_discogs_url,
 	.type      = GET_COVERART,
+	.quality   = 60,
+	.speed     = 60,
 	.endmarker = NULL,
 	.free_url  = false
 };

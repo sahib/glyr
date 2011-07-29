@@ -27,7 +27,7 @@ const char * lyrics_darklyrics_url(GlyQuery * settings)
     return DARK_URL;
 }
 
-GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
+GList * lyrics_darklyrics_parse(cb_object * capo)
 {
     /* We have to search for the title in the data,
      * Therefore we convert everything to lowercase
@@ -36,7 +36,7 @@ GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
      * the correct case in the finaly lyrics
      * */
 
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     GlyMemCache * r_cache = NULL;
 
     char *searchstring = strdup_printf(". %s%s",capo->s->title,"</a></h3>");
@@ -79,8 +79,7 @@ GlyCacheList * lyrics_darklyrics_parse(cb_object * capo)
 
     if(r_cache)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,r_cache);
+        r_list = g_list_prepend(r_list,r_cache);
     }
     return r_list;
 }
@@ -94,5 +93,7 @@ MetaDataSource lyrics_darklyrics_src = {
 	.get_url   = lyrics_darklyrics_url,
 	.type      = GET_LYRICS,
 	.endmarker = "<div class=\"note\">",
+	.quality   = 20,
+	.speed     = 20,
 	.free_url  = true
 };

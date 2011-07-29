@@ -34,9 +34,9 @@ const char * cover_albumart_url(GlyQuery * sets)
 
 #define AMZ "http://ecx.images-amazon.com/images/"
 
-GlyCacheList * cover_albumart_parse(cb_object * capo)
+GList * cover_albumart_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     char * node = strstr(capo->cache->data,"<div id=\"main\">");
     if(node)
@@ -63,14 +63,11 @@ GlyCacheList * cover_albumart_parse(cb_object * capo)
                 char * img_url = copy_value(img_tag,img_end);
                 if(img_url)
                 {
-                    if(!r_list) r_list = DL_new_lst();
-
                     GlyMemCache * result = DL_init();
                     result->data = strdup_printf(AMZ"%s.jpg",img_url);
                     result->size = strlen(result->data);
 
-                    DL_add_to_list(r_list,result);
-
+                    r_list = g_list_prepend(r_list,result);
                     urlc++;
 
                     free(img_url);
@@ -88,5 +85,7 @@ MetaDataSource cover_albumart_src = {
 	.get_url   = cover_albumart_url,
 	.type      = GET_COVERART,
 	.endmarker = "<div id=\"pagination\"",
+	.quality   = 80,
+	.speed     = 70,
 	.free_url  = false
 };

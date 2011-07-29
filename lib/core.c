@@ -30,6 +30,9 @@
 /* Get user agent string */
 #include "config.h"
 
+/* Mini blacklist */
+#include "blacklist.h"
+
 /*--------------------------------------------------------*/
 
 // This is not a nice way. I know.
@@ -210,85 +213,6 @@ GlyMemCache* DL_init(void)
 
 /*--------------------------------------------------------*/
 
-GlyCacheList * DL_new_lst(void)
-{
-	GlyCacheList * c = calloc(1,sizeof(GlyCacheList));
-	if(c != NULL)
-	{
-		c->size = 0;
-		c->usersig = GLYRE_OK;
-		c->list = calloc(1,sizeof(GlyMemCache*));
-		if(!c->list)
-		{
-			glyr_message(-1,NULL,stderr,"calloc() returned NULL!");
-		}
-	}
-	else
-	{
-		glyr_message(-1,NULL,stderr,"calloc() returned NULL!");
-	}
-
-	return c;
-}
-
-/*--------------------------------------------------------*/
-
-void DL_add_to_list(GlyCacheList * l, GlyMemCache * c)
-{
-	if(l && c)
-	{
-		l->list = realloc(l->list, sizeof(GlyMemCache *) * (l->size+2));
-		l->list[  l->size] = c;
-		l->list[++l->size] = NULL;
-	}
-}
-
-/*--------------------------------------------------------*/
-
-void DL_push_sublist(GlyCacheList * l, GlyCacheList * s)
-{
-	if(l && s)
-	{
-		size_t i;
-		for(i = 0; i < s->size; i++)
-		{
-			DL_add_to_list(l,s->list[i]);
-		}
-	}
-}
-
-/*--------------------------------------------------------*/
-
-// Free list itself and all caches stored in there
-void DL_free_lst(GlyCacheList * c)
-{
-	if(c)
-	{
-		size_t i;
-		for(i = 0; i < c->size ; i++)
-			DL_free(c->list[i]);
-
-		DL_free_container(c);
-	}
-}
-
-/*--------------------------------------------------------*/
-
-// only free list, caches are left intact
-void DL_free_container(GlyCacheList * c)
-{
-	if(c!=NULL)
-	{
-		if(c->list)
-			free(c->list);
-
-		memset(c,0,sizeof(GlyCacheList));
-		free(c);
-	}
-}
-
-/*--------------------------------------------------------*/
-
 // Splits http_proxy to libcurl conform represantation
 static bool proxy_to_curl(GlyQuery * q, char ** userpwd, char ** server)
 {
@@ -427,7 +351,7 @@ bool continue_search(int iter, GlyQuery * s)
 /*--------------------------------------------------------*/
 
 
-gint delete_dupes(GList * result, GlyQuery * s)
+gsize delete_dupes(GList * result, GlyQuery * s)
 {
 	// As author of rmlint I know that there are better ways
 	// to do fast duplicate finding... but well, it works ;-)
@@ -436,17 +360,6 @@ gint delete_dupes(GList * result, GlyQuery * s)
 
 	unsigned char empty_md5sum[16];
 	memset(empty_md5sum,0,16);
-
-puts("----------------------------------------------------------");
-
-	for(GList * elem = result; elem; elem = elem->next)
-	{
-					GlyMemCache * a = elem->data;
-					fprintf(stderr,"%s\n",a->data);
-		
-	}
-fprintf(stderr,"Items: %d\n",g_list_length(result));
-puts("----------------------------------------------------------");
 
 	gint double_items = 0;
 	for(GList * inode = result; inode; inode = inode->next)
@@ -464,7 +377,6 @@ puts("----------------------------------------------------------");
 				  (!memcmp(lval->md5sum,empty_md5sum,16)||
 				   !memcmp(rval->md5sum,empty_md5sum,16)))
 				{
-					fprintf(stderr,"glyr: warning: empty checksum found.\n");
 					if(!memcmp(lval->data,rval->data,rval->size))
 					{
 						is_duplicate = true;
@@ -474,17 +386,13 @@ puts("----------------------------------------------------------");
 					if(!memcmp(lval->md5sum,rval->md5sum,16))
 					{
 						is_duplicate = true;
-						MDPrintArr(lval->md5sum); printf(" - ");
-						MDPrintArr(rval->md5sum);
-						fprintf(stderr,"=> <%s>\n",rval->data);
 					}
 				}
 
 				/* Delete this element.. */
 				if(is_duplicate == true) 
 				{
-					GlyMemCache * a = jnode->data;
-					fprintf(stderr,"Del: %s\n",a->data);
+					DL_free(rval);
 					result = g_list_delete_link(result,jnode);
 					double_items++;
 				}
@@ -492,113 +400,53 @@ puts("----------------------------------------------------------");
 		}
 	}
 
-puts("----------------------------------------------------------");
-	for(GList * elem = result; elem; elem = elem->next)
-	{
-					GlyMemCache * a = elem->data;
-					fprintf(stderr,"%s\n",a->data);
-		
-	}
-fprintf(stderr,"Items: %d\n",g_list_length(result));
-exit(0);
 	return double_items;
 }
 
 /*--------------------------------------------------------*/
 
-int flag_invalid_format(GlyCacheList * result, GlyQuery * s)
+gsize delete_invalid_format(GList * result, gchar * allowed_formats)
 {
-	int c = 0;
-	size_t i = 0;
-	for(i = 0; i < result->size; i++)
+	if(allowed_formats == NULL)
+	    return 0;
+
+	/* Parse formats spec into glist */
+	GList * allowed = NULL;
+
+	gchar * token;
+	gsize len = strlen(allowed_formats);
+	gsize offset = 0, count = 0;
+	while((token = get_next_word(allowed_formats,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) != NULL)
 	{
-		if(result->list[i]->error != ALL_OK)
-			continue;
+		allowed = g_list_prepend(allowed,token);
+	}
 
-		char * data = result->list[i]->data;
-		size_t dlen = strlen(data);
-
-		if(data != NULL)
+	for(GList * elem = result; elem; elem = elem->next)
+	{
+		GlyMemCache * item = elem->data;
+		if(item && item->data != NULL)
 		{
-			// Search for '.' marking seperator from name
-			char * dot_ptr = strrstr_len(data,(char*)".",dlen);
-			if(dot_ptr != NULL)
+			gboolean has_suffix = false;
+			for(GList * form = allowed; form; form = form->next)
 			{
-				// Copy format spec
-				char * c_format = copy_value(dot_ptr+1,data+dlen);
-				if(c_format != NULL)
+				if(g_str_has_suffix(item->data,(gchar*)form->data))
 				{
-					ascii_strdown_modify(c_format);
-					char  * f = NULL;
-					size_t offset = 0, kick_me = false, flen = strlen(s->formats);
-					while(!kick_me && (f = get_next_word(s->formats,";",&offset,flen)))
-					{
-						if(!strcmp(f,c_format) || !strcmp(f,"all"))
-						{
-							kick_me = true;
-						}
-						free(f);
-						f = NULL;
-
-						if(kick_me) break;
-					}
-
-					if(!kick_me)
-					{
-						result->list[i]->error = BAD_FORMAT;
-						c++;
-					}
+					has_suffix = true;
+					break;
 				}
-				free(c_format);
 			}
-			else
+
+			if(has_suffix == false)
 			{
-				result->list[i]->error = BAD_FORMAT;
-				c++;
+				DL_free(item);
+				result = g_list_delete_link(result,elem);
+				count++;
 			}
 		}
 	}
-	if(c != 0)
-	{
-		glyr_message(2,s,stderr,C_"- Ignoring %d images with unknown format.\n",c);
-	}
-	return c;
-}
 
-/*--------------------------------------------------------*/
-
-int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, GlyQuery * s)
-{
-	if(s->duplcheck == false)
-		return 0;
-
-	size_t i = 0, ctr = 0;
-	for(i = 0; i < result->size; i++)
-	{
-		if(result->list[i]->error != ALL_OK)
-			continue;
-
-		if(result->list[i]->error == 0)
-		{
-			size_t j = 0;
-			for(j = 0; URLblacklist[j]; j++)
-			{
-				if(result->list[j]->error == 0)
-				{
-					if(!strcmp(result->list[i]->data,URLblacklist[j]))
-					{
-						result->list[i]->error = BLACKLISTED;
-						ctr++;
-					}
-				}
-			}
-		}
-	}
-	if(ctr != 0)
-	{
-		glyr_message(2,s,stderr,C_"- Ignoring %d blacklisted URL%s.\n\n",ctr,ctr>=1 ? " " : "s ");
-	}
-	return ctr;
+	g_list_free_full(allowed,g_free);
+	return count;
 }
 
 /*--------------------------------------------------------*/
@@ -606,57 +454,55 @@ int flag_blacklisted_urls(GlyCacheList * result, const char ** URLblacklist, Gly
 // Download a singe file NOT in parallel
 GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 {
-	if(url==NULL)
+	if(url != NULL && is_blacklisted((gchar*)url) == false)
 	{
-		return NULL;
-	}
+		CURL *curl = NULL;
+		CURLcode res = 0;
 
-	CURL *curl = NULL;
-	CURLcode res = 0;
+		// Init handles
+		curl = curl_easy_init();
+		GlyMemCache * dldata = DL_init();
 
-	// Init handles
-	curl = curl_easy_init();
-	GlyMemCache * dldata = DL_init();
-
-	// DL_buffer needs the 'end' mark.
-	// As I didnt want to introduce a new struct just for this
-	// I save it in ->dsrc
-	if(end != NULL)
-	{
-		dldata->dsrc = strdup(end);
-	}
-
-	if(curl != NULL)
-	{
-		// Configure curl
-		DL_setopt(curl,dldata,url,s,NULL,s->timeout);
-
-		// Perform transaction
-		res = curl_easy_perform(curl);
-
-		// Better check again
-		if(res != CURLE_OK && res != CURLE_WRITE_ERROR)
+		// DL_buffer needs the 'end' mark.
+		// As I didnt want to introduce a new struct just for this
+		// I save it in ->dsrc
+		if(end != NULL)
 		{
-			glyr_message(-1,NULL,stderr,C_"\ncurl-error: %s [E:%d]\n", curl_easy_strerror(res),res);
-			DL_free(dldata);
-			dldata = NULL;
+			dldata->dsrc = strdup(end);
 		}
-		else
+
+		if(curl != NULL)
 		{
-			// Set the source URL
-			if(dldata->dsrc != NULL)
-				free(dldata->dsrc);
+			// Configure curl
+			DL_setopt(curl,dldata,url,s,NULL,s->timeout);
 
-			dldata->dsrc = strdup(url);
+			// Perform transaction
+			res = curl_easy_perform(curl);
+
+			// Better check again
+			if(res != CURLE_OK && res != CURLE_WRITE_ERROR)
+			{
+				glyr_message(-1,NULL,stderr,C_"\ncurl-error: %s [E:%d]\n", curl_easy_strerror(res),res);
+				DL_free(dldata);
+				dldata = NULL;
+			}
+			else
+			{
+				// Set the source URL
+				if(dldata->dsrc != NULL)
+					free(dldata->dsrc);
+
+				dldata->dsrc = strdup(url);
+			}
+			// Handle without any use - clean up
+			curl_easy_cleanup(curl);
+			update_md5sum(dldata);
+			return dldata;
 		}
-		// Handle without any use - clean up
-		curl_easy_cleanup(curl);
-		update_md5sum(dldata);
-		return dldata;
-	}
 
-	// Free mem
-	DL_free(dldata);
+		// Free mem
+		DL_free(dldata);
+	}
 	return NULL;
 }
 
@@ -721,11 +567,14 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 
 		/* Now create cb_objects */
 		for (elem = url_list; elem; elem = elem->next) {
-			cb_object * obj = calloc(1,sizeof(cb_object));
-			obj->url   = g_strdup((gchar*)(elem->data));
-			obj->cache = handle_init(cmHandle,obj,s,abs_timeout);
-			obj->s     = s;
-			cb_list    = g_list_prepend(cb_list,obj); 
+			if(is_blacklisted((gchar*)elem->data) == false) 
+			{
+				cb_object * obj = calloc(1,sizeof(cb_object));
+				obj->url   = g_strdup((gchar*)(elem->data));
+				obj->cache = handle_init(cmHandle,obj,s,abs_timeout);
+				obj->s     = s;
+				cb_list    = g_list_prepend(cb_list,obj); 
+			}
 		}
 
 		while(U != 0) {
@@ -862,19 +711,18 @@ GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_dow
 
 		/* Cross fingers... */
 		if(plugin != NULL) {
-			/* Call the parserplugin */
-			GlyCacheList * sub = plugin->parser(capo);
 
-			/* Convert to a GList - will be removed later */
-			if(sub != NULL) 
+			/* Call the parserplugin */
+			GList * parsed_data = plugin->parser(capo);
+			for(GList * elem = parsed_data; elem; elem = elem->next)
 			{
-				/* Convert to GList - replace this later */
-				for(int i = 0; i < (int)sub->size; i++) {
-					sub->list[i]->prov = g_strdup(plugin->name);
-					parsed = g_list_prepend(parsed,sub->list[i]);
+				GlyMemCache * item = elem->data;
+				if(item != NULL)
+				{
+					item->prov = g_strdup(plugin->name);
 				}
-				DL_free_container(sub);
 			}
+
 		} else {
 			fprintf(stderr,"glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
 		}
@@ -897,13 +745,13 @@ GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_dow
 
 /*--------------------------------------------------------*/
 
-bool provider_is_enabled(GlyQuery * s, MetaDataSource * f)
+gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 {
 	/* Assume 'all we have' */
 	if(s->from == NULL)
-	    return true;
+	    return TRUE;
 
-	bool isFound = false;
+	gboolean isFound = FALSE;
 
 	/* split string */
 	if(f->name != NULL) 
@@ -915,7 +763,7 @@ bool provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 		while((token = get_next_word(s->from,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) && isFound == false)
 		{
 			if(token[0] == f->key || !strcasecmp(token,f->name))
-				isFound = true;
+				isFound = TRUE;
 
 			free(token);
 		}
@@ -933,9 +781,6 @@ void checksum_all_in_list(GList * list)
 		{
 			GlyMemCache * item = elem->data;
 			update_md5sum(item);
-//			fprintf(stderr,"%s: Check <%s> => ",item->prov,item->data);
-//			MDPrintArr(item->md5sum);
-//			fprintf(stderr,"\n");
 		}
 	} 
 }
@@ -1018,14 +863,14 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 
 /*--------------------------------------------------------*/
 
-GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int type)
+GList * generic_finalizer(GList * result, GlyQuery * settings, int type)
 {
+	GList * r_list = NULL;
+
+#if 0
 	if(!result) return NULL;
 
 	size_t i = 0;
-	GlyCacheList * r_list = NULL;
-
-
 	for(i = 0; i < result->size; i++)
 	{
 		if(result->list[i]->error != ALL_OK)
@@ -1053,6 +898,7 @@ GlyCacheList * generic_finalizer(GlyCacheList * result, GlyQuery * settings, int
 			break;
 		}
 	}
+#endif
 	return r_list;
 }
 

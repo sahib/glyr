@@ -34,7 +34,7 @@ const char * cover_lastfm_url(GlyQuery * sets)
     return NULL;
 }
 
-GlyCacheList * cover_lastfm_parse(cb_object *capo)
+GList * cover_lastfm_parse(cb_object *capo)
 {
     // Handle size requirements (Default to large)
     const char *tag_ssize = NULL ;
@@ -54,7 +54,7 @@ GlyCacheList * cover_lastfm_parse(cb_object *capo)
 
     // The (perhaps) result
     GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     int urlc = 0;
 
@@ -69,13 +69,10 @@ GlyCacheList * cover_lastfm_parse(cb_object *capo)
             {
                 if(strcmp(url,"http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"))
                 {
-                    if(!r_list) r_list = DL_new_lst();
-
                     result = DL_init();
                     result->data = url;
                     result->size = end_tag - (find + strlen(tag_ssize));
-
-                    DL_add_to_list(r_list,result);
+                    r_list = g_list_prepend(r_list,result);
                     urlc++;
                 }
                 else
@@ -95,6 +92,8 @@ MetaDataSource cover_lastfm_src = {
 	.parser    = cover_lastfm_parse,
 	.get_url   = cover_lastfm_url,
 	.type      = GET_COVERART,
+	.quality   = 90,
+	.speed     = 85,
 	.endmarker = NULL,
 	.free_url  = false
 };

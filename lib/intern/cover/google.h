@@ -24,6 +24,6 @@
 #include "../../core.h"
 
 const char * generic_google_url(GlyQuery * sets, const char * searchterm);
-GlyCacheList * generic_google_parse(cb_object * capo);
+GList * generic_google_parse(cb_object * capo);
 
 #endif

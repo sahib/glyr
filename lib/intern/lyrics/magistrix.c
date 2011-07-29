@@ -76,9 +76,9 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
 #define SEARCH_END   "</a>"
 #define MAX_TRIES 7
 
-GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
+GList * lyrics_magistrix_parse (cb_object * capo)
 {
-    GlyCacheList * r_list=NULL;
+    GList * r_list=NULL;
     if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   // No songtext page?
     {
         if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   // Are we not on the search result page?
@@ -87,8 +87,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
             if(result)
             {
                 result->dsrc = strdup(capo->url);
-                if(!r_list) r_list = DL_new_lst();
-                DL_add_to_list(r_list,result);
+                r_list = g_list_prepend(r_list,result);
             }
         }
         else
@@ -132,8 +131,7 @@ GlyCacheList * lyrics_magistrix_parse (cb_object * capo)
                                                         {
                                                             urlc++;
                                                             result->dsrc = strdup(dl_url);
-                                                            if(!r_list) r_list = DL_new_lst();
-                                                            DL_add_to_list(r_list,result);
+                                                            r_list = g_list_prepend(r_list,result);
                                                         }
                                                         DL_free(dl_cache);
                                                     }
@@ -163,6 +161,8 @@ MetaDataSource lyrics_magistrix_src = {
 	.parser    = lyrics_magistrix_parse,
 	.get_url   = lyrics_magistrix_url,
 	.type      = GET_LYRICS,
+	.quality   = 25,
+	.speed     = 70,
 	.endmarker = NULL,
 	.free_url  = false
 };

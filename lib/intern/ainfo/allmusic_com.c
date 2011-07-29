@@ -105,17 +105,16 @@ GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
 #define SEARCH_NODE "<td><a href=\""
 #define SEARCH_DELM "\">"
 
-GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
+GList * ainfo_allmusic_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     if( strstr(capo->cache->data, "<!--Begin Biography -->") )
     {
-        r_list = DL_new_lst();
         GlyMemCache * info_short = parse_bio_short(capo->cache);
         GlyMemCache * info_long  = parse_bio_long (capo->cache,capo->s);
 
-        DL_add_to_list(r_list,info_short);
-        DL_add_to_list(r_list,info_long );
+        r_list = g_list_prepend(r_list,info_short);
+        r_list = g_list_prepend(r_list,info_long );
         return r_list;
     }
 
@@ -135,17 +134,16 @@ GlyCacheList * ainfo_allmusic_parse(cb_object * capo)
             GlyMemCache * dl = download_single(url,capo->s,NULL);
             if(dl != NULL)
             {
-                if(!r_list) r_list = DL_new_lst();
                 GlyMemCache * info_short = parse_bio_short(dl);
                 if(info_short != NULL)
                 {
-                    DL_add_to_list(r_list,info_short);
+                    r_list = g_list_prepend(r_list,info_short);
                 }
 
                 GlyMemCache * info_long  = parse_bio_long (dl,capo->s);
                 if(info_long != NULL)
                 {
-                    DL_add_to_list(r_list,info_long );
+                    r_list = g_list_prepend(r_list,info_long );
                 }
 
                 DL_free(dl);
@@ -169,5 +167,7 @@ MetaDataSource ainfo_allmusic_src = {
 	.type      = GET_ARTISTBIO,
 	.parser    = ainfo_allmusic_parse,
 	.get_url   = ainfo_allmusic_url,
+	.quality   = 90,
+	.speed     = 40,
 	.endmarker = NULL
 };

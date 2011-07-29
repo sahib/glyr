@@ -65,9 +65,9 @@ static char * fix_crappy_lastfm_txt(const char * txt)
     return result;
 }
 
-GlyCacheList * ainfo_lastfm_parse(cb_object * capo)
+GList * ainfo_lastfm_parse(cb_object * capo)
 {
-    GlyCacheList * r_lst = NULL;
+    GList * r_lst = NULL;
     char * short_desc = copy_value(strstr(capo->cache->data,SUMMARY_BEGIN)+strlen(SUMMARY_BEGIN),strstr(capo->cache->data,SUMMARY_ENDIN));
     if(short_desc)
     {
@@ -84,9 +84,8 @@ GlyCacheList * ainfo_lastfm_parse(cb_object * capo)
             lc->size = strlen(lc->data);
             lc->dsrc = strdup(capo->url);
 
-            r_lst = DL_new_lst();
-            DL_add_to_list(r_lst,sc);
-            DL_add_to_list(r_lst,lc);
+            r_lst = g_list_prepend(r_lst,sc);
+            r_lst = g_list_prepend(r_lst,lc);
 
             free(content);
             content=NULL;
@@ -106,5 +105,7 @@ MetaDataSource ainfo_lastfm_src = {
 	.type      = GET_ARTISTBIO,
 	.parser    = ainfo_lastfm_parse,
 	.get_url   = ainfo_lastfm_url,
+	.quality   = 85,
+	.speed     = 85,
 	.endmarker = NULL
 };

@@ -39,14 +39,14 @@ const char * lyrics_lyricsvip_url(GlyQuery * settings)
     return result;
 }
 
-GlyCacheList * lyrics_lyricsvip_parse(cb_object *capo)
+GList * lyrics_lyricsvip_parse(cb_object *capo)
 {
     char * start = NULL;
     char * end = NULL;
     char * content = NULL;
 
     GlyMemCache * r_cache = NULL;
-    GlyCacheList * r_list  = NULL;
+    GList * r_list  = NULL;
 
     if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL)
     {
@@ -71,8 +71,7 @@ GlyCacheList * lyrics_lyricsvip_parse(cb_object *capo)
 
     if(r_cache)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,r_cache);
+        r_list = g_list_prepend(r_list,r_cache);
     }
     return r_list;
 }
@@ -86,5 +85,7 @@ MetaDataSource lyrics_lyricsvip_src = {
 	.get_url   = lyrics_lyricsvip_url,
 	.type      = GET_LYRICS,
 	.endmarker = "</td></tr></table>",
+	.quality   = 60,
+	.speed     = 50,
 	.free_url  = true
 };

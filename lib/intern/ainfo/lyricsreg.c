@@ -29,9 +29,9 @@ const char * ainfo_lyricsreg_url(GlyQuery * s)
     return "http://www.lyricsreg.com/biography/%artist%/";
 }
 
-GlyCacheList * ainfo_lyricsreg_parse(cb_object * capo)
+GList * ainfo_lyricsreg_parse(cb_object * capo)
 {
-    GlyCacheList * ls = NULL;
+    GList * ls = NULL;
     size_t ib_len = strlen(INFO_BEGIN);
     char * point_to_start = strstr(capo->cache->data,INFO_BEGIN);
     if(point_to_start != NULL)
@@ -41,13 +41,12 @@ GlyCacheList * ainfo_lyricsreg_parse(cb_object * capo)
         char * info = copy_value(point_to_start, mend);
         if(info != NULL && (mend-point_to_start) > 150)
         {
-            ls = DL_new_lst();
             GlyMemCache * tmp = DL_init();
             tmp->data = beautify_lyrics(info);
             tmp->size = (tmp->data) ? strlen(tmp->data) : 0;
             tmp->dsrc = strdup(capo->url);
 
-            DL_add_to_list(ls,tmp);
+            ls = g_list_prepend(ls,tmp);
 
             free(info);
         }
@@ -64,5 +63,7 @@ MetaDataSource ainfo_lyricsreg_src = {
 	.type      = GET_ARTISTBIO,
 	.parser    = ainfo_lyricsreg_parse,
 	.get_url   = ainfo_lyricsreg_url,
+	.quality   = 25,
+	.speed     = 50,
 	.endmarker = NULL
 };

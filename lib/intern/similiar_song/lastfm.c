@@ -63,9 +63,9 @@ static char * in_tag(const char * string, const char * begin, const char * endin
         return NULL;
 }
 
-GlyCacheList * similiar_song_lastfm_parse(cb_object * capo)
+GList * similiar_song_lastfm_parse(cb_object * capo)
 {
-        GlyCacheList * r_list = NULL;
+        GList * r_list = NULL;
 
         int urlc = 0;
         char * begin = capo->cache->data;
@@ -104,14 +104,12 @@ GlyCacheList * similiar_song_lastfm_parse(cb_object * capo)
                 if(composed != NULL)
                 {
                         GlyMemCache * result = DL_init();
-                        if(!r_list) r_list = DL_new_lst();
 
                         result->data = composed;
                         result->size = strlen(composed);
                         result->dsrc = strdup(capo->url);
 
-                        DL_add_to_list(r_list, result);
-
+                        r_list = g_list_prepend(r_list, result);
                         urlc++;
                 }
 
@@ -146,6 +144,8 @@ MetaDataSource similar_song_lastfm_src = {
 	.key  = 'l',
 	.parser    = similiar_song_lastfm_parse,
 	.get_url   = similiar_song_lastfm_url,
+	.quality   = 90,
+	.speed     = 90,
 	.endmarker = NULL, 
 	.free_url  = true,
 	.type      = GET_SIMILIAR_SONGS

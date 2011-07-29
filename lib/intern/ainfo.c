@@ -23,13 +23,6 @@
 
 /*-------------------------------------*/
 
-GlyCacheList * ainfo_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-    return generic_finalizer(result,settings,TYPE_AINFO);
-}
-
-/*-------------------------------------*/
-
 bool vdt_ainfo(GlyQuery * settings)
 {
     if(settings && settings->artist)

@@ -190,9 +190,9 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
 /*--------------------------------------------------------*/
 
 /* Wrap around the (a bit more) generic versions */
-GlyCacheList * tags_musicbrainz_parse(cb_object * capo)
+GList * tags_musicbrainz_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     GlyMemCache  * info = generic_musicbrainz_parse(capo,"tags");
     if(info)
     {
@@ -219,8 +219,7 @@ GlyCacheList * tags_musicbrainz_parse(cb_object * capo)
                     tmp->type = type_num;
                     tmp->dsrc = info->dsrc ? strdup(info->dsrc) : NULL;
 
-                    if(!r_list) r_list = DL_new_lst();
-                    DL_add_to_list(r_list,tmp);
+                    r_list = g_list_prepend(r_list,tmp);
                 }
                 else
                 {
@@ -249,5 +248,7 @@ MetaDataSource tags_musicbrainz_src = {
 	.get_url   = tags_musicbrainz_url,
 	.endmarker = NULL, 
 	.free_url  = true,
+	.quality   = 90,
+	.speed     = 90,
 	.type      = GET_TAGS
 };

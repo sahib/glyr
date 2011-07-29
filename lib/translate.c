@@ -163,8 +163,11 @@ static char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctnes
 /* Modifies $to_translate with the translation */
 void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
 {
+/* BROKEN */
+#if 0
     char * concat_chain = NULL;
     char block_buf[BLOCK_BUF+2];
+
     if(s && to_translate && s->gtrans.target)
     {
 
@@ -265,6 +268,7 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
             to_translate->size = strlen(concat_chain);
         }
     }
+#endif
 }
 
 /* ------------------------------------------------------------------- */

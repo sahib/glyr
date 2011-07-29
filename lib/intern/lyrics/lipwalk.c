@@ -29,14 +29,14 @@ const char * lyrics_lipwalk_url(GlyQuery * settings)
 	return LIPWALK_URL;
 }
 
-GlyCacheList * lyrics_lipwalk_parse(cb_object *capo)
+GList * lyrics_lipwalk_parse(cb_object *capo)
 {
     char * start = NULL;
     char * end = NULL;
     char * content = NULL;
 
     GlyMemCache * r_cache = NULL;
-    GlyCacheList * r_list  = NULL;
+    GList * r_list  = NULL;
 
     if ((start = strstr(capo->cache->data,START)) != NULL)
     {
@@ -61,8 +61,7 @@ GlyCacheList * lyrics_lipwalk_parse(cb_object *capo)
 
     if(r_cache)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,r_cache);
+        r_list = g_list_prepend(r_list,r_cache);
     }
     return r_list;
 }
@@ -75,6 +74,8 @@ MetaDataSource lyrics_lipwalk_src = {
 	.parser    = lyrics_lipwalk_parse,
 	.get_url   = lyrics_lipwalk_url,
 	.type      = GET_LYRICS,
+	.quality   = 90,
+	.speed     = 90,
 	.endmarker = NULL,
 	.free_url  = false
 };

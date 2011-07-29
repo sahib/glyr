@@ -55,11 +55,11 @@ const char * lyrics_directlyrics_url(GlyQuery * settings)
 #define START "<div id=\"lyricsContent\"><p>"
 #define ENDIN "</div>"
 
-GlyCacheList * lyrics_directlyrics_parse(cb_object * capo)
+GList * lyrics_directlyrics_parse(cb_object * capo)
 {
     char * f_entry;
     GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     if( (f_entry = strstr(capo->cache->data,START)) )
     {
@@ -93,8 +93,7 @@ GlyCacheList * lyrics_directlyrics_parse(cb_object * capo)
     }
     if(result)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
+        r_list = g_list_prepend(r_list,result);
     }
     return r_list;
 }
@@ -108,5 +107,7 @@ MetaDataSource lyrics_directlyrics_src = {
 	.get_url   = lyrics_directlyrics_url,
 	.type      = GET_LYRICS,
 	.endmarker = "<!-- google_ad_section_start(weight=ignore) -->",
+	.quality   = 30,
+	.speed 	   = 80,
 	.free_url  = true
 };

@@ -96,7 +96,7 @@ const char * cover_amazon_url(GlyQuery * sets)
 #define C_MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
 #define C_MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
 
-GlyCacheList * cover_amazon_parse(cb_object *capo)
+GList * cover_amazon_parse(cb_object *capo)
 {
     const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
                             (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :
@@ -107,7 +107,7 @@ GlyCacheList * cover_amazon_parse(cb_object *capo)
 #undef MIN
 
     int urlc = 0;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     char * find = capo->cache->data;
     while( (find = strstr(find +1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
@@ -121,13 +121,10 @@ GlyCacheList * cover_amazon_parse(cb_object *capo)
             char * result_url = copy_value(find,endTag);
             if(result_url)
             {
-                if(!r_list) r_list = DL_new_lst();
-
                 GlyMemCache * result_cache = DL_init();
                 result_cache->data = result_url;
                 result_cache->size = strlen(result_url);
-
-                DL_add_to_list(r_list,result_cache);
+                r_list = g_list_prepend(r_list,result_cache);
                 urlc++;
             }
         }
@@ -141,6 +138,8 @@ MetaDataSource cover_amazon_src = {
 	.parser    = cover_amazon_parse,
 	.get_url   = cover_amazon_url,
 	.type      = GET_COVERART,
+	.quality   = 90,
+	.speed     = 85,
 	.endmarker = NULL,
 	.free_url  = true
 };

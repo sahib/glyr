@@ -80,9 +80,9 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
 #define NODE_ENDIN "\" title=\""
 #define TITLE_END  " Lyrics"
 
-GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
+GList * lyrics_metrolyrics_parse(cb_object * capo)
 {
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     char * root = strstr(capo->cache->data,ROOT_NODE);
     if(root)
     {
@@ -114,8 +114,7 @@ GlyCacheList * lyrics_metrolyrics_parse(cb_object * capo)
                                         if(result)
                                         {
                                             result->dsrc = strdup(dl_url);
-                                            if(!r_list) r_list = DL_new_lst();
-                                            DL_add_to_list(r_list,result);
+                                            r_list = g_list_prepend(r_list,result);
                                         }
                                         DL_free(dl_cache);
                                     }
@@ -148,6 +147,8 @@ MetaDataSource lyrics_metrolyrics_src = {
 	.parser    = lyrics_metrolyrics_parse,
 	.get_url   = lyrics_metrolyrics_url,
 	.type      = GET_LYRICS,
+	.quality   = 25,
+	.speed     = 40,
 	.endmarker = NULL,
 	.free_url  = false
 };

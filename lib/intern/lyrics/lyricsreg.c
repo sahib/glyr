@@ -28,9 +28,9 @@ const char * lyrics_lyricsreg_url(GlyQuery * s)
     return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
 }
 
-GlyCacheList * lyrics_lyricsreg_parse(cb_object * capo)
+GList * lyrics_lyricsreg_parse(cb_object * capo)
 {
-    GlyCacheList * ls = NULL;
+    GList * ls = NULL;
     size_t info_s_len = strlen(INFO_BEGIN);
 
     char * ptr = strstr(capo->cache->data, INFO_BEGIN);
@@ -46,14 +46,11 @@ GlyCacheList * lyrics_lyricsreg_parse(cb_object * capo)
                 char * no_br_tags = strreplace(text_seg,"<br />",NULL);
                 if(no_br_tags)
                 {
-                    ls = DL_new_lst();
                     GlyMemCache * tmp = DL_init();
                     tmp->data = beautify_lyrics(no_br_tags);
                     tmp->size = tmp->data ? strlen(tmp->data) : 0;
                     tmp->dsrc = strdup(capo->url);
-
-                    DL_add_to_list(ls,tmp);
-
+                    ls = g_list_prepend(ls,tmp);
                     free(no_br_tags);
                 }
                 free(text_seg);
@@ -71,6 +68,8 @@ MetaDataSource lyrics_lyricsreg_src = {
 	.parser    = lyrics_lyricsreg_parse,
 	.get_url   = lyrics_lyricsreg_url,
 	.type      = GET_LYRICS,
+	.quality   = 42,
+	.speed     = 50,
 	.endmarker = NULL,
 	.free_url  = false
 };

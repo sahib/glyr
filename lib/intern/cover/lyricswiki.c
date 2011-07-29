@@ -44,13 +44,13 @@ const char * cover_lyricswiki_url(GlyQuery * sets)
 #define URL_MARKER "url=\""
 #define URL_END "\" descriptionurl="
 
-GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
+GList * cover_lyricswiki_parse(cb_object * capo)
 {
     char * find=capo->cache->data;
     char * endTag   = NULL;
 
     int urlc = 0;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     char *tmp = strreplace(capo->s->album," ","_");
     if(tmp)
@@ -95,13 +95,10 @@ GlyCacheList * cover_lyricswiki_parse(cb_object * capo)
                                     char * url = copy_value(url_start, url_end);
                                     if(url)
                                     {
-                                        if(!r_list) r_list = DL_new_lst();
-
                                         GlyMemCache * result = DL_init();
                                         result->data = url;
                                         result->size = url_end - url_start;
-
-                                        DL_add_to_list(r_list,result);
+                                        r_list = g_list_prepend(r_list,result);
                                         urlc++;
                                     }
 
@@ -139,6 +136,8 @@ MetaDataSource cover_lyricswiki_src = {
 	.parser    = cover_lyricswiki_parse,
 	.get_url   = cover_lyricswiki_url,
 	.type      = GET_COVERART,
+	.quality   = 75,
+	.speed     = 65,
 	.endmarker = NULL,
 	.free_url  = false
 };

@@ -34,10 +34,10 @@ const char * lyrics_lyrixat_url(GlyQuery * settings)
 
 #define MAX_TRIES 5
 
-GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
+GList * lyrics_lyrixat_parse(cb_object * capo)
 {
     /* lyrix.at does not offer any webservice -> use the searchfield to get some results */
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
     char * search_begin_tag = capo->cache->data;
     int ctr = 0, urlc = 0;
 
@@ -84,9 +84,7 @@ GlyCacheList * lyrics_lyrixat_parse(cb_object * capo)
                                                     result->data = strreplace(lyrics,"<br />","");
                                                     result->size = strlen(lyrics);
                                                     result->dsrc = strdup(url);
-
-                                                    if(!r_list) r_list = DL_new_lst();
-                                                    DL_add_to_list(r_list,result);
+                                                    r_list = g_list_prepend(r_list,result);
                                                     urlc++;
                                                 }
                                                 free(lyrics);
@@ -118,5 +116,7 @@ MetaDataSource lyrics_lyrix_src = {
 	.get_url   = lyrics_lyrixat_url,
 	.type      = GET_LYRICS,
 	.endmarker = "<div id='d_navigation'",
+	.quality   = 70,
+	.speed     = 50,
 	.free_url  = false
 };

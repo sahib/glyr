@@ -36,7 +36,7 @@ const char * photos_google_url(GlyQuery * s)
     return result;
 }
 
-GlyCacheList * photos_google_parse(cb_object * capo)
+GList * photos_google_parse(cb_object * capo)
 {
     return generic_google_parse(capo);
 }
@@ -49,6 +49,8 @@ MetaDataSource photos_google_src = {
 	.parser    = photos_google_parse,
 	.get_url   = photos_google_url,
 	.type      = GET_ARTIST_PHOTOS,
+	.quality   = 40,
+	.speed     = 90,
 	.endmarker = NULL,
 	.free_url  = true
 };

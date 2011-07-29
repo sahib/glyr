@@ -27,10 +27,10 @@ const char * lyrics_lyrdb_url(GlyQuery * settings)
     return LYRDB_URL;
 }
 
-GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
+GList * lyrics_lyrdb_parse(cb_object * capo)
 {
     GlyMemCache * result = NULL;
-    GlyCacheList * r_list = NULL;
+    GList * r_list = NULL;
 
     char *slash;
     if( (slash = strchr(capo->cache->data,'\\')) )
@@ -71,8 +71,7 @@ GlyCacheList * lyrics_lyrdb_parse(cb_object * capo)
 
     if(result)
     {
-        r_list = DL_new_lst();
-        DL_add_to_list(r_list,result);
+        r_list = g_list_prepend(r_list,result);
     }
     return r_list;
 }
@@ -86,5 +85,7 @@ MetaDataSource lyrics_lyrdb_src = {
 	.get_url   = lyrics_lyrdb_url,
 	.type      = GET_LYRICS,
 	.endmarker = NULL,
+	.quality   = 75,
+	.speed     = 50,
 	.free_url  = false
 };
