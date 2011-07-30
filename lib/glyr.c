@@ -290,7 +290,7 @@ enum GLYR_ERROR GlyOpt_from(GlyQuery * s, const char * from)
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
 	if(from != NULL)
 	{
-		glyr_set_info(s,7,from);
+		glyr_set_info(s,4,from);
 		return GLYRE_OK;
 	}
 	return GLYRE_BAD_VALUE;	
@@ -333,7 +333,7 @@ enum GLYR_ERROR GlyOpt_duplcheck(GlyQuery * s, bool duplcheck)
 enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring)
 {
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,6,proxystring);
+	glyr_set_info(s,3,proxystring);
 	return GLYRE_OK;
 }
 
@@ -365,22 +365,6 @@ enum GLYR_ERROR GlyOpt_download(GlyQuery * s, bool download)
 }
 
 /*-----------------------------------------------*/
-
-enum GLYR_ERROR GlyOpt_gtrans_target_lang(GlyQuery * s, const char * target)
-{
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return glyr_set_info(s,4,target);
-}
-
-/*-----------------------------------------------*/
-
-enum GLYR_ERROR GlyOpt_gtrans_source_lang(GlyQuery * s, const char * source)
-{
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return glyr_set_info(s,5,source);
-}
-
-/*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 
@@ -408,6 +392,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
 	glyrs->fuzzyness = DEFAULT_FUZZYNESS;
 	glyrs->duplcheck = DEFAULT_DUPLCHECK;
 	glyrs->proxy = DEFAULT_PROXY;
+	glyrs->itemctr = 0;
 
 	/* Init freepointer pool */
 	memset(glyrs->info,0,sizeof(const char * ) * 10);
@@ -496,6 +481,9 @@ void Gly_init(void)
 	{
 		/* Try to print informative output */
 		signal(SIGSEGV, sig_handler);
+
+		/* Init for threads */
+		g_thread_init(NULL);
 
 		if(curl_global_init(CURL_GLOBAL_ALL))
 		{
@@ -674,10 +662,10 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 			case 2:
 				s->title = (char*)s->info[at];
 				break;
-			case 6:
+			case 3:
 				s->proxy = s->info[at];
 				break;
-			case 7:
+			case 4:
 				s->from = (char*)s->info[at];
 				break;
 			default:

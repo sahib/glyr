@@ -23,7 +23,7 @@
 
 /* ------------------------------------- */
 
-static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, bool * add_item)
+static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
 {
 	if(capo->cache != NULL)
 	{
@@ -32,10 +32,15 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 		capo->cache->is_image = true;
 		capo->cache->type = TYPE_COVER;
 
-		gchar * prov_name = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
-		capo->cache->prov = (prov_name) ? g_strdup(prov_name) : NULL;
+		GlyMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
 
-		capo->s->callback.download(capo->cache,capo->s);
+		if(old_cache != NULL)
+		{
+			capo->cache->prov       = (old_cache->prov!=NULL) ? g_strdup(old_cache->prov) : NULL;
+			capo->cache->img_format = (old_cache->img_format) ? g_strdup(old_cache->img_format) : NULL;
+			capo->s->callback.download(capo->cache,capo->s);
+			*add_item += 1;
+		}
 	}
 	return NULL;
 }
@@ -53,16 +58,16 @@ static GList * factory(GlyQuery * s, GList * list) {
 		}	
 		return g_list_copy(list);
 
-	/* Downloading is requested */
+		/* Downloading is requested */
 	} else {
 		/* Convert to a list of URLs first */
 		GList * url_list  = NULL; 
 
 		/* Hashtable to associate the provider name with the corresponding URL */
-		GHashTable * prov_url_table = g_hash_table_new_full(g_str_hash,g_str_equal,
-								    NULL,
-					        	            (GDestroyNotify)g_free
-							           );
+		GHashTable * cache_url_table = g_hash_table_new_full(g_str_hash,g_str_equal,
+				NULL,
+				(GDestroyNotify)DL_free
+				);
 
 		/* Iterate over all caches and turn them to GList */
 		for(GList * item = list; item; item = item->next) {
@@ -73,22 +78,15 @@ static GList * factory(GlyQuery * s, GList * list) {
 			url_list  = g_list_prepend(url_list,url_double);
 
 			/* Fill in the URL */
-			g_hash_table_insert(prov_url_table,(gpointer)url_double,g_strdup(cache->prov));
-
-			/* Don't keep the cache - we can't safely say which cache corresponds to which provider 
-			 * Therefore the Hashtable is used */
-			DL_free(cache);
+			g_hash_table_insert(cache_url_table,(gpointer)url_double,(gpointer)cache);
 		}		
 
-		/* Download images */
-		GList * dl_raw_images = async_download(url_list,s,1,1,async_dl_callback,prov_url_table);
+		/* Download images in parallel */
+		GList * dl_raw_images = async_download(url_list,s,1,1 * (g_list_length(url_list)/4),async_dl_callback,cache_url_table);
 
 		/* Freeing Party */
-		for(GList * elem = url_list; elem; elem = elem->next) {
-			g_free((gchar*)elem->data);
-		}
-		g_hash_table_destroy(prov_url_table);
-		g_list_free(url_list);
+		g_hash_table_destroy(cache_url_table);
+		g_list_free_full(url_list,g_free);
 
 		/* Ready to save images */
 		return dl_raw_images;

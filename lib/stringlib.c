@@ -907,3 +907,25 @@ char * getStr (char ** s, char * start, char * end)
 }
 
 /* ------------------------------------------------------------- */
+
+void chomp_breakline(gchar * string)
+{
+	if(string != NULL)
+	{
+		gsize len = strlen(string);
+		while(--len)
+		{
+			if(string[len] == '\n')
+			{
+				string[len] = '\0';
+				if(len != 0 && string[len-1] == '\r')
+				{
+					string[len-1] = '\0';
+				}
+				break;
+			}
+		}
+	}
+}
+
+/* ------------------------------------------------------------- */

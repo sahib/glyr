@@ -428,15 +428,13 @@ static const char ** parse_commandline_general(int argc, char * const * argv, Gl
                 {"fuzzyness",     required_argument, 0, 'z'},
                 {"prefer",        required_argument, 0, 'o'},
                 {"callback",	  required_argument, 0, 'j'},
-		{"targetlang",    required_argument, 0, 's'},
-		{"sourcelang",    required_argument, 0, 'q'},
 		{"proxy",	  required_argument, 0, 'k'},
                 {0,               0,                 0, '0'}
         };
 
         while (true) {
                 int option_index = 0;
-                c = getopt_long_only(argc, argv, "uUVhHcCyYdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:j:s:q:k:",long_options, &option_index);
+                c = getopt_long_only(argc, argv, "uUVhHcCyYdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index);
 
                 // own error report
                 opterr = 0;
@@ -568,14 +566,8 @@ static const char ** parse_commandline_general(int argc, char * const * argv, Gl
                 case 'j':
                         exec_on_call = optarg;
                         break;
-		case 'q':
-			GlyOpt_gtrans_source_lang(glyrs,optarg);
-			break;
 		case 'k':
 			GlyOpt_proxy(glyrs,optarg);
-			break;
-		case 's':
-			GlyOpt_gtrans_target_lang(glyrs,optarg);
 			break;
                 case '?':
                         suggest_other_options(sizeof(long_options) / sizeof(struct option), argc, argv, optind-1, long_options,glyrs);
@@ -889,10 +881,12 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 
         // Print the actual data.
         // This might have funny results if using cover/photos
-        if(!cacheditem->is_image)
+        if(!cacheditem->is_image) {
                 glyr_message(1,s,stderr,"\nDATA:\n%s",cacheditem->data);
-        else
+        } else {
                 glyr_message(1,s,stderr,"\nDATA: <not printable>");
+                glyr_message(1,s,stderr,"\nFRMT: %s",cacheditem->img_format);
+	}
 
         glyr_message(1,s,stderr,"\n------------------------\n");
         glyr_message(1,s,stderr,"\n");
@@ -1045,7 +1039,6 @@ int main(int argc, char * argv[])
                                 enum GLYR_ERROR get_error = GLYRE_OK;
                                 GlyMemCache * my_list= Gly_get(&my_query, &get_error, &length);
 
-GlyMemCache * a =my_list;
                                 if(my_list) {
                                         if(get_error == GLYRE_OK) {
                                                 /* This is the place where you would work with the cachelist *
@@ -1053,16 +1046,13 @@ GlyMemCache * a =my_list;
                                                    Useful if you need to cache the data (e.g. for batch jobs *
 						   Left only for the reader's informatiom, no functions here *
                                                 */
-while(my_list != NULL)
-{
-	puts(my_list->dsrc);
-	my_list = my_list->next;
-}
-						glyr_message(2,&my_query,stderr,"In total %d items found.\n",length);
+
+						glyr_message(2,&my_query,stderr,"- In total %d items found.\n",length);
                                         }
 
                                         // Free all downloaded buffers
-                                        Gly_free_list(a);
+                                        Gly_free_list(my_list);
+
                                 } else if(get_error != GLYRE_OK) {
                                         glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
                                 }

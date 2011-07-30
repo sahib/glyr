@@ -123,14 +123,15 @@ enum GLYR_DATA_TYPE {
 * It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr. 
 */
 typedef struct GlyMemCache {
-        char  *data;    /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
-        size_t size;    /*!< Size of data, cahnge this if you changed the data field. */
-        char  *dsrc;    /*!< Source of data, i.e. an exact URL to the place where it has been found. */
-        char  *prov;    /*!< The name of the provider which found this item */
-        int   type;     /*!< The metadata type, is one of the GLYR_GET_TYPE enum */
-        int   error;    /*!< error code - internal use only */
-        int   duration; /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
-        bool  is_image; /*!< Wether it is an image or a textitem */
+        char  *data;        /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
+        size_t size;        /*!< Size of data, cahnge this if you changed the data field. */
+        char  *dsrc;        /*!< Source of data, i.e. an exact URL to the place where it has been found. */
+        char  *prov;        /*!< The name of the provider which found this item */
+        int   type;         /*!< The metadata type, is one of the GLYR_GET_TYPE enum */
+        int   error;        /*!< error code - internal use only */
+        int   duration;     /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
+        bool  is_image;     /*!< Wether it is an image or a textitem */
+	char * img_format;  /*!< If it as an image, the imageformat (usually 'png' or 'jpeg') */
         unsigned char md5sum[16]; /*!< A checksum of generated from the data field, used internally for duplicate checking, useable as identifier from data */
 
 	/* Linkage */
@@ -201,7 +202,7 @@ typedef struct GlyQuery {
         char * title;  /*!< title field */
         char * from;   /*!< String passed to GlyOpt_from() */
 
-	
+	int itemctr; /*!< Counter of already received items - you shouldn't need this */	
 	char * info[10]; /*!<A register where porinters to all dynamic alloc. fields are saved. Do not use. */
 
 } GlyQuery;
