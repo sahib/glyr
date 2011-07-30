@@ -823,6 +823,7 @@ GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long t
 									item_list = g_list_prepend(item_list,item);
 								}
 							}
+							g_list_free(cb_results);
 
 						} else if(to_add != 0) {
 							/* Add it as raw data */
