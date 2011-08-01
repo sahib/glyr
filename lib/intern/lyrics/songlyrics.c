@@ -76,9 +76,7 @@ GList * lyrics_songlyrics_parse(cb_object * capo)
                     free(buf);
                 }
             }
-            else result = DL_error(NO_ENDIN_TAG);
         }
-        else result = DL_error(NO_BEGIN_TAG);
     }
     if(result)
     {

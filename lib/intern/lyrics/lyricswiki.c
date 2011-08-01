@@ -117,12 +117,9 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
                 }
                 endTag=NULL;
             }
-            else result = DL_error(NO_ENDIN_TAG);
             find=NULL;
         }
-        else result = DL_error(NO_BEGIN_TAG);
     }
-    else result = DL_error(NO_BEGIN_TAG);
 
     if(result)
     {

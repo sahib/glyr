@@ -78,6 +78,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/utils.c"
 	"${DIR_ROOT}/blacklist.c"
 	# fetcher
+	"${DIR_INTERN}/generic.c"
 	"${DIR_INTERN}/ainfo.c"
 	"${DIR_INTERN}/cover.c"
 	"${DIR_INTERN}/similiar_artist.c"

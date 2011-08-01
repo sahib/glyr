@@ -64,10 +64,6 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
             free(uID);
         }
     }
-    else
-    {
-        result = DL_error(NO_BEGIN_TAG);
-    }
 
     if(result)
     {

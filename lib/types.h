@@ -25,7 +25,7 @@
 
 /* Default values */
 #define DEFAULT_TIMEOUT  20L /*! default timeout */
-#define DEFAULT_REDIRECTS 1L /*! default redirects */
+#define DEFAULT_REDIRECTS 3L /*! default redirects */
 #define DEFAULT_PARALLEL 4L  /*! default parallel */
 #define DEFAULT_CMINSIZE 125 /*! default minsize of cover */
 #define DEFAULT_CMAXSIZE -1
@@ -202,8 +202,9 @@ typedef struct GlyQuery {
         char * title;  /*!< title field */
         char * from;   /*!< String passed to GlyOpt_from() */
 
-	int itemctr; /*!< Counter of already received items - you shouldn't need this */	
-	char * info[10]; /*!<A register where porinters to all dynamic alloc. fields are saved. Do not use. */
+	int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */	
+	char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
+	bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
 } GlyQuery;
 

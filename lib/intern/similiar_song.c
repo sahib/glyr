@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 /*----------------------------------------------------------------*/
 
@@ -34,7 +35,10 @@ bool vdt_similar_song(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+{
+	return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
+}
 
 /*----------------------------------------------------------------*/
 
@@ -43,6 +47,7 @@ MetaDataFetcher glyrFetcher_similar_song = {
 	.name = "similar",
 	.type = GET_SIMILIAR_SONGS,
 	.validate = vdt_similar_song,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory 

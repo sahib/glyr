@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 //-------------------------------------
 
@@ -38,7 +39,10 @@ bool get_albumlist(GlyQuery * settings)
 
 //-------------------------------------
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+{
+	return generic_txt_finalizer(s,list,stop_me,TYPE_ALBUMLIST);
+}
 
 //-------------------------------------
 
@@ -47,6 +51,7 @@ MetaDataFetcher glyrFetcher_albumlist = {
 	.name = "ArtistInfo Fetcher",
 	.type = GET_ALBUMLIST,
 	.validate  = get_albumlist,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory 

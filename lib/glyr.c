@@ -532,13 +532,13 @@ GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 	{
 		/* Print some user info, always useful */	
 		if(settings->artist != NULL) {
-			glyr_message(2,settings,stderr,"Artist: %s\n",settings->artist);
+			glyr_message(2,settings,stderr,"- Artist : %s\n",settings->artist);
 		}
 		if(settings->album != NULL) {
-			glyr_message(2,settings,stderr,"Album:  %s\n",settings->album);
+			glyr_message(2,settings,stderr,"- Album  : %s\n",settings->album);
 		}
 		if(settings->title != NULL) {
-			glyr_message(2,settings,stderr,"Title:  %s\n",settings->title);
+			glyr_message(2,settings,stderr,"- Title  : %s\n",settings->title);
 		}
 
 		GList * result = NULL;
@@ -555,7 +555,10 @@ GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 
 				if(isValid) {
 					if(e) *e = GLYRE_OK;
-					glyr_message(2,settings,stderr,"Type:   %s\n",item->name);
+					glyr_message(2,settings,stderr,"- Type   : %s\n",item->name);
+
+					/* Lookup what we search for here: Images (url, or raw) or text */
+					settings->imagejob = !item->full_data; 
 
 					/* Now start your engines, gentlemen */
 					result = start_engine(settings,item);

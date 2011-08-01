@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 //-------------------------------------
 
@@ -36,7 +37,10 @@ bool vdt_relations(GlyQuery * settings)
     }
 }
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+{
+	return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
+}
 
 //-------------------------------------
 
@@ -45,6 +49,7 @@ MetaDataFetcher glyrFetcher_relations = {
 	.name = "Relation Fetcher",
 	.type = GET_RELATIONS,
 	.validate  = vdt_relations,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory

@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 /*----------------------------------------------------------------*/
 
@@ -39,14 +40,19 @@ bool vdt_tags(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+{
+	return generic_txt_finalizer(s,list,stop_me,TYPE_TAGS);
+}
+
+/*----------------------------------------------------------------*/
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tags = {
 	.name = "Tag Fetcher",
 	.type = GET_TAGS,
 	.validate = vdt_tags,
-	/* CTor | DTor */
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory

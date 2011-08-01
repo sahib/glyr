@@ -147,6 +147,6 @@ MetaDataSource similar_song_lastfm_src = {
 	.quality   = 90,
 	.speed     = 90,
 	.endmarker = NULL, 
-	.free_url  = true,
+	.free_url  = false,
 	.type      = GET_SIMILIAR_SONGS
 };

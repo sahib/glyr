@@ -81,6 +81,7 @@ typedef struct cb_object
 /*------------------------------------------------------*/
 
 // Internal representation of one metadataprovider
+// PLEASE FILL _ALL_ FIELDS!
 typedef struct MetaDataFetcher
 {
    /* cover, lyrics, stuff */
@@ -89,20 +90,25 @@ typedef struct MetaDataFetcher
    /* A List of MetaDataSources */
    GList * provider;
 
-   /* what this thing delievers */
+   /* what this thing delievers; e.g. GET_COVERART */
    enum GLYR_GET_TYPE type; 
 
    /* callbacks */
    bool (*validate)(GlyQuery *); 
    void (*init)(void);  
    void (*destroy)(void);
-   GList* (*finalize)(GlyQuery*,GList*);
+   GList* (*finalize)(GlyQuery*,GList*,gboolean*);
+
+   /* Wether this Fetcher delievers the full data (lyrics),
+      or just URLs of the data. */
+   gboolean full_data;
 
 } MetaDataFetcher;
 
 /*------------------------------------------------------*/
 
 // Internal representation of one provider
+// PLEASE FILL _ALL_ FIELDS!
 typedef struct MetaDataSource {
       gchar * name;  /* Name of this provider            */
       gchar key;     /* A key that may be used in --from */
@@ -122,29 +128,24 @@ typedef struct MetaDataSource {
 
 /*------------------------------------------------------*/
 
-// Internal list of errors
-// Use those with DL_error(ecode)
 enum CORE_ERR
 {
     ALL_OK,
-    NO_BEGIN_TAG,
-    NO_ENDIN_TAG
 };
 
 /*------------------------------------------------------*/
 
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
-GList * async_download(GList * url_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
+GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
 GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
 
 /*------------------------------------------------------*/
 
-bool continue_search(int iter, GlyQuery * s);
+gboolean continue_search(gint current, GlyQuery * s);
 void update_md5sum(GlyMemCache * c);
 
 GlyMemCache * DL_init(void);
-GlyMemCache * DL_error(int eid);
 GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
 

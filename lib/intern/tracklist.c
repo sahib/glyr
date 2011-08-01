@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 /*----------------------------------------------------------------*/
 
@@ -34,7 +35,10 @@ bool vdt_tracklist(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+{
+	return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
+}
 
 /*----------------------------------------------------------------*/
 
@@ -43,6 +47,7 @@ MetaDataFetcher glyrFetcher_tracklist = {
 	.name = "Tracklist Fetcher",
 	.type = GET_TRACKLIST,
 	.validate  = vdt_tracklist,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory

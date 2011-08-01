@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 /*----------------------------------------------------------------*/
 
@@ -38,7 +39,24 @@ bool vdt_review(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+{
+	/* Fix up messy text, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyMemCache * item = elem->data;
+		if(item != NULL)
+		{
+			
+			gchar * temp = beautify_lyrics(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
+		}
+	}
+	
+	return generic_txt_finalizer(s,list,stop_me,TYPE_REVIEW);
+}
 
 /*----------------------------------------------------------------*/
 
@@ -47,6 +65,7 @@ MetaDataFetcher glyrFetcher_review = {
 	.name = "Review Fetcher",
 	.type = GET_ALBUM_REVIEW,
 	.validate  = vdt_review,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory 

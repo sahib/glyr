@@ -82,15 +82,8 @@ GList * lyrics_directlyrics_parse(cb_object * capo)
                 free(buf);
             }
         }
-        else
-        {
-            result = DL_error(NO_ENDIN_TAG);
-        }
     }
-    else
-    {
-        result = DL_error(NO_BEGIN_TAG);
-    }
+
     if(result)
     {
         r_list = g_list_prepend(r_list,result);

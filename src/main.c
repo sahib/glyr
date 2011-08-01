@@ -919,107 +919,104 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
                 size_t opt = 0;
                 for(opt = 0; write_arg[opt]; opt++) {
                         char * path = get_path_by_type(s,write_arg[opt],*i);
-                        if(path != NULL) {
-				const char * data_type = get_type_string(s);
-				if(data_type != NULL) {
-                                	glyr_message(1,s,stderr,"- Writing '%s' to %s\n",data_type,path);
-					/*TODO*/
-					//free((char*)data_type);
+			if(path != NULL) {
+				glyr_message(1,s,stderr,"- Writing '%d' to %s\n",c->type,path);
+				/*TODO*/
+				//free((char*)data_type);
+
+				if(Gly_write(c,path) == -1) {
+					glyr_message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
+				}
+			}
+
+			/* call the program if any specified */
+			if(exec_on_call != NULL) {
+				char * replace_path = strdup(exec_on_call);
+				if(path != NULL) {
+					replace_path = strreplace(exec_on_call,"<path>",path);
 				}
 
-                                if(Gly_write(c,path) == -1) {
-                                        glyr_message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
-                                }
-                        }
+				// Call command
+				int exitVal = system(replace_path);
 
-                        /* call the program if any specified */
-                        if(exec_on_call != NULL) {
-                                char * replace_path = strdup(exec_on_call);
-                                if(path != NULL) {
-                                        replace_path = strreplace(exec_on_call,"<path>",path);
-                                }
+				if(exitVal != EXIT_SUCCESS) {
+					glyr_message(1,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
+				}
 
-                                // Call command
-                                int exitVal = system(replace_path);
-
-                                if(exitVal != EXIT_SUCCESS) {
-                                        glyr_message(1,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
-                                }
-
-                                free(replace_path);
-                        }
-                        free(path);
-                }
-        }
+				free(replace_path);
+			}
+			free(path);
+		}
+	}
 
 	if(i != NULL) {
-        	*i += 1;
+		*i += 1;
 	} else {
 		glyr_message(-1,NULL,stderr,"warning: Empty counterpointer!\n");
 	}
-        return GLYRE_OK;
+	return GLYRE_OK;
 }
 
 /* --------------------------------------------------------- */
 
 int main(int argc, char * argv[])
 {
-        int result = EXIT_SUCCESS;
+	int result = EXIT_SUCCESS;
 
-        // make sure to init everything and destroy again
-        Gly_init();
-        atexit(Gly_cleanup);
+	// make sure to init everything and destroy again
+	Gly_init();
+	atexit(Gly_cleanup);
 
-	    /* Go furth unless the user demeands translation */
-        if(argc >= 3 && strcmp(argv[1],"gtrans") != 0) {
+	/* Go furth unless the user demeands translation */
+	if(argc >= 3 && strcmp(argv[1],"gtrans") != 0) {
 		// The struct that control this beast
-                GlyQuery my_query;
+		GlyQuery my_query;
 
-                // set it on default values
-                Gly_init_query(&my_query);
+		// set it on default values
+		Gly_init_query(&my_query);
 
-				// Good enough for glyrc
-                GlyOpt_verbosity(&my_query,2);
+		// Good enough for glyrc
+		GlyOpt_verbosity(&my_query,2);
 
-                // Set the type..
-/*
-                if(!set_get_type(&my_query, argv[1])) {
-			puts("Cannot set type. This is a bug.");
-                        Gly_destroy_query( &my_query );
-                        return EXIT_FAILURE;
-                }
-*/
-		my_query.type = GET_COVERART;
+		// Set the type..
+		/*
+		   if(!set_get_type(&my_query, argv[1])) {
+		   puts("Cannot set type. This is a bug.");
+		   Gly_destroy_query( &my_query );
+		   return EXIT_FAILURE;
+		   }
+		 */
+		my_query.type = GET_LYRICS;
 
-                write_arg = parse_commandline_general(argc-1, argv+1, &my_query);
-                if(write_arg == NULL) {
-                        write_arg = malloc(2 * sizeof(char*));
-                        write_arg[0] = strdup(default_path);
-                        write_arg[1] = NULL;
-                }
+		write_arg = parse_commandline_general(argc-1, argv+1, &my_query);
+		if(write_arg == NULL) {
+			write_arg = malloc(2 * sizeof(char*));
+			write_arg[0] = strdup(default_path);
+			write_arg[1] = NULL;
+		}
 
-				// Special cases
-                if(my_query.type == GET_ARTISTBIO)
-		    GlyOpt_number(&my_query,my_query.number*2);
+		// Special cases
+		if(my_query.type == GET_ARTISTBIO)
+			GlyOpt_number(&my_query,my_query.number*2);
 
-                // Check if files do already exist
-                bool file_exist = false;
+		// Check if files do already exist
+		bool file_exist = false;
 
-                int iter = 0;
-                for(iter = 0; iter < my_query.number; iter++) {
-                        size_t j = 0;
-                        for(j = 0; write_arg[j]; j++) {
-                                char * path = get_path_by_type(&my_query, write_arg[j], iter);
-                                if(path) {
-                                        if(!update && (file_exist = !access(path,R_OK) )) {
-                                                free(path);
-                                                break;
-                                        }
-                                        free(path);
-                                        path = NULL;
-                                }
-                        }
-                }
+		int iter = 0;
+		for(iter = 0; iter < my_query.number; iter++) {
+			size_t j = 0;
+			for(j = 0; write_arg[j]; j++) {
+				char * path = get_path_by_type(&my_query, write_arg[j], iter);
+				if(path) {
+					if(!update && (file_exist = !access(path,R_OK) )) {
+						free(path);
+						break;
+					}
+					free(path);
+					path = NULL;
+				}
+			}
+		}
 
 		if(my_query.type == GET_TRACKLIST)
 			GlyOpt_number(&my_query,0);
@@ -1027,54 +1024,54 @@ int main(int argc, char * argv[])
 		if(my_query.type == GET_ALBUMLIST)
 			GlyOpt_number(&my_query,0);
 
-                // Set the callback - it will do all the actual work
-                int item_counter = 0;
-                GlyOpt_dlcallback(&my_query, callback, &item_counter);
+		// Set the callback - it will do all the actual work
+		int item_counter = 0;
+		GlyOpt_dlcallback(&my_query, callback, &item_counter);
 
-                if(my_query.type != GET_UNSURE) {
-                        if(!file_exist) {
+		if(my_query.type != GET_UNSURE) {
+			if(!file_exist) {
 
-                                // Now start searching!
+				// Now start searching!
 				int length = -1;
-                                enum GLYR_ERROR get_error = GLYRE_OK;
-                                GlyMemCache * my_list= Gly_get(&my_query, &get_error, &length);
+				enum GLYR_ERROR get_error = GLYRE_OK;
+				GlyMemCache * my_list= Gly_get(&my_query, &get_error, &length);
 
-                                if(my_list) {
-                                        if(get_error == GLYRE_OK) {
-                                                /* This is the place where you would work with the cachelist *
-                                                   As the callback is used in glyrc this is just plain empty *
-                                                   Useful if you need to cache the data (e.g. for batch jobs *
+				if(my_list) {
+					if(get_error == GLYRE_OK) {
+						/* This is the place where you would work with the cachelist *
+						   As the callback is used in glyrc this is just plain empty *
+						   Useful if you need to cache the data (e.g. for batch jobs *
 						   Left only for the reader's informatiom, no functions here *
-                                                */
+						 */
 
 						glyr_message(2,&my_query,stderr,"- In total %d items found.\n",length);
-                                        }
+					}
 
-                                        // Free all downloaded buffers
-                                        Gly_free_list(my_list);
+					// Free all downloaded buffers
+					Gly_free_list(my_list);
 
-                                } else if(get_error != GLYRE_OK) {
-                                        glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
-                                }
-                        } else {
-                                glyr_message(1,&my_query,stderr,C_B"*"C_" File(s) already exist. Use -u to update.\n");
-                        }
+				} else if(get_error != GLYRE_OK) {
+					glyr_message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
+				}
+			} else {
+				glyr_message(1,&my_query,stderr,C_B"*"C_" File(s) already exist. Use -u to update.\n");
+			}
 
 			// free pathes
-                        size_t x = 0;
-                        for( x = 0; write_arg[x]; x++) {
-                                free((char*)write_arg[x]);
-                                write_arg[x] = NULL;
-                        }
-                        free(write_arg);
-                        write_arg = NULL;
+			size_t x = 0;
+			for( x = 0; write_arg[x]; x++) {
+				free((char*)write_arg[x]);
+				write_arg[x] = NULL;
+			}
+			free(write_arg);
+			write_arg = NULL;
 
-                        // Clean memory alloc'd by settings
-                        Gly_destroy_query( &my_query);
-                }
-	/* Translator mode - simple interface to google translator */
+			// Clean memory alloc'd by settings
+			Gly_destroy_query( &my_query);
+		}
+		/* Translator mode - simple interface to google translator */
 	} else if(argc >= 3 && !strcmp(argv[1],"gtrans")) {
-// Broken
+		// Broken
 #if 0
 		GlyQuery settings;
 		Gly_init_query(&settings);
@@ -1084,7 +1081,7 @@ int main(int argc, char * argv[])
 		if(!strcmp(argv[2],"list")) {
 			print_suppported_languages(&settings);
 
-		/* detect language snippet given as argument */
+			/* detect language snippet given as argument */
 		} else if(!strcmp(argv[2],"detect") && argc >= 4) {
 			float correctness = 0.0;
 			char * lang_guess = Gly_gtrans_lookup(&settings,argv[3],&correctness);
@@ -1093,7 +1090,7 @@ int main(int argc, char * argv[])
 				free(lang_guess);
 			}
 
-		/* Translation */
+			/* Translation */
 		} else if(argc >= 4) {
 			GlyMemCache * buffer = Gly_new_cache();
 			if(buffer != NULL) {
@@ -1124,23 +1121,23 @@ int main(int argc, char * argv[])
 		Gly_destroy_query(&settings);
 #endif
 
-	/*  making glyrc -h works (*sigh*) */
-        } else if(argc >= 2 && !strcmp(argv[1],"-V")) {
-                print_version(NULL);
-        } else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-CH"))) {
-                GlyQuery tmp;
-                tmp.color_output = false;
-                usage(&tmp);
-        } else if(argc >= 2 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"-ch") || !strcmp(argv[1],"-hc"))) {
-                help_short(NULL);
-        } else {
-                GlyQuery tmp;
-                tmp.color_output = false;
-                usage(&tmp);
-        }
+		/*  making glyrc -h works (*sigh*) */
+	} else if(argc >= 2 && !strcmp(argv[1],"-V")) {
+		print_version(NULL);
+	} else if(argc >= 2 && (!strcmp(argv[1],"-C") || !strcmp(argv[1],"-CH"))) {
+		GlyQuery tmp;
+		tmp.color_output = false;
+		usage(&tmp);
+	} else if(argc >= 2 && (!strcmp(argv[1],"-h") || !strcmp(argv[1],"-ch") || !strcmp(argv[1],"-hc"))) {
+		help_short(NULL);
+	} else {
+		GlyQuery tmp;
+		tmp.color_output = false;
+		usage(&tmp);
+	}
 
-        // byebye
-        return result;
+	// byebye
+	return result;
 }
 
 //* --------------------------------------------------------- */

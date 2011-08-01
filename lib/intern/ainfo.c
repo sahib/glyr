@@ -20,6 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
+#include "generic.h"
 
 /*-------------------------------------*/
 
@@ -32,7 +33,24 @@ bool vdt_ainfo(GlyQuery * settings)
     return false;
 }
 
-static GList * factory(GlyQuery * s, GList * list) {return NULL;}
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+{
+	/* Fix up messy text, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyMemCache * item = elem->data;
+		if(item != NULL)
+		{
+			
+			gchar * temp = beautify_lyrics(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
+		}
+	}
+	
+	return generic_txt_finalizer(s,list,stop_me,TYPE_AINFO);
+}
 
 /*-------------------------------------*/
 
@@ -41,6 +59,7 @@ MetaDataFetcher glyrFetcher_artistbio = {
 	.name = "ArtistInfo Fetcher",
 	.type = GET_ARTISTBIO,
 	.validate  = vdt_ainfo,
+	.full_data = TRUE,
 	.init      = NULL,
 	.destroy   = NULL,
 	.finalize  = factory

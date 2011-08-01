@@ -65,9 +65,7 @@ GList * lyrics_lyricsvip_parse(cb_object *capo)
                 }
             }
         }
-        else r_cache = DL_error(NO_ENDIN_TAG);
     }
-    else r_cache = DL_error(NO_BEGIN_TAG);
 
     if(r_cache)
     {

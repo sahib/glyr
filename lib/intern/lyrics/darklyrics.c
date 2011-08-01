@@ -65,17 +65,13 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
                 }
                 else
                 {
-                    r_cache = DL_error(NO_ENDIN_TAG);
                 }
             }
             free(cache_copy);
         }
         free(searchstring);
     }
-    else
-    {
-        r_cache = DL_error(NO_BEGIN_TAG);
-    }
+
 
     if(r_cache)
     {
@@ -95,5 +91,5 @@ MetaDataSource lyrics_darklyrics_src = {
 	.endmarker = "<div class=\"note\">",
 	.quality   = 20,
 	.speed     = 20,
-	.free_url  = true
+	.free_url  = false 
 };

@@ -20,65 +20,7 @@
 
 #include "../core.h"
 #include "../stringlib.h"
-
-/* ------------------------------------- */
-#if 0
-static GlyCacheList * lyrics_finalize(GlyCacheList * result, GlyQuery * settings)
-{
-	// no cleanup needs to be done
-	if(!result) return NULL;
-
-	GlyCacheList * lst = DL_new_lst();
-
-	size_t i = 0;
-	for(i = 0; i < result->size; i++)
-	{
-		GlyMemCache * dl = DL_copy(result->list[i]);
-		if(dl != NULL)
-		{
-			if(dl->data)
-			{
-				free(dl->data);
-			}
-			if(dl->dsrc)
-			{
-				free(dl->dsrc);
-			}
-			if(dl->prov)
-			{
-				free(dl->prov);
-			}
-
-			dl->data = beautify_lyrics(result->list[i]->data);
-			dl->size = strlen(dl->data);
-			dl->dsrc = strdup(result->list[i]->dsrc);
-			dl->type = TYPE_LYRICS;
-
-			if(result->list[i]->prov)
-			{
-				dl->prov = strdup(result->list[i]->prov);
-			}
-
-			// call user defined callback
-			if(settings->callback.download)
-			{
-				lst->usersig = settings->callback.download(dl,settings);
-			}
-
-			if(lst->usersig == GLYRE_OK)
-			{
-				DL_add_to_list(lst,dl);
-			}
-			else if(lst->usersig == GLYRE_STOP_BY_CB)
-			{
-				DL_free(dl);
-				break;
-			}
-		}
-	}
-	return lst;
-}
-#endif
+#include "generic.h"
 
 /* ------------------------------------- */
 
@@ -97,7 +39,25 @@ bool vdt_lyrics(GlyQuery * settings)
 
 /* ------------------------------------- */
 
-GList * factory(GlyQuery * s, GList * query) { return NULL; }
+GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+{
+	/* Fix up lyrics, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyMemCache * item = elem->data;
+		if(item != NULL)
+		{
+			
+			gchar * temp = beautify_lyrics(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
+		}
+	}
+	
+	/* Let the rest do by the norma generic finalizer */
+	return generic_txt_finalizer(s,list,stop_me,TYPE_LYRICS);
+}
 
 /* ------------------------------------- */
 
@@ -106,6 +66,7 @@ MetaDataFetcher glyrFetcher_lyrics = {
 	.name = "Lyrics Fetcher",
 	.type = GET_LYRICS,
 	.validate  = vdt_lyrics,
+	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
 	.finalize = factory
