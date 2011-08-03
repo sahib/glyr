@@ -82,14 +82,15 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_darklyrics_src = {
-	.name = "darklyrics",
-	.key  = 'y',
-	.parser    = lyrics_darklyrics_parse,
-	.get_url   = lyrics_darklyrics_url,
-	.type      = GET_LYRICS,
-	.endmarker = "<div class=\"note\">",
-	.quality   = 20,
-	.speed     = 20,
-	.free_url  = false 
+MetaDataSource lyrics_darklyrics_src =
+{
+    .name = "darklyrics",
+    .key  = 'y',
+    .parser    = lyrics_darklyrics_parse,
+    .get_url   = lyrics_darklyrics_url,
+    .type      = GET_LYRICS,
+    .endmarker = "<div class=\"note\">",
+    .quality   = 20,
+    .speed     = 20,
+    .free_url  = false
 };

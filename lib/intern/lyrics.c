@@ -26,50 +26,51 @@
 
 bool vdt_lyrics(GlyQuery * settings)
 {
-	if(settings && settings->artist && settings->title)
-	{
-		return true;
-	}
-	else
-	{
-		glyr_message(2,settings,stderr,C_R"* "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
-		return false;
-	}
+    if(settings && settings->artist && settings->title)
+    {
+        return true;
+    }
+    else
+    {
+        glyr_message(2,settings,stderr,C_R"* "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
+        return false;
+    }
 }
 
 /* ------------------------------------- */
 
-GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	/* Fix up lyrics, escape chars etc.  */
-	for(GList * elem = list; elem; elem = elem->next)
-	{
-		GlyMemCache * item = elem->data;
-		if(item != NULL)
-		{
-			
-			gchar * temp = beautify_lyrics(item->data);
-			g_free(item->data);
-			item->data = temp;
-			item->size = (item->data) ? strlen(item->data) : 0;
-		}
-	}
-	
-	/* Let the rest do by the norma generic finalizer */
-	return generic_txt_finalizer(s,list,stop_me,TYPE_LYRICS);
+    /* Fix up lyrics, escape chars etc.  */
+    for(GList * elem = list; elem; elem = elem->next)
+    {
+        GlyMemCache * item = elem->data;
+        if(item != NULL)
+        {
+
+            gchar * temp = beautify_lyrics(item->data);
+            g_free(item->data);
+            item->data = temp;
+            item->size = (item->data) ? strlen(item->data) : 0;
+        }
+    }
+
+    /* Let the rest do by the norma generic finalizer */
+    return generic_txt_finalizer(s,list,stop_me,TYPE_LYRICS);
 }
 
 /* ------------------------------------- */
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_lyrics = {
-	.name = "Lyrics Fetcher",
-	.type = GET_LYRICS,
-	.validate  = vdt_lyrics,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_lyrics =
+{
+    .name = "Lyrics Fetcher",
+    .type = GET_LYRICS,
+    .validate  = vdt_lyrics,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };
 
 /* ------------------------------------- */

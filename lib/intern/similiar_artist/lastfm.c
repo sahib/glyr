@@ -113,14 +113,15 @@ GList * similiar_lastfm_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource similar_artist_lastfm_src = {
-	.name = "lastfm",
-	.key  = 'l',
-	.parser    = similiar_lastfm_parse,
-	.get_url   = similiar_lastfm_url,
-	.quality   = 90,
-	.speed     = 90,
-	.endmarker = NULL, 
-	.free_url  = false,
-	.type      = GET_SIMILIAR_ARTISTS
+MetaDataSource similar_artist_lastfm_src =
+{
+    .name = "lastfm",
+    .key  = 'l',
+    .parser    = similiar_lastfm_parse,
+    .get_url   = similiar_lastfm_url,
+    .quality   = 90,
+    .speed     = 90,
+    .endmarker = NULL,
+    .free_url  = false,
+    .type      = GET_SIMILIAR_ARTISTS
 };

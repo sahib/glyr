@@ -31,24 +31,25 @@ bool vdt_similiar(GlyQuery * settings)
         return true;
     }
     return false;
-} 
+}
 
 /*----------------------------------------------------------------*/
 
 static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
 }
 
 /*----------------------------------------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_similiar_artists = {
-	.name = "SimilarArtist Fetcher",
-	.type = GET_SIMILIAR_ARTISTS,
-	.validate  = vdt_similiar,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_similiar_artists =
+{
+    .name = "SimilarArtist Fetcher",
+    .type = GET_SIMILIAR_ARTISTS,
+    .validate  = vdt_similiar,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

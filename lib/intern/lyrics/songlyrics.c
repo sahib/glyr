@@ -83,18 +83,19 @@ GList * lyrics_songlyrics_parse(cb_object * capo)
         r_list = g_list_prepend(r_list, result);
     }
     return r_list;
-}  
+}
 
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_songlyrics_src = {
-	.name = "songlyrics",
-	.key  = 's',
-	.parser    = lyrics_songlyrics_parse,
-	.get_url   = lyrics_songlyrics_url,
-	.type      = GET_LYRICS,
-	.quality   = 20,
-	.speed     = 30,
-	.endmarker = NULL,
-	.free_url  = true
+MetaDataSource lyrics_songlyrics_src =
+{
+    .name = "songlyrics",
+    .key  = 's',
+    .parser    = lyrics_songlyrics_parse,
+    .get_url   = lyrics_songlyrics_url,
+    .type      = GET_LYRICS,
+    .quality   = 20,
+    .speed     = 30,
+    .endmarker = NULL,
+    .free_url  = true
 };

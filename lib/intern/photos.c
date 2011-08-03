@@ -26,30 +26,34 @@
 
 bool vdt_photos(GlyQuery * settings)
 {
-    if (settings && settings->artist) {
+    if (settings && settings->artist)
+    {
         return true;
-    } else {
+    }
+    else
+    {
         glyr_message(2,settings,stderr,C_R"*"C_" Artist is needed to download artist-related photos!\n");
-	return false;
+        return false;
     }
 }
 
 /*--------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_img_finalizer(s,list,stop_me,TYPE_PHOTOS);
+    return generic_img_finalizer(s,list,stop_me,TYPE_PHOTOS);
 }
 
 /*--------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_artistphotos = {
-	.name = "artist_photo",
-	.type = GET_ARTIST_PHOTOS,
-	.validate  = vdt_photos,
-	.full_data = FALSE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_artistphotos =
+{
+    .name = "artist_photo",
+    .type = GET_ARTIST_PHOTOS,
+    .validate  = vdt_photos,
+    .full_data = FALSE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

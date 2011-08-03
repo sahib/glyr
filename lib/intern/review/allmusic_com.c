@@ -135,14 +135,15 @@ GList * review_allmusic_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource review_allmusic_src = {
-	.name = "allmusic",
-	.key  = 'm',
-	.parser    = review_allmusic_parse,
-	.get_url   = review_allmusic_url,
-	.endmarker = "<div id=\"right-sidebar\">",
-	.quality   = 75,
-	.speed     = 40,
-	.free_url  = false,
-	.type      = GET_ALBUM_REVIEW
+MetaDataSource review_allmusic_src =
+{
+    .name = "allmusic",
+    .key  = 'm',
+    .parser    = review_allmusic_parse,
+    .get_url   = review_allmusic_url,
+    .endmarker = "<div id=\"right-sidebar\">",
+    .quality   = 75,
+    .speed     = 40,
+    .free_url  = false,
+    .type      = GET_ALBUM_REVIEW
 };

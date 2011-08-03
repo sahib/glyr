@@ -15,9 +15,9 @@ ADD_LIBRARY(glyr SHARED	${LIB_SOURCE_LOCATIONS})
 
 # Win32 needs that socket library for libcurl
 if(WIN32)
-  TARGET_LINK_LIBRARIES(glyr curl ws2_32 gtk2) 
-else() # otherwise we have an okay system
-  TARGET_LINK_LIBRARIES(glyr curl ${GTK2_LIBRARIES}) 
+  TARGET_LINK_LIBRARIES(glyr curl ${GLIBPKG_LIBRARIES} ws2_32) 
+else() 
+  TARGET_LINK_LIBRARIES(glyr curl ${GLIBPKG_LIBRARIES}) 
 endif(WIN32)
 
 # Install headeas

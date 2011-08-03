@@ -88,15 +88,16 @@ GList * tracklist_musicbrainz_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource tracklist_musicbrainz_src = {
-	.name = "musicbrainz",
-	.key  = 'm',
-	.parser    = tracklist_musicbrainz_parse,
-	.get_url   = tracklist_musicbrainz_url,
-	.quality   = 90,
-	.speed     = 90,
-	.endmarker = NULL, 
-	.free_url  = false,
-	.type      = GET_TRACKLIST
+MetaDataSource tracklist_musicbrainz_src =
+{
+    .name = "musicbrainz",
+    .key  = 'm',
+    .parser    = tracklist_musicbrainz_parse,
+    .get_url   = tracklist_musicbrainz_url,
+    .quality   = 90,
+    .speed     = 90,
+    .endmarker = NULL,
+    .free_url  = false,
+    .type      = GET_TRACKLIST
 };
 

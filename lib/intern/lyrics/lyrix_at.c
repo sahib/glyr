@@ -109,14 +109,15 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
 }
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_lyrix_src = {
-	.name = "lyrix",
-	.key  = 'a',
-	.parser    = lyrics_lyrixat_parse,
-	.get_url   = lyrics_lyrixat_url,
-	.type      = GET_LYRICS,
-	.endmarker = "<div id='d_navigation'",
-	.quality   = 70,
-	.speed     = 50,
-	.free_url  = false
+MetaDataSource lyrics_lyrix_src =
+{
+    .name = "lyrix",
+    .key  = 'a',
+    .parser    = lyrics_lyrixat_parse,
+    .get_url   = lyrics_lyrixat_url,
+    .type      = GET_LYRICS,
+    .endmarker = "<div id='d_navigation'",
+    .quality   = 70,
+    .speed     = 50,
+    .free_url  = false
 };

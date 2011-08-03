@@ -160,14 +160,15 @@ GList * ainfo_allmusic_parse(cb_object * capo)
 
 /*-------------------------------------*/
 
-MetaDataSource ainfo_allmusic_src = {
-	.name      = "allmusic",
-	.key       = 'm',
-	.free_url  = false,
-	.type      = GET_ARTISTBIO,
-	.parser    = ainfo_allmusic_parse,
-	.get_url   = ainfo_allmusic_url,
-	.quality   = 90,
-	.speed     = 40,
-	.endmarker = NULL
+MetaDataSource ainfo_allmusic_src =
+{
+    .name      = "allmusic",
+    .key       = 'm',
+    .free_url  = false,
+    .type      = GET_ARTISTBIO,
+    .parser    = ainfo_allmusic_parse,
+    .get_url   = ainfo_allmusic_url,
+    .quality   = 90,
+    .speed     = 40,
+    .endmarker = NULL
 };

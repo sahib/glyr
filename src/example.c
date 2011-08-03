@@ -11,114 +11,42 @@
 #include <stdio.h>
 #include <string.h>
 
-// Only include this one
+/* Usually only this needs to be included */
 #include "../lib/glyr.h"
 
-// Prototypes;
-static void print_item(GlyMemCache * cacheditem, int num);
-static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q);
 
-// Just print an item..
-static void print_item(GlyMemCache * cacheditem, int num)
+static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 {
-    // GlyMemcache members
-    // dsrc = Exact link to the location where the data came from
-    // size = size in bytes
-    // type = Type of data
-    // data = actual data
-    // (error) - Don't use this. Only internal use
-    fprintf(stderr,"----- ITEM #%d ------\n",num);
-    fprintf(stderr,"FROM: <%s>\n",cacheditem->dsrc);
-    fprintf(stderr,"SIZE: %d Bytes\n",(int)cacheditem->size);
-    fprintf(stderr,"TYPE: ");
-
-    // Each cache identfies it's data by a constant
-    switch(cacheditem->type)
-    {
-    case TYPE_COVER:
-        fprintf(stderr,"cover");
-        break;
-    case TYPE_COVER_PRI:
-        fprintf(stderr,"cover (frontside)");
-        break;
-    case TYPE_COVER_SEC:
-        fprintf(stderr,"cover (backside or inlet)");
-        break;
-    case TYPE_LYRICS:
-        fprintf(stderr,"songtext");
-        break;
-    case TYPE_PHOTOS:
-        fprintf(stderr,"band photo");
-        break;
-    case TYPE_REVIEW:
-        fprintf(stderr,"albumreview");
-        break;
-    case TYPE_AINFO:
-        fprintf(stderr,"artistbio");
-        break;
-    case TYPE_SIMILIAR:
-        fprintf(stderr,"similiar artist");
-        break;
-    case TYPE_TRACK:
-        fprintf(stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60);
-        break;
-    case TYPE_ALBUMLIST:
-        fprintf(stderr,"albumname");
-        break;
-    case TYPE_TAGS:
-        fprintf(stderr,"some tag");
-        break;
-    case TYPE_TAG_ARTIST:
-        fprintf(stderr,"artisttag");
-        break;
-    case TYPE_TAG_ALBUM:
-        fprintf(stderr,"albumtag");
-        break;
-    case TYPE_TAG_TITLE:
-        fprintf(stderr,"titletag");
-        break;
-    case TYPE_RELATION:
-        fprintf(stderr,"relation");
-        break;
-    case TYPE_NOIDEA:
-    default:
-        fprintf(stderr,"brunette giraffe..? No idea.");
-    }
-
-    // Print the actual data.
-    // This might have funny results if using cover/photos
-    if(!cacheditem->is_image)
-        fprintf(stderr,"\nDATA:\n%s",cacheditem->data);
-    else
-        fprintf(stderr,"\nDATA: <not printable>");
-
-    fprintf(stderr,"\n");
+	fprintf(stderr,"\n------- ITEM #%d --------\n",num);
+	Gly_printitem(s,cacheditem);
+	fprintf(stderr,"\n------------------------\n");
 }
 
+/* ------------------------------------------ */
+
+/* This is called whenever glyr gets a ready to use item */
 static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q)
 {
-    // This is called whenever glyr gets a ready to use item
-
-    // You can pass a void pointer to the callback,
-    // by passing it as third argument to GlyOpt_dlcallback()
+    /* You can pass a void pointer to the callback,
+     * by passing it as third argument to GlyOpt_dlcallback()
+     */
     int * i = q->callback.user_pointer;
-    //print_item(c,*i);
     *i = *i + 1;
 
-    // Silly break condition
-   // if(strstr(c->data,"Friede") != NULL)
     if(*i == 3)
     {
-        puts("!! Oh my goat, he said <enter search string here> !!");
+        puts("=> Gentlemen, we received 3 items. We should stop now.");
         return GLYRE_STOP_BY_CB;
+	/*
+         * You can also return:
+         * - GLYRE_STOP_BY_CB which will stop libglyr
+         * - GLYRE_IGNORE which will cause libglyr not to add this item to the results
+         */
     }
-    /*
-        You can also return:
-        - GLYRE_STOP_BY_CB which will stop libglyr
-        - GLYRE_IGNORE which will cause libglyr not to add this item to the results
-    */
     return GLYRE_OK;
 }
+
+/* ------------------------------------------ */
 
 int main(int argc, char * argv[])
 {
@@ -126,14 +54,12 @@ int main(int argc, char * argv[])
     GlyQuery q;
     Gly_init_query(&q);
 
-    // make sure to init everything and destroy again at exit
-    Gly_init();
-    atexit(Gly_cleanup);
+    /* You need to call this before anything happens */
+    //Gly_init();
+    //atexit(Gly_cleanup);
 
-    // Say we want lyrics.
+    /* Say we want a Songtext */
     enum GLYR_GET_TYPE type = GET_LYRICS;
-
-    // Now set the type we determined.
     GlyOpt_type(&q,type);
 
     // Set at least the required fields to your needs
@@ -151,9 +77,9 @@ int main(int argc, char * argv[])
     GlyOpt_verbosity(&q,2);
 
     // Download 5 items
-    GlyOpt_number(&q,111);
+    GlyOpt_number(&q,5);
 
-    // Just search
+    // Just search, without downloading items
     GlyOpt_download(&q,1);
 
     // Call the most important command: GET!
@@ -170,20 +96,17 @@ int main(int argc, char * argv[])
     {
         GlyMemCache * start = it;
 
-        fprintf(stderr,"\n--------------------\n");
-        //fprintf(stderr,"In total %d item(s).\n",(int)result_list->size);
-
         int counter = 0;
         while(it != NULL)
         {
             // This has the same effect as in the callback,
             // Just that it's executed just once after all DL is done.
-	    // Commented out, as this would print it twice
-            print_item(it,counter);
+            // Commented out, as this would print it twice
+	    print_item(&q,it,counter);
 
-	    // Every cache has a link to the next and prev one (or NULL respectively)
+            // Every cache has a link to the next and prev one (or NULL respectively)
             it = it->next;
-	    ++counter;
+            ++counter;
         }
 
         // The contents of it are dynamically allocated.

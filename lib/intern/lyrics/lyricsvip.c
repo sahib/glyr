@@ -76,14 +76,15 @@ GList * lyrics_lyricsvip_parse(cb_object *capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_lyricsvip_src = {
-	.name = "lyricsvip",
-	.key  = 'v',
-	.parser    = lyrics_lyricsvip_parse,
-	.get_url   = lyrics_lyricsvip_url,
-	.type      = GET_LYRICS,
-	.endmarker = "</td></tr></table>",
-	.quality   = 60,
-	.speed     = 50,
-	.free_url  = true
+MetaDataSource lyrics_lyricsvip_src =
+{
+    .name = "lyricsvip",
+    .key  = 'v',
+    .parser    = lyrics_lyricsvip_parse,
+    .get_url   = lyrics_lyricsvip_url,
+    .type      = GET_LYRICS,
+    .endmarker = "</td></tr></table>",
+    .quality   = 60,
+    .speed     = 50,
+    .free_url  = true
 };

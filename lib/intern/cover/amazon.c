@@ -132,14 +132,15 @@ GList * cover_amazon_parse(cb_object *capo)
     return r_list;
 }
 
-MetaDataSource cover_amazon_src = {
-	.name      = "amazon",
-	.key       = 'a',
-	.parser    = cover_amazon_parse,
-	.get_url   = cover_amazon_url,
-	.type      = GET_COVERART,
-	.quality   = 90,
-	.speed     = 85,
-	.endmarker = NULL,
-	.free_url  = true
+MetaDataSource cover_amazon_src =
+{
+    .name      = "amazon",
+    .key       = 'a',
+    .parser    = cover_amazon_parse,
+    .get_url   = cover_amazon_url,
+    .type      = GET_COVERART,
+    .quality   = 90,
+    .speed     = 85,
+    .endmarker = NULL,
+    .free_url  = true
 };

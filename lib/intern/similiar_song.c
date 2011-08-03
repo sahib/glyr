@@ -28,27 +28,28 @@ bool vdt_similar_song(GlyQuery * settings)
 {
     if(settings && settings->artist && settings->title)
     {
-		return true;
+        return true;
     }
     return false;
 }
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
 }
 
 /*----------------------------------------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_similar_song = {
-	.name = "similar",
-	.type = GET_SIMILIAR_SONGS,
-	.validate = vdt_similar_song,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory 
+MetaDataFetcher glyrFetcher_similar_song =
+{
+    .name = "similar",
+    .type = GET_SIMILIAR_SONGS,
+    .validate = vdt_similar_song,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

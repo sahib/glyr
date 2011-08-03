@@ -56,14 +56,15 @@ GList * ainfo_lyricsreg_parse(cb_object * capo)
 
 /*-------------------------------------*/
 
-MetaDataSource ainfo_lyricsreg_src = {
-	.name      = "lyricsreg",
-	.key       = 'r',
-	.free_url  = false,
-	.type      = GET_ARTISTBIO,
-	.parser    = ainfo_lyricsreg_parse,
-	.get_url   = ainfo_lyricsreg_url,
-	.quality   = 25,
-	.speed     = 50,
-	.endmarker = NULL
+MetaDataSource ainfo_lyricsreg_src =
+{
+    .name      = "lyricsreg",
+    .key       = 'r',
+    .free_url  = false,
+    .type      = GET_ARTISTBIO,
+    .parser    = ainfo_lyricsreg_parse,
+    .get_url   = ainfo_lyricsreg_url,
+    .quality   = 25,
+    .speed     = 50,
+    .endmarker = NULL
 };

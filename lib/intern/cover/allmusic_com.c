@@ -132,14 +132,15 @@ GList * cover_allmusic_parse(cb_object * capo)
     return r_list;
 }
 
-MetaDataSource cover_allmusic_src = {
-	.name      = "allmusic",
-	.key       = 'm',
-	.parser    = cover_allmusic_parse,
-	.get_url   = cover_allmusic_url,
-	.type      = GET_COVERART,
-	.quality   = 65,
-	.speed     = 50,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource cover_allmusic_src =
+{
+    .name      = "allmusic",
+    .key       = 'm',
+    .parser    = cover_allmusic_parse,
+    .get_url   = cover_allmusic_url,
+    .type      = GET_COVERART,
+    .quality   = 65,
+    .speed     = 50,
+    .endmarker = NULL,
+    .free_url  = false
 };

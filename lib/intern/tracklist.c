@@ -35,20 +35,21 @@ bool vdt_tracklist(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
 }
 
 /*----------------------------------------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_tracklist = {
-	.name = "Tracklist Fetcher",
-	.type = GET_TRACKLIST,
-	.validate  = vdt_tracklist,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_tracklist =
+{
+    .name = "Tracklist Fetcher",
+    .type = GET_TRACKLIST,
+    .validate  = vdt_tracklist,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

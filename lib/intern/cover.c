@@ -24,43 +24,44 @@
 
 /* ------------------------------------- */
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_img_finalizer(s,list,stop_me,TYPE_COVER);
+    return generic_img_finalizer(s,list,stop_me,TYPE_COVER);
 }
 
 /* ------------------------------------- */
 
 bool vdt_cover(GlyQuery * settings)
 {
-	if (settings && settings->artist && settings->album)
-	{
-		/* validate size */
-		if(settings->cover.min_size <= 0)
-			settings->cover.min_size = -1;
+    if (settings && settings->artist && settings->album)
+    {
+        /* validate size */
+        if(settings->cover.min_size <= 0)
+            settings->cover.min_size = -1;
 
-		if(settings->cover.max_size <= 0)
-			settings->cover.max_size = -1;
+        if(settings->cover.max_size <= 0)
+            settings->cover.max_size = -1;
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 /* ------------------------------------- */
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_cover = {
-	.name = "cover",
-	.type = GET_COVERART,
-	.validate  = vdt_cover,
-	.full_data = FALSE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_cover =
+{
+    .name = "cover",
+    .type = GET_COVERART,
+    .validate  = vdt_cover,
+    .full_data = FALSE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };
 
 /* ------------------------------------- */

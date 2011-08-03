@@ -93,14 +93,15 @@ GList * lyrics_directlyrics_parse(cb_object * capo)
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_directlyrics_src = {
-	.name = "directlyrics",
-	.key  = 'i',
-	.parser    = lyrics_directlyrics_parse,
-	.get_url   = lyrics_directlyrics_url,
-	.type      = GET_LYRICS,
-	.endmarker = "<!-- google_ad_section_start(weight=ignore) -->",
-	.quality   = 30,
-	.speed 	   = 80,
-	.free_url  = true
+MetaDataSource lyrics_directlyrics_src =
+{
+    .name = "directlyrics",
+    .key  = 'i',
+    .parser    = lyrics_directlyrics_parse,
+    .get_url   = lyrics_directlyrics_url,
+    .type      = GET_LYRICS,
+    .endmarker = "<!-- google_ad_section_start(weight=ignore) -->",
+    .quality   = 30,
+    .speed 	   = 80,
+    .free_url  = true
 };

@@ -1,9 +1,13 @@
 #ifndef REGISTER_PLUGINS
-  #define REGISTER_PLUGINS
-  #include <glib.h>
-  void   register_fetcher_plugins(void);
-  void unregister_fetcher_plugins(void);
+#define REGISTER_PLUGINS
+#include "types.h"
+#include <glib.h>
+void   register_fetcher_plugins(void);
+void unregister_fetcher_plugins(void);
 
-  GList * r_getFList(void);
-  GList * r_getSList(void);
+GList * r_getFList(void);
+GList * r_getSList(void);
+
+GlyFetcherInfo * get_plugin_info(void);
+void free_plugin_info(GlyFetcherInfo ** infos);
 #endif

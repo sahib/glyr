@@ -39,18 +39,19 @@ bool vdt_relations(GlyQuery * settings)
 
 static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
 }
 
 //-------------------------------------
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_relations = {
-	.name = "Relation Fetcher",
-	.type = GET_RELATIONS,
-	.validate  = vdt_relations,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_relations =
+{
+    .name = "Relation Fetcher",
+    .type = GET_RELATIONS,
+    .validate  = vdt_relations,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

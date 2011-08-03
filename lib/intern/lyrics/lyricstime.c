@@ -147,14 +147,15 @@ GList * lyrics_lyricstime_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_lyricstime_src = {
-	.name = "lyricstime",
-	.key  = 't',
-	.parser    = lyrics_lyricstime_parse,
-	.get_url   = lyrics_lyricstime_url,
-	.type      = GET_LYRICS,
-	.quality   = 50,
-	.speed     = 60,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource lyrics_lyricstime_src =
+{
+    .name = "lyricstime",
+    .key  = 't',
+    .parser    = lyrics_lyricstime_parse,
+    .get_url   = lyrics_lyricstime_url,
+    .type      = GET_LYRICS,
+    .quality   = 50,
+    .speed     = 60,
+    .endmarker = NULL,
+    .free_url  = false
 };

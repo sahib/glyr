@@ -26,7 +26,7 @@
 
 const char * lyrics_lipwalk_url(GlyQuery * settings)
 {
-	return LIPWALK_URL;
+    return LIPWALK_URL;
 }
 
 GList * lyrics_lipwalk_parse(cb_object *capo)
@@ -66,14 +66,15 @@ GList * lyrics_lipwalk_parse(cb_object *capo)
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_lipwalk_src = {
-	.name = "lipwalk",
-	.key  = 'z',
-	.parser    = lyrics_lipwalk_parse,
-	.get_url   = lyrics_lipwalk_url,
-	.type      = GET_LYRICS,
-	.quality   = 90,
-	.speed     = 90,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource lyrics_lipwalk_src =
+{
+    .name = "lipwalk",
+    .key  = 'z',
+    .parser    = lyrics_lipwalk_parse,
+    .get_url   = lyrics_lipwalk_url,
+    .type      = GET_LYRICS,
+    .quality   = 90,
+    .speed     = 90,
+    .endmarker = NULL,
+    .free_url  = false
 };

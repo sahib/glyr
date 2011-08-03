@@ -33,21 +33,21 @@
 #define PRT_COLOR glyr_USE_COLOR
 #define USE_COLOR
 #ifdef  USE_COLOR
-  #define C_B "\x1b[34;01m" // blue
-  #define C_M "\x1b[35;01m" // magenta
-  #define C_C "\x1b[36;01m" // Cyan
-  #define C_R "\x1b[31;01m" // Red
-  #define C_G "\x1b[32;01m" // Green
-  #define C_Y "\x1b[33;01m" // Yellow
-  #define C_  "\x1b[0m"     // Reset
+#define C_B "\x1b[34;01m" // blue
+#define C_M "\x1b[35;01m" // magenta
+#define C_C "\x1b[36;01m" // Cyan
+#define C_R "\x1b[31;01m" // Red
+#define C_G "\x1b[32;01m" // Green
+#define C_Y "\x1b[33;01m" // Yellow
+#define C_  "\x1b[0m"     // Reset
 #else
-  #define C_B "" // blue
-  #define C_M "" // magenta
-  #define C_C "" // Cyan
-  #define C_R "" // Red
-  #define C_G "" // Green
-  #define C_Y "" // Yellow
-  #define C_  "" // Reset
+#define C_B "" // blue
+#define C_M "" // magenta
+#define C_C "" // Cyan
+#define C_R "" // Red
+#define C_G "" // Green
+#define C_Y "" // Yellow
+#define C_  "" // Reset
 #endif
 
 // libglyr uses checksums to filter double items
@@ -84,24 +84,24 @@ typedef struct cb_object
 // PLEASE FILL _ALL_ FIELDS!
 typedef struct MetaDataFetcher
 {
-   /* cover, lyrics, stuff */
-   const char * name;
- 
-   /* A List of MetaDataSources */
-   GList * provider;
+    /* cover, lyrics, stuff */
+    const char * name;
 
-   /* what this thing delievers; e.g. GET_COVERART */
-   enum GLYR_GET_TYPE type; 
+    /* A List of MetaDataSources */
+    GList * provider;
 
-   /* callbacks */
-   bool (*validate)(GlyQuery *); 
-   void (*init)(void);  
-   void (*destroy)(void);
-   GList* (*finalize)(GlyQuery*,GList*,gboolean*);
+    /* what this thing delievers; e.g. GET_COVERART */
+    enum GLYR_GET_TYPE type;
 
-   /* Wether this Fetcher delievers the full data (lyrics),
-      or just URLs of the data. */
-   gboolean full_data;
+    /* callbacks */
+    bool (*validate)(GlyQuery *);
+    void (*init)(void);
+    void (*destroy)(void);
+    GList* (*finalize)(GlyQuery*,GList*,gboolean*);
+
+    /* Wether this Fetcher delievers the full data (lyrics),
+       or just URLs of the data. */
+    gboolean full_data;
 
 } MetaDataFetcher;
 
@@ -109,25 +109,28 @@ typedef struct MetaDataFetcher
 
 // Internal representation of one provider
 // PLEASE FILL _ALL_ FIELDS!
-typedef struct MetaDataSource {
-      gchar * name;  /* Name of this provider            */
-      gchar key;     /* A key that may be used in --from */
-      
-      GList * (* parser) (struct cb_object *);  /* called when parsing is needed                  */
-      const char  * (* get_url)(GlyQuery *); 	/* called when the url of this provider is needed */
-      gchar  * endmarker;              	        /* Download stops if this mark is found           */
+typedef struct MetaDataSource
+{
+    gchar * name;  /* Name of this provider            */
+    gchar key;     /* A key that may be used in --from */
 
-      enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
-      gint priority;  /* What priority this plugin has            */
-      gboolean free_url; /* URL is dyn. allocated - set this always! */
+    GList * (* parser) (struct cb_object *);  /* called when parsing is needed                  */
+    const char  * (* get_url)(GlyQuery *); 	/* called when the url of this provider is needed */
+    gchar  * endmarker;              	        /* Download stops if this mark is found           */
 
-      gint quality;  /* Measurement of how good the content  usually is [0-100] */
-      gint speed;    /* Measurement of how fast the provider usually is [0-100] */
+    enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
+    gint priority;  /* What priority this plugin has            */
+    gboolean free_url; /* URL is dyn. allocated - set this always! */
+
+    gint quality;  /* Measurement of how good the content  usually is [0-100] */
+    gint speed;    /* Measurement of how fast the provider usually is [0-100] */
 
 } MetaDataSource;
 
 /*------------------------------------------------------*/
 
+
+//TODO
 enum CORE_ERR
 {
     ALL_OK,

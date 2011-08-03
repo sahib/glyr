@@ -155,14 +155,15 @@ GList * lyrics_magistrix_parse (cb_object * capo)
 }
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_magistrix_src = {
-	.name = "magistrix",
-	.key  = 'x',
-	.parser    = lyrics_magistrix_parse,
-	.get_url   = lyrics_magistrix_url,
-	.type      = GET_LYRICS,
-	.quality   = 25,
-	.speed     = 70,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource lyrics_magistrix_src =
+{
+    .name = "magistrix",
+    .key  = 'x',
+    .parser    = lyrics_magistrix_parse,
+    .get_url   = lyrics_magistrix_url,
+    .type      = GET_LYRICS,
+    .quality   = 25,
+    .speed     = 70,
+    .endmarker = NULL,
+    .free_url  = false
 };

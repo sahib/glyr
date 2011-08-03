@@ -74,14 +74,15 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_lyrdb_src = {
-	.name = "lyrdb",
-	.key  = 'd',
-	.parser    = lyrics_lyrdb_parse,
-	.get_url   = lyrics_lyrdb_url,
-	.type      = GET_LYRICS,
-	.endmarker = NULL,
-	.quality   = 75,
-	.speed     = 50,
-	.free_url  = false
+MetaDataSource lyrics_lyrdb_src =
+{
+    .name = "lyrdb",
+    .key  = 'd',
+    .parser    = lyrics_lyrdb_parse,
+    .get_url   = lyrics_lyrdb_url,
+    .type      = GET_LYRICS,
+    .endmarker = NULL,
+    .quality   = 75,
+    .speed     = 50,
+    .free_url  = false
 };

@@ -62,14 +62,15 @@ GList * lyrics_lyricsreg_parse(cb_object * capo)
 
 /*---------------------------------------------------*/
 
-MetaDataSource lyrics_lyricsreg_src = {
-	.name = "lyricsreg",
-	.key  = 'r',
-	.parser    = lyrics_lyricsreg_parse,
-	.get_url   = lyrics_lyricsreg_url,
-	.type      = GET_LYRICS,
-	.quality   = 42,
-	.speed     = 50,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource lyrics_lyricsreg_src =
+{
+    .name = "lyricsreg",
+    .key  = 'r',
+    .parser    = lyrics_lyricsreg_parse,
+    .get_url   = lyrics_lyricsreg_url,
+    .type      = GET_LYRICS,
+    .quality   = 42,
+    .speed     = 50,
+    .endmarker = NULL,
+    .free_url  = false
 };

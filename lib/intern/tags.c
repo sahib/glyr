@@ -27,13 +27,13 @@
 bool vdt_tags(GlyQuery * settings)
 {
     if(settings && settings->artist &&
-	 !(settings && settings->artist && /* Impossible to get tags of a title without album */
-	   settings->album == NULL &&
-	   settings->title != NULL
-	   )
-	  )
+            !(settings && settings->artist && /* Impossible to get tags of a title without album */
+              settings->album == NULL &&
+              settings->title != NULL
+             )
+      )
     {
-		return true;
+        return true;
     }
     return false;
 }
@@ -42,18 +42,19 @@ bool vdt_tags(GlyQuery * settings)
 
 static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_TAGS);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_TAGS);
 }
 
 /*----------------------------------------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_tags = {
-	.name = "Tag Fetcher",
-	.type = GET_TAGS,
-	.validate = vdt_tags,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+MetaDataFetcher glyrFetcher_tags =
+{
+    .name = "Tag Fetcher",
+    .type = GET_TAGS,
+    .validate = vdt_tags,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

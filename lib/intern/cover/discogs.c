@@ -177,14 +177,15 @@ GList * cover_discogs_parse(cb_object * capo)
     return r_list;
 }
 
-MetaDataSource cover_discogs_src = {
-	.name      = "discogs",
-	.key       = 'd',
-	.parser    = cover_discogs_parse,
-	.get_url   = cover_discogs_url,
-	.type      = GET_COVERART,
-	.quality   = 60,
-	.speed     = 60,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource cover_discogs_src =
+{
+    .name      = "discogs",
+    .key       = 'd',
+    .parser    = cover_discogs_parse,
+    .get_url   = cover_discogs_url,
+    .type      = GET_COVERART,
+    .quality   = 60,
+    .speed     = 60,
+    .endmarker = NULL,
+    .free_url  = false
 };

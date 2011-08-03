@@ -98,14 +98,15 @@ GList * ainfo_lastfm_parse(cb_object * capo)
 
 /*-------------------------------------*/
 
-MetaDataSource ainfo_lastfm_src = {
-	.name      = "lastfm",
-	.key       = 'l',
-	.free_url  = true,
-	.type      = GET_ARTISTBIO,
-	.parser    = ainfo_lastfm_parse,
-	.get_url   = ainfo_lastfm_url,
-	.quality   = 85,
-	.speed     = 85,
-	.endmarker = NULL
+MetaDataSource ainfo_lastfm_src =
+{
+    .name      = "lastfm",
+    .key       = 'l',
+    .free_url  = true,
+    .type      = GET_ARTISTBIO,
+    .parser    = ainfo_lastfm_parse,
+    .get_url   = ainfo_lastfm_url,
+    .quality   = 85,
+    .speed     = 85,
+    .endmarker = NULL
 };

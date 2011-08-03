@@ -130,14 +130,15 @@ GList * cover_lyricswiki_parse(cb_object * capo)
 
 /*-----------------------------------------------*/
 
-MetaDataSource cover_lyricswiki_src = {
-	.name      = "lyricswiki",
-	.key       = 'w',
-	.parser    = cover_lyricswiki_parse,
-	.get_url   = cover_lyricswiki_url,
-	.type      = GET_COVERART,
-	.quality   = 75,
-	.speed     = 65,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource cover_lyricswiki_src =
+{
+    .name      = "lyricswiki",
+    .key       = 'w',
+    .parser    = cover_lyricswiki_parse,
+    .get_url   = cover_lyricswiki_url,
+    .type      = GET_COVERART,
+    .quality   = 75,
+    .speed     = 65,
+    .endmarker = NULL,
+    .free_url  = false
 };

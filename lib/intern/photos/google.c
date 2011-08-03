@@ -43,14 +43,15 @@ GList * photos_google_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource photos_google_src = {
-	.name = "google",
-	.key  = 'g',
-	.parser    = photos_google_parse,
-	.get_url   = photos_google_url,
-	.type      = GET_ARTIST_PHOTOS,
-	.quality   = 40,
-	.speed     = 90,
-	.endmarker = NULL,
-	.free_url  = true
+MetaDataSource photos_google_src =
+{
+    .name = "google",
+    .key  = 'g',
+    .parser    = photos_google_parse,
+    .get_url   = photos_google_url,
+    .type      = GET_ARTIST_PHOTOS,
+    .quality   = 40,
+    .speed     = 90,
+    .endmarker = NULL,
+    .free_url  = true
 };

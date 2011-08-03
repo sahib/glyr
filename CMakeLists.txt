@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
-PROJECT( glyr C )
+PROJECT(glyr C)
+
+include(FindPkgConfig)
 
 # Change default dir
 SET(CMAKE_INSTALL_PREFIX "/usr")
@@ -43,15 +45,14 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 	)
 
 # set directories
-SET( SUBDIR_LIB lib)
-SET( SUBDIR_SRC src)
-SET( SUBDIR_SWIG swig)
+SET(SUBDIR_LIB lib)
+SET(SUBDIR_SRC src)
+SET(SUBDIR_SWIG swig)
 
 # Find deps
 FIND_PACKAGE(CURL REQUIRED)
-# Gtk for now, too lazy to find the glib pack
-FIND_PACKAGE(GTK2 REQUIRED)
-INCLUDE_DIRECTORIES(${GTK2_INCLUDE_DIRS})
+pkg_check_modules (GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
+INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
 set (DIR_INTERN ${DIR_ROOT}/intern )
@@ -102,7 +103,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"
 	"${DIR_TAGS}/musicbrainz.c"
-	"${DIR_COVER}/last_fm.c"
+	"${DIR_COVER}/lastfm.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
 	"${DIR_COVER}/lyricswiki.c"

@@ -63,14 +63,15 @@ GList * review_amazon_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource review_amazon_src = {
-	.name = "amazon",
-	.key  = 'a',
-	.parser    = review_amazon_parse,
-	.get_url   = review_amazon_url,
-	.type      = GET_ALBUM_REVIEW,
-	.quality   = 45,
-	.speed     = 70,
-	.endmarker = NULL, 
-	.free_url  = true
+MetaDataSource review_amazon_src =
+{
+    .name = "amazon",
+    .key  = 'a',
+    .parser    = review_amazon_parse,
+    .get_url   = review_amazon_url,
+    .type      = GET_ALBUM_REVIEW,
+    .quality   = 45,
+    .speed     = 70,
+    .endmarker = NULL,
+    .free_url  = true
 };

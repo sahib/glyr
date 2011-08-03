@@ -141,14 +141,15 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-MetaDataSource lyrics_metrolyrics_src = {
-	.name = "metrolyrics",
-	.key  = 'm',
-	.parser    = lyrics_metrolyrics_parse,
-	.get_url   = lyrics_metrolyrics_url,
-	.type      = GET_LYRICS,
-	.quality   = 25,
-	.speed     = 40,
-	.endmarker = NULL,
-	.free_url  = false
+MetaDataSource lyrics_metrolyrics_src =
+{
+    .name = "metrolyrics",
+    .key  = 'm',
+    .parser    = lyrics_metrolyrics_parse,
+    .get_url   = lyrics_metrolyrics_url,
+    .type      = GET_LYRICS,
+    .quality   = 25,
+    .speed     = 40,
+    .endmarker = NULL,
+    .free_url  = false
 };

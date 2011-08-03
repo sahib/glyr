@@ -28,31 +28,32 @@ bool get_albumlist(GlyQuery * settings)
 {
     if(settings && settings->artist)
     {
-	return true;
+        return true;
     }
     else
     {
         glyr_message(2,settings,stderr,C_R"* "C_"Artist is needed to retrieve a albumlist (o rly?).\n");
-	return false;
+        return false;
     }
 }
 
 //-------------------------------------
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me) 
+static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-	return generic_txt_finalizer(s,list,stop_me,TYPE_ALBUMLIST);
+    return generic_txt_finalizer(s,list,stop_me,TYPE_ALBUMLIST);
 }
 
 //-------------------------------------
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_albumlist = {
-	.name = "ArtistInfo Fetcher",
-	.type = GET_ALBUMLIST,
-	.validate  = get_albumlist,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory 
+MetaDataFetcher glyrFetcher_albumlist =
+{
+    .name = "ArtistInfo Fetcher",
+    .type = GET_ALBUMLIST,
+    .validate  = get_albumlist,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };
