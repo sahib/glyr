@@ -50,7 +50,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tags =
 {
-    .name = "Tag Fetcher",
+    .name = "tags",
     .type = GET_TAGS,
     .validate = vdt_tags,
     .full_data = TRUE,

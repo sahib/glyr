@@ -663,7 +663,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
 /*--------------------------------------------------------*/
 /* ----------------- THE HEART OF GOLD ------------------ */
 /*--------------------------------------------------------*/
-GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr)
+GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr)
 {
     /* Storage for result items */
     GList * item_list = NULL;
@@ -771,10 +771,10 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
                         update_md5sum(capo->cache);
 
                         /* Call it if present */
-                        if(callback != NULL)
+                        if(asdl_callback != NULL)
                         {
                             /* Add parsed results or nothing if parsed result is empty */
-                            cb_results = callback(capo,userptr,&stop_download,&to_add);
+                            cb_results = asdl_callback(capo,userptr,&stop_download,&to_add);
                         }
 
                         if(cb_results != NULL)
@@ -910,10 +910,16 @@ static gboolean format_is_allowed(gchar * format, gchar * allowed)
 
 /*--------------------------------------------------------*/
 
-static void kick_out_wrong_formats(GList * data_list)
+static void kick_out_wrong_formats(GList * data_list, GlyQuery * s)
 {
     /* Parallely check if the format is what we wanted */
     check_all_types_in_url_list(data_list);
+
+    gchar * allowed_formats = s->allowed_formats;
+    if(allowed_formats == NULL)
+    {
+	allowed_formats = DEFAULT_ALLOWED_FORMATS;
+    }
 
     /* Now compare it agains the format. */
     gsize invalid_format_counter = 0;
@@ -923,7 +929,7 @@ static void kick_out_wrong_formats(GList * data_list)
         GlyMemCache * item = elem->data;
         if(item != NULL)
         {
-            if(format_is_allowed(item->img_format,"png;jpeg;gif") == FALSE)
+            if(format_is_allowed(item->img_format,allowed_formats) == FALSE)
             {
                 GList * to_delete = elem;
                 elem = elem->next;
@@ -962,8 +968,6 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
         {
             GList * raw_parsed_data = plugin->parser(capo);
 
-            g_print("- Received %d entries from parser\n",g_list_length(raw_parsed_data));
-
             /* Also do some duplicate check already */
             gsize less = delete_dupes(raw_parsed_data,capo->s);
             if(less > 0)
@@ -974,7 +978,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
             /* We shouldn't check (e.g) lyrics if they are a valid URL ;-) */
             if(capo->s->imagejob == TRUE)
             {
-                kick_out_wrong_formats(raw_parsed_data);
+                kick_out_wrong_formats(raw_parsed_data,capo->s);
             }
 
             for(GList * elem = raw_parsed_data; elem; elem = elem->next)

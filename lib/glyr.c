@@ -97,7 +97,7 @@ const char * err_strings[] =
     "Unknown ID for getter",
     "Ignored cache",
     "Stopped by callback",
-    "Library is not yet initialized, use Gly_init()",
+    "Library is not yet initialized, use glyr_init()",
     NULL
 };
 
@@ -110,7 +110,7 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg);
 /*-------------------- OTHER -----------------------------*/
 /*--------------------------------------------------------*/
 
-GlyMemCache * Gly_copy_cache(GlyMemCache * source)
+GlyMemCache * glyr_copy_cache(GlyMemCache * source)
 {
     return DL_copy(source);
 }
@@ -118,7 +118,7 @@ GlyMemCache * Gly_copy_cache(GlyMemCache * source)
 /*--------------------------------------------------------*/
 
 // return a descriptive string on error ID
-const char * Gly_strerror(enum GLYR_ERROR ID)
+const char * glyr_strerror(enum GLYR_ERROR ID)
 {
     if(ID < (sizeof(err_strings)/sizeof(const char *)))
     {
@@ -129,14 +129,14 @@ const char * Gly_strerror(enum GLYR_ERROR ID)
 
 /*-----------------------------------------------*/
 
-void Gly_update_md5sum(GlyMemCache * cache)
+void glyr_update_md5sum(GlyMemCache * cache)
 {
     update_md5sum(cache);
 }
 
 /*-----------------------------------------------*/
 
-const char * Gly_version(void)
+const char * glyr_version(void)
 {
     return "Version "glyr_VERSION_MAJOR"."glyr_VERSION_MINOR" ("glyr_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
 }
@@ -146,7 +146,7 @@ const char * Gly_version(void)
 /*-----------------------------------------------*/
 
 // Seperate method because va_arg struggles with function pointers
-enum GLYR_ERROR GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp)
+enum GLYR_ERROR glyr_opt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp)
 {
     if(settings)
     {
@@ -159,7 +159,7 @@ enum GLYR_ERROR GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void *
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
+enum GLYR_ERROR glyr_opt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
 {
 
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -173,7 +173,7 @@ enum GLYR_ERROR GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_artist(GlyQuery * s, char * artist)
+enum GLYR_ERROR glyr_opt_artist(GlyQuery * s, char * artist)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,0,artist);
@@ -182,7 +182,7 @@ enum GLYR_ERROR GlyOpt_artist(GlyQuery * s, char * artist)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_album(GlyQuery * s, char * album)
+enum GLYR_ERROR glyr_opt_album(GlyQuery * s, char * album)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,1,album);
@@ -191,7 +191,7 @@ enum GLYR_ERROR GlyOpt_album(GlyQuery * s, char * album)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_title(GlyQuery * s, char * title)
+enum GLYR_ERROR glyr_opt_title(GlyQuery * s, char * title)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,2,title);
@@ -218,7 +218,7 @@ static int size_set(int * ref, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_cmaxsize(GlyQuery * s, int size)
+enum GLYR_ERROR glyr_opt_cmaxsize(GlyQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     return size_set(&s->cover.max_size,size);
@@ -226,7 +226,7 @@ enum GLYR_ERROR GlyOpt_cmaxsize(GlyQuery * s, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_cminsize(GlyQuery * s, int size)
+enum GLYR_ERROR glyr_opt_cminsize(GlyQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     return size_set(&s->cover.min_size,size);
@@ -234,7 +234,7 @@ enum GLYR_ERROR GlyOpt_cminsize(GlyQuery * s, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_parallel(GlyQuery * s, unsigned long val)
+enum GLYR_ERROR glyr_opt_parallel(GlyQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->parallel = (long)val;
@@ -243,7 +243,7 @@ enum GLYR_ERROR GlyOpt_parallel(GlyQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_timeout(GlyQuery * s, unsigned long val)
+enum GLYR_ERROR glyr_opt_timeout(GlyQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->timeout = (long)val;
@@ -252,7 +252,7 @@ enum GLYR_ERROR GlyOpt_timeout(GlyQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_redirects(GlyQuery * s, unsigned long val)
+enum GLYR_ERROR glyr_opt_redirects(GlyQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->redirects = (long)val;
@@ -261,7 +261,7 @@ enum GLYR_ERROR GlyOpt_redirects(GlyQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_lang(GlyQuery * s, char * langcode)
+enum GLYR_ERROR glyr_opt_lang(GlyQuery * s, char * langcode)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(langcode != NULL)
@@ -274,7 +274,7 @@ enum GLYR_ERROR GlyOpt_lang(GlyQuery * s, char * langcode)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_number(GlyQuery * s, unsigned int num)
+enum GLYR_ERROR glyr_opt_number(GlyQuery * s, unsigned int num)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->number = num == 0 ? INT_MAX : num;
@@ -283,7 +283,7 @@ enum GLYR_ERROR GlyOpt_number(GlyQuery * s, unsigned int num)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_verbosity(GlyQuery * s, unsigned int level)
+enum GLYR_ERROR glyr_opt_verbosity(GlyQuery * s, unsigned int level)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->verbosity = level;
@@ -292,7 +292,7 @@ enum GLYR_ERROR GlyOpt_verbosity(GlyQuery * s, unsigned int level)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_from(GlyQuery * s, const char * from)
+enum GLYR_ERROR glyr_opt_from(GlyQuery * s, const char * from)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(from != NULL)
@@ -305,7 +305,7 @@ enum GLYR_ERROR GlyOpt_from(GlyQuery * s, const char * from)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_allowed_formats(GlyQuery * s, const char * formats)
+enum GLYR_ERROR glyr_opt_allowed_formats(GlyQuery * s, const char * formats)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,5,(formats==NULL) ? DEFAULT_ALLOWED_FORMATS : formats);
@@ -314,7 +314,7 @@ enum GLYR_ERROR GlyOpt_allowed_formats(GlyQuery * s, const char * formats)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_plugmax(GlyQuery * s, int plugmax)
+enum GLYR_ERROR glyr_opt_plugmax(GlyQuery * s, int plugmax)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(plugmax < 0)
@@ -328,7 +328,7 @@ enum GLYR_ERROR GlyOpt_plugmax(GlyQuery * s, int plugmax)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_qsratio(GlyQuery * s, float ratio)
+enum GLYR_ERROR glyr_opt_qsratio(GlyQuery * s, float ratio)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->qsratio = MIN(MAX(ratio,0.0),1.0);
@@ -337,7 +337,7 @@ enum GLYR_ERROR GlyOpt_qsratio(GlyQuery * s, float ratio)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring)
+enum GLYR_ERROR glyr_opt_proxy(GlyQuery * s, const char * proxystring)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,3,proxystring);
@@ -346,7 +346,7 @@ enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_fuzzyness(GlyQuery * s, int fuzz)
+enum GLYR_ERROR glyr_opt_fuzzyness(GlyQuery * s, int fuzz)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->fuzzyness = fuzz;
@@ -355,16 +355,7 @@ enum GLYR_ERROR GlyOpt_fuzzyness(GlyQuery * s, int fuzz)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR GlyOpt_groupedDL(GlyQuery * s, bool groupedDL)
-{
-    if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    s->groupedDL = groupedDL;
-    return GLYRE_OK;
-}
-
-/*-----------------------------------------------*/
-
-enum GLYR_ERROR GlyOpt_download(GlyQuery * s, bool download)
+enum GLYR_ERROR glyr_opt_download(GlyQuery * s, bool download)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->download = download;
@@ -395,7 +386,6 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->lang = DEFAULT_LANG;
     glyrs->plugmax = DEFAULT_PLUGMAX;
     glyrs->download = DEFAULT_DOWNLOAD;
-    glyrs->groupedDL = DEFAULT_GROUPEDL;
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
     glyrs->fuzzyness = DEFAULT_FUZZYNESS;
@@ -407,14 +397,14 @@ static void set_query_on_defaults(GlyQuery * glyrs)
 
 /*-----------------------------------------------*/
 
-void Gly_init_query(GlyQuery * glyrs)
+void glyr_init_query(GlyQuery * glyrs)
 {
     set_query_on_defaults(glyrs);
 }
 
 /*-----------------------------------------------*/
 
-void Gly_destroy_query(GlyQuery * sets)
+void glyr_destroy_query(GlyQuery * sets)
 {
     if(sets)
     {
@@ -435,14 +425,14 @@ void Gly_destroy_query(GlyQuery * sets)
 
 /*-----------------------------------------------*/
 
-GlyMemCache * Gly_download(const char * url, GlyQuery * s)
+GlyMemCache * glyr_download(const char * url, GlyQuery * s)
 {
     return download_single(url,s,NULL);
 }
 
 /*-----------------------------------------------*/
 
-void Gly_free_list(GlyMemCache * head)
+void glyr_free_list(GlyMemCache * head)
 {
     if(head != NULL)
     {
@@ -467,14 +457,14 @@ void Gly_free_list(GlyMemCache * head)
 
 /*-----------------------------------------------*/
 
-void Gly_free_cache(GlyMemCache * c)
+void glyr_free_cache(GlyMemCache * c)
 {
     DL_free(c);
 }
 
 /*-----------------------------------------------*/
 
-GlyMemCache * Gly_new_cache(void)
+GlyMemCache * glyr_new_cache(void)
 {
     return DL_init();
 }
@@ -482,7 +472,7 @@ GlyMemCache * Gly_new_cache(void)
 /*-----------------------------------------------*/
 
 // !! NOT THREADSAFE !! //
-void Gly_init(void)
+void glyr_init(void)
 {
     /* Protect agains double initialization */
     if(is_initalized == FALSE)
@@ -512,7 +502,7 @@ void Gly_init(void)
 /*-----------------------------------------------*/
 
 // !! NOT THREADSAFE !! //
-void Gly_cleanup(void)
+void glyr_cleanup(void)
 {
     if(is_initalized == TRUE)
     {
@@ -533,7 +523,7 @@ void Gly_cleanup(void)
 
 /*-----------------------------------------------*/
 
-GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
+GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 {
     if(is_initalized == FALSE)
     {
@@ -634,7 +624,7 @@ GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 
 /*-----------------------------------------------*/
 
-int Gly_write(GlyMemCache * data, const char * path)
+int glyr_write(GlyMemCache * data, const char * path)
 {
     int bytes = -1;
     if(path)
@@ -666,7 +656,7 @@ int Gly_write(GlyMemCache * data, const char * path)
             }
             else
             {
-                glyr_message(-1,NULL,stderr,"Gly_write: Unable to write to '%s'!\n",path);
+                glyr_message(-1,NULL,stderr,"glyr_write: Unable to write to '%s'!\n",path);
             }
         }
     }
@@ -719,7 +709,7 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 
 /*-----------------------------------------------*/
 
-void Gly_printitem(GlyQuery *s, GlyMemCache * cacheditem)
+void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 {
 	// GlyMemcache members
 	// dsrc = Exact link to the location where the data came from
@@ -787,7 +777,7 @@ void Gly_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 			break;
 		case TYPE_NOIDEA:
 		default:
-			glyr_message(1,s,stderr,"No idea...?");
+			glyr_message(1,s,stderr,"Unknown");
 	}
 
 	// Print the actual data.
@@ -805,14 +795,14 @@ void Gly_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 
 /* --------------------------------------------------------- */
 
-GlyFetcherInfo * Gly_get_plugin_info(void)
+GlyFetcherInfo * glyr_get_plugin_info(void)
 {
 	return get_plugin_info();
 }
 
 /* --------------------------------------------------------- */
 
-void Gly_free_plugin_info(GlyFetcherInfo ** info)
+void glyr_free_plugin_info(GlyFetcherInfo ** info)
 {
 	free_plugin_info(info);
 }

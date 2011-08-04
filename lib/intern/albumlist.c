@@ -49,7 +49,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_albumlist =
 {
-    .name = "ArtistInfo Fetcher",
+    .name = "albumlist",
     .type = GET_ALBUMLIST,
     .validate  = get_albumlist,
     .full_data = TRUE,

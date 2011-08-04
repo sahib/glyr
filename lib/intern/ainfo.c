@@ -57,7 +57,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistbio =
 {
-    .name = "ArtistInfo Fetcher",
+    .name = "artistbio",
     .type = GET_ARTISTBIO,
     .validate  = vdt_ainfo,
     .full_data = TRUE,

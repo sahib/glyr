@@ -17,39 +17,11 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
+#ifndef LASTFM_H
+#define LASTFM_H
 
-#include "../core.h"
-#include "../stringlib.h"
-#include "generic.h"
+#include "../../core.h"
+const char   * cover_lastfm_url(GlyQuery * sets);
+GList * cover_lastfm_parse(cb_object *capo);
 
-/*----------------------------------------------------------------*/
-
-bool vdt_tracklist(GlyQuery * settings)
-{
-    if(settings && settings->artist && settings->album)
-    {
-        return true;
-    }
-    return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
-{
-    return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
-}
-
-/*----------------------------------------------------------------*/
-
-/* PlugStruct */
-MetaDataFetcher glyrFetcher_tracklist =
-{
-    .name = "tracklist",
-    .type = GET_TRACKLIST,
-    .validate  = vdt_tracklist,
-    .full_data = TRUE,
-    .init    = NULL,
-    .destroy = NULL,
-    .finalize = factory
-};
+#endif

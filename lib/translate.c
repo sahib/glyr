@@ -15,15 +15,15 @@
 #include "core.h"
 
 /* Module prototypes */
-static const char * gtrans_get_trans_url(const char * input, const char * from, const char * to);
-static const char * gtrans_get_detector_url(const char * input);
+const char * gtrans_get_trans_url(const char * input, const char * from, const char * to);
+const char * gtrans_get_detector_url(const char * input);
 static char * json_get_single_value(char * sval, size_t keylen);
-static char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key);
-static char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness);
+char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key);
+char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness);
 
 /* ------------------------------------------------------------------- */
 
-static const char * gtrans_get_trans_url(const char * input, const char * from, const char * to)
+const char * gtrans_get_trans_url(const char * input, const char * from, const char * to)
 {
     char * resultURL = NULL;
     if(input != NULL)
@@ -45,7 +45,7 @@ static const char * gtrans_get_trans_url(const char * input, const char * from, 
 
 /* ------------------------------------------------------------------- */
 
-static const char * gtrans_get_detector_url(const char * input)
+const char * gtrans_get_detector_url(const char * input)
 {
     char * resultURL = NULL;
     if(input != NULL)
@@ -88,7 +88,7 @@ static char * json_get_single_value(char * keyval, size_t keylen)
 
 /* ------------------------------------------------------------------- */
 
-static char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key)
+char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key)
 {
     char * resultBuf = NULL;
     if(cache != NULL)
@@ -139,7 +139,7 @@ static char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_k
 #define TRNS_KEY "\"translatedText\":"
 
 
-static char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness)
+char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness)
 {
     char * resultBuf = NULL;
     if(cache && cache->data)

@@ -123,7 +123,8 @@ static gint compare_by_priority(gconstpointer a, gconstpointer b)
 {
     const MetaDataSource * sa = a;
     const MetaDataSource * sb = b;
-    return (sa && sb) ? (sa->priority - sb->priority) : -1;
+    return (sa-sb);
+    //return (sa && sb) ? (sa->priority - sb->priority) : -1;
 }
 
 static void get_list_from_type(MetaDataFetcher * fetch)
@@ -298,12 +299,10 @@ void free_plugin_info(GlyFetcherInfo ** infos)
 {
 	if(infos != NULL)
 	{
-		g_print("%p\n",infos);	
 		GlyFetcherInfo * fetch = infos[0];
 		while(fetch != NULL)
 		{
 			GlyFetcherInfo * to_delete = fetch;
-			puts(fetch->name);
 			fetch = fetch->next;
 
 			free_single_item(to_delete);

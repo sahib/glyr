@@ -34,7 +34,7 @@
 
 /* Globals */
 const gchar * exec_on_call = NULL;
-const gchar ** write_arg   = NULL;
+gchar * write_to = NULL;
 
 int message(int verbosity, GlyQuery * s, FILE * stream, const char * fmt, ...)
 {
@@ -68,7 +68,7 @@ int message(int verbosity, GlyQuery * s, FILE * stream, const char * fmt, ...)
 
 static void print_version(GlyQuery * s)
 {
-    message(-1,s,stdout, "%s\n\n",Gly_version());
+    message(-1,s,stdout, "%s\n\n",glyr_version());
     message(-1,s,stderr, "This is still beta software, expect quite a lot bugs.\n");
     message(-1,s,stderr, "Email bugs to <sahib@online.de> or use the bugtracker\n"
                  "at https://github.com/sahib/glyr/issues - Thank you! \n");
@@ -101,8 +101,6 @@ void help_short(GlyQuery * s)
                  IN"-V --version          Print the version string.\n"
                  IN"-d --download         Download Images.\n"
                  IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
-                 IN"-g --groups           Enable grouped download (Slower but more accurate, as quality > speed)\n"
-                 IN"-G --skip-groups      Query all providers at once. (Faster but may deliever weird results)\n"
                  IN"-a --artist           Artist name (Used by all plugins)\n"
                  IN"-b --album            Album name (Used by cover,review,lyrics)\n"
                  IN"-t --title            Songname (used mainly by lyrics)\n"
@@ -111,14 +109,37 @@ void help_short(GlyQuery * s)
                  IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
                  IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
+	   	 IN"-q --qsratio          How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
+                 IN"-k --proxy	          Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
+		 IN"-L --list             List all fetchers and source providers for each and exit.\n"
+		 IN"-  --formats          A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n" 
                  IN"-j --callback         Set a bash command to be executed when a item is finished downloading;\n"
-                 IN"-k --proxy	      Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
                  IN"                      The special string <path> is expanded with the actual path to the data.\n"
                 );
 
-    message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",Gly_version());
+    message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",glyr_version());
     exit(EXIT_FAILURE);
 #undef IN
+}
+
+/* --------------------------------------------------------- */
+
+static void visualize_from_options(void)
+{
+	GlyFetcherInfo * info = glyr_get_plugin_info();
+	if(info != NULL)
+	{
+		for(GlyFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
+		{
+			g_print("%s\n",elem0->name);
+			for(GlySourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
+			{
+				g_print("  [%c] %s\n",elem1->key,elem1->name);
+			}
+			g_print("\n");
+		}
+	}
+	glyr_free_plugin_info(&info);
 }
 
 /* --------------------------------------------------------- */
@@ -134,13 +155,14 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 		{"timeout",       required_argument, 0, 'm'},
 		{"plugmax",       required_argument, 0, 'x'},
 		{"verbosity",     required_argument, 0, 'v'},
+		{"qsratio",       required_argument, 0, 'q'},
+		{"formats",       required_argument, 0, 'F'},
 		{"help",          no_argument,       0, 'h'},
 		{"usage",         no_argument,       0, 'H'},
 		{"version",       no_argument,       0, 'V'},
 		{"download",      no_argument,       0, 'd'},
 		{"no-download",   no_argument,       0, 'D'},
-		{"groups",        no_argument,       0, 'g'},
-		{"no-groups",     no_argument,       0, 'G'},
+		{"list",          no_argument,       0, 'L'},
 		// ---------- plugin specific ------------ //
 		{"artist",        required_argument, 0, 'a'},
 		{"album",         required_argument, 0, 'b'},
@@ -160,13 +182,10 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 	{
 		int c;
 		int option_index = 0;
-		if((c = getopt_long_only(argc, argv, "VhHdDgGf:w:p:r:m:x:v:a:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index)) == -1)
+		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index)) == -1)
 		{
 			break;
 		}
-
-		/* Disable getopt's error messages */ 
-		opterr = 0;
 
 		switch (c)
 		{
@@ -186,28 +205,22 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 					}
 					break;
 				}
-			case 'g':
-				GlyOpt_groupedDL(glyrs,true);
-				break;
-			case 'G':
-				GlyOpt_groupedDL(glyrs,false);
-				break;
 			case 'f':
-				GlyOpt_from(glyrs,optarg);
+				glyr_opt_from(glyrs,optarg);
 			case 'v':
-				GlyOpt_verbosity(glyrs,atoi(optarg));
+				glyr_opt_verbosity(glyrs,atoi(optarg));
 				break;
 			case 'p':
-				GlyOpt_parallel(glyrs,atoi(optarg));
+				glyr_opt_parallel(glyrs,atoi(optarg));
 				break;
 			case 'r':
-				GlyOpt_redirects(glyrs,atoi(optarg));
+				glyr_opt_redirects(glyrs,atoi(optarg));
 				break;
 			case 'm':
-				GlyOpt_timeout(glyrs,atoi(optarg));
+				glyr_opt_timeout(glyrs,atoi(optarg));
 				break;
 			case 'x':
-				GlyOpt_plugmax(glyrs,atoi(optarg));
+				glyr_opt_plugmax(glyrs,atoi(optarg));
 				break;
 			case 'V':
 				print_version(glyrs);
@@ -216,40 +229,50 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 				help_short(glyrs);
 				break;
 			case 'a':
-				GlyOpt_artist(glyrs,optarg);
+				glyr_opt_artist(glyrs,optarg);
 				break;
 			case 'b':
-				GlyOpt_album(glyrs,optarg);
+				glyr_opt_album(glyrs,optarg);
 				break;
 			case 't':
-				GlyOpt_title(glyrs,optarg);
+				glyr_opt_title(glyrs,optarg);
 				break;
 			case 'i':
-				GlyOpt_cminsize(glyrs,atoi(optarg));
+				glyr_opt_cminsize(glyrs,atoi(optarg));
 				break;
 			case 'e':
-				GlyOpt_cmaxsize(glyrs,atoi(optarg));
+				glyr_opt_cmaxsize(glyrs,atoi(optarg));
 				break;
 			case 'n':
-				GlyOpt_number(glyrs,atoi(optarg));
+				glyr_opt_number(glyrs,atoi(optarg));
 				break;
 			case 'd':
-				GlyOpt_download(glyrs,true);
+				glyr_opt_download(glyrs,true);
 				break;
 			case 'D':
-				GlyOpt_download(glyrs,false);
+				glyr_opt_download(glyrs,false);
 				break;
 			case 'l':
-				GlyOpt_lang(glyrs,optarg);
+				glyr_opt_lang(glyrs,optarg);
+				break;
+			case 'L': 
+				visualize_from_options();
+				exit(0);
 				break;
 			case 'z':
-				GlyOpt_fuzzyness(glyrs,atoi(optarg));
+				glyr_opt_fuzzyness(glyrs,atoi(optarg));
 				break;
 			case 'j':
 				exec_on_call = optarg;
 				break;
 			case 'k':
-				GlyOpt_proxy(glyrs,optarg);
+				glyr_opt_proxy(glyrs,optarg);
+				break;
+			case 'q':
+				glyr_opt_qsratio(glyrs,atof(optarg));
+				break;
+			case 'F':
+				glyr_opt_formats(glyrs,optarg);
 				break;
 			case '?':
 				break;
@@ -510,7 +533,7 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 	// data = actual data
 	// (error) - Don't use this. Only internal use
 	message(1,s,stderr,"\n------- ITEM #%d --------\n",num);
-	Gly_printitem(s,cacheditem);
+	glyr_printitem(s,cacheditem);
 	message(1,s,stderr,"\n------------------------\n");
 	message(1,s,stderr,"\n");
 }
@@ -529,48 +552,44 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 	int * current = s->callback.user_pointer;
 
 	// Text Represantation of this item
-	print_item(s,c,(*current));
+	print_item(s,c,*(current));
 
 	/* write out 'live' */
-	if(write_arg)
+	if(write_to != NULL)
 	{
-		size_t opt = 0;
-		for(opt = 0; write_arg[opt]; opt++)
+		gchar * path = get_path_by_type(s,write_to,*current);
+		if(path != NULL)
 		{
-			gchar * path = get_path_by_type(s,write_arg[opt],*current);
+			message(1,s,stderr,"- Writing '%d' to %s\n",c->type,path);
+
+			if(glyr_write(c,path) == -1)
+			{
+				message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
+			}
+		}
+
+		/* call the program if any specified */
+		if(exec_on_call != NULL)
+		{
+			char * replace_path = g_strdup(exec_on_call);
 			if(path != NULL)
 			{
-				message(1,s,stderr,"- Writing '%d' to %s\n",c->type,path);
-
-				if(Gly_write(c,path) == -1)
-				{
-					message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
-				}
+				gchar ** path_splitv = g_strsplit(path,"<path>",0);
+				replace_path = g_strjoinv(path,path_splitv);
+				g_strfreev(path_splitv);
+				path_splitv = NULL;
 			}
 
-			/* call the program if any specified */
-			if(exec_on_call != NULL)
+			/* Call that command */
+			int exitVal = system(replace_path);
+			if(exitVal != EXIT_SUCCESS)
 			{
-				char * replace_path = g_strdup(exec_on_call);
-				if(path != NULL)
-				{
-					gchar ** path_splitv = g_strsplit(path,"<path>",0);
-					replace_path = g_strjoinv(path,path_splitv);
-					g_strfreev(path_splitv);
-					path_splitv = NULL;
-				}
-
-				/* Call that command */
-				int exitVal = system(replace_path);
-				if(exitVal != EXIT_SUCCESS)
-				{
-					message(1,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
-				}
-
-				g_free(replace_path);
+				message(1,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
 			}
-			g_free(path);
+
+			g_free(replace_path);
 		}
+		g_free(path);
 	}
 
 	if(current != NULL)
@@ -588,20 +607,44 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
+enum GLYR_GET_TYPE get_type_from_string(gchar * string)
+{
+	enum GLYR_GET_TYPE result = GET_UNSURE;
+	GlyFetcherInfo * info = glyr_get_plugin_info();
+	if(info != NULL)
+	{
+		for(GlyFetcherInfo * elem = info; elem; elem = elem->next)
+		{
+			if(g_ascii_strncasecmp(elem->name,string,strlen(elem->name)) == 0)
+			{
+				result = elem->type;
+				break;
+			}
+		}
+	}
+	else
+	{
+		g_printerr("Warning: Can't get type information. Probably a bug.\n");
+	}
+	glyr_free_plugin_info(&info);
+	return result;
+}
+
+/* --------------------------------------------------------- */
+// --------------------------------------------------------- //
+/* -------------------------------------------------------- */
+
 int main(int argc, char * argv[])
 {
 	int result = EXIT_SUCCESS;
 
-	// make sure to init everything and destroy again
-	Gly_init();
-	atexit(Gly_cleanup);
+	/* Init. You _have_ to call this before making any calls */
+	glyr_init();
 
-	GlyFetcherInfo * info = Gly_get_plugin_info();
-	GlyFetcherInfo * elem = info;
-
-	Gly_free_plugin_info(&info);
-	if(info == NULL) puts("Oh dear.");
-
+	/* For every init, you should call glyr_cleanup,
+	 * Note: Both methods are NOT Threadsafe!
+	 */
+	atexit(glyr_cleanup);
 
 	if(argc >= 3)
 	{
@@ -609,35 +652,32 @@ int main(int argc, char * argv[])
 		GlyQuery my_query;
 
 		// set it on default values
-		Gly_init_query(&my_query);
+		glyr_init_query(&my_query);
 
-		// Good enough for glyrc
-		GlyOpt_verbosity(&my_query,2);
+		/* Default to a bit more verbose mode */
+		glyr_opt_verbosity(&my_query,2);
 
+		my_query.type = get_type_from_string(argv[1]);
 
-		my_query.type = GET_COVERART;
-
-		gchar * write_to = NULL;
 		parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
 
 		if(write_to == NULL)
 		{
-			g_printerr("- Not path specified. Assuming current working directory.\n");
 			write_to = ".";
 		}
 
-		g_printerr("Will write to %s\n",write_to);
+		g_printerr("- Will write to %s\n",write_to);
 
 		// Set the callback - it will do all the actual work
 		int item_counter = 0;
-		GlyOpt_dlcallback(&my_query, callback, &item_counter);
+		glyr_opt_dlcallback(&my_query, callback, &item_counter);
 
 		if(my_query.type != GET_UNSURE)
 		{
 			// Now start searching!
 			int length = -1;
 			enum GLYR_ERROR get_error = GLYRE_OK;
-			GlyMemCache * my_list = Gly_get(&my_query, &get_error, &length);
+			GlyMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
 			if(my_list)
 			{
@@ -653,23 +693,27 @@ int main(int argc, char * argv[])
 				}
 
 				// Free all downloaded buffers
-				Gly_free_list(my_list);
+				glyr_free_list(my_list);
 
 			}
 			else if(get_error != GLYRE_OK)
 			{
-				message(1,&my_query,stderr,"E: %s\n",Gly_strerror(get_error));
+				message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
 			}
 
 
 			// Clean memory alloc'd by settings
-			Gly_destroy_query( &my_query);
+			glyr_destroy_query( &my_query);
 		}
 		/* Translator mode - simple interface to google translator */
 	}
 	else if(argc >= 2 && !strcmp(argv[1],"-V"))
 	{
 		print_version(NULL);
+	}
+	else if(argc >= 2 && !strcmp(argv[1],"-L"))
+	{
+		visualize_from_options();
 	}
 	else 
 	{

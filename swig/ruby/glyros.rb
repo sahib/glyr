@@ -1,6 +1,4 @@
 #!/usr/bin/ruby
-
-# should be there
 require 'rubygems'
 
 begin
@@ -8,7 +6,7 @@ begin
   require_relative "../../bin/ruby/glyros"
 rescue LoadError => e
   puts "-- Error while loading Glyr's ruby module"
-  puts "-- It is supposed to be in the bin/ruby directory"
+  puts "-- It is supposed to be in the bin/ruby directory."
   puts "-- ..did you build it? (cmake . -DSWIG_RUBY)"
   exit(-1)
 end
@@ -18,25 +16,36 @@ class Glyros::GlyMemCache
 	# You don't need to do this yourself
 	def register_free
 	    ObjectSpace.define_finalizer(self, 
-	    proc do 
-		self.finalize
-	    end)
+	      proc do 
+		  self.finalize
+	      end
+	    )
 	    return self
 	end
 
 	# Use these instead of new
 	def self.instance
-	    copy = Glyros::Gly_new_cache()
+	    copy = Glyros::glyr_new_cache()
 	    return copy.register_free
 	end
 
 	def self.instance_by_copy(copy_me)
-	    copy = (copy_me.nil?) ? nil : Glyros::Gly_copy_cache(copy_me)
+	    copy = (copy_me.nil?) ? nil : Glyros::glyr_copy_cache(copy_me)
 	    return copy.register_free
 	end
 
 	def write_file(path) 
-		return Glyros::Gly_write(self,path)
+		return Glyros::glyr_write(self,path)
+	end
+
+	def update_md5sum
+		Glyros::glyr_update_md5sum(self)
+	end
+
+	def print
+		q = Glyros::GlyQuery.instance
+		Glyros::glyr_opt_verbosity(q,2)
+		Glyros::glyr_printitem(q,self)
 	end
 
 	# disable ctor
@@ -44,9 +53,8 @@ class Glyros::GlyMemCache
 
 	private
 	def finalize
-	    Glyros::Gly_free_cache(self)	
+	    Glyros::glyr_free_cache(self)	
 	end
-
 end
 
 class Glyros::GlyQuery
@@ -60,13 +68,13 @@ class Glyros::GlyQuery
 
 	def self.instance
 	    new_query = Glyros::GlyQuery.new
-	    Glyros::Gly_init_query(new_query)
+	    Glyros::glyr_init_query(new_query)
 	    return new_query.register_free
 	end
 
 	private
 	def finalize
-	    Glyros::Gly_destroy_query(self)
+	    Glyros::glyr_destroy_query(self)
 	end
 end
 
@@ -80,56 +88,46 @@ class GlyrosSpit
 		@query = Glyros::GlyQuery.instance()
 	end
 
-	# public
 	def reset 
-		# finalizer gets called
 		@query = nil
 		@providers = nil
 		@query = Glyros::GlyQuery.new
 	end
 
         def get(type_enum)
-		Glyros::GlyOpt_type(@query,type_enum)
-		return call_get
+		if type_enum.is_a? Integer
+		  Glyros::glyr_opt_type(@query,type_enum)
+		  return call_get
+		end
+                nil
 	end	
 	
-	def download_util( url ) 
-		return Glyros::Gly_download(URL, @query) unless @query.nil?
+	def download_url(url) 
+		unless @query.nil?
+		   return Glyros::glyr_download(url, @query)
+		end
+		nil
 	end	
 	
 	def version
-		return Glyros::Gly_version()
+		return Glyros::glyr_version()
 	end
 
-	def self.key_by_id(get_id)
-		return Glyros::GlyPlug_get_key_by_id(get_id)
+	def get_plugin_info
+		return Glyros::GlyFetcherInfo.new
 	end
 
-	def self.gid_by_id(get_id)
-		return Glyros::GlyPlug_get_gid_by_id(get_id)
-	end
-
-	def self.name_by_id(get_id)
-		return Glyros::GlyPlug_get_single_name_by_id(get_id).split(/\|/)
-	end
-
-	def self.groupname_by_id(get_id)
-		return Glyros::Gly_groupname_by_id(get_id)
-	end
-=begin 
-=| GETTER|SETTER |=
-=end
-  def verbosity=(level) 
-  	@query.verbosity = level
+	def verbosity=(level) 
+ 	 	@query.verbosity = level
 		self
-  end
+  	end
 
 	def artist 
 		return @query.artist
 	end
 
 	def artist=(artist)
-		Glyros::GlyOpt_artist(@query,artist)
+		Glyros::glyr_opt_artist(@query,artist)
 		self
 	end
 
@@ -138,7 +136,7 @@ class GlyrosSpit
 	end
 
 	def album=(album)
-		Glyros::GlyOpt_album(@query,album)
+		Glyros::glyr_opt_album(@query,album)
 		self
 	end
 
@@ -147,7 +145,7 @@ class GlyrosSpit
 	end
 
 	def title=(title)
-		Glyros::GlyOpt_title(@query,title)
+		Glyros::glyr_opt_title(@query,title)
 		self
 	end
 
@@ -156,7 +154,7 @@ class GlyrosSpit
 	end
 	
 	def number=(num)
-		Glyros::GlyOpt_number(@query,num)
+		Glyros::glyr_opt_number(@query,num)
 		self
 	end
 
@@ -165,7 +163,7 @@ class GlyrosSpit
 	end
 
 	def plugmax=(num)
-		Glyros::GlyOpt_plugmax(@query,num)
+		Glyros::glyr_opt_plugmax(@query,num)
 		self
 	end
 
@@ -174,7 +172,7 @@ class GlyrosSpit
 	end
 
 	def lang=(code)
-		Glyros::GlyOpt_lang(@query,code)
+		Glyros::glyr_opt_lang(@query,code)
 		self
 	end
 
@@ -183,7 +181,7 @@ class GlyrosSpit
 	end
 
 	def timeout=(timeout)
-		Glyros::GlyOpt_timeout(@query,timeout)
+		Glyros::glyr_opt_timeout(@query,timeout)
 		self
 	end
 
@@ -192,7 +190,7 @@ class GlyrosSpit
 	end
 
 	def redirects=(redirects) 
-		Glyros::GlyOpt_redirects(@query,redirects)
+		Glyros::glyr_opt_redirects(@query,redirects)
 		self
 	end
 
@@ -201,7 +199,7 @@ class GlyrosSpit
 	end
 
 	def parallel=(parallel)
-		Glyros::GlyOpt_parallel(@query,parallel)
+		Glyros::glyr_opt_parallel(@query,parallel)
 		self
 	end
 
@@ -210,7 +208,7 @@ class GlyrosSpit
 	end
 
 	def proxy=(proxystring)
-		Glyros::GlyOpt_proxy(@query,proxystring)
+		Glyros::glyr_opt_proxy(@query,proxystring)
 		self
 	end
 	
@@ -218,9 +216,9 @@ class GlyrosSpit
 		return @query.proxy
 	end
 
-	def coverSize=( min, max ) 
-		Glyros::GlyOpt_cminsize(@query,min);
-		Glyros::GlyOpt_cmaxsize(@query,max);
+	def coverSize=(min, max) 
+		Glyros::glyr_opt_cminsize(@query,min);
+		Glyros::glyr_opt_cmaxsize(@query,max);
 		self
 	end
 
@@ -237,8 +235,8 @@ class GlyrosSpit
 		return @providers
 	end
 
-	def download=( boolean )
-		Glyros::GlyOpt_download(@query,boolean)
+	def download=(boolean)
+		Glyros::glyr_opt_download(@query,boolean)
 		self
 	end
 
@@ -246,13 +244,8 @@ class GlyrosSpit
 		return @query.download
 	end
 
-	def color=( boolean )
-		Glyros::GlyOpt_color(@query,boolean)
-		self
-	end
-       
 	def fuzzyness=(fuzzval) 
-		Glyros::GlyOpt_fuzzyness(@query,fuzzval)
+		Glyros::glyr_opt_fuzzyness(@query,fuzzval)
 		self
 	end
  
@@ -260,47 +253,30 @@ class GlyrosSpit
 		return @query.fuzzyness
 	end
 
-        def color?
-     	        return @query.color
-    	end
-
-	def grouped_download?
-		return @query.grouped_download
-	end
-
-	def grouped_download=(make_it_grouped)
-		Glyros::GlyOpt_groupedDL(@query,make_it_grouped)
-	end
-
 	def formats
 		return @query.formats
 	end
 
 	def formats=(allowed_formats )
-		Glyros::GlyOpt_formats(@query, allowed_formats)
+		Glyros::glyr_opt_formats(@query, allowed_formats)
 		self
 	end
 
-	def duplcheck=(check)
-		Glyros::GlyOpt_duplcheck(@query, check)
-		self
+	def qsratio
+		return @query.qsratio
 	end
 
-	def duplcheck?
-		return @query.duplcheck
+	def qsratio=(ratio)
+		Glyros::glyr_opt_qsratio(@query,qsratio)
 	end
 
-=begin
-=| PRIVATE HELPERS |=
-=end
 	private
-	#-----#
 
 	def call_get
 		length = 0
 
-		Glyros::GlyOpt_from(@query,@providers) unless @providers == nil
-		cache_head = Glyros::Gly_get(@query, nil, nil)
+		Glyros::glyr_opt_from(@query,@providers) unless @providers == nil
+		cache_head = Glyros::glyr_get(@query, nil, nil)
 
 		convert = []
 		unless cache_head == nil 
@@ -316,7 +292,7 @@ class GlyrosSpit
 	end
 end
 
-# A simple test, more tests will follow
+=begin
 def test_me
 	# Note the dots at the end.
 	
@@ -330,11 +306,20 @@ def test_me
 end
 
 def use_strange_functions 
-	puts GlyrosSpit.new.key_by_id(Glyros::GET_LYRICS)
-	puts GlyrosSpit.new.name_by_id(Glyros::GET_LYRICS)
-	GlyrosSpit.new.gid_by_id(Glyros::GET_LYRICS).each_byte { |int| print "#{int} " }
-	puts "\n",GlyrosSpit.new.groupname_by_id(Glyros::GRP_FAST)
+	spit = GlyrosSpit.new
+	info = spit.get_plugin_info()
+	
+	until info.nil?
+		puts "-----------"
+		puts info.name
+		source = info.head
+		until source.nil?
+			puts "  [#{source.key}] #{source.name}"
+			source = source.next
+		end		
+		info = info.next
+	end
 end
 
-#test_me()
-#use_strange_functions()
+use_strange_functions()
+=end

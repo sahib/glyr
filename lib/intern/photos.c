@@ -49,7 +49,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistphotos =
 {
-    .name = "artist_photo",
+    .name = "artistphoto",
     .type = GET_ARTIST_PHOTOS,
     .validate  = vdt_photos,
     .full_data = FALSE,

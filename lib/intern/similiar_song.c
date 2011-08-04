@@ -45,7 +45,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_similar_song =
 {
-    .name = "similar",
+    .name = "similarsongs",
     .type = GET_SIMILIAR_SONGS,
     .validate = vdt_similar_song,
     .full_data = TRUE,

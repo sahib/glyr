@@ -12,29 +12,29 @@
 int main(void)
 {
     /* Init this thing, the only two methods not being threadsafe */
-    Gly_init();
+    glyr_init();
     /* Also clear ressources on exit */
-    atexit(Gly_cleanup);
+    atexit(glyr_cleanup);
 
-    /* This struct is used to store all settings you do via GlyOpt_* */
+    /* This struct is used to store all settings you do via glyr_opt_* */
     GlyQuery q;
     /* We also should set it to standard values */
-    Gly_init_query(&q);
+    glyr_init_query(&q);
 
     /* We want lyrics, well, I want. */
-    GlyOpt_type(&q,GET_LYRICS);
+    glyr_opt_type(&q,GET_LYRICS);
 
     /* Set random artist/title -  you could also omit the album line */
-    GlyOpt_artist(&q,(char*)"Die Ärzte");
-    GlyOpt_album (&q,(char*)"Die Bestie in Menschengestalt");
-    GlyOpt_title (&q,(char*)"FaFaFa");
+    glyr_opt_artist(&q,(char*)"Die Ärzte");
+    glyr_opt_album (&q,(char*)"Die Bestie in Menschengestalt");
+    glyr_opt_title (&q,(char*)"FaFaFa");
 
     /* If any error occured it will be saved here, or GLYRE_OK */
-    /* You could have also passed a NULL pointer to Gly_get() if you're not interested in this */
+    /* You could have also passed a NULL pointer to glyr_get() if you're not interested in this */
     enum GLYR_ERROR err;
 
     /* Now get the job done! The 3rd  */
-    GlyMemCache * head = Gly_get(&q,&err,NULL);
+    GlyMemCache * head = glyr_get(&q,&err,NULL);
 
     /* The results are stored in the GlyMemCache struct -
        you are most likely only interested in the fields data, size and type*/
@@ -44,10 +44,10 @@ int main(void)
         puts(head->data);
 
         /* We have to free it again also, you can pass ANY pointer of the list, it works in both directions */
-        Gly_free_list(head);
+        glyr_free_list(head);
     }
 
-    /* Gly_init_query  may allocate memory - free it. */
-    Gly_destroy_query(&q);
+    /* glyr_init_query  may allocate memory - free it. */
+    glyr_destroy_query(&q);
     return err;
 }

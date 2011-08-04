@@ -26,7 +26,8 @@
 
 static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_img_finalizer(s,list,stop_me,TYPE_COVER);
+    GList * l =  generic_img_finalizer(s,list,stop_me,TYPE_COVER);
+    return l;
 }
 
 /* ------------------------------------- */

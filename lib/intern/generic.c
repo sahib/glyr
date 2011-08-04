@@ -52,7 +52,7 @@ GList * generic_txt_finalizer(GlyQuery * settings, GList * input_list, gboolean 
 
 /*--------------------------------------------------------*/
 
-static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
+static GList * test_async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
 {
     if(capo->cache != NULL)
     {
@@ -62,12 +62,16 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 
         GlyMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
 
-        enum GLYR_ERROR response;
+        enum GLYR_ERROR response = GLYRE_OK;
         if(old_cache != NULL)
         {
             capo->cache->prov       = (old_cache->prov!=NULL) ? g_strdup(old_cache->prov) : NULL;
             capo->cache->img_format = (old_cache->img_format) ? g_strdup(old_cache->img_format) : NULL;
-            response = capo->s->callback.download(capo->cache,capo->s);
+            
+            if(capo->s->callback.download != NULL)
+            {
+                response = capo->s->callback.download(capo->cache,capo->s);
+            }
             *add_item = (response != GLYRE_IGNORE);
         }
 
@@ -121,7 +125,7 @@ GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, en
         }
 
         /* Download images in parallel */
-        GList * dl_raw_images = async_download(url_list,NULL,s,1,1 * (g_list_length(url_list)/4),async_dl_callback,cache_url_table);
+        GList * dl_raw_images = async_download(url_list,NULL,s,1,1 * (g_list_length(url_list)/4),test_async_dl_callback,cache_url_table);
 
         /* Default to the given type */
         for(GList * elem = dl_raw_images; elem; elem = elem->next)

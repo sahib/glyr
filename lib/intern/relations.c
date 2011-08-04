@@ -47,7 +47,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_relations =
 {
-    .name = "Relation Fetcher",
+    .name = "relations",
     .type = GET_RELATIONS,
     .validate  = vdt_relations,
     .full_data = TRUE,

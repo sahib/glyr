@@ -63,7 +63,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_review =
 {
-    .name = "Review Fetcher",
+    .name = "albumreview",
     .type = GET_ALBUM_REVIEW,
     .validate  = vdt_review,
     .full_data = TRUE,

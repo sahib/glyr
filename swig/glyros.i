@@ -24,6 +24,6 @@
 /* make sure libglyr wakes  up */
 %init 
 %{
-  Gly_init();
-  atexit(Gly_cleanup);
+  glyr_init();
+  atexit(glyr_cleanup);
 %}

@@ -65,14 +65,14 @@
 enum GLYR_ERROR
 {
     GLYRE_OK,           /*!< everything is fine */
-    GLYRE_BAD_OPTION,   /*!< you passed a bad option to Gly_setopt() */
+    GLYRE_BAD_OPTION,   /*!< you passed a bad option to glyr_setopt() */
     GLYRE_BAD_VALUE,    /*!< Invalid value in va_list */
-    GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to Gly_setopt() */
+    GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_setopt() */
     GLYRE_NO_PROVIDER,  /*!< setttings->provider == NULL */
     GLYRE_UNKNOWN_GET,  /*!< settings->type is not valid */
     GLYRE_IGNORE,       /*!< If returned by callback, cache is ignored */
     GLYRE_STOP_BY_CB,   /*!< Callback returned stop signal. */
-    GLYRE_NO_INIT       /*!< Library has not been initialized with Gly_init() yet */
+    GLYRE_NO_INIT       /*!< Library has not been initialized with glyr_init() yet */
 };
 
 /**
@@ -151,9 +151,9 @@ typedef struct GlyMemCache
 /**
 * @brief Structure controlling all of libglyr's options
 *
-* You should modify this with the GlyOpt_* methods,\n
+* You should modify this with the glyr_opt_* methods,\n
 * You can read all members directly.\n
-* Look up the corresponding GlyOpt_$name methods for more details.
+* Look up the corresponding glyr_opt_$name methods for more details.
 * For reading: Dynamically allocated members are stored in '.alloc'!
 */
 typedef struct GlyQuery
@@ -162,7 +162,7 @@ typedef struct GlyQuery
 
     int number; /*!< Number of items to download */
     int plugmax; /*!< Number of items a single provider may download */
-    int verbosity; /*!<See GlyOpt_verbosity() for all levels */
+    int verbosity; /*!<See glyr_opt_verbosity() for all levels */
     size_t fuzzyness; /*!< Treshold for Levenshtein algorithm */
 
     /**
@@ -180,7 +180,6 @@ typedef struct GlyQuery
     long redirects;/*!< Max redirects for downloads */
 
     bool download; /*!< return only urls without downloading, converting glyr to a sort of search engine */
-    bool groupedDL; /*!< Download group for group, or all in parallel (faster, but less accurate) */
     float qsratio; /*!< Weight speed or quality more, 0.0 = fullspeed; 1.0 = highest quality only */
 
 #ifdef COMING_FROM_SWIG
@@ -211,7 +210,7 @@ typedef struct GlyQuery
     char * artist; /*!< artist field */
     char * album;  /*!< album field */
     char * title;  /*!< title field */
-    char * from;   /*!< String passed to GlyOpt_from() */
+    char * from;   /*!< String passed to glyr_opt_from() */
     char * allowed_formats; /*!< Allowed formats for images, given as semicolon sperated list "png;jpeg;gif" */
 
     int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
@@ -241,7 +240,7 @@ typedef struct GlySourceInfo
 */
 typedef struct GlyFetcherInfo 
 {
-	const char * name;
+	char * name;
 	enum GLYR_GET_TYPE type;		
 
 	GlySourceInfo * head;
@@ -251,7 +250,7 @@ typedef struct GlyFetcherInfo
 } GlyFetcherInfo;
 
 /**
-* @brief typefef for the GlyOpt_dlcallback() option
+* @brief typefef for the glyr_opt_dlcallback() option
 *
 * @param DL_callback A callback of the form: enum GLYR_ERROR cb(GlyMemCache * dl, struct GlyQuery * s)
 *
@@ -265,14 +264,14 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
     GlyQuery()
     {
         GlyQuery my_query;
-        Gly_init_query(&my_query);
+        glyr_init_query(&my_query);
         GlyQuery * copy = malloc(sizeof(GlyQuery));
         memcpy(copy,&my_query,sizeof(GlyQuery));
         return copy;
     }
     ~GlyQuery()
     {
-        Gly_destroy_query($self);
+        glyr_destroy_query($self);
         if($self != NULL)
             free($self);
     }
@@ -282,11 +281,24 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
 {
     GlyMemCache()
     {
-        return Gly_new_cache();
+        return glyr_new_cache();
     }
     ~GlyMemCache()
     {
-        Gly_free_cache($self);
+        glyr_free_cache($self);
+    }
+}
+
+%extend GlyFetcherInfo
+{
+    GlyFetcherInfo()
+    {
+	return glyr_get_plugin_info();
+    }
+
+    ~GlyFetcherInfo()
+    {
+	glyr_free_plugin_info(&($self));
     }
 }
 #endif

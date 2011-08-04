@@ -41,31 +41,31 @@ extern "C"
 #endif
     /**
     * @brief call this at startup.
-    * This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init
+    * This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init
     * Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.
     */
-    void Gly_init(void);
+    void glyr_init(void);
 
     /**
-    * @brief Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after Gly_init()
+    * @brief Call this at program termination. It's adviseable to call 'atexit(glyr_cleanup)' after glyr_init()
     * Not threadsafe also.
     */
-    void Gly_cleanup(void);
+    void glyr_cleanup(void);
 
     /**
     * @brief The 'main' method of glyr. It starts the searching according to the settings in the settings param
     *
-    * @param settings The setting struct controlling glyr. (See the GlyOpt_* methods)
+    * @param settings The setting struct controlling glyr. (See the glyr_opt_* methods)
     * @param error An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
     * @param length An optional pointer storing the length of the returned list
     *
-    * It takes a pointer to a GlyQuery struct filled to your needs via the GlyOpt_* methods,\n
-    * Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.\n
-    * After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with Gly_free_list when done.\n
+    * It takes a pointer to a GlyQuery struct filled to your needs via the glyr_opt_* methods,\n
+    * Once an item is found the callback (set via glyr_opt_dlcallback) is called with the item as parameter.\n
+    * After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with glyr_free_list when done.\n
     *
     * @return A GlyCacheList containing all found data. See the struct reference for further details.
     */
-    GlyMemCache * Gly_get(GlyQuery * settings, enum GLYR_ERROR * error, int * length);
+    GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * error, int * length);
 
     /**
     * @brief Init's the GlyQuery structure to sane defaults.
@@ -73,28 +73,28 @@ extern "C"
     *
     * @param glyrs The fresh GlyQuery to be init'd.
     */
-    void Gly_init_query(GlyQuery * glyrs);
+    void glyr_init_query(GlyQuery * glyrs);
 
     /**
     * @brief Free all memory associated with this query, and restore default settings.
     * Do this always when you're done with this one.
     * @param sets The GlyQuery to be destroyed
     */
-    void Gly_destroy_query(GlyQuery * sets);
+    void glyr_destroy_query(GlyQuery * sets);
 
     /**
-    * @brief Free the memory in the GlyCacheList returned by Gly_get
+    * @brief Free the memory in the GlyCacheList returned by glyr_get
     *
     * @param head The GlyCacheList to be free'd
     */
-    void Gly_free_list(GlyMemCache * head);
+    void glyr_free_list(GlyMemCache * head);
 
     /**
-    * @brief Returns a newly allocated and initialized GlyMemCache, mostly for use with Gly_gtrans_*
-    * Don't forget to free it with Gly_free_cache
+    * @brief Returns a newly allocated and initialized GlyMemCache, mostly for use with glyr_gtrans_*
+    * Don't forget to free it with glyr_free_cache
     * @return A newly allocated GlyMemCache
     */
-    GlyMemCache * Gly_new_cache(void);
+    GlyMemCache * glyr_new_cache(void);
 
     /**
     * @brief Produces an exact copy of the GlyMemCache source.
@@ -103,17 +103,17 @@ extern "C"
     *
     * @return A newly allocated GlyMemCache
     */
-    GlyMemCache * Gly_copy_cache(GlyMemCache * source);
+    GlyMemCache * glyr_copy_cache(GlyMemCache * source);
 
     /**
     * @brief Free the GlyMemCache pointed to by c. You should set it to NULL also, as using it after this will crash your program.
     *
     * @param c An allocated GlyMemCache
     */
-    void Gly_free_cache(GlyMemCache * c);
+    void glyr_free_cache(GlyMemCache * c);
 
     /********************************************************
-     * GlyOpt methods ahead - use them to control Gly_get() *
+     * GlyOpt methods ahead - use them to control glyr_get() *
      ********************************************************/
 
     /**
@@ -131,7 +131,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
+    enum GLYR_ERROR glyr_opt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
     /**
     * @brief What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.
     *
@@ -140,7 +140,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
+    enum GLYR_ERROR glyr_opt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
     /**
     * @brief The artist field. libglyr will try to format it to fit the best.
     *
@@ -151,7 +151,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_artist(GlyQuery * s, char * artist);
+    enum GLYR_ERROR glyr_opt_artist(GlyQuery * s, char * artist);
     /**
     * @brief The album field. libglyr will try to format it to fit the best.
     *
@@ -173,7 +173,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_album(GlyQuery * s,  char * album);
+    enum GLYR_ERROR glyr_opt_album(GlyQuery * s,  char * album);
     /**
     * @brief The title field. libglyr will try to format it to fit the best.
     *
@@ -188,7 +188,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_title(GlyQuery * s,  char * title);
+    enum GLYR_ERROR glyr_opt_title(GlyQuery * s,  char * title);
     /**
     * @brief Maximum size a cover may have (assuming the cover is quadratic, only one size is required)
     *
@@ -200,18 +200,18 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_cmaxsize(GlyQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_cmaxsize(GlyQuery * s, int size);
     /**
     * @brief Minimum size a cover may have (assuming the cover is quadratic, only one size is required)
     *
     * @param s The GlyQuery settings struct to store this option in.
     * @param size The min. size in pixel
     *
-    * Note: Also see GlyOpt_cmaxsize()
+    * Note: Also see glyr_opt_cmaxsize()
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_cminsize(GlyQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_cminsize(GlyQuery * s, int size);
     /**
     * @brief The number of items that may be downloaded in parallel
     *
@@ -220,7 +220,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_parallel(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_parallel(GlyQuery * s, unsigned long val);
     /**
     * @brief Amout of seconds to wait before cancelling an download
     *
@@ -232,7 +232,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_timeout(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_timeout(GlyQuery * s, unsigned long val);
     /**
     * @brief Max number of redirects to
     *
@@ -244,7 +244,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_redirects(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_redirects(GlyQuery * s, unsigned long val);
     /**
     * @brief Set the language the items should be in.
     *
@@ -261,12 +261,12 @@ extern "C"
     *	(Use only these providers if you really want ONLY localized content)\n
     *	If no language specified the language defaults to english ("en")
     *
-    * Note1: This only works with a few providers, which should be set via GlyOpt_from()
+    * Note1: This only works with a few providers, which should be set via glyr_opt_from()
     * Note2: Don't coinfuse this with the built-in google translator's settings.
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_lang(GlyQuery * s, char * langcode);
+    enum GLYR_ERROR glyr_opt_lang(GlyQuery * s, char * langcode);
     /**
     * @brief Set the number of items to search.
     *
@@ -282,7 +282,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_number(GlyQuery * s, unsigned int num);
+    enum GLYR_ERROR glyr_opt_number(GlyQuery * s, unsigned int num);
     /**
     * @brief Set libglyr's verbosity level (debug)
     *
@@ -297,7 +297,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_verbosity(GlyQuery * s, unsigned int level);
+    enum GLYR_ERROR glyr_opt_verbosity(GlyQuery * s, unsigned int level);
     /**
     * @brief Define the providers you want to use
     *
@@ -323,7 +323,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_from(GlyQuery * s, const char * from);
+    enum GLYR_ERROR glyr_opt_from(GlyQuery * s, const char * from);
 
     /**
     * @brief Define the maximum number of items a provider may download
@@ -336,7 +336,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_plugmax(GlyQuery * s, int plugmax);
+    enum GLYR_ERROR glyr_opt_plugmax(GlyQuery * s, int plugmax);
 
     /**
     * @brief Define allowed image formats
@@ -357,7 +357,7 @@ extern "C"
     * @return an errorID
     */
 
-    enum GLYR_ERROR GlyOpt_allowed_formats(GlyQuery * s, const char * formats);
+    enum GLYR_ERROR glyr_opt_allowed_formats(GlyQuery * s, const char * formats);
     /**
     * @brief Define if image items (i.e, covers, photos) are downloaded.
     *
@@ -372,22 +372,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_download(GlyQuery * s, bool download);
-    /**
-    * @brief Define wether searching happens in groups or everything or parallel (= false)
-    *
-    * @param s The GlyQuery settings struct to store this option in.
-    * @param groupedDL boolean to toggle this
-    *
-    *        If set false, this will disable the grouping of providers.\n
-    *        By default providers are grouped in categories like 'safe','unsafe','fast' etc., which\n
-    *        are queried in parallel, so the 'best' providers are queried first.\n
-    *        Disabling this behaviour will result in increasing speed, but as a result the searchresults\n
-    *        won't be sorted by quality, as it is normally the case.\n
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR GlyOpt_groupedDL(GlyQuery * s, bool groupedDL);
+    enum GLYR_ERROR glyr_opt_download(GlyQuery * s, bool download);
 
     /**
     * @brief Set the max. tolerance for fuzzy matching
@@ -409,7 +394,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_fuzzyness(GlyQuery * s, int fuzz);
+    enum GLYR_ERROR glyr_opt_fuzzyness(GlyQuery * s, int fuzz);
 
     /**
     * @brief Weight ratio between speed and quality
@@ -425,7 +410,7 @@ extern "C"
     *
     * @return
     */
-    enum GLYR_ERROR GlyOpt_qsratio(GlyQuery * s, float ratio);
+    enum GLYR_ERROR glyr_opt_qsratio(GlyQuery * s, float ratio);
 
     /**
     * @brief Set the proxy to use
@@ -441,7 +426,7 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR GlyOpt_proxy(GlyQuery * s, const char * proxystring);
+    enum GLYR_ERROR glyr_opt_proxy(GlyQuery * s, const char * proxystring);
 
     /**
     * @brief A convinience method to download the content at the URl $url, according to the settings in $s
@@ -452,7 +437,7 @@ extern "C"
     *
     * @return A GlyMemCache containing the data
     */
-    GlyMemCache * Gly_download(const char * url, GlyQuery * s);
+    GlyMemCache * glyr_download(const char * url, GlyQuery * s);
 
     /**
     * @brief Many methods use an returnvalue, or error parameters to inform you about errors
@@ -462,7 +447,7 @@ extern "C"
     *
     * @return A descriptive nullterminated string, do not pass to free
     */
-    const char * Gly_strerror(enum GLYR_ERROR ID);
+    const char * glyr_strerror(enum GLYR_ERROR ID);
 
     /**
     * @brief Returns versioning information, including compiletime
@@ -472,7 +457,7 @@ extern "C"
     *
     * @return A nullterminated string, do not free
     */
-    const char * Gly_version(void);
+    const char * glyr_version(void);
 
     /**
     * @brief Writes data to a specified path
@@ -485,7 +470,7 @@ extern "C"
     *
     * @return An error id.
     */
-    int Gly_write(GlyMemCache * data, const char * path);
+    int glyr_write(GlyMemCache * data, const char * path);
 
 
     /**
@@ -493,7 +478,7 @@ extern "C"
     *
     * @param c a valid memcahe
     */
-    void Gly_update_md5sum(GlyMemCache * c);
+    void glyr_update_md5sum(GlyMemCache * c);
 
     
     /**
@@ -502,22 +487,28 @@ extern "C"
     * @param s
     * @param cacheditem
     */
-    void Gly_printitem(GlyQuery *s, GlyMemCache * cacheditem);
+    void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem);
 
     
     /**
-    * @brief 
+    * @brief get information about existing Fetcher and Source
+    *
+    *
+    * A Doubly linked list of Fetcher is returned, each having a field 'head',
+    * being a pointer to a doubly linked list of GlySourceInfos
     *
     * @return A newly GlyFetcherInfo structure, you can iterate over. 
     */
-    GlyFetcherInfo * Gly_get_plugin_info(void);
+    GlyFetcherInfo * glyr_get_plugin_info(void);
 
     /**
-    * @brief 
+    * @brief Free the data from glyr_get_plugin_info()
     *
-    * @param info
+    * This method also set the pointer to NULL, for safety reasons. 
+    *
+    * @param info A reference to the return value fo glyr_get_plugin_info()
     */
-    void Gly_free_plugin_info(GlyFetcherInfo ** info);
+    void glyr_free_plugin_info(GlyFetcherInfo ** info);
 
 #ifdef _cplusplus
 }

@@ -64,7 +64,7 @@ GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_lyrics =
 {
-    .name = "Lyrics Fetcher",
+    .name = "lyrics",
     .type = GET_LYRICS,
     .validate  = vdt_lyrics,
     .full_data = TRUE,
