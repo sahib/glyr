@@ -1,4 +1,4 @@
-.TH "lib/types.h" 3 "Sat Jun 25 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/types.h" 3 "Thu Aug 4 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -25,15 +25,21 @@ File containing all definitions used in the external API.
 .RI "struct \fBGlyQuery\fP"
 .br
 .RI "\fIStructure controlling all of libglyr's options. \fP"
+.ti -1c
+.RI "struct \fBGlySourceInfo\fP"
+.br
+.ti -1c
+.RI "struct \fBGlyFetcherInfo\fP"
+.br
 .in -1c
 .SS "Defines"
 
 .in +1c
 .ti -1c
-.RI "#define \fBDEFAULT_TIMEOUT\fP   20L"
+.RI "#define \fBDEFAULT_REDIRECTS\fP   3L"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_REDIRECTS\fP   1L"
+.RI "#define \fBDEFAULT_TIMEOUT\fP   20L"
 .br
 .ti -1c
 .RI "#define \fBDEFAULT_PARALLEL\fP   4L"
@@ -66,16 +72,16 @@ File containing all definitions used in the external API.
 .RI "#define \fBDEFAULT_FROM_ARGUMENT_DELIM\fP   ';'"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_DUPLCHECK\fP   true"
-.br
-.ti -1c
 .RI "#define \fBDEFAULT_FUZZYNESS\fP   4"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_FORMATS\fP   'jpg;jpeg;png'"
+.RI "#define \fBDEFAULT_PROXY\fP   NULL"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_PROXY\fP   NULL"
+.RI "#define \fBDEFAULT_QSRATIO\fP   0.85"
+.br
+.ti -1c
+.RI "#define \fBDEFAULT_ALLOWED_FORMATS\fP   'png;jpeg;tiff'"
 .br
 .in -1c
 .SS "Typedefs"
@@ -90,26 +96,29 @@ File containing all definitions used in the external API.
 .br
 .RI "\fIStructure controlling all of libglyr's options. \fP"
 .ti -1c
+.RI "typedef struct \fBGlySourceInfo\fP \fBGlySourceInfo\fP"
+.br
+.ti -1c
+.RI "typedef struct \fBGlyFetcherInfo\fP \fBGlyFetcherInfo\fP"
+.br
+.ti -1c
 .RI "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP )(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
 .br
-.RI "\fItypefef for the \fBGlyOpt_dlcallback()\fP option \fP"
+.RI "\fItypefef for the \fBglyr_opt_dlcallback()\fP option \fP"
 .in -1c
 .SS "Enumerations"
 
 .in +1c
 .ti -1c
-.RI "enum \fBGLYR_GROUPS\fP { \fBGRP_NONE\fP =  0 << 0, \fBGRP_SAFE\fP =  1 << 0, \fBGRP_USFE\fP =  1 << 1, \fBGRP_SPCL\fP =  1 << 2, \fBGRP_FAST\fP =  1 << 3, \fBGRP_SLOW\fP =  1 << 4, \fBGRP_ALL\fP =  1 << 5 }"
-.br
-.ti -1c
-.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_IGNORE\fP, \fBGLYRE_STOP_BY_CB\fP }"
+.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_IGNORE\fP, \fBGLYRE_STOP_BY_CB\fP, \fBGLYRE_NO_INIT\fP }"
 .br
 .RI "\fIAll possible errors that may be returned. \fP"
 .ti -1c
-.RI "enum \fBGLYR_GET_TYPE\fP { \fBGET_COVERART\fP =  1, \fBGET_LYRICS\fP =  2, \fBGET_ARTIST_PHOTOS\fP =  3, \fBGET_ARTISTBIO\fP =  4, \fBGET_SIMILIAR_ARTISTS\fP =  5, \fBGET_ALBUM_REVIEW\fP =  6, \fBGET_TRACKLIST\fP =  7, \fBGET_TAGS\fP =  8, \fBGET_RELATIONS\fP =  9, \fBGET_ALBUMLIST\fP =  10, \fBGET_UNSURE\fP =  11 }"
+.RI "enum \fBGLYR_GET_TYPE\fP { \fBGET_COVERART\fP =  1, \fBGET_LYRICS\fP =  2, \fBGET_ARTIST_PHOTOS\fP =  3, \fBGET_ARTISTBIO\fP =  4, \fBGET_SIMILIAR_ARTISTS\fP =  5, \fBGET_SIMILIAR_SONGS\fP =  6, \fBGET_ALBUM_REVIEW\fP =  7, \fBGET_TRACKLIST\fP =  8, \fBGET_TAGS\fP =  9, \fBGET_RELATIONS\fP =  10, \fBGET_ALBUMLIST\fP =  11, \fBGET_UNSURE\fP =  12 }"
 .br
 .RI "\fIEnumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. \fP"
 .ti -1c
-.RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_TRACK\fP }"
+.RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_SIMILIAR_SONG\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_IMG_URL\fP, \fBTYPE_TXT_URL\fP, \fBTYPE_TRACK\fP }"
 .br
 .RI "\fIAll possible values the type field of \fBGlyMemCache\fP can have. \fP"
 .in -1c
@@ -137,11 +146,10 @@ Christopher Pahl
 
 .SH "Define Documentation"
 .PP 
+.SS "#define DEFAULT_ALLOWED_FORMATS   'png;jpeg;tiff'"
 .SS "#define DEFAULT_CMAXSIZE   -1"
 .SS "#define DEFAULT_CMINSIZE   125"
 .SS "#define DEFAULT_DOWNLOAD   true"
-.SS "#define DEFAULT_DUPLCHECK   true"
-.SS "#define DEFAULT_FORMATS   'jpg;jpeg;png'"
 .SS "#define DEFAULT_FROM_ARGUMENT_DELIM   ';'"
 .SS "#define DEFAULT_FUZZYNESS   4"
 .SS "#define DEFAULT_GROUPEDL   true"
@@ -150,14 +158,15 @@ Christopher Pahl
 .SS "#define DEFAULT_PARALLEL   4L"
 .SS "#define DEFAULT_PLUGMAX   -1"
 .SS "#define DEFAULT_PROXY   NULL"
-.SS "#define DEFAULT_REDIRECTS   1L"
+.SS "#define DEFAULT_QSRATIO   0.85"
+.SS "#define DEFAULT_REDIRECTS   3L"
 .SS "#define DEFAULT_TIMEOUT   20L"
 .SS "#define DEFAULT_VERBOSITY   0"
 .SH "Typedef Documentation"
 .PP 
 .SS "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
 .PP
-typefef for the \fBGlyOpt_dlcallback()\fP option \fBParameters:\fP
+typefef for the \fBglyr_opt_dlcallback()\fP option \fBParameters:\fP
 .RS 4
 \fIDL_callback\fP A callback of the form: enum GLYR_ERROR cb(GlyMemCache * dl, struct GlyQuery * s)
 .RE
@@ -168,16 +177,18 @@ possibly an error or GLYRE_OK
 .RE
 .PP
 
+.SS "typedef struct \fBGlyFetcherInfo\fP  \fBGlyFetcherInfo\fP"
 .SS "typedef struct \fBGlyMemCache\fP  \fBGlyMemCache\fP"
 .PP
 Represents a single item. It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr. 
 .SS "typedef struct \fBGlyQuery\fP  \fBGlyQuery\fP"
 .PP
-Structure controlling all of libglyr's options. You should modify this with the GlyOpt_* methods,
+Structure controlling all of libglyr's options. You should modify this with the glyr_opt_* methods,
 .br
  You can read all members directly.
 .br
- Look up the corresponding GlyOpt_$name methods for more details. 
+ Look up the corresponding glyr_opt_$name methods for more details. For reading: Dynamically allocated members are stored in '.alloc'! 
+.SS "typedef struct \fBGlySourceInfo\fP  \fBGlySourceInfo\fP"
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBGLYR_DATA_TYPE\fP"
@@ -214,6 +225,9 @@ Artist bio
 \fB\fITYPE_SIMILIAR \fP\fP
 Similiar artists 
 .TP
+\fB\fITYPE_SIMILIAR_SONG \fP\fP
+Similar songs 
+.TP
 \fB\fITYPE_ALBUMLIST \fP\fP
 List of albums, each cache containing one name 
 .TP
@@ -232,6 +246,12 @@ Tag associated with the album
 \fB\fITYPE_RELATION \fP\fP
 Random relation, each cache containing one link 
 .TP
+\fB\fITYPE_IMG_URL \fP\fP
+URL pointing to an image 
+.TP
+\fB\fITYPE_TXT_URL \fP\fP
+URL pointing to some text content 
+.TP
 \fB\fITYPE_TRACK \fP\fP
 List of tracknames, each cache containing one name 
 .SS "enum \fBGLYR_ERROR\fP"
@@ -245,13 +265,13 @@ All possible errors that may be returned.
 everything is fine 
 .TP
 \fB\fIGLYRE_BAD_OPTION \fP\fP
-you passed a bad option to Gly_setopt() 
+you passed a bad option to glyr_setopt() 
 .TP
 \fB\fIGLYRE_BAD_VALUE \fP\fP
 Invalid value in va_list 
 .TP
 \fB\fIGLYRE_EMPTY_STRUCT \fP\fP
-you passed an empty struct to Gly_setopt() 
+you passed an empty struct to glyr_setopt() 
 .TP
 \fB\fIGLYRE_NO_PROVIDER \fP\fP
 setttings->provider == NULL 
@@ -264,6 +284,9 @@ If returned by callback, cache is ignored
 .TP
 \fB\fIGLYRE_STOP_BY_CB \fP\fP
 Callback returned stop signal. 
+.TP
+\fB\fIGLYRE_NO_INIT \fP\fP
+Library has not been initialized with \fBglyr_init()\fP yet 
 .SS "enum \fBGLYR_GET_TYPE\fP"
 .PP
 Enumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. The type of metadata to get, names are selfexplanatory Requirements are given in braces, [] means optional. 
@@ -286,6 +309,9 @@ Get bio of (artist)
 \fB\fIGET_SIMILIAR_ARTISTS \fP\fP
 Get similiar artists to (artist) 
 .TP
+\fB\fIGET_SIMILIAR_SONGS \fP\fP
+Get similiar songs (artist|title) 
+.TP
 \fB\fIGET_ALBUM_REVIEW \fP\fP
 Get album review to (artist|album) 
 .TP
@@ -303,31 +329,6 @@ Get a list of albums by (artist)
 .TP
 \fB\fIGET_UNSURE \fP\fP
 Do nothing but relax 
-.SS "enum \fBGLYR_GROUPS\fP"
-.PP
-\fBEnumerator: \fP
-.in +1c
-.TP
-\fB\fIGRP_NONE \fP\fP
-None 
-.TP
-\fB\fIGRP_SAFE \fP\fP
-Safe 
-.TP
-\fB\fIGRP_USFE \fP\fP
-Unsafe, 
-.TP
-\fB\fIGRP_SPCL \fP\fP
-Special, unsual providers 
-.TP
-\fB\fIGRP_FAST \fP\fP
-Fast, maybe unsafe 
-.TP
-\fB\fIGRP_SLOW \fP\fP
-Slow, exec'd at last 
-.TP
-\fB\fIGRP_ALL \fP\fP
-All, when no groups are used 
 .SH "Author"
 .PP 
 Generated automatically by Doxygen for libglyr from the source code.

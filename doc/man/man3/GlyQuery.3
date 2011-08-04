@@ -1,4 +1,4 @@
-.TH "GlyQuery" 3 "Sat Jun 25 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "GlyQuery" 3 "Thu Aug 4 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,15 +16,6 @@ Structure controlling all of libglyr's options.
 .in +1c
 .ti -1c
 .RI "enum \fBGLYR_GET_TYPE\fP \fBtype\fP"
-.br
-.ti -1c
-.RI "char * \fBartist\fP"
-.br
-.ti -1c
-.RI "char * \fBalbum\fP"
-.br
-.ti -1c
-.RI "char * \fBtitle\fP"
 .br
 .ti -1c
 .RI "int \fBnumber\fP"
@@ -60,25 +51,10 @@ Structure controlling all of libglyr's options.
 .RI "long \fBredirects\fP"
 .br
 .ti -1c
-.RI "bool \fBcolor_output\fP"
-.br
-.ti -1c
 .RI "bool \fBdownload\fP"
 .br
 .ti -1c
-.RI "bool \fBgroupedDL\fP"
-.br
-.ti -1c
-.RI "bool \fBduplcheck\fP"
-.br
-.ti -1c
-.RI "const char * \fBlang\fP"
-.br
-.ti -1c
-.RI "const char * \fBformats\fP"
-.br
-.ti -1c
-.RI "const char * \fBproxy\fP"
+.RI "float \fBqsratio\fP"
 .br
 .ti -1c
 .RI "struct {"
@@ -93,68 +69,80 @@ Structure controlling all of libglyr's options.
 .RI "} \fBcallback\fP"
 .br
 .ti -1c
-.RI "const char * \fBinfo\fP [10]"
+.RI "const char * \fBlang\fP"
+.br
+.RI "\fIanonymous struct holding the source and target lang for gtrans If source is NULL, autodetection will be enabled,
+.br
+ target has to be !NULL to enable translating \fP"
+.ti -1c
+.RI "const char * \fBproxy\fP"
 .br
 .ti -1c
-.RI "void * \fBproviders\fP"
+.RI "char * \fBartist\fP"
+.br
+.ti -1c
+.RI "char * \fBalbum\fP"
+.br
+.ti -1c
+.RI "char * \fBtitle\fP"
+.br
+.ti -1c
+.RI "char * \fBfrom\fP"
+.br
+.ti -1c
+.RI "char * \fBallowed_formats\fP"
 .br
 .ti -1c
 .RI "int \fBitemctr\fP"
 .br
 .ti -1c
-.RI "struct {"
+.RI "char * \fBinfo\fP [10]"
 .br
 .ti -1c
-.RI "   const char * \fBtarget\fP"
-.br
-.ti -1c
-.RI "   const char * \fBsource\fP"
-.br
-.ti -1c
-.RI "} \fBgtrans\fP"
+.RI "bool \fBimagejob\fP"
 .br
 .in -1c
 .SH "Detailed Description"
 .PP 
 Structure controlling all of libglyr's options. 
 
-You should modify this with the GlyOpt_* methods,
+You should modify this with the glyr_opt_* methods,
 .br
  You can read all members directly.
 .br
- Look up the corresponding GlyOpt_$name methods for more details. 
+ Look up the corresponding glyr_opt_$name methods for more details. For reading: Dynamically allocated members are stored in '.alloc'! 
 .SH "Field Documentation"
 .PP 
 .SS "char* \fBGlyQuery::album\fP"album field 
+.SS "char* \fBGlyQuery::allowed_formats\fP"Allowed formats for images, given as semicolon sperated list 'png;jpeg;gif' 
 .SS "char* \fBGlyQuery::artist\fP"artist field 
 .SS "struct { ... }   \fBGlyQuery::callback\fP"
-.SS "bool \fBGlyQuery::color_output\fP"
 .SS "struct { ... }   \fBGlyQuery::cover\fP"
 .SS "bool \fBGlyQuery::download\fP"return only urls without downloading, converting glyr to a sort of search engine 
 .SS "enum \fBGLYR_ERROR\fP(*  \fBGlyQuery::download\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
-.SS "bool \fBGlyQuery::duplcheck\fP"Check for bad data? 
-.SS "const char* \fBGlyQuery::formats\fP"Format settings 
+.SS "char* \fBGlyQuery::from\fP"String passed to \fBglyr_opt_from()\fP 
 .SS "size_t \fBGlyQuery::fuzzyness\fP"Treshold for Levenshtein algorithm 
-.SS "bool \fBGlyQuery::groupedDL\fP"Download group for group, or all in parallel (faster, but less accurate) 
-.SS "struct { ... }   \fBGlyQuery::gtrans\fP"
-.SS "const char* \fBGlyQuery::info\fP[10]"
-.SS "int \fBGlyQuery::itemctr\fP"
-.SS "const char* \fBGlyQuery::lang\fP"language settings (for amazon / google / last.fm) 
+.SS "bool \fBGlyQuery::imagejob\fP"
+.SS "char* \fBGlyQuery::info\fP[10]"Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. 
+.SS "int \fBGlyQuery::itemctr\fP"Do not use! - Counter of already received items - you shouldn't need this 
+.SS "const char* \fBGlyQuery::lang\fP"
+.PP
+anonymous struct holding the source and target lang for gtrans If source is NULL, autodetection will be enabled,
+.br
+ target has to be !NULL to enable translating language settings (for amazon / google / last.fm) 
 .SS "int \fBGlyQuery::max_size\fP"Max size a cover may have 
 .SS "int \fBGlyQuery::min_size\fP"Min size a cover may have 
 .SS "int \fBGlyQuery::number\fP"Number of items to download 
 .SS "long \fBGlyQuery::parallel\fP"Max parallel downloads 
 .SS "int \fBGlyQuery::plugmax\fP"Number of items a single provider may download 
-.SS "void* \fBGlyQuery::providers\fP"
 .SS "const char* \fBGlyQuery::proxy\fP"Proxy settings 
+.SS "float \fBGlyQuery::qsratio\fP"Weight speed or quality more, 0.0 = fullspeed; 1.0 = highest quality only 
 .SS "long \fBGlyQuery::redirects\fP"Max redirects for downloads 
-.SS "const char* \fBGlyQuery::source\fP"
-.SS "const char* \fBGlyQuery::target\fP"
 .SS "long \fBGlyQuery::timeout\fP"Max timeout for downloads 
 .SS "char* \fBGlyQuery::title\fP"title field 
 .SS "enum \fBGLYR_GET_TYPE\fP \fBGlyQuery::type\fP"What type of data to get 
 .SS "void* \fBGlyQuery::user_pointer\fP"
-.SS "int \fBGlyQuery::verbosity\fP"See \fBGlyOpt_verbosity()\fP for all levels 
+.SS "int \fBGlyQuery::verbosity\fP"See \fBglyr_opt_verbosity()\fP for all levels 
 
 .SH "Author"
 .PP 

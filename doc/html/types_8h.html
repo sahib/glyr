@@ -123,10 +123,12 @@ Data Structures</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single item.  <a href="structGlyMemCache.html#details">More...</a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyQuery.html">GlyQuery</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure controlling all of libglyr's options.  <a href="structGlyQuery.html#details">More...</a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlySourceInfo.html">GlySourceInfo</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a></td></tr>
 <tr><td colspan="2"><h2><a name="define-members"></a>
 Defines</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a0b3d5c8811b4866148dab1533d3b3ec0">DEFAULT_REDIRECTS</a>&#160;&#160;&#160;3L</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#aad2dd72565852b91c809cd4685833b17">DEFAULT_TIMEOUT</a>&#160;&#160;&#160;20L</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a0b3d5c8811b4866148dab1533d3b3ec0">DEFAULT_REDIRECTS</a>&#160;&#160;&#160;1L</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a12da9a236225183cd17469ab4d2a89f6">DEFAULT_PARALLEL</a>&#160;&#160;&#160;4L</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a08343dc916eaa8706fbd560e03230fd8">DEFAULT_CMINSIZE</a>&#160;&#160;&#160;125</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a5014d3a84c08d90bc66874e1d5c2eebc">DEFAULT_CMAXSIZE</a>&#160;&#160;&#160;-1</td></tr>
@@ -137,31 +139,22 @@ Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a8dbc16348f3bc111ade61c30375d50f0">DEFAULT_DOWNLOAD</a>&#160;&#160;&#160;true</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a26c1dd8a78369deffd624b068dee190d">DEFAULT_GROUPEDL</a>&#160;&#160;&#160;true</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a9a724f504634670fef442d8b45f75005">DEFAULT_FROM_ARGUMENT_DELIM</a>&#160;&#160;&#160;&quot;;&quot;</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a8bc82045218fbd655329f26daca16f43">DEFAULT_DUPLCHECK</a>&#160;&#160;&#160;true</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a4029b4a226246aed03aecba69fccace1">DEFAULT_FUZZYNESS</a>&#160;&#160;&#160;4</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#ac2903a99a05b74da2602f638a975e891">DEFAULT_FORMATS</a>&#160;&#160;&#160;&quot;jpg;jpeg;png&quot;</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a972523bd10648a52ff577dd078087c4a">DEFAULT_PROXY</a>&#160;&#160;&#160;NULL</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a6f1269ee8ebeab989ec1ed2f793d238d">DEFAULT_QSRATIO</a>&#160;&#160;&#160;0.85</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a34d7fce219cb0f4eac440aa9199ead6c">DEFAULT_ALLOWED_FORMATS</a>&#160;&#160;&#160;&quot;png;jpeg;tiff&quot;</td></tr>
 <tr><td colspan="2"><h2><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a2a55868c699831aca4f300812dae6d91">GlyMemCache</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Represents a single item.  <a href="#a2a55868c699831aca4f300812dae6d91"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGlyQuery.html">GlyQuery</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a4ff23d431fb90a6b1b04bfd43a2e6bb1">GlyQuery</a></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Structure controlling all of libglyr's options.  <a href="#a4ff23d431fb90a6b1b04bfd43a2e6bb1"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGlySourceInfo.html">GlySourceInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#aa695574fd90d6427ed9bfd1d40bed523">GlySourceInfo</a></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#ae327308f82eb87aa6728342816442d5b">GlyFetcherInfo</a></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a331454be4b9aa91c5d2758a182fdd2f1">DL_callback</a> )(<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *dl, struct <a class="el" href="structGlyQuery.html">GlyQuery</a> *s)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">typefef for the <a class="el" href="glyr_8h.html#a3e957cc01be0cd7ce29443cbd0a91c44" title="Set the callback that is executed once an item is ready downloaded.">GlyOpt_dlcallback()</a> option  <a href="#a331454be4b9aa91c5d2758a182fdd2f1"></a><br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">typefef for the <a class="el" href="glyr_8h.html#a87990716a1edd101d5bf5a91fbdd2606" title="Set the callback that is executed once an item is ready downloaded.">glyr_opt_dlcallback()</a> option  <a href="#a331454be4b9aa91c5d2758a182fdd2f1"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4">GLYR_GROUPS</a> { <br/>
-&#160;&#160;<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4a6845b1cda04e4db404bf4b8598817a16">GRP_NONE</a> =  0 &lt;&lt; 0, 
-<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4aada88e960c35c3e0fecf077a9dfc2578">GRP_SAFE</a> =  1 &lt;&lt; 0, 
-<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4a7cc65f4818311ede46cd7c8847393ea0">GRP_USFE</a> =  1 &lt;&lt; 1, 
-<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4a8c62b4ef6a282affae9cb1423c429ce8">GRP_SPCL</a> =  1 &lt;&lt; 2, 
-<br/>
-&#160;&#160;<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4ab6ce1e345bed69baf3ee0f0707253bc5">GRP_FAST</a> =  1 &lt;&lt; 3, 
-<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4a06c250e4e94481456c767a1099a04a6f">GRP_SLOW</a> =  1 &lt;&lt; 4, 
-<a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4a54f88a11d02828254ac726313c3c0af1">GRP_ALL</a> =  1 &lt;&lt; 5
-<br/>
- }</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> { <br/>
 &#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ababebb14223c39a7b0f11378765c0e9730">GLYRE_OK</a>, 
 <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abaf2a0e8ba8cd5925599188b0270f52a3b">GLYRE_BAD_OPTION</a>, 
@@ -171,7 +164,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba04cd5c78cb78a585ed7596563e38f9df">GLYRE_NO_PROVIDER</a>, 
 <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abae7f5303f2118a36ba94aa7a29d525052">GLYRE_UNKNOWN_GET</a>, 
 <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba564d0b1d74f8c42c5af45fae3d280102">GLYRE_IGNORE</a>, 
-<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3">GLYRE_STOP_BY_CB</a>
+<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3">GLYRE_STOP_BY_CB</a>, 
+<br/>
+&#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5">GLYRE_NO_INIT</a>
 <br/>
  }</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">All possible errors that may be returned.  <a href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">More...</a><br/></td></tr>
@@ -182,13 +177,14 @@ Enumerations</h2></td></tr>
 <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9af3dde5e4c9bdec25ce22cc7e799b9c11">GET_ARTISTBIO</a> =  4, 
 <br/>
 &#160;&#160;<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9a37c379e14bb70a4246376f1ba0b6ff1b">GET_SIMILIAR_ARTISTS</a> =  5, 
-<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9a325fbaf2869977091d38e65262136411">GET_ALBUM_REVIEW</a> =  6, 
-<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9a5b63a7423fd5edf01533294c969a196d">GET_TRACKLIST</a> =  7, 
-<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aff0604b1e76f2cd661a68201bc3e4866">GET_TAGS</a> =  8, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9ad63bfbd83f09271d06820f31ba74f7dd">GET_SIMILIAR_SONGS</a> =  6, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9a325fbaf2869977091d38e65262136411">GET_ALBUM_REVIEW</a> =  7, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9a5b63a7423fd5edf01533294c969a196d">GET_TRACKLIST</a> =  8, 
 <br/>
-&#160;&#160;<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aca6b3149a830d6fbac5b5a14faf5d92d">GET_RELATIONS</a> =  9, 
-<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aee649f727687d814ff654becb91e6a6f">GET_ALBUMLIST</a> =  10, 
-<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aa231a93c27857c99ae46ee0b00975be4">GET_UNSURE</a> =  11
+&#160;&#160;<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aff0604b1e76f2cd661a68201bc3e4866">GET_TAGS</a> =  9, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aca6b3149a830d6fbac5b5a14faf5d92d">GET_RELATIONS</a> =  10, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aee649f727687d814ff654becb91e6a6f">GET_ALBUMLIST</a> =  11, 
+<a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9aa231a93c27857c99ae46ee0b00975be4">GET_UNSURE</a> =  12
 <br/>
  }</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration of all getters, <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> is initalized to GET_UNSURE.  <a href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">More...</a><br/></td></tr>
@@ -204,13 +200,17 @@ Enumerations</h2></td></tr>
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2af4622e19eb85e9cc5c47b63791dc0882">TYPE_AINFO</a>, 
 <br/>
 &#160;&#160;<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a31cfbcf41f3a2a3caa4c5c796836af11">TYPE_SIMILIAR</a>, 
+<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a4c126a7cae9a6d2fa290e9993df97e91">TYPE_SIMILIAR_SONG</a>, 
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2ac9dcddda75968cee9e834217d59ddf1e">TYPE_ALBUMLIST</a>, 
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2acc70ca844ad60e13261e80c557ec9019">TYPE_TAGS</a>, 
-<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2ab4af47a47034bf22277addfa81ac7e7a">TYPE_TAG_ARTIST</a>, 
 <br/>
-&#160;&#160;<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a0a12296b9533980461641464543f49f5">TYPE_TAG_ALBUM</a>, 
+&#160;&#160;<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2ab4af47a47034bf22277addfa81ac7e7a">TYPE_TAG_ARTIST</a>, 
+<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a0a12296b9533980461641464543f49f5">TYPE_TAG_ALBUM</a>, 
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a6fa87c2a30d5fa0789a2ece8d03c3d9f">TYPE_TAG_TITLE</a>, 
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a821e76fde8ff06b541c0fbff9fd157a6">TYPE_RELATION</a>, 
+<br/>
+&#160;&#160;<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2ac95a11378b43eca8674dbeb370953d92">TYPE_IMG_URL</a>, 
+<a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a60c92002bd842c8b694be2d4e81c00ee">TYPE_TXT_URL</a>, 
 <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2a200d8ea69ed0805680aa7585c3ea749a">TYPE_TRACK</a>
 <br/>
  }</td></tr>
@@ -223,6 +223,19 @@ Enumerations</h2></td></tr>
 <dl class="version"><dt><b>Version:</b></dt><dd>0.6 </dd></dl>
 <dl class="date"><dt><b>Date:</b></dt><dd>2011-06-14 </dd></dl>
 </div><hr/><h2>Define Documentation</h2>
+<a class="anchor" id="a34d7fce219cb0f4eac440aa9199ead6c"></a><!-- doxytag: member="types.h::DEFAULT_ALLOWED_FORMATS" ref="a34d7fce219cb0f4eac440aa9199ead6c" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEFAULT_ALLOWED_FORMATS&#160;&#160;&#160;&quot;png;jpeg;tiff&quot;</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a5014d3a84c08d90bc66874e1d5c2eebc"></a><!-- doxytag: member="types.h::DEFAULT_CMAXSIZE" ref="a5014d3a84c08d90bc66874e1d5c2eebc" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -255,32 +268,6 @@ Enumerations</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">#define DEFAULT_DOWNLOAD&#160;&#160;&#160;true</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="a8bc82045218fbd655329f26daca16f43"></a><!-- doxytag: member="types.h::DEFAULT_DUPLCHECK" ref="a8bc82045218fbd655329f26daca16f43" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFAULT_DUPLCHECK&#160;&#160;&#160;true</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-</div>
-</div>
-<a class="anchor" id="ac2903a99a05b74da2602f638a975e891"></a><!-- doxytag: member="types.h::DEFAULT_FORMATS" ref="ac2903a99a05b74da2602f638a975e891" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define DEFAULT_FORMATS&#160;&#160;&#160;&quot;jpg;jpeg;png&quot;</td>
         </tr>
       </table>
 </div>
@@ -392,12 +379,25 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a6f1269ee8ebeab989ec1ed2f793d238d"></a><!-- doxytag: member="types.h::DEFAULT_QSRATIO" ref="a6f1269ee8ebeab989ec1ed2f793d238d" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEFAULT_QSRATIO&#160;&#160;&#160;0.85</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a0b3d5c8811b4866148dab1533d3b3ec0"></a><!-- doxytag: member="types.h::DEFAULT_REDIRECTS" ref="a0b3d5c8811b4866148dab1533d3b3ec0" args="" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define DEFAULT_REDIRECTS&#160;&#160;&#160;1L</td>
+          <td class="memname">#define DEFAULT_REDIRECTS&#160;&#160;&#160;3L</td>
         </tr>
       </table>
 </div>
@@ -443,7 +443,7 @@ Enumerations</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>typefef for the <a class="el" href="glyr_8h.html#a3e957cc01be0cd7ce29443cbd0a91c44" title="Set the callback that is executed once an item is ready downloaded.">GlyOpt_dlcallback()</a> option </p>
+<p>typefef for the <a class="el" href="glyr_8h.html#a87990716a1edd101d5bf5a91fbdd2606" title="Set the callback that is executed once an item is ready downloaded.">glyr_opt_dlcallback()</a> option </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">DL_callback</td><td>A callback of the form: enum GLYR_ERROR cb(GlyMemCache * dl, struct GlyQuery * s)</td></tr>
@@ -451,6 +451,19 @@ Enumerations</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>possibly an error or GLYRE_OK </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ae327308f82eb87aa6728342816442d5b"></a><!-- doxytag: member="types.h::GlyFetcherInfo" ref="ae327308f82eb87aa6728342816442d5b" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a>  <a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -482,9 +495,22 @@ Enumerations</h2></td></tr>
 <div class="memdoc">
 
 <p>Structure controlling all of libglyr's options. </p>
-<p>You should modify this with the GlyOpt_* methods,<br/>
+<p>You should modify this with the glyr_opt_* methods,<br/>
  You can read all members directly.<br/>
- Look up the corresponding GlyOpt_$name methods for more details. </p>
+ Look up the corresponding glyr_opt_$name methods for more details. For reading: Dynamically allocated members are stored in '.alloc'! </p>
+
+</div>
+</div>
+<a class="anchor" id="aa695574fd90d6427ed9bfd1d40bed523"></a><!-- doxytag: member="types.h::GlySourceInfo" ref="aa695574fd90d6427ed9bfd1d40bed523" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct <a class="el" href="structGlySourceInfo.html">GlySourceInfo</a>  <a class="el" href="structGlySourceInfo.html">GlySourceInfo</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
 
 </div>
 </div>
@@ -529,6 +555,9 @@ Enumerations</h2></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a31cfbcf41f3a2a3caa4c5c796836af11"></a><!-- doxytag: member="TYPE_SIMILIAR" ref="aed6a85dbaccaf17531f2b57700ea23c2a31cfbcf41f3a2a3caa4c5c796836af11" args="" -->TYPE_SIMILIAR</em>&nbsp;</td><td>
 <p>Similiar artists </p>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a4c126a7cae9a6d2fa290e9993df97e91"></a><!-- doxytag: member="TYPE_SIMILIAR_SONG" ref="aed6a85dbaccaf17531f2b57700ea23c2a4c126a7cae9a6d2fa290e9993df97e91" args="" -->TYPE_SIMILIAR_SONG</em>&nbsp;</td><td>
+<p>Similar songs </p>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2ac9dcddda75968cee9e834217d59ddf1e"></a><!-- doxytag: member="TYPE_ALBUMLIST" ref="aed6a85dbaccaf17531f2b57700ea23c2ac9dcddda75968cee9e834217d59ddf1e" args="" -->TYPE_ALBUMLIST</em>&nbsp;</td><td>
 <p>List of albums, each cache containing one name </p>
 </td></tr>
@@ -546,6 +575,12 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a821e76fde8ff06b541c0fbff9fd157a6"></a><!-- doxytag: member="TYPE_RELATION" ref="aed6a85dbaccaf17531f2b57700ea23c2a821e76fde8ff06b541c0fbff9fd157a6" args="" -->TYPE_RELATION</em>&nbsp;</td><td>
 <p>Random relation, each cache containing one link </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2ac95a11378b43eca8674dbeb370953d92"></a><!-- doxytag: member="TYPE_IMG_URL" ref="aed6a85dbaccaf17531f2b57700ea23c2ac95a11378b43eca8674dbeb370953d92" args="" -->TYPE_IMG_URL</em>&nbsp;</td><td>
+<p>URL pointing to an image </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a60c92002bd842c8b694be2d4e81c00ee"></a><!-- doxytag: member="TYPE_TXT_URL" ref="aed6a85dbaccaf17531f2b57700ea23c2a60c92002bd842c8b694be2d4e81c00ee" args="" -->TYPE_TXT_URL</em>&nbsp;</td><td>
+<p>URL pointing to some text content </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="aed6a85dbaccaf17531f2b57700ea23c2a200d8ea69ed0805680aa7585c3ea749a"></a><!-- doxytag: member="TYPE_TRACK" ref="aed6a85dbaccaf17531f2b57700ea23c2a200d8ea69ed0805680aa7585c3ea749a" args="" -->TYPE_TRACK</em>&nbsp;</td><td>
 <p>List of tracknames, each cache containing one name </p>
@@ -573,13 +608,13 @@ Enumerations</h2></td></tr>
 <p>everything is fine </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abaf2a0e8ba8cd5925599188b0270f52a3b"></a><!-- doxytag: member="GLYRE_BAD_OPTION" ref="a65c6c61a2d677f11ea7150a4f9ed78abaf2a0e8ba8cd5925599188b0270f52a3b" args="" -->GLYRE_BAD_OPTION</em>&nbsp;</td><td>
-<p>you passed a bad option to Gly_setopt() </p>
+<p>you passed a bad option to glyr_setopt() </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abae1dda4483b5809c51d7eee88c59b52a1"></a><!-- doxytag: member="GLYRE_BAD_VALUE" ref="a65c6c61a2d677f11ea7150a4f9ed78abae1dda4483b5809c51d7eee88c59b52a1" args="" -->GLYRE_BAD_VALUE</em>&nbsp;</td><td>
 <p>Invalid value in va_list </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba7533eefb93f499f1dc4debaf3ad7e285"></a><!-- doxytag: member="GLYRE_EMPTY_STRUCT" ref="a65c6c61a2d677f11ea7150a4f9ed78aba7533eefb93f499f1dc4debaf3ad7e285" args="" -->GLYRE_EMPTY_STRUCT</em>&nbsp;</td><td>
-<p>you passed an empty struct to Gly_setopt() </p>
+<p>you passed an empty struct to glyr_setopt() </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba04cd5c78cb78a585ed7596563e38f9df"></a><!-- doxytag: member="GLYRE_NO_PROVIDER" ref="a65c6c61a2d677f11ea7150a4f9ed78aba04cd5c78cb78a585ed7596563e38f9df" args="" -->GLYRE_NO_PROVIDER</em>&nbsp;</td><td>
 <p>setttings-&gt;provider == NULL </p>
@@ -592,6 +627,9 @@ Enumerations</h2></td></tr>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3"></a><!-- doxytag: member="GLYRE_STOP_BY_CB" ref="a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3" args="" -->GLYRE_STOP_BY_CB</em>&nbsp;</td><td>
 <p>Callback returned stop signal. </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5"></a><!-- doxytag: member="GLYRE_NO_INIT" ref="a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5" args="" -->GLYRE_NO_INIT</em>&nbsp;</td><td>
+<p>Library has not been initialized with <a class="el" href="glyr_8h.html#af4e64a53d273b91a3f704db26c254016" title="call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you...">glyr_init()</a> yet </p>
 </td></tr>
 </table>
 </dd>
@@ -628,6 +666,9 @@ Enumerations</h2></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a10514a32d3df08c9165d5ed7d15589a9a37c379e14bb70a4246376f1ba0b6ff1b"></a><!-- doxytag: member="GET_SIMILIAR_ARTISTS" ref="a10514a32d3df08c9165d5ed7d15589a9a37c379e14bb70a4246376f1ba0b6ff1b" args="" -->GET_SIMILIAR_ARTISTS</em>&nbsp;</td><td>
 <p>Get similiar artists to (artist) </p>
 </td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a10514a32d3df08c9165d5ed7d15589a9ad63bfbd83f09271d06820f31ba74f7dd"></a><!-- doxytag: member="GET_SIMILIAR_SONGS" ref="a10514a32d3df08c9165d5ed7d15589a9ad63bfbd83f09271d06820f31ba74f7dd" args="" -->GET_SIMILIAR_SONGS</em>&nbsp;</td><td>
+<p>Get similiar songs (artist|title) </p>
+</td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a10514a32d3df08c9165d5ed7d15589a9a325fbaf2869977091d38e65262136411"></a><!-- doxytag: member="GET_ALBUM_REVIEW" ref="a10514a32d3df08c9165d5ed7d15589a9a325fbaf2869977091d38e65262136411" args="" -->GET_ALBUM_REVIEW</em>&nbsp;</td><td>
 <p>Get album review to (artist|album) </p>
 </td></tr>
@@ -652,44 +693,6 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4"></a><!-- doxytag: member="types.h::GLYR_GROUPS" ref="ab7531e8915e8f69b5c25c68b5c73f0d4" args="" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4">GLYR_GROUPS</a></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<dl><dt><b>Enumerator: </b></dt><dd><table border="0" cellspacing="2" cellpadding="0">
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4a6845b1cda04e4db404bf4b8598817a16"></a><!-- doxytag: member="GRP_NONE" ref="ab7531e8915e8f69b5c25c68b5c73f0d4a6845b1cda04e4db404bf4b8598817a16" args="" -->GRP_NONE</em>&nbsp;</td><td>
-<p>None </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4aada88e960c35c3e0fecf077a9dfc2578"></a><!-- doxytag: member="GRP_SAFE" ref="ab7531e8915e8f69b5c25c68b5c73f0d4aada88e960c35c3e0fecf077a9dfc2578" args="" -->GRP_SAFE</em>&nbsp;</td><td>
-<p>Safe </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4a7cc65f4818311ede46cd7c8847393ea0"></a><!-- doxytag: member="GRP_USFE" ref="ab7531e8915e8f69b5c25c68b5c73f0d4a7cc65f4818311ede46cd7c8847393ea0" args="" -->GRP_USFE</em>&nbsp;</td><td>
-<p>Unsafe, </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4a8c62b4ef6a282affae9cb1423c429ce8"></a><!-- doxytag: member="GRP_SPCL" ref="ab7531e8915e8f69b5c25c68b5c73f0d4a8c62b4ef6a282affae9cb1423c429ce8" args="" -->GRP_SPCL</em>&nbsp;</td><td>
-<p>Special, unsual providers </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4ab6ce1e345bed69baf3ee0f0707253bc5"></a><!-- doxytag: member="GRP_FAST" ref="ab7531e8915e8f69b5c25c68b5c73f0d4ab6ce1e345bed69baf3ee0f0707253bc5" args="" -->GRP_FAST</em>&nbsp;</td><td>
-<p>Fast, maybe unsafe </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4a06c250e4e94481456c767a1099a04a6f"></a><!-- doxytag: member="GRP_SLOW" ref="ab7531e8915e8f69b5c25c68b5c73f0d4a06c250e4e94481456c767a1099a04a6f" args="" -->GRP_SLOW</em>&nbsp;</td><td>
-<p>Slow, exec'd at last </p>
-</td></tr>
-<tr><td valign="top"><em><a class="anchor" id="ab7531e8915e8f69b5c25c68b5c73f0d4a54f88a11d02828254ac726313c3c0af1"></a><!-- doxytag: member="GRP_ALL" ref="ab7531e8915e8f69b5c25c68b5c73f0d4a54f88a11d02828254ac726313c3c0af1" args="" -->GRP_ALL</em>&nbsp;</td><td>
-<p>All, when no groups are used </p>
-</td></tr>
-</table>
-</dd>
-</dl>
-
-</div>
-</div>
 </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -705,7 +708,7 @@ Enumerations</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 16:52:26 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 4 2011 16:37:40 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

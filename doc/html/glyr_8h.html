@@ -115,92 +115,79 @@ function toggleVisibility(linkObj) {
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c">Gly_init</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.  <a href="#a356fe1b104c5cae22323954cde41622c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a705e9f8709f3e53a6566e37a3317548e">Gly_cleanup</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a> Not threadsafe also.  <a href="#a705e9f8709f3e53a6566e37a3317548e"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a80069848115976452b38bf2e042dd230">Gly_get</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *settings, enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> *error, int *length)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The 'main' method of glyr. It starts the searching according to the settings in the settings param.  <a href="#a80069848115976452b38bf2e042dd230"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a2398522a3dc5d296bd61eba5b25475d5">Gly_init_query</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *glyrs)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Init's the <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> structure to sane defaults. Call this after creating the variable.  <a href="#a2398522a3dc5d296bd61eba5b25475d5"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a93834f114a1397408c2ae371e83084e3">Gly_destroy_query</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *sets)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all memory associated with this query, and restore default settings. Do this always when you're done with this one.  <a href="#a93834f114a1397408c2ae371e83084e3"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#adb1bfffe30a28d1fddc3d240e7a6398c">Gly_free_list</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *head)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the memory in the GlyCacheList returned by Gly_get.  <a href="#adb1bfffe30a28d1fddc3d240e7a6398c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aa691b444bf961fa4b13ed9c5171ea3f7">Gly_new_cache</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated and initialized <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a>, mostly for use with Gly_gtrans_* Don't forget to free it with Gly_free_cache.  <a href="#aa691b444bf961fa4b13ed9c5171ea3f7"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a58dc7a160c2d5de031253a07b6270eef">Gly_copy_cache</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *source)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Produces an exact copy of the <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> source.  <a href="#a58dc7a160c2d5de031253a07b6270eef"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a7c8e7df16853e6a6608a23fe32772286">Gly_free_cache</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *c)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> pointed to by c. You should set it to NULL also, as using it after this will crash your program.  <a href="#a7c8e7df16853e6a6608a23fe32772286"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a3e957cc01be0cd7ce29443cbd0a91c44">GlyOpt_dlcallback</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *settings, <a class="el" href="types_8h.html#a331454be4b9aa91c5d2758a182fdd2f1">DL_callback</a> dl_cb, void *userp)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback that is executed once an item is ready downloaded.  <a href="#a3e957cc01be0cd7ce29443cbd0a91c44"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a5d3d1e66a6de297e9523082d9ab7fb3b">GlyOpt_type</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> type)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.  <a href="#a5d3d1e66a6de297e9523082d9ab7fb3b"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a107feb0dac5aedf16e6f588fbd867041">GlyOpt_artist</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *artist)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The artist field. libglyr will try to format it to fit the best.  <a href="#a107feb0dac5aedf16e6f588fbd867041"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a0905a9ae9b1180fee53115964cb01609">GlyOpt_album</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *album)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The album field. libglyr will try to format it to fit the best.  <a href="#a0905a9ae9b1180fee53115964cb01609"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ae5e77ff9acd8ac8b9121b6709daafb13">GlyOpt_title</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *title)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The title field. libglyr will try to format it to fit the best.  <a href="#ae5e77ff9acd8ac8b9121b6709daafb13"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a700449f2b95df3697f43de5c8062c6f4">GlyOpt_cmaxsize</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int size)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum size a cover may have (assuming the cover is quadratic, only one size is required)  <a href="#a700449f2b95df3697f43de5c8062c6f4"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ab85f300fdc54b40892519b63debb7204">GlyOpt_cminsize</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int size)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum size a cover may have (assuming the cover is quadratic, only one size is required)  <a href="#ab85f300fdc54b40892519b63debb7204"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#abadb29caaa700e14de0587d7b4da6a4f">GlyOpt_parallel</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of items that may be downloaded in parallel.  <a href="#abadb29caaa700e14de0587d7b4da6a4f"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a60a5617e83c6d6a53020ada9821f7b51">GlyOpt_timeout</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Amout of seconds to wait before cancelling an download.  <a href="#a60a5617e83c6d6a53020ada9821f7b51"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a95cabc1cf3b3218d792625c4c200ffc6">GlyOpt_redirects</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of redirects to.  <a href="#a95cabc1cf3b3218d792625c4c200ffc6"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a9e8357a498b5c27dcbbab29cfc2815c4">GlyOpt_lang</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *langcode)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the language the items should be in.  <a href="#a9e8357a498b5c27dcbbab29cfc2815c4"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#abdc48ae62ce6a05d9b788e2da60bd563">GlyOpt_number</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned int num)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the number of items to search.  <a href="#abdc48ae62ce6a05d9b788e2da60bd563"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#af47ce58609d06cd281964a71c3616049">GlyOpt_verbosity</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned int level)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set libglyr's verbosity level (debug)  <a href="#af47ce58609d06cd281964a71c3616049"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a038498aa9c2c94a8da8a7584eee1645d">GlyOpt_from</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *from)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the providers you want to use.  <a href="#a038498aa9c2c94a8da8a7584eee1645d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#af8eac81b2853264d0d07d75d93fce51c">GlyOpt_color</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, bool iLikeColorInMyLife)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable colored log output. (Debug)  <a href="#af8eac81b2853264d0d07d75d93fce51c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ae4097ddca97dd331c9d792e1383454b5">GlyOpt_plugmax</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int plugmax)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the maximum number of items a provider may download.  <a href="#ae4097ddca97dd331c9d792e1383454b5"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a5beceee3282466f3e4d96c63f565f5f2">GlyOpt_download</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, bool download)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define if image items (i.e, covers, photos) are downloaded.  <a href="#a5beceee3282466f3e4d96c63f565f5f2"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a9a43f3480a81461de1f23bb3328d1c63">GlyOpt_groupedDL</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, bool groupedDL)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define wether searching happens in groups or everything or parallel (= false)  <a href="#a9a43f3480a81461de1f23bb3328d1c63"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a21e154237db515e5d84734ccf4b71937">GlyOpt_formats</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *formats)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define allowed image formats.  <a href="#a21e154237db515e5d84734ccf4b71937"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ab6860aa18f5bc750c8915f7bb57abefd">GlyOpt_fuzzyness</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int fuzz)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the max. tolerance for fuzzy matching.  <a href="#ab6860aa18f5bc750c8915f7bb57abefd"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aa274fb7171bade1574a1f7730d66eec1">GlyOpt_duplcheck</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, bool duplcheck)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Enable/Disable check for duplicate items.  <a href="#aa274fb7171bade1574a1f7730d66eec1"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a4d6dbad9c0787fdf1b4f7bd984e91e2d">GlyOpt_gtrans_source_lang</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *source)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the source language for google translator or NULL to autodetect.  <a href="#a4d6dbad9c0787fdf1b4f7bd984e91e2d"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aed9f0ea7b268d4b1def806eb2f7dc4e9">GlyOpt_gtrans_target_lang</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *target)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the target language for google translator or NULL to disable.  <a href="#aed9f0ea7b268d4b1def806eb2f7dc4e9"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a641253c631f2f0a54831bce84f9b532c">GlyOpt_proxy</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *proxystring)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the proxy to use.  <a href="#a641253c631f2f0a54831bce84f9b532c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a58d98290aeb979d17f0d43855a68747c">GlyPlug_get_name_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a nullterminated list of available providers.  <a href="#a58d98290aeb979d17f0d43855a68747c"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ab067ea8cbd2145e22d3d3cef45c69d96">GlyPlug_get_single_name_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as GlyPlug_get_name_by_id, but returns single string.  <a href="#ab067ea8cbd2145e22d3d3cef45c69d96"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a82e74ef9c730f56597bc73916357a015">GlyPlug_get_key_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a nullterminated list of available providers, with their name as key.  <a href="#a82e74ef9c730f56597bc73916357a015"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a2f502063416ee5252a8268f9237e2f03">GlyPlug_get_gid_by_id</a> (enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a list of GroupIDs.  <a href="#a2f502063416ee5252a8268f9237e2f03"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a5477f0f7e49419413a18be93d0c49cd7">Gly_download</a> (const char *url, <a class="el" href="structGlyQuery.html">GlyQuery</a> *s)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A convinience method to download the content at the URl $url, according to the settings in $s Actually only the redirect and timeout parameters are used here.  <a href="#a5477f0f7e49419413a18be93d0c49cd7"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a390b0873fe96aedc11957f26f2ec5d84">Gly_strerror</a> (enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Many methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print.  <a href="#a390b0873fe96aedc11957f26f2ec5d84"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#abc4eba9788c23579406ecbae08c7bf8a">Gly_groupname_by_id</a> (enum <a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4">GLYR_GROUPS</a> ID)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of a group as string.  <a href="#abc4eba9788c23579406ecbae08c7bf8a"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aaf1ebbe2db15c30a3dc329d25ace2279">Gly_version</a> (void)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns versioning information, including compiletime.  <a href="#aaf1ebbe2db15c30a3dc329d25ace2279"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#addc3e50e99d595eb14e1c76500d93f95">Gly_write</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *data, const char *path)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data to a specified path.  <a href="#addc3e50e99d595eb14e1c76500d93f95"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aa408467eac9814fc3d683e5ac882617a">Gly_update_md5sum</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *c)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the md5sum field of the cache c.  <a href="#aa408467eac9814fc3d683e5ac882617a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#af4e64a53d273b91a3f704db26c254016">glyr_init</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.  <a href="#af4e64a53d273b91a3f704db26c254016"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a7d9cffb8f2bce83e72ca73fe98b76d3a">glyr_cleanup</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Call this at program termination. It's adviseable to call 'atexit(glyr_cleanup)' after <a class="el" href="glyr_8h.html#af4e64a53d273b91a3f704db26c254016" title="call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you...">glyr_init()</a> Not threadsafe also.  <a href="#a7d9cffb8f2bce83e72ca73fe98b76d3a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a54758271379fcd1e30c0e21a33009610">glyr_get</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *settings, enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> *error, int *length)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The 'main' method of glyr. It starts the searching according to the settings in the settings param.  <a href="#a54758271379fcd1e30c0e21a33009610"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a59b1da085a0f6cd84d7324f2b6fae881">glyr_init_query</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *glyrs)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Init's the <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> structure to sane defaults. Call this after creating the variable.  <a href="#a59b1da085a0f6cd84d7324f2b6fae881"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a48807fd6437200193716e36bf7cd96a2">glyr_destroy_query</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *sets)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free all memory associated with this query, and restore default settings. Do this always when you're done with this one.  <a href="#a48807fd6437200193716e36bf7cd96a2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a4266a786dd5da468fc54b8dfd412d0e7">glyr_free_list</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *head)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the memory in the GlyCacheList returned by glyr_get.  <a href="#a4266a786dd5da468fc54b8dfd412d0e7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a04635845d665370b1872312c687cef57">glyr_new_cache</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a newly allocated and initialized <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a>, mostly for use with glyr_gtrans_* Don't forget to free it with glyr_free_cache.  <a href="#a04635845d665370b1872312c687cef57"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ae3e519e5eb1fc81eb922e4cc47710d6a">glyr_copy_cache</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *source)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Produces an exact copy of the <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> source.  <a href="#ae3e519e5eb1fc81eb922e4cc47710d6a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#afe73509298be0738113c6f2aecb196c4">glyr_free_cache</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *c)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> pointed to by c. You should set it to NULL also, as using it after this will crash your program.  <a href="#afe73509298be0738113c6f2aecb196c4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a87990716a1edd101d5bf5a91fbdd2606">glyr_opt_dlcallback</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *settings, <a class="el" href="types_8h.html#a331454be4b9aa91c5d2758a182fdd2f1">DL_callback</a> dl_cb, void *userp)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the callback that is executed once an item is ready downloaded.  <a href="#a87990716a1edd101d5bf5a91fbdd2606"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ab8f8c466c2c4f5882dea091919a29a71">glyr_opt_type</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a> type)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.  <a href="#ab8f8c466c2c4f5882dea091919a29a71"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ac785a54307d9ac42c3f77ca02166d583">glyr_opt_artist</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *artist)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The artist field. libglyr will try to format it to fit the best.  <a href="#ac785a54307d9ac42c3f77ca02166d583"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ae29b1444de6160015b05e0f6d66b09a5">glyr_opt_album</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *album)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The album field. libglyr will try to format it to fit the best.  <a href="#ae29b1444de6160015b05e0f6d66b09a5"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a99af16d77dc6df739b39ccb5580d2876">glyr_opt_title</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *title)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The title field. libglyr will try to format it to fit the best.  <a href="#a99af16d77dc6df739b39ccb5580d2876"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aa027cc5e369c58e2f4d906f26f9eec2b">glyr_opt_cmaxsize</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int size)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum size a cover may have (assuming the cover is quadratic, only one size is required)  <a href="#aa027cc5e369c58e2f4d906f26f9eec2b"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a3c9c3c45bbb950b5d3ac8f01b95ebc9e">glyr_opt_cminsize</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int size)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Minimum size a cover may have (assuming the cover is quadratic, only one size is required)  <a href="#a3c9c3c45bbb950b5d3ac8f01b95ebc9e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#aad974b68c3d0893de80d8245318c5201">glyr_opt_parallel</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The number of items that may be downloaded in parallel.  <a href="#aad974b68c3d0893de80d8245318c5201"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a77c895145985a9dab5c5697ad8160073">glyr_opt_timeout</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Amout of seconds to wait before cancelling an download.  <a href="#a77c895145985a9dab5c5697ad8160073"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a65e9c5c16a89f5829c6d83b4f0cf78d9">glyr_opt_redirects</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of redirects to.  <a href="#a65e9c5c16a89f5829c6d83b4f0cf78d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a55e23bb74b7d509829b4f4017652b3e3">glyr_opt_lang</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *langcode)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the language the items should be in.  <a href="#a55e23bb74b7d509829b4f4017652b3e3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ac48616e106fb58a277bea7658db2d6c9">glyr_opt_number</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned int num)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the number of items to search.  <a href="#ac48616e106fb58a277bea7658db2d6c9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a72b17d9e3d54fa076f3e71b78a0edf04">glyr_opt_verbosity</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned int level)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set libglyr's verbosity level (debug)  <a href="#a72b17d9e3d54fa076f3e71b78a0edf04"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a9c796730a24e658b49956c13f7fe00aa">glyr_opt_from</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *from)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the providers you want to use.  <a href="#a9c796730a24e658b49956c13f7fe00aa"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ac7683cd652091bcffe5ac66c24c47762">glyr_opt_plugmax</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int plugmax)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define the maximum number of items a provider may download.  <a href="#ac7683cd652091bcffe5ac66c24c47762"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a2ab879e786dd2e363b4cbc3e9de92766">glyr_opt_allowed_formats</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *formats)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define allowed image formats.  <a href="#a2ab879e786dd2e363b4cbc3e9de92766"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#af61e2068f07fe93c569c168cfa7f695e">glyr_opt_download</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, bool download)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Define if image items (i.e, covers, photos) are downloaded.  <a href="#af61e2068f07fe93c569c168cfa7f695e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a0507f605a6021e5c99fa8587565b3cb3">glyr_opt_fuzzyness</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, int fuzz)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the max. tolerance for fuzzy matching.  <a href="#a0507f605a6021e5c99fa8587565b3cb3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a4cb20b3f2e7fd94453b4104bb02b4aac">glyr_opt_qsratio</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, float ratio)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Weight ratio between speed and quality.  <a href="#a4cb20b3f2e7fd94453b4104bb02b4aac"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ace054ccd3870e8835fe66aa3ffb71ae3">glyr_opt_proxy</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *proxystring)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the proxy to use.  <a href="#ace054ccd3870e8835fe66aa3ffb71ae3"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#addf8a1d9834b84a1e999d41fe98f1fd8">glyr_download</a> (const char *url, <a class="el" href="structGlyQuery.html">GlyQuery</a> *s)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">A convinience method to download the content at the URl $url, according to the settings in $s Actually only the redirect and timeout parameters are used here.  <a href="#addf8a1d9834b84a1e999d41fe98f1fd8"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a607c30104138c4ac10aff26f1d26abcf">glyr_strerror</a> (enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> ID)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Many methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print.  <a href="#a607c30104138c4ac10aff26f1d26abcf"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a85eb1ffcd7fbc67ab6859a6d417d34f2">glyr_version</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns versioning information, including compiletime.  <a href="#a85eb1ffcd7fbc67ab6859a6d417d34f2"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a96e11e5568ac76ace76bfe9c3f3ce14a">glyr_write</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *data, const char *path)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes data to a specified path.  <a href="#a96e11e5568ac76ace76bfe9c3f3ce14a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a053d418b430ed5fd7f03ad0851335e2a">glyr_update_md5sum</a> (<a class="el" href="structGlyMemCache.html">GlyMemCache</a> *c)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Updates the md5sum field of the cache c.  <a href="#a053d418b430ed5fd7f03ad0851335e2a"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a8462213c9c2773c058623475b2cbb651">glyr_printitem</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, <a class="el" href="structGlyMemCache.html">GlyMemCache</a> *cacheditem)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ac06146b36b4aca36e6fc77d6906e34b7">glyr_get_plugin_info</a> (void)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get information about existing Fetcher and Source  <a href="#ac06146b36b4aca36e6fc77d6906e34b7"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a1354483bce0d969a1c974f113f0a8337">glyr_free_plugin_info</a> (<a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a> **info)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the data from <a class="el" href="glyr_8h.html#ac06146b36b4aca36e6fc77d6906e34b7" title="get information about existing Fetcher and Source">glyr_get_plugin_info()</a>  <a href="#a1354483bce0d969a1c974f113f0a8337"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>All method declaration here. You should only need to include this file. </p>
@@ -209,12 +196,12 @@ Functions</h2></td></tr>
 <dl class="version"><dt><b>Version:</b></dt><dd>0.6 </dd></dl>
 <dl class="date"><dt><b>Date:</b></dt><dd>2011-06-14 </dd></dl>
 </div><hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a705e9f8709f3e53a6566e37a3317548e"></a><!-- doxytag: member="glyr.h::Gly_cleanup" ref="a705e9f8709f3e53a6566e37a3317548e" args="(void)" -->
+<a class="anchor" id="a7d9cffb8f2bce83e72ca73fe98b76d3a"></a><!-- doxytag: member="glyr.h::glyr_cleanup" ref="a7d9cffb8f2bce83e72ca73fe98b76d3a" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Gly_cleanup </td>
+          <td class="memname">void glyr_cleanup </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -224,16 +211,16 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Call this at program termination. It's adviseable to call 'atexit(Gly_cleanup)' after <a class="el" href="glyr_8h.html#a356fe1b104c5cae22323954cde41622c" title="call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you ...">Gly_init()</a> Not threadsafe also. </p>
+<p>Call this at program termination. It's adviseable to call 'atexit(glyr_cleanup)' after <a class="el" href="glyr_8h.html#af4e64a53d273b91a3f704db26c254016" title="call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you...">glyr_init()</a> Not threadsafe also. </p>
 
 </div>
 </div>
-<a class="anchor" id="a58dc7a160c2d5de031253a07b6270eef"></a><!-- doxytag: member="glyr.h::Gly_copy_cache" ref="a58dc7a160c2d5de031253a07b6270eef" args="(GlyMemCache *source)" -->
+<a class="anchor" id="ae3e519e5eb1fc81eb922e4cc47710d6a"></a><!-- doxytag: member="glyr.h::glyr_copy_cache" ref="ae3e519e5eb1fc81eb922e4cc47710d6a" args="(GlyMemCache *source)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* Gly_copy_cache </td>
+          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* glyr_copy_cache </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
           <td class="paramname"><em>source</em></td><td>)</td>
@@ -254,12 +241,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a93834f114a1397408c2ae371e83084e3"></a><!-- doxytag: member="glyr.h::Gly_destroy_query" ref="a93834f114a1397408c2ae371e83084e3" args="(GlyQuery *sets)" -->
+<a class="anchor" id="a48807fd6437200193716e36bf7cd96a2"></a><!-- doxytag: member="glyr.h::glyr_destroy_query" ref="a48807fd6437200193716e36bf7cd96a2" args="(GlyQuery *sets)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Gly_destroy_query </td>
+          <td class="memname">void glyr_destroy_query </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>sets</em></td><td>)</td>
@@ -279,12 +266,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5477f0f7e49419413a18be93d0c49cd7"></a><!-- doxytag: member="glyr.h::Gly_download" ref="a5477f0f7e49419413a18be93d0c49cd7" args="(const char *url, GlyQuery *s)" -->
+<a class="anchor" id="addf8a1d9834b84a1e999d41fe98f1fd8"></a><!-- doxytag: member="glyr.h::glyr_download" ref="addf8a1d9834b84a1e999d41fe98f1fd8" args="(const char *url, GlyQuery *s)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* Gly_download </td>
+          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* glyr_download </td>
           <td>(</td>
           <td class="paramtype">const char *&#160;</td>
           <td class="paramname"><em>url</em>, </td>
@@ -316,12 +303,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a7c8e7df16853e6a6608a23fe32772286"></a><!-- doxytag: member="glyr.h::Gly_free_cache" ref="a7c8e7df16853e6a6608a23fe32772286" args="(GlyMemCache *c)" -->
+<a class="anchor" id="afe73509298be0738113c6f2aecb196c4"></a><!-- doxytag: member="glyr.h::glyr_free_cache" ref="afe73509298be0738113c6f2aecb196c4" args="(GlyMemCache *c)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Gly_free_cache </td>
+          <td class="memname">void glyr_free_cache </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
           <td class="paramname"><em>c</em></td><td>)</td>
@@ -341,12 +328,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="adb1bfffe30a28d1fddc3d240e7a6398c"></a><!-- doxytag: member="glyr.h::Gly_free_list" ref="adb1bfffe30a28d1fddc3d240e7a6398c" args="(GlyMemCache *head)" -->
+<a class="anchor" id="a4266a786dd5da468fc54b8dfd412d0e7"></a><!-- doxytag: member="glyr.h::glyr_free_list" ref="a4266a786dd5da468fc54b8dfd412d0e7" args="(GlyMemCache *head)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Gly_free_list </td>
+          <td class="memname">void glyr_free_list </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
           <td class="paramname"><em>head</em></td><td>)</td>
@@ -356,7 +343,7 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Free the memory in the GlyCacheList returned by Gly_get. </p>
+<p>Free the memory in the GlyCacheList returned by glyr_get. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
     <tr><td class="paramname">head</td><td>The GlyCacheList to be free'd </td></tr>
@@ -366,12 +353,38 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a80069848115976452b38bf2e042dd230"></a><!-- doxytag: member="glyr.h::Gly_get" ref="a80069848115976452b38bf2e042dd230" args="(GlyQuery *settings, enum GLYR_ERROR *error, int *length)" -->
+<a class="anchor" id="a1354483bce0d969a1c974f113f0a8337"></a><!-- doxytag: member="glyr.h::glyr_free_plugin_info" ref="a1354483bce0d969a1c974f113f0a8337" args="(GlyFetcherInfo **info)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* Gly_get </td>
+          <td class="memname">void glyr_free_plugin_info </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a> **&#160;</td>
+          <td class="paramname"><em>info</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Free the data from <a class="el" href="glyr_8h.html#ac06146b36b4aca36e6fc77d6906e34b7" title="get information about existing Fetcher and Source">glyr_get_plugin_info()</a> </p>
+<p>This method also set the pointer to NULL, for safety reasons.</p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">info</td><td>A reference to the return value fo <a class="el" href="glyr_8h.html#ac06146b36b4aca36e6fc77d6906e34b7" title="get information about existing Fetcher and Source">glyr_get_plugin_info()</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a54758271379fcd1e30c0e21a33009610"></a><!-- doxytag: member="glyr.h::glyr_get" ref="a54758271379fcd1e30c0e21a33009610" args="(GlyQuery *settings, enum GLYR_ERROR *error, int *length)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* glyr_get </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>settings</em>, </td>
@@ -400,55 +413,26 @@ Functions</h2></td></tr>
 <p>The 'main' method of glyr. It starts the searching according to the settings in the settings param. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">settings</td><td>The setting struct controlling glyr. (See the GlyOpt_* methods) </td></tr>
+    <tr><td class="paramname">settings</td><td>The setting struct controlling glyr. (See the glyr_opt_* methods) </td></tr>
     <tr><td class="paramname">error</td><td>An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success </td></tr>
     <tr><td class="paramname">length</td><td>An optional pointer storing the length of the returned list</td></tr>
   </table>
   </dd>
 </dl>
-<p>It takes a pointer to a <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> struct filled to your needs via the GlyOpt_* methods,<br/>
- Once an item is found the callback (set via GlyOpt_dlcallback) is called with the item as parameter.<br/>
- After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with Gly_free_list when done.<br/>
+<p>It takes a pointer to a <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> struct filled to your needs via the glyr_opt_* methods,<br/>
+ Once an item is found the callback (set via glyr_opt_dlcallback) is called with the item as parameter.<br/>
+ After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with glyr_free_list when done.<br/>
 </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A GlyCacheList containing all found data. See the struct reference for further details. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="abc4eba9788c23579406ecbae08c7bf8a"></a><!-- doxytag: member="glyr.h::Gly_groupname_by_id" ref="abc4eba9788c23579406ecbae08c7bf8a" args="(enum GLYR_GROUPS ID)" -->
+<a class="anchor" id="ac06146b36b4aca36e6fc77d6906e34b7"></a><!-- doxytag: member="glyr.h::glyr_get_plugin_info" ref="ac06146b36b4aca36e6fc77d6906e34b7" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* Gly_groupname_by_id </td>
-          <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#ab7531e8915e8f69b5c25c68b5c73f0d4">GLYR_GROUPS</a>&#160;</td>
-          <td class="paramname"><em>ID</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Get the name of a group as string. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ID</td><td>a member of the GLYR_GROUPS enum</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>GRP_FAST gets to "fast",GRP_ALL to "all" etc.<br/>
- Use this to make strings from <a class="el" href="glyr_8h.html#a2f502063416ee5252a8268f9237e2f03" title="Get a list of GroupIDs.">GlyPlug_get_gid_by_id()</a><br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A groupname as string or NULL if not found </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a356fe1b104c5cae22323954cde41622c"></a><!-- doxytag: member="glyr.h::Gly_init" ref="a356fe1b104c5cae22323954cde41622c" args="(void)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Gly_init </td>
+          <td class="memname"><a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a>* glyr_get_plugin_info </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -458,16 +442,37 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>call this at startup. This is not threadsafe and Gly_cleanup should be called once for everytime you call Gly_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. </p>
+<p>get information about existing Fetcher and Source </p>
+<p>A Doubly linked list of Fetcher is returned, each having a field 'head', being a pointer to a doubly linked list of GlySourceInfos</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A newly <a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a> structure, you can iterate over. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a2398522a3dc5d296bd61eba5b25475d5"></a><!-- doxytag: member="glyr.h::Gly_init_query" ref="a2398522a3dc5d296bd61eba5b25475d5" args="(GlyQuery *glyrs)" -->
+<a class="anchor" id="af4e64a53d273b91a3f704db26c254016"></a><!-- doxytag: member="glyr.h::glyr_init" ref="af4e64a53d273b91a3f704db26c254016" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void Gly_init_query </td>
+          <td class="memname">void glyr_init </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init Actually this method is only there to initialize libcurl, glyr only depends on the settings struct. </p>
+
+</div>
+</div>
+<a class="anchor" id="a59b1da085a0f6cd84d7324f2b6fae881"></a><!-- doxytag: member="glyr.h::glyr_init_query" ref="a59b1da085a0f6cd84d7324f2b6fae881" args="(GlyQuery *glyrs)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void glyr_init_query </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>glyrs</em></td><td>)</td>
@@ -487,12 +492,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa691b444bf961fa4b13ed9c5171ea3f7"></a><!-- doxytag: member="glyr.h::Gly_new_cache" ref="aa691b444bf961fa4b13ed9c5171ea3f7" args="(void)" -->
+<a class="anchor" id="a04635845d665370b1872312c687cef57"></a><!-- doxytag: member="glyr.h::glyr_new_cache" ref="a04635845d665370b1872312c687cef57" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* Gly_new_cache </td>
+          <td class="memname"><a class="el" href="structGlyMemCache.html">GlyMemCache</a>* glyr_new_cache </td>
           <td>(</td>
           <td class="paramtype">void&#160;</td>
           <td class="paramname"></td><td>)</td>
@@ -502,129 +507,17 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Returns a newly allocated and initialized <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a>, mostly for use with Gly_gtrans_* Don't forget to free it with Gly_free_cache. </p>
+<p>Returns a newly allocated and initialized <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a>, mostly for use with glyr_gtrans_* Don't forget to free it with glyr_free_cache. </p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A newly allocated <a class="el" href="structGlyMemCache.html" title="Represents a single item.">GlyMemCache</a> </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a390b0873fe96aedc11957f26f2ec5d84"></a><!-- doxytag: member="glyr.h::Gly_strerror" ref="a390b0873fe96aedc11957f26f2ec5d84" args="(enum GLYR_ERROR ID)" -->
+<a class="anchor" id="ae29b1444de6160015b05e0f6d66b09a5"></a><!-- doxytag: member="glyr.h::glyr_opt_album" ref="ae29b1444de6160015b05e0f6d66b09a5" args="(GlyQuery *s, char *album)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* Gly_strerror </td>
-          <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td>
-          <td class="paramname"><em>ID</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Many methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ID</td><td>The returned error</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A descriptive nullterminated string, do not pass to free </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aa408467eac9814fc3d683e5ac882617a"></a><!-- doxytag: member="glyr.h::Gly_update_md5sum" ref="aa408467eac9814fc3d683e5ac882617a" args="(GlyMemCache *c)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Gly_update_md5sum </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
-          <td class="paramname"><em>c</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Updates the md5sum field of the cache c. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">c</td><td>a valid memcahe </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="aaf1ebbe2db15c30a3dc329d25ace2279"></a><!-- doxytag: member="glyr.h::Gly_version" ref="aaf1ebbe2db15c30a3dc329d25ace2279" args="(void)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">const char* Gly_version </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Returns versioning information, including compiletime. </p>
-<p>Example: <br/>
- Version 0.4 (Larcenous Locust (dev)) of [May 20 2011] compiled at [19:12:37]</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>A nullterminated string, do not free </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="addc3e50e99d595eb14e1c76500d93f95"></a><!-- doxytag: member="glyr.h::Gly_write" ref="addc3e50e99d595eb14e1c76500d93f95" args="(GlyMemCache *data, const char *path)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int Gly_write </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
-          <td class="paramname"><em>data</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>path</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Writes data to a specified path. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">data</td><td>The data to write. </td></tr>
-    <tr><td class="paramname">path</td><td>The path to write data at.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',<br/>
- which are pretty selfexplaining.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>An error id. </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a0905a9ae9b1180fee53115964cb01609"></a><!-- doxytag: member="glyr.h::GlyOpt_album" ref="a0905a9ae9b1180fee53115964cb01609" args="(GlyQuery *s, char *album)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_album </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_album </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -669,12 +562,56 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a107feb0dac5aedf16e6f588fbd867041"></a><!-- doxytag: member="glyr.h::GlyOpt_artist" ref="a107feb0dac5aedf16e6f588fbd867041" args="(GlyQuery *s, char *artist)" -->
+<a class="anchor" id="a2ab879e786dd2e363b4cbc3e9de92766"></a><!-- doxytag: member="glyr.h::glyr_opt_allowed_formats" ref="a2ab879e786dd2e363b4cbc3e9de92766" args="(GlyQuery *s, const char *formats)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_artist </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_allowed_formats </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>formats</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Define allowed image formats. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
+    <tr><td class="paramname">formats</td><td>A comma seperated list of format specifiers, e.g. "png;jpeg"</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>Awaits a string with a semicolon seperated list of allowed formats.<br/>
+ The case of the format is ignored.<br/>
+</p>
+<p>Example:<br/>
+ "png;jpg" would allow png,jpeg,jpg,JPEG,jpg, but not gifs.<br/>
+ The names of the format are the MIME types found in HTTP headers. A list of types is here: <a href="http://www.w3schools.com/media/media_mimeref.asp">http://www.w3schools.com/media/media_mimeref.asp</a></p>
+<p>A value of NULL will default to "png;jpeg;tiff"</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="ac785a54307d9ac42c3f77ca02166d583"></a><!-- doxytag: member="glyr.h::glyr_opt_artist" ref="ac785a54307d9ac42c3f77ca02166d583" args="(GlyQuery *s, char *artist)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_artist </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -707,12 +644,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a700449f2b95df3697f43de5c8062c6f4"></a><!-- doxytag: member="glyr.h::GlyOpt_cmaxsize" ref="a700449f2b95df3697f43de5c8062c6f4" args="(GlyQuery *s, int size)" -->
+<a class="anchor" id="aa027cc5e369c58e2f4d906f26f9eec2b"></a><!-- doxytag: member="glyr.h::glyr_opt_cmaxsize" ref="aa027cc5e369c58e2f4d906f26f9eec2b" args="(GlyQuery *s, int size)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_cmaxsize </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_cmaxsize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -747,12 +684,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab85f300fdc54b40892519b63debb7204"></a><!-- doxytag: member="glyr.h::GlyOpt_cminsize" ref="ab85f300fdc54b40892519b63debb7204" args="(GlyQuery *s, int size)" -->
+<a class="anchor" id="a3c9c3c45bbb950b5d3ac8f01b95ebc9e"></a><!-- doxytag: member="glyr.h::glyr_opt_cminsize" ref="a3c9c3c45bbb950b5d3ac8f01b95ebc9e" args="(GlyQuery *s, int size)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_cminsize </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_cminsize </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -780,56 +717,17 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Note: Also see <a class="el" href="glyr_8h.html#a700449f2b95df3697f43de5c8062c6f4" title="Maximum size a cover may have (assuming the cover is quadratic, only one size is required)">GlyOpt_cmaxsize()</a></p>
+<p>Note: Also see <a class="el" href="glyr_8h.html#aa027cc5e369c58e2f4d906f26f9eec2b" title="Maximum size a cover may have (assuming the cover is quadratic, only one size is required)">glyr_opt_cmaxsize()</a></p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af8eac81b2853264d0d07d75d93fce51c"></a><!-- doxytag: member="glyr.h::GlyOpt_color" ref="af8eac81b2853264d0d07d75d93fce51c" args="(GlyQuery *s, bool iLikeColorInMyLife)" -->
+<a class="anchor" id="a87990716a1edd101d5bf5a91fbdd2606"></a><!-- doxytag: member="glyr.h::glyr_opt_dlcallback" ref="a87990716a1edd101d5bf5a91fbdd2606" args="(GlyQuery *settings, DL_callback dl_cb, void *userp)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_color </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>iLikeColorInMyLife</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Enable colored log output. (Debug) </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">iLikeColorInMyLife</td><td>a boolean</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Colored output only works in terminal with standard color support,<br/>
- which means, non standard terminals like the MS commandline do not work.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>always GLYRE_OK </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a3e957cc01be0cd7ce29443cbd0a91c44"></a><!-- doxytag: member="glyr.h::GlyOpt_dlcallback" ref="a3e957cc01be0cd7ce29443cbd0a91c44" args="(GlyQuery *settings, DL_callback dl_cb, void *userp)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_dlcallback </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_dlcallback </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>settings</em>, </td>
@@ -871,12 +769,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5beceee3282466f3e4d96c63f565f5f2"></a><!-- doxytag: member="glyr.h::GlyOpt_download" ref="a5beceee3282466f3e4d96c63f565f5f2" args="(GlyQuery *s, bool download)" -->
+<a class="anchor" id="af61e2068f07fe93c569c168cfa7f695e"></a><!-- doxytag: member="glyr.h::glyr_opt_download" ref="af61e2068f07fe93c569c168cfa7f695e" args="(GlyQuery *s, bool download)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_download </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_download </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -913,96 +811,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aa274fb7171bade1574a1f7730d66eec1"></a><!-- doxytag: member="glyr.h::GlyOpt_duplcheck" ref="aa274fb7171bade1574a1f7730d66eec1" args="(GlyQuery *s, bool duplcheck)" -->
+<a class="anchor" id="a9c796730a24e658b49956c13f7fe00aa"></a><!-- doxytag: member="glyr.h::glyr_opt_from" ref="a9c796730a24e658b49956c13f7fe00aa" args="(GlyQuery *s, const char *from)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_duplcheck </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>duplcheck</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Enable/Disable check for duplicate items. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">duplcheck</td><td>boolean flag, true enables, false disables</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Actually there is no valid reason to set this to false,<br/>
- except duplicate items are okay for you.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a21e154237db515e5d84734ccf4b71937"></a><!-- doxytag: member="glyr.h::GlyOpt_formats" ref="a21e154237db515e5d84734ccf4b71937" args="(GlyQuery *s, const char *formats)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_formats </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>formats</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Define allowed image formats. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">formats</td><td>A comma seperated list of format specifiers, e.g. "png;jpg;jpeg"</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>Awaits a string with a semicolon seperated list of allowed formats.<br/>
- The case of the format is ignored.<br/>
-</p>
-<p>Example:<br/>
- "png;jpg;jpeg" would allow png and jpeg.<br/>
-</p>
-<p>You can also specify "all", which disables this check.<br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a038498aa9c2c94a8da8a7584eee1645d"></a><!-- doxytag: member="glyr.h::GlyOpt_from" ref="a038498aa9c2c94a8da8a7584eee1645d" args="(GlyQuery *s, const char *from)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_from </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_from </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1050,12 +864,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ab6860aa18f5bc750c8915f7bb57abefd"></a><!-- doxytag: member="glyr.h::GlyOpt_fuzzyness" ref="ab6860aa18f5bc750c8915f7bb57abefd" args="(GlyQuery *s, int fuzz)" -->
+<a class="anchor" id="a0507f605a6021e5c99fa8587565b3cb3"></a><!-- doxytag: member="glyr.h::glyr_opt_fuzzyness" ref="a0507f605a6021e5c99fa8587565b3cb3" args="(GlyQuery *s, int fuzz)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_fuzzyness </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_fuzzyness </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1097,132 +911,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9a43f3480a81461de1f23bb3328d1c63"></a><!-- doxytag: member="glyr.h::GlyOpt_groupedDL" ref="a9a43f3480a81461de1f23bb3328d1c63" args="(GlyQuery *s, bool groupedDL)" -->
+<a class="anchor" id="a55e23bb74b7d509829b4f4017652b3e3"></a><!-- doxytag: member="glyr.h::glyr_opt_lang" ref="a55e23bb74b7d509829b4f4017652b3e3" args="(GlyQuery *s, char *langcode)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_groupedDL </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>groupedDL</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Define wether searching happens in groups or everything or parallel (= false) </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">groupedDL</td><td>boolean to toggle this</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>If set false, this will disable the grouping of providers.<br/>
- By default providers are grouped in categories like 'safe','unsafe','fast' etc., which<br/>
- are queried in parallel, so the 'best' providers are queried first.<br/>
- Disabling this behaviour will result in increasing speed, but as a result the searchresults<br/>
- won't be sorted by quality, as it is normally the case.<br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a4d6dbad9c0787fdf1b4f7bd984e91e2d"></a><!-- doxytag: member="glyr.h::GlyOpt_gtrans_source_lang" ref="a4d6dbad9c0787fdf1b4f7bd984e91e2d" args="(GlyQuery *s, const char *source)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_gtrans_source_lang </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>source</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set the source language for google translator or NULL to autodetect. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">source</td><td>A nullterminated pointer to char.</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>You can use 'glyrc gtrans list' or the <a class="el" href="translate_8h.html#a6433f428fdde8dc5d1380ce0487d578e" title="List all supported languages.">Gly_gtrans_list()</a> method,<br/>
- to get a list of all valid values.</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="aed9f0ea7b268d4b1def806eb2f7dc4e9"></a><!-- doxytag: member="glyr.h::GlyOpt_gtrans_target_lang" ref="aed9f0ea7b268d4b1def806eb2f7dc4e9" args="(GlyQuery *s, const char *target)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_gtrans_target_lang </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
-          <td class="paramname"><em>s</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>target</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-
-<p>Set the target language for google translator or NULL to disable. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
-    <tr><td class="paramname">target</td><td>By default this feature is disabled (target == NULL)<br/>
- Use the methods in <a class="el" href="translate_8h.html" title="(do not use yet) Methods to interact directly with google translator">lib/translate.h</a> to use the corresponding methods directly.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
-
-</div>
-</div>
-<a class="anchor" id="a9e8357a498b5c27dcbbab29cfc2815c4"></a><!-- doxytag: member="glyr.h::GlyOpt_lang" ref="a9e8357a498b5c27dcbbab29cfc2815c4" args="(GlyQuery *s, char *langcode)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_lang </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_lang </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1255,17 +949,17 @@ Functions</h2></td></tr>
 </p>
 <p>(Use only these providers if you really want ONLY localized content)<br/>
  If no language specified the language defaults to english ("en")</p>
-<p>Note1: This only works with a few providers, which should be set via <a class="el" href="glyr_8h.html#a038498aa9c2c94a8da8a7584eee1645d" title="Define the providers you want to use.">GlyOpt_from()</a> Note2: Don't coinfuse this with the built-in google translator's settings.</p>
+<p>Note1: This only works with a few providers, which should be set via <a class="el" href="glyr_8h.html#a9c796730a24e658b49956c13f7fe00aa" title="Define the providers you want to use.">glyr_opt_from()</a> Note2: Don't coinfuse this with the built-in google translator's settings.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="abdc48ae62ce6a05d9b788e2da60bd563"></a><!-- doxytag: member="glyr.h::GlyOpt_number" ref="abdc48ae62ce6a05d9b788e2da60bd563" args="(GlyQuery *s, unsigned int num)" -->
+<a class="anchor" id="ac48616e106fb58a277bea7658db2d6c9"></a><!-- doxytag: member="glyr.h::glyr_opt_number" ref="ac48616e106fb58a277bea7658db2d6c9" args="(GlyQuery *s, unsigned int num)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_number </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_number </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1297,17 +991,17 @@ Functions</h2></td></tr>
  This is not the number of items actually returned then,<br/>
  because libglyr is not able to find 300 songtexts of the same song,<br/>
  or libglyr filters duplicate items before returning.<br/>
-</p>
+ It will try to get as close to this number, but not higher. If '0' is specified, libglyr will try to find all the things.</p>
 <dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="abadb29caaa700e14de0587d7b4da6a4f"></a><!-- doxytag: member="glyr.h::GlyOpt_parallel" ref="abadb29caaa700e14de0587d7b4da6a4f" args="(GlyQuery *s, unsigned long val)" -->
+<a class="anchor" id="aad974b68c3d0893de80d8245318c5201"></a><!-- doxytag: member="glyr.h::glyr_opt_parallel" ref="aad974b68c3d0893de80d8245318c5201" args="(GlyQuery *s, unsigned long val)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_parallel </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_parallel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1339,12 +1033,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae4097ddca97dd331c9d792e1383454b5"></a><!-- doxytag: member="glyr.h::GlyOpt_plugmax" ref="ae4097ddca97dd331c9d792e1383454b5" args="(GlyQuery *s, int plugmax)" -->
+<a class="anchor" id="ac7683cd652091bcffe5ac66c24c47762"></a><!-- doxytag: member="glyr.h::glyr_opt_plugmax" ref="ac7683cd652091bcffe5ac66c24c47762" args="(GlyQuery *s, int plugmax)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_plugmax </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_plugmax </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1377,12 +1071,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a641253c631f2f0a54831bce84f9b532c"></a><!-- doxytag: member="glyr.h::GlyOpt_proxy" ref="a641253c631f2f0a54831bce84f9b532c" args="(GlyQuery *s, const char *proxystring)" -->
+<a class="anchor" id="ace054ccd3870e8835fe66aa3ffb71ae3"></a><!-- doxytag: member="glyr.h::glyr_opt_proxy" ref="ace054ccd3870e8835fe66aa3ffb71ae3" args="(GlyQuery *s, const char *proxystring)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_proxy </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_proxy </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1416,12 +1110,51 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a95cabc1cf3b3218d792625c4c200ffc6"></a><!-- doxytag: member="glyr.h::GlyOpt_redirects" ref="a95cabc1cf3b3218d792625c4c200ffc6" args="(GlyQuery *s, unsigned long val)" -->
+<a class="anchor" id="a4cb20b3f2e7fd94453b4104bb02b4aac"></a><!-- doxytag: member="glyr.h::glyr_opt_qsratio" ref="a4cb20b3f2e7fd94453b4104bb02b4aac" args="(GlyQuery *s, float ratio)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_redirects </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_qsratio </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>ratio</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Weight ratio between speed and quality. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
+    <tr><td class="paramname">ratio</td><td>A float, where 0.0 if full speed, and 1.0 full quality</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>0.00 means highest speed, you're kinda lucky if you have the right result there. 1.00 Takes possibly longer, but delivers usually good results. 0.85 is the current default value.</p>
+<p>All other values, smaller 0.0, greater 1.0 are clamped to 0.0 / 1.0</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a65e9c5c16a89f5829c6d83b4f0cf78d9"></a><!-- doxytag: member="glyr.h::glyr_opt_redirects" ref="a65e9c5c16a89f5829c6d83b4f0cf78d9" args="(GlyQuery *s, unsigned long val)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_redirects </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1455,12 +1188,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a60a5617e83c6d6a53020ada9821f7b51"></a><!-- doxytag: member="glyr.h::GlyOpt_timeout" ref="a60a5617e83c6d6a53020ada9821f7b51" args="(GlyQuery *s, unsigned long val)" -->
+<a class="anchor" id="a77c895145985a9dab5c5697ad8160073"></a><!-- doxytag: member="glyr.h::glyr_opt_timeout" ref="a77c895145985a9dab5c5697ad8160073" args="(GlyQuery *s, unsigned long val)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_timeout </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_timeout </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1494,12 +1227,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="ae5e77ff9acd8ac8b9121b6709daafb13"></a><!-- doxytag: member="glyr.h::GlyOpt_title" ref="ae5e77ff9acd8ac8b9121b6709daafb13" args="(GlyQuery *s, char *title)" -->
+<a class="anchor" id="a99af16d77dc6df739b39ccb5580d2876"></a><!-- doxytag: member="glyr.h::glyr_opt_title" ref="a99af16d77dc6df739b39ccb5580d2876" args="(GlyQuery *s, char *title)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_title </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_title </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1537,12 +1270,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a5d3d1e66a6de297e9523082d9ab7fb3b"></a><!-- doxytag: member="glyr.h::GlyOpt_type" ref="a5d3d1e66a6de297e9523082d9ab7fb3b" args="(GlyQuery *s, enum GLYR_GET_TYPE type)" -->
+<a class="anchor" id="ab8f8c466c2c4f5882dea091919a29a71"></a><!-- doxytag: member="glyr.h::glyr_opt_type" ref="ab8f8c466c2c4f5882dea091919a29a71" args="(GlyQuery *s, enum GLYR_GET_TYPE type)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_type </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_type </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1574,12 +1307,12 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af47ce58609d06cd281964a71c3616049"></a><!-- doxytag: member="glyr.h::GlyOpt_verbosity" ref="af47ce58609d06cd281964a71c3616049" args="(GlyQuery *s, unsigned int level)" -->
+<a class="anchor" id="a72b17d9e3d54fa076f3e71b78a0edf04"></a><!-- doxytag: member="glyr.h::glyr_opt_verbosity" ref="a72b17d9e3d54fa076f3e71b78a0edf04" args="(GlyQuery *s, unsigned int level)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> GlyOpt_verbosity </td>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_verbosity </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
@@ -1617,14 +1350,48 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a2f502063416ee5252a8268f9237e2f03"></a><!-- doxytag: member="glyr.h::GlyPlug_get_gid_by_id" ref="a2f502063416ee5252a8268f9237e2f03" args="(enum GLYR_GET_TYPE ID)" -->
+<a class="anchor" id="a8462213c9c2773c058623475b2cbb651"></a><!-- doxytag: member="glyr.h::glyr_printitem" ref="a8462213c9c2773c058623475b2cbb651" args="(GlyQuery *s, GlyMemCache *cacheditem)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">char* GlyPlug_get_gid_by_id </td>
+          <td class="memname">void glyr_printitem </td>
           <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
+          <td class="paramname"><em>cacheditem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td></td></tr>
+    <tr><td class="paramname">cacheditem</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a607c30104138c4ac10aff26f1d26abcf"></a><!-- doxytag: member="glyr.h::glyr_strerror" ref="a607c30104138c4ac10aff26f1d26abcf" args="(enum GLYR_ERROR ID)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* glyr_strerror </td>
+          <td>(</td>
+          <td class="paramtype">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td>
           <td class="paramname"><em>ID</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1632,106 +1399,100 @@ Functions</h2></td></tr>
 </div>
 <div class="memdoc">
 
-<p>Get a list of GroupIDs. </p>
+<p>Many methods use an returnvalue, or error parameters to inform you about errors Use this method to get a descriptive message you can print. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">ID</td><td>What type to get, or GET_UNSURE for a list of getters</td></tr>
+    <tr><td class="paramname">ID</td><td>The returned error</td></tr>
   </table>
   </dd>
 </dl>
-<p>You can use the groupid to determine in whatt group this provider is.<br/>
- You will not use this function in 99.9% of all cases, but it can be useful to translate user input<br/>
- to glyr's represantation, or to list groups as glyrc does. GET_UNSURE will result in a list of all GET_* enumerators (i.e. GET_COVER...GET_UNSURE)<br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>.. </dd></dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A descriptive nullterminated string, do not pass to free </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a82e74ef9c730f56597bc73916357a015"></a><!-- doxytag: member="glyr.h::GlyPlug_get_key_by_id" ref="a82e74ef9c730f56597bc73916357a015" args="(enum GLYR_GET_TYPE ID)" -->
+<a class="anchor" id="a053d418b430ed5fd7f03ad0851335e2a"></a><!-- doxytag: member="glyr.h::glyr_update_md5sum" ref="a053d418b430ed5fd7f03ad0851335e2a" args="(GlyMemCache *c)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* GlyPlug_get_key_by_id </td>
+          <td class="memname">void glyr_update_md5sum </td>
           <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
-          <td class="paramname"><em>ID</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
+          <td class="paramname"><em>c</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Get a nullterminated list of available providers, with their name as key. </p>
+<p>Updates the md5sum field of the cache c. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">ID</td><td>What type to get, or GET_UNSURE for a list of getters</td></tr>
+    <tr><td class="paramname">c</td><td>a valid memcahe </td></tr>
   </table>
   </dd>
 </dl>
-<p>A string is returned with all keys of this getter.<br/>
- Example: <br/>
- "lawgbdmc\\0", where 'a' stands for amazon.<br/>
- You can use them (or their full names is <a class="el" href="glyr_8h.html#a038498aa9c2c94a8da8a7584eee1645d" title="Define the providers you want to use.">GlyOpt_from()</a><br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>a nullterminated list of available providers </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="a58d98290aeb979d17f0d43855a68747c"></a><!-- doxytag: member="glyr.h::GlyPlug_get_name_by_id" ref="a58d98290aeb979d17f0d43855a68747c" args="(enum GLYR_GET_TYPE ID)" -->
+<a class="anchor" id="a85eb1ffcd7fbc67ab6859a6d417d34f2"></a><!-- doxytag: member="glyr.h::glyr_version" ref="a85eb1ffcd7fbc67ab6859a6d417d34f2" args="(void)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char** GlyPlug_get_name_by_id </td>
+          <td class="memname">const char* glyr_version </td>
           <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
-          <td class="paramname"><em>ID</em></td><td>)</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Get a nullterminated list of available providers. </p>
-<dl><dt><b>Parameters:</b></dt><dd>
-  <table class="params">
-    <tr><td class="paramname">ID</td><td>What type to get, or GET_UNSURE for a list of getters</td></tr>
-  </table>
-  </dd>
-</dl>
-<p>A list is returned with all providernames for this type.<br/>
- Example:<br/>
- {"last.fm","amazon",...,"coverhunt",NULL}; <br/>
- You can use this in <a class="el" href="glyr_8h.html#a038498aa9c2c94a8da8a7584eee1645d" title="Define the providers you want to use.">GlyOpt_from()</a><br/>
-</p>
-<dl class="return"><dt><b>Returns:</b></dt><dd>a nullterminated list of available providers </dd></dl>
+<p>Returns versioning information, including compiletime. </p>
+<p>Example: <br/>
+ Version 0.4 (Larcenous Locust (dev)) of [May 20 2011] compiled at [19:12:37]</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>A nullterminated string, do not free </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="ab067ea8cbd2145e22d3d3cef45c69d96"></a><!-- doxytag: member="glyr.h::GlyPlug_get_single_name_by_id" ref="ab067ea8cbd2145e22d3d3cef45c69d96" args="(enum GLYR_GET_TYPE ID)" -->
+<a class="anchor" id="a96e11e5568ac76ace76bfe9c3f3ce14a"></a><!-- doxytag: member="glyr.h::glyr_write" ref="a96e11e5568ac76ace76bfe9c3f3ce14a" args="(GlyMemCache *data, const char *path)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* GlyPlug_get_single_name_by_id </td>
+          <td class="memname">int glyr_write </td>
           <td>(</td>
-          <td class="paramtype">enum <a class="el" href="types_8h.html#a10514a32d3df08c9165d5ed7d15589a9">GLYR_GET_TYPE</a>&#160;</td>
-          <td class="paramname"><em>ID</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
+          <td class="paramname"><em>data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>path</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
 
-<p>Same as GlyPlug_get_name_by_id, but returns single string. </p>
+<p>Writes data to a specified path. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">ID</td><td>What type to get, or GET_UNSURE for a list of getters</td></tr>
+    <tr><td class="paramname">data</td><td>The data to write. </td></tr>
+    <tr><td class="paramname">path</td><td>The path to write data at.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="return"><dt><b>Returns:</b></dt><dd>a nullterminated string of providers, seperated with '|' </dd></dl>
+<p>Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',<br/>
+ which are pretty selfexplaining.</p>
+<dl class="return"><dt><b>Returns:</b></dt><dd>An error id. </dd></dl>
 
 </div>
 </div>
@@ -1750,7 +1511,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Sat Jun 25 2011 16:52:26 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 4 2011 16:37:40 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>
