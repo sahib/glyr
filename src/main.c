@@ -112,7 +112,7 @@ void help_short(GlyQuery * s)
 	   	 IN"-q --qsratio          How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
                  IN"-k --proxy	          Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
 		 IN"-L --list             List all fetchers and source providers for each and exit.\n"
-		 IN"-  --formats          A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n" 
+		 IN"-F --formats          A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n" 
                  IN"-j --callback         Set a bash command to be executed when a item is finished downloading;\n"
                  IN"                      The special string <path> is expanded with the actual path to the data.\n"
                 );
@@ -272,7 +272,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 				glyr_opt_qsratio(glyrs,atof(optarg));
 				break;
 			case 'F':
-				glyr_opt_formats(glyrs,optarg);
+				glyr_opt_allowed_formats(glyrs,optarg);
 				break;
 			case '?':
 				break;
@@ -526,12 +526,6 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 
 static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 {
-	// GlyMemcache members
-	// dsrc = Exact link to the location where the data came from
-	// size = size in bytes
-	// type = Type of data
-	// data = actual data
-	// (error) - Don't use this. Only internal use
 	message(1,s,stderr,"\n------- ITEM #%d --------\n",num);
 	glyr_printitem(s,cacheditem);
 	message(1,s,stderr,"\n------------------------\n");
@@ -560,7 +554,7 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 		gchar * path = get_path_by_type(s,write_to,*current);
 		if(path != NULL)
 		{
-			message(1,s,stderr,"- Writing '%d' to %s\n",c->type,path);
+			message(1,s,stderr,"- Writing %s to %s\n",glyr_type_to_string(c->type),path);
 
 			if(glyr_write(c,path) == -1)
 			{

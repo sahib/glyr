@@ -113,10 +113,6 @@ class GlyrosSpit
 		return Glyros::glyr_version()
 	end
 
-	def get_plugin_info
-		return Glyros::GlyFetcherInfo.new
-	end
-
 	def verbosity=(level) 
  	 	@query.verbosity = level
 		self
@@ -270,6 +266,14 @@ class GlyrosSpit
 		Glyros::glyr_opt_qsratio(@query,qsratio)
 	end
 
+	def self.type_to_s(mytype)
+		Glyros::glyr_type_to_string(mytype)
+	end	
+
+	def self.get_plugin_info
+		return Glyros::GlyFetcherInfo.new
+	end
+
 	private
 
 	def call_get
@@ -292,22 +296,27 @@ class GlyrosSpit
 	end
 end
 
-=begin
 def test_me
 	# Note the dots at the end.
 	
 	q = GlyrosSpit.new
+	q.verbosity = 0
 	q.artist = "Die Apokalyptischen Reiter"
 	q.album  = "Moral & Wahnsinn"
 	q.title  = "Die Boten"
+
+	puts("---------------------------")
 	q.get(Glyros::GET_LYRICS).each do |item|
-		puts item,item.data
+		puts "Recieved a #{GlyrosSpit.type_to_s(item.type)}:"
+		item.print
 	end
+	
 end
 
+test_me
+
 def use_strange_functions 
-	spit = GlyrosSpit.new
-	info = spit.get_plugin_info()
+	info = GlyrosSpit.get_plugin_info()
 	
 	until info.nil?
 		puts "-----------"
@@ -322,4 +331,3 @@ def use_strange_functions
 end
 
 use_strange_functions()
-=end

@@ -508,7 +508,16 @@ extern "C"
     *
     * @param info A reference to the return value fo glyr_get_plugin_info()
     */
-    void glyr_free_plugin_info(GlyFetcherInfo ** info);
+    void glyr_free_plugin_info(GlyFetcherInfo ** info); 
+
+    /**
+    * @brief 
+    *
+    * @param type
+    *
+    * @return 
+    */
+    const char * glyr_type_to_string(enum GLYR_DATA_TYPE type);
 
 #ifdef _cplusplus
 }

@@ -91,20 +91,21 @@ const char * err_strings[] =
 {
     "all okay",
     "bad option",
-    "bad value for option",
+    "bad value for glyr_opt_*",
     "empty query",
     "No provider specified",
     "Unknown ID for getter",
-    "Ignored cache",
-    "Stopped by callback",
+    "Skipped cache",
+    "Stopped by callback (post)",
+    "Stopped by callback (pre)",
     "Library is not yet initialized, use glyr_init()",
     NULL
 };
 
 /*--------------------------------------------------------*/
 
-// prototypes
 static int glyr_set_info(GlyQuery * s, int at, const char * arg);
+static void set_query_on_defaults(GlyQuery * glyrs);
 
 /*--------------------------------------------------------*/
 /*-------------------- OTHER -----------------------------*/
@@ -709,6 +710,53 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
 
 /*-----------------------------------------------*/
 
+const char * glyr_type_to_string(enum GLYR_DATA_TYPE type)
+{
+	switch(type)
+	{
+		case TYPE_COVER:
+			return "cover";
+		case TYPE_COVER_PRI:
+			return "cover (frontside)";
+		case TYPE_COVER_SEC:
+			return "cover (backside or inlet)";
+		case TYPE_LYRICS:
+			return "songtext";
+		case TYPE_PHOTOS:
+			return "band photo";
+		case TYPE_REVIEW:
+			return "albumreview";
+		case TYPE_AINFO:
+			return "artistbio";
+		case TYPE_SIMILIAR:
+			return "similiar artist";
+		case TYPE_SIMILIAR_SONG:
+			return "similiar song";
+		case TYPE_TRACK:
+			return "trackname";
+		case TYPE_ALBUMLIST:
+			return "albumname";
+		case TYPE_TAGS:
+			return "some tag";
+		case TYPE_TAG_ARTIST:
+			return "artisttag";
+		case TYPE_TAG_ALBUM:
+			return "albumtag";
+		case TYPE_TAG_TITLE:
+			return "titletag";
+		case TYPE_RELATION:
+			return "relation";
+		case TYPE_IMG_URL:
+			return "Image URL";
+		case TYPE_TXT_URL:
+			return "HTML URL";
+		case TYPE_NOIDEA:
+		default:
+			return "Unknown";
+	}
+}
+/*-----------------------------------------------*/
+
 void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 {
 	// GlyMemcache members
@@ -725,60 +773,11 @@ void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 
 	// Each cache identified it's data by a constant
 	glyr_message(1,s,stderr,"\nTYPE: ");
-	switch(cacheditem->type)
+	if(cacheditem->type == TYPE_TRACK)
 	{
-		case TYPE_COVER:
-			glyr_message(1,s,stderr,"cover");
-			break;
-		case TYPE_COVER_PRI:
-			glyr_message(1,s,stderr,"cover (frontside)");
-			break;
-		case TYPE_COVER_SEC:
-			glyr_message(1,s,stderr,"cover (backside or inlet)");
-			break;
-		case TYPE_LYRICS:
-			glyr_message(1,s,stderr,"songtext");
-			break;
-		case TYPE_PHOTOS:
-			glyr_message(1,s,stderr,"band photo");
-			break;
-		case TYPE_REVIEW:
-			glyr_message(1,s,stderr,"albumreview");
-			break;
-		case TYPE_AINFO:
-			glyr_message(1,s,stderr,"artistbio");
-			break;
-		case TYPE_SIMILIAR:
-			glyr_message(1,s,stderr,"similiar artist");
-			break;
-		case TYPE_SIMILIAR_SONG:
-			glyr_message(1,s,stderr,"similiar song");
-			break;
-		case TYPE_TRACK:
-			glyr_message(1,s,stderr,"trackname [%d:%02d]",cacheditem->duration/60,cacheditem->duration%60);
-			break;
-		case TYPE_ALBUMLIST:
-			glyr_message(1,s,stderr,"albumname");
-			break;
-		case TYPE_TAGS:
-			glyr_message(1,s,stderr,"some tag");
-			break;
-		case TYPE_TAG_ARTIST:
-			glyr_message(1,s,stderr,"artisttag");
-			break;
-		case TYPE_TAG_ALBUM:
-			glyr_message(1,s,stderr,"albumtag");
-			break;
-		case TYPE_TAG_TITLE:
-			glyr_message(1,s,stderr,"titletag");
-			break;
-		case TYPE_RELATION:
-			glyr_message(1,s,stderr,"relation");
-			break;
-		case TYPE_NOIDEA:
-		default:
-			glyr_message(1,s,stderr,"Unknown");
+		glyr_message(1,s,stderr,"[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
 	}
+	glyr_message(1,s,stderr,"%s",glyr_type_to_string(cacheditem->type));
 
 	// Print the actual data.
 	// This might have funny results if using cover/photos

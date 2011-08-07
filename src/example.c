@@ -31,18 +31,21 @@ static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q)
      * by passing it as third argument to glyr_opt_dlcallback()
      */
     int * i = q->callback.user_pointer;
-    *i = *i + 1;
 
-    if(*i == 3)
+    if(*i == 1)
     {
-        puts("=> Gentlemen, we received 3 items. We should stop now.");
-        return GLYRE_STOP_BY_CB;
+        puts("=> Gentlemen, we received an item.");
+	puts("=> We originally wanted more, but we decide to stop here.");
+	puts("=> Therefore we return GLYRE_STOP_PRE. Goodbye.");
+        return GLYRE_STOP_PRE;
 	/*
          * You can also return:
-         * - GLYRE_STOP_BY_CB which will stop libglyr
-         * - GLYRE_IGNORE which will cause libglyr not to add this item to the results
+         * - GLYRE_STOP_POST which will stop libglyr, but still add the current item
+         * - GLYRE_STOP_PRE  which will stop libglyr, but skip the current item
+         * - GLYRE_SKIP which will cause libglyr not to add this item to the results
          */
     }
+    *i = *i + 1;
     return GLYRE_OK;
 }
 
@@ -50,21 +53,21 @@ static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q)
 
 int main(int argc, char * argv[])
 {
-    // Initialize a new query (this may allocate memory)
+    /* You need to call this before anything happens */
+    glyr_init();
+    atexit(glyr_cleanup);
+
+    /* Initialize a new query (this may allocate memory) */
     GlyQuery q;
     glyr_init_query(&q);
-
-    /* You need to call this before anything happens */
-    //glyr_init();
-    //atexit(glyr_cleanup);
 
     /* Say we want a Songtext */
     enum GLYR_GET_TYPE type = GET_LYRICS;
     glyr_opt_type(&q,type);
 
-    // Set at least the required fields to your needs
-    // For lyrics those are 'artist' and 'title', ('album')
-    // is strictly optional and may be used by a few plugins
+    /* Set at least the required fields to your needs        *
+     * For lyrics those are 'artist' and 'title', ('album')  *
+     * is strictly optional and may be used by a few plugins */
     glyr_opt_artist(&q,(char*)"Die Apokalyptischen Reiter");
     glyr_opt_album (&q,(char*)"Riders on the Storm");
     glyr_opt_title (&q,(char*)"Friede sei mit dir");
@@ -80,7 +83,7 @@ int main(int argc, char * argv[])
     glyr_opt_number(&q,5);
 
     // Just search, without downloading items
-    glyr_opt_download(&q,1);
+    glyr_opt_download(&q,0);
 
     // Call the most important command: GET!
     // This returned a list of (GlyMemCache *)s

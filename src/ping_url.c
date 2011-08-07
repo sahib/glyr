@@ -104,6 +104,7 @@ static struct header_data * url_is_gettable(gchar * url)
         curl_easy_setopt(eh, CURLOPT_USERAGENT, "libglyr ("glyr_VERSION_NAME")/linkvalidator");
         curl_easy_setopt(eh, CURLOPT_URL,url);
         curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, TRUE);
+//        curl_easy_setopt(eh, CURLOPT_MAXREDIRS, 5L);
         curl_easy_setopt(eh, CURLOPT_HEADER,TRUE);
         curl_easy_setopt(eh, CURLOPT_NOBODY,TRUE);
         //curl_easy_setopt(eh, CURLOPT_FAILONERROR,TRUE);

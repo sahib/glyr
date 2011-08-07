@@ -122,7 +122,7 @@ MetaDataSource cover_google_src =
     .get_url   = cover_google_url,
     .type      = GET_COVERART,
     .quality   = 35,
-    .speed     = 100,
+    .speed     = 99,
     .endmarker = NULL,
     .free_url  = true
 };

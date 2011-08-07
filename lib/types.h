@@ -70,8 +70,9 @@ enum GLYR_ERROR
     GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_setopt() */
     GLYRE_NO_PROVIDER,  /*!< setttings->provider == NULL */
     GLYRE_UNKNOWN_GET,  /*!< settings->type is not valid */
-    GLYRE_IGNORE,       /*!< If returned by callback, cache is ignored */
-    GLYRE_STOP_BY_CB,   /*!< Callback returned stop signal. */
+    GLYRE_SKIP,         /*!< If returned by callback, cache is wont be added to results */
+    GLYRE_STOP_POST,    /*!< Will stop searching, but still add the current item */
+    GLYRE_STOP_PRE,     /*!< Will stop searching, but won't add the current item */
     GLYRE_NO_INIT       /*!< Library has not been initialized with glyr_init() yet */
 };
 
@@ -136,7 +137,6 @@ typedef struct GlyMemCache
     char  *dsrc;        /*!< Source of data, i.e. an exact URL to the place where it has been found. */
     char  *prov;        /*!< The name of the provider which found this item */
     int   type;         /*!< The metadata type, is one of the GLYR_GET_TYPE enum */
-    int   error;        /*!< error code - internal use only */
     int   duration;     /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
     bool  is_image;     /*!< Wether it is an image or a textitem */
     char * img_format;  /*!< If it as an image, the imageformat (usually 'png' or 'jpeg') */

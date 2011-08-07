@@ -129,15 +129,6 @@ typedef struct MetaDataSource
 
 /*------------------------------------------------------*/
 
-
-//TODO
-enum CORE_ERR
-{
-    ALL_OK,
-};
-
-/*------------------------------------------------------*/
-
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
 GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
 GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);

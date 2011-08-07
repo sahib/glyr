@@ -47,7 +47,6 @@ GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
         GlyMemCache * item = elem->data;
         if(item != NULL)
         {
-
             gchar * temp = beautify_lyrics(item->data);
             g_free(item->data);
             item->data = temp;
