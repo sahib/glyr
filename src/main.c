@@ -545,7 +545,10 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 	int * current = s->callback.user_pointer;
 
 	// Text Represantation of this item
-	print_item(s,c,*(current));
+	if(s->verbosity > 1)
+	{
+		print_item(s,c,*(current));
+	}
 
 	/* write out 'live' */
 	if(write_to != NULL)
@@ -553,8 +556,11 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 		gchar * path = get_path_by_type(s,write_to,*current);
 		if(path != NULL)
 		{
-			message(2,s,stderr,"\nWRITE to '%s'\n",path);
-			message(2,s,stderr,"////////////////////\n");
+			if(s->verbosity > 1)
+			{
+				message(2,s,stderr,"\nWRITE to '%s'\n",path);
+				message(2,s,stderr,"////////////////////\n");
+			}
 
 			if(glyr_write(c,path) == -1)
 			{

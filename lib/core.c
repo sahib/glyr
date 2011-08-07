@@ -375,7 +375,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_easy_setopt(eh, CURLOPT_MAXREDIRS, 5L);
         curl_easy_setopt(eh, CURLOPT_HEADER,TRUE);
-        curl_easy_setopt(eh, CURLOPT_NOBODY,TRUE);
+        curl_easy_setopt(eh, CURLOPT_NOBODY,FALSE);
         curl_easy_setopt(eh, CURLOPT_HEADERFUNCTION, header_cb);
         curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, empty_cb);
         curl_easy_setopt(eh, CURLOPT_WRITEHEADER, info);
@@ -1057,27 +1057,45 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 static gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 {
 	/* Assume 'all we have' */
-	if(s->from == NULL)
+	if(s->from == NULL) {
 		return TRUE;
+	}
 
+	/* You need to take a little break to read this through at once */
 	gboolean isFound = FALSE;
+	gboolean is_excluded = FALSE;
+	gboolean all_occured = FALSE;
 
 	/* split string */
 	if(f->name != NULL)
 	{
-		size_t len = strlen(s->from);
-		size_t offset = 0;
+		gsize len = strlen(s->from);
+		gsize offset = 0;
 
-		char * token = NULL;
-		while((token = get_next_word(s->from,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) && isFound == false)
+		gchar * token = NULL;
+		while((token = get_next_word(s->from,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
 		{
-			if(token[0] == f->key || !strcasecmp(token,f->name))
-				isFound = TRUE;
+			if(token != NULL)
+			{
+				gchar * back = token;
 
-			g_free(token);
+				gboolean minus; 
+				if((minus = token[0] == '-') || token[0] == '+')
+					token++;
+
+				if(!strcasecmp(token,"all"))
+					all_occured = TRUE;
+
+				if((token[0] == f->key && strlen(token) == 1) || !strcasecmp(token,f->name))
+				{
+					is_excluded = minus;
+					isFound = !minus;
+				}
+				g_free(back);
+			}
 		}
 	}
-	return isFound;
+	return (all_occured) ? (is_excluded == FALSE) : isFound;
 }
 
 /*--------------------------------------------------------*/
@@ -1103,13 +1121,16 @@ static GList * get_queued(GlyQuery * s, MetaDataFetcher * fetcher, gint * fired)
 		for(GList * elem = fetcher->provider; elem; elem = elem->next, ++pos)
 		{
 			MetaDataSource * src = elem->data;
-			if(fired[pos] == 0)
+			if(provider_is_enabled(s,src) == TRUE)
 			{
-				gfloat rating = calc_rating(s->qsratio,src->quality,src->speed);
-				if(rating > max)
+				if(fired[pos] == 0)
 				{
-					max = rating;
-					max_pos = pos;
+					gfloat rating = calc_rating(s->qsratio,src->quality,src->speed);
+					if(rating > max)
+					{
+						max = rating;
+						max_pos = pos;
+					}
 				}
 			}
 		}
@@ -1145,7 +1166,7 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 	for(GList * source = source_list; source != NULL; source = source->next)
 	{
 		MetaDataSource * item = source->data;
-		if(item != NULL && provider_is_enabled(query,item))
+		if(item != NULL /*&& provider_is_enabled(query,item)*/)
 		{
 			/* get the url of this MetaDataSource */
 			const gchar * lookup_url = item->get_url(query);
@@ -1200,7 +1221,7 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 			{
 				/* Call finalize to sanitize data, or download given URLs */
 				ready_caches = fetcher->finalize(query, raw_parsed,stop_me);
-				
+
 				/* Raw data not needed anymore */
 				g_list_free(raw_parsed);
 				raw_parsed = NULL;
@@ -1230,8 +1251,8 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	GList * result_list = NULL;
 	GList * src_list = NULL;
 	while( (src_list = get_queued(query, fetcher, fired)) != NULL &&
-		(g_list_length(result_list) < (gsize)query->number)   &&
-		(stop_now == FALSE)
+			(g_list_length(result_list) < (gsize)query->number)   &&
+			(stop_now == FALSE)
 	     )
 	{
 		glyr_message(2,query,"---- Triggering: ");
@@ -1241,8 +1262,6 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 			glyr_message(2,query,"%s ",info->name);
 		}
 		glyr_message(2,query,"\n");
-
-
 
 		GList * sub_list = prepare_run(query,fetcher,src_list, &stop_now);
 		if(sub_list != NULL)
