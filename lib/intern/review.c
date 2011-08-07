@@ -32,7 +32,7 @@ bool vdt_review(GlyQuery * settings)
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"* "C_"Artist and album is needed to retrieve reviews (o rly?).\n");
+        glyr_message(2,settings,C_R"* "C_"Artist and album is needed to retrieve reviews (o rly?).\n");
         return false;
     }
 }

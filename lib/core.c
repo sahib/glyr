@@ -38,31 +38,48 @@
 
 /*--------------------------------------------------------*/
 
-int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...)
+static int _msg(const char * fmt, va_list params)
 {
-    int r = -1;
-    if(s || v == -1)
-    {
-        if(v == -1 || v <= s->verbosity)
-        {
-            va_list param;
-            char * tmp = NULL;
-            if(stream && fmt)
-            {
-                va_start(param,fmt);
-                r = g_vasprintf (&tmp,fmt,param);
-                va_end(param);
+	gchar * tmp_buf = NULL;
+	gint written = g_vasprintf(&tmp_buf,fmt,params);
 
-                if(r != -1 && tmp)
-                {
-                    r = fprintf(stream,"%s%s",(v>2)?C_B"DEBUG: "C_:"",tmp);
-                    g_free(tmp);
-                    tmp = NULL;
-                }
+	if(written != -1 && tmp_buf != NULL)
+	{
+		g_printerr(tmp_buf);
+		g_free(tmp_buf);
+	}
+	return written;
+}
+
+/*--------------------------------------------------------*/
+
+void panic(const char * fmt, ...)
+{
+	va_list list;
+	va_start(list,fmt);
+	_msg(fmt,list);
+	va_end(list);
+}
+
+/*--------------------------------------------------------*/
+
+int glyr_message(int verbosity, GlyQuery * s, const char * fmt, ...)
+{
+    gint written = 0;
+    if(s != NULL || verbosity == -1)
+    {
+        if(verbosity == -1 || verbosity <= s->verbosity)
+        {
+            va_list params;
+            if(fmt != NULL)
+            {
+                va_start(params,fmt);
+		written = _msg(fmt,params);
+                va_end(params);
             }
         }
     }
-    return r;
+    return written;
 }
 
 /*--------------------------------------------------------*/
@@ -80,7 +97,7 @@ GlyMemCache * DL_copy(GlyMemCache * src)
                 dest->data = calloc(src->size+1,sizeof(char));
                 if(!dest->data)
                 {
-                    glyr_message(-1,NULL,stderr,"fatal: Allocation of cachecopy failed in DL_copy()\n");
+                    glyr_message(-1,NULL,"fatal: Allocation of cachecopy failed in DL_copy()\n");
                     return NULL;
                 }
                 memcpy(dest->data,src->data,src->size);
@@ -128,8 +145,8 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
     }
     else
     {
-        glyr_message(-1,NULL,stderr,"Caching failed: Out of memory.\n");
-        glyr_message(-1,NULL,stderr,"Did you perhaps try to load a 4,7GB iso into your RAM?\n");
+        glyr_message(-1,NULL,"Caching failed: Out of memory.\n");
+        glyr_message(-1,NULL,"Did you perhaps try to load a 4,7GB iso into your RAM?\n");
     }
     return realsize;
 }
@@ -191,7 +208,7 @@ GlyMemCache* DL_init(void)
     }
     else
     {
-        glyr_message(-1,NULL,stderr,"Warning: empty dlcache. Might be noting serious.\n");
+        glyr_message(-1,NULL,"Warning: empty dlcache. Might be noting serious.\n");
     }
     return cache;
 }
@@ -328,7 +345,7 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
         }
         else
         {
-            glyr_message(-1,NULL,stderr,"glyr: warning: error while parsing proxy string.\n");
+		panic("glyr: Warning: Invalid proxy string.\n");
         }
 
         if(userpwd != NULL)
@@ -343,7 +360,6 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
 
 static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring)
 {
-    g_print("- Check: %s\n",url);
     struct header_data * info = NULL;
     if(url != NULL)
     {
@@ -352,7 +368,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 
         info = g_malloc0(sizeof(struct header_data));
 
-        curl_easy_setopt(eh, CURLOPT_TIMEOUT, 3);
+        curl_easy_setopt(eh, CURLOPT_TIMEOUT, 5);
         curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
         curl_easy_setopt(eh, CURLOPT_USERAGENT, "liblyr ("glyr_VERSION_NAME")/linkvalidator");
         curl_easy_setopt(eh, CURLOPT_URL,url);
@@ -375,8 +391,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 
         if(rc != CURLE_OK)
         {
-            g_printerr("- g_ping: E: %s [%d]\n",curl_easy_strerror(rc),rc);
-            puts(url);
+            panic("- g_ping: E: %s [%d]\n",curl_easy_strerror(rc),rc);
             g_free(info);
             info = NULL;
 
@@ -553,7 +568,7 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 			/* Better check again */
 			if(res != CURLE_OK && res != CURLE_WRITE_ERROR)
 			{
-				glyr_message(-1,NULL,stderr,C_"- singledownload: %s [E:%d]\n", curl_easy_strerror(res),res);
+				panic("glyr: E: singledownload: %s [E:%d]\n", curl_easy_strerror(res),res);
 				DL_free(dldata);
 				dldata = NULL;
 			}
@@ -697,7 +712,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 				if (curl_multi_fdset(cmHandle, &ReadFDS, &WriteFDS, &ErrorFDS, &max_fd) ||
 						curl_multi_timeout(cmHandle, &wait_time))
 				{
-					fprintf(stderr,"glyr: error while selecting stream. Might be a bug.\n");
+					panic("glyr: error while selecting stream. Might be a bug.\n");
 					return NULL;
 				}
 
@@ -718,8 +733,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 					/* Now block till something interesting happens with the download */
 					if (select(max_fd+1, &ReadFDS, &WriteFDS, &ErrorFDS, &Tmax) == -1)
 					{
-						glyr_message(-1,NULL,stderr, "E: select(%i <=> %li): %i: %s\n",
-								max_fd+1, wait_time, errno, strerror(errno));
+						panic("glyr: E: select(%i <=> %li): %i: %s\n",max_fd+1, wait_time, errno, strerror(errno));
 						return NULL;
 					}
 				}
@@ -791,8 +805,6 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 							item_list = g_list_prepend(item_list,capo->cache);
 						}
 
-						if(stop_download == TRUE) puts ("Say Good bye engine!");
-
 						/* So, shall we stop? */
 						terminate = stop_download;
 
@@ -801,10 +813,10 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 					{
 						/* Something in this download was wrong. Tell us what. */
 						char * errstring = (char*)curl_easy_strerror(msg->data.result);
-						g_printerr("- glyr: Downloaderror: %s [errno:%d]\n",
+						glyr_message(3,capo->s,"- glyr: Downloaderror: %s [errno:%d]\n",
 								errstring ? errstring : "Unknown Error",
 								msg->data.result);
-						g_printerr("  On URL: %s\n",capo->url);
+						glyr_message(3,capo->s,"  On URL: %s\n",capo->url);
 					}
 
 					/* We're done with this one.. bybebye */
@@ -815,7 +827,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 				else
 				{
 					/* Something in the multidownloading gone wrong */
-					fprintf(stderr,"glyrE: multiDL-errorcode: %d\n",msg->msg);
+					panic("glyrE: multiDL-errorcode: %d\n",msg->msg);
 				}
 			}
 		}
@@ -826,12 +838,14 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 
 /*--------------------------------------------------------*/
 
-static void check_all_types_in_url_list(GList * cache_list)
+static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
 {
 	if(cache_list != NULL)
 	{
 		GHashTable * thread_id_table = g_hash_table_new(g_direct_hash,g_direct_equal);
 		GList * thread_list = NULL;
+
+		glyr_message(2,s,"#[%02d/%02d] Checking image-types: [",s->itemctr,s->number);
 
 		for(GList * elem = cache_list; elem; elem = elem->next)
 		{
@@ -849,6 +863,7 @@ static void check_all_types_in_url_list(GList * cache_list)
 
 		for(GList * thread = thread_list; thread; thread = thread->next)
 		{
+			gboolean success = FALSE;
 			struct header_data * info = g_thread_join(thread->data);
 			if(info != NULL)
 			{
@@ -858,20 +873,24 @@ static void check_all_types_in_url_list(GList * cache_list)
 					if(g_strcmp0(info->type,"image") == 0)
 					{
 						linked_cache->img_format = g_strdup(info->format);
+						success = TRUE;
 					}
 				}
 				else
 				{
-					g_printerr("# Uh oh.. empty link in hashtable..\n");
+					panic("glyr: Uh oh.. empty link in hashtable..\n");
 				}
 				g_free(info->format);
 				g_free(info->type);
 				g_free(info->extra);
 				g_free(info);
 			}
+
+			glyr_message(2,s,"%c",(success) ? '.' : '!');
 		}
 		g_list_free(thread_list);
 		g_hash_table_destroy(thread_id_table);
+		glyr_message(2,s,"]");
 	}
 }
 
@@ -909,7 +928,7 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyQuery * s)
 	GList * new_head = data_list;	
 
 	/* Parallely check if the format is what we wanted */
-	check_all_types_in_url_list(new_head);
+	check_all_types_in_url_list(new_head,s);
 
 	gchar * allowed_formats = s->allowed_formats;
 	if(allowed_formats == NULL)
@@ -939,10 +958,7 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyQuery * s)
 		elem = elem->next;
 	}
 
-	if(invalid_format_counter > 0)
-	{
-		g_printerr("- Refusing %ld items due to bad format in Content-Type.\n",invalid_format_counter);
-	}
+	glyr_message(2,s," (-%d item(s) less)\n",invalid_format_counter);
 	return new_head;
 }
 
@@ -968,7 +984,8 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 			gsize less = delete_dupes(raw_parsed_data,capo->s);
 			if(less > 0)
 			{
-				g_print("- Inner check revaled %ld dupes\n",less);
+				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
+				glyr_message(2,capo->s,"#[%02d/%02d] Inner check revaled %ld dupes\n",items_now,capo->s->number,less);
 			}
 
 			if(g_list_length(raw_parsed_data) != 0)
@@ -993,6 +1010,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 								item->prov = g_strdup(plugin->name);
 								parsed = g_list_prepend(parsed,item);
 								capo->s->itemctr++;
+
 							}
 							else /* Not needed anymore. Forget this item */
 							{
@@ -1014,7 +1032,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 		}
 		else
 		{
-			fprintf(stderr,"glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
+			panic("glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
 		}
 
 	}
@@ -1088,9 +1106,6 @@ static GList * get_queued(GlyQuery * s, MetaDataFetcher * fetcher, gint * fired)
 			if(fired[pos] == 0)
 			{
 				gfloat rating = calc_rating(s->qsratio,src->quality,src->speed);
-
-				//	g_print("#### [%d/%d] => %2.2f: %s\n",src->quality,src->speed,calc_rating(s->qsratio,src->quality,src->speed),src->name);
-
 				if(rating > max)
 				{
 					max = rating;
@@ -1177,20 +1192,20 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 			int pre_less = delete_dupes(raw_parsed,query);
 			if(pre_less > 0)
 			{
-				glyr_message(2,query,stderr,"- Prefiltering  double data: %d elements less.\n",pre_less);
+				glyr_message(2,query,"- Prefiltering double data: (-%d item(s) less)\n",pre_less);
 			}
 
+			glyr_message(2,query,"---- \n");
 			if(g_list_length(raw_parsed) != 0)
 			{
 				/* Call finalize to sanitize data, or download given URLs */
 				ready_caches = fetcher->finalize(query, raw_parsed,stop_me);
-
+				
 				/* Raw data not needed anymore */
 				g_list_free(raw_parsed);
 				raw_parsed = NULL;
 			}
 		}
-
 	}
 
 	g_list_free_full(url_list,g_free);
@@ -1211,9 +1226,6 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	gint fired[list_len];
 	memset(fired,0,list_len * sizeof(gint));
 
-	g_print("- QSRatio is %2.2f\n",query->qsratio);
-
-
 	gboolean stop_now = FALSE;
 	GList * result_list = NULL;
 	GList * src_list = NULL;
@@ -1222,16 +1234,13 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 		(stop_now == FALSE)
 	     )
 	{
-
-
-
-		g_print("-- Triggering: ");
+		glyr_message(2,query,"---- Triggering: ");
 		for(GList * elem = src_list; elem; elem = elem->next)
 		{
 			MetaDataSource * info = elem->data;
-			g_print("%s ",info->name);
+			glyr_message(2,query,"%s ",info->name);
 		}
-		g_print("\n");
+		glyr_message(2,query,"\n");
 
 
 
@@ -1242,14 +1251,12 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 			int post_less = delete_dupes(result_list,query);
 			if(post_less > 0)
 			{
-				glyr_message(2,query,stderr,"- Postfiltering double data: %d elements less.\n",post_less);
+				glyr_message(2,query,"- Postfiltering double data: (-%d item(s) less)\n",post_less);
 			}
 
 		}
 		g_list_free(src_list);
 	}
-
-	g_print("- Sending %d items back to you.\n",g_list_length(result_list));
 	return result_list;
 }
 

@@ -119,7 +119,7 @@ static GList * test_async_dl_callback(cb_object * capo, void * userptr, bool * s
 		}
 		else
 		{
-			g_printerr("Warn: Hashtable is empty im image_callback!\n");
+			g_printerr("glyr: Warn: Hashtable is empty im image_callback!\n");
 		}
 	}
 	return NULL;
@@ -135,10 +135,9 @@ GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, en
 		for(GList * elem = list; elem; elem = elem->next)
 		{
 			GlyMemCache * img = elem->data;
-			img->type = TYPE_IMG_URL;
-			img->is_image = true;
+			img->is_image = false;
 		}
-		return g_list_copy(list);
+		return generic_txt_finalizer(s,list,stop_me,TYPE_IMG_URL);
 	}
 	else
 	{

@@ -207,6 +207,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 				}
 			case 'f':
 				glyr_opt_from(glyrs,optarg);
+				break;
 			case 'v':
 				glyr_opt_verbosity(glyrs,atoi(optarg));
 				break;
@@ -515,7 +516,7 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 			m_path = path_relations(s,sd,iter);
 			break;
 		case GET_UNSURE:
-			message(-1,NULL,stderr,"# getPath(): Unknown type, Problem?\n");
+			message(-1,NULL,stderr,"glyrc: getPath(): Unknown type, Problem?\n");
 	}
 	return m_path;
 }
@@ -526,10 +527,8 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 
 static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 {
-	message(1,s,stderr,"\n------- ITEM #%d --------\n",num);
+	message(1,s,stderr,"\n///// ITEM #%d /////\n",num);
 	glyr_printitem(s,cacheditem);
-	message(1,s,stderr,"\n------------------------\n");
-	message(1,s,stderr,"\n");
 }
 
 /* --------------------------------------------------------- */
@@ -554,7 +553,8 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 		gchar * path = get_path_by_type(s,write_to,*current);
 		if(path != NULL)
 		{
-			message(1,s,stderr,"- Writing %s to %s\n",glyr_type_to_string(c->type),path);
+			message(2,s,stderr,"\nWRITE to '%s'\n",path);
+			message(2,s,stderr,"////////////////////\n");
 
 			if(glyr_write(c,path) == -1)
 			{
@@ -660,8 +660,6 @@ int main(int argc, char * argv[])
 			write_to = ".";
 		}
 
-		g_printerr("- Will write to %s\n",write_to);
-
 		// Set the callback - it will do all the actual work
 		int item_counter = 0;
 		glyr_opt_dlcallback(&my_query, callback, &item_counter);
@@ -682,7 +680,6 @@ int main(int argc, char * argv[])
 					   Useful if you need to cache the data (e.g. for batch jobs *
 					   Left only for the reader's informatiom, no functions here *
 					 */
-
 					message(2,&my_query,stderr,"- In total %d items found.\n",length);
 				}
 

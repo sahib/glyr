@@ -106,7 +106,7 @@ const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
         comparestr  = s->artist;
         break;
     default:
-        glyr_message(0,s,stderr,"Warning: (tags/musicbrainz.c) Unable to determine type.\n");
+        glyr_message(0,s,"Warning: (tags/musicbrainz.c) Unable to determine type.\n");
     }
 
     const char * mbid = NULL;

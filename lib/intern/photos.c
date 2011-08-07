@@ -32,7 +32,7 @@ bool vdt_photos(GlyQuery * settings)
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"*"C_" Artist is needed to download artist-related photos!\n");
+        glyr_message(2,settings,C_R"*"C_" Artist is needed to download artist-related photos!\n");
         return false;
     }
 }

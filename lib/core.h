@@ -56,6 +56,13 @@
 #define CALC_MD5SUMS true
 
 /*------------------------------------------------------*/
+/* ----------------- Messages ------------------------- */
+/*------------------------------------------------------*/
+
+void panic(const char * fmt, ...);
+int glyr_message(int v, GlyQuery * s, const char * fmt, ...);
+
+/*------------------------------------------------------*/
 
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
@@ -119,7 +126,6 @@ typedef struct MetaDataSource
     gchar  * endmarker;              	        /* Download stops if this mark is found           */
 
     enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
-    gint priority;  /* What priority this plugin has            */
     gboolean free_url; /* URL is dyn. allocated - set this always! */
 
     gint quality;  /* Measurement of how good the content  usually is [0-100] */
@@ -143,9 +149,4 @@ GlyMemCache * DL_init(void);
 GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
 
-// Will be replaced by g_print
-int glyr_message(int v, GlyQuery * s, FILE * stream, const char * fmt, ...);
-
-gsize delete_dupes(GList * result, GlyQuery * s);
-gsize delete_invalid_format(GList * result, gchar * allowed_formats);
 #endif

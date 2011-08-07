@@ -32,7 +32,7 @@ bool vdt_lyrics(GlyQuery * settings)
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"* "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
+        glyr_message(2,settings,C_R"* "C_"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
         return false;
     }
 }

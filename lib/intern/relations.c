@@ -32,7 +32,7 @@ bool vdt_relations(GlyQuery * settings)
     }
     else
     {
-        glyr_message(2,settings,stderr,C_R"* "C_"At least the artist is needed to get relations.\n");
+        glyr_message(2,settings,C_R"* "C_"At least the artist is needed to get relations.\n");
         return false;
     }
 }

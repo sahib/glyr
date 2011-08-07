@@ -52,10 +52,10 @@ gboolean is_initalized = FALSE;
   
       for (i = 0; i < size; i++)
       {
-          fprintf(stderr,"    [#%02u] %s\n",(int)i+1, bt_info_list[i]);
+          g_printerr("    [#%02u] %s\n",(int)i+1, bt_info_list[i]);
       }
   
-      fprintf(stderr,"\n%zd calls in total are shown.\n", size);
+      g_printerr("\n%zd calls in total are shown.\n", size);
       free(bt_info_list);
   }
   
@@ -70,16 +70,16 @@ static void sig_handler(int signal)
     case SIGABRT :
     case SIGFPE  :
     case SIGSEGV : /* sigh */
-        glyr_message(-1,NULL,stderr,C_R"\nFATAL: "C_"libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
-        glyr_message(-1,NULL,stderr,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
-        glyr_message(-1,NULL,stderr,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
-        glyr_message(-1,NULL,stderr,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
-        glyr_message(-1,NULL,stderr,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
+        glyr_message(-1,NULL,C_R"\nFATAL: "C_"libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
+        glyr_message(-1,NULL,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
+        glyr_message(-1,NULL,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
+        glyr_message(-1,NULL,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
+        glyr_message(-1,NULL,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
 #ifndef WIN32
-        glyr_message(-1,NULL,stderr,C_"\nA list of the last called functions follows, please add this to your report:\n");
+        glyr_message(-1,NULL,C_"\nA list of the last called functions follows, please add this to your report:\n");
         print_trace();
 #endif
-        glyr_message(-1,NULL,stderr,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
+        glyr_message(-1,NULL,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
         break;
     }
     exit(-1);
@@ -486,7 +486,7 @@ void glyr_init(void)
 
         if(curl_global_init(CURL_GLOBAL_ALL))
         {
-            glyr_message(-1,NULL,stderr,"glyr: Fatal: libcurl failed to init\n");
+            glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
         }
 
         /* Register plugins */
@@ -541,15 +541,15 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
         /* Print some user info, always useful */
         if(settings->artist != NULL)
         {
-            glyr_message(2,settings,stderr,"- Artist : %s\n",settings->artist);
+            glyr_message(2,settings,"- Artist : %s\n",settings->artist);
         }
         if(settings->album != NULL)
         {
-            glyr_message(2,settings,stderr,"- Album  : %s\n",settings->album);
+            glyr_message(2,settings,"- Album  : %s\n",settings->album);
         }
         if(settings->title != NULL)
         {
-            glyr_message(2,settings,stderr,"- Title  : %s\n",settings->title);
+            glyr_message(2,settings,"- Title  : %s\n",settings->title);
         }
 
         GList * result = NULL;
@@ -570,7 +570,7 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
                 if(isValid)
                 {
                     if(e) *e = GLYRE_OK;
-                    glyr_message(2,settings,stderr,"- Type   : %s\n",item->name);
+                    glyr_message(2,settings,"- Type   : %s\n\n",item->name);
 
                     /* Lookup what we search for here: Images (url, or raw) or text */
                     settings->imagejob = !item->full_data;
@@ -582,7 +582,7 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
                 }
                 else
                 {
-                    glyr_message(2,settings,stderr,C_R"Insufficient amount of data supplied for this fetcher.\n"C_);
+                    glyr_message(2,settings,C_R"Insufficient amount of data supplied for this fetcher.\n"C_);
                 }
             }
         }
@@ -657,7 +657,7 @@ int glyr_write(GlyMemCache * data, const char * path)
             }
             else
             {
-                glyr_message(-1,NULL,stderr,"glyr_write: Unable to write to '%s'!\n",path);
+                glyr_message(-1,NULL,"glyr_write: Unable to write to '%s'!\n",path);
             }
         }
     }
@@ -698,7 +698,7 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
             s->allowed_formats = (char*)s->info[at];
             break;
         default:
-            glyr_message(2,s,stderr,"Warning: wrong <at> for glyr_info_at!\n");
+            glyr_message(2,s,"Warning: wrong <at> for glyr_info_at!\n");
         }
     }
     else
@@ -765,30 +765,30 @@ void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem)
 	// type = Type of data
 	// data = actual data
 	// (error) - Don't use this. Only internal use
-	glyr_message(1,s,stderr,"FROM: <%s>\n",cacheditem->dsrc);
-	glyr_message(1,s,stderr,"PROV: %s\n",cacheditem->prov);
-	glyr_message(1,s,stderr,"SIZE: %d Bytes\n",(int)cacheditem->size);
-	glyr_message(1,s,stderr,"MSUM: ");
+	g_printerr("FROM: <%s>\n",cacheditem->dsrc);
+	g_printerr("PROV: %s\n",cacheditem->prov);
+	g_printerr("SIZE: %d Bytes\n",(int)cacheditem->size);
+	g_printerr("MSUM: ");
 	MDPrintArr(cacheditem->md5sum);
 
 	// Each cache identified it's data by a constant
-	glyr_message(1,s,stderr,"\nTYPE: ");
+	g_printerr("\nTYPE: ");
 	if(cacheditem->type == TYPE_TRACK)
 	{
-		glyr_message(1,s,stderr,"[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
+		panic("[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
 	}
-	glyr_message(1,s,stderr,"%s",glyr_type_to_string(cacheditem->type));
+	g_printerr("%s",glyr_type_to_string(cacheditem->type));
 
 	// Print the actual data.
 	// This might have funny results if using cover/photos
-	if(!cacheditem->is_image)
+	if(cacheditem->is_image == FALSE)
 	{
-		glyr_message(1,s,stderr,"\nDATA:\n%s",cacheditem->data);
+		g_printerr("\nDATA: %s",cacheditem->data);
 	}
 	else
 	{
-		glyr_message(1,s,stderr,"\nDATA: <not printable>");
-		glyr_message(1,s,stderr,"\nFRMT: %s",cacheditem->img_format);
+		g_printerr("\nDATA: <not printable>");
+		g_printerr("\nFRMT: %s",cacheditem->img_format);
 	}
 }
 

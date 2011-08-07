@@ -119,13 +119,21 @@ static void register_provider_plugins(void)
 
 /* --------------------------------------- */
 
+/* Just presort a bit, so we don't need to shuffle the plugins always *
+ * This has no actual practical use, it's just that pretty plugins are listed
+ * first in outputs. Actual sorting is not threadsafe! 
+ */
 static gint compare_by_priority(gconstpointer a, gconstpointer b)
 {
     const MetaDataSource * sa = a;
     const MetaDataSource * sb = b;
-    return (sa-sb);
-    //return (sa && sb) ? (sa->priority - sb->priority) : -1;
+    return (sa != NULL && sb != NULL) ? 
+	   (sa->quality * sa->speed -
+            sb->quality * sb->speed
+           ) : 0;
 }
+
+/* --------------------------------------- */
 
 static void get_list_from_type(MetaDataFetcher * fetch)
 {

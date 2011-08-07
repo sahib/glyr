@@ -100,7 +100,8 @@ GList * generic_google_parse(cb_object * capo)
             {
                 GlyMemCache * result = DL_init();
                 result->data = url;
-                result->size = strlen(url);
+
+                result->size = end_of_url - find;
                 r_list = g_list_prepend(r_list,result);
                 urlc++;
             }

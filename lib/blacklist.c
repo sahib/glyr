@@ -5,7 +5,8 @@
 GHashTable * lookup_table = NULL;
 gchar * blacklist_array[] =
 {
-    "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg" /* blank image */
+    "http://ecx.images-amazon.com/images/I/11J2DMYABHL.jpg",       /* blank image */
+    "http://cdn.recordshopx.com/cover/normal/5/53/53138.jpg%3Fcd"  /* blank image */
 };
 
 
