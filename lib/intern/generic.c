@@ -184,7 +184,7 @@ GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, en
 
 		/* Freeing Party */
 		g_hash_table_destroy(cache_url_table);
-		g_list_free_full(url_list,g_free);
+		glist_free_full(url_list,g_free);
 
 		/* Ready to save images */
 		return dl_raw_images;

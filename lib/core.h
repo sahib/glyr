@@ -149,5 +149,6 @@ void update_md5sum(GlyMemCache * c);
 GlyMemCache * DL_init(void);
 GlyMemCache * DL_copy(GlyMemCache * src);
 void DL_free(GlyMemCache *cache);
+void glist_free_full(GList * List, void (* free_func)(void * ptr));
 
 #endif

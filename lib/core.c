@@ -664,7 +664,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
 			cb_object * item = elem->data;
 			g_free(item->url);
 		}
-		g_list_free_full(cb_list,g_free);
+		glist_free_full(cb_list,g_free);
 	}
 }
 
@@ -1290,7 +1290,7 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 		}
 	}
 
-	g_list_free_full(url_list,g_free);
+	glist_free_full(url_list,g_free);
 	url_list = NULL;
 
 	g_list_free(endmarks);
@@ -1353,6 +1353,22 @@ void update_md5sum(GlyMemCache * c)
 		MD5Final(&mdContext);
 		memcpy(c->md5sum, mdContext.digest, 16);
 	}
+}
+
+/*--------------------------------------------------------*/
+
+/* As of writing glib 2.24 is pretty common, g_list_free_full() is missing there */
+void glist_free_full(GList * List, void (* free_func)(void * ptr))
+{
+	for(GList * elem = List; elem; elem = elem->next)
+	{
+		if(free_func != NULL)
+		{
+			free_func(elem->data);
+		}
+		
+	}
+	g_list_free(List);
 }
 
 /*--------------------------------------------------------*/
