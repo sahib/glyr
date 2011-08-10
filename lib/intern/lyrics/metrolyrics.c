@@ -30,6 +30,27 @@ const char * lyrics_metrolyrics_url(GlyQuery * settings)
     return ML_URL;
 }
 
+static void replace_from_message_inline(char * text)
+{
+	if(text != NULL)
+	{
+		char * from_msg_start = strstr(text,"[ From: ");
+		if(from_msg_start != NULL)
+		{
+			while(from_msg_start[0] != '\n' && from_msg_start[0])
+			{
+				from_msg_start[0] = ' ';
+				from_msg_start++;
+			}
+
+			if(from_msg_start[0] == '\n')
+			{
+				from_msg_start[0] = ' ';
+			}
+		}
+	}
+}
+
 static GlyMemCache * parse_lyrics_page(const char * buffer)
 {
     GlyMemCache * result = NULL;
@@ -45,7 +66,8 @@ static GlyMemCache * parse_lyrics_page(const char * buffer)
                 if(lyr)
                 {
                     result = DL_init();
-                    result->data = strreplace(lyr,"<br />","");
+		    replace_from_message_inline(lyr);
+                    result->data = strreplace(lyr,"</span>\n","");
                     result->size = ABS(end-begin);
                     free(lyr);
                 }
@@ -145,6 +167,7 @@ MetaDataSource lyrics_metrolyrics_src =
 {
     .name = "metrolyrics",
     .key  = 'm',
+    .encoding  = "ISO8859-1",
     .parser    = lyrics_metrolyrics_parse,
     .get_url   = lyrics_metrolyrics_url,
     .type      = GET_LYRICS,

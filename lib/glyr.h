@@ -167,7 +167,7 @@ extern "C"
     *	Optional for those:
     *	  - tags
     *	  - relations
-    *         - lyrics
+    *     - lyrics
     *
     *
     *
@@ -245,6 +245,16 @@ extern "C"
     * @return an errorID
     */
     enum GLYR_ERROR glyr_opt_redirects(GlyQuery * s, unsigned long val);
+
+    /**
+    * @brief  Set the useragent during making progresses
+    *
+    * @param s The GlyQuery settings struct to store this option in. 
+    * @param useragent a null terminated string containging everything you want
+    *
+    * @return an errorID
+    */
+    enum GLYR_ERROR glyr_opt_useragent(GlyQuery * s, const char * useragent);
     /**
     * @brief Set the language the items should be in.
     *

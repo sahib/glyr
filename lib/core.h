@@ -118,8 +118,9 @@ typedef struct MetaDataFetcher
 // PLEASE FILL _ALL_ FIELDS!
 typedef struct MetaDataSource
 {
-    gchar * name;  /* Name of this provider            */
-    gchar key;     /* A key that may be used in --from */
+    gchar * name;  /* Name of this provider              */
+    gchar key;     /* A key that may be used in --from   */
+    gchar * encoding;/* Encoding, NULL defaults to UTF-8, this will only take place for textparser */
 
     GList * (* parser) (struct cb_object *);  /* called when parsing is needed                  */
     const char  * (* get_url)(GlyQuery *); 	/* called when the url of this provider is needed */

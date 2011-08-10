@@ -20,6 +20,7 @@
 
 /* All you need is glove */
 #include <glib.h>
+#include <locale.h>
 
 #ifndef WIN32
   /* Backtrace*/
@@ -262,6 +263,15 @@ enum GLYR_ERROR glyr_opt_redirects(GlyQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
+enum GLYR_ERROR glyr_opt_useragent(GlyQuery * s, const char * useragent)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,6,(useragent) ? useragent : "");
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 enum GLYR_ERROR glyr_opt_lang(GlyQuery * s, char * langcode)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -393,6 +403,7 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->proxy = DEFAULT_PROXY;
     glyrs->qsratio = DEFAULT_QSRATIO;
     glyrs->allowed_formats = DEFAULT_ALLOWED_FORMATS;
+    glyrs->useragent = DEFAULT_USERAGENT;
     glyrs->itemctr = 0;
 }
 
@@ -488,6 +499,12 @@ void glyr_init(void)
         {
             glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
         }
+
+	/* Locale */
+	if(setlocale (LC_ALL, "") == NULL)
+	{
+	    glyr_message(-1,NULL,"glyr: Cannot set locale!\n");
+	}
 
         /* Register plugins */
         register_fetcher_plugins();
@@ -697,6 +714,9 @@ static int glyr_set_info(GlyQuery * s, int at, const char * arg)
         case 5:
             s->allowed_formats = (char*)s->info[at];
             break;
+	case 6:
+	    s->useragent = (char*)s->info[at];
+	    break;
         default:
             glyr_message(2,s,"Warning: wrong <at> for glyr_info_at!\n");
         }

@@ -42,6 +42,7 @@
 
 /* Disallow *.gif, mostly bad quality */
 #define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff"
+#define DEFAULT_USERAGENT "libglyr ("glyr_VERSION_NAME")"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -212,6 +213,7 @@ typedef struct GlyQuery
     char * title;  /*!< title field */
     char * from;   /*!< String passed to glyr_opt_from() */
     char * allowed_formats; /*!< Allowed formats for images, given as semicolon sperated list "png;jpeg;gif" */
+    char * useragent; /*!< Useragent for HTTP Requests */
 
     int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */

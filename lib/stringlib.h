@@ -45,5 +45,6 @@ char * copy_value(const char * begin, const char * end);
 char * get_next_word(const char * string, const char * delim, size_t *offset, size_t len);
 int x_vasprintf(char ** str, const char * fmt, va_list params);
 void chomp_breakline(gchar * string);
+gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * new_size);
 
 #endif

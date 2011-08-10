@@ -358,7 +358,7 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
 
 /*--------------------------------------------------------*/
 
-static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring)
+static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring, gchar * useragent)
 {
     struct header_data * info = NULL;
     if(url != NULL)
@@ -367,10 +367,11 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         CURLcode rc = CURLE_OK;
 
         info = g_malloc0(sizeof(struct header_data));
+	gchar * link_user_agent = g_strdup_printf("%s/linkvalidator",useragent);
 
         curl_easy_setopt(eh, CURLOPT_TIMEOUT, 5);
         curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
-        curl_easy_setopt(eh, CURLOPT_USERAGENT, "liblyr ("glyr_VERSION_NAME")/linkvalidator");
+        curl_easy_setopt(eh, CURLOPT_USERAGENT, link_user_agent);
         curl_easy_setopt(eh, CURLOPT_URL,url);
         curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_easy_setopt(eh, CURLOPT_MAXREDIRS, 5L);
@@ -403,6 +404,8 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
             chomp_breakline(info->format);
             chomp_breakline(info->extra);
         }
+
+	g_free(link_user_agent);
     }
     return info;
 }
@@ -838,6 +841,28 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 
 /*--------------------------------------------------------*/
 
+struct wrap_retrieve_pass_data
+{
+	gchar * url;
+	GlyQuery * query;
+};
+
+static void * wrap_retrieve_content(gpointer data)
+{
+	struct header_data * head = NULL;
+	if(data != NULL)
+	{
+		struct wrap_retrieve_pass_data * passed = data;
+		GlyQuery * query = passed->query;
+		head = retrieve_content_info(passed->url,(gchar*)query->proxy,(gchar*)query->useragent);
+		g_free(passed);
+		passed = NULL;
+	}
+	return head;
+}
+
+/*--------------------------------------------------------*/
+
 static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
 {
 	if(cache_list != NULL)
@@ -852,7 +877,11 @@ static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
 			GlyMemCache * item = elem->data;
 			if(item != NULL)
 			{
-				GThread * thread = g_thread_create((GThreadFunc)retrieve_content_info,item->data,true,NULL);
+				struct wrap_retrieve_pass_data * passer = g_malloc0(sizeof(struct wrap_retrieve_pass_data));
+				passer->url   = item->data;
+				passer->query = s;
+
+				GThread * thread = g_thread_create((GThreadFunc)wrap_retrieve_content,passer,true,NULL);
 				if(thread != NULL)
 				{
 					thread_list = g_list_prepend(thread_list,thread);
@@ -962,6 +991,33 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyQuery * s)
 	return new_head;
 }
 
+/*--------------------------------------------------------*/
+
+static void do_charset_conversion(MetaDataSource * source, GList * text_list)
+{
+	if(source != NULL && text_list != NULL)
+	{
+		for(GList * elem = text_list; elem; elem = elem->next)
+		{
+			GlyMemCache * cache = elem->data;
+
+			/* We might need to unescape the HTML Utf8 encoded strings first */
+			gchar * utf8_string = unescape_html_UTF8(cache->data);
+			if(utf8_string != NULL)
+			{
+				gsize new_len;
+				gchar * conv = convert_charset(utf8_string,source->encoding,"UTF-8",&new_len);
+				if(conv != NULL)
+				{
+					cache->size = new_len;
+					g_free(cache->data);
+					cache->data = conv;
+				}
+				g_free(utf8_string);
+			}
+		}
+	}
+}
 
 /*--------------------------------------------------------*/
 
@@ -995,6 +1051,11 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 				if(capo->s->imagejob == TRUE)
 				{
 					raw_parsed_data = kick_out_wrong_formats(raw_parsed_data,capo->s);
+				}
+				else if(plugin->encoding != NULL) /* We should look if charset conversion is requested */
+				{
+					glyr_message(2,capo->s,"- Attempting to convert charsets.\n");
+					do_charset_conversion(plugin,raw_parsed_data);	
 				}
 
 				if(g_list_length(raw_parsed_data) != 0)
@@ -1062,7 +1123,7 @@ static gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 	}
 
 	/* You need to take a little break to read this through at once */
-	gboolean isFound = FALSE;
+	gboolean is_found    = FALSE;
 	gboolean is_excluded = FALSE;
 	gboolean all_occured = FALSE;
 
@@ -1088,14 +1149,14 @@ static gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
 
 				if((token[0] == f->key && strlen(token) == 1) || !strcasecmp(token,f->name))
 				{
-					is_excluded = minus;
-					isFound = !minus;
+					is_excluded =  minus;
+					is_found    = !minus;
 				}
 				g_free(back);
 			}
 		}
 	}
-	return (all_occured) ? (is_excluded == FALSE) : isFound;
+	return (all_occured) ? (is_excluded == FALSE) : is_found;
 }
 
 /*--------------------------------------------------------*/
@@ -1250,7 +1311,7 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 	gboolean stop_now = FALSE;
 	GList * result_list = NULL;
 	GList * src_list = NULL;
-	while( (src_list = get_queued(query, fetcher, fired)) != NULL &&
+	while((src_list = get_queued(query, fetcher, fired)) != NULL &&
 			(g_list_length(result_list) < (gsize)query->number)   &&
 			(stop_now == FALSE)
 	     )

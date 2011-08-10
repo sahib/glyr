@@ -154,6 +154,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 		{"redirects",     required_argument, 0, 'r'},
 		{"timeout",       required_argument, 0, 'm'},
 		{"plugmax",       required_argument, 0, 'x'},
+		{"useragent",     required_argument, 0, 'u'},
 		{"verbosity",     required_argument, 0, 'v'},
 		{"qsratio",       required_argument, 0, 'q'},
 		{"formats",       required_argument, 0, 'F'},
@@ -182,7 +183,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 	{
 		int c;
 		int option_index = 0;
-		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index)) == -1)
+		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index)) == -1)
 		{
 			break;
 		}
@@ -219,6 +220,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 				break;
 			case 'm':
 				glyr_opt_timeout(glyrs,atoi(optarg));
+				break;
+			case 'u':
+				glyr_opt_useragent(glyrs,optarg);
 				break;
 			case 'x':
 				glyr_opt_plugmax(glyrs,atoi(optarg));
@@ -687,6 +691,12 @@ int main(int argc, char * argv[])
 					   Left only for the reader's informatiom, no functions here *
 					 */
 					message(2,&my_query,stderr,"- In total %d items found.\n",length);
+					GlyMemCache * elem = my_list;
+					while(elem != NULL)
+					{
+						g_print("%s\n",elem->dsrc);
+						elem = elem->next;
+					}
 				}
 
 				// Free all downloaded buffers
