@@ -237,11 +237,7 @@ static void swap_string(char ** tmp, const char * subs, const char * with)
 {
 	char * swap = *tmp;
 	*tmp = strreplace(swap,subs,with);
-
-	if(swap)
-	{
-		free(swap);
-	}
+	g_free(swap);
 }
 
 // Prepares the url for you to get downloaded. You don't have to call this.
