@@ -42,7 +42,7 @@
 
 /* Disallow *.gif, mostly bad quality */
 #define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff"
-#define DEFAULT_USERAGENT "libglyr ("glyr_VERSION_NAME")"
+#define DEFAULT_USERAGENT "libglyr"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
