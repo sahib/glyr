@@ -143,6 +143,7 @@ Defines</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a972523bd10648a52ff577dd078087c4a">DEFAULT_PROXY</a>&#160;&#160;&#160;NULL</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a6f1269ee8ebeab989ec1ed2f793d238d">DEFAULT_QSRATIO</a>&#160;&#160;&#160;0.85</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a34d7fce219cb0f4eac440aa9199ead6c">DEFAULT_ALLOWED_FORMATS</a>&#160;&#160;&#160;&quot;png;jpeg;tiff&quot;</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a313997fde791b6b14b60b1911776591e">DEFAULT_USERAGENT</a>&#160;&#160;&#160;&quot;libglyr&quot;</td></tr>
 <tr><td colspan="2"><h2><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">typedef struct <a class="el" href="structGlyMemCache.html">GlyMemCache</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="types_8h.html#a2a55868c699831aca4f300812dae6d91">GlyMemCache</a></td></tr>
@@ -163,10 +164,11 @@ Enumerations</h2></td></tr>
 <br/>
 &#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba04cd5c78cb78a585ed7596563e38f9df">GLYRE_NO_PROVIDER</a>, 
 <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abae7f5303f2118a36ba94aa7a29d525052">GLYRE_UNKNOWN_GET</a>, 
-<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba564d0b1d74f8c42c5af45fae3d280102">GLYRE_IGNORE</a>, 
-<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3">GLYRE_STOP_BY_CB</a>, 
+<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba15537198003f2ff0f1cdb4999ca41f43">GLYRE_SKIP</a>, 
+<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78aba49a948748f8e83c3baf9649cf63c1fe4">GLYRE_STOP_POST</a>, 
 <br/>
-&#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5">GLYRE_NO_INIT</a>
+&#160;&#160;<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abae28cebec06f40cb01f7e48fa6c15af3d">GLYRE_STOP_PRE</a>, 
+<a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5">GLYRE_NO_INIT</a>
 <br/>
  }</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">All possible errors that may be returned.  <a href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">More...</a><br/></td></tr>
@@ -418,6 +420,19 @@ Enumerations</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="a313997fde791b6b14b60b1911776591e"></a><!-- doxytag: member="types.h::DEFAULT_USERAGENT" ref="a313997fde791b6b14b60b1911776591e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DEFAULT_USERAGENT&#160;&#160;&#160;&quot;libglyr&quot;</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+</div>
+</div>
 <a class="anchor" id="a20610841bdaddedcf51131de8f973ed9"></a><!-- doxytag: member="types.h::DEFAULT_VERBOSITY" ref="a20610841bdaddedcf51131de8f973ed9" args="" -->
 <div class="memitem">
 <div class="memproto">
@@ -622,11 +637,14 @@ Enumerations</h2></td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abae7f5303f2118a36ba94aa7a29d525052"></a><!-- doxytag: member="GLYRE_UNKNOWN_GET" ref="a65c6c61a2d677f11ea7150a4f9ed78abae7f5303f2118a36ba94aa7a29d525052" args="" -->GLYRE_UNKNOWN_GET</em>&nbsp;</td><td>
 <p>settings-&gt;type is not valid </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba564d0b1d74f8c42c5af45fae3d280102"></a><!-- doxytag: member="GLYRE_IGNORE" ref="a65c6c61a2d677f11ea7150a4f9ed78aba564d0b1d74f8c42c5af45fae3d280102" args="" -->GLYRE_IGNORE</em>&nbsp;</td><td>
-<p>If returned by callback, cache is ignored </p>
+<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba15537198003f2ff0f1cdb4999ca41f43"></a><!-- doxytag: member="GLYRE_SKIP" ref="a65c6c61a2d677f11ea7150a4f9ed78aba15537198003f2ff0f1cdb4999ca41f43" args="" -->GLYRE_SKIP</em>&nbsp;</td><td>
+<p>If returned by callback, cache is wont be added to results </p>
 </td></tr>
-<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3"></a><!-- doxytag: member="GLYRE_STOP_BY_CB" ref="a65c6c61a2d677f11ea7150a4f9ed78aba60198722803b5205486fdc9ad5786dd3" args="" -->GLYRE_STOP_BY_CB</em>&nbsp;</td><td>
-<p>Callback returned stop signal. </p>
+<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78aba49a948748f8e83c3baf9649cf63c1fe4"></a><!-- doxytag: member="GLYRE_STOP_POST" ref="a65c6c61a2d677f11ea7150a4f9ed78aba49a948748f8e83c3baf9649cf63c1fe4" args="" -->GLYRE_STOP_POST</em>&nbsp;</td><td>
+<p>Will stop searching, but still add the current item </p>
+</td></tr>
+<tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abae28cebec06f40cb01f7e48fa6c15af3d"></a><!-- doxytag: member="GLYRE_STOP_PRE" ref="a65c6c61a2d677f11ea7150a4f9ed78abae28cebec06f40cb01f7e48fa6c15af3d" args="" -->GLYRE_STOP_PRE</em>&nbsp;</td><td>
+<p>Will stop searching, but won't add the current item </p>
 </td></tr>
 <tr><td valign="top"><em><a class="anchor" id="a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5"></a><!-- doxytag: member="GLYRE_NO_INIT" ref="a65c6c61a2d677f11ea7150a4f9ed78abadb21c7125c519ad7e44bae2b090060f5" args="" -->GLYRE_NO_INIT</em>&nbsp;</td><td>
 <p>Library has not been initialized with <a class="el" href="glyr_8h.html#af4e64a53d273b91a3f704db26c254016" title="call this at startup. This is not threadsafe and glyr_cleanup should be called once for everytime you...">glyr_init()</a> yet </p>
@@ -708,7 +726,7 @@ Enumerations</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 4 2011 16:37:40 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 11 2011 17:32:18 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

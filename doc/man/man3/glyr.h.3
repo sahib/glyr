@@ -1,4 +1,4 @@
-.TH "lib/glyr.h" 3 "Thu Aug 4 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/glyr.h" 3 "Thu Aug 11 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -92,6 +92,10 @@ All method declaration here. You should only need to include this file.
 .br
 .RI "\fIMax number of redirects to. \fP"
 .ti -1c
+.RI "enum \fBGLYR_ERROR\fP \fBglyr_opt_useragent\fP (\fBGlyQuery\fP *s, const char *useragent)"
+.br
+.RI "\fISet the useragent during making progresses. \fP"
+.ti -1c
 .RI "enum \fBGLYR_ERROR\fP \fBglyr_opt_lang\fP (\fBGlyQuery\fP *s, char *langcode)"
 .br
 .RI "\fISet the language the items should be in. \fP"
@@ -162,6 +166,9 @@ All method declaration here. You should only need to include this file.
 .RI "void \fBglyr_free_plugin_info\fP (\fBGlyFetcherInfo\fP **info)"
 .br
 .RI "\fIFree the data from \fBglyr_get_plugin_info()\fP \fP"
+.ti -1c
+.RI "const char * \fBglyr_type_to_string\fP (enum \fBGLYR_DATA_TYPE\fP type)"
+.br
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -741,6 +748,21 @@ an errorID
 .RE
 .PP
 
+.SS "enum \fBGLYR_ERROR\fP glyr_opt_useragent (\fBGlyQuery\fP *s, const char *useragent)"
+.PP
+Set the useragent during making progresses. \fBParameters:\fP
+.RS 4
+\fIs\fP The \fBGlyQuery\fP settings struct to store this option in. 
+.br
+\fIuseragent\fP a null terminated string containging everything you want
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+an errorID 
+.RE
+.PP
+
 .SS "enum \fBGLYR_ERROR\fP glyr_opt_verbosity (\fBGlyQuery\fP *s, unsigned intlevel)"
 .PP
 Set libglyr's verbosity level (debug) \fBParameters:\fP
@@ -785,6 +807,16 @@ Many methods use an returnvalue, or error parameters to inform you about errors 
 \fBReturns:\fP
 .RS 4
 A descriptive nullterminated string, do not pass to free 
+.RE
+.PP
+
+.SS "const char* glyr_type_to_string (enum \fBGLYR_DATA_TYPE\fPtype)"\fBParameters:\fP
+.RS 4
+\fItype\fP 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
 .RE
 .PP
 

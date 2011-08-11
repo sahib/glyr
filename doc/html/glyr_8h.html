@@ -153,6 +153,8 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Amout of seconds to wait before cancelling an download.  <a href="#a77c895145985a9dab5c5697ad8160073"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a65e9c5c16a89f5829c6d83b4f0cf78d9">glyr_opt_redirects</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned long val)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Max number of redirects to.  <a href="#a65e9c5c16a89f5829c6d83b4f0cf78d9"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ad5439d4ce22df22b88c740ee90afe232">glyr_opt_useragent</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *useragent)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the useragent during making progresses.  <a href="#ad5439d4ce22df22b88c740ee90afe232"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a55e23bb74b7d509829b4f4017652b3e3">glyr_opt_lang</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, char *langcode)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the language the items should be in.  <a href="#a55e23bb74b7d509829b4f4017652b3e3"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#ac48616e106fb58a277bea7658db2d6c9">glyr_opt_number</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, unsigned int num)</td></tr>
@@ -188,6 +190,7 @@ Functions</h2></td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">get information about existing Fetcher and Source  <a href="#ac06146b36b4aca36e6fc77d6906e34b7"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a1354483bce0d969a1c974f113f0a8337">glyr_free_plugin_info</a> (<a class="el" href="structGlyFetcherInfo.html">GlyFetcherInfo</a> **info)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Free the data from <a class="el" href="glyr_8h.html#ac06146b36b4aca36e6fc77d6906e34b7" title="get information about existing Fetcher and Source">glyr_get_plugin_info()</a>  <a href="#a1354483bce0d969a1c974f113f0a8337"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="glyr_8h.html#a77ee283dad7a7893a0b29598845de115">glyr_type_to_string</a> (enum <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2">GLYR_DATA_TYPE</a> type)</td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>All method declaration here. You should only need to include this file. </p>
@@ -1307,6 +1310,43 @@ Functions</h2></td></tr>
 
 </div>
 </div>
+<a class="anchor" id="ad5439d4ce22df22b88c740ee90afe232"></a><!-- doxytag: member="glyr.h::glyr_opt_useragent" ref="ad5439d4ce22df22b88c740ee90afe232" args="(GlyQuery *s, const char *useragent)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="types_8h.html#a65c6c61a2d677f11ea7150a4f9ed78ab">GLYR_ERROR</a> glyr_opt_useragent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>useragent</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set the useragent during making progresses. </p>
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> settings struct to store this option in. </td></tr>
+    <tr><td class="paramname">useragent</td><td>a null terminated string containging everything you want</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd>an errorID </dd></dl>
+
+</div>
+</div>
 <a class="anchor" id="a72b17d9e3d54fa076f3e71b78a0edf04"></a><!-- doxytag: member="glyr.h::glyr_opt_verbosity" ref="a72b17d9e3d54fa076f3e71b78a0edf04" args="(GlyQuery *s, unsigned int level)" -->
 <div class="memitem">
 <div class="memproto">
@@ -1407,6 +1447,30 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="return"><dt><b>Returns:</b></dt><dd>A descriptive nullterminated string, do not pass to free </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="a77ee283dad7a7893a0b29598845de115"></a><!-- doxytag: member="glyr.h::glyr_type_to_string" ref="a77ee283dad7a7893a0b29598845de115" args="(enum GLYR_DATA_TYPE type)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char* glyr_type_to_string </td>
+          <td>(</td>
+          <td class="paramtype">enum <a class="el" href="types_8h.html#aed6a85dbaccaf17531f2b57700ea23c2">GLYR_DATA_TYPE</a>&#160;</td>
+          <td class="paramname"><em>type</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<dl><dt><b>Parameters:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramname">type</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="return"><dt><b>Returns:</b></dt><dd></dd></dl>
 
 </div>
 </div>
@@ -1511,7 +1575,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 4 2011 16:37:40 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 11 2011 17:32:18 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

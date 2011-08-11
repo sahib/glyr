@@ -1,4 +1,4 @@
-.TH "GlyQuery" 3 "Thu Aug 4 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "GlyQuery" 3 "Thu Aug 11 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -93,6 +93,9 @@ Structure controlling all of libglyr's options.
 .RI "char * \fBallowed_formats\fP"
 .br
 .ti -1c
+.RI "char * \fBuseragent\fP"
+.br
+.ti -1c
 .RI "int \fBitemctr\fP"
 .br
 .ti -1c
@@ -142,6 +145,7 @@ anonymous struct holding the source and target lang for gtrans If source is NULL
 .SS "char* \fBGlyQuery::title\fP"title field 
 .SS "enum \fBGLYR_GET_TYPE\fP \fBGlyQuery::type\fP"What type of data to get 
 .SS "void* \fBGlyQuery::user_pointer\fP"
+.SS "char* \fBGlyQuery::useragent\fP"Useragent for HTTP Requests 
 .SS "int \fBGlyQuery::verbosity\fP"See \fBglyr_opt_verbosity()\fP for all levels 
 
 .SH "Author"

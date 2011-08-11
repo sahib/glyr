@@ -1,4 +1,4 @@
-.TH "lib/types.h" 3 "Thu Aug 4 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/types.h" 3 "Thu Aug 11 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -83,6 +83,9 @@ File containing all definitions used in the external API.
 .ti -1c
 .RI "#define \fBDEFAULT_ALLOWED_FORMATS\fP   'png;jpeg;tiff'"
 .br
+.ti -1c
+.RI "#define \fBDEFAULT_USERAGENT\fP   'libglyr'"
+.br
 .in -1c
 .SS "Typedefs"
 
@@ -110,7 +113,7 @@ File containing all definitions used in the external API.
 
 .in +1c
 .ti -1c
-.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_IGNORE\fP, \fBGLYRE_STOP_BY_CB\fP, \fBGLYRE_NO_INIT\fP }"
+.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_SKIP\fP, \fBGLYRE_STOP_POST\fP, \fBGLYRE_STOP_PRE\fP, \fBGLYRE_NO_INIT\fP }"
 .br
 .RI "\fIAll possible errors that may be returned. \fP"
 .ti -1c
@@ -161,6 +164,7 @@ Christopher Pahl
 .SS "#define DEFAULT_QSRATIO   0.85"
 .SS "#define DEFAULT_REDIRECTS   3L"
 .SS "#define DEFAULT_TIMEOUT   20L"
+.SS "#define DEFAULT_USERAGENT   'libglyr'"
 .SS "#define DEFAULT_VERBOSITY   0"
 .SH "Typedef Documentation"
 .PP 
@@ -279,11 +283,14 @@ setttings->provider == NULL
 \fB\fIGLYRE_UNKNOWN_GET \fP\fP
 settings->type is not valid 
 .TP
-\fB\fIGLYRE_IGNORE \fP\fP
-If returned by callback, cache is ignored 
+\fB\fIGLYRE_SKIP \fP\fP
+If returned by callback, cache is wont be added to results 
 .TP
-\fB\fIGLYRE_STOP_BY_CB \fP\fP
-Callback returned stop signal. 
+\fB\fIGLYRE_STOP_POST \fP\fP
+Will stop searching, but still add the current item 
+.TP
+\fB\fIGLYRE_STOP_PRE \fP\fP
+Will stop searching, but won't add the current item 
 .TP
 \fB\fIGLYRE_NO_INIT \fP\fP
 Library has not been initialized with \fBglyr_init()\fP yet 
