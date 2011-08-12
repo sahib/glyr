@@ -78,7 +78,7 @@ GList * lyrics_directlyrics_parse(cb_object * capo)
                     result->size = strlen(brtagged);
                     result->dsrc = strdup(capo->url);
                 }
-                free(buf);
+                g_free(buf);
             }
         }
     }

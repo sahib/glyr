@@ -63,8 +63,8 @@ GList * relations_musicbrainz_parse(cb_object * capo)
                     results = g_list_prepend(results,tmp);
                     ctr++;
 
-                    free(type);
-                    free(target);
+                    g_free(type);
+                    g_free(target);
                 }
             }
         }

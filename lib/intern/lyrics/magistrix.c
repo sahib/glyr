@@ -46,7 +46,7 @@ static GlyMemCache * parse_lyric_page(const char * buffer)
                         result = DL_init();
                         result->data = strreplace(lyr,"<br />","");
                         result->size = strlen(result->data);
-                        free(lyr);
+                        g_free(lyr);
                     }
                 }
             }
@@ -62,10 +62,10 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
         char * tmp = strdup(compare);
         if(levenshtein_strcasecmp(content,tmp) <= fuzz)
         {
-            free(tmp);
+            g_free(tmp);
             return true;
         }
-        free(tmp);
+        g_free(tmp);
     }
     return false;
 }
@@ -135,18 +135,18 @@ GList * lyrics_magistrix_parse (cb_object * capo)
                                                         }
                                                         DL_free(dl_cache);
                                                     }
-                                                    free(dl_url);
+                                                    g_free(dl_url);
                                                 }
-                                                free(url);
+                                                g_free(url);
                                             }
                                         }
                                     }
                                 }
-                                free(title);
+                                g_free(title);
                             }
                         }
                     }
-                    free(artist);
+                    g_free(artist);
                 }
             }
         }

@@ -54,9 +54,9 @@ static GlyMemCache * parse_page(GlyMemCache * dl, cb_object * capo)
                     result->size = (result->data) ? strlen(result->data) : 0;
                     result->dsrc = strdup(capo->url);
 
-                    free(no_br_tags);
+                    g_free(no_br_tags);
                 }
-                free(text);
+                g_free(text);
             }
         }
     }
@@ -106,7 +106,7 @@ GList * lyrics_lyricstime_parse(cb_object * capo)
                                 if(levenshtein_strcasecmp(artist_val,capo->s->artist) <= capo->s->fuzzyness)
                                     i_shall_continue = true;
 
-                                free(artist_val);
+                                g_free(artist_val);
                             }
                         }
                     }
@@ -133,9 +133,9 @@ GList * lyrics_lyricstime_parse(cb_object * capo)
                                 ctr++;
                             }
                             DL_free(dl_cache);
-                            free(full_url);
+                            g_free(full_url);
                         }
-                        free(url);
+                        g_free(url);
                     }
                 }
             }

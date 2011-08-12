@@ -133,11 +133,11 @@ const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
                     mbid = (char*)copy_value(node+nlen,strchr(node+nlen,'"'));
                     if(mbid && !(*mbid))
                     {
-                        free((char*)mbid);
+                        g_free((char*)mbid);
                         mbid = NULL;
                     }
                 }
-                free(to_compare);
+                g_free(to_compare);
             }
             node++;
         }
@@ -179,9 +179,9 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
             if(info_page_url)
             {
                 info = download_single(info_page_url,capo->s,NULL);
-                free(info_page_url);
+                g_free(info_page_url);
             }
-            free((char*)mbid);
+            g_free((char*)mbid);
         }
     }
     return info;
@@ -223,7 +223,7 @@ GList * tags_musicbrainz_parse(cb_object * capo)
                 }
                 else
                 {
-                    free(value);
+                    g_free(value);
                 }
             }
         }

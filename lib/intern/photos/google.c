@@ -31,7 +31,7 @@ const char * photos_google_url(GlyQuery * s)
     if(searchterm != NULL)
     {
         result = generic_google_url(s,searchterm);
-        free(searchterm);
+        g_free(searchterm);
     }
     return result;
 }

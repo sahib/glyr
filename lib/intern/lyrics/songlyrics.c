@@ -73,7 +73,7 @@ GList * lyrics_songlyrics_parse(cb_object * capo)
                         result->size = strlen(brd);
                         result->dsrc = strdup(capo->url);
                     }
-                    free(buf);
+                    g_free(buf);
                 }
             }
         }

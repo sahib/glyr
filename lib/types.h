@@ -39,6 +39,7 @@
 #define DEFAULT_FUZZYNESS 4
 #define DEFAULT_PROXY NULL
 #define DEFAULT_QSRATIO 0.85
+#define DEFAULT_FORCE_UTF8 true 
 
 /* Disallow *.gif, mostly bad quality */
 #define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff"
@@ -181,6 +182,7 @@ typedef struct GlyQuery
     long timeout;  /*!< Max timeout for downloads */
     long redirects;/*!< Max redirects for downloads */
 
+    bool force_utf8; /*!< For textitems only; Only accept items with valid UTF8 encoding  */
     bool download; /*!< return only urls without downloading, converting glyr to a sort of search engine */
     float qsratio; /*!< Weight speed or quality more, 0.0 = fullspeed; 1.0 = highest quality only */
 
@@ -276,7 +278,7 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
     {
         glyr_destroy_query($self);
         if($self != NULL)
-            free($self);
+            g_free($self);
     }
 }
 

@@ -38,7 +38,7 @@ const char * gtrans_get_trans_url(const char * input, const char * from, const c
                                       to,escape_input
                                      );
         }
-        free(escape_input);
+        g_free(escape_input);
     }
     return resultURL;
 }
@@ -55,7 +55,7 @@ const char * gtrans_get_detector_url(const char * input)
         {
             resultURL = g_strdup_printf("https://www.googleapis.com/language/translate/v2/detect?key=%s&q=%s",API_KEY_GTRANS,escape_input);
         }
-        free(escape_input);
+        g_free(escape_input);
     }
     return resultURL;
 }
@@ -221,18 +221,18 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
                         // Not the actual purpose of it, but well..
                         char * back_up = concat_chain;
                         concat_chain = g_strdup_printf("%s%s",(concat_chain) ? concat_chain : "",parsed_json);
-                        if(back_up) free(back_up);
+                        if(back_up) g_free(back_up);
 
                         // Free previous
-                        free(parsed_json);
+                        g_free(parsed_json);
                         parsed_json = NULL;
                     }
 
                     // Free bufs
-                    free((char*)dl_url);
+                    g_free((char*)dl_url);
                 }
             }
-            free(escaped_newlines);
+            g_free(escaped_newlines);
             escaped_newlines = NULL;
 
         }
@@ -244,13 +244,13 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
             if(concat_chain != NULL)
             {
                 char * temp = strreplace(concat_chain,NEWLINE_MARKUP,"\n");
-                free(back_ptr);
+                g_free(back_ptr);
                 back_ptr = NULL;
 
                 if(temp)
                 {
                     concat_chain = beautify_lyrics(temp);
-                    free(temp);
+                    g_free(temp);
                     temp = NULL;
                 }
 
@@ -262,7 +262,7 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
         {
             if(to_translate->data != NULL)
             {
-                free(to_translate->data);
+                g_free(to_translate->data);
             }
             to_translate->data = concat_chain;
             to_translate->size = strlen(concat_chain);
@@ -288,7 +288,7 @@ char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness
                 result_lang = gtrans_parse_detector_json(DCache,correctness);
                 DL_free(DCache);
             }
-            free((char*)dl_url);
+            g_free((char*)dl_url);
         }
     }
     return result_lang;

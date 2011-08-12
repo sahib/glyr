@@ -82,7 +82,7 @@ GList * photos_flickr_parse(cb_object * capo)
                 char * SC = get_field_by_name(linebf, "secret=");
                 char * SV = get_field_by_name(linebf, "server=");
                 char * FR = get_field_by_name(linebf, "farm=");
-                free(linebf);
+                g_free(linebf);
                 linebf = NULL;
 
                 GlyMemCache * cache = DL_init();
@@ -90,13 +90,13 @@ GList * photos_flickr_parse(cb_object * capo)
                 r_list = g_list_prepend(r_list,cache);
 
                 if(ID)
-                    free(ID);
+                    g_free(ID);
                 if(SC)
-                    free(SC);
+                    g_free(SC);
                 if(SV)
-                    free(SV);
+                    g_free(SV);
                 if(FR)
-                    free(FR);
+                    g_free(FR);
 
                 urlc++;
             }

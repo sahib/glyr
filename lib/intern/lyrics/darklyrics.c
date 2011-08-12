@@ -60,7 +60,7 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
                         r_cache->data = strreplace(html_code,"<br />","");
                         r_cache->size = strlen(r_cache->data);
                         r_cache->dsrc = strdup(capo->url);
-                        free(html_code);
+                        g_free(html_code);
                     }
                 }
             }

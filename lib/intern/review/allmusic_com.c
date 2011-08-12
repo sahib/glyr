@@ -57,7 +57,7 @@ GlyMemCache * parse_text(GlyMemCache * to_parse)
                 rche->data = strip_html_unicode(text);
                 rche->size = strlen(rche->data);
 
-                free(text);
+                g_free(text);
                 text = NULL;
             }
         }
@@ -112,15 +112,15 @@ GList * review_allmusic_parse(cb_object * capo)
 						    }
 						    DL_free(dl);
 					    }
-					    free(review_url);
+					    g_free(review_url);
 					    review_url = NULL;
 				    }
 			    }
 		    }
-		    free(artist);
+		    g_free(artist);
 		    artist=NULL;
 	    }
-	    free(url);
+	    g_free(url);
 	    url=NULL;
 	}
     }

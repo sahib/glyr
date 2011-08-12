@@ -59,9 +59,9 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
 
                     DL_free(new_cache);
                 }
-                free(lyr_url);
+                g_free(lyr_url);
             }
-            free(uID);
+            g_free(uID);
         }
     }
 

@@ -32,9 +32,9 @@ const char * lyrics_lyricsvip_url(GlyQuery * settings)
         if(title_clean)
         {
             result = g_strdup_printf(LV_URL, artist_clean, title_clean);
-            free(title_clean);
+            g_free(title_clean);
         }
-        free(artist_clean);
+        g_free(artist_clean);
     }
     return result;
 }

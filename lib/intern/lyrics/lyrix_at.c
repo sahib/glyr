@@ -87,18 +87,18 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
                                                     r_list = g_list_prepend(r_list,result);
                                                     urlc++;
                                                 }
-                                                free(lyrics);
+                                                g_free(lyrics);
                                             }
                                             lyr_begin=NULL;
                                         }
                                         DL_free(lyrcache);
                                     }
-                                    free(url);
+                                    g_free(url);
                                 }
-                                free(url_part);
+                                g_free(url_part);
                             }
                         }
-                        free(title);
+                        g_free(title);
                     }
                     title_end=NULL;
                 }

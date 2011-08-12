@@ -112,7 +112,7 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
                         }
                         DL_free(new_cache);
                     }
-                    free(wiki_page_url);
+                    g_free(wiki_page_url);
                 }
                 endTag=NULL;
             }

@@ -70,7 +70,7 @@ GList * cover_albumart_parse(cb_object * capo)
                     r_list = g_list_prepend(r_list,result);
                     urlc++;
 
-                    free(img_url);
+                    g_free(img_url);
                 }
             }
         }

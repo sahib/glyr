@@ -57,7 +57,7 @@ gboolean is_initalized = FALSE;
       }
   
       g_printerr("\n%zd calls in total are shown.\n", size);
-      free(bt_info_list);
+      g_free(bt_info_list);
   }
   
 #endif
@@ -388,6 +388,9 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->album  = NULL;
     glyrs->title  = NULL;
     glyrs->from   = NULL;
+    glyrs->callback.download = NULL;
+    glyrs->callback.user_pointer = NULL;
+
     glyrs->cover.min_size = DEFAULT_CMINSIZE;
     glyrs->cover.max_size = DEFAULT_CMAXSIZE;
     glyrs->number = DEFAULT_NUMBER;
@@ -398,13 +401,13 @@ static void set_query_on_defaults(GlyQuery * glyrs)
     glyrs->lang = DEFAULT_LANG;
     glyrs->plugmax = DEFAULT_PLUGMAX;
     glyrs->download = DEFAULT_DOWNLOAD;
-    glyrs->callback.download = NULL;
-    glyrs->callback.user_pointer = NULL;
     glyrs->fuzzyness = DEFAULT_FUZZYNESS;
     glyrs->proxy = DEFAULT_PROXY;
     glyrs->qsratio = DEFAULT_QSRATIO;
     glyrs->allowed_formats = DEFAULT_ALLOWED_FORMATS;
     glyrs->useragent = DEFAULT_USERAGENT;
+    glyrs->force_utf8 = DEFAULT_FORCE_UTF8;
+
     glyrs->itemctr = 0;
 }
 
@@ -666,7 +669,7 @@ int glyr_write(GlyMemCache * data, const char * path)
         }
         else
         {
-            FILE * fp = fopen(path,"w" /* welcome back */);
+            FILE * fp = fopen(path,"w");
             if(fp)
             {
                 if(data->data != NULL)

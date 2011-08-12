@@ -91,21 +91,21 @@ GList * similiar_lastfm_parse(cb_object * capo)
         }
 
         if(name)
-            free(name);
+            g_free(name);
         if(match)
-            free(match);
+            g_free(match);
         if(url)
-            free(url);
+            g_free(url);
         if(img_s)
-            free(img_s);
+            g_free(img_s);
         if(img_m)
-            free(img_m);
+            g_free(img_m);
         if(img_l)
-            free(img_l);
+            g_free(img_l);
         if(img_e)
-            free(img_e);
+            g_free(img_e);
         if(img_x)
-            free(img_x);
+            g_free(img_x);
 
     }
     return r_list;

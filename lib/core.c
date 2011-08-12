@@ -1001,7 +1001,7 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 		{
 			GlyMemCache * cache = elem->data;
 
-			/* We might need to unescape the HTML Utf8 encoded strings first */
+			/* We might need to unescape the HTML Utf8 encoded strings first, this is done later anyway. */
 			gchar * utf8_string = unescape_html_UTF8(cache->data);
 			if(utf8_string != NULL)
 			{
@@ -1018,6 +1018,45 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 		}
 	}
 }
+
+/*--------------------------------------------------------*/
+
+static GList * check_for_forced_utf8(GlyQuery * query, GList * text_list)
+{
+	gint deleted = 0;
+	GList * new_head = text_list;
+	if(query != NULL && text_list != NULL && query->force_utf8 == TRUE)
+	{
+		glyr_message(2,query,"#[%02d/%02d] ",g_list_length(text_list),query->number);
+
+		GList * elem = text_list;
+		while(elem != NULL)
+		{
+			GlyMemCache * cache = elem->data;
+			const gchar * end_of_valid_utf8 = NULL;
+			if(g_utf8_validate(cache->data,-1,&end_of_valid_utf8))
+			{
+				/* UTF8 was forced, and this cache didn't pass -> deletre */	
+				glyr_message(2,query,"!");
+
+				DL_free(cache);
+				deleted++;
+
+				GList * to_delete = elem;
+				elem = elem->next;
+				new_head = g_list_delete_link(new_head,to_delete);
+				continue;
+			}
+			else
+			{
+				glyr_message(2,query,".");
+				elem = elem->next;
+			}
+		}
+		glyr_message(2,query,"] (-%d item(s) less)\n",deleted);
+	}
+	return new_head;
+} 
 
 /*--------------------------------------------------------*/
 
@@ -1041,7 +1080,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 			if(less > 0)
 			{
 				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
-				glyr_message(2,capo->s,"#[%02d/%02d] Inner check revaled %ld dupes\n",items_now,capo->s->number,less);
+				glyr_message(2,capo->s,"#[%02d/%02d] Inner check found %ld dupes\n",items_now,capo->s->number,less);
 			}
 
 			if(g_list_length(raw_parsed_data) != 0)
@@ -1054,8 +1093,9 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 				}
 				else if(plugin->encoding != NULL) /* We should look if charset conversion is requested */
 				{
-					glyr_message(2,capo->s,"- Attempting to convert charsets.\n");
-					do_charset_conversion(plugin,raw_parsed_data);	
+					glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets ");
+					do_charset_conversion(plugin, raw_parsed_data);
+					raw_parsed_data = check_for_forced_utf8(capo->s,raw_parsed_data);	
 				}
 
 				if(g_list_length(raw_parsed_data) != 0)
@@ -1377,7 +1417,7 @@ void glist_free_full(GList * List, void (* free_func)(void * ptr))
 		{
 			free_func(elem->data);
 		}
-		
+
 	}
 	g_list_free(List);
 }

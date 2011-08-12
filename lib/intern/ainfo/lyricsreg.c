@@ -48,7 +48,7 @@ GList * ainfo_lyricsreg_parse(cb_object * capo)
 
             ls = g_list_prepend(ls,tmp);
 
-            free(info);
+            g_free(info);
         }
     }
     return ls;

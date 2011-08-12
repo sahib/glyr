@@ -55,7 +55,7 @@ GList * review_amazon_parse(cb_object * capo)
 
                 cList = g_list_prepend(cList,tmp);
             }
-            free(text);
+            g_free(text);
         }
     }
     return cList;

@@ -35,7 +35,7 @@ const char * ainfo_lastfm_url(GlyQuery * s)
     char * url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,s->lang);
 
     if(right_artist)
-        free(right_artist);
+        g_free(right_artist);
     return url;
 }
 
@@ -57,9 +57,9 @@ static char * fix_crappy_lastfm_txt(const char * txt)
                     trim_copy(no_unicode_at_all,trim_buf);
                     result = trim_buf;
                 }
-                free(no_unicode_at_all);
+                g_free(no_unicode_at_all);
             }
-            free(no_unicode);
+            g_free(no_unicode);
         }
     }
     return result;
@@ -87,10 +87,10 @@ GList * ainfo_lastfm_parse(cb_object * capo)
             r_lst = g_list_prepend(r_lst,sc);
             r_lst = g_list_prepend(r_lst,lc);
 
-            free(content);
+            g_free(content);
             content=NULL;
         }
-        free(short_desc);
+        g_free(short_desc);
         short_desc=NULL;
     }
     return r_lst;

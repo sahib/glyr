@@ -59,8 +59,8 @@ static GList * traverse_xml(const char * data, const char * url, cb_object * cap
             ctr++;
 
             // free & jump to next
-            free(value);
-            free(durat);
+            g_free(value);
+            g_free(durat);
             beg = dy;
         }
     }
@@ -80,8 +80,8 @@ GList * tracklist_musicbrainz_parse(cb_object * capo)
             ls = traverse_xml(dlData->data,capo->url,capo);
             DL_free(dlData);
         }
-        free(release_page_info_url);
-        free(release_ID);
+        g_free(release_page_info_url);
+        g_free(release_ID);
     }
     return ls;
 }

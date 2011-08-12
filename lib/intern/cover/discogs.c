@@ -139,7 +139,7 @@ GList * cover_discogs_parse(cb_object * capo)
                                                             }
                                                             else
                                                             {
-                                                                free(url);
+                                                                g_free(url);
                                                                 url=NULL;
                                                             }
                                                         }
@@ -151,7 +151,7 @@ GList * cover_discogs_parse(cb_object * capo)
                                             }
                                         }
 
-                                        free(size);
+                                        g_free(size);
                                         size=NULL;
                                     }
                                 }
@@ -159,17 +159,17 @@ GList * cover_discogs_parse(cb_object * capo)
                                 tmp_cache=NULL;
                             }
 
-                            free(release_url);
+                            g_free(release_url);
                             release_url=NULL;
                         }
 
-                        free(release_ID);
+                        g_free(release_ID);
                         release_ID=NULL;
                     }
                 }
             }
 
-            free(title_value);
+            g_free(title_value);
             title_value = NULL;
         }
     }

@@ -53,7 +53,7 @@ GList * albumlist_musicbrainz_parse(cb_object * capo)
 
             c->dsrc = strdup(capo->url);
             collection = g_list_prepend(collection,c);
-            free(name);
+            g_free(name);
             ctr++;
         }
     }

@@ -44,7 +44,7 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
         {
             int atoid = atoi(buf);
 
-            free(buf);
+            g_free(buf);
             if((atoid >= capo->s->cover.min_size || capo->s->cover.min_size == -1) &&
                     (atoid <= capo->s->cover.max_size || capo->s->cover.max_size == -1)  )
                 return true;
@@ -115,9 +115,9 @@ GList * cover_coverhunt_parse(cb_object *capo)
                         }
                         DL_free(search_buf);
                     }
-                    free(real_url);
+                    g_free(real_url);
                 }
-                free(go_url);
+                g_free(go_url);
             }
         }
     }

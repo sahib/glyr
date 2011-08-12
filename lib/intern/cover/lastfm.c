@@ -77,7 +77,7 @@ GList * cover_lastfm_parse(cb_object *capo)
                 }
                 else
                 {
-                    free(url);
+                    g_free(url);
                     url=NULL;
                 }
             }

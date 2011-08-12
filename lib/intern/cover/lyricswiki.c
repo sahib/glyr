@@ -118,7 +118,7 @@ GList * cover_lyricswiki_parse(cb_object * capo)
                 g_free(name);
                 name=NULL;
             }
-            free(_album);
+            g_free(_album);
             _album=NULL;
         }
 

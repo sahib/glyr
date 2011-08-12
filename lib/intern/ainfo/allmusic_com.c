@@ -55,7 +55,7 @@ GlyMemCache * parse_bio_short(GlyMemCache * to_parse)
                 rche->data = strip_html_unicode(text);
                 rche->size = strlen(rche->data);
 
-                free(text);
+                g_free(text);
                 text = NULL;
             }
         }
@@ -88,10 +88,10 @@ GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
                         DL_free(dl);
                         dl=NULL;
                     }
-                    free(url);
+                    g_free(url);
                     url=NULL;
                 }
-                free(id);
+                g_free(id);
                 id=NULL;
             }
         }
@@ -151,7 +151,7 @@ GList * ainfo_allmusic_parse(cb_object * capo)
                 if(info_short || info_long)
                     urlc++;
             }
-            free(url);
+            g_free(url);
             url=NULL;
         }
     }

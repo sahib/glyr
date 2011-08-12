@@ -51,9 +51,9 @@ GList * lyrics_lyricsreg_parse(cb_object * capo)
                     tmp->size = tmp->data ? strlen(tmp->data) : 0;
                     tmp->dsrc = strdup(capo->url);
                     ls = g_list_prepend(ls,tmp);
-                    free(no_br_tags);
+                    g_free(no_br_tags);
                 }
-                free(text_seg);
+                g_free(text_seg);
             }
         }
     }

@@ -69,7 +69,7 @@ static GlyMemCache * parse_lyrics_page(const char * buffer)
 		    replace_from_message_inline(lyr);
                     result->data = strreplace(lyr,"</span>\n","");
                     result->size = ABS(end-begin);
-                    free(lyr);
+                    g_free(lyr);
                 }
             }
         }
@@ -89,9 +89,9 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
             if(levenshtein_strcasecmp(plain,tmp) <= fuzz)
                 result = true;
 
-            free(tmp);
+            g_free(tmp);
         }
-        free(plain);
+        g_free(plain);
     }
 
     return result;
@@ -140,12 +140,12 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                                         }
                                         DL_free(dl_cache);
                                     }
-                                    free(dl_url);
+                                    g_free(dl_url);
                                 }
-                                free(url);
+                                g_free(url);
                             }
                         }
-                        free(title);
+                        g_free(title);
                     }
                 }
             }

@@ -62,7 +62,7 @@ GlyMemCache * parse_cover_page(GlyMemCache * dl)
                 }
                 else
                 {
-                    free(img_url);
+                    g_free(img_url);
                     img_url=NULL;
                 }
             }
@@ -118,14 +118,14 @@ GList * cover_allmusic_parse(cb_object * capo)
                                 DL_free(dl);
                             }
                         }
-                        free(orig_artist);
+                        g_free(orig_artist);
                         orig_artist=NULL;
                     }
                 }
-                free(artist);
+                g_free(artist);
                 artist=NULL;
             }
-            free(url);
+            g_free(url);
             url=NULL;
         }
     }
