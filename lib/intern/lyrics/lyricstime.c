@@ -122,7 +122,7 @@ GList * lyrics_lyricstime_parse(cb_object * capo)
                     char * url = copy_value(node+nlen,end_of_url);
                     if(url != NULL)
                     {
-                        char * full_url = strdup_printf("http://www.lyricstime.com%s",url);
+                        char * full_url = g_strdup_printf("http://www.lyricstime.com%s",url);
                         GlyMemCache * dl_cache = download_single(full_url,capo->s,NULL);
                         if(dl_cache)
                         {

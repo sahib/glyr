@@ -104,7 +104,7 @@ GList * cover_allmusic_parse(cb_object * capo)
                     char * orig_artist = strdup(capo->s->artist);
                     if(orig_artist)
                     {
-                        if(levenshtein_strcmp(ascii_strdown_modify(orig_artist),ascii_strdown_modify(artist)) <= capo->s->fuzzyness)
+                        if(levenshtein_strcasecmp(orig_artist,artist) <= capo->s->fuzzyness)
                         {
                             GlyMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
                             if(dl != NULL)

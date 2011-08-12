@@ -83,23 +83,24 @@ static void sig_handler(int signal)
         glyr_message(-1,NULL,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
         break;
     }
-    exit(-1);
+    exit(EXIT_FAILURE);
 }
 
 /*--------------------------------------------------------*/
 
 const char * err_strings[] =
 {
-    "all okay",
-    "bad option",
-    "bad value for glyr_opt_*",
-    "empty query",
-    "No provider specified",
-    "Unknown ID for getter",
-    "Skipped cache",
-    "Stopped by callback (post)",
-    "Stopped by callback (pre)",
-    "Library is not yet initialized, use glyr_init()",
+    "Unknown Error",                                   /* GLYRE_UNKNOWN      */
+    "Everything is fine",                              /* GLYRE_OK           */
+    "Bad option for gly_opt_*()",                      /* GLYRE_BAD_OPTION   */
+    "Bad value for glyr_opt_*()",                      /* GLYRE_BAD_VALUE    */
+    "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
+    "No provider specified in glyr_opt_from()",        /* GLYRE_NO_PROVIDER  */
+    "Unknown GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
+    "Cache was skipped due to user",                   /* GLYRE_SKIP         */
+    "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
+    "Stopped by callback (pre)",                       /* GLYRE_STOP_PRE     */
+    "Library is not yet initialized, use glyr_init()", /* GLYRE_NO_INIT      */
     NULL
 };
 
@@ -126,7 +127,7 @@ const char * glyr_strerror(enum GLYR_ERROR ID)
     {
         return err_strings[ID];
     }
-    return NULL;
+    return err_strings[0];
 }
 
 /*-----------------------------------------------*/
@@ -593,7 +594,7 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
                     settings->imagejob = !item->full_data;
 
                     /* Now start your engines, gentlemen */
-                    result = start_engine(settings,item);
+                    result = start_engine(settings,item,e);
                     break;
 
                 }
@@ -606,6 +607,9 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 
         /* Make this query reusable */
         settings->itemctr = 0;
+        
+
+	GlyMemCache * head = NULL;
 
         /* free if empty */
         if(result != NULL)
@@ -625,7 +629,6 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
             }
 
             /* Finish. */
-            GlyMemCache * head = NULL;
             if(g_list_first(result))
             {
                 head = g_list_first(result)->data;
@@ -633,8 +636,8 @@ GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * e, int * length)
 
             g_list_free(result);
             result = NULL;
-            return head;
         }
+        return head;
     }
     if(e) *e = GLYRE_EMPTY_STRUCT;
     return NULL;

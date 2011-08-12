@@ -60,12 +60,12 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
                     char * title = copy_value(title_tag + strlen(URL_TAG_ENDIN),title_end);
                     if(title)
                     {
-                        if(levenshtein_strcmp(ascii_strdown_modify(title),capo->s->title) <= capo->s->fuzzyness)
+                        if(levenshtein_strcmp(title,capo->s->title) <= capo->s->fuzzyness)
                         {
                             char * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
                             if(url_part)
                             {
-                                char * url = strdup_printf("http://lyrix.at/de%s",url_part);
+                                char * url = g_strdup_printf("http://lyrix.at/de%s",url_part);
                                 if(url)
                                 {
                                     GlyMemCache * lyrcache = download_single(url,capo->s,"<!-- eBay Relevance Ad -->");

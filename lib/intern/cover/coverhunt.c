@@ -82,7 +82,7 @@ GList * cover_coverhunt_parse(cb_object *capo)
             char * go_url = copy_value(table_start + strlen(NODE_BEGIN),table_end);
             if(go_url)
             {
-                char * real_url = strdup_printf("http://www.coverhunt.com/go/%s",go_url);
+                char * real_url = g_strdup_printf("http://www.coverhunt.com/go/%s",go_url);
                 if(real_url)
                 {
                     GlyMemCache * search_buf = download_single(real_url,capo->s,"<div id=\"right\">");

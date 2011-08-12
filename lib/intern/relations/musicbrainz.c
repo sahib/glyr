@@ -56,7 +56,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
                 if(type != NULL && target != NULL)
                 {
                     GlyMemCache * tmp = DL_init();
-                    tmp->data = strdup_printf("%s:%s",type,target);
+                    tmp->data = g_strdup_printf("%s:%s",type,target);
                     tmp->size = strlen(tmp->data);
                     tmp->type = TYPE_RELATION;
                     tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;

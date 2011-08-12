@@ -31,7 +31,7 @@ const char * lyrics_lyricsvip_url(GlyQuery * settings)
         char * title_clean =  strreplace(settings->title, " ", "-");
         if(title_clean)
         {
-            result = strdup_printf(LV_URL, artist_clean, title_clean);
+            result = g_strdup_printf(LV_URL, artist_clean, title_clean);
             free(title_clean);
         }
         free(artist_clean);

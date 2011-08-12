@@ -26,28 +26,27 @@
 
 const char * lyrics_directlyrics_url(GlyQuery * settings)
 {
-    char * url   = NULL;
-
-    char * esc_a = ascii_strdown(settings->artist);
-    if(esc_a)
+    gchar * url   = NULL;
+    gchar * esc_a = g_utf8_strdown(settings->artist,-1);
+    if(esc_a != NULL)
     {
-        char * esc_t = ascii_strdown(settings->title);
-        if(esc_t)
+        gchar * esc_t = g_utf8_strdown(settings->title,-1);
+        if(esc_t != NULL)
         {
-            char * rep_a = strreplace(esc_a," ","-");
-            if(rep_a)
+            gchar * rep_a = strreplace(esc_a," ","-");
+            if(rep_a != NULL)
             {
-                char * rep_t = strreplace(esc_t," ","-");
-                if(rep_t)
+                gchar * rep_t = strreplace(esc_t," ","-");
+                if(rep_t != NULL)
                 {
-                    url = strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
-                    free(rep_t);
+                    url =  g_strdup_printf("http://www.directlyrics.com/%s-%s-lyrics.html",rep_a,rep_t);
+                    g_free(rep_t);
                 }
-                free(rep_a);
+                g_free(rep_a);
             }
-            free(esc_t);
+            g_free(esc_t);
         }
-        free(esc_a);
+        g_free(esc_a);
     }
     return url;
 }

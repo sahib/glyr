@@ -20,6 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
+#define BAD_STRING "Special:Random" /* This has been a running gag during developement: "I want to edit metadata!" */
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=%artist%&song=%title%"
 
 /*--------------------------------------------------------*/
@@ -38,31 +39,29 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
     bool res = false;
     if(to_artist && to_title && capo)
     {
-        char * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
-        if(tmp_artist)
+        gchar * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
+        if(tmp_artist != NULL)
         {
-            ascii_strdown_modify(tmp_artist);
-            char * tmp_title  = copy_value(to_title, strstr(to_title ,"</song>" ));
-            if(tmp_title)
+            gchar * tmp_title = copy_value(to_title, strstr(to_title ,"</song>" ));
+            if(tmp_title != NULL)
             {
-                ascii_strdown_modify(tmp_title);
-                char * cmp_a = ascii_strdown_modify(strdup_printf("<artist>%s",capo->s->artist));
-                if(cmp_a)
+                char * cmp_a =  g_strdup_printf("<artist>%s",capo->s->artist);
+                if(cmp_a != NULL)
                 {
-                    char * cmp_t = ascii_strdown_modify(strdup_printf("<song>%s",  capo->s->title));
-                    if(cmp_t)
+                    char * cmp_t =  g_strdup_printf("<song>%s",capo->s->title);
+                    if(cmp_t != NULL)
                     {
-                        if((levenshtein_strcmp(cmp_a,tmp_artist) + levenshtein_strcmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness)
+                        if((levenshtein_strcasecmp(cmp_a,tmp_artist) + levenshtein_strcasecmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness)
                         {
                             res = true;
                         }
-                        free(cmp_t);
+                        g_free(cmp_t);
                     }
-                    free(cmp_a);
+                    g_free(cmp_a);
                 }
-                free(tmp_title);
+                g_free(tmp_title);
             }
-            free(tmp_artist);
+            g_free(tmp_artist);
         }
     }
     return res;
@@ -97,10 +96,10 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
                             nextTag(lyr_begin);
                             nextTag(lyr_begin);
 
-                            if( (lyr_end = strstr(lyr_begin, "<!--")) )
+                            if( (lyr_end = strstr(lyr_begin, "<!--")))
                             {
                                 char * lyr = copy_value(lyr_begin,lyr_end);
-                                if(lyr)
+                                if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL)
                                 {
                                     result = DL_init();
                                     result->data = lyr;

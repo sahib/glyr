@@ -31,7 +31,7 @@ const char * gtrans_get_trans_url(const char * input, const char * from, const c
         char * escape_input = curl_easy_escape(NULL,input,0);
         if(escape_input != NULL)
         {
-            resultURL = strdup_printf("https://www.googleapis.com/language/translate/v2?key=%s%s%s&target=%s&prettyprint=true&q=%s",
+            resultURL = g_strdup_printf("https://www.googleapis.com/language/translate/v2?key=%s%s%s&target=%s&prettyprint=true&q=%s",
                                       API_KEY_GTRANS,
                                       (from==NULL) ? "" : "&source=", // &source field can be omitted, autodetect then.
                                       (from==NULL) ? "" : from,
@@ -53,7 +53,7 @@ const char * gtrans_get_detector_url(const char * input)
         char * escape_input = curl_easy_escape(NULL,input,0);
         if(escape_input != NULL)
         {
-            resultURL = strdup_printf("https://www.googleapis.com/language/translate/v2/detect?key=%s&q=%s",API_KEY_GTRANS,escape_input);
+            resultURL = g_strdup_printf("https://www.googleapis.com/language/translate/v2/detect?key=%s&q=%s",API_KEY_GTRANS,escape_input);
         }
         free(escape_input);
     }
@@ -220,7 +220,7 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
                     {
                         // Not the actual purpose of it, but well..
                         char * back_up = concat_chain;
-                        concat_chain = strdup_printf("%s%s",(concat_chain) ? concat_chain : "",parsed_json);
+                        concat_chain = g_strdup_printf("%s%s",(concat_chain) ? concat_chain : "",parsed_json);
                         if(back_up) free(back_up);
 
                         // Free previous

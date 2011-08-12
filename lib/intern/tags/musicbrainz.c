@@ -65,11 +65,11 @@ const char * generic_musicbrainz_url(GlyQuery * sets)
     switch(please_what_type(sets))
     {
     case TYPE_TAG_TITLE :
-        return strdup_printf("http://musicbrainz.org/ws/1/track/?type=xml&title=%s&artist=%s&release=%s",wrap_t,wrap_a,wrap_b);
+        return g_strdup_printf("http://musicbrainz.org/ws/1/track/?type=xml&title=%s&artist=%s&release=%s",wrap_t,wrap_a,wrap_b);
     case TYPE_TAG_ALBUM :
-        return strdup_printf("http://musicbrainz.org/ws/1/release/?type=xml&title=%s&artist=%s",wrap_b,wrap_a);
+        return g_strdup_printf("http://musicbrainz.org/ws/1/release/?type=xml&title=%s&artist=%s",wrap_b,wrap_a);
     case TYPE_TAG_ARTIST:
-        return strdup_printf("http://musicbrainz.org/ws/1/artist/?type=xml&name=%s",wrap_a);
+        return g_strdup_printf("http://musicbrainz.org/ws/1/artist/?type=xml&name=%s",wrap_a);
     default:
         return NULL;
     }
@@ -175,7 +175,7 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
                 break;
             }
 
-            char * info_page_url = strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
+            char * info_page_url = g_strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
             if(info_page_url)
             {
                 info = download_single(info_page_url,capo->s,NULL);

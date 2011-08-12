@@ -17,34 +17,60 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
+
 #ifndef STRINGOP_H
 #define STRINGOP_H
 
 #include <glib.h>
 
-#define nextTag(X) while(*X && *X++ != '>')
-size_t levenshtein_strcmp(const char * s, const char * t);
-size_t levenshtein_strcasecmp(const char * s, const char * t);
-char * escape_slashes(const char * in);
-char * ascii_strdown_modify(char * string);
-char * ascii_strdown (const char * string);
-char * strreplace(const char * string, const char * subs, const char * with);
-char * prepare_url   (const char * URL, const char * artist, const char * album, const char * title);
-char * unescape_html_UTF8(const char *data);
-int    strcrepl(char* in, const char orig, const char new);
-char * strip_html_unicode(const char * string);
-char * beautify_lyrics(const char * lyrics);
-char * strdup_printf (const char *format, ...);
-char * strrstr_len(char *haystack, char *needle, size_t len);
-void   trim_copy(char *input, char *output);
-void   trim_inplace(char *s);
-char * trim_nocopy(char *s);
-char * getStr (char ** s, char * start, char * end);
-size_t remove_tags_from_string(char * string, int length, char start, char end);
-char * copy_value(const char * begin, const char * end);
-char * get_next_word(const char * string, const char * delim, size_t *offset, size_t len);
-int x_vasprintf(char ** str, const char * fmt, va_list params);
-void chomp_breakline(gchar * string);
+/* Glyr's internal unicode stringlib - You're free to use it. */
+
+/* Cheap, but well working macro */
+#define nextTag(PTR) while(PTR[0] && *PTR++ != '>')
+
+/* Compute levenshtein distance of 'string' to 'other' */
+gsize levenshtein_strcmp(const gchar * string, const gchar * other);
+
+/* Same as above, but converts to lowercase before */
+gsize levenshtein_strcasecmp(const gchar * sstring, const gchar * other);
+
+/* Replaces 'subs' with 'with' in string, returns newly allocated string or NULL */
+gchar * strreplace(const gchar * string, const gchar * subs, const gchar * with);
+
+/* Converts charset of 'string' from charset 'from' to charset 'to', number of bytes saved in new_size (can be NULL) */
 gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * new_size);
+
+/* Replaces HTML-unicode strings like &ouml; with their UTF-8 bytes */
+gchar * strip_html_unicode(const gchar * string);
+
+/* Removes trailing '\n' or '\r\n' in a string */
+void chomp_breakline(gchar * string);
+
+/* Pass a string to input, and an allocated buffer to output */
+void trim_copy(gchar *input, gchar *output);
+
+/* Same as above, but does trim inplace */
+void trim_inplace(gchar *s);
+
+/* Same as above, but returns new pointer (inplace) */
+gchar * trim_nocopy(gchar *s);
+
+/* Copies the value from begin to end, returns newly allocated buffer */
+gchar * copy_value(const gchar * begin, const gchar * end);
+
+/* Iterates over string, always returning string to the next 'delim' offset and len != 0!  */
+gchar * get_next_word(const gchar * string, const gchar * delim, gsize * offset, gsize len);
+
+/* Removes everything between 'start' and 'end', works inplace  */
+gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar end);
+
+/* Unescapes HTML numeric unicode entities to normal UTF8 strings */
+gchar * unescape_html_UTF8(const gchar *data);
+
+/* Puts artist, album title in the string URL where it is %artist%,%album%,%title% */
+gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album, const gchar * title);
+
+/* Runs many of the above funtions to make lyrics beautier */
+gchar * beautify_lyrics(const gchar * lyrics);
 
 #endif

@@ -38,7 +38,7 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
         char * uID = copy_value(capo->cache->data,slash);
         if(uID)
         {
-            char * lyr_url = strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
+            char * lyr_url = g_strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
             if(lyr_url)
             {
                 GlyMemCache * new_cache = download_single(lyr_url,capo->s,NULL);

@@ -367,7 +367,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         CURLcode rc = CURLE_OK;
 
         info = g_malloc0(sizeof(struct header_data));
-	gchar * link_user_agent = g_strdup_printf("%s/linkvalidator",useragent);
+	gchar * link_user_agent =  g_strdup_printf("%s/linkvalidator",useragent);
 
         curl_easy_setopt(eh, CURLOPT_TIMEOUT, 5);
         curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
@@ -1302,11 +1302,13 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 
 /*--------------------------------------------------------*/
 
-GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
+GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err)
 {
 	gsize list_len = g_list_length(fetcher->provider);
 	gint fired[list_len];
 	memset(fired,0,list_len * sizeof(gint));
+
+	gboolean something_was_searched = FALSE;
 
 	gboolean stop_now = FALSE;
 	GList * result_list = NULL;
@@ -1336,6 +1338,15 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher)
 
 		}
 		g_list_free(src_list);
+		something_was_searched = TRUE;
+	}
+
+	if(something_was_searched == FALSE)
+	{
+		if(err != NULL)
+		{
+			*err = GLYRE_NO_PROVIDER;
+		}
 	}
 	return result_list;
 }

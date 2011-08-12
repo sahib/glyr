@@ -67,7 +67,7 @@ const char * generic_google_url(GlyQuery * sets, const char * searchterm)
         back = "islt:vga";
     }
 
-    return strdup_printf("http://www.google.%s/images?q=%s&safe=off&tbs=isch:1,iar:s,%s",lang,searchterm,back);
+    return g_strdup_printf("http://www.google.%s/images?q=%s&safe=off&tbs=isch:1,iar:s,%s",lang,searchterm,back);
 }
 
 const char * cover_google_url(GlyQuery * s)

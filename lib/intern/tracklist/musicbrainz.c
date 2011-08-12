@@ -73,7 +73,7 @@ GList * tracklist_musicbrainz_parse(cb_object * capo)
     char * release_ID = NULL;
     if( (release_ID = copy_value(strstr(capo->cache->data,REL_ID_BEGIN)+strlen(REL_ID_BEGIN),strstr(capo->cache->data,REL_ID_ENDIN))) != NULL)
     {
-        char * release_page_info_url = strdup_printf(REL_ID_FORM,release_ID);
+        char * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);
         GlyMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
         if(dlData)
         {

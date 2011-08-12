@@ -65,10 +65,11 @@
 */
 enum GLYR_ERROR
 {
+    GLYRE_UNKNOWN = 0,  /*!< Unknown error */
     GLYRE_OK,           /*!< everything is fine */
-    GLYRE_BAD_OPTION,   /*!< you passed a bad option to glyr_setopt() */
+    GLYRE_BAD_OPTION,   /*!< you passed a bad option to glyr_opt_() */
     GLYRE_BAD_VALUE,    /*!< Invalid value in va_list */
-    GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_setopt() */
+    GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_opt_() */
     GLYRE_NO_PROVIDER,  /*!< setttings->provider == NULL */
     GLYRE_UNKNOWN_GET,  /*!< settings->type is not valid */
     GLYRE_SKIP,         /*!< If returned by callback, cache is wont be added to results */

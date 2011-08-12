@@ -25,26 +25,26 @@ const char * lyrics_songlyrics_url(GlyQuery * settings)
     char * url = NULL;
     if(settings && settings->artist && settings->title)
     {
-        char * esc_a = ascii_strdown(settings->artist);
-        if(esc_a)
+        gchar * esc_a = g_utf8_strdown(settings->artist,-1);
+        if(esc_a != NULL)
         {
-            char * esc_t = ascii_strdown(settings->title);
-            if(esc_t)
+            char * esc_t = g_utf8_strdown(settings->title,-1);
+            if(esc_t != NULL)
             {
                 char * rep_a = strreplace(esc_a," ","-");
-                if(rep_a)
+                if(rep_a != NULL)
                 {
                     char * rep_t = strreplace(esc_t," ","-");
-                    if(rep_t)
+                    if(rep_t != NULL)
                     {
-                        url = strdup_printf("http://www.songlyrics.com/%s/%s-lyrics/",rep_a,rep_t);
-                        free(rep_t);
+                        url = g_strdup_printf("http://www.songlyrics.com/%s/%s-lyrics/",rep_a,rep_t);
+                        g_free(rep_t);
                     }
-                    free(rep_a);
+                    g_free(rep_a);
                 }
-                free(esc_t);
+                g_free(esc_t);
             }
-            free(esc_a);
+            g_free(esc_a);
         }
     }
     return url;

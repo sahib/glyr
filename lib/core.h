@@ -137,7 +137,7 @@ typedef struct MetaDataSource
 /*------------------------------------------------------*/
 
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
-GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher);
+GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err);
 GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
 GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
 

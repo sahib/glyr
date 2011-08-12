@@ -86,7 +86,7 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
         char * tmp = strdup(compare);
         if(tmp)
         {
-            if(levenshtein_strcmp(ascii_strdown_modify(plain),ascii_strdown_modify(tmp)) <= fuzz)
+            if(levenshtein_strcasecmp(plain,tmp) <= fuzz)
                 result = true;
 
             free(tmp);
@@ -126,7 +126,7 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                             char * url = copy_value(node+strlen(NODE_BEGIN),title_beg);
                             if(url)
                             {
-                                char * dl_url = strdup_printf("www.metrolyrics.com%s",url);
+                                char * dl_url = g_strdup_printf("www.metrolyrics.com%s",url);
                                 if(dl_url)
                                 {
                                     GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);

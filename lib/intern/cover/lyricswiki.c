@@ -55,7 +55,7 @@ GList * cover_lyricswiki_parse(cb_object * capo)
     char *tmp = strreplace(capo->s->album," ","_");
     if(tmp)
     {
-        char *_album = ascii_strdown(tmp);
+        char * _album = g_utf8_strdown(tmp,-1);
         if(_album)
         {
             // Go through all names and compare them with Levenshtein
@@ -79,7 +79,7 @@ GList * cover_lyricswiki_parse(cb_object * capo)
                             name[ll] = '\0';
 
                     // Compare only lower case strings...
-                    char * down_name = ascii_strdown(name);
+                    gchar * down_name = g_utf8_strdown(name,-1);
                     if(down_name)
                     {
                         // Allow max. 2 'typos'
@@ -111,18 +111,18 @@ GList * cover_lyricswiki_parse(cb_object * capo)
 
                         // Get next img tag
                         find = strstr(endTag,"<img name=\"");
-                        free(down_name);
+                        g_free(down_name);
                         down_name=NULL;
                     }
                 }
-                free(name);
+                g_free(name);
                 name=NULL;
             }
             free(_album);
             _album=NULL;
         }
 
-        free(tmp);
+        g_free(tmp);
         tmp=NULL;
     }
     return r_list;

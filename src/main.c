@@ -84,11 +84,18 @@ static void print_version(GlyQuery * s)
 void help_short(GlyQuery * s)
 {
     message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
+    GlyFetcherInfo * info  = glyr_get_plugin_info();
+    GlyFetcherInfo * track = info;
+    while(info != NULL)
+    {
+	g_print(" - %s\n", info->name);
+	info = info->next;
+    }
+    glyr_free_plugin_info(&track);
 
-// spacer
-#define IN "    "
+    #define IN "    "
     message(-1,s,stderr,"\n\nOPTIONS:\n"
-                 IN"-f --from  <s>        Providers from where to get metadata. Refer to the list at the end of this text.\n"
+                 IN"-f --from  <s>        Providers from where to get metadata. Refer to glyrc --list for a full list\n"
                  IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
                  IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
                  IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
@@ -119,7 +126,7 @@ void help_short(GlyQuery * s)
 
     message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",glyr_version());
     exit(EXIT_FAILURE);
-#undef IN
+    #undef IN
 }
 
 /* --------------------------------------------------------- */
@@ -179,7 +186,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 		{0,               0,                 0, '0'}
 	};
 
-	while (true)
+	while(TRUE)
 	{
 		int c;
 		int option_index = 0;
@@ -193,16 +200,18 @@ static void parse_commandline_general(int argc, char * const * argv, GlyQuery * 
 			case 'w':
 				{
 					gsize opt_len = strlen(optarg);
-					if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 &&
-					   g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 &&
-					   g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 &&
+					if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 ||
+					   g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
+					   g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
 					   g_file_test(optarg,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
 					{
+						puts(optarg);
 						*write_to = optarg;
 					}
 					else
 					{
-						g_printerr("'%s' does not seem to be an valid directory!\n",optarg);	
+						g_printerr("'%s' does not seem to be an valid directory!\n",optarg);
+						exit(-1);
 					}
 					break;
 				}
@@ -332,7 +341,7 @@ static char * path_covers(GlyQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_album  = correct_path(s->album );
-	char * good_path   = g_strdup_printf("%s/%s_%s_cover_%d.jpg",save_dir, good_artist,good_album,i);
+	char * good_path   =  g_strdup_printf("%s/%s_%s_cover_%d.jpg",save_dir, good_artist,good_album,i);
 
 	if(good_album)
 		free(good_album);
@@ -350,7 +359,7 @@ static char * path_lyrics(GlyQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_title  = correct_path(s->title );
-	char * good_path   = g_strdup_printf("%s/%s_%s_lyrics_%d.txt",save_dir,good_artist,good_title,i);
+	char * good_path   =  g_strdup_printf("%s/%s_%s_lyrics_%d.txt",save_dir,good_artist,good_title,i);
 
 	if(good_title)
 		free(good_title);
@@ -367,7 +376,7 @@ static char * path_lyrics(GlyQuery * s, const char * save_dir, int i)
 static char * path_photos(GlyQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_photo_%d.jpg",save_dir,good_artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_photo_%d.jpg",save_dir,good_artist,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -382,7 +391,7 @@ static char * path_photos(GlyQuery * s, const char * save_dir, int i)
 static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_ainfo_%d.txt",save_dir,good_artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_ainfo_%d.txt",save_dir,good_artist,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -397,7 +406,7 @@ static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
 static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_similiar_%d.txt",save_dir, good_artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_similiar_%d.txt",save_dir, good_artist,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -413,7 +422,7 @@ static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_album  = correct_path(s->album );
-	char * good_path   = g_strdup_printf("%s/%s_%s_%s_%d.txt",save_dir,good_artist,good_album,type,i);
+	char * good_path   =  g_strdup_printf("%s/%s_%s_%s_%d.txt",save_dir,good_artist,good_album,type,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -444,7 +453,7 @@ static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
 static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_albumtitle_%d.txt",save_dir,good_artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_albumtitle_%d.txt",save_dir,good_artist,i);
 	if(good_artist)
 		free(good_artist);
 
@@ -456,7 +465,7 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_tag_%d.txt",save_dir,s->artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_tag_%d.txt",save_dir,s->artist,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -469,7 +478,7 @@ static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 static char * path_relations(GlyQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
-	char * good_path   = g_strdup_printf("%s/%s_url_%d.txt",save_dir,s->artist,i);
+	char * good_path   =  g_strdup_printf("%s/%s_url_%d.txt",save_dir,s->artist,i);
 
 	if(good_artist)
 		free(good_artist);
@@ -557,43 +566,53 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 	/* write out 'live' */
 	if(write_to != NULL)
 	{
-		gchar * path = get_path_by_type(s,write_to,*current);
-		if(path != NULL)
+		gsize write_len = strlen(write_to);
+		if(g_ascii_strncasecmp(write_to,"stdout",write_len) == 0||
+		   g_ascii_strncasecmp(write_to,"stderr",write_len) == 0||
+		   g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
 		{
-			if(s->verbosity > 1)
-			{
-				message(2,s,stderr,"\nWRITE to '%s'\n",path);
-				message(2,s,stderr,"////////////////////\n");
-			}
-
-			if(glyr_write(c,path) == -1)
-			{
-				message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
-			}
+			glyr_write(c,write_to);
 		}
-
-		/* call the program if any specified */
-		if(exec_on_call != NULL)
+		else
 		{
-			char * replace_path = g_strdup(exec_on_call);
+			gchar * path = get_path_by_type(s,write_to,*current);
 			if(path != NULL)
 			{
-				gchar ** path_splitv = g_strsplit(path,"<path>",0);
-				replace_path = g_strjoinv(path,path_splitv);
-				g_strfreev(path_splitv);
-				path_splitv = NULL;
+				if(s->verbosity > 1)
+				{
+					message(2,s,stderr,"\nWRITE to '%s'\n",path);
+					message(2,s,stderr,"////////////////////\n");
+				}
+
+				if(glyr_write(c,path) == -1)
+				{
+					message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",path);
+				}
 			}
 
-			/* Call that command */
-			int exitVal = system(replace_path);
-			if(exitVal != EXIT_SUCCESS)
+			/* call the program if any specified */
+			if(exec_on_call != NULL)
 			{
-				message(1,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
-			}
+				char * replace_path = g_strdup(exec_on_call);
+				if(path != NULL)
+				{
+					gchar ** path_splitv = g_strsplit(replace_path,"<path>",0);
+					replace_path = g_strjoinv(path,path_splitv);
+					g_strfreev(path_splitv);
+					path_splitv = NULL;
+				}
 
-			g_free(replace_path);
+				/* Call that command */
+				int exitVal = system(replace_path);
+				if(exitVal != EXIT_SUCCESS)
+				{
+					message(3,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
+				}
+
+				g_free(replace_path);
+			}
+			g_free(path);
 		}
-		g_free(path);
 	}
 
 	if(current != NULL)
@@ -690,13 +709,18 @@ int main(int argc, char * argv[])
 					   Useful if you need to cache the data (e.g. for batch jobs *
 					   Left only for the reader's informatiom, no functions here *
 					 */
-					message(2,&my_query,stderr,"- In total %d items found.\n",length);
+
+					/*
+					// Example to print it all out
 					GlyMemCache * elem = my_list;
 					while(elem != NULL)
 					{
-						g_print("%s\n",elem->dsrc);
-						elem = elem->next;
+					g_print("%s\n",elem->dsrc);
+					elem = elem->next;
 					}
+					 */
+
+					message(2,&my_query,stderr,"- In total %d items found.\n",length);
 				}
 
 				// Free all downloaded buffers

@@ -39,22 +39,22 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
     GList * r_list = NULL;
     GlyMemCache * r_cache = NULL;
 
-    char *searchstring = strdup_printf(". %s%s",capo->s->title,"</a></h3>");
-    if(searchstring)
+    gchar *searchstring = g_strdup_printf(". %s%s",capo->s->title,"</a></h3>");
+    if(searchstring != NULL)
     {
-        ascii_strdown_modify(searchstring);
-        char *cache_copy = strdup(capo->cache->data);
-        if(cache_copy)
+        gchar * searchstr_lower = g_utf8_strdown(searchstring,-1);
+        gchar *cache_copy = g_utf8_strdown(capo->cache->data,-1);
+
+        if(cache_copy != NULL)
         {
-            ascii_strdown_modify(cache_copy);
-            char *head = strstr(cache_copy,searchstring);
-            if(head)
+            gchar * head = strstr(cache_copy,searchstr_lower);
+            if(head != NULL)
             {
                 char *foot  = strstr(head, "<a name=");
-                if(foot)
+                if(foot != NULL)
                 {
                     char * html_code = copy_value(head,foot);
-                    if(html_code)
+                    if(html_code != NULL)
                     {
                         r_cache = DL_init();
                         r_cache->data = strreplace(html_code,"<br />","");
@@ -63,13 +63,11 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
                         free(html_code);
                     }
                 }
-                else
-                {
-                }
             }
-            free(cache_copy);
+            g_free(cache_copy);
+	    g_free(searchstr_lower);
         }
-        free(searchstring);
+        g_free(searchstring);
     }
 
 

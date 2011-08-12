@@ -32,7 +32,7 @@
 const char * ainfo_lastfm_url(GlyQuery * s)
 {
     char * right_artist = strreplace(s->artist," ","+");
-    char * url = strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,s->lang);
+    char * url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,s->lang);
 
     if(right_artist)
         free(right_artist);

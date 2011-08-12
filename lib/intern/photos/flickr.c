@@ -25,7 +25,7 @@
 
 const char * photos_flickr_url(GlyQuery * settings)
 {
-    return strdup_printf("http://api.flickr.com/services/rest/"
+    return g_strdup_printf("http://api.flickr.com/services/rest/"
                          "?method=flickr.photos.search&"
                          "api_key="API_KEY_FLICKR"&"
                          "tags=%s&"
@@ -86,7 +86,7 @@ GList * photos_flickr_parse(cb_object * capo)
                 linebf = NULL;
 
                 GlyMemCache * cache = DL_init();
-                cache->data = strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
+                cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
                 r_list = g_list_prepend(r_list,cache);
 
                 if(ID)

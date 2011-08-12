@@ -64,7 +64,7 @@ GList * cover_albumart_parse(cb_object * capo)
                 if(img_url)
                 {
                     GlyMemCache * result = DL_init();
-                    result->data = strdup_printf(AMZ"%s.jpg",img_url);
+                    result->data = g_strdup_printf(AMZ"%s.jpg",img_url);
                     result->size = strlen(result->data);
 
                     r_list = g_list_prepend(r_list,result);

@@ -85,7 +85,7 @@ GList * cover_discogs_parse(cb_object * capo)
                         release_end = NULL;
 
                         // Construct release_url
-                        char *release_url = strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
+                        char *release_url = g_strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
                         if(release_url)
                         {
                             // Only download till artists tag.

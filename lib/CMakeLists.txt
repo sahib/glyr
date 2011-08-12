@@ -1,6 +1,6 @@
 # configure
 set( GLYR_VERSION_MAJOR "0")
-set( GLYR_VERSION_MINOR "7")
+set( GLYR_VERSION_MINOR "7.1")
 set( GLYR_VERSION_NAME  "Engaging Sloth (dev)")
 set( GLYR_COLORED_OUTPUT true)
 

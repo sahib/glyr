@@ -78,7 +78,7 @@ GlyMemCache * parse_bio_long(GlyMemCache * to_parse, GlyQuery * s)
             char * id = copy_value(url_root + strlen(ROOT_URL),strstr(url_root,"\">"));
             if(id != NULL)
             {
-                char * url = strdup_printf(ROOT_URL"%s",id);
+                char * url = g_strdup_printf(ROOT_URL"%s",id);
                 if(url != NULL)
                 {
                     GlyMemCache * dl = download_single(url,s,NULL);

@@ -99,7 +99,7 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
             artist  = in_tag(begin_artist,NAME_BEGIN,NAME_ENDIN);
         }
 
-        char * composed = strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",track,artist,match,url,img_s,img_m,img_l,img_e,img_x);
+        char * composed = g_strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",track,artist,match,url,img_s,img_m,img_l,img_e,img_x);
 
         if(composed != NULL)
         {

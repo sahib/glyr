@@ -60,7 +60,7 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
     if(compare)
     {
         char * tmp = strdup(compare);
-        if(levenshtein_strcmp(ascii_strdown_modify(content),ascii_strdown_modify(tmp)) <= fuzz)
+        if(levenshtein_strcasecmp(content,tmp) <= fuzz)
         {
             free(tmp);
             return true;
@@ -119,7 +119,7 @@ GList * lyrics_magistrix_parse (cb_object * capo)
                                             char * url = copy_value(url_begin+strlen(URL_BEGIN),title_begin);
                                             if(url)
                                             {
-                                                char * dl_url = strdup_printf("www.magistrix.de%s",url);
+                                                char * dl_url = g_strdup_printf("www.magistrix.de%s",url);
                                                 if(dl_url)
                                                 {
                                                     // We don't need the ugly comments
