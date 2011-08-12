@@ -60,14 +60,14 @@
 /*------------------------------------------------------*/
 
 void panic(const char * fmt, ...);
-int glyr_message(int v, GlyQuery * s, const char * fmt, ...);
+int glyr_message(int v, GlyrQuery * s, const char * fmt, ...);
 
 /*------------------------------------------------------*/
 
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
 // Other parts of the program shall not use this struct
-// GlyMemCache is what you're searching
+// GlyrMemCache is what you're searching
 // It models the data that one plugin needs.
 typedef struct cb_object
 {
@@ -78,10 +78,10 @@ typedef struct cb_object
     CURL *handle;
 
     // pointer to settings struct (artist,album,etc)
-    GlyQuery * s;
+    GlyrQuery * s;
 
     // internal cache attached to this url
-    GlyMemCache *cache;
+    GlyrMemCache *cache;
 
 } cb_object;
 
@@ -101,10 +101,10 @@ typedef struct MetaDataFetcher
     enum GLYR_GET_TYPE type;
 
     /* callbacks */
-    bool (*validate)(GlyQuery *);
+    bool (*validate)(GlyrQuery *);
     void (*init)(void);
     void (*destroy)(void);
-    GList* (*finalize)(GlyQuery*,GList*,gboolean*);
+    GList* (*finalize)(GlyrQuery*,GList*,gboolean*);
 
     /* Wether this Fetcher delievers the full data (lyrics),
        or just URLs of the data. */
@@ -123,7 +123,7 @@ typedef struct MetaDataSource
     gchar * encoding;/* Encoding, NULL defaults to UTF-8, this will only take place for textparser */
 
     GList * (* parser) (struct cb_object *);  /* called when parsing is needed                  */
-    const char  * (* get_url)(GlyQuery *); 	/* called when the url of this provider is needed */
+    const char  * (* get_url)(GlyrQuery *); 	/* called when the url of this provider is needed */
     gchar  * endmarker;              	        /* Download stops if this mark is found           */
 
     enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
@@ -137,18 +137,18 @@ typedef struct MetaDataSource
 /*------------------------------------------------------*/
 
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
-GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err);
-GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
-GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end);
+GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err);
+GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
+GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end);
 
 /*------------------------------------------------------*/
 
-gboolean continue_search(gint current, GlyQuery * s);
-void update_md5sum(GlyMemCache * c);
+gboolean continue_search(gint current, GlyrQuery * s);
+void update_md5sum(GlyrMemCache * c);
 
-GlyMemCache * DL_init(void);
-GlyMemCache * DL_copy(GlyMemCache * src);
-void DL_free(GlyMemCache *cache);
+GlyrMemCache * DL_init(void);
+GlyrMemCache * DL_copy(GlyrMemCache * src);
+void DL_free(GlyrMemCache *cache);
 void glist_free_full(GList * List, void (* free_func)(void * ptr));
 
 #endif

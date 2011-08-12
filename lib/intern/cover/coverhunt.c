@@ -25,7 +25,7 @@
  * Provider will be removed if down any longer..
 */
 
-const char * cover_coverhunt_url(GlyQuery * sets)
+const char * cover_coverhunt_url(GlyrQuery * sets)
 {
     if(sets->cover.min_size <= 500 || sets->cover.min_size == -1)
         return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
@@ -85,7 +85,7 @@ GList * cover_coverhunt_parse(cb_object *capo)
                 char * real_url = g_strdup_printf("http://www.coverhunt.com/go/%s",go_url);
                 if(real_url)
                 {
-                    GlyMemCache * search_buf = download_single(real_url,capo->s,"<div id=\"right\">");
+                    GlyrMemCache * search_buf = download_single(real_url,capo->s,"<div id=\"right\">");
                     if(search_buf)
                     {
                         char * artwork = strstr(search_buf->data, "<div class=\"artwork\">");
@@ -103,7 +103,7 @@ GList * cover_coverhunt_parse(cb_object *capo)
                                         char * url = copy_value(img_start,img_end);
                                         if(url)
                                         {
-                                            GlyMemCache * shell = DL_init();
+                                            GlyrMemCache * shell = DL_init();
                                             shell->data = url;
                                             shell->size = img_end - img_start;
                                             r_list = g_list_prepend(r_list,shell);

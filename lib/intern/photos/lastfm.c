@@ -27,7 +27,7 @@
 #define URL_BEGIN "\">"
 #define URL_ENDIN "</size>"
 
-const char * photos_lastfm_url(GlyQuery * settings)
+const char * photos_lastfm_url(GlyrQuery * settings)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY;
 }
@@ -50,7 +50,7 @@ GList * photos_lastfm_parse(cb_object * capo)
                 char * urlb = copy_value(begin,endin);
                 if(urlb)
                 {
-                    GlyMemCache * cache = DL_init();
+                    GlyrMemCache * cache = DL_init();
                     cache->data = urlb;
                     r_list = g_list_prepend(r_list,cache);
                     urlc++;

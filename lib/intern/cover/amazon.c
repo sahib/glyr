@@ -61,7 +61,7 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 
 
 #define rg_markup "__RESPONSE_GROUP__"
-const char * generic_amazon_url(GlyQuery * sets, const char * response_group)
+const char * generic_amazon_url(GlyrQuery * sets, const char * response_group)
 {
     const char * lang_link = NULL;
     if(sets->cover.min_size <= 500 || sets->cover.min_size)
@@ -88,7 +88,7 @@ const char * generic_amazon_url(GlyQuery * sets, const char * response_group)
     return NULL;
 }
 
-const char * cover_amazon_url(GlyQuery * sets)
+const char * cover_amazon_url(GlyrQuery * sets)
 {
     return generic_amazon_url(sets,"Images");
 }
@@ -121,7 +121,7 @@ GList * cover_amazon_parse(cb_object *capo)
             char * result_url = copy_value(find,endTag);
             if(result_url)
             {
-                GlyMemCache * result_cache = DL_init();
+                GlyrMemCache * result_cache = DL_init();
                 result_cache->data = result_url;
                 result_cache->size = strlen(result_url);
                 r_list = g_list_prepend(r_list,result_cache);

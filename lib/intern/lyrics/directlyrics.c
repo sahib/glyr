@@ -24,7 +24,7 @@
 // Unable to use this via CGI without lots of pain..
 // So only use dump URL scheme
 
-const char * lyrics_directlyrics_url(GlyQuery * settings)
+const char * lyrics_directlyrics_url(GlyrQuery * settings)
 {
     gchar * url   = NULL;
     gchar * esc_a = g_utf8_strdown(settings->artist,-1);
@@ -57,7 +57,7 @@ const char * lyrics_directlyrics_url(GlyQuery * settings)
 GList * lyrics_directlyrics_parse(cb_object * capo)
 {
     char * f_entry;
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     GList * r_list = NULL;
 
     if( (f_entry = strstr(capo->cache->data,START)) )

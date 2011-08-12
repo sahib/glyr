@@ -24,7 +24,7 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_tags(GlyQuery * settings)
+bool vdt_tags(GlyrQuery * settings)
 {
     if(settings && settings->artist &&
             !(settings && settings->artist && /* Impossible to get tags of a title without album */
@@ -40,7 +40,7 @@ bool vdt_tags(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     return generic_txt_finalizer(s,list,stop_me,TYPE_TAGS);
 }

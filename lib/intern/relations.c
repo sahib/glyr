@@ -24,7 +24,7 @@
 
 //-------------------------------------
 
-bool vdt_relations(GlyQuery * settings)
+bool vdt_relations(GlyrQuery * settings)
 {
     if(settings && settings->artist)
     {
@@ -37,7 +37,7 @@ bool vdt_relations(GlyQuery * settings)
     }
 }
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
 }

@@ -12,7 +12,7 @@ rescue LoadError => e
 end
 
 # Mixin free/
-class Glyros::GlyMemCache
+class Glyros::GlyrMemCache
 	# You don't need to do this yourself
 	def register_free
 	    ObjectSpace.define_finalizer(self, 
@@ -43,7 +43,7 @@ class Glyros::GlyMemCache
 	end
 
 	def print
-		q = Glyros::GlyQuery.instance
+		q = Glyros::GlyrQuery.instance
 		Glyros::glyr_opt_verbosity(q,2)
 		Glyros::glyr_printitem(q,self)
 	end
@@ -57,7 +57,7 @@ class Glyros::GlyMemCache
 	end
 end
 
-class Glyros::GlyQuery
+class Glyros::GlyrQuery
 	def register_free
 	    ObjectSpace.define_finalizer(self,
 	    proc do
@@ -67,7 +67,7 @@ class Glyros::GlyQuery
 	end
 
 	def self.instance
-	    new_query = Glyros::GlyQuery.new
+	    new_query = Glyros::GlyrQuery.new
 	    Glyros::glyr_init_query(new_query)
 	    return new_query.register_free
 	end
@@ -85,13 +85,13 @@ class GlyrosSpit
 	@providers = nil
 
 	def initialize
-		@query = Glyros::GlyQuery.instance()
+		@query = Glyros::GlyrQuery.instance()
 	end
 
 	def reset 
 		@query = nil
 		@providers = nil
-		@query = Glyros::GlyQuery.new
+		@query = Glyros::GlyrQuery.new
 	end
 
         def get(type_enum)
@@ -271,7 +271,7 @@ class GlyrosSpit
 	end	
 
 	def self.get_plugin_info
-		return Glyros::GlyFetcherInfo.new
+		return Glyros::GlyrFetcherInfo.new
 	end
 
 	private
@@ -319,7 +319,7 @@ def use_strange_functions
 	info = GlyrosSpit.get_plugin_info()
 	
 	until info.nil?
-		puts "-----------"
+		puts "\n-----------"
 		puts info.name
 		source = info.head
 		until source.nil?

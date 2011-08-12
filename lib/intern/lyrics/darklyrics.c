@@ -22,7 +22,7 @@
 
 #define DARK_URL "http://darklyrics.com/lyrics/%artist%/%album%.html#1"
 
-const char * lyrics_darklyrics_url(GlyQuery * settings)
+const char * lyrics_darklyrics_url(GlyrQuery * settings)
 {
     return DARK_URL;
 }
@@ -37,7 +37,7 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
      * */
 
     GList * r_list = NULL;
-    GlyMemCache * r_cache = NULL;
+    GlyrMemCache * r_cache = NULL;
 
     gchar *searchstring = g_strdup_printf(". %s%s",capo->s->title,"</a></h3>");
     if(searchstring != NULL)

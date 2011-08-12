@@ -22,7 +22,7 @@
 
 #define API_KEY API_KEY_LASTFM
 
-const char * similiar_song_lastfm_url(GlyQuery * sets)
+const char * similiar_song_lastfm_url(GlyrQuery * sets)
 {
     return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=%artist%&track=%title%&api_key="API_KEY;
 }
@@ -103,7 +103,7 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
 
         if(composed != NULL)
         {
-            GlyMemCache * result = DL_init();
+            GlyrMemCache * result = DL_init();
 
             result->data = composed;
             result->size = strlen(composed);

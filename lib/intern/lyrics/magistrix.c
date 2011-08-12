@@ -22,14 +22,14 @@
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
 
-const char * lyrics_magistrix_url(GlyQuery * settings)
+const char * lyrics_magistrix_url(GlyrQuery * settings)
 {
     return MG_URL;
 }
 
-static GlyMemCache * parse_lyric_page(const char * buffer)
+static GlyrMemCache * parse_lyric_page(const char * buffer)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     if(buffer)
     {
         char * begin = strstr(buffer,"<div id='songtext'>");
@@ -83,7 +83,7 @@ GList * lyrics_magistrix_parse (cb_object * capo)
     {
         if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   // Are we not on the search result page?
         {
-            GlyMemCache * result = parse_lyric_page(capo->cache->data);
+            GlyrMemCache * result = parse_lyric_page(capo->cache->data);
             if(result)
             {
                 result->dsrc = strdup(capo->url);
@@ -123,10 +123,10 @@ GList * lyrics_magistrix_parse (cb_object * capo)
                                                 if(dl_url)
                                                 {
                                                     // We don't need the ugly comments
-                                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
+                                                    GlyrMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
                                                     if(dl_cache)
                                                     {
-                                                        GlyMemCache * result = parse_lyric_page(dl_cache->data);
+                                                        GlyrMemCache * result = parse_lyric_page(dl_cache->data);
                                                         if(result)
                                                         {
                                                             urlc++;

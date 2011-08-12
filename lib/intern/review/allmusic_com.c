@@ -31,7 +31,7 @@
 #define ARTIST_PART "<td>"
 #define ARTIST_END  "</td>"
 
-const char * review_allmusic_url(GlyQuery * s)
+const char * review_allmusic_url(GlyrQuery * s)
 {
     return "http://www.allmusic.com/search/album/%album%";
 }
@@ -39,9 +39,9 @@ const char * review_allmusic_url(GlyQuery * s)
 #define IMG_BEGIN "<p class=\"text\">"
 #define IMG_ENDIN "</p>"
 
-GlyMemCache * parse_text(GlyMemCache * to_parse)
+GlyrMemCache * parse_text(GlyrMemCache * to_parse)
 {
-    GlyMemCache * rche = NULL;
+    GlyrMemCache * rche = NULL;
     char * text_begin = strstr(to_parse->data,IMG_BEGIN);
     if(text_begin != NULL)
     {
@@ -71,7 +71,7 @@ GList * review_allmusic_parse(cb_object * capo)
     GList * r_list = NULL;
     if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
     {
-        GlyMemCache * result = parse_text(capo->cache);
+        GlyrMemCache * result = parse_text(capo->cache);
         r_list = g_list_prepend(r_list, result);
         return r_list;
     }
@@ -101,10 +101,10 @@ GList * review_allmusic_parse(cb_object * capo)
 				    char * review_url = g_strdup_printf("%s/review",url);
 				    if(review_url)
 				    {
-					    GlyMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
+					    GlyrMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
 					    if(dl != NULL)
 					    {
-						    GlyMemCache * result = parse_text(dl);
+						    GlyrMemCache * result = parse_text(dl);
 						    if(result != NULL)
 						    {
 							    r_list = g_list_prepend(r_list,result);

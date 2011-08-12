@@ -29,7 +29,7 @@
 
 #define API_KEY API_KEY_LASTFM
 
-const char * ainfo_lastfm_url(GlyQuery * s)
+const char * ainfo_lastfm_url(GlyrQuery * s)
 {
     char * right_artist = strreplace(s->artist," ","+");
     char * url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY,right_artist,s->lang);
@@ -74,12 +74,12 @@ GList * ainfo_lastfm_parse(cb_object * capo)
         char * content = copy_value(strstr(capo->cache->data,CONTENT_BEGIN)+strlen(CONTENT_BEGIN),strstr(capo->cache->data,CONTENT_ENDIN));
         if(content)
         {
-            GlyMemCache * sc = DL_init();
+            GlyrMemCache * sc = DL_init();
             sc->data = fix_crappy_lastfm_txt(short_desc);
             sc->size = strlen(sc->data);
             sc->dsrc = strdup(capo->url);
 
-            GlyMemCache * lc = DL_init();
+            GlyrMemCache * lc = DL_init();
             lc->data = fix_crappy_lastfm_txt(content);
             lc->size = strlen(lc->data);
             lc->dsrc = strdup(capo->url);

@@ -25,7 +25,7 @@
 
 #define API_KEY API_KEY_LASTFM
 
-const char * cover_lastfm_url(GlyQuery * sets)
+const char * cover_lastfm_url(GlyrQuery * sets)
 {
     if(sets->cover.min_size <= 350 || sets->cover.min_size == -1)
     {
@@ -53,7 +53,7 @@ GList * cover_lastfm_parse(cb_object *capo)
         tag_ssize = "<image size=\"extralarge\">";
 
     // The (perhaps) result
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     GList * r_list = NULL;
 
     int urlc = 0;

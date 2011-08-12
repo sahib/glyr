@@ -22,7 +22,7 @@
 
 #define AT_URL "http://lyrix.at/lyrics-search/s-%artist%,,%title%,,any,1321,0.html"
 
-const char * lyrics_lyrixat_url(GlyQuery * settings)
+const char * lyrics_lyrixat_url(GlyrQuery * settings)
 {
     return AT_URL;
 }
@@ -68,7 +68,7 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
                                 char * url = g_strdup_printf("http://lyrix.at/de%s",url_part);
                                 if(url)
                                 {
-                                    GlyMemCache * lyrcache = download_single(url,capo->s,"<!-- eBay Relevance Ad -->");
+                                    GlyrMemCache * lyrcache = download_single(url,capo->s,"<!-- eBay Relevance Ad -->");
                                     if(lyrcache)
                                     {
                                         char * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);
@@ -80,7 +80,7 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
                                                 char * lyrics = copy_value(lyr_begin,lyr_endin);
                                                 if(lyrics)
                                                 {
-                                                    GlyMemCache * result = DL_init();
+                                                    GlyrMemCache * result = DL_init();
                                                     result->data = strreplace(lyrics,"<br />","");
                                                     result->size = strlen(lyrics);
                                                     result->dsrc = strdup(url);

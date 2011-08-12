@@ -15,21 +15,21 @@
 /**
 * @brief Initiate translating
 *
-* @param s The GlyQuery needed to determine the source/target language
+* @param s The GlyrQuery needed to determine the source/target language
 * @param to_translate Cache that gets modified with the translation.
 *
-*  Takes the cache struct to_translate and translate the text according to the setting stored in the GlyQuery s \n
+*  Takes the cache struct to_translate and translate the text according to the setting stored in the GlyrQuery s \n
 *  It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang,   \n
 *  and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit \n
 *  being at the moment at 100,000 chars per day and IP.\n
 *  The buffer is directly modified so make copies before if you need.\n
 */
-void  Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate);
+void  Gly_gtrans_translate(GlyrQuery * s, GlyrMemCache * to_translate);
 
 /**
 * @brief Lookup the language a certain snippet may be in
 *
-* @param s The GlyQuery needed to determine the source/target language\n
+* @param s The GlyrQuery needed to determine the source/target language\n
 * @param snippet a short snippet (less than 500 signs) in the questionable language\n
 * @param correctness an optional pointer storing the correctness, or NULL\n
 *
@@ -42,12 +42,12 @@ void  Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate);
 * @return the language code ("en",de",..)
 */
 
-char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness);
+char * Gly_gtrans_lookup(GlyrQuery * s, const char * snippet, float * correctness);
 
 /**
 * @brief List all supported languages
 *
-* @param s The GlyQuery needed to determine the source/target language
+* @param s The GlyrQuery needed to determine the source/target language
 *
 * Queries google for a list of all supported languages \n
 * Returned as a list of char pointers, free both the   \n
@@ -58,6 +58,6 @@ char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness
 * @return a list of strings, containg the language codes
 */
 
-char ** Gly_gtrans_list(GlyQuery * s);
+char ** Gly_gtrans_list(GlyrQuery * s);
 
 #endif

@@ -226,22 +226,22 @@ void unregister_fetcher_plugins(void)
 
 /* --------------------------------------- */
 
-GlyFetcherInfo * get_plugin_info(void)
+GlyrFetcherInfo * get_plugin_info(void)
 {
-	GlyFetcherInfo * head = NULL;
-	GlyFetcherInfo * prev_fetcher = NULL;
+	GlyrFetcherInfo * head = NULL;
+	GlyrFetcherInfo * prev_fetcher = NULL;
 	for(GList * elem0 = r_getFList(); elem0; elem0 = elem0->next)
 	{
 		MetaDataFetcher * fetch = elem0->data;
-		GlyFetcherInfo  * finfo = g_malloc0(sizeof(GlyFetcherInfo));
+		GlyrFetcherInfo  * finfo = g_malloc0(sizeof(GlyrFetcherInfo));
 
-		GlySourceInfo * prev_source = NULL;
+		GlyrSourceInfo * prev_source = NULL;
 		for(GList * elem1 = r_getSList(); elem1; elem1 = elem1->next)
 		{
 			MetaDataSource * source = elem1->data;
 			if(source && source->type == fetch->type)
 			{
-				GlySourceInfo  * sinfos = g_malloc0(sizeof(GlySourceInfo)); 
+				GlyrSourceInfo  * sinfos = g_malloc0(sizeof(GlyrSourceInfo)); 
 
 				sinfos->quality = source->quality;
 				sinfos->speed   = source->speed;
@@ -282,14 +282,14 @@ GlyFetcherInfo * get_plugin_info(void)
 
 /* --------------------------------------- */
 
-static void free_single_item(GlyFetcherInfo * info)
+static void free_single_item(GlyrFetcherInfo * info)
 {
 	if(info != NULL)
 	{
-		GlySourceInfo * elem = info->head;
+		GlyrSourceInfo * elem = info->head;
 		while(elem != NULL)
 		{
-			GlySourceInfo * to_delete = elem;
+			GlyrSourceInfo * to_delete = elem;
 			elem = elem->next;
 
 			g_free(to_delete->name);
@@ -303,14 +303,14 @@ static void free_single_item(GlyFetcherInfo * info)
 
 /* --------------------------------------- */
 
-void free_plugin_info(GlyFetcherInfo ** infos)
+void free_plugin_info(GlyrFetcherInfo ** infos)
 {
 	if(infos != NULL)
 	{
-		GlyFetcherInfo * fetch = infos[0];
+		GlyrFetcherInfo * fetch = infos[0];
 		while(fetch != NULL)
 		{
-			GlyFetcherInfo * to_delete = fetch;
+			GlyrFetcherInfo * to_delete = fetch;
 			fetch = fetch->next;
 
 			free_single_item(to_delete);

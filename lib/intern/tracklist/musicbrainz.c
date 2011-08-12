@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * tracklist_musicbrainz_url(GlyQuery * sets)
+const char * tracklist_musicbrainz_url(GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=Official&limit=10&title=%album%&limit=1";
 }
@@ -49,7 +49,7 @@ static GList * traverse_xml(const char * data, const char * url, cb_object * cap
         char * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN))); // 1 UP
         if(value && durat)
         {
-            GlyMemCache * cont = DL_init();
+            GlyrMemCache * cont = DL_init();
             cont->data = beautify_lyrics(value);
             cont->size = strlen(cont->data);
             cont->duration = atoi(durat) / 1e3;
@@ -74,7 +74,7 @@ GList * tracklist_musicbrainz_parse(cb_object * capo)
     if( (release_ID = copy_value(strstr(capo->cache->data,REL_ID_BEGIN)+strlen(REL_ID_BEGIN),strstr(capo->cache->data,REL_ID_ENDIN))) != NULL)
     {
         char * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);
-        GlyMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
+        GlyrMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
         if(dlData)
         {
             ls = traverse_xml(dlData->data,capo->url,capo);

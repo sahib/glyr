@@ -24,7 +24,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * photos_google_url(GlyQuery * s)
+const char * photos_google_url(GlyrQuery * s)
 {
     const char * result = NULL;
     char * searchterm = strdup("%artist%+band+photos");

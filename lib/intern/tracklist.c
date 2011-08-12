@@ -24,7 +24,7 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_tracklist(GlyQuery * settings)
+bool vdt_tracklist(GlyrQuery * settings)
 {
     if(settings && settings->artist && settings->album)
     {
@@ -35,7 +35,7 @@ bool vdt_tracklist(GlyQuery * settings)
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
 }

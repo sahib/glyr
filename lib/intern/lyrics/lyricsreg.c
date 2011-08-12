@@ -23,7 +23,7 @@
 #define INFO_BEGIN "</div><div style=\"text-align:center;\""
 #define INFO_ENDIN " <a href=\""
 
-const char * lyrics_lyricsreg_url(GlyQuery * s)
+const char * lyrics_lyricsreg_url(GlyrQuery * s)
 {
     return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
 }
@@ -46,7 +46,7 @@ GList * lyrics_lyricsreg_parse(cb_object * capo)
                 char * no_br_tags = strreplace(text_seg,"<br />",NULL);
                 if(no_br_tags)
                 {
-                    GlyMemCache * tmp = DL_init();
+                    GlyrMemCache * tmp = DL_init();
                     tmp->data = beautify_lyrics(no_br_tags);
                     tmp->size = tmp->data ? strlen(tmp->data) : 0;
                     tmp->dsrc = strdup(capo->url);

@@ -24,7 +24,7 @@
 
 //-------------------------------------
 
-bool get_albumlist(GlyQuery * settings)
+bool get_albumlist(GlyrQuery * settings)
 {
     if(settings && settings->artist)
     {
@@ -39,7 +39,7 @@ bool get_albumlist(GlyQuery * settings)
 
 //-------------------------------------
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     return generic_txt_finalizer(s,list,stop_me,TYPE_ALBUMLIST);
 }

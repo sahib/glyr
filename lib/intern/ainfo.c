@@ -24,7 +24,7 @@
 
 /*-------------------------------------*/
 
-bool vdt_ainfo(GlyQuery * settings)
+bool vdt_ainfo(GlyrQuery * settings)
 {
     if(settings && settings->artist)
     {
@@ -33,12 +33,12 @@ bool vdt_ainfo(GlyQuery * settings)
     return false;
 }
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     /* Fix up messy text, escape chars etc.  */
     for(GList * elem = list; elem; elem = elem->next)
     {
-        GlyMemCache * item = elem->data;
+        GlyrMemCache * item = elem->data;
         if(item != NULL)
         {
 

@@ -11,12 +11,12 @@
 
 static void * call_get(void * p)
 {
-    GlyMemCache * r = glyr_get(p,NULL,NULL);
+    GlyrMemCache * r = glyr_get(p,NULL,NULL);
     puts("Thread finished");
     return r;
 }
 
-static void configure(GlyQuery * s, enum GLYR_GET_TYPE type)
+static void configure(GlyrQuery * s, enum GLYR_GET_TYPE type)
 {
     glyr_init_query(s);
     glyr_opt_artist(s,"Die Apokalyptischen Reiter");
@@ -27,9 +27,9 @@ static void configure(GlyQuery * s, enum GLYR_GET_TYPE type)
     glyr_opt_from(s,NULL);
 }
 
-static void printme(GlyMemCache * start)
+static void printme(GlyrMemCache * start)
 {
-    GlyMemCache * i = start;
+    GlyrMemCache * i = start;
     while(i != NULL)
     {
         glyr_write(i,"stdout");
@@ -45,11 +45,11 @@ int main(void)
     atexit(glyr_cleanup);
 
     /* Fill some silly values */
-    GlyQuery query_long, query_longer;
+    GlyrQuery query_long, query_longer;
     configure(&query_long,GET_SIMILIAR_ARTISTS);
     configure(&query_longer,GET_LYRICS);
 
-    GlyMemCache * a, * b;
+    GlyrMemCache * a, * b;
 
     /* Create two threads */
     GThread * thread_a = g_thread_create(call_get,(gpointer)&query_long,true,NULL);

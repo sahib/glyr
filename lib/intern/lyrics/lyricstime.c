@@ -24,7 +24,7 @@
 
 /*--------------------------------------------------------*/
 
-const char * lyrics_lyricstime_url(GlyQuery * settings)
+const char * lyrics_lyricstime_url(GlyrQuery * settings)
 {
     return GET_URL;
 }
@@ -34,9 +34,9 @@ const char * lyrics_lyricstime_url(GlyQuery * settings)
 #define LYR_BEGIN "<div id=\"songlyrics\" >"
 #define LYR_ENDIN "</div>"
 
-static GlyMemCache * parse_page(GlyMemCache * dl, cb_object * capo)
+static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     if(dl != NULL)
     {
         char * begin = strstr(dl->data,LYR_BEGIN);
@@ -123,10 +123,10 @@ GList * lyrics_lyricstime_parse(cb_object * capo)
                     if(url != NULL)
                     {
                         char * full_url = g_strdup_printf("http://www.lyricstime.com%s",url);
-                        GlyMemCache * dl_cache = download_single(full_url,capo->s,NULL);
+                        GlyrMemCache * dl_cache = download_single(full_url,capo->s,NULL);
                         if(dl_cache)
                         {
-                            GlyMemCache * r_cache = parse_page(dl_cache,capo);
+                            GlyrMemCache * r_cache = parse_page(dl_cache,capo);
                             if(r_cache)
                             {
                                 rList = g_list_prepend(rList,r_cache);

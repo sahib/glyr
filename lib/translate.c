@@ -18,8 +18,8 @@
 const char * gtrans_get_trans_url(const char * input, const char * from, const char * to);
 const char * gtrans_get_detector_url(const char * input);
 static char * json_get_single_value(char * sval, size_t keylen);
-char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key);
-char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness);
+char * gtrans_parse_trans_json(GlyrMemCache * cache, const char * search_key);
+char * gtrans_parse_detector_json(GlyrMemCache * cache, float * correctness);
 
 /* ------------------------------------------------------------------- */
 
@@ -88,7 +88,7 @@ static char * json_get_single_value(char * keyval, size_t keylen)
 
 /* ------------------------------------------------------------------- */
 
-char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key)
+char * gtrans_parse_trans_json(GlyrMemCache * cache, const char * search_key)
 {
     char * resultBuf = NULL;
     if(cache != NULL)
@@ -139,7 +139,7 @@ char * gtrans_parse_trans_json(GlyMemCache * cache, const char * search_key)
 #define TRNS_KEY "\"translatedText\":"
 
 
-char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness)
+char * gtrans_parse_detector_json(GlyrMemCache * cache, float * correctness)
 {
     char * resultBuf = NULL;
     if(cache && cache->data)
@@ -161,7 +161,7 @@ char * gtrans_parse_detector_json(GlyMemCache * cache, float * correctness)
 #define BLOCK_BUF 500
 #define NEWLINE_MARKUP "__"
 /* Modifies $to_translate with the translation */
-void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
+void Gly_gtrans_translate(GlyrQuery * s, GlyrMemCache * to_translate)
 {
     /* BROKEN */
 #if 0
@@ -209,7 +209,7 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
                 if(dl_url)
                 {
                     // Download and parse
-                    GlyMemCache * DCache = NULL;
+                    GlyrMemCache * DCache = NULL;
                     char * parsed_json = gtrans_parse_trans_json((DCache=download_single(dl_url,s,NULL)), (s->gtrans.source == NULL) ? TRNS_KEY : TRNS_KEY);
 
                     // Not needed anymore
@@ -274,7 +274,7 @@ void Gly_gtrans_translate(GlyQuery * s, GlyMemCache * to_translate)
 /* ------------------------------------------------------------------- */
 
 /* Ask google translator what language we are dealing with, NULL if unknown */
-char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness)
+char * Gly_gtrans_lookup(GlyrQuery * s, const char * snippet, float * correctness)
 {
     char * result_lang = NULL;
     if(s  && snippet)
@@ -282,7 +282,7 @@ char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness
         const char * dl_url = gtrans_get_detector_url(snippet);
         if(dl_url != NULL)
         {
-            GlyMemCache * DCache = download_single(dl_url,s,NULL);
+            GlyrMemCache * DCache = download_single(dl_url,s,NULL);
             if(DCache != NULL)
             {
                 result_lang = gtrans_parse_detector_json(DCache,correctness);
@@ -296,7 +296,7 @@ char * Gly_gtrans_lookup(GlyQuery * s, const char * snippet, float * correctness
 
 /* ------------------------------------------------------------------- */
 
-char ** Gly_gtrans_list(GlyQuery * s)
+char ** Gly_gtrans_list(GlyrQuery * s)
 {
     char ** result_list = NULL;
     if(s != NULL)
@@ -305,7 +305,7 @@ char ** Gly_gtrans_list(GlyQuery * s)
         const char * dl_url = "https://www.googleapis.com/language/translate/v2/languages?key="API_KEY_GTRANS"&prettyprint=true";
         if(dl_url != NULL)
         {
-            GlyMemCache * DCache = download_single(dl_url,s,NULL);
+            GlyrMemCache * DCache = download_single(dl_url,s,NULL);
             if(DCache != NULL && DCache->data != NULL)
             {
                 char * lang_elem = DCache->data, * value;

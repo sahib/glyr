@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * cover_albumart_url(GlyQuery * sets)
+const char * cover_albumart_url(GlyrQuery * sets)
 {
     int i = sets->cover.min_size;
     int e = sets->cover.max_size;
@@ -63,7 +63,7 @@ GList * cover_albumart_parse(cb_object * capo)
                 char * img_url = copy_value(img_tag,img_end);
                 if(img_url)
                 {
-                    GlyMemCache * result = DL_init();
+                    GlyrMemCache * result = DL_init();
                     result->data = g_strdup_printf(AMZ"%s.jpg",img_url);
                     result->size = strlen(result->data);
 

@@ -25,7 +25,7 @@
 
 /*--------------------------------------------------------*/
 
-const char * lyrics_lyricswiki_url(GlyQuery * settings)
+const char * lyrics_lyricswiki_url(GlyrQuery * settings)
 {
     return LW_URL;
 }
@@ -72,7 +72,7 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 
 GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     GList * r_list = NULL;
 
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
@@ -86,7 +86,7 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
                 char * wiki_page_url = copy_value(find,endTag);
                 if(wiki_page_url)
                 {
-                    GlyMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
+                    GlyrMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
                     if(new_cache)
                     {
                         char *lyr_begin, *lyr_end;

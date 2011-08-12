@@ -24,7 +24,7 @@
 
 /* ------------------------------------- */
 
-static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     GList * l =  generic_img_finalizer(s,list,stop_me,TYPE_COVER);
     return l;
@@ -32,7 +32,7 @@ static GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
 
 /* ------------------------------------- */
 
-bool vdt_cover(GlyQuery * settings)
+bool vdt_cover(GlyrQuery * settings)
 {
     if (settings && settings->artist && settings->album)
     {

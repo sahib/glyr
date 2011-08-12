@@ -24,7 +24,7 @@
 #define INFO_BEGIN "</script><br />"
 #define INFO_ENDIN "<br />"
 
-const char * ainfo_lyricsreg_url(GlyQuery * s)
+const char * ainfo_lyricsreg_url(GlyrQuery * s)
 {
     return "http://www.lyricsreg.com/biography/%artist%/";
 }
@@ -41,7 +41,7 @@ GList * ainfo_lyricsreg_parse(cb_object * capo)
         char * info = copy_value(point_to_start, mend);
         if(info != NULL && (mend-point_to_start) > 150)
         {
-            GlyMemCache * tmp = DL_init();
+            GlyrMemCache * tmp = DL_init();
             tmp->data = beautify_lyrics(info);
             tmp->size = (tmp->data) ? strlen(tmp->data) : 0;
             tmp->dsrc = strdup(capo->url);

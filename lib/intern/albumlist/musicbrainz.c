@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * albumlist_musicbrainz_url(GlyQuery * sets)
+const char * albumlist_musicbrainz_url(GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
 }
@@ -42,7 +42,7 @@ GList * albumlist_musicbrainz_parse(cb_object * capo)
         char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
         if(name != NULL)
         {
-            GlyMemCache * c = DL_init();
+            GlyrMemCache * c = DL_init();
             c->data = beautify_lyrics(name);
 
             if(c->data != NULL)

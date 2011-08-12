@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * cover_lyricswiki_url(GlyQuery * sets)
+const char * cover_lyricswiki_url(GlyrQuery * sets)
 {
     if(sets->cover.min_size < 500)
         return "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
@@ -95,7 +95,7 @@ GList * cover_lyricswiki_parse(cb_object * capo)
                                     char * url = copy_value(url_start, url_end);
                                     if(url)
                                     {
-                                        GlyMemCache * result = DL_init();
+                                        GlyrMemCache * result = DL_init();
                                         result->data = url;
                                         result->size = url_end - url_start;
                                         r_list = g_list_prepend(r_list,result);

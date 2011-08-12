@@ -32,7 +32,7 @@ artist && album          -> album
 */
 
 // 'please' is important. gcc won't compile without.
-static int please_what_type(GlyQuery * s)
+static int please_what_type(GlyrQuery * s)
 {
     int result = -1;
     if(s->artist && !s->album && !s->title)
@@ -56,7 +56,7 @@ static int please_what_type(GlyQuery * s)
 /*--------------------------------------------------------*/
 
 /*  */
-const char * generic_musicbrainz_url(GlyQuery * sets)
+const char * generic_musicbrainz_url(GlyrQuery * sets)
 {
     const char * wrap_a = sets->artist ? "%artist%" : "";
     const char * wrap_b = sets->album  ? "%album%"  : "";
@@ -79,7 +79,7 @@ const char * generic_musicbrainz_url(GlyQuery * sets)
 
 #define ID_BEGIN "id=\""
 
-const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
+const char * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, size_t * offset)
 {
     if(!c || !s || !offset)
         return NULL;
@@ -149,11 +149,11 @@ const char * get_mbid_from_xml(GlyQuery * s, GlyMemCache * c, size_t * offset)
 /*--------------------------------------------------------*/
 
 // Returns only a parseable memcache
-GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
+GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
 {
     size_t offset = 0;
     const char * mbid = NULL;
-    GlyMemCache * info = NULL;
+    GlyrMemCache * info = NULL;
 
     int ctr = 0;
 
@@ -193,7 +193,7 @@ GlyMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
 GList * tags_musicbrainz_parse(cb_object * capo)
 {
     GList * r_list = NULL;
-    GlyMemCache  * info = generic_musicbrainz_parse(capo,"tags");
+    GlyrMemCache  * info = generic_musicbrainz_parse(capo,"tags");
     if(info)
     {
         int type_num = please_what_type(capo->s);
@@ -213,7 +213,7 @@ GList * tags_musicbrainz_parse(cb_object * capo)
             {
                 if(*value)
                 {
-                    GlyMemCache * tmp = DL_init();
+                    GlyrMemCache * tmp = DL_init();
                     tmp->data = value;
                     tmp->size = tag_endin - tag_begin;
                     tmp->type = type_num;
@@ -234,7 +234,7 @@ GList * tags_musicbrainz_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const char * tags_musicbrainz_url(GlyQuery * sets)
+const char * tags_musicbrainz_url(GlyrQuery * sets)
 {
     return generic_musicbrainz_url(sets);
 }

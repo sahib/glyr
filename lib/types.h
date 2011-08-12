@@ -80,7 +80,7 @@ enum GLYR_ERROR
 };
 
 /**
-* @brief Enumeration of all getters, GlyQuery is initalized to GET_UNSURE
+* @brief Enumeration of all getters, GlyrQuery is initalized to GET_UNSURE
 *
 *  The type of metadata to get, names are selfexplanatory
 *  Requirements are given in braces, [] means optional.
@@ -102,7 +102,7 @@ enum GLYR_GET_TYPE
 };
 
 /**
-* @brief All possible values the type field of GlyMemCache can have
+* @brief All possible values the type field of GlyrMemCache can have
 */
 enum GLYR_DATA_TYPE
 {
@@ -133,7 +133,7 @@ enum GLYR_DATA_TYPE
 *
 * It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr.
 */
-typedef struct GlyMemCache
+typedef struct GlyrMemCache
 {
     char  *data;        /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
     size_t size;        /*!< Size of data, cahnge this if you changed the data field. */
@@ -146,9 +146,9 @@ typedef struct GlyMemCache
     unsigned char md5sum[16]; /*!< A checksum of generated from the data field, used internally for duplicate checking, useable as identifier from data */
 
     /* Linkage */
-    struct GlyMemCache * next; /*!< Pointer to next cache in list, or NULL */
-    struct GlyMemCache * prev; /*!< Pointer to prev cache in list, or NULL */
-} GlyMemCache;
+    struct GlyrMemCache * next; /*!< Pointer to next cache in list, or NULL */
+    struct GlyrMemCache * prev; /*!< Pointer to prev cache in list, or NULL */
+} GlyrMemCache;
 
 
 /**
@@ -159,7 +159,7 @@ typedef struct GlyMemCache
 * Look up the corresponding glyr_opt_$name methods for more details.
 * For reading: Dynamically allocated members are stored in '.alloc'!
 */
-typedef struct GlyQuery
+typedef struct GlyrQuery
 {
     enum GLYR_GET_TYPE type; /*!< What type of data to get */
 
@@ -194,7 +194,7 @@ typedef struct GlyQuery
 
         /* Callback and userpointer */
         struct {
-            enum GLYR_ERROR (* download)(GlyMemCache * dl, struct GlyQuery * s);
+            enum GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
             void  * user_pointer;
         } callback;
 
@@ -222,12 +222,12 @@ typedef struct GlyQuery
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
-} GlyQuery;
+} GlyrQuery;
 
 /**
 * @brief 
 */
-typedef struct GlySourceInfo
+typedef struct GlyrSourceInfo
 {
 	char key;
 
@@ -236,72 +236,72 @@ typedef struct GlySourceInfo
 	int speed;	
 
 	char * name;
-	struct GlySourceInfo * next;
-	struct GlySourceInfo * prev;
-} GlySourceInfo;
+	struct GlyrSourceInfo * next;
+	struct GlyrSourceInfo * prev;
+} GlyrSourceInfo;
 
 /**
 * @brief 
 */
-typedef struct GlyFetcherInfo 
+typedef struct GlyrFetcherInfo 
 {
 	char * name;
 	enum GLYR_GET_TYPE type;		
 
-	GlySourceInfo * head;
+	GlyrSourceInfo * head;
 
-	struct GlyFetcherInfo * next;
-	struct GlyFetcherInfo * prev;
-} GlyFetcherInfo;
+	struct GlyrFetcherInfo * next;
+	struct GlyrFetcherInfo * prev;
+} GlyrFetcherInfo;
 
 /**
 * @brief typefef for the glyr_opt_dlcallback() option
 *
-* @param DL_callback A callback of the form: enum GLYR_ERROR cb(GlyMemCache * dl, struct GlyQuery * s)
+* @param DL_callback A callback of the form: enum GLYR_ERROR cb(GlyrMemCache * dl, struct GlyrQuery * s)
 *
 * @return possibly an error or GLYRE_OK
 */
-typedef enum GLYR_ERROR (*DL_callback)(GlyMemCache * dl, struct GlyQuery * s);
+typedef enum GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 
 #ifdef COMING_FROM_SWIG
-%extend GlyQuery
+%extend GlyrQuery
 {
-    GlyQuery()
+    GlyrQuery()
     {
-        GlyQuery my_query;
+        GlyrQuery my_query;
         glyr_init_query(&my_query);
-        GlyQuery * copy = malloc(sizeof(GlyQuery));
-        memcpy(copy,&my_query,sizeof(GlyQuery));
+        GlyrQuery * copy = malloc(sizeof(GlyrQuery));
+        memcpy(copy,&my_query,sizeof(GlyrQuery));
         return copy;
     }
-    ~GlyQuery()
+    ~GlyrQuery()
     {
         glyr_destroy_query($self);
         if($self != NULL)
-            g_free($self);
+            free($self);
     }
 }
 
-%extend GlyMemCache
+%extend GlyrMemCache
 {
-    GlyMemCache()
+    GlyrMemCache()
     {
         return glyr_new_cache();
     }
-    ~GlyMemCache()
+    ~GlyrMemCache()
     {
         glyr_free_cache($self);
     }
 }
 
-%extend GlyFetcherInfo
+%extend GlyrFetcherInfo
 {
-    GlyFetcherInfo()
+    GlyrFetcherInfo()
     {
 	return glyr_get_plugin_info();
     }
 
-    ~GlyFetcherInfo()
+    ~GlyrFetcherInfo()
     {
 	glyr_free_plugin_info(&($self));
     }

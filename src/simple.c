@@ -17,7 +17,7 @@ int main(void)
     atexit(glyr_cleanup);
 
     /* This struct is used to store all settings you do via glyr_opt_* */
-    GlyQuery q;
+    GlyrQuery q;
     /* We also should set it to standard values */
     glyr_init_query(&q);
 
@@ -34,9 +34,9 @@ int main(void)
     enum GLYR_ERROR err;
 
     /* Now get the job done! The 3rd  */
-    GlyMemCache * head = glyr_get(&q,&err,NULL);
+    GlyrMemCache * head = glyr_get(&q,&err,NULL);
 
-    /* The results are stored in the GlyMemCache struct -
+    /* The results are stored in the GlyrMemCache struct -
        you are most likely only interested in the fields data, size and type*/
     if(head != NULL)
     {

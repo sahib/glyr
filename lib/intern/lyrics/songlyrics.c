@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * lyrics_songlyrics_url(GlyQuery * settings)
+const char * lyrics_songlyrics_url(GlyrQuery * settings)
 {
     char * url = NULL;
     if(settings && settings->artist && settings->title)
@@ -52,7 +52,7 @@ const char * lyrics_songlyrics_url(GlyQuery * settings)
 
 GList * lyrics_songlyrics_parse(cb_object * capo)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     GList * r_list = NULL;
     char * find_tag, * find_end;
 

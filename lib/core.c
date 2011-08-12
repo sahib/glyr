@@ -63,7 +63,7 @@ void panic(const char * fmt, ...)
 
 /*--------------------------------------------------------*/
 
-int glyr_message(int verbosity, GlyQuery * s, const char * fmt, ...)
+int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 {
     gint written = 0;
     if(s != NULL || verbosity == -1)
@@ -84,9 +84,9 @@ int glyr_message(int verbosity, GlyQuery * s, const char * fmt, ...)
 
 /*--------------------------------------------------------*/
 
-GlyMemCache * DL_copy(GlyMemCache * src)
+GlyrMemCache * DL_copy(GlyrMemCache * src)
 {
-    GlyMemCache * dest = NULL;
+    GlyrMemCache * dest = NULL;
     if(src)
     {
         dest = DL_init();
@@ -127,11 +127,11 @@ GlyMemCache * DL_copy(GlyMemCache * src)
 
 /*--------------------------------------------------------*/
 
-// cache incoming data in a GlyMemCache
+// cache incoming data in a GlyrMemCache
 static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {
     size_t realsize = size * nmemb;
-    struct GlyMemCache *mem = (struct GlyMemCache *)cache;
+    struct GlyrMemCache *mem = (struct GlyrMemCache *)cache;
 
     mem->data = realloc(mem->data, mem->size + realsize + 1);
     if (mem->data)
@@ -154,7 +154,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 /*--------------------------------------------------------*/
 
 // cleanup internal buffer if no longer used
-void DL_free(GlyMemCache *cache)
+void DL_free(GlyrMemCache *cache)
 {
     if(cache)
     {
@@ -188,9 +188,9 @@ void DL_free(GlyMemCache *cache)
 /*--------------------------------------------------------*/
 
 // Use this to init the internal buffer
-GlyMemCache* DL_init(void)
+GlyrMemCache* DL_init(void)
 {
-    GlyMemCache *cache = malloc(sizeof(GlyMemCache));
+    GlyrMemCache *cache = malloc(sizeof(GlyrMemCache));
 
     if(cache)
     {
@@ -413,7 +413,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 /*--------------------------------------------------------*/
 
 // Init an easyhandler with all relevant options
-static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery * s, void * magic_private_ptr, long timeout)
+static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuery * s, void * magic_private_ptr, long timeout)
 {
     if(!s) return;
 
@@ -454,7 +454,7 @@ static void DL_setopt(CURL *eh, GlyMemCache * cache, const char * url, GlyQuery 
 
 /*--------------------------------------------------------*/
 
-gboolean continue_search(gint current, GlyQuery * s)
+gboolean continue_search(gint current, GlyrQuery * s)
 {
     gboolean decision = FALSE;
     if(s != NULL)
@@ -475,7 +475,7 @@ gboolean continue_search(gint current, GlyQuery * s)
 /*--------------------------------------------------------*/
 
 /* Check for dupes. This does not affect the HEAD of the list, therefore no GList return */
-gsize delete_dupes(GList * result, GlyQuery * s)
+gsize delete_dupes(GList * result, GlyrQuery * s)
 {
 	if(!result || g_list_length(result) < 1)
 		return 0;
@@ -489,13 +489,13 @@ gsize delete_dupes(GList * result, GlyQuery * s)
 	gint double_items = 0;
 	for(GList * inode = result; inode; inode = inode->next)
 	{
-		GlyMemCache * lval = inode->data;
+		GlyrMemCache * lval = inode->data;
 
 		GList * jnode = result;
 		while(jnode != NULL)
 		{
 			bool is_duplicate  = false;
-			GlyMemCache * rval = jnode->data;
+			GlyrMemCache * rval = jnode->data;
 
 			if(lval && rval && rval != lval && lval->size == rval->size)
 			{
@@ -541,7 +541,7 @@ gsize delete_dupes(GList * result, GlyQuery * s)
 /*--------------------------------------------------------*/
 
 // Download a singe file NOT in parallel
-GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
+GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 {
 	if(url != NULL && is_blacklisted((gchar*)url) == false)
 	{
@@ -550,7 +550,7 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 
 		/* Init handles */
 		curl = curl_easy_init();
-		GlyMemCache * dldata = DL_init();
+		GlyrMemCache * dldata = DL_init();
 
 		/* DL_buffer needs the 'end' mark.
 		 * As I didnt want to introduce a new struct just for this
@@ -600,9 +600,9 @@ GlyMemCache * download_single(const char* url, GlyQuery * s, const char * end)
 /*--------------------------------------------------------*/
 
 // Init a callback object and a curl_easy_handle
-static GlyMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyQuery *s, long timeout, gchar * endmark)
+static GlyrMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyrQuery *s, long timeout, gchar * endmark)
 {
-	GlyMemCache * dlcache = NULL;
+	GlyrMemCache * dlcache = NULL;
 	if(capo && capo->url)
 	{
 		/* Init handle */
@@ -628,7 +628,7 @@ static GlyMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyQuery *s,
 
 /*--------------------------------------------------------*/
 
-static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM * cmHandle, GlyQuery * s, int abs_timeout)
+static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM * cmHandle, GlyrQuery * s, int abs_timeout)
 {
 	GList * cb_list = NULL;
 	for(GList * elem = url_list; elem; elem = elem->next)
@@ -671,7 +671,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
 /*--------------------------------------------------------*/
 /* ----------------- THE HEART OF GOLD ------------------ */
 /*--------------------------------------------------------*/
-GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr)
+GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr)
 {
 	/* Storage for result items */
 	GList * item_list = NULL;
@@ -791,7 +791,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 							/* Fill in the source filed (dsrc) if not already done */
 							for(GList * elem = cb_results; elem; elem = elem->next)
 							{
-								GlyMemCache * item = elem->data;
+								GlyrMemCache * item = elem->data;
 								if(item && item->dsrc == NULL)
 								{
 									/* Plugin didn't do any special download */
@@ -844,7 +844,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyQuery * s, lon
 struct wrap_retrieve_pass_data
 {
 	gchar * url;
-	GlyQuery * query;
+	GlyrQuery * query;
 };
 
 static void * wrap_retrieve_content(gpointer data)
@@ -853,7 +853,7 @@ static void * wrap_retrieve_content(gpointer data)
 	if(data != NULL)
 	{
 		struct wrap_retrieve_pass_data * passed = data;
-		GlyQuery * query = passed->query;
+		GlyrQuery * query = passed->query;
 		head = retrieve_content_info(passed->url,(gchar*)query->proxy,(gchar*)query->useragent);
 		g_free(passed);
 		passed = NULL;
@@ -863,7 +863,7 @@ static void * wrap_retrieve_content(gpointer data)
 
 /*--------------------------------------------------------*/
 
-static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
+static void check_all_types_in_url_list(GList * cache_list, GlyrQuery * s)
 {
 	if(cache_list != NULL)
 	{
@@ -874,7 +874,7 @@ static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
 
 		for(GList * elem = cache_list; elem; elem = elem->next)
 		{
-			GlyMemCache * item = elem->data;
+			GlyrMemCache * item = elem->data;
 			if(item != NULL)
 			{
 				struct wrap_retrieve_pass_data * passer = g_malloc0(sizeof(struct wrap_retrieve_pass_data));
@@ -896,7 +896,7 @@ static void check_all_types_in_url_list(GList * cache_list, GlyQuery * s)
 			struct header_data * info = g_thread_join(thread->data);
 			if(info != NULL)
 			{
-				GlyMemCache * linked_cache = g_hash_table_lookup(thread_id_table,thread->data);
+				GlyrMemCache * linked_cache = g_hash_table_lookup(thread_id_table,thread->data);
 				if(linked_cache != NULL)
 				{
 					if(g_strcmp0(info->type,"image") == 0)
@@ -952,7 +952,7 @@ static gboolean format_is_allowed(gchar * format, gchar * allowed)
 
 /*--------------------------------------------------------*/
 
-static GList * kick_out_wrong_formats(GList * data_list, GlyQuery * s)
+static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
 {
 	GList * new_head = data_list;	
 
@@ -970,7 +970,7 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyQuery * s)
 	GList * elem = new_head;
 	while(elem != NULL)
 	{
-		GlyMemCache * item = elem->data;
+		GlyrMemCache * item = elem->data;
 		if(item != NULL)
 		{
 			if(format_is_allowed(item->img_format,allowed_formats) == FALSE)
@@ -999,7 +999,7 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 	{
 		for(GList * elem = text_list; elem; elem = elem->next)
 		{
-			GlyMemCache * cache = elem->data;
+			GlyrMemCache * cache = elem->data;
 
 			/* We might need to unescape the HTML Utf8 encoded strings first, this is done later anyway. */
 			gchar * utf8_string = unescape_html_UTF8(cache->data);
@@ -1021,7 +1021,7 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 
 /*--------------------------------------------------------*/
 
-static GList * check_for_forced_utf8(GlyQuery * query, GList * text_list)
+static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
 {
 	gint deleted = 0;
 	GList * new_head = text_list;
@@ -1032,7 +1032,7 @@ static GList * check_for_forced_utf8(GlyQuery * query, GList * text_list)
 		GList * elem = text_list;
 		while(elem != NULL)
 		{
-			GlyMemCache * cache = elem->data;
+			GlyrMemCache * cache = elem->data;
 			const gchar * end_of_valid_utf8 = NULL;
 			if(g_utf8_validate(cache->data,-1,&end_of_valid_utf8))
 			{
@@ -1102,7 +1102,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 				{
 					for(GList * elem = raw_parsed_data; elem; elem = elem->next)
 					{
-						GlyMemCache * item = elem->data;
+						GlyrMemCache * item = elem->data;
 						if(item != NULL)
 						{
 							if(capo->s->itemctr < capo->s->number)
@@ -1155,7 +1155,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 
 /*--------------------------------------------------------*/
 
-static gboolean provider_is_enabled(GlyQuery * s, MetaDataSource * f)
+static gboolean provider_is_enabled(GlyrQuery * s, MetaDataSource * f)
 {
 	/* Assume 'all we have' */
 	if(s->from == NULL) {
@@ -1210,7 +1210,7 @@ static gfloat calc_rating(gfloat qsratio, gint quality, gint speed)
 
 /*--------------------------------------------------------*/
 
-static GList * get_queued(GlyQuery * s, MetaDataFetcher * fetcher, gint * fired)
+static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired)
 {
 	GList * source_list = NULL;
 	for(gint it = 0; it < s->parallel; it++)
@@ -1257,7 +1257,7 @@ static GList * get_queued(GlyQuery * s, MetaDataFetcher * fetcher, gint * fired)
 
 /*--------------------------------------------------------*/
 
-static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * source_list, gboolean * stop_me)
+static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList * source_list, gboolean * stop_me)
 {
 	GList * url_list = NULL;
 	GList * endmarks = NULL;
@@ -1342,7 +1342,7 @@ static GList * prepare_run(GlyQuery * query, MetaDataFetcher * fetcher, GList * 
 
 /*--------------------------------------------------------*/
 
-GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err)
+GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err)
 {
 	gsize list_len = g_list_length(fetcher->provider);
 	gint fired[list_len];
@@ -1394,7 +1394,7 @@ GList * start_engine(GlyQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERRO
 
 /*--------------------------------------------------------*/
 
-void update_md5sum(GlyMemCache * c)
+void update_md5sum(GlyrMemCache * c)
 {
 	if(c && c->data && c->size)
 	{

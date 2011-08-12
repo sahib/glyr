@@ -59,58 +59,58 @@ extern "C"
     * @param error An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
     * @param length An optional pointer storing the length of the returned list
     *
-    * It takes a pointer to a GlyQuery struct filled to your needs via the glyr_opt_* methods,\n
+    * It takes a pointer to a GlyrQuery struct filled to your needs via the glyr_opt_* methods,\n
     * Once an item is found the callback (set via glyr_opt_dlcallback) is called with the item as parameter.\n
     * After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with glyr_free_list when done.\n
     *
     * @return A GlyCacheList containing all found data. See the struct reference for further details.
     */
-    GlyMemCache * glyr_get(GlyQuery * settings, enum GLYR_ERROR * error, int * length);
+    GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * error, int * length);
 
     /**
-    * @brief Init's the GlyQuery structure to sane defaults.
+    * @brief Init's the GlyrQuery structure to sane defaults.
     * Call this after creating the variable.
     *
-    * @param glyrs The fresh GlyQuery to be init'd.
+    * @param glyrs The fresh GlyrQuery to be init'd.
     */
-    void glyr_init_query(GlyQuery * glyrs);
+    void glyr_init_query(GlyrQuery * glyrs);
 
     /**
     * @brief Free all memory associated with this query, and restore default settings.
     * Do this always when you're done with this one.
-    * @param sets The GlyQuery to be destroyed
+    * @param sets The GlyrQuery to be destroyed
     */
-    void glyr_destroy_query(GlyQuery * sets);
+    void glyr_destroy_query(GlyrQuery * sets);
 
     /**
     * @brief Free the memory in the GlyCacheList returned by glyr_get
     *
     * @param head The GlyCacheList to be free'd
     */
-    void glyr_free_list(GlyMemCache * head);
+    void glyr_free_list(GlyrMemCache * head);
 
     /**
-    * @brief Returns a newly allocated and initialized GlyMemCache, mostly for use with glyr_gtrans_*
+    * @brief Returns a newly allocated and initialized GlyrMemCache, mostly for use with glyr_gtrans_*
     * Don't forget to free it with glyr_free_cache
-    * @return A newly allocated GlyMemCache
+    * @return A newly allocated GlyrMemCache
     */
-    GlyMemCache * glyr_new_cache(void);
+    GlyrMemCache * glyr_new_cache(void);
 
     /**
-    * @brief Produces an exact copy of the GlyMemCache source.
+    * @brief Produces an exact copy of the GlyrMemCache source.
     *
-    * @param source The GlyMemCache to copy
+    * @param source The GlyrMemCache to copy
     *
-    * @return A newly allocated GlyMemCache
+    * @return A newly allocated GlyrMemCache
     */
-    GlyMemCache * glyr_copy_cache(GlyMemCache * source);
+    GlyrMemCache * glyr_copy_cache(GlyrMemCache * source);
 
     /**
-    * @brief Free the GlyMemCache pointed to by c. You should set it to NULL also, as using it after this will crash your program.
+    * @brief Free the GlyrMemCache pointed to by c. You should set it to NULL also, as using it after this will crash your program.
     *
-    * @param c An allocated GlyMemCache
+    * @param c An allocated GlyrMemCache
     */
-    void glyr_free_cache(GlyMemCache * c);
+    void glyr_free_cache(GlyrMemCache * c);
 
     /********************************************************
      * GlyOpt methods ahead - use them to control glyr_get() *
@@ -119,9 +119,9 @@ extern "C"
     /**
     * @brief Set the callback that is executed once an item is ready downloaded
     *
-    * @param settings The GlyQuery settings struct to store this option in
+    * @param settings The GlyrQuery settings struct to store this option in
     * @param dl_cb The callback to register, must have a prototype like this:\n
-      	       enum GLYR_ERROR my_callback(GlyMemCache * dl, struct GlyQuery * s);
+      	       enum GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
     * @param userp A pointer to a custom variable you can access inside the callback via s->callback.user_pointer;
     *
     * Note that you can return a certain integer in the callback:\n
@@ -131,31 +131,31 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_dlcallback(GlyQuery * settings, DL_callback dl_cb, void * userp);
+    enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
     /**
     * @brief What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.
     *
-    * @param s The GlyQuery settings struct to store this option in
+    * @param s The GlyrQuery settings struct to store this option in
     * @param type A member of the GLYR_GET_TYPE enum, set this before you set anything else.
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_type(GlyQuery * s, enum GLYR_GET_TYPE type);
+    enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type);
     /**
     * @brief The artist field. libglyr will try to format it to fit the best.
     *
-    * @param s The GlyQuery settings struct to store this option in
+    * @param s The GlyrQuery settings struct to store this option in
     * @param artist A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
     *
     * This field is required for all getters. You are required to fill it.
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_artist(GlyQuery * s, char * artist);
+    enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
     /**
     * @brief The album field. libglyr will try to format it to fit the best.
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param album A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
     *
     *	Required for the following getters:
@@ -173,11 +173,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_album(GlyQuery * s,  char * album);
+    enum GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
     /**
     * @brief The title field. libglyr will try to format it to fit the best.
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param title A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
     *
     *	Required for:
@@ -188,11 +188,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_title(GlyQuery * s,  char * title);
+    enum GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
     /**
     * @brief Maximum size a cover may have (assuming the cover is quadratic, only one size is required)
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param size The max. size in pixel
     *
     * Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers,\n
@@ -200,31 +200,31 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_cmaxsize(GlyQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_cmaxsize(GlyrQuery * s, int size);
     /**
     * @brief Minimum size a cover may have (assuming the cover is quadratic, only one size is required)
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param size The min. size in pixel
     *
     * Note: Also see glyr_opt_cmaxsize()
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_cminsize(GlyQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_cminsize(GlyrQuery * s, int size);
     /**
     * @brief The number of items that may be downloaded in parallel
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param val the number as unsigned long
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_parallel(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val);
     /**
     * @brief Amout of seconds to wait before cancelling an download
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param val Timeout in seconds.
     *
     * If more than one item is downloaded in parallel, the timeout will be changed accordingly.\n
@@ -232,11 +232,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_timeout(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val);
     /**
     * @brief Max number of redirects to
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param val an unsigned integer
     *
     * A value of 0 is allowed, but may break certain plugins.\n
@@ -244,21 +244,21 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_redirects(GlyQuery * s, unsigned long val);
+    enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val);
 
     /**
     * @brief  Set the useragent during making progresses
     *
-    * @param s The GlyQuery settings struct to store this option in. 
+    * @param s The GlyrQuery settings struct to store this option in. 
     * @param useragent a null terminated string containging everything you want
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_useragent(GlyQuery * s, const char * useragent);
+    enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
     /**
     * @brief Set the language the items should be in.
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param langcode
     *	The language used for providers with multilingual content.
     *	It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.
@@ -276,11 +276,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_lang(GlyQuery * s, char * langcode);
+    enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
     /**
     * @brief Set the number of items to search.
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param num the number as an integer
     *
     *	How many items to search for (1 to INT_MAX)\n
@@ -292,11 +292,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_number(GlyQuery * s, unsigned int num);
+    enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
     /**
     * @brief Set libglyr's verbosity level (debug)
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param level The level as an integer, see description below
     *
     *        0) nothing but fatal errors.\n
@@ -307,11 +307,11 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_verbosity(GlyQuery * s, unsigned int level);
+    enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
     /**
     * @brief Define the providers you want to use
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param from a string, see below
     *
     *        Use this to define what providers you want to use.\n
@@ -333,12 +333,12 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_from(GlyQuery * s, const char * from);
+    enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
 
     /**
     * @brief Define the maximum number of items a provider may download
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param plugmax
     *
     *	Use this to scatter the results over more providers, to get different results.\n
@@ -346,12 +346,12 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_plugmax(GlyQuery * s, int plugmax);
+    enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 
     /**
     * @brief Define allowed image formats
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param formats A comma seperated list of format specifiers, e.g. "png;jpeg"
     *
     * Awaits a string with a semicolon seperated list of allowed formats.\n
@@ -367,11 +367,11 @@ extern "C"
     * @return an errorID
     */
 
-    enum GLYR_ERROR glyr_opt_allowed_formats(GlyQuery * s, const char * formats);
+    enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
     /**
     * @brief Define if image items (i.e, covers, photos) are downloaded.
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param download
     *
     *        For image getters only.\n
@@ -382,12 +382,12 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_download(GlyQuery * s, bool download);
+    enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
 
     /**
     * @brief Set the max. tolerance for fuzzy matching
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param fuzz
     *
     *	Set the maximum amount of inserts, edits and substitutions, a search results\n
@@ -404,12 +404,12 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_fuzzyness(GlyQuery * s, int fuzz);
+    enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
 
     /**
     * @brief Weight ratio between speed and quality
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param ratio A float, where 0.0 if full speed, and 1.0 full quality
     *
     *   0.00 means highest speed, you're kinda lucky if you have the right result there.
@@ -420,12 +420,12 @@ extern "C"
     *
     * @return
     */
-    enum GLYR_ERROR glyr_opt_qsratio(GlyQuery * s, float ratio);
+    enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
 
     /**
     * @brief Set the proxy to use
     *
-    * @param s The GlyQuery settings struct to store this option in.
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param proxystring the proxy setting.
     *
     *  NULL for none, otherwise see the documentation of curl_easy_setopt(CURLOPT_PROXY) how to set this.
@@ -436,18 +436,18 @@ extern "C"
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_proxy(GlyQuery * s, const char * proxystring);
+    enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 
     /**
     * @brief A convinience method to download the content at the URl $url, according to the settings in $s
     * Actually only the redirect and timeout parameters are used here.
     *
     * @param url The url to download as nullterminated string. Must be a vaild URL.
-    * @param s A GlyQuery with the timeout and redirect values filled to your needs.
+    * @param s A GlyrQuery with the timeout and redirect values filled to your needs.
     *
-    * @return A GlyMemCache containing the data
+    * @return A GlyrMemCache containing the data
     */
-    GlyMemCache * glyr_download(const char * url, GlyQuery * s);
+    GlyrMemCache * glyr_download(const char * url, GlyrQuery * s);
 
     /**
     * @brief Many methods use an returnvalue, or error parameters to inform you about errors
@@ -480,7 +480,7 @@ extern "C"
     *
     * @return An error id.
     */
-    int glyr_write(GlyMemCache * data, const char * path);
+    int glyr_write(GlyrMemCache * data, const char * path);
 
 
     /**
@@ -488,7 +488,7 @@ extern "C"
     *
     * @param c a valid memcahe
     */
-    void glyr_update_md5sum(GlyMemCache * c);
+    void glyr_update_md5sum(GlyrMemCache * c);
 
     
     /**
@@ -497,7 +497,7 @@ extern "C"
     * @param s
     * @param cacheditem
     */
-    void glyr_printitem(GlyQuery *s, GlyMemCache * cacheditem);
+    void glyr_printitem(GlyrQuery *s, GlyrMemCache * cacheditem);
 
     
     /**
@@ -505,11 +505,11 @@ extern "C"
     *
     *
     * A Doubly linked list of Fetcher is returned, each having a field 'head',
-    * being a pointer to a doubly linked list of GlySourceInfos
+    * being a pointer to a doubly linked list of GlyrSourceInfos
     *
-    * @return A newly GlyFetcherInfo structure, you can iterate over. 
+    * @return A newly GlyrFetcherInfo structure, you can iterate over. 
     */
-    GlyFetcherInfo * glyr_get_plugin_info(void);
+    GlyrFetcherInfo * glyr_get_plugin_info(void);
 
     /**
     * @brief Free the data from glyr_get_plugin_info()
@@ -518,7 +518,7 @@ extern "C"
     *
     * @param info A reference to the return value fo glyr_get_plugin_info()
     */
-    void glyr_free_plugin_info(GlyFetcherInfo ** info); 
+    void glyr_free_plugin_info(GlyrFetcherInfo ** info); 
 
     /**
     * @brief 

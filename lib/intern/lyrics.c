@@ -24,7 +24,7 @@
 
 /* ------------------------------------- */
 
-bool vdt_lyrics(GlyQuery * settings)
+bool vdt_lyrics(GlyrQuery * settings)
 {
     if(settings && settings->artist && settings->title)
     {
@@ -39,12 +39,12 @@ bool vdt_lyrics(GlyQuery * settings)
 
 /* ------------------------------------- */
 
-GList * factory(GlyQuery * s, GList * list, gboolean * stop_me)
+GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
     /* Fix up lyrics, escape chars etc.  */
     for(GList * elem = list; elem; elem = elem->next)
     {
-        GlyMemCache * item = elem->data;
+        GlyrMemCache * item = elem->data;
         if(item != NULL)
         {
             gchar * temp = beautify_lyrics(item->data);

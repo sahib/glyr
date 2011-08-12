@@ -22,7 +22,7 @@
 
 #define LV_URL "http://www.lyricsvip.com/%s/%s-Lyrics.html"
 
-const char * lyrics_lyricsvip_url(GlyQuery * settings)
+const char * lyrics_lyricsvip_url(GlyrQuery * settings)
 {
     char * result = NULL;
     char * artist_clean = strreplace(settings->artist, " ", "-");
@@ -45,7 +45,7 @@ GList * lyrics_lyricsvip_parse(cb_object *capo)
     char * end = NULL;
     char * content = NULL;
 
-    GlyMemCache * r_cache = NULL;
+    GlyrMemCache * r_cache = NULL;
     GList * r_list  = NULL;
 
     if ((start = strstr(capo->cache->data,"<table class=\"tbl0\">")) != NULL)

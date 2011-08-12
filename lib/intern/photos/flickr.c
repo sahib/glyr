@@ -23,7 +23,7 @@
 #define LINE_BEGIN "<photo id="
 #define LINE_ENDIN "/>"
 
-const char * photos_flickr_url(GlyQuery * settings)
+const char * photos_flickr_url(GlyrQuery * settings)
 {
     return g_strdup_printf("http://api.flickr.com/services/rest/"
                          "?method=flickr.photos.search&"
@@ -85,7 +85,7 @@ GList * photos_flickr_parse(cb_object * capo)
                 g_free(linebf);
                 linebf = NULL;
 
-                GlyMemCache * cache = DL_init();
+                GlyrMemCache * cache = DL_init();
                 cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
                 r_list = g_list_prepend(r_list,cache);
 

@@ -28,7 +28,7 @@
 GList * relations_musicbrainz_parse(cb_object * capo)
 {
     GList * results = NULL;
-    GlyMemCache  * infobuf = generic_musicbrainz_parse(capo,"url-rels");
+    GlyrMemCache  * infobuf = generic_musicbrainz_parse(capo,"url-rels");
 
     if(infobuf)
     {
@@ -55,7 +55,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
                 char * target = copy_value(beg_of_target+1,end_of_target);
                 if(type != NULL && target != NULL)
                 {
-                    GlyMemCache * tmp = DL_init();
+                    GlyrMemCache * tmp = DL_init();
                     tmp->data = g_strdup_printf("%s:%s",type,target);
                     tmp->size = strlen(tmp->data);
                     tmp->type = TYPE_RELATION;
@@ -75,7 +75,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const char * relations_musicbrainz_url(GlyQuery * sets)
+const char * relations_musicbrainz_url(GlyrQuery * sets)
 {
     return generic_musicbrainz_url(sets);
 }

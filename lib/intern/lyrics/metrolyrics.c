@@ -25,7 +25,7 @@
 #define MAX_TRIES 5
 
 // Just return URL
-const char * lyrics_metrolyrics_url(GlyQuery * settings)
+const char * lyrics_metrolyrics_url(GlyrQuery * settings)
 {
     return ML_URL;
 }
@@ -51,9 +51,9 @@ static void replace_from_message_inline(char * text)
 	}
 }
 
-static GlyMemCache * parse_lyrics_page(const char * buffer)
+static GlyrMemCache * parse_lyrics_page(const char * buffer)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     if(buffer)
     {
         char * begin = strstr(buffer,"<div id=\"lyrics\">");
@@ -129,10 +129,10 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                                 char * dl_url = g_strdup_printf("www.metrolyrics.com%s",url);
                                 if(dl_url)
                                 {
-                                    GlyMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
+                                    GlyrMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
                                     if(dl_cache)
                                     {
-                                        GlyMemCache * result = parse_lyrics_page(dl_cache->data);
+                                        GlyrMemCache * result = parse_lyrics_page(dl_cache->data);
                                         if(result)
                                         {
                                             result->dsrc = strdup(dl_url);

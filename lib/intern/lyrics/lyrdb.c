@@ -22,14 +22,14 @@
 
 #define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=%artist%|%title%&for=match&agent=mpdbox"
 
-const char * lyrics_lyrdb_url(GlyQuery * settings)
+const char * lyrics_lyrdb_url(GlyrQuery * settings)
 {
     return LYRDB_URL;
 }
 
 GList * lyrics_lyrdb_parse(cb_object * capo)
 {
-    GlyMemCache * result = NULL;
+    GlyrMemCache * result = NULL;
     GList * r_list = NULL;
 
     char *slash;
@@ -41,7 +41,7 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
             char * lyr_url = g_strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
             if(lyr_url)
             {
-                GlyMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
+                GlyrMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
                 if(new_cache)
                 {
                     char *buffer = malloc(new_cache->size+1);

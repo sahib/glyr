@@ -25,7 +25,7 @@
 #define FIRST_RESULT "<a href=\"/imgres?imgurl="
 #define END_OF_URL "&amp;imgrefurl="
 
-const char * generic_google_url(GlyQuery * sets, const char * searchterm)
+const char * generic_google_url(GlyrQuery * sets, const char * searchterm)
 {
     const char * lang = NULL;
     if(!strcasecmp(sets->lang,"us"))
@@ -70,7 +70,7 @@ const char * generic_google_url(GlyQuery * sets, const char * searchterm)
     return g_strdup_printf("http://www.google.%s/images?q=%s&safe=off&tbs=isch:1,iar:s,%s",lang,searchterm,back);
 }
 
-const char * cover_google_url(GlyQuery * s)
+const char * cover_google_url(GlyrQuery * s)
 {
     const char * result = NULL;
     char * searchterm = strdup("%artist%+%album%+album");
@@ -98,7 +98,7 @@ GList * generic_google_parse(cb_object * capo)
             char * url = copy_value(find,end_of_url);
             if(url)
             {
-                GlyMemCache * result = DL_init();
+                GlyrMemCache * result = DL_init();
                 result->data = url;
 
                 result->size = end_of_url - find;

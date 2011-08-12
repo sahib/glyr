@@ -35,7 +35,7 @@
 
 #define API_KEY API_KEY_DISCOGS
 
-const char * cover_discogs_url(GlyQuery * sets)
+const char * cover_discogs_url(GlyrQuery * sets)
 {
     if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
     {
@@ -89,7 +89,7 @@ GList * cover_discogs_parse(cb_object * capo)
                         if(release_url)
                         {
                             // Only download till artists tag.
-                            GlyMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
+                            GlyrMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
                             if(tmp_cache && tmp_cache->data && tmp_cache->size)
                             {
                                 // Parsing the image url from here on
@@ -128,7 +128,7 @@ GList * cover_discogs_parse(cb_object * capo)
                                                         char * url = copy_value(uri_begin+strlen(URL_BEGIN),uri_endin);
                                                         if(url)
                                                         {
-                                                            GlyMemCache * result = DL_init();
+                                                            GlyrMemCache * result = DL_init();
                                                             if(result)
                                                             {
                                                                 result->data = url;

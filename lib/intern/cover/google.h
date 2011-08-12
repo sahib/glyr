@@ -23,7 +23,7 @@
 
 #include "../../core.h"
 
-const char * generic_google_url(GlyQuery * sets, const char * searchterm);
+const char * generic_google_url(GlyrQuery * sets, const char * searchterm);
 GList * generic_google_parse(cb_object * capo);
 
 #endif

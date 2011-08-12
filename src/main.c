@@ -36,7 +36,7 @@
 const gchar * exec_on_call = NULL;
 gchar * write_to = NULL;
 
-int message(int verbosity, GlyQuery * s, FILE * stream, const char * fmt, ...)
+int message(int verbosity, GlyrQuery * s, FILE * stream, const char * fmt, ...)
 {
     int written_bytes = -1;
     if(s || verbosity == -1)
@@ -66,7 +66,7 @@ int message(int verbosity, GlyQuery * s, FILE * stream, const char * fmt, ...)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static void print_version(GlyQuery * s)
+static void print_version(GlyrQuery * s)
 {
     message(-1,s,stdout, "%s\n\n",glyr_version());
     message(-1,s,stderr, "This is still beta software, expect quite a lot bugs.\n");
@@ -81,11 +81,11 @@ static void print_version(GlyQuery * s)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-void help_short(GlyQuery * s)
+void help_short(GlyrQuery * s)
 {
     message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
-    GlyFetcherInfo * info  = glyr_get_plugin_info();
-    GlyFetcherInfo * track = info;
+    GlyrFetcherInfo * info  = glyr_get_plugin_info();
+    GlyrFetcherInfo * track = info;
     while(info != NULL)
     {
 	g_print(" - %s\n", info->name);
@@ -133,13 +133,13 @@ void help_short(GlyQuery * s)
 
 static void visualize_from_options(void)
 {
-	GlyFetcherInfo * info = glyr_get_plugin_info();
+	GlyrFetcherInfo * info = glyr_get_plugin_info();
 	if(info != NULL)
 	{
-		for(GlyFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
+		for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
 		{
 			g_print("%s\n",elem0->name);
-			for(GlySourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
+			for(GlyrSourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
 			{
 				g_print("  [%c] %s\n",elem1->key,elem1->name);
 			}
@@ -151,7 +151,7 @@ static void visualize_from_options(void)
 
 /* --------------------------------------------------------- */
 
-static void parse_commandline_general(int argc, char * const * argv, GlyQuery * glyrs, gchar ** write_to)
+static void parse_commandline_general(int argc, char * const * argv, GlyrQuery * glyrs, gchar ** write_to)
 {
 	static struct option long_options[] =
 	{
@@ -337,7 +337,7 @@ char * correct_path(const char * path)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_covers(GlyQuery * s, const char * save_dir, int i)
+static char * path_covers(GlyrQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_album  = correct_path(s->album );
@@ -355,7 +355,7 @@ static char * path_covers(GlyQuery * s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_lyrics(GlyQuery * s, const char * save_dir, int i)
+static char * path_lyrics(GlyrQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_title  = correct_path(s->title );
@@ -373,7 +373,7 @@ static char * path_lyrics(GlyQuery * s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_photos(GlyQuery * s, const char * save_dir, int i)
+static char * path_photos(GlyrQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_photo_%d.jpg",save_dir,good_artist,i);
@@ -388,7 +388,7 @@ static char * path_photos(GlyQuery * s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
+static char * path_ainfo(GlyrQuery * s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_ainfo_%d.txt",save_dir,good_artist,i);
@@ -403,7 +403,7 @@ static char * path_ainfo(GlyQuery * s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
+static char * path_similiar(GlyrQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_similiar_%d.txt",save_dir, good_artist,i);
@@ -418,7 +418,7 @@ static char * path_similiar(GlyQuery *s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const char * type)
+static char * path_album_artist(GlyrQuery *s, const char * save_dir, int i, const char * type)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_album  = correct_path(s->album );
@@ -436,21 +436,21 @@ static char * path_album_artist(GlyQuery *s, const char * save_dir, int i, const
 // ---------------------- MISC ----------------------------- //
 /* --------------------------------------------------------- */
 
-static char * path_review(GlyQuery *s, const char * save_dir, int i)
+static char * path_review(GlyrQuery *s, const char * save_dir, int i)
 {
 	return path_album_artist(s,save_dir,i,"review");
 }
 
 /* --------------------------------------------------------- */
 
-static char * path_tracklist(GlyQuery *s, const char * save_dir, int i)
+static char * path_tracklist(GlyrQuery *s, const char * save_dir, int i)
 {
 	return path_album_artist(s,save_dir,i,"tracktitle");
 }
 
 /* --------------------------------------------------------- */
 
-static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
+static char * path_albumlist(GlyrQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_albumtitle_%d.txt",save_dir,good_artist,i);
@@ -462,7 +462,7 @@ static char * path_albumlist(GlyQuery *s, const char * save_dir, int i)
 
 /* --------------------------------------------------------- */
 
-static char * path_tags(GlyQuery *s, const char * save_dir, int i)
+static char * path_tags(GlyrQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_tag_%d.txt",save_dir,s->artist,i);
@@ -475,7 +475,7 @@ static char * path_tags(GlyQuery *s, const char * save_dir, int i)
 
 /* --------------------------------------------------------- */
 
-static char * path_relations(GlyQuery *s, const char * save_dir, int i)
+static char * path_relations(GlyrQuery *s, const char * save_dir, int i)
 {
 	char * good_artist = correct_path(s->artist);
 	char * good_path   =  g_strdup_printf("%s/%s_url_%d.txt",save_dir,s->artist,i);
@@ -490,7 +490,7 @@ static char * path_relations(GlyQuery *s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
-char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
+char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
 {
 	char * m_path = NULL;
 	switch(s->type)
@@ -538,7 +538,7 @@ char * get_path_by_type(GlyQuery * s, const char * sd, int iter)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
+static void print_item(GlyrQuery *s, GlyrMemCache * cacheditem, int num)
 {
 	message(1,s,stderr,"\n///// ITEM #%d /////\n",num);
 	glyr_printitem(s,cacheditem);
@@ -548,7 +548,7 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
+static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 {
 	// This is just to demonstrate the callback option.
 	// Put anything in here that you want to be executed when
@@ -633,10 +633,10 @@ static enum GLYR_ERROR callback(GlyMemCache * c, GlyQuery * s)
 enum GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
 	enum GLYR_GET_TYPE result = GET_UNSURE;
-	GlyFetcherInfo * info = glyr_get_plugin_info();
+	GlyrFetcherInfo * info = glyr_get_plugin_info();
 	if(info != NULL)
 	{
-		for(GlyFetcherInfo * elem = info; elem; elem = elem->next)
+		for(GlyrFetcherInfo * elem = info; elem; elem = elem->next)
 		{
 			if(g_ascii_strncasecmp(elem->name,string,strlen(elem->name)) == 0)
 			{
@@ -672,7 +672,7 @@ int main(int argc, char * argv[])
 	if(argc >= 3)
 	{
 		// The struct that control this beast
-		GlyQuery my_query;
+		GlyrQuery my_query;
 
 		// set it on default values
 		glyr_init_query(&my_query);
@@ -698,7 +698,7 @@ int main(int argc, char * argv[])
 			// Now start searching!
 			int length = -1;
 			enum GLYR_ERROR get_error = GLYRE_OK;
-			GlyMemCache * my_list = glyr_get(&my_query, &get_error, &length);
+			GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
 			if(my_list)
 			{
@@ -712,7 +712,7 @@ int main(int argc, char * argv[])
 
 					/*
 					// Example to print it all out
-					GlyMemCache * elem = my_list;
+					GlyrMemCache * elem = my_list;
 					while(elem != NULL)
 					{
 					g_print("%s\n",elem->dsrc);

@@ -31,13 +31,13 @@ struct callback_save_struct
 /*--------------------------------------------------------*/
 
 /* Simple finalizer template sufficient for most */
-GList * generic_txt_finalizer(GlyQuery * settings, GList * input_list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
+GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
 {
     gboolean add_to_list = TRUE;
     GList * almost_copied = NULL;
     for(GList * elem = input_list; elem; elem = elem->next)
     {
-	    GlyMemCache * item = elem->data;
+	    GlyrMemCache * item = elem->data;
 	    if(add_to_list == TRUE)
 	    {
 		    /* Set to some default type */
@@ -92,7 +92,7 @@ static GList * test_async_dl_callback(cb_object * capo, void * userptr, bool * s
 
 		if(prov_url_table != NULL)
 		{
-			GlyMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
+			GlyrMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
 
 			enum GLYR_ERROR response = GLYRE_OK;
 			if(old_cache != NULL)
@@ -127,14 +127,14 @@ static GList * test_async_dl_callback(cb_object * capo, void * userptr, bool * s
 
 /*--------------------------------------------------------*/
 
-GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
+GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
 {
 	/* Just return URLs */
 	if(s->download == false)
 	{
 		for(GList * elem = list; elem; elem = elem->next)
 		{
-			GlyMemCache * img = elem->data;
+			GlyrMemCache * img = elem->data;
 			img->is_image = false;
 		}
 		return generic_txt_finalizer(s,list,stop_me,TYPE_IMG_URL);
@@ -153,7 +153,7 @@ GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, en
 		/* Iterate over all caches and turn them to GList */
 		for(GList * item = list; item; item = item->next)
 		{
-			GlyMemCache * cache = item->data;
+			GlyrMemCache * cache = item->data;
 
 			/* Make a copy, since we free the cache */
 			gchar * url_double = g_strdup(cache->data);
@@ -175,7 +175,7 @@ GList * generic_img_finalizer(GlyQuery * s, GList * list, gboolean * stop_me, en
 		/* Default to the given type */
 		for(GList * elem = dl_raw_images; elem; elem = elem->next)
 		{
-			GlyMemCache * item = elem->data;
+			GlyrMemCache * item = elem->data;
 			if(item && item->type == TYPE_NOIDEA)
 			{
 				item->type = type;

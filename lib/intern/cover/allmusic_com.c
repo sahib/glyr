@@ -22,7 +22,7 @@
 #include "../../stringlib.h"
 #include "../../glyr.h"
 
-const char * cover_allmusic_url(GlyQuery * s)
+const char * cover_allmusic_url(GlyrQuery * s)
 {
     if(s->cover.min_size < 200)
         return "http://www.allmusic.com/search/album/%album%";
@@ -43,9 +43,9 @@ const char * cover_allmusic_url(GlyQuery * s)
 #define IMG_BEGIN "<div class=\"image\"> <img src=\""
 #define IMG_ENDIN "\" alt=\""
 
-GlyMemCache * parse_cover_page(GlyMemCache * dl)
+GlyrMemCache * parse_cover_page(GlyrMemCache * dl)
 {
-    GlyMemCache * rc = NULL;
+    GlyrMemCache * rc = NULL;
     if(dl != NULL)
     {
         char * img_begin = strstr(dl->data,IMG_BEGIN);
@@ -76,7 +76,7 @@ GList * cover_allmusic_parse(cb_object * capo)
     GList * r_list = NULL;
     if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
     {
-        GlyMemCache * result = parse_cover_page(capo->cache);
+        GlyrMemCache * result = parse_cover_page(capo->cache);
         r_list = g_list_prepend(r_list, result);
         return r_list;
     }
@@ -106,10 +106,10 @@ GList * cover_allmusic_parse(cb_object * capo)
                     {
                         if(levenshtein_strcasecmp(orig_artist,artist) <= capo->s->fuzzyness)
                         {
-                            GlyMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
+                            GlyrMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
                             if(dl != NULL)
                             {
-                                GlyMemCache * result = parse_cover_page(dl);
+                                GlyrMemCache * result = parse_cover_page(dl);
                                 if(result != NULL && result->data)
                                 {
                                     r_list = g_list_prepend(r_list,result);

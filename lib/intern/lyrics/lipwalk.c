@@ -24,7 +24,7 @@
 #define START "<div id=\"lyric\">"
 #define END "</div>"
 
-const char * lyrics_lipwalk_url(GlyQuery * settings)
+const char * lyrics_lipwalk_url(GlyrQuery * settings)
 {
     return LIPWALK_URL;
 }
@@ -35,7 +35,7 @@ GList * lyrics_lipwalk_parse(cb_object *capo)
     char * end = NULL;
     char * content = NULL;
 
-    GlyMemCache * r_cache = NULL;
+    GlyrMemCache * r_cache = NULL;
     GList * r_list  = NULL;
 
     if ((start = strstr(capo->cache->data,START)) != NULL)

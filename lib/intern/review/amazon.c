@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * review_amazon_url(GlyQuery * settings)
+const char * review_amazon_url(GlyrQuery * settings)
 {
     return generic_amazon_url(settings,"EditorialReview");
 }
@@ -46,7 +46,7 @@ GList * review_amazon_parse(cb_object * capo)
             // as mostly just advertisement
             if((endOfText - (node+clen)) > 350)
             {
-                GlyMemCache * tmp = DL_init();
+                GlyrMemCache * tmp = DL_init();
                 tmp->data = beautify_lyrics(text);
                 tmp->size = tmp->data ? strlen(tmp->data) : 0;
                 tmp->dsrc = strdup(capo->url);

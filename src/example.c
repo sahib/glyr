@@ -15,7 +15,7 @@
 #include "../lib/glyr.h"
 
 
-static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
+static void print_item(GlyrQuery *s, GlyrMemCache * cacheditem, int num)
 {
 	fprintf(stderr,"\n------- ITEM #%d --------\n",num);
 	glyr_printitem(s,cacheditem);
@@ -25,7 +25,7 @@ static void print_item(GlyQuery *s, GlyMemCache * cacheditem, int num)
 /* ------------------------------------------ */
 
 /* This is called whenever glyr gets a ready to use item */
-static enum GLYR_ERROR funny_callback(GlyMemCache * c, GlyQuery * q)
+static enum GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
 {
     /* You can pass a void pointer to the callback,
      * by passing it as third argument to glyr_opt_dlcallback()
@@ -58,7 +58,7 @@ int main(int argc, char * argv[])
     atexit(glyr_cleanup);
 
     /* Initialize a new query (this may allocate memory) */
-    GlyQuery q;
+    GlyrQuery q;
     glyr_init_query(&q);
 
     /* Say we want a Songtext */
@@ -86,10 +86,10 @@ int main(int argc, char * argv[])
     glyr_opt_download(&q,0);
 
     // Call the most important command: GET!
-    // This returned a list of (GlyMemCache *)s
+    // This returned a list of (GlyrMemCache *)s
     // Each containing ONE item. (i.e. a songtext)
     enum GLYR_ERROR err;
-    GlyMemCache * it = glyr_get(&q,&err,NULL);
+    GlyrMemCache * it = glyr_get(&q,&err,NULL);
 
     if(err != GLYRE_OK)
         fprintf(stderr,"E:%s\n",glyr_strerror(err));
@@ -97,7 +97,7 @@ int main(int argc, char * argv[])
     // Now iterate through it...
     if(it != NULL)
     {
-        GlyMemCache * start = it;
+        GlyrMemCache * start = it;
 
         int counter = 0;
         while(it != NULL)
