@@ -1,4 +1,4 @@
-.TH "lib/types.h" 3 "Thu Aug 11 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/types.h" 3 "Sat Aug 13 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -18,18 +18,18 @@ File containing all definitions used in the external API.
 
 .in +1c
 .ti -1c
-.RI "struct \fBGlyMemCache\fP"
+.RI "struct \fBGlyrMemCache\fP"
 .br
 .RI "\fIRepresents a single item. \fP"
 .ti -1c
-.RI "struct \fBGlyQuery\fP"
+.RI "struct \fBGlyrQuery\fP"
 .br
 .RI "\fIStructure controlling all of libglyr's options. \fP"
 .ti -1c
-.RI "struct \fBGlySourceInfo\fP"
+.RI "struct \fBGlyrSourceInfo\fP"
 .br
 .ti -1c
-.RI "struct \fBGlyFetcherInfo\fP"
+.RI "struct \fBGlyrFetcherInfo\fP"
 .br
 .in -1c
 .SS "Defines"
@@ -81,6 +81,9 @@ File containing all definitions used in the external API.
 .RI "#define \fBDEFAULT_QSRATIO\fP   0.85"
 .br
 .ti -1c
+.RI "#define \fBDEFAULT_FORCE_UTF8\fP   true"
+.br
+.ti -1c
 .RI "#define \fBDEFAULT_ALLOWED_FORMATS\fP   'png;jpeg;tiff'"
 .br
 .ti -1c
@@ -91,21 +94,21 @@ File containing all definitions used in the external API.
 
 .in +1c
 .ti -1c
-.RI "typedef struct \fBGlyMemCache\fP \fBGlyMemCache\fP"
+.RI "typedef struct \fBGlyrMemCache\fP \fBGlyrMemCache\fP"
 .br
 .RI "\fIRepresents a single item. \fP"
 .ti -1c
-.RI "typedef struct \fBGlyQuery\fP \fBGlyQuery\fP"
+.RI "typedef struct \fBGlyrQuery\fP \fBGlyrQuery\fP"
 .br
 .RI "\fIStructure controlling all of libglyr's options. \fP"
 .ti -1c
-.RI "typedef struct \fBGlySourceInfo\fP \fBGlySourceInfo\fP"
+.RI "typedef struct \fBGlyrSourceInfo\fP \fBGlyrSourceInfo\fP"
 .br
 .ti -1c
-.RI "typedef struct \fBGlyFetcherInfo\fP \fBGlyFetcherInfo\fP"
+.RI "typedef struct \fBGlyrFetcherInfo\fP \fBGlyrFetcherInfo\fP"
 .br
 .ti -1c
-.RI "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP )(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.RI "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP )(\fBGlyrMemCache\fP *dl, struct \fBGlyrQuery\fP *s)"
 .br
 .RI "\fItypefef for the \fBglyr_opt_dlcallback()\fP option \fP"
 .in -1c
@@ -113,17 +116,17 @@ File containing all definitions used in the external API.
 
 .in +1c
 .ti -1c
-.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_SKIP\fP, \fBGLYRE_STOP_POST\fP, \fBGLYRE_STOP_PRE\fP, \fBGLYRE_NO_INIT\fP }"
+.RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_UNKNOWN\fP =  0, \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_SKIP\fP, \fBGLYRE_STOP_POST\fP, \fBGLYRE_STOP_PRE\fP, \fBGLYRE_NO_INIT\fP }"
 .br
 .RI "\fIAll possible errors that may be returned. \fP"
 .ti -1c
 .RI "enum \fBGLYR_GET_TYPE\fP { \fBGET_COVERART\fP =  1, \fBGET_LYRICS\fP =  2, \fBGET_ARTIST_PHOTOS\fP =  3, \fBGET_ARTISTBIO\fP =  4, \fBGET_SIMILIAR_ARTISTS\fP =  5, \fBGET_SIMILIAR_SONGS\fP =  6, \fBGET_ALBUM_REVIEW\fP =  7, \fBGET_TRACKLIST\fP =  8, \fBGET_TAGS\fP =  9, \fBGET_RELATIONS\fP =  10, \fBGET_ALBUMLIST\fP =  11, \fBGET_UNSURE\fP =  12 }"
 .br
-.RI "\fIEnumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. \fP"
+.RI "\fIEnumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE. \fP"
 .ti -1c
 .RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_SIMILIAR_SONG\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_IMG_URL\fP, \fBTYPE_TXT_URL\fP, \fBTYPE_TRACK\fP }"
 .br
-.RI "\fIAll possible values the type field of \fBGlyMemCache\fP can have. \fP"
+.RI "\fIAll possible values the type field of \fBGlyrMemCache\fP can have. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
@@ -153,6 +156,7 @@ Christopher Pahl
 .SS "#define DEFAULT_CMAXSIZE   -1"
 .SS "#define DEFAULT_CMINSIZE   125"
 .SS "#define DEFAULT_DOWNLOAD   true"
+.SS "#define DEFAULT_FORCE_UTF8   true"
 .SS "#define DEFAULT_FROM_ARGUMENT_DELIM   ';'"
 .SS "#define DEFAULT_FUZZYNESS   4"
 .SS "#define DEFAULT_GROUPEDL   true"
@@ -168,11 +172,11 @@ Christopher Pahl
 .SS "#define DEFAULT_VERBOSITY   0"
 .SH "Typedef Documentation"
 .PP 
-.SS "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP)(\fBGlyMemCache\fP *dl, struct \fBGlyQuery\fP *s)"
+.SS "typedef enum \fBGLYR_ERROR\fP(* \fBDL_callback\fP)(\fBGlyrMemCache\fP *dl, struct \fBGlyrQuery\fP *s)"
 .PP
 typefef for the \fBglyr_opt_dlcallback()\fP option \fBParameters:\fP
 .RS 4
-\fIDL_callback\fP A callback of the form: enum GLYR_ERROR cb(GlyMemCache * dl, struct GlyQuery * s)
+\fIDL_callback\fP A callback of the form: enum GLYR_ERROR cb(GlyrMemCache * dl, struct GlyrQuery * s)
 .RE
 .PP
 \fBReturns:\fP
@@ -181,23 +185,23 @@ possibly an error or GLYRE_OK
 .RE
 .PP
 
-.SS "typedef struct \fBGlyFetcherInfo\fP  \fBGlyFetcherInfo\fP"
-.SS "typedef struct \fBGlyMemCache\fP  \fBGlyMemCache\fP"
+.SS "typedef struct \fBGlyrFetcherInfo\fP  \fBGlyrFetcherInfo\fP"
+.SS "typedef struct \fBGlyrMemCache\fP  \fBGlyrMemCache\fP"
 .PP
 Represents a single item. It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr. 
-.SS "typedef struct \fBGlyQuery\fP  \fBGlyQuery\fP"
+.SS "typedef struct \fBGlyrQuery\fP  \fBGlyrQuery\fP"
 .PP
 Structure controlling all of libglyr's options. You should modify this with the glyr_opt_* methods,
 .br
  You can read all members directly.
 .br
  Look up the corresponding glyr_opt_$name methods for more details. For reading: Dynamically allocated members are stored in '.alloc'! 
-.SS "typedef struct \fBGlySourceInfo\fP  \fBGlySourceInfo\fP"
+.SS "typedef struct \fBGlyrSourceInfo\fP  \fBGlyrSourceInfo\fP"
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBGLYR_DATA_TYPE\fP"
 .PP
-All possible values the type field of \fBGlyMemCache\fP can have. 
+All possible values the type field of \fBGlyrMemCache\fP can have. 
 .PP
 \fBEnumerator: \fP
 .in +1c
@@ -265,17 +269,20 @@ All possible errors that may be returned.
 \fBEnumerator: \fP
 .in +1c
 .TP
+\fB\fIGLYRE_UNKNOWN \fP\fP
+Unknown error 
+.TP
 \fB\fIGLYRE_OK \fP\fP
 everything is fine 
 .TP
 \fB\fIGLYRE_BAD_OPTION \fP\fP
-you passed a bad option to glyr_setopt() 
+you passed a bad option to glyr_opt_() 
 .TP
 \fB\fIGLYRE_BAD_VALUE \fP\fP
 Invalid value in va_list 
 .TP
 \fB\fIGLYRE_EMPTY_STRUCT \fP\fP
-you passed an empty struct to glyr_setopt() 
+you passed an empty struct to glyr_opt_() 
 .TP
 \fB\fIGLYRE_NO_PROVIDER \fP\fP
 setttings->provider == NULL 
@@ -296,7 +303,7 @@ Will stop searching, but won't add the current item
 Library has not been initialized with \fBglyr_init()\fP yet 
 .SS "enum \fBGLYR_GET_TYPE\fP"
 .PP
-Enumeration of all getters, \fBGlyQuery\fP is initalized to GET_UNSURE. The type of metadata to get, names are selfexplanatory Requirements are given in braces, [] means optional. 
+Enumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE. The type of metadata to get, names are selfexplanatory Requirements are given in braces, [] means optional. 
 .PP
 \fBEnumerator: \fP
 .in +1c

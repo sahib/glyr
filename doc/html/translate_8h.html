@@ -115,12 +115,12 @@ function toggleVisibility(linkObj) {
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#a00e2d4c9776581a3ed147139d1fd7677">Gly_gtrans_translate</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, <a class="el" href="structGlyMemCache.html">GlyMemCache</a> *to_translate)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate translating.  <a href="#a00e2d4c9776581a3ed147139d1fd7677"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#af7689be87ddbc703529c85a4eb8812c0">Gly_gtrans_lookup</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s, const char *snippet, float *correctness)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Lookup the language a certain snippet may be in.  <a href="#af7689be87ddbc703529c85a4eb8812c0"></a><br/></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#a6433f428fdde8dc5d1380ce0487d578e">Gly_gtrans_list</a> (<a class="el" href="structGlyQuery.html">GlyQuery</a> *s)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">List all supported languages.  <a href="#a6433f428fdde8dc5d1380ce0487d578e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#aaa94c64b6544585d9c7bce3ee61ec1f4">Gly_gtrans_translate</a> (<a class="el" href="structGlyrQuery.html">GlyrQuery</a> *s, <a class="el" href="structGlyrMemCache.html">GlyrMemCache</a> *to_translate)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate translating.  <a href="#aaa94c64b6544585d9c7bce3ee61ec1f4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#a2e05038f79ce78cb9029a4e4fdf0eee4">Gly_gtrans_lookup</a> (<a class="el" href="structGlyrQuery.html">GlyrQuery</a> *s, const char *snippet, float *correctness)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Lookup the language a certain snippet may be in.  <a href="#a2e05038f79ce78cb9029a4e4fdf0eee4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">char **&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="translate_8h.html#ae9e4916041f6ccaac8c956f82706be3e">Gly_gtrans_list</a> (<a class="el" href="structGlyrQuery.html">GlyrQuery</a> *s)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">List all supported languages.  <a href="#ae9e4916041f6ccaac8c956f82706be3e"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>(do not use yet) Methods to interact directly with google translator </p>
@@ -129,14 +129,14 @@ Functions</h2></td></tr>
 <dl class="version"><dt><b>Version:</b></dt><dd>0.6 </dd></dl>
 <dl class="date"><dt><b>Date:</b></dt><dd>2011-06-14 </dd></dl>
 </div><hr/><h2>Function Documentation</h2>
-<a class="anchor" id="a6433f428fdde8dc5d1380ce0487d578e"></a><!-- doxytag: member="translate.h::Gly_gtrans_list" ref="a6433f428fdde8dc5d1380ce0487d578e" args="(GlyQuery *s)" -->
+<a class="anchor" id="ae9e4916041f6ccaac8c956f82706be3e"></a><!-- doxytag: member="translate.h::Gly_gtrans_list" ref="ae9e4916041f6ccaac8c956f82706be3e" args="(GlyrQuery *s)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">char** Gly_gtrans_list </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structGlyrQuery.html">GlyrQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em></td><td>)</td>
           <td></td>
         </tr>
@@ -147,7 +147,7 @@ Functions</h2></td></tr>
 <p>List all supported languages. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> needed to determine the source/target language</td></tr>
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyrQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyrQuery</a> needed to determine the source/target language</td></tr>
   </table>
   </dd>
 </dl>
@@ -161,14 +161,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="af7689be87ddbc703529c85a4eb8812c0"></a><!-- doxytag: member="translate.h::Gly_gtrans_lookup" ref="af7689be87ddbc703529c85a4eb8812c0" args="(GlyQuery *s, const char *snippet, float *correctness)" -->
+<a class="anchor" id="a2e05038f79ce78cb9029a4e4fdf0eee4"></a><!-- doxytag: member="translate.h::Gly_gtrans_lookup" ref="a2e05038f79ce78cb9029a4e4fdf0eee4" args="(GlyrQuery *s, const char *snippet, float *correctness)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">char* Gly_gtrans_lookup </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structGlyrQuery.html">GlyrQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
         </tr>
         <tr>
@@ -195,7 +195,7 @@ Functions</h2></td></tr>
 <p>Lookup the language a certain snippet may be in. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> needed to determine the source/target language<br/>
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyrQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyrQuery</a> needed to determine the source/target language<br/>
  </td></tr>
     <tr><td class="paramname">snippet</td><td>a short snippet (less than 500 signs) in the questionable language<br/>
  </td></tr>
@@ -213,20 +213,20 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a00e2d4c9776581a3ed147139d1fd7677"></a><!-- doxytag: member="translate.h::Gly_gtrans_translate" ref="a00e2d4c9776581a3ed147139d1fd7677" args="(GlyQuery *s, GlyMemCache *to_translate)" -->
+<a class="anchor" id="aaa94c64b6544585d9c7bce3ee61ec1f4"></a><!-- doxytag: member="translate.h::Gly_gtrans_translate" ref="aaa94c64b6544585d9c7bce3ee61ec1f4" args="(GlyrQuery *s, GlyrMemCache *to_translate)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">void Gly_gtrans_translate </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="structGlyQuery.html">GlyQuery</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structGlyrQuery.html">GlyrQuery</a> *&#160;</td>
           <td class="paramname"><em>s</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="structGlyMemCache.html">GlyMemCache</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="structGlyrMemCache.html">GlyrMemCache</a> *&#160;</td>
           <td class="paramname"><em>to_translate</em>&#160;</td>
         </tr>
         <tr>
@@ -241,12 +241,12 @@ Functions</h2></td></tr>
 <p>Initiate translating. </p>
 <dl><dt><b>Parameters:</b></dt><dd>
   <table class="params">
-    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> needed to determine the source/target language </td></tr>
+    <tr><td class="paramname">s</td><td>The <a class="el" href="structGlyrQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyrQuery</a> needed to determine the source/target language </td></tr>
     <tr><td class="paramname">to_translate</td><td>Cache that gets modified with the translation.</td></tr>
   </table>
   </dd>
 </dl>
-<p>Takes the cache struct to_translate and translate the text according to the setting stored in the <a class="el" href="structGlyQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyQuery</a> s <br/>
+<p>Takes the cache struct to_translate and translate the text according to the setting stored in the <a class="el" href="structGlyrQuery.html" title="Structure controlling all of libglyr&#39;s options.">GlyrQuery</a> s <br/>
  It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, <br/>
  and both languages are valid. Note that the usage of these functions is restricted by google to a certain limit <br/>
  being at the moment at 100,000 chars per day and IP.<br/>
@@ -270,7 +270,7 @@ Functions</h2></td></tr>
 </iframe>
 </div>
 
-<hr class="footer"/><address class="footer"><small>Generated on Thu Aug 11 2011 17:32:18 for libglyr by&#160;
+<hr class="footer"/><address class="footer"><small>Generated on Sat Aug 13 2011 01:17:04 for libglyr by&#160;
 <a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/></a> 1.7.4 </small></address>
 </body>

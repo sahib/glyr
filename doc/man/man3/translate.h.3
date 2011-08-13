@@ -1,4 +1,4 @@
-.TH "lib/translate.h" 3 "Thu Aug 11 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/translate.h" 3 "Sat Aug 13 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
@@ -16,15 +16,15 @@ lib/translate.h \-
 
 .in +1c
 .ti -1c
-.RI "void \fBGly_gtrans_translate\fP (\fBGlyQuery\fP *s, \fBGlyMemCache\fP *to_translate)"
+.RI "void \fBGly_gtrans_translate\fP (\fBGlyrQuery\fP *s, \fBGlyrMemCache\fP *to_translate)"
 .br
 .RI "\fIInitiate translating. \fP"
 .ti -1c
-.RI "char * \fBGly_gtrans_lookup\fP (\fBGlyQuery\fP *s, const char *snippet, float *correctness)"
+.RI "char * \fBGly_gtrans_lookup\fP (\fBGlyrQuery\fP *s, const char *snippet, float *correctness)"
 .br
 .RI "\fILookup the language a certain snippet may be in. \fP"
 .ti -1c
-.RI "char ** \fBGly_gtrans_list\fP (\fBGlyQuery\fP *s)"
+.RI "char ** \fBGly_gtrans_list\fP (\fBGlyrQuery\fP *s)"
 .br
 .RI "\fIList all supported languages. \fP"
 .in -1c
@@ -52,11 +52,11 @@ Christopher Pahl
 
 .SH "Function Documentation"
 .PP 
-.SS "char** Gly_gtrans_list (\fBGlyQuery\fP *s)"
+.SS "char** Gly_gtrans_list (\fBGlyrQuery\fP *s)"
 .PP
 List all supported languages. \fBParameters:\fP
 .RS 4
-\fIs\fP The \fBGlyQuery\fP needed to determine the source/target language
+\fIs\fP The \fBGlyrQuery\fP needed to determine the source/target language
 .RE
 .PP
 Queries google for a list of all supported languages 
@@ -76,11 +76,11 @@ a list of strings, containg the language codes
 .RE
 .PP
 
-.SS "char* Gly_gtrans_lookup (\fBGlyQuery\fP *s, const char *snippet, float *correctness)"
+.SS "char* Gly_gtrans_lookup (\fBGlyrQuery\fP *s, const char *snippet, float *correctness)"
 .PP
 Lookup the language a certain snippet may be in. \fBParameters:\fP
 .RS 4
-\fIs\fP The \fBGlyQuery\fP needed to determine the source/target language
+\fIs\fP The \fBGlyrQuery\fP needed to determine the source/target language
 .br
  
 .br
@@ -108,16 +108,16 @@ the language code ('en',de",..)
 .RE
 .PP
 
-.SS "void Gly_gtrans_translate (\fBGlyQuery\fP *s, \fBGlyMemCache\fP *to_translate)"
+.SS "void Gly_gtrans_translate (\fBGlyrQuery\fP *s, \fBGlyrMemCache\fP *to_translate)"
 .PP
 Initiate translating. \fBParameters:\fP
 .RS 4
-\fIs\fP The \fBGlyQuery\fP needed to determine the source/target language 
+\fIs\fP The \fBGlyrQuery\fP needed to determine the source/target language 
 .br
 \fIto_translate\fP Cache that gets modified with the translation.
 .RE
 .PP
-Takes the cache struct to_translate and translate the text according to the setting stored in the \fBGlyQuery\fP s 
+Takes the cache struct to_translate and translate the text according to the setting stored in the \fBGlyrQuery\fP s 
 .br
  It will be translated IF to_translate is not an image (is_image == false) and the targetlang != sourcelang, 
 .br
