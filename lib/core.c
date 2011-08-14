@@ -1027,17 +1027,18 @@ static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
 	GList * new_head = text_list;
 	if(query != NULL && text_list != NULL && query->force_utf8 == TRUE)
 	{
-		glyr_message(2,query,"#[%02d/%02d] ",g_list_length(text_list),query->number);
+		glyr_message(2,query,"#[%02d/%02d] Checking encoding [",g_list_length(text_list),query->number);
 
 		GList * elem = text_list;
 		while(elem != NULL)
 		{
 			GlyrMemCache * cache = elem->data;
 			const gchar * end_of_valid_utf8 = NULL;
-			if(g_utf8_validate(cache->data,-1,&end_of_valid_utf8))
+			if(g_utf8_validate(cache->data,-1,&end_of_valid_utf8) == FALSE)
 			{
 				/* UTF8 was forced, and this cache didn't pass -> deletre */	
 				glyr_message(2,query,"!");
+
 
 				DL_free(cache);
 				deleted++;
@@ -1091,10 +1092,13 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 				{
 					raw_parsed_data = kick_out_wrong_formats(raw_parsed_data,capo->s);
 				}
-				else if(plugin->encoding != NULL) /* We should look if charset conversion is requested */
+				else /* We should look if charset conversion is requested */
 				{
-					glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets ");
-					do_charset_conversion(plugin, raw_parsed_data);
+					if(plugin->encoding != NULL)
+					{
+						do_charset_conversion(plugin, raw_parsed_data);
+						glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets ");
+					}
 					raw_parsed_data = check_for_forced_utf8(capo->s,raw_parsed_data);	
 				}
 

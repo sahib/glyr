@@ -17,7 +17,7 @@ class Glyros::GlyrMemCache
 	def register_free
 	    ObjectSpace.define_finalizer(self, 
 	      proc do 
-		  self.finalize
+		  		self.finalize
 	      end
 	    )
 	    return self
@@ -72,6 +72,10 @@ class Glyros::GlyrQuery
 	    return new_query.register_free
 	end
 
+	def download_url(url) 
+ 		return Glyros::glyr_download(url,self)
+	end	
+
 	private
 	def finalize
 	    Glyros::glyr_destroy_query(self)
@@ -94,20 +98,20 @@ class GlyrosSpit
 		@query = Glyros::GlyrQuery.new
 	end
 
-        def get(type_enum)
+   def get(type_enum)
 		if type_enum.is_a? Integer
 		  Glyros::glyr_opt_type(@query,type_enum)
 		  return call_get
 		end
-                nil
+      nil
 	end	
-	
-	def download_url(url) 
-		unless @query.nil?
-		   return Glyros::glyr_download(url, @query)
+
+	def get
+		unless @query.type == Glyros::GET_UNSURE
+			return call_get
 		end
 		nil
-	end	
+	end
 	
 	def version
 		return Glyros::glyr_version()
@@ -143,6 +147,10 @@ class GlyrosSpit
 	def title=(title)
 		Glyros::glyr_opt_title(@query,title)
 		self
+	end
+
+	def type=(type_enum) 
+		 Glyros::glyr_opt_type(@query,type_enum)
 	end
 
 	def type
@@ -313,8 +321,6 @@ def test_me
 	
 end
 
-test_me
-
 def use_strange_functions 
 	info = GlyrosSpit.get_plugin_info()
 	
@@ -329,5 +335,3 @@ def use_strange_functions
 		info = info.next
 	end
 end
-
-use_strange_functions()

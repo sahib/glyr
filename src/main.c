@@ -160,6 +160,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 		{"parallel",      required_argument, 0, 'p'},
 		{"redirects",     required_argument, 0, 'r'},
 		{"timeout",       required_argument, 0, 'm'},
+		{"proxy",	  required_argument, 0, 'k'},
 		{"plugmax",       required_argument, 0, 'x'},
 		{"useragent",     required_argument, 0, 'u'},
 		{"verbosity",     required_argument, 0, 'v'},
@@ -171,6 +172,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 		{"download",      no_argument,       0, 'd'},
 		{"no-download",   no_argument,       0, 'D'},
 		{"list",          no_argument,       0, 'L'},
+		{"force-utf8",    no_argument,       0, '8'},
 		// ---------- plugin specific ------------ //
 		{"artist",        required_argument, 0, 'a'},
 		{"album",         required_argument, 0, 'b'},
@@ -182,7 +184,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 		{"fuzzyness",     required_argument, 0, 'z'},
 		{"prefer",        required_argument, 0, 'o'},
 		{"callback",	  required_argument, 0, 'j'},
-		{"proxy",	  required_argument, 0, 'k'},
 		{0,               0,                 0, '0'}
 	};
 
@@ -190,7 +191,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 	{
 		int c;
 		int option_index = 0;
-		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:",long_options, &option_index)) == -1)
+		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
 		{
 			break;
 		}
@@ -287,6 +288,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 				break;
 			case 'F':
 				glyr_opt_allowed_formats(glyrs,optarg);
+				break;
+			case '8':
+				glyr_opt_force_utf8(glyrs,true);
 				break;
 			case '?':
 				break;

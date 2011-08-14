@@ -439,6 +439,20 @@ extern "C"
     enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 
     /**
+    * @brief Forces UTF8 encoding for text items
+    *
+    * @param s A GlyrQuery with the timeout and redirect values filled to your needs.
+    * @param force_utf8 true to foce, false to accept other encodings 
+    *
+    * Often this will option won't have serious impact, except for a view providers that don't deliever exact UTF8,
+    * due to corrupted data (twice encoded like metrolyrics), but may deliever subsets of UTF8.
+    * Check is done via g_utf8_validate()
+    *
+    * @return A GlyrMemCache containing the data
+    */
+    enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
+
+    /**
     * @brief A convinience method to download the content at the URl $url, according to the settings in $s
     * Actually only the redirect and timeout parameters are used here.
     *

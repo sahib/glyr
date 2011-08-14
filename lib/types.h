@@ -39,7 +39,7 @@
 #define DEFAULT_FUZZYNESS 4
 #define DEFAULT_PROXY NULL
 #define DEFAULT_QSRATIO 0.85
-#define DEFAULT_FORCE_UTF8 true 
+#define DEFAULT_FORCE_UTF8 false 
 
 /* Disallow *.gif, mostly bad quality */
 #define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff"

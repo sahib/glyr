@@ -375,6 +375,15 @@ enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
 }
 
 /*-----------------------------------------------*/
+
+enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
+{
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->force_utf8 = force_utf8;
+    return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 
