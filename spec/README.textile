@@ -1,0 +1,5 @@
+.h1 Testsuit for libglyr
+*Note:* This actually tests glyros, the ruby wrapper for libglyr,
+but indirectly of course the functionality (whitebox) of libglyr.
+
+It depends on RSpec.
