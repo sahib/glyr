@@ -21,18 +21,18 @@
 #include <glib.h>
 #include <locale.h>
 
+#include "glyr.h"
+#include "core.h"
+#include "register_plugins.h"
+#include "blacklist.h"
+#include "md5.h"
+
 #if glyr_DEBUG
   #ifndef WIN32
     /* Backtrace*/
     #include <execinfo.h>
   #endif
 #endif
-
-#include "glyr.h"
-#include "core.h"
-#include "register_plugins.h"
-#include "blacklist.h"
-#include "md5.h"
 
 //* ------------------------------------------------------- */
 

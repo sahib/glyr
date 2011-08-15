@@ -32,17 +32,17 @@ const char * ainfo_allmusic_url(GlyrQuery * s)
 GlyrMemCache * parse_bio_short(GlyrMemCache * to_parse)
 {
     GlyrMemCache * rche = NULL;
-    char * text_begin = strstr(to_parse->data,IMG_BEGIN);
+    gchar * text_begin = strstr(to_parse->data,IMG_BEGIN);
     if(text_begin != NULL)
     {
-        char * text_endin = strstr(text_begin,IMG_ENDIN);
+        gchar * text_endin = strstr(text_begin,IMG_ENDIN);
         if(text_endin != NULL)
         {
-            char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
+            gchar * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
             if(text != NULL)
             {
                 remove_tags_from_string(text,strlen(text),'<','>');
-                char * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
+                gchar * null_marker = strstr(text,"&hellip;&nbsp;&nbsp;");
                 if(null_marker != NULL)
                 {
                     text[null_marker - text + 0] = '.';

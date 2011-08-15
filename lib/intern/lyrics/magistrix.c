@@ -27,6 +27,10 @@ const char * lyrics_magistrix_url(GlyrQuery * settings)
     return MG_URL;
 }
 
+
+#define OPT_START "<img align=\"absmiddle\" alt=\"Phone2\""
+#define OPT_END   "<img align=\"absmiddle\" alt=\"Phone\""
+
 static GlyrMemCache * parse_lyric_page(const char * buffer)
 {
     GlyrMemCache * result = NULL;
@@ -36,8 +40,21 @@ static GlyrMemCache * parse_lyric_page(const char * buffer)
         if(begin)
         {
             begin = strstr(begin,"</div>");
+	    if(begin)
             {
-                char * end = strstr(begin+1,"</div>");
+		/* Another running gag during developement */
+		gchar * ring_tone = strstr(begin,OPT_START);
+		if(ring_tone != NULL)
+		{
+			begin = ring_tone;
+		}
+
+		gchar * end = strstr(begin+1,OPT_END);
+		if(end == NULL)
+		{
+                	end = strstr(begin+1,"</div>");
+		}
+
                 if(end)
                 {
                     char * lyr = copy_value(begin,end);
