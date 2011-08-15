@@ -44,7 +44,7 @@ GList * lyrics_lyrdb_parse(cb_object * capo)
                 GlyrMemCache * new_cache = download_single(lyr_url,capo->s,NULL);
                 if(new_cache)
                 {
-                    char *buffer = malloc(new_cache->size+1);
+                    char *buffer = g_malloc0(new_cache->size+1);
 
                     size_t i;
                     for(i=0; i < new_cache->size; i++)

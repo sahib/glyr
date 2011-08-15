@@ -597,14 +597,9 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 			/* call the program if any specified */
 			if(exec_on_call != NULL)
 			{
-				char * replace_path = g_strdup(exec_on_call);
-				if(path != NULL)
-				{
-					gchar ** path_splitv = g_strsplit(replace_path,"<path>",0);
-					replace_path = g_strjoinv(path,path_splitv);
-					g_strfreev(path_splitv);
-					path_splitv = NULL;
-				}
+				char ** path_splitv = g_strsplit(exec_on_call,"<path>",0);
+				char * replace_path = g_strjoinv(path,path_splitv);
+				g_strfreev(path_splitv);
 
 				/* Call that command */
 				int exitVal = system(replace_path);

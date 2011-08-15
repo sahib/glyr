@@ -244,7 +244,7 @@ char *unescape_html_UTF8(const char * data)
 		int tagflag = 0;
 		int iB = 0;
 
-		result = calloc(len+1,sizeof(char));
+		result = g_malloc0(len+1);
 		for (i = 0; i  < len; ++i)
 		{
 			char * semicol = NULL;
@@ -787,7 +787,7 @@ gchar * copy_value(const gchar * begin, const gchar * end)
 	if(begin && end)
 	{
 		gsize length = end - begin;
-		gchar * buffer = malloc(length+1);
+		gchar * buffer = g_malloc0(length+1);
 
 		if(buffer != NULL)
 		{

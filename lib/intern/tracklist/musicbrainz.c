@@ -25,7 +25,6 @@ const char * tracklist_musicbrainz_url(GlyrQuery * sets)
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=Official&limit=10&title=%album%&limit=1";
 }
 
-//const char * musicbrainz_get_id(
 #define REL_ID_BEGIN "id=\""
 #define REL_ID_ENDIN "\" ext:score="
 #define REL_ID_FORM  "http://musicbrainz.org/ws/1/release/%s?type=xml&inc=tracks"
@@ -35,19 +34,20 @@ const char * tracklist_musicbrainz_url(GlyrQuery * sets)
 #define TIT_BEGIN "<title>"
 #define TIT_ENDIN "</title>"
 
-static GList * traverse_xml(const char * data, const char * url, cb_object * capo)
-{
-    char * beg = (char*)data;
-    GList * collection = NULL;
+/* ----------------------------------------- */
 
-    int ctr = 0;
+static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * capo)
+{
+    gchar * beg = (gchar*)data;
+    GList * collection = NULL;
+    gint ctr = 0;
 
     while(continue_search(ctr,capo->s) && (beg = strstr(beg+1,TIT_BEGIN)) != NULL)
     {
-        char * dy;
-        char * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN)); // 1 UP
-        char * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN))); // 1 UP
-        if(value && durat)
+        gchar * dy;
+        gchar * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN)); 
+        gchar * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN))); 
+        if(value != NULL && durat != NULL)
         {
             GlyrMemCache * cont = DL_init();
             cont->data = beautify_lyrics(value);
@@ -58,7 +58,7 @@ static GList * traverse_xml(const char * data, const char * url, cb_object * cap
 
             ctr++;
 
-            // free & jump to next
+            /* free & jump to next */
             g_free(value);
             g_free(durat);
             beg = dy;
@@ -67,10 +67,14 @@ static GList * traverse_xml(const char * data, const char * url, cb_object * cap
     return collection;
 }
 
+/* ----------------------------------------- */
+
+/* Use simple text parsing, xml parsing has no advantage here */
 GList * tracklist_musicbrainz_parse(cb_object * capo)
 {
     GList * ls = NULL;
-    char * release_ID = NULL;
+    gchar * release_ID = NULL;
+
     if( (release_ID = copy_value(strstr(capo->cache->data,REL_ID_BEGIN)+strlen(REL_ID_BEGIN),strstr(capo->cache->data,REL_ID_ENDIN))) != NULL)
     {
         char * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);

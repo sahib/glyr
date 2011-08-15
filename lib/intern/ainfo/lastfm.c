@@ -51,7 +51,7 @@ static char * fix_crappy_lastfm_txt(const char * txt)
             char * no_unicode_at_all = unescape_html_UTF8(no_unicode);
             if(no_unicode_at_all)
             {
-                char * trim_buf = calloc(strlen(no_unicode_at_all)+1,sizeof(char));
+                char * trim_buf = g_malloc0(strlen(no_unicode_at_all)+1);
                 if(trim_buf)
                 {
                     trim_copy(no_unicode_at_all,trim_buf);
