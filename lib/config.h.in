@@ -2,3 +2,4 @@
 #define glyr_VERSION_MINOR "@GLYR_VERSION_MINOR@"
 #define glyr_VERSION_NAME  "@GLYR_VERSION_NAME@"
 #define glyr_USE_COLOR     @GLYR_COLORED_OUTPUT@
+#define glyr_DEBUG         @GLYR_DEBUG@

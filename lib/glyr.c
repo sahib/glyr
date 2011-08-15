@@ -18,13 +18,14 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-/* All you need is glove */
 #include <glib.h>
 #include <locale.h>
 
-#ifndef WIN32
-  /* Backtrace*/
-  #include <execinfo.h>
+#if glyr_DEBUG
+  #ifndef WIN32
+    /* Backtrace*/
+    #include <execinfo.h>
+  #endif
 #endif
 
 #include "glyr.h"
@@ -39,52 +40,53 @@ gboolean is_initalized = FALSE;
 
 //* ------------------------------------------------------- */
 
-#ifndef WIN32
-#define STACK_FRAME_SIZE 20
-  /* Obtain a backtrace and print it to stdout. */
-  static void print_trace(void)
-  {
-      void * array[STACK_FRAME_SIZE];
-      char **bt_info_list;
-      size_t size, i = 0;
-  
-      size = backtrace (array, STACK_FRAME_SIZE);
-      bt_info_list = backtrace_symbols(array, size);
-  
-      for (i = 0; i < size; i++)
-      {
-          g_printerr("    [#%02u] %s\n",(int)i+1, bt_info_list[i]);
-      }
-  
-      g_printerr("\n%zd calls in total are shown.\n", size);
-      g_free(bt_info_list);
-  }
-  
-#endif
-
-//* ------------------------------------------------------- */
-
-static void sig_handler(int signal)
-{
-    switch(signal)
+#if glyr_DEBUG
+  #ifndef WIN32
+  #define STACK_FRAME_SIZE 20
+    /* Obtain a backtrace and print it to stdout. */
+    static void print_trace(void)
     {
-    case SIGABRT :
-    case SIGFPE  :
-    case SIGSEGV : /* sigh */
-        glyr_message(-1,NULL,C_R"\nFATAL: "C_"libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
-        glyr_message(-1,NULL,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
-        glyr_message(-1,NULL,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
-        glyr_message(-1,NULL,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
-        glyr_message(-1,NULL,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
-#ifndef WIN32
-        glyr_message(-1,NULL,C_"\nA list of the last called functions follows, please add this to your report:\n");
-        print_trace();
-#endif
-        glyr_message(-1,NULL,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
-        break;
+        void * array[STACK_FRAME_SIZE];
+        gchar ** bt_info_list;
+        gsize size, it = 0;
+    
+        size = backtrace (array, STACK_FRAME_SIZE);
+        bt_info_list = backtrace_symbols(array, size);
+    
+        for (it = 0; it < size; it++)
+        {
+            g_printerr("    [#%02u] %s\n",(gint)it+1, bt_info_list[it]);
+        }
+    
+        g_printerr("\n%zd calls in total are shown.\n", size);
+        g_free(bt_info_list);
     }
-    exit(EXIT_FAILURE);
-}
+  #endif
+  
+  //* ------------------------------------------------------- */
+  
+  static void sig_handler(int signal)
+  {
+      switch(signal)
+      {
+      case SIGABRT :
+      case SIGFPE  :
+      case SIGSEGV : /* sigh */
+          glyr_message(-1,NULL,C_R"\nFATAL: "C_"libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
+          glyr_message(-1,NULL,C_"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
+          glyr_message(-1,NULL,C_"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
+          glyr_message(-1,NULL,C_"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
+          glyr_message(-1,NULL,C_"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
+  #ifndef WIN32
+          glyr_message(-1,NULL,C_"\nA list of the last called functions follows, please add this to your report:\n");
+          print_trace();
+  #endif
+          glyr_message(-1,NULL,C_"\n(Thanks, and Sorry for any bad feelings.)\n\n");
+          break;
+      }
+      exit(EXIT_FAILURE);
+  }
+#endif
 
 /*--------------------------------------------------------*/
 
@@ -502,8 +504,10 @@ void glyr_init(void)
     /* Protect agains double initialization */
     if(is_initalized == FALSE)
     {
+#if glyr_DEBUG
         /* Try to print informative output */
         signal(SIGSEGV, sig_handler);
+#endif
 
         /* Init for threads */
         g_thread_init(NULL);

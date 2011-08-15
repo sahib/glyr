@@ -3,9 +3,9 @@
 
 	include(FindPkgConfig)
 
-	# Change default dir
 	SET(CMAKE_INSTALL_PREFIX "/usr")
 
+	SET(GLYR_DEBUG true)
 	SET(CSTANDARD "-std=gnu99")
 	SET(CDEBUG "-ggdb3")
 	SET(CWARN "-Wall -Wstrict-prototypes")
