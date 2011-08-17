@@ -41,8 +41,6 @@ extern MetaDataSource cover_discogs_src;
 extern MetaDataSource cover_google_src;
 extern MetaDataSource cover_lastfm_src;
 extern MetaDataSource cover_lyricswiki_src;
-extern MetaDataSource lyrics_darklyrics_src;
-extern MetaDataSource lyrics_directlyrics_src;
 extern MetaDataSource lyrics_lipwalk_src;
 extern MetaDataSource lyrics_lyrdb_src;
 extern MetaDataSource lyrics_lyricsreg_src;
@@ -52,7 +50,6 @@ extern MetaDataSource lyrics_lyricswiki_src;
 extern MetaDataSource lyrics_lyrix_src;
 extern MetaDataSource lyrics_magistrix_src;
 extern MetaDataSource lyrics_metrolyrics_src;
-extern MetaDataSource lyrics_songlyrics_src;
 extern MetaDataSource photos_flickr_src;
 extern MetaDataSource photos_google_src;
 extern MetaDataSource photos_lastfm_src;
@@ -64,6 +61,10 @@ extern MetaDataSource similar_song_lastfm_src;
 extern MetaDataSource tags_musicbrainz_src;
 extern MetaDataSource tracklist_musicbrainz_src;
 
+// Disabled due to bad quality.
+//extern MetaDataSource lyrics_darklyrics_src;
+//extern MetaDataSource lyrics_directlyrics_src;
+//extern MetaDataSource lyrics_songlyrics_src;
 /* --------------------------------------- */
 
 /* Get fetcher list */
