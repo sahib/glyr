@@ -51,7 +51,8 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
                     char * cmp_t =  g_strdup_printf("<song>%s",capo->s->title);
                     if(cmp_t != NULL)
                     {
-                        if((levenshtein_strcasecmp(cmp_a,tmp_artist) + levenshtein_strcasecmp(cmp_t,tmp_title) ) <= capo->s->fuzzyness)
+                        if((levenshtein_strcasecmp(cmp_a,tmp_artist) <= capo->s->fuzzyness &&
+			    levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
                         {
                             res = true;
                         }

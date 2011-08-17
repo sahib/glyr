@@ -1018,7 +1018,7 @@ static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
 				new_head = g_list_delete_link(new_head,to_delete);
 				continue;
 			}
-			else
+			else 
 			{
 				glyr_message(2,query,".");
 				elem = elem->next;
@@ -1028,6 +1028,30 @@ static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
 	}
 	return new_head;
 } 
+
+/*--------------------------------------------------------*/
+
+static void normalize_utf8(GList * text_list)
+{
+	for(GList * elem = text_list; elem; elem = elem->next)
+	{
+		GlyrMemCache * cache = elem->data;
+		if(cache != NULL && cache->data)
+		{
+			if(g_utf8_validate(cache->data,-1,NULL) != FALSE)
+			{
+				gchar * normalized_utf8 = g_utf8_normalize(cache->data,-1,G_NORMALIZE_NFKC);
+				if(normalized_utf8 != NULL)
+				{
+					/* Swap cache contents */
+					g_free(cache->data);
+					cache->data = normalized_utf8;
+					cache->size = strlen(normalized_utf8);
+				}
+			}
+		}
+	}
+}
 
 /*--------------------------------------------------------*/
 
@@ -1064,6 +1088,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 				}
 				else /* We should look if charset conversion is requested */
 				{
+					normalize_utf8(raw_parsed_data);
 					if(plugin->encoding != NULL)
 					{
 						do_charset_conversion(plugin, raw_parsed_data);

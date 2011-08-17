@@ -35,6 +35,7 @@ GList * lyrics_darklyrics_parse(cb_object * capo)
      * Afterwards we copy from cache->data so we have
      * the correct case in the finaly lyrics
      * */
+puts(capo->cache->data);
 
     GList * r_list = NULL;
     GlyrMemCache * r_cache = NULL;

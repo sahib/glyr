@@ -150,10 +150,16 @@ static gchar * prepare_string(const gchar * input)
 		gchar * downed = g_utf8_strdown(input,-1);
 		if(downed != NULL)
 		{
-			result = curl_easy_escape(NULL,downed,0);
-			if(result != NULL)
+			gchar * normalized = g_utf8_normalize(downed,-1,G_NORMALIZE_NFKC);
+			if(normalized != NULL)
 			{
-				remove_tags_from_string(result,-1,'(',')');
+				result = curl_easy_escape(NULL,normalized,0);
+				if(result != NULL)
+				{
+					remove_tags_from_string(result,-1,'(',')');
+
+				}
+				g_free(normalized);
 			}
 			g_free(downed);
 		}
@@ -190,6 +196,7 @@ gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album
 			g_free(p_album);
 		if(p_title)
 			g_free(p_title);
+
 	}
 	return tmp;
 }
@@ -557,7 +564,7 @@ const char * html_to_unicode_table[][2] =
 char * strip_html_unicode(const gchar * string)
 {
 	if(string == NULL)
-	    return NULL;
+		return NULL;
 
 	// Total length, iterator and resultbuf
 	gsize sR_len = strlen(string), sR_i = 0;
