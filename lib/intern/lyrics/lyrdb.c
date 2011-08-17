@@ -78,6 +78,7 @@ MetaDataSource lyrics_lyrdb_src =
 {
     .name = "lyrdb",
     .key  = 'd',
+    .encoding  = "LATIN1",
     .parser    = lyrics_lyrdb_parse,
     .get_url   = lyrics_lyrdb_url,
     .type      = GET_LYRICS,

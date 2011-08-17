@@ -167,7 +167,6 @@ MetaDataSource lyrics_metrolyrics_src =
 {
     .name = "metrolyrics",
     .key  = 'm',
-    .encoding  = "ISO8859-1",
     .parser    = lyrics_metrolyrics_parse,
     .get_url   = lyrics_metrolyrics_url,
     .type      = GET_LYRICS,

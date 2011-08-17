@@ -976,7 +976,7 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 			if(utf8_string != NULL)
 			{
 				gsize new_len;
-				gchar * conv = convert_charset(utf8_string,source->encoding,"UTF-8",&new_len);
+				gchar * conv = convert_charset(utf8_string,"UTF-8",source->encoding,&new_len);
 				if(conv != NULL)
 				{
 					cache->size = new_len;
@@ -1091,8 +1091,8 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 					normalize_utf8(raw_parsed_data);
 					if(plugin->encoding != NULL)
 					{
+						glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets\n",g_list_length(raw_parsed_data),capo->s->number);
 						do_charset_conversion(plugin, raw_parsed_data);
-						glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets ");
 					}
 					raw_parsed_data = check_for_forced_utf8(capo->s,raw_parsed_data);	
 				}
