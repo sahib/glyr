@@ -50,12 +50,14 @@ extern MetaDataSource lyrics_lyricswiki_src;
 extern MetaDataSource lyrics_lyrix_src;
 extern MetaDataSource lyrics_magistrix_src;
 extern MetaDataSource lyrics_metrolyrics_src;
+extern MetaDataSource lyrics_metallum_src;
 extern MetaDataSource photos_flickr_src;
 extern MetaDataSource photos_google_src;
 extern MetaDataSource photos_lastfm_src;
 extern MetaDataSource relations_musicbrainz_src;
 extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
+extern MetaDataSource review_metallum_src;
 extern MetaDataSource similar_artist_lastfm_src;
 extern MetaDataSource similar_song_lastfm_src;
 extern MetaDataSource tags_musicbrainz_src;
@@ -82,6 +84,10 @@ GList * r_getSList(void)
 
 static void register_provider_plugins(void)
 {
+// Disabled due to bad quality:
+//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_darklyrics_src);
+//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_directlyrics_src);
+//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_songlyrics_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_allmusic_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_lastfm_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_lyricsreg_src);
@@ -94,8 +100,6 @@ static void register_provider_plugins(void)
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_google_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_lastfm_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_lyricswiki_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_darklyrics_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_directlyrics_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lipwalk_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyrdb_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyricsreg_src);
@@ -105,13 +109,14 @@ static void register_provider_plugins(void)
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyrix_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_magistrix_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metrolyrics_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_songlyrics_src);
+    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metallum_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_flickr_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_google_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_lastfm_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&relations_musicbrainz_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_allmusic_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_amazon_src);
+    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_metallum_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&similar_artist_lastfm_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&similar_song_lastfm_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&tags_musicbrainz_src);

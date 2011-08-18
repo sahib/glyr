@@ -196,7 +196,6 @@ gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album
 			g_free(p_album);
 		if(p_title)
 			g_free(p_title);
-
 	}
 	return tmp;
 }
@@ -251,6 +250,7 @@ char *unescape_html_UTF8(const char * data)
 		int tagflag = 0;
 		int iB = 0;
 
+		char * tag_open_ptr = NULL;
 		result = g_malloc0(len+1);
 		for (i = 0; i  < len; ++i)
 		{
@@ -276,17 +276,30 @@ char *unescape_html_UTF8(const char * data)
 				}
 				i =  (int)(semicol-data);
 			}
-			else         /* normal char */
+			else /* normal char */
 			{
 				if (data[i] == '<')
 				{
+					tag_open_ptr = (char*)&data[i+1];
 					tagflag = 1;
 					continue;
 				}
-				if (tagflag ==  0 ) result[iB++] = data[i];
-				else if (data[i] == '>') result[iB++] = '\n';
 
-				if (data[i] == '>') tagflag = 0;
+				if(tagflag ==  0 )
+				{
+					result[iB++] = data[i];
+				}
+				else if (data[i] == '>')
+				{
+					if(tag_open_ptr != NULL)
+					{
+						if(g_strstr_len(tag_open_ptr,7,"br") != NULL)
+						{
+							result[iB++] = '\n';
+						}
+					}
+					tagflag = 0;
+				}
 			}
 		}
 		result[iB] = 0;
@@ -687,21 +700,21 @@ gchar * beautify_lyrics(const gchar * lyrics)
 			gsize Len = strlen(unicode);
 			for(gsize i = 0; i < Len; i++)
 			{
-				gint tlen = 0;
-				gsize j;
-				for(j = i; j < Len && unicode[j] == '\n'; j++)
+				gsize newline_ctr = 0;
+				gsize j = i;
+				for(; j < Len && (unicode[j] == '\n' || unicode[j] == '\r'); j++)
 				{
-					if(++tlen > 1)
+					if(newline_ctr % 3 == 0)
+					{
+						unicode[j] = '\n';
+					}
+					else
 					{
 						unicode[j] = ' ';
 					}
+					newline_ctr++;
 				}
-				if(tlen > 1)
-				{
-					unicode[j-1] = '\n';
-				}
-
-				i = j+1;
+				i = j + 1;
 			}
 
 			Len -= remove_tags_from_string(unicode,Len,'<','>');

@@ -51,7 +51,6 @@ GList * lyrics_lipwalk_parse(cb_object *capo)
                     r_cache = DL_init();
                     r_cache->data = content;
                     r_cache->size = strlen(content);
-                    r_cache->dsrc = strdup(capo->url);
                 }
             }
         }

@@ -100,6 +100,7 @@
 		"${DIR_TRACKLIST}/musicbrainz.c"
 		"${DIR_REVIEW}/allmusic_com.c"
 	        "${DIR_REVIEW}/amazon.c"
+		"${DIR_REVIEW}/metallum.c"
 	        "${DIR_ALBUMLIST}/musicbrainz.c"
 	        "${DIR_RELATIONS}/musicbrainz.c"
 	        "${DIR_TAGS}/musicbrainz.c"
@@ -112,12 +113,10 @@
 	        "${DIR_COVER}/discogs.c"
 	        "${DIR_COVER}/amazon.c"
 	        "${DIR_LYRICS}/lyrdb.c"
+		"${DIR_LYRICS}/metallum.c"
 	        "${DIR_LYRICS}/magistrix.c"
 	        "${DIR_LYRICS}/lyrix_at.c"
 	        "${DIR_LYRICS}/lyricsvip.c"
-	        "${DIR_LYRICS}/directlyrics.c"
-	        "${DIR_LYRICS}/songlyrics.c"
-	        "${DIR_LYRICS}/darklyrics.c"
 	        "${DIR_LYRICS}/metrolyrics.c"
 	        "${DIR_LYRICS}/lyricswiki.c"
 	        "${DIR_LYRICS}/lyricstime.c"
@@ -126,6 +125,9 @@
 	        "${DIR_PHOTOS}/flickr.c"
 	        "${DIR_PHOTOS}/lastfm.c"
    	        "${DIR_PHOTOS}/google.c"
+#	        "${DIR_LYRICS}/songlyrics.c"
+#	        "${DIR_LYRICS}/directlyrics.c"
+#	        "${DIR_LYRICS}/darklyrics.c"
 	)
 
 # Pretty high warnlevel
