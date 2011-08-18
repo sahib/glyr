@@ -682,6 +682,34 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 
 /* ------------------------------------------------------------- */
 
+static gchar * trim_after_newline(gchar * string, gsize Len, gint * less)
+{
+	gint buf_ctr = 0;
+	gchar * buffer = g_malloc0(Len + 1);
+	for(gsize it = 0; it < Len ; it++)
+	{
+		if(string[it] == '\n')
+		{
+			while(string[it] && (string[it] == '\r' || string[it] == '\n'))
+			{
+				buffer[buf_ctr++] = string[it++];
+			}
+
+			while(string[it] && isspace(string[it])) 
+			{
+				if(less != NULL) *less += 1;
+				it++;
+			}
+		}
+		buffer[buf_ctr++] = string[it];
+	}
+	return buffer;
+}
+
+
+
+/* ------------------------------------------------------------- */
+
 /* Beautify lyrics in general, by removing endline spaces, *
  * trimming everything and removing double newlines        */
 gchar * beautify_lyrics(const gchar * lyrics)
@@ -718,15 +746,10 @@ gchar * beautify_lyrics(const gchar * lyrics)
 			}
 
 			Len -= remove_tags_from_string(unicode,Len,'<','>');
-			gchar * trimd = g_malloc0(Len + 1);
 
-			if(trimd)
-			{
-				trim_copy(unicode,trimd);
-				g_free(unicode);
-			}
-
-			result = trimd;
+			gint less = 0;
+			result = trim_after_newline(unicode,Len,&less);
+			g_free(unicode);
 		}
 		g_free(strip);
 	}
