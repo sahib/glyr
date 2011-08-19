@@ -122,6 +122,7 @@
 	        "${DIR_LYRICS}/lyricstime.c"
 	        "${DIR_LYRICS}/lyricsreg.c"
 	        "${DIR_LYRICS}/lipwalk.c"
+	        "${DIR_LYRICS}/elyrics.c"
 	        "${DIR_PHOTOS}/flickr.c"
 	        "${DIR_PHOTOS}/lastfm.c"
    	        "${DIR_PHOTOS}/google.c"

@@ -142,7 +142,7 @@ gchar * strreplace(const char * string, const char * subs, const char * with)
 
 /* ------------------------------------------------------------- */
 
-static gchar * prepare_string(const gchar * input)
+gchar * prepare_string(const gchar * input, gboolean delintify)
 {
 	gchar * result = NULL;
 	if(input != NULL)
@@ -154,7 +154,7 @@ static gchar * prepare_string(const gchar * input)
 			if(normalized != NULL)
 			{
 				result = curl_easy_escape(NULL,normalized,0);
-				if(result != NULL)
+				if(result != NULL && delintify == TRUE)
 				{
 					remove_tags_from_string(result,-1,'(',')');
 
@@ -182,9 +182,9 @@ gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album
 	{
 		tmp = g_strdup(URL);
 
-		gchar * p_artist = prepare_string(artist);
-		gchar * p_album  = prepare_string(album);
-		gchar * p_title  = prepare_string(title);
+		gchar * p_artist = prepare_string(artist,FALSE); 
+		gchar * p_album  = prepare_string(album,TRUE);
+		gchar * p_title  = prepare_string(title,TRUE);
 
 		swap_string(&tmp,"%artist%",p_artist);
 		swap_string(&tmp,"%album%", p_album);

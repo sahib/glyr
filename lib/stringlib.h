@@ -73,4 +73,7 @@ gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album
 /* Runs many of the above funtions to make lyrics beautier */
 gchar * beautify_lyrics(const gchar * lyrics);
 
+/* "Normalizes" a string, suitable for URls afterwards */
+gchar * prepare_string(const gchar * input, gboolean delinitfy);
+
 #endif

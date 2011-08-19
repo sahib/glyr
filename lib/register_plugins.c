@@ -51,6 +51,7 @@ extern MetaDataSource lyrics_lyrix_src;
 extern MetaDataSource lyrics_magistrix_src;
 extern MetaDataSource lyrics_metrolyrics_src;
 extern MetaDataSource lyrics_metallum_src;
+extern MetaDataSource lyrics_elyrics_src;
 extern MetaDataSource photos_flickr_src;
 extern MetaDataSource photos_google_src;
 extern MetaDataSource photos_lastfm_src;
@@ -110,6 +111,7 @@ static void register_provider_plugins(void)
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_magistrix_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metrolyrics_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metallum_src);
+    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_elyrics_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_flickr_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_google_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_lastfm_src);

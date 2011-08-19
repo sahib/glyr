@@ -49,7 +49,7 @@ GList * lyrics_metallum_parse(cb_object * capo)
 MetaDataSource lyrics_metallum_src =
 {
 	.name = "metallum",
-	.key  = 'e',
+	.key  = 'u',
 	.parser    = lyrics_metallum_parse,
 	.get_url   = lyrics_metallum_url,
 	.endmarker = NULL,
