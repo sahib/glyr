@@ -106,6 +106,9 @@ typedef struct MetaDataFetcher
     void (*destroy)(void);
     GList* (*finalize)(GlyrQuery*,GList*,gboolean*);
 
+    /* Default value for ->parallel, if set to auto */
+    long default_parallel;
+
     /* Wether this Fetcher delievers the full data (lyrics),
        or just URLs of the data. */
     gboolean full_data;
@@ -122,7 +125,7 @@ typedef struct MetaDataSource
     gchar key;     /* A key that may be used in --from   */
     gchar * encoding;/* Encoding, NULL defaults to UTF-8, this will only take place for textparser */
 
-    GList * (* parser) (struct cb_object *);  /* called when parsing is needed                  */
+    GList * (* parser) (struct cb_object *);    /* called when parsing is needed                  */
     const char  * (* get_url)(GlyrQuery *); 	/* called when the url of this provider is needed */
     gchar  * endmarker;              	        /* Download stops if this mark is found           */
 

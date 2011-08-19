@@ -55,5 +55,6 @@ MetaDataFetcher glyrFetcher_artistphotos =
     .full_data = FALSE,
     .init    = NULL,
     .destroy = NULL,
-    .finalize = factory
+    .finalize = factory,
+    .default_parallel = 2
 };

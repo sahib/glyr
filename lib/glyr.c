@@ -558,6 +558,25 @@ void glyr_cleanup(void)
 
 /*-----------------------------------------------*/
 
+/* Sets parallel field depending on the get_type */
+static void auto_detect_parallel(MetaDataFetcher * fetcher, GlyrQuery * query)
+{
+	if(query->parallel <= 0)
+	{
+		if(fetcher->default_parallel <= 0)
+		{
+			gint div = (int)(1.0/CLAMP(query->qsratio,0.01,0.99) * 2);
+			query->parallel = (div == 0) ? 3 : g_list_length(fetcher->provider) / div;
+		}
+		else
+		{
+			query->parallel = fetcher->default_parallel;
+		}
+	}	
+}
+
+/*-----------------------------------------------*/
+
 GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
 {
     if(is_initalized == FALSE)
@@ -609,6 +628,9 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
                     /* Lookup what we search for here: Images (url, or raw) or text */
                     settings->imagejob = !item->full_data;
 
+		    /* If ->parallel is <= 0, it gets autodetected */
+		    auto_detect_parallel(item, settings);
+		
                     /* Now start your engines, gentlemen */
                     result = start_engine(settings,item,e);
                     break;

@@ -69,7 +69,8 @@ MetaDataFetcher glyrFetcher_lyrics =
     .full_data = TRUE,
     .init    = NULL,
     .destroy = NULL,
-    .finalize = factory
+    .finalize = factory,
+    .default_parallel = 3
 };
 
 /* ------------------------------------- */
