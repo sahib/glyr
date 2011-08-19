@@ -126,6 +126,7 @@
 	        "${DIR_PHOTOS}/flickr.c"
 	        "${DIR_PHOTOS}/lastfm.c"
    	        "${DIR_PHOTOS}/google.c"
+   	        "${DIR_PHOTOS}/singerpictures.c"
 #	        "${DIR_LYRICS}/songlyrics.c"
 #	        "${DIR_LYRICS}/directlyrics.c"
 #	        "${DIR_LYRICS}/darklyrics.c"

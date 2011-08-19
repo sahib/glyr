@@ -55,6 +55,7 @@ extern MetaDataSource lyrics_elyrics_src;
 extern MetaDataSource photos_flickr_src;
 extern MetaDataSource photos_google_src;
 extern MetaDataSource photos_lastfm_src;
+extern MetaDataSource photos_singerpictures_src;
 extern MetaDataSource relations_musicbrainz_src;
 extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
@@ -115,6 +116,7 @@ static void register_provider_plugins(void)
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_flickr_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_google_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_lastfm_src);
+    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_singerpictures_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&relations_musicbrainz_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_allmusic_src);
     glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_amazon_src);

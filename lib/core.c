@@ -524,7 +524,7 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 			/* Better check again */
 			if(res != CURLE_OK && res != CURLE_WRITE_ERROR)
 			{
-				panic("glyr: E: singledownload: %s [E:%d]\n", curl_easy_strerror(res),res);
+				glyr_message(3,s,"glyr: E: singledownload: %s [E:%d]\n", curl_easy_strerror(res),res);
 				DL_free(dldata);
 				dldata = NULL;
 			}

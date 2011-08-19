@@ -41,8 +41,14 @@
 #define DEFAULT_QSRATIO 0.85
 #define DEFAULT_FORCE_UTF8 false 
 
-/* Disallow *.gif, mostly bad quality */
-#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff"
+/* Disallow *.gif, mostly bad quality 
+ * jpeg and jpg, because some not standardaware
+ * servers give MIME types like image/jpg
+ * (which should be image/jpeg usually)
+ */
+#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg" 
+
+/* Be honest by default */
 #define DEFAULT_USERAGENT "libglyr"
 
 /* --------------------------- */
