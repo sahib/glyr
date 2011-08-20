@@ -223,18 +223,18 @@ static int size_set(int * ref, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_cmaxsize(GlyrQuery * s, int size)
+enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    return size_set(&s->cover.max_size,size);
+    return size_set(&s->img_max_size,size);
 }
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_cminsize(GlyrQuery * s, int size)
+enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    return size_set(&s->cover.min_size,size);
+    return size_set(&s->img_min_size,size);
 }
 
 /*-----------------------------------------------*/
@@ -402,8 +402,8 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
 
-    glyrs->cover.min_size = DEFAULT_CMINSIZE;
-    glyrs->cover.max_size = DEFAULT_CMAXSIZE;
+    glyrs->img_min_size = DEFAULT_CMINSIZE;
+    glyrs->img_max_size = DEFAULT_CMAXSIZE;
     glyrs->number = DEFAULT_NUMBER;
     glyrs->parallel  = DEFAULT_PARALLEL;
     glyrs->redirects = DEFAULT_REDIRECTS;

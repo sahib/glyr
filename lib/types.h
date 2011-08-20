@@ -174,15 +174,8 @@ typedef struct GlyrQuery
     int verbosity; /*!<See glyr_opt_verbosity() for all levels */
     size_t fuzzyness; /*!< Treshold for Levenshtein algorithm */
 
-    /**
-    * @brief Anonymous Struct holding min/maxsize for covers
-    */
-    struct
-    {
-        int min_size; /*!< Min size a cover may have */
-        int max_size; /*!< Max size a cover may have */
-    } cover;
-
+    int img_min_size; /*!< Min size a image may have */
+    int img_max_size; /*!< Max size a image may have */
 
     long parallel; /*!< Max parallel downloads */
     long timeout;  /*!< Max timeout for downloads */
@@ -197,7 +190,6 @@ typedef struct GlyrQuery
     %immutable
     {
 #endif
-
         /* Callback and userpointer */
         struct {
             enum GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);

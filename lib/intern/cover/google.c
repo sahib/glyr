@@ -46,27 +46,27 @@ const char * generic_google_url(GlyrQuery * sets, const char * searchterm)
         lang = "com";
 
     const gchar * back = NULL;
-    if(sets->cover.min_size == -1)
+    if(sets->img_min_size == -1)
     {
         back = "";
     }
-    else if(sets->cover.min_size < 75)
+    else if(sets->img_min_size < 75)
     {
         back = "&tbs=isz:i";
     }
-    else if(sets->cover.min_size < 300)
+    else if(sets->img_min_size < 300)
     {
         back = "&tbs=isz:m";
     }
-    else if(sets->cover.min_size < 450)
+    else if(sets->img_min_size < 450)
     {
         back = "&tbs=isz:lt,islt:qsvga";
     }
-    else if(sets->cover.min_size < 550)
+    else if(sets->img_min_size < 550)
     {
         back = "&tbs=isz:lt,islt:vg/a";
     }
-    else if(sets->cover.min_size < 700)
+    else if(sets->img_min_size < 700)
     {
         back = "&tbs=isz:lt,islt:svga";
     }
@@ -116,8 +116,7 @@ static gboolean check_image_size(GlyrQuery * s, gchar * ref)
 		gint height = get_value(img_src_after,HEIGHT_START);
 		gint ratio  = (width+height)/2;
 
-		g_print("%d X %d\n",width,height);
-		result = size_is_okay(ratio,s->cover.min_size,s->cover.max_size);
+		result = size_is_okay(ratio,s->img_min_size,s->img_max_size);
 	}
 	return result;
 }

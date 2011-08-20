@@ -111,8 +111,8 @@ void help_short(GlyrQuery * s)
                  IN"-a --artist           Artist name (Used by all plugins)\n"
                  IN"-b --album            Album name (Used by cover,review,lyrics)\n"
                  IN"-t --title            Songname (used mainly by lyrics)\n"
-                 IN"-e --maxsize          (cover only) The maximum size a cover may have.\n"
-                 IN"-i --minsize          (cover only) The minimum size a cover may have.\n"
+                 IN"-e --maxsize          (images only) The maximum size a cover may have.\n"
+                 IN"-i --minsize          (images only) The minimum size a cover may have.\n"
                  IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
                  IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
                  IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
@@ -253,10 +253,10 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 				glyr_opt_title(glyrs,optarg);
 				break;
 			case 'i':
-				glyr_opt_cminsize(glyrs,atoi(optarg));
+				glyr_opt_img_minsize(glyrs,atoi(optarg));
 				break;
 			case 'e':
-				glyr_opt_cmaxsize(glyrs,atoi(optarg));
+				glyr_opt_img_maxsize(glyrs,atoi(optarg));
 				break;
 			case 'n':
 				glyr_opt_number(glyrs,atoi(optarg));

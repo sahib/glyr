@@ -37,11 +37,11 @@ bool vdt_cover(GlyrQuery * settings)
     if (settings && settings->artist && settings->album)
     {
         /* validate size */
-        if(settings->cover.min_size <= 0)
-            settings->cover.min_size = -1;
+        if(settings->img_min_size <= 0)
+            settings->img_min_size = -1;
 
-        if(settings->cover.max_size <= 0)
-            settings->cover.max_size = -1;
+        if(settings->img_max_size <= 0)
+            settings->img_max_size = -1;
 
         return true;
     }

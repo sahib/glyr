@@ -25,7 +25,7 @@
 
 const char * photos_flickr_url(GlyrQuery * settings)
 {
-    if(settings->cover.max_size <= 175 || settings->cover.max_size == -1)
+    if(settings->img_max_size <= 175 || settings->img_max_size == -1)
     {
 	return NULL;
     }

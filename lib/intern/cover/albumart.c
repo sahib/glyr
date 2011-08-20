@@ -23,8 +23,8 @@
 
 const char * cover_albumart_url(GlyrQuery * sets)
 {
-    int i = sets->cover.min_size;
-    int e = sets->cover.max_size;
+    int i = sets->img_min_size;
+    int e = sets->img_max_size;
 
     if((e >= 50 || e==-1) && (i == -1 || i < 450))
         return "http://www.albumart.org/index.php?srchkey=%artist%+%album%&itempage=1&newsearch=1&searchindex=Music";
@@ -42,7 +42,7 @@ GList * cover_albumart_parse(cb_object * capo)
     if(node)
     {
         size_t size_it = 2;
-        if(capo->s->cover.max_size < 450 && capo->s->cover.max_size != -1 && capo->s->cover.min_size < 160)
+        if(capo->s->img_max_size < 450 && capo->s->img_max_size != -1 && capo->s->img_min_size < 160)
         {
             size_it = 1;
         }

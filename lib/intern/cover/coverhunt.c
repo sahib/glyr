@@ -27,7 +27,7 @@
 
 const char * cover_coverhunt_url(GlyrQuery * sets)
 {
-    if(sets->cover.min_size <= 500 || sets->cover.min_size == -1)
+    if(sets->img_min_size <= 500 || sets->img_min_size == -1)
         return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
 
     return NULL;
@@ -45,8 +45,8 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
             int atoid = atoi(buf);
 
             g_free(buf);
-            if((atoid >= capo->s->cover.min_size || capo->s->cover.min_size == -1) &&
-                    (atoid <= capo->s->cover.max_size || capo->s->cover.max_size == -1)  )
+            if((atoid >= capo->s->img_min_size || capo->s->img_min_size == -1) &&
+               (atoid <= capo->s->img_max_size || capo->s->img_max_size == -1)  )
                 return true;
         }
     }

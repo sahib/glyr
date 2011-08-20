@@ -24,7 +24,7 @@
 
 const char * cover_allmusic_url(GlyrQuery * s)
 {
-    if(s->cover.min_size < 200)
+    if(s->img_min_size < 200)
         return "http://www.allmusic.com/search/album/%album%";
 
     return NULL;

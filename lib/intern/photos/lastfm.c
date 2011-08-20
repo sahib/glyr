@@ -77,13 +77,13 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
 			if(g_strstr_len(ref[0],100,"original") != NULL)
 			{
 				/* Deny extremelly large images by default, except explicitely wanted */
-				if(!(ratio >= 1000 && s->cover.min_size >= 1000 && s->cover.max_size == -1))
+				if(!(ratio >= 1000 && s->img_min_size >= 1000 && s->img_max_size == -1))
 				{
 					original_size_allowed = FALSE;
 				}
 			}
 
-			if(size_is_okay(ratio, s->cover.min_size, s->cover.max_size) == TRUE && original_size_allowed == TRUE)
+			if(size_is_okay(ratio, s->img_min_size, s->img_max_size) == TRUE && original_size_allowed == TRUE)
 			{
 				result = TRUE;
 			}

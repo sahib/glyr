@@ -64,7 +64,7 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 const char * generic_amazon_url(GlyrQuery * sets, const char * response_group)
 {
     const char * lang_link = NULL;
-    if(sets->cover.min_size <= 500 || sets->cover.min_size)
+    if(sets->img_min_size <= 500 || sets->img_min_size)
     {
         if(!strcmp(sets->lang,"us"))
             lang_link =  "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
@@ -93,12 +93,12 @@ const char * cover_amazon_url(GlyrQuery * sets)
     return generic_amazon_url(sets,"Images");
 }
 
-#define C_MAX(X) (capo->s->cover.max_size <  X && capo->s->cover.max_size != -1)
-#define C_MIN(X) (capo->s->cover.min_size >= X && capo->s->cover.min_size != -1)
+#define C_MAX(X) (capo->s->img_max_size <  X && capo->s->img_max_size != -1)
+#define C_MIN(X) (capo->s->img_min_size >= X && capo->s->img_min_size != -1)
 
 GList * cover_amazon_parse(cb_object *capo)
 {
-    const char *tag_ssize = (capo->s->cover.max_size == -1 && capo->s->cover.min_size == -1) ? "<LargeImage>"  :
+    const char *tag_ssize = (capo->s->img_max_size == -1 && capo->s->img_min_size == -1) ? "<LargeImage>"  :
                             (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :
                             (C_MAX( 70) && C_MIN(30)) ? "<SmallImage>"  :
                             (C_MAX(150) && C_MIN(70)) ? "<MediumImage>" :

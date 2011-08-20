@@ -23,7 +23,7 @@
 
 const char * cover_lyricswiki_url(GlyrQuery * sets)
 {
-    if(sets->cover.min_size < 500)
+    if(sets->img_min_size < 500)
         return "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
 
     return NULL;

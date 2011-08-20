@@ -220,14 +220,14 @@ class GlyrosSpit
 		return @query.proxy
 	end
 
-	def coverSize=(min, max) 
+	def image_size=(min, max) 
 		Glyros::glyr_opt_cminsize(@query,min);
 		Glyros::glyr_opt_cmaxsize(@query,max);
 		self
 	end
 
-	def coverSize
-		return @query.cover.min_size, @query.cover.max_size
+	def image_size
+		return @query.img_min_size, @query.img_max_size
 	end
 
 	def from=(argstring )

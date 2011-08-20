@@ -20,6 +20,7 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
+#include "../../utils.h"
 
 #define RELEASE_ID  "<release id=\""
 #define RELEASE_END "\" "
@@ -37,7 +38,7 @@
 
 const char * cover_discogs_url(GlyrQuery * sets)
 {
-    if(sets->cover.max_size >= 300 || sets->cover.max_size == -1)
+    if(sets->img_max_size >= 300 || sets->img_max_size == -1)
     {
         return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY;
     }
@@ -113,11 +114,7 @@ GList * cover_discogs_parse(cb_object * capo)
                                         char * size = copy_value(imgurl_begin+strlen(IMGURL_BEGIN),imgurl_endin);
                                         if(size)
                                         {
-                                            int iS = atoi(size);
-                                            if( (capo->s->cover.min_size == -1 && capo->s->cover.max_size == -1) ||
-                                                    (capo->s->cover.min_size == -1 && capo->s->cover.max_size >= iS) ||
-                                                    (capo->s->cover.min_size <= iS && capo->s->cover.max_size == -1) ||
-                                                    (capo->s->cover.min_size <= iS && capo->s->cover.max_size >= iS)  )
+					    if(size_is_okay(atoi(size),capo->s->img_min_size,capo->s->img_max_size))
                                             {
                                                 char * uri_begin = strstr(imgurl_endin,URL_BEGIN);
                                                 if(uri_begin)
@@ -168,7 +165,6 @@ GList * cover_discogs_parse(cb_object * capo)
                     }
                 }
             }
-
             g_free(title_value);
             title_value = NULL;
         }

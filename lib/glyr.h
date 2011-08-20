@@ -196,22 +196,22 @@ extern "C"
     * @param size The max. size in pixel
     *
     * Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers,\n
-    * but generally overall in the range between cmin and cmax. Also, this only works for the 'cover' getter, not for 'photos'!\n
+    * but generally overall in the range between min and max. \n
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_cmaxsize(GlyrQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
     /**
-    * @brief Minimum size a cover may have (assuming the cover is quadratic, only one size is required)
+    * @brief Minimum size a image-item may have (assuming the image is quadratic, only one size is required)
     *
     * @param s The GlyrQuery settings struct to store this option in.
     * @param size The min. size in pixel
     *
-    * Note: Also see glyr_opt_cmaxsize()
+    * Note: Also see glyr_opt_img_maxsize()
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_cminsize(GlyrQuery * s, int size);
+    enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
     /**
     * @brief The number of items that may be downloaded in parallel
     *

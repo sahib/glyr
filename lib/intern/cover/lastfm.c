@@ -27,7 +27,7 @@
 
 const char * cover_lastfm_url(GlyrQuery * sets)
 {
-    if(sets->cover.min_size <= 350 || sets->cover.min_size == -1)
+    if(sets->img_min_size <= 350 || sets->img_min_size == -1)
     {
         return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY;
     }
@@ -41,13 +41,13 @@ GList * cover_lastfm_parse(cb_object *capo)
     const char *tag_esize = "</image>";
 
     // find desired size
-    if( size_is_okay(300,capo->s->cover.min_size,capo->s->cover.max_size) )
+    if( size_is_okay(300,capo->s->img_min_size,capo->s->img_max_size) )
         tag_ssize = "<image size=\"extralarge\">";
-    else if( size_is_okay(125,capo->s->cover.min_size,capo->s->cover.max_size) )
+    else if( size_is_okay(125,capo->s->img_min_size,capo->s->img_max_size) )
         tag_ssize = "<image size=\"large\">";
-    else if( size_is_okay(64, capo->s->cover.min_size,capo->s->cover.max_size) )
+    else if( size_is_okay(64, capo->s->img_min_size,capo->s->img_max_size) )
         tag_ssize = "<image size=\"middle\">";
-    else if( size_is_okay(34, capo->s->cover.min_size,capo->s->cover.max_size) )
+    else if( size_is_okay(34, capo->s->img_min_size,capo->s->img_max_size) )
         tag_ssize = "<image size=\"small\">";
     else if ( true || false )
         tag_ssize = "<image size=\"extralarge\">";
