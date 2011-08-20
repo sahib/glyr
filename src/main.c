@@ -719,7 +719,7 @@ int main(int argc, char * argv[])
 					}
 					 */
 
-					message(2,&my_query,stderr,"- In total %d items found.\n",length);
+					message(2,&my_query,stderr,"- In total %d item(s) found.\n",length);
 				}
 
 				// Free all downloaded buffers
@@ -737,11 +737,11 @@ int main(int argc, char * argv[])
 		}
 		/* Translator mode - simple interface to google translator */
 	}
-	else if(argc >= 2 && !strcmp(argv[1],"-V"))
+	else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
 	{
 		print_version(NULL);
 	}
-	else if(argc >= 2 && !strcmp(argv[1],"-L"))
+	else if(argc >= 2 && (!strcmp(argv[1],"-L") || !strcmp(argv[1],"--list")))
 	{
 		visualize_from_options();
 	}

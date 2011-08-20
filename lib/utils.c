@@ -34,9 +34,9 @@
 bool size_is_okay(int sZ, int min, int max)
 {
     if((min == -1 && max == -1) ||
-            (min == -1 && max >= sZ) ||
-            (min <= sZ && max == -1) ||
-            (min <= sZ && max >= sZ)  )
+       (min == -1 && max >= sZ) ||
+       (min <= sZ && max == -1) ||
+       (min <= sZ && max >= sZ)  )
         return true;
 
     return false;

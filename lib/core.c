@@ -329,7 +329,20 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 		curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, TRUE);
 		curl_easy_setopt(eh, CURLOPT_MAXREDIRS, 5L);
 		curl_easy_setopt(eh, CURLOPT_HEADER,TRUE);
-		curl_easy_setopt(eh, CURLOPT_NOBODY,FALSE);
+
+		/* Dirty hack here: Amazon bitches at me when setting NOBODY to true *
+                 * But otherwise large images won't pass with other providers        * 
+                 * Check domain therefore.. 
+                 */
+		if(strstr(url,"amazon") != NULL)
+		{
+			curl_easy_setopt(eh, CURLOPT_NOBODY,FALSE);
+		}
+		else
+		{
+			curl_easy_setopt(eh, CURLOPT_NOBODY,TRUE);
+		}
+
 		curl_easy_setopt(eh, CURLOPT_HEADERFUNCTION, header_cb);
 		curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, empty_cb);
 		curl_easy_setopt(eh, CURLOPT_WRITEHEADER, info);
