@@ -77,7 +77,7 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
 			if(g_strstr_len(ref[0],100,"original") != NULL)
 			{
 				/* Deny extremelly large images by default, except explicitely wanted */
-				if(!(ratio >= 1500 && s->cover.min_size >= 1500 && s->cover.max_size == -1))
+				if(!(ratio >= 1000 && s->cover.min_size >= 1000 && s->cover.max_size == -1))
 				{
 					original_size_allowed = FALSE;
 				}

@@ -25,13 +25,19 @@
 
 const char * photos_flickr_url(GlyrQuery * settings)
 {
+    if(settings->cover.max_size <= 175 || settings->cover.max_size == -1)
+    {
+	return NULL;
+    }
+
     return g_strdup_printf("http://api.flickr.com/services/rest/"
                          "?method=flickr.photos.search&"
                          "api_key="API_KEY_FLICKR"&"
                          "tags=%s&"
-                         "content_type=1&"
                          "media=photos&"
-                         "is_gallery=true&"
+			 "group_id=29928242@N00&"
+			 "content_type=6&"
+			 "sort=interestingness-asc&"
                          "per_page=%d",
                          settings->artist,
                          settings->number
@@ -78,15 +84,16 @@ GList * photos_flickr_parse(cb_object * capo)
             char * linebf = copy_value(ph_begin,ph_end);
             if(linebf)
             {
-                char * ID = get_field_by_name(linebf, "id=");
-                char * SC = get_field_by_name(linebf, "secret=");
-                char * SV = get_field_by_name(linebf, "server=");
-                char * FR = get_field_by_name(linebf, "farm=");
+                gchar * ID = get_field_by_name(linebf, "id=");
+                gchar * SC = get_field_by_name(linebf, "secret=");
+                gchar * SV = get_field_by_name(linebf, "server=");
+                gchar * FR = get_field_by_name(linebf, "farm=");
                 g_free(linebf);
                 linebf = NULL;
 
                 GlyrMemCache * cache = DL_init();
                 cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
+		cache->size = strlen(cache->data);
                 r_list = g_list_prepend(r_list,cache);
 
                 if(ID)
@@ -114,8 +121,8 @@ MetaDataSource photos_flickr_src =
     .parser    = photos_flickr_parse,
     .get_url   = photos_flickr_url,
     .type      = GET_ARTIST_PHOTOS,
-    .quality   = 60,
-    .speed     = 75,
+    .quality   = 40,
+    .speed     = 65,
     .endmarker = NULL,
     .free_url  = true
 };
