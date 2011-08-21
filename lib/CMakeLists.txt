@@ -22,9 +22,7 @@ endif(WIN32)
 
 # Install headeas
 INSTALL(FILES glyr.h DESTINATION include/glyr)
-INSTALL(FILES stringlib.h DESTINATION include/glyr)
 INSTALL(FILES types.h DESTINATION include/glyr)
-INSTALL(FILES translate.h DESTINATION include/glyr)
 
 # Install library 
 INSTALL(TARGETS glyr LIBRARY DESTINATION lib)

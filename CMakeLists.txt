@@ -51,7 +51,7 @@ SET(SUBDIR_SWIG swig)
 
 # Find deps
 FIND_PACKAGE(CURL REQUIRED)
-pkg_check_modules (GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
+pkg_check_modules(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
@@ -72,7 +72,6 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
-	"${DIR_ROOT}/translate.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
