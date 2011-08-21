@@ -1,0 +1,72 @@
+.TH "GlyrMemCache" 3 "Sun Aug 21 2011" "Version 0.8" "libglyr" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+GlyrMemCache \- 
+.PP
+Represents a single item'\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.PP
+\fC#include <types\&.h>\fP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "char * \fBdata\fP"
+.br
+.ti -1c
+.RI "size_t \fBsize\fP"
+.br
+.ti -1c
+.RI "char * \fBdsrc\fP"
+.br
+.ti -1c
+.RI "char * \fBprov\fP"
+.br
+.ti -1c
+.RI "int \fBtype\fP"
+.br
+.ti -1c
+.RI "int \fBduration\fP"
+.br
+.ti -1c
+.RI "bool \fBis_image\fP"
+.br
+.ti -1c
+.RI "char * \fBimg_format\fP"
+.br
+.ti -1c
+.RI "unsigned char \fBmd5sum\fP [16]"
+.br
+.ti -1c
+.RI "struct \fBGlyrMemCache\fP * \fBnext\fP"
+.br
+.ti -1c
+.RI "struct \fBGlyrMemCache\fP * \fBprev\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Represents a single item'\&. 
+
+It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr'\&. 
+.SH "Field Documentation"
+.PP 
+.SS "char* \fBGlyrMemCache::data\fP"Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed'\&. 
+.SS "char* \fBGlyrMemCache::dsrc\fP"Source of data, i'\&.e'\&. an exact URL to the place where it has been found'\&. 
+.SS "int \fBGlyrMemCache::duration\fP"Duration of a song (in seconds)'\&. Only filled for the tracklist getter'\&. 
+.SS "char* \fBGlyrMemCache::img_format\fP"If it as an image, the imageformat (usually 'png' or 'jpeg') 
+.SS "bool \fBGlyrMemCache::is_image\fP"Wether it is an image or a textitem 
+.SS "unsigned char \fBGlyrMemCache::md5sum\fP[16]"A checksum of generated from the data field, used internally for duplicate checking, useable as identifier from data 
+.SS "struct \fBGlyrMemCache\fP* \fBGlyrMemCache::next\fP"Pointer to next cache in list, or NULL 
+.SS "struct \fBGlyrMemCache\fP* \fBGlyrMemCache::prev\fP"Pointer to prev cache in list, or NULL 
+.SS "char* \fBGlyrMemCache::prov\fP"The name of the provider which found this item 
+.SS "size_t \fBGlyrMemCache::size\fP"Size of data, cahnge this if you changed the data field'\&. 
+.SS "int \fBGlyrMemCache::type\fP"The metadata type, is one of the GLYR_GET_TYPE enum 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libglyr from the source code'\&.
