@@ -1,17 +1,17 @@
-.TH "lib/types.h" 3 "Sat Aug 13 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
+.TH "lib/types.h" 3 "Sun Aug 21 2011" "Version 0.6" "libglyr" \" -*- nroff -*-
 .ad l
 .nh
 .SH NAME
 lib/types.h \- 
 .PP
-File containing all definitions used in the external API.  
+File containing all definitions used in the external API'\&.  
 
 .SH SYNOPSIS
 .br
 .PP
-\fC#include <stdlib.h>\fP
+\fC#include <stdlib\&.h>\fP
 .br
-\fC#include <stdbool.h>\fP
+\fC#include <stdbool\&.h>\fP
 .br
 
 .SS "Data Structures"
@@ -20,11 +20,11 @@ File containing all definitions used in the external API.
 .ti -1c
 .RI "struct \fBGlyrMemCache\fP"
 .br
-.RI "\fIRepresents a single item. \fP"
+.RI "\fIRepresents a single item'\&. \fP"
 .ti -1c
 .RI "struct \fBGlyrQuery\fP"
 .br
-.RI "\fIStructure controlling all of libglyr's options. \fP"
+.RI "\fIStructure controlling all of libglyr's options'\&. \fP"
 .ti -1c
 .RI "struct \fBGlyrSourceInfo\fP"
 .br
@@ -42,10 +42,10 @@ File containing all definitions used in the external API.
 .RI "#define \fBDEFAULT_TIMEOUT\fP   20L"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_PARALLEL\fP   4L"
+.RI "#define \fBDEFAULT_PARALLEL\fP   0L"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_CMINSIZE\fP   125"
+.RI "#define \fBDEFAULT_CMINSIZE\fP   130"
 .br
 .ti -1c
 .RI "#define \fBDEFAULT_CMAXSIZE\fP   -1"
@@ -78,13 +78,13 @@ File containing all definitions used in the external API.
 .RI "#define \fBDEFAULT_PROXY\fP   NULL"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_QSRATIO\fP   0.85"
+.RI "#define \fBDEFAULT_QSRATIO\fP   0\&.85"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_FORCE_UTF8\fP   true"
+.RI "#define \fBDEFAULT_FORCE_UTF8\fP   false"
 .br
 .ti -1c
-.RI "#define \fBDEFAULT_ALLOWED_FORMATS\fP   'png;jpeg;tiff'"
+.RI "#define \fBDEFAULT_ALLOWED_FORMATS\fP   'png;jpeg;tiff;jpg'"
 .br
 .ti -1c
 .RI "#define \fBDEFAULT_USERAGENT\fP   'libglyr'"
@@ -96,11 +96,11 @@ File containing all definitions used in the external API.
 .ti -1c
 .RI "typedef struct \fBGlyrMemCache\fP \fBGlyrMemCache\fP"
 .br
-.RI "\fIRepresents a single item. \fP"
+.RI "\fIRepresents a single item'\&. \fP"
 .ti -1c
 .RI "typedef struct \fBGlyrQuery\fP \fBGlyrQuery\fP"
 .br
-.RI "\fIStructure controlling all of libglyr's options. \fP"
+.RI "\fIStructure controlling all of libglyr's options'\&. \fP"
 .ti -1c
 .RI "typedef struct \fBGlyrSourceInfo\fP \fBGlyrSourceInfo\fP"
 .br
@@ -118,21 +118,21 @@ File containing all definitions used in the external API.
 .ti -1c
 .RI "enum \fBGLYR_ERROR\fP { \fBGLYRE_UNKNOWN\fP =  0, \fBGLYRE_OK\fP, \fBGLYRE_BAD_OPTION\fP, \fBGLYRE_BAD_VALUE\fP, \fBGLYRE_EMPTY_STRUCT\fP, \fBGLYRE_NO_PROVIDER\fP, \fBGLYRE_UNKNOWN_GET\fP, \fBGLYRE_SKIP\fP, \fBGLYRE_STOP_POST\fP, \fBGLYRE_STOP_PRE\fP, \fBGLYRE_NO_INIT\fP }"
 .br
-.RI "\fIAll possible errors that may be returned. \fP"
+.RI "\fIAll possible errors that may be returned'\&. \fP"
 .ti -1c
 .RI "enum \fBGLYR_GET_TYPE\fP { \fBGET_COVERART\fP =  1, \fBGET_LYRICS\fP =  2, \fBGET_ARTIST_PHOTOS\fP =  3, \fBGET_ARTISTBIO\fP =  4, \fBGET_SIMILIAR_ARTISTS\fP =  5, \fBGET_SIMILIAR_SONGS\fP =  6, \fBGET_ALBUM_REVIEW\fP =  7, \fBGET_TRACKLIST\fP =  8, \fBGET_TAGS\fP =  9, \fBGET_RELATIONS\fP =  10, \fBGET_ALBUMLIST\fP =  11, \fBGET_UNSURE\fP =  12 }"
 .br
-.RI "\fIEnumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE. \fP"
+.RI "\fIEnumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE'\&. \fP"
 .ti -1c
 .RI "enum \fBGLYR_DATA_TYPE\fP { \fBTYPE_NOIDEA\fP, \fBTYPE_LYRICS\fP, \fBTYPE_REVIEW\fP, \fBTYPE_PHOTOS\fP, \fBTYPE_COVER\fP, \fBTYPE_COVER_PRI\fP, \fBTYPE_COVER_SEC\fP, \fBTYPE_AINFO\fP, \fBTYPE_SIMILIAR\fP, \fBTYPE_SIMILIAR_SONG\fP, \fBTYPE_ALBUMLIST\fP, \fBTYPE_TAGS\fP, \fBTYPE_TAG_ARTIST\fP, \fBTYPE_TAG_ALBUM\fP, \fBTYPE_TAG_TITLE\fP, \fBTYPE_RELATION\fP, \fBTYPE_IMG_URL\fP, \fBTYPE_TXT_URL\fP, \fBTYPE_TRACK\fP }"
 .br
-.RI "\fIAll possible values the type field of \fBGlyrMemCache\fP can have. \fP"
+.RI "\fIAll possible values the type field of \fBGlyrMemCache\fP can have'\&. \fP"
 .in -1c
 .SH "Detailed Description"
 .PP 
-File containing all definitions used in the external API. 
+File containing all definitions used in the external API'\&. 
 
-All defines/typedefs/enums/structs are here. Onyl dependency is stdlib/stdbool
+All defines/typedefs/enums/structs are here'\&. Onyl dependency is stdlib/stdbool
 .PP
 \fBAuthor:\fP
 .RS 4
@@ -141,7 +141,7 @@ Christopher Pahl
 .PP
 \fBVersion:\fP
 .RS 4
-0.6 
+0'\&.6 
 .RE
 .PP
 \fBDate:\fP
@@ -152,20 +152,20 @@ Christopher Pahl
 
 .SH "Define Documentation"
 .PP 
-.SS "#define DEFAULT_ALLOWED_FORMATS   'png;jpeg;tiff'"
+.SS "#define DEFAULT_ALLOWED_FORMATS   'png;jpeg;tiff;jpg'"
 .SS "#define DEFAULT_CMAXSIZE   -1"
-.SS "#define DEFAULT_CMINSIZE   125"
+.SS "#define DEFAULT_CMINSIZE   130"
 .SS "#define DEFAULT_DOWNLOAD   true"
-.SS "#define DEFAULT_FORCE_UTF8   true"
+.SS "#define DEFAULT_FORCE_UTF8   false"
 .SS "#define DEFAULT_FROM_ARGUMENT_DELIM   ';'"
 .SS "#define DEFAULT_FUZZYNESS   4"
 .SS "#define DEFAULT_GROUPEDL   true"
 .SS "#define DEFAULT_LANG   'en'"
 .SS "#define DEFAULT_NUMBER   1"
-.SS "#define DEFAULT_PARALLEL   4L"
+.SS "#define DEFAULT_PARALLEL   0L"
 .SS "#define DEFAULT_PLUGMAX   -1"
 .SS "#define DEFAULT_PROXY   NULL"
-.SS "#define DEFAULT_QSRATIO   0.85"
+.SS "#define DEFAULT_QSRATIO   0\&.85"
 .SS "#define DEFAULT_REDIRECTS   3L"
 .SS "#define DEFAULT_TIMEOUT   20L"
 .SS "#define DEFAULT_USERAGENT   'libglyr'"
@@ -188,20 +188,20 @@ possibly an error or GLYRE_OK
 .SS "typedef struct \fBGlyrFetcherInfo\fP  \fBGlyrFetcherInfo\fP"
 .SS "typedef struct \fBGlyrMemCache\fP  \fBGlyrMemCache\fP"
 .PP
-Represents a single item. It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr. 
+Represents a single item'\&. It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr'\&. 
 .SS "typedef struct \fBGlyrQuery\fP  \fBGlyrQuery\fP"
 .PP
-Structure controlling all of libglyr's options. You should modify this with the glyr_opt_* methods,
+Structure controlling all of libglyr's options'\&. You should modify this with the glyr_opt_* methods,
 .br
- You can read all members directly.
+ You can read all members directly'\&.
 .br
- Look up the corresponding glyr_opt_$name methods for more details. For reading: Dynamically allocated members are stored in '.alloc'! 
+ Look up the corresponding glyr_opt_$name methods for more details'\&. For reading: Dynamically allocated members are stored in ''\&.alloc'! 
 .SS "typedef struct \fBGlyrSourceInfo\fP  \fBGlyrSourceInfo\fP"
 .SH "Enumeration Type Documentation"
 .PP 
 .SS "enum \fBGLYR_DATA_TYPE\fP"
 .PP
-All possible values the type field of \fBGlyrMemCache\fP can have. 
+All possible values the type field of \fBGlyrMemCache\fP can have'\&. 
 .PP
 \fBEnumerator: \fP
 .in +1c
@@ -210,7 +210,7 @@ All possible values the type field of \fBGlyrMemCache\fP can have.
 You shouldn't get this 
 .TP
 \fB\fITYPE_LYRICS \fP\fP
-Lyrics. 
+Lyrics'\&. 
 .TP
 \fB\fITYPE_REVIEW \fP\fP
 Album reviews 
@@ -225,7 +225,7 @@ Coverart
 A cover known to be the front side of the album 
 .TP
 \fB\fITYPE_COVER_SEC \fP\fP
-A cover known to be the backside, inlet etc. 
+A cover known to be the backside, inlet etc'\&. 
 .TP
 \fB\fITYPE_AINFO \fP\fP
 Artist bio 
@@ -264,7 +264,7 @@ URL pointing to some text content
 List of tracknames, each cache containing one name 
 .SS "enum \fBGLYR_ERROR\fP"
 .PP
-All possible errors that may be returned. 
+All possible errors that may be returned'\&. 
 .PP
 \fBEnumerator: \fP
 .in +1c
@@ -303,7 +303,7 @@ Will stop searching, but won't add the current item
 Library has not been initialized with \fBglyr_init()\fP yet 
 .SS "enum \fBGLYR_GET_TYPE\fP"
 .PP
-Enumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE. The type of metadata to get, names are selfexplanatory Requirements are given in braces, [] means optional. 
+Enumeration of all getters, \fBGlyrQuery\fP is initalized to GET_UNSURE'\&. The type of metadata to get, names are selfexplanatory Requirements are given in braces, [] means optional'\&. 
 .PP
 \fBEnumerator: \fP
 .in +1c
@@ -333,10 +333,10 @@ Get album review to (artist|album)
 Get list of tracks for album (artist|album) 
 .TP
 \fB\fIGET_TAGS \fP\fP
-Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) 
+Get tags (i'\&.e'\&. words like 'Metal') for (artist|[album]|[title]) 
 .TP
 \fB\fIGET_RELATIONS \fP\fP
-Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) 
+Get relations (e'\&.g'\&. links to last'\&.fm/wikipedia) for (artist|[album]|[title]) 
 .TP
 \fB\fIGET_ALBUMLIST \fP\fP
 Get a list of albums by (artist) 
@@ -345,4 +345,4 @@ Get a list of albums by (artist)
 Do nothing but relax 
 .SH "Author"
 .PP 
-Generated automatically by Doxygen for libglyr from the source code.
+Generated automatically by Doxygen for libglyr from the source code'\&.
