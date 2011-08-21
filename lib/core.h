@@ -83,6 +83,9 @@ typedef struct cb_object
     // internal cache attached to this url
     GlyrMemCache *cache;
 
+    // has this struct been consumed?
+    gboolean consumed;
+
 } cb_object;
 
 /*------------------------------------------------------*/
@@ -141,7 +144,7 @@ typedef struct MetaDataSource
 
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
 GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err);
-GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr);
+GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr, gboolean free_caches);
 GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end);
 
 /*------------------------------------------------------*/

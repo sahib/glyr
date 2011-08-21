@@ -170,7 +170,7 @@ GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, e
 		};
 
 		/* Download images in parallel */
-		GList * dl_raw_images = async_download(url_list,NULL,s,1,(g_list_length(url_list)/2),test_async_dl_callback,&userptr);
+		GList * dl_raw_images = async_download(url_list,NULL,s,1,(g_list_length(url_list)/2),test_async_dl_callback,&userptr,FALSE);
 
 		/* Default to the given type */
 		for(GList * elem = dl_raw_images; elem; elem = elem->next)

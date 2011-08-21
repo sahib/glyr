@@ -602,9 +602,10 @@ static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM
 		if(is_blacklisted((gchar*)elem->data) == false)
 		{
 			cb_object * obj = g_malloc0(sizeof(cb_object));
-			obj->s     = s;
-			obj->url   = g_strdup((gchar*)(elem->data));
-			cb_list    = g_list_prepend(cb_list,obj);
+			obj->s = s;
+			obj->url = g_strdup((gchar*)(elem->data));
+			cb_list = g_list_prepend(cb_list,obj);
+			obj->consumed = FALSE;
 
 			/* Get the endmark from the endmark list */
 			gint endmark_pos = g_list_position(url_list,elem);
@@ -619,7 +620,7 @@ static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM
 
 /*--------------------------------------------------------*/
 
-static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
+static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean free_caches)
 {
 	/* Free ressources */
 	curl_multi_cleanup(cmHandle);
@@ -634,6 +635,12 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
 				curl_easy_cleanup(item->handle);
 			}
 
+			if(free_caches == TRUE && item->consumed == FALSE)
+			{
+				DL_free(item->cache);
+				item->cache = NULL;
+			}
+
 			g_free(item->url);
 		}
 		glist_free_full(cb_list,g_free);
@@ -643,7 +650,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle)
 /*--------------------------------------------------------*/
 /* ----------------- THE HEART OF GOLD ------------------ */
 /*--------------------------------------------------------*/
-GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr)
+GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr, gboolean free_caches)
 {
 	/* Storage for result items */
 	GList * item_list = NULL;
@@ -672,10 +679,16 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 
 		while(running_handles != 0 && terminate == FALSE)
 		{
-			/* Store number of handles still being transferred in U */
-			CURLMcode merr;
-			if((merr = curl_multi_perform(cmHandle, &running_handles)) != CURLM_OK)
+			CURLMcode merr = CURLM_CALL_MULTI_PERFORM;
+			while(merr == CURLM_CALL_MULTI_PERFORM) 
+			{
+				merr = curl_multi_perform(cmHandle, &running_handles);
+			}
+			if(merr != CURLM_OK)
+			{
+				panic("curl_multi_perform() failed!");
 				return NULL;
+			}
 
 			if(running_handles != 0)
 			{
@@ -732,6 +745,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 					/* It's useless if it's empty  */
 					if(capo && capo->cache && capo->cache->data == NULL)
 					{
+						capo->consumed = TRUE;
 						DL_free(capo->cache);
 						capo->cache = NULL;
 					}
@@ -785,6 +799,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 						}
 						else
 						{
+							capo->consumed = TRUE;
 							DL_free(capo->cache);
 							capo->cache = NULL;
 						}
@@ -801,7 +816,10 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 								errstring ? errstring : "Unknown Error",
 								msg->data.result);
 						glyr_message(3,capo->s,"  On URL: %s\n",capo->url);
+
 						DL_free(capo->cache);
+						capo->cache = NULL;
+						capo->consumed = TRUE;
 					}
 
 					/* We're done with this one.. bybebye */
@@ -816,7 +834,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 				}
 			}
 		}
-		destroy_async_download(cb_list,cmHandle);
+		destroy_async_download(cb_list,cmHandle,free_caches);
 	}
 	return item_list;
 }
@@ -1315,7 +1333,8 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 				g_list_length(url_list)/2,
 				1,                         
 				call_provider_callback,    /* Callback    */
-				url_table);                /* Userpointer */
+				url_table,                 /* Userpointer */
+				TRUE);
 
 		if(g_list_length(raw_parsed) != 0)
 		{

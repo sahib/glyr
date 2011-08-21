@@ -67,8 +67,8 @@ static GlyrMemCache * parse_lyrics_page(const char * buffer)
                 {
                     result = DL_init();
 		    replace_from_message_inline(lyr);
-                    result->data = strreplace(lyr,"</span>\n","");
-                    result->size = ABS(end-begin);
+                    result->data = strreplace(lyr,"</span>","");
+                    result->size = strlen(result->data);
                     g_free(lyr);
                 }
             }
