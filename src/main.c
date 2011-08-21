@@ -95,32 +95,32 @@ void help_short(GlyrQuery * s)
 
     #define IN "    "
     message(-1,s,stderr,"\n\nOPTIONS:\n"
-                 IN"-f --from  <s>        Providers from where to get metadata. Refer to glyrc --list for a full list\n"
-                 IN"-w --write <d>        Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
-                 IN"-p --parallel <i>     Integer. Define the number of downloads that may be performed in parallel.\n"
+                 IN"-f --from             String: Providers from where to get metadata. Refer to glyrc --list for a full list\n"
+                 IN"-w --write            Path: Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
+                 IN"-p --parallel         Integer: Define the number of downloads that may be performed in parallel.\n"
+	 	 IN"-u --useragent        String: The useragent to use during HTTP requests\n"
                  IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
                  IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
                  IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
                  IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
-                 IN"-u --update           Also download metadata if files are already in path (given by -w or '.')\n"
-                 IN"-U --skip-update      Do not download data if already present.\n"
                  IN"-h --help             This text you unlucky wanderer are viewing.\n"
                  IN"-V --version          Print the version string.\n"
                  IN"-d --download         Download Images.\n"
                  IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
-                 IN"-a --artist           Artist name (Used by all plugins)\n"
-                 IN"-b --album            Album name (Used by cover,review,lyrics)\n"
-                 IN"-t --title            Songname (used mainly by lyrics)\n"
-                 IN"-e --maxsize          (images only) The maximum size a cover may have.\n"
-                 IN"-i --minsize          (images only) The minimum size a cover may have.\n"
-                 IN"-n --number           Download max. <n> items. Amount of actual downloaded items may be less.\n"
-                 IN"-t --lang             Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes\n"
-                 IN"-f --fuzzyness        Set treshold for level of Levenshtein algorithm.\n"
-	   	 IN"-q --qsratio          How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
-                 IN"-k --proxy	          Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
+                 IN"-a --artist           String: Artist name to search for\n"
+                 IN"-b --album            String: Album name to search for\n"
+                 IN"-t --title            String: Songname to search for\n"
+                 IN"-e --maxsize          Integer: (images only) The maximum size a cover may have.\n"
+                 IN"-i --minsize          Integer: (images only) The minimum size a cover may have.\n"
+                 IN"-n --number           Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
+                 IN"-t --lang             String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
+                 IN"-f --fuzzyness        Integer: Set treshold for level of Levenshtein algorithm.\n"
+	   	 IN"-q --qsratio          Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
+                 IN"-k --proxy	          String: Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
 		 IN"-L --list             List all fetchers and source providers for each and exit.\n"
-		 IN"-F --formats          A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n" 
-                 IN"-j --callback         Set a bash command to be executed when a item is finished downloading;\n"
+		 IN"-F --formats          String: A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n"
+		 IN"-8 --force-utf8       Forces utf8 encoding for text items, invalid encodings get sorted out\n"
+                 IN"-j --callback         Command: Set a bash command to be executed when a item is finished downloading;\n"
                  IN"                      The special string <path> is expanded with the actual path to the data.\n"
                 );
 
@@ -167,7 +167,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 		{"qsratio",       required_argument, 0, 'q'},
 		{"formats",       required_argument, 0, 'F'},
 		{"help",          no_argument,       0, 'h'},
-		{"usage",         no_argument,       0, 'H'},
 		{"version",       no_argument,       0, 'V'},
 		{"download",      no_argument,       0, 'd'},
 		{"no-download",   no_argument,       0, 'D'},
@@ -189,9 +188,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 
 	while(TRUE)
 	{
-		int c;
-		int option_index = 0;
-		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hHVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
+		gint c;
+		gint option_index = 0;
+		if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
 		{
 			break;
 		}
@@ -545,7 +544,7 @@ char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
 static void print_item(GlyrQuery *s, GlyrMemCache * cacheditem, int num)
 {
 	message(1,s,stderr,"\n///// ITEM #%d /////\n",num);
-	glyr_printitem(s,cacheditem);
+	glyr_printitem(cacheditem);
 }
 
 /* --------------------------------------------------------- */

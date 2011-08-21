@@ -858,7 +858,7 @@ const char * glyr_type_to_string(enum GLYR_DATA_TYPE type)
 }
 /*-----------------------------------------------*/
 
-void glyr_printitem(GlyrQuery *s, GlyrMemCache * cacheditem)
+void glyr_printitem(GlyrMemCache * cacheditem)
 {
 	// GlyMemcache members
 	// dsrc = Exact link to the location where the data came from

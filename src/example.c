@@ -15,10 +15,10 @@
 #include "../lib/glyr.h"
 
 
-static void print_item(GlyrQuery *s, GlyrMemCache * cacheditem, int num)
+static void print_item(GlyrMemCache * cacheditem, int num)
 {
 	fprintf(stderr,"\n------- ITEM #%d --------\n",num);
-	glyr_printitem(s,cacheditem);
+	glyr_printitem(cacheditem);
 	fprintf(stderr,"\n------------------------\n");
 }
 
@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
             // This has the same effect as in the callback,
             // Just that it's executed just once after all DL is done.
             // Commented out, as this would print it twice
-	    print_item(&q,it,counter);
+	    print_item(it,counter);
 
             // Every cache has a link to the next and prev one (or NULL respectively)
             it = it->next;

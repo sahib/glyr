@@ -40,15 +40,16 @@ extern "C"
 {
 #endif
     /**
-    * @brief call this at startup.
-    * This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init
-    * Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.
+    * @brief call this at startup
+    * This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init\n
+    * Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.\n
     */
     void glyr_init(void);
 
     /**
-    * @brief Call this at program termination. It's adviseable to call 'atexit(glyr_cleanup)' after glyr_init()
-    * Not threadsafe also.
+    * @brief Call this at program termination. 
+    * It's adviseable to call 'atexit(glyr_cleanup)' after glyr_init()\n
+    * Not threadsafe!\n
     */
     void glyr_cleanup(void);
 
@@ -161,14 +162,13 @@ extern "C"
     *	Required for the following getters:
     *	  - albumlist
     *	  - cover
-    *	  - review
+    *	  - albumreview
+    *     - similarsongs
     *	  - tracklist
     *
     *	Optional for those:
     *	  - tags
     *	  - relations
-    *     - lyrics
-    *
     *
     *
     * @return an errorID
@@ -213,10 +213,15 @@ extern "C"
     */
     enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
     /**
-    * @brief The number of items that may be downloaded in parallel
+    * @brief The number of jobs that may be started in parallel
     *
     * @param s The GlyrQuery settings struct to store this option in.
     * @param val the number as unsigned long
+    *
+    * This does not acutally limit the number of parallel downloads,\n
+    * rather it limits the number of providers that are tried in parallel\n
+    * Set this to a value of 0 to let libglyr guess the best value.\n
+    * 
     *
     * @return an errorID
     */
@@ -240,7 +245,7 @@ extern "C"
     * @param val an unsigned integer
     *
     * A value of 0 is allowed, but may break certain plugins.\n
-    * Default = 1
+    * Default = 1\n
     *
     * @return an errorID
     */
@@ -252,11 +257,15 @@ extern "C"
     * @param s The GlyrQuery settings struct to store this option in. 
     * @param useragent a null terminated string containging everything you want
     *
+    * Some provider may require an useragent, setting it to an empty string "" \n
+    * might not be safe therefore\n
+    * Default useragents is "libglyr/<version name>" or similar 
+    *
     * @return an errorID
     */
     enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
     /**
-    * @brief Set the language the items should be in.
+    * @brief Language for providers offering multilingual data.
     *
     * @param s The GlyrQuery settings struct to store this option in.
     * @param langcode
@@ -269,10 +278,9 @@ extern "C"
     *	   * ainfo/lastfm (the language the biography shall be in)\n
     *
     *	(Use only these providers if you really want ONLY localized content)\n
-    *	If no language specified the language defaults to english ("en")
-    *
-    * Note1: This only works with a few providers, which should be set via glyr_opt_from()
-    * Note2: Don't coinfuse this with the built-in google translator's settings.
+    *	If no language specified the language defaults to english ("en")\n
+    *   The special value 'auto' is recognized, in which case the language will be\n
+    *   guessed from your current locale. 
     *
     * @return an errorID
     */
@@ -506,12 +514,11 @@ extern "C"
 
     
     /**
-    * @brief 
+    * @brief Prints information about a GlyrMemCache to stderr 
     *
-    * @param s
-    * @param cacheditem
+    * @param cacheditem The GlyrMemCache to be printed
     */
-    void glyr_printitem(GlyrQuery *s, GlyrMemCache * cacheditem);
+    void glyr_printitem(GlyrMemCache * cacheditem);
 
     
     /**
@@ -535,11 +542,11 @@ extern "C"
     void glyr_free_plugin_info(GlyrFetcherInfo ** info); 
 
     /**
-    * @brief 
+    * @brief Converts a GLYR_DATA_TYPE type to a string 
     *
-    * @param type
+    * @param type a member of the GLYR_DATA_TYPE enum, TYPE_COVER_PRI e.g.
     *
-    * @return 
+    * @return a statically allocated string, do not free
     */
     const char * glyr_type_to_string(enum GLYR_DATA_TYPE type);
 

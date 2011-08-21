@@ -1327,14 +1327,15 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 	if(g_list_length(url_list) != 0)
 	{
 		/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
+		gsize list_length = g_list_length(url_list);
 		GList * raw_parsed = async_download(url_list,
 				endmarks,
 				query,
-				g_list_length(url_list)/2,
-				1,                         
-				call_provider_callback,    /* Callback    */
-				url_table,                 /* Userpointer */
-				TRUE);
+				list_length / query->timeout  + 1,
+				list_length / query->parallel + 4,
+				call_provider_callback,    /* Callback           */
+				url_table,                 /* Userpointer        */
+				TRUE);                     /* Free caches itself */
 
 		if(g_list_length(raw_parsed) != 0)
 		{
