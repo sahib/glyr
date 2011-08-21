@@ -34,7 +34,7 @@ class Glyros::GlyrMemCache
 	    return copy.register_free
 	end
 
-	def write_file(path) 
+	def write_to_file(path) 
 		return Glyros::glyr_write(self,path)
 	end
 
