@@ -17,9 +17,9 @@
 
 static void print_item(GlyrMemCache * cacheditem, int num)
 {
-	fprintf(stderr,"\n------- ITEM #%d --------\n",num);
-	glyr_printitem(cacheditem);
-	fprintf(stderr,"\n------------------------\n");
+    fprintf(stderr,"\n------- ITEM #%d --------\n",num);
+    glyr_printitem(cacheditem);
+    fprintf(stderr,"\n------------------------\n");
 }
 
 /* ------------------------------------------ */
@@ -35,15 +35,15 @@ static enum GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
     if(*i == 1)
     {
         puts("=> Gentlemen, we received an item.");
-	puts("=> We originally wanted more, but we decide to stop here.");
-	puts("=> Therefore we return GLYRE_STOP_PRE. Goodbye.");
+        puts("=> We originally wanted more, but we decide to stop here.");
+        puts("=> Therefore we return GLYRE_STOP_PRE. Goodbye.");
         return GLYRE_STOP_PRE;
-	/*
-         * You can also return:
-         * - GLYRE_STOP_POST which will stop libglyr, but still add the current item
-         * - GLYRE_STOP_PRE  which will stop libglyr, but skip the current item
-         * - GLYRE_SKIP which will cause libglyr not to add this item to the results
-         */
+        /*
+             * You can also return:
+             * - GLYRE_STOP_POST which will stop libglyr, but still add the current item
+             * - GLYRE_STOP_PRE  which will stop libglyr, but skip the current item
+             * - GLYRE_SKIP which will cause libglyr not to add this item to the results
+             */
     }
     *i = *i + 1;
     return GLYRE_OK;
@@ -105,7 +105,7 @@ int main(int argc, char * argv[])
             // This has the same effect as in the callback,
             // Just that it's executed just once after all DL is done.
             // Commented out, as this would print it twice
-	    print_item(it,counter);
+            print_item(it,counter);
 
             // Every cache has a link to the next and prev one (or NULL respectively)
             it = it->next;

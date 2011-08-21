@@ -32,23 +32,23 @@ const char * lyrics_metrolyrics_url(GlyrQuery * settings)
 
 static void replace_from_message_inline(char * text)
 {
-	if(text != NULL)
-	{
-		char * from_msg_start = strstr(text,"[ From: ");
-		if(from_msg_start != NULL)
-		{
-			while(from_msg_start[0] != '\n' && from_msg_start[0])
-			{
-				from_msg_start[0] = ' ';
-				from_msg_start++;
-			}
+    if(text != NULL)
+    {
+        char * from_msg_start = strstr(text,"[ From: ");
+        if(from_msg_start != NULL)
+        {
+            while(from_msg_start[0] != '\n' && from_msg_start[0])
+            {
+                from_msg_start[0] = ' ';
+                from_msg_start++;
+            }
 
-			if(from_msg_start[0] == '\n')
-			{
-				from_msg_start[0] = ' ';
-			}
-		}
-	}
+            if(from_msg_start[0] == '\n')
+            {
+                from_msg_start[0] = ' ';
+            }
+        }
+    }
 }
 
 static GlyrMemCache * parse_lyrics_page(const char * buffer)
@@ -66,7 +66,7 @@ static GlyrMemCache * parse_lyrics_page(const char * buffer)
                 if(lyr)
                 {
                     result = DL_init();
-		    replace_from_message_inline(lyr);
+                    replace_from_message_inline(lyr);
                     result->data = strreplace(lyr,"</span>","");
                     result->size = strlen(result->data);
                     g_free(lyr);

@@ -93,36 +93,36 @@ GList * review_allmusic_parse(cb_object * capo)
             char * rr = strstr(node+1,ARTIST_PART);
             if(rr != NULL)
             {
-		    char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
-		    if(artist != NULL)
-		    {
-			    if(levenshtein_strcasecmp(capo->s->artist,artist) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/)
-			    {
-				    char * review_url = g_strdup_printf("%s/review",url);
-				    if(review_url)
-				    {
-					    GlyrMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
-					    if(dl != NULL)
-					    {
-						    GlyrMemCache * result = parse_text(dl);
-						    if(result != NULL)
-						    {
-							    r_list = g_list_prepend(r_list,result);
-							    urlc++;
-						    }
-						    DL_free(dl);
-					    }
-					    g_free(review_url);
-					    review_url = NULL;
-				    }
-			    }
-		    }
-		    g_free(artist);
-		    artist=NULL;
-	    }
-	    g_free(url);
-	    url=NULL;
-	}
+                char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
+                if(artist != NULL)
+                {
+                    if(levenshtein_strcasecmp(capo->s->artist,artist) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/)
+                    {
+                        char * review_url = g_strdup_printf("%s/review",url);
+                        if(review_url)
+                        {
+                            GlyrMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
+                            if(dl != NULL)
+                            {
+                                GlyrMemCache * result = parse_text(dl);
+                                if(result != NULL)
+                                {
+                                    r_list = g_list_prepend(r_list,result);
+                                    urlc++;
+                                }
+                                DL_free(dl);
+                            }
+                            g_free(review_url);
+                            review_url = NULL;
+                        }
+                    }
+                }
+                g_free(artist);
+                artist=NULL;
+            }
+            g_free(url);
+            url=NULL;
+        }
     }
     return r_list;
 }
@@ -131,13 +131,13 @@ GList * review_allmusic_parse(cb_object * capo)
 
 MetaDataSource review_allmusic_src =
 {
-	.name = "allmusic",
-	.key  = 'm',
-	.parser    = review_allmusic_parse,
-	.get_url   = review_allmusic_url,
-	.endmarker = "<div id=\"right-sidebar\">",
-	.quality   = 75,
-	.speed     = 40,
-	.free_url  = false,
-	.type      = GET_ALBUM_REVIEW
+    .name = "allmusic",
+    .key  = 'm',
+    .parser    = review_allmusic_parse,
+    .get_url   = review_allmusic_url,
+    .endmarker = "<div id=\"right-sidebar\">",
+    .quality   = 75,
+    .speed     = 40,
+    .free_url  = false,
+    .type      = GET_ALBUM_REVIEW
 };

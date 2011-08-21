@@ -32,11 +32,11 @@ const char * gtrans_get_trans_url(const char * input, const char * from, const c
         if(escape_input != NULL)
         {
             resultURL = g_strdup_printf("https://www.googleapis.com/language/translate/v2?key=%s%s%s&target=%s&prettyprint=true&q=%s",
-                                      API_KEY_GTRANS,
-                                      (from==NULL) ? "" : "&source=", // &source field can be omitted, autodetect then.
-                                      (from==NULL) ? "" : from,
-                                      to,escape_input
-                                     );
+                                        API_KEY_GTRANS,
+                                        (from==NULL) ? "" : "&source=", // &source field can be omitted, autodetect then.
+                                        (from==NULL) ? "" : from,
+                                        to,escape_input
+                                       );
         }
         g_free(escape_input);
     }

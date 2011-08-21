@@ -131,14 +131,14 @@ static void register_provider_plugins(void)
 
 /* Just presort a bit, so we don't need to shuffle the plugins always *
  * This has no actual practical use, it's just that pretty plugins are listed
- * first in outputs. Actual sorting is not threadsafe! 
+ * first in outputs. Actual sorting is not threadsafe!
  */
 static gint compare_by_priority(gconstpointer a, gconstpointer b)
 {
     const MetaDataSource * sa = a;
     const MetaDataSource * sb = b;
-    return (sa != NULL && sb != NULL) ? 
-	   (sa->quality * sa->speed -
+    return (sa != NULL && sb != NULL) ?
+           (sa->quality * sa->speed -
             sb->quality * sb->speed
            ) : 0;
 }
@@ -238,93 +238,93 @@ void unregister_fetcher_plugins(void)
 
 GlyrFetcherInfo * get_plugin_info(void)
 {
-	GlyrFetcherInfo * head = NULL;
-	GlyrFetcherInfo * prev_fetcher = NULL;
-	for(GList * elem0 = r_getFList(); elem0; elem0 = elem0->next)
-	{
-		MetaDataFetcher * fetch = elem0->data;
-		GlyrFetcherInfo  * finfo = g_malloc0(sizeof(GlyrFetcherInfo));
+    GlyrFetcherInfo * head = NULL;
+    GlyrFetcherInfo * prev_fetcher = NULL;
+    for(GList * elem0 = r_getFList(); elem0; elem0 = elem0->next)
+    {
+        MetaDataFetcher * fetch = elem0->data;
+        GlyrFetcherInfo  * finfo = g_malloc0(sizeof(GlyrFetcherInfo));
 
-		GlyrSourceInfo * prev_source = NULL;
-		for(GList * elem1 = r_getSList(); elem1; elem1 = elem1->next)
-		{
-			MetaDataSource * source = elem1->data;
-			if(source && source->type == fetch->type)
-			{
-				GlyrSourceInfo  * sinfos = g_malloc0(sizeof(GlyrSourceInfo)); 
+        GlyrSourceInfo * prev_source = NULL;
+        for(GList * elem1 = r_getSList(); elem1; elem1 = elem1->next)
+        {
+            MetaDataSource * source = elem1->data;
+            if(source && source->type == fetch->type)
+            {
+                GlyrSourceInfo  * sinfos = g_malloc0(sizeof(GlyrSourceInfo));
 
-				sinfos->quality = source->quality;
-				sinfos->speed   = source->speed;
-				sinfos->key     = source->key;
-				sinfos->type    = source->type;
-				sinfos->name    = g_strdup(source->name);			
+                sinfos->quality = source->quality;
+                sinfos->speed   = source->speed;
+                sinfos->key     = source->key;
+                sinfos->type    = source->type;
+                sinfos->name    = g_strdup(source->name);
 
-				if(prev_source != NULL)
-				{
-					prev_source->next = sinfos;
-					sinfos->prev = prev_source;
-				}
-				else
-				{
-					finfo->head = sinfos;
-				}
-				prev_source = sinfos;
-			}
-		}
+                if(prev_source != NULL)
+                {
+                    prev_source->next = sinfos;
+                    sinfos->prev = prev_source;
+                }
+                else
+                {
+                    finfo->head = sinfos;
+                }
+                prev_source = sinfos;
+            }
+        }
 
-		if(prev_fetcher != NULL)
-		{
-			prev_fetcher->next = finfo;
-			finfo->prev = prev_fetcher;
-		}
-		else
-		{
-			head = finfo;
-		}
+        if(prev_fetcher != NULL)
+        {
+            prev_fetcher->next = finfo;
+            finfo->prev = prev_fetcher;
+        }
+        else
+        {
+            head = finfo;
+        }
 
-		prev_fetcher = finfo;
+        prev_fetcher = finfo;
 
-		finfo->name = g_strdup(fetch->name);
-		finfo->type = fetch->type;
-	}
-	return head;
+        finfo->name = g_strdup(fetch->name);
+        finfo->type = fetch->type;
+    }
+    return head;
 }
 
 /* --------------------------------------- */
 
 static void free_single_item(GlyrFetcherInfo * info)
 {
-	if(info != NULL)
-	{
-		GlyrSourceInfo * elem = info->head;
-		while(elem != NULL)
-		{
-			GlyrSourceInfo * to_delete = elem;
-			elem = elem->next;
+    if(info != NULL)
+    {
+        GlyrSourceInfo * elem = info->head;
+        while(elem != NULL)
+        {
+            GlyrSourceInfo * to_delete = elem;
+            elem = elem->next;
 
-			g_free(to_delete->name);
-			g_free(to_delete);
-		}
-		g_free((gchar*)info->name);
-		info->name = NULL;
-	}
-	g_free(info);
+            g_free(to_delete->name);
+            g_free(to_delete);
+        }
+        g_free((gchar*)info->name);
+        info->name = NULL;
+    }
+    g_free(info);
 }
 
 /* --------------------------------------- */
 
 void free_plugin_info(GlyrFetcherInfo ** infos)
 {
-	if(infos != NULL)
-	{
-		GlyrFetcherInfo * fetch = infos[0];
-		while(fetch != NULL)
-		{
-			GlyrFetcherInfo * to_delete = fetch;
-			fetch = fetch->next;
+    if(infos != NULL)
+    {
+        GlyrFetcherInfo * fetch = infos[0];
+        while(fetch != NULL)
+        {
+            GlyrFetcherInfo * to_delete = fetch;
+            fetch = fetch->next;
 
-			free_single_item(to_delete);
-		}
-		*(infos) = NULL;
-	}
+            free_single_item(to_delete);
+        }
+        *(infos) = NULL;
+    }
 }

@@ -46,7 +46,7 @@ static bool check_size(const char * art_root, const char *hw, cb_object * capo)
 
             g_free(buf);
             if((atoid >= capo->s->img_min_size || capo->s->img_min_size == -1) &&
-               (atoid <= capo->s->img_max_size || capo->s->img_max_size == -1)  )
+                    (atoid <= capo->s->img_max_size || capo->s->img_max_size == -1)  )
                 return true;
         }
     }

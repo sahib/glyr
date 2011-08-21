@@ -47,7 +47,7 @@ extern "C"
     void glyr_init(void);
 
     /**
-    * @brief Call this at program termination. 
+    * @brief Call this at program termination.
     * It's adviseable to call 'atexit(glyr_cleanup)' after glyr_init()\n
     * Not threadsafe!\n
     */
@@ -221,7 +221,7 @@ extern "C"
     * This does not acutally limit the number of parallel downloads,\n
     * rather it limits the number of providers that are tried in parallel\n
     * Set this to a value of 0 to let libglyr guess the best value.\n
-    * 
+    *
     *
     * @return an errorID
     */
@@ -254,12 +254,12 @@ extern "C"
     /**
     * @brief  Set the useragent during making progresses
     *
-    * @param s The GlyrQuery settings struct to store this option in. 
+    * @param s The GlyrQuery settings struct to store this option in.
     * @param useragent a null terminated string containging everything you want
     *
     * Some provider may require an useragent, setting it to an empty string "" \n
     * might not be safe therefore\n
-    * Default useragents is "libglyr/<version name>" or similar 
+    * Default useragents is "libglyr/<version name>" or similar
     *
     * @return an errorID
     */
@@ -280,7 +280,7 @@ extern "C"
     *	(Use only these providers if you really want ONLY localized content)\n
     *	If no language specified the language defaults to english ("en")\n
     *   The special value 'auto' is recognized, in which case the language will be\n
-    *   guessed from your current locale. 
+    *   guessed from your current locale.
     *
     * @return an errorID
     */
@@ -450,7 +450,7 @@ extern "C"
     * @brief Forces UTF8 encoding for text items
     *
     * @param s A GlyrQuery with the timeout and redirect values filled to your needs.
-    * @param force_utf8 true to foce, false to accept other encodings 
+    * @param force_utf8 true to foce, false to accept other encodings
     *
     * Often this will option won't have serious impact, except for a view providers that don't deliever exact UTF8,
     * due to corrupted data (twice encoded like metrolyrics), but may deliever subsets of UTF8.
@@ -512,15 +512,15 @@ extern "C"
     */
     void glyr_update_md5sum(GlyrMemCache * c);
 
-    
+
     /**
-    * @brief Prints information about a GlyrMemCache to stderr 
+    * @brief Prints information about a GlyrMemCache to stderr
     *
     * @param cacheditem The GlyrMemCache to be printed
     */
     void glyr_printitem(GlyrMemCache * cacheditem);
 
-    
+
     /**
     * @brief get information about existing Fetcher and Source
     *
@@ -528,21 +528,21 @@ extern "C"
     * A Doubly linked list of Fetcher is returned, each having a field 'head',
     * being a pointer to a doubly linked list of GlyrSourceInfos
     *
-    * @return A newly GlyrFetcherInfo structure, you can iterate over. 
+    * @return A newly GlyrFetcherInfo structure, you can iterate over.
     */
     GlyrFetcherInfo * glyr_get_plugin_info(void);
 
     /**
     * @brief Free the data from glyr_get_plugin_info()
     *
-    * This method also set the pointer to NULL, for safety reasons. 
+    * This method also set the pointer to NULL, for safety reasons.
     *
     * @param info A reference to the return value fo glyr_get_plugin_info()
     */
-    void glyr_free_plugin_info(GlyrFetcherInfo ** info); 
+    void glyr_free_plugin_info(GlyrFetcherInfo ** info);
 
     /**
-    * @brief Converts a GLYR_DATA_TYPE type to a string 
+    * @brief Converts a GLYR_DATA_TYPE type to a string
     *
     * @param type a member of the GLYR_DATA_TYPE enum, TYPE_COVER_PRI e.g.
     *

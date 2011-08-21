@@ -45,8 +45,8 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
     while(continue_search(ctr,capo->s) && (beg = strstr(beg+1,TIT_BEGIN)) != NULL)
     {
         gchar * dy;
-        gchar * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN)); 
-        gchar * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN))); 
+        gchar * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN));
+        gchar * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN)));
         if(value != NULL && durat != NULL)
         {
             GlyrMemCache * cont = DL_init();

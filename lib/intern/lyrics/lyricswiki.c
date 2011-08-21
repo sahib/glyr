@@ -52,7 +52,7 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
                     if(cmp_t != NULL)
                     {
                         if((levenshtein_strcasecmp(cmp_a,tmp_artist) <= capo->s->fuzzyness &&
-			    levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
+                                levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
                         {
                             res = true;
                         }

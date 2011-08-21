@@ -40,20 +40,20 @@ static GlyrMemCache * parse_lyric_page(const char * buffer)
         if(begin)
         {
             begin = strstr(begin,"</div>");
-	    if(begin)
+            if(begin)
             {
-		/* Another running gag during developement */
-		gchar * ring_tone = strstr(begin,OPT_START);
-		if(ring_tone != NULL)
-		{
-			begin = ring_tone;
-		}
+                /* Another running gag during developement */
+                gchar * ring_tone = strstr(begin,OPT_START);
+                if(ring_tone != NULL)
+                {
+                    begin = ring_tone;
+                }
 
-		gchar * end = strstr(begin+1,OPT_END);
-		if(end == NULL)
-		{
-                	end = strstr(begin+1,"</div>");
-		}
+                gchar * end = strstr(begin+1,OPT_END);
+                if(end == NULL)
+                {
+                    end = strstr(begin+1,"</div>");
+                }
 
                 if(end)
                 {

@@ -70,7 +70,7 @@ const char * generic_google_url(GlyrQuery * sets, const char * searchterm)
     {
         back = "&tbs=isz:lt,islt:svga";
     }
-    else /* High enough. */ 
+    else /* High enough. */
     {
         back = "&tbs=isz:lt,islt:xga";
     }
@@ -87,38 +87,38 @@ const char * generic_google_url(GlyrQuery * sets, const char * searchterm)
 
 static gint get_value(gchar * ref, gchar * name)
 {
-	gint number = 0;
-	gchar * start = g_strstr_len(ref,256,name);
-	if(start != NULL)
-	{
-		start += strlen(name);
-		gchar * end = strchr(start,' ');
-		if(end != NULL)
-		{
-			gchar numbuf[MAX_NUM_BUF] = {};
-			gsize span = MIN(end - start,MAX_NUM_BUF-1);
-			strncpy(numbuf,start,span);
-			number = strtol(numbuf,NULL,10);
-		}
-	}
-	return number;
+    gint number = 0;
+    gchar * start = g_strstr_len(ref,256,name);
+    if(start != NULL)
+    {
+        start += strlen(name);
+        gchar * end = strchr(start,' ');
+        if(end != NULL)
+        {
+            gchar numbuf[MAX_NUM_BUF] = {};
+            gsize span = MIN(end - start,MAX_NUM_BUF-1);
+            strncpy(numbuf,start,span);
+            number = strtol(numbuf,NULL,10);
+        }
+    }
+    return number;
 }
 
 /* ------------------------- */
 
 static gboolean check_image_size(GlyrQuery * s, gchar * ref)
 {
-	gboolean result = FALSE;
-	gchar * img_src_after = strstr(ref,IMG_SRC_START);
-	if(img_src_after != NULL)
-	{
-		gint width  = get_value(img_src_after,WIDTH_START);
-		gint height = get_value(img_src_after,HEIGHT_START);
-		gint ratio  = (width+height)/2;
+    gboolean result = FALSE;
+    gchar * img_src_after = strstr(ref,IMG_SRC_START);
+    if(img_src_after != NULL)
+    {
+        gint width  = get_value(img_src_after,WIDTH_START);
+        gint height = get_value(img_src_after,HEIGHT_START);
+        gint ratio  = (width+height)/2;
 
-		result = size_is_okay(ratio,s->img_min_size,s->img_max_size);
-	}
-	return result;
+        result = size_is_okay(ratio,s->img_min_size,s->img_max_size);
+    }
+    return result;
 }
 
 /* ------------------------- */
@@ -139,52 +139,52 @@ const char * cover_google_url(GlyrQuery * s)
 
 GList * generic_google_parse(cb_object * capo)
 {
-	GList * r_list = NULL;
-	gchar * find = capo->cache->data;
-	gsize urlc = 0;
+    GList * r_list = NULL;
+    gchar * find = capo->cache->data;
+    gsize urlc = 0;
 
-	while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && continue_search(urlc,capo->s))
-	{
-		gchar * end_of_url = NULL;
-		find += strlen(FIRST_RESULT);
-		if( (end_of_url = strstr(find, END_OF_URL)) != NULL)
-		{
-			if(check_image_size(capo->s,find) == TRUE)
-			{
-				gchar * url = copy_value(find,end_of_url);
-				if(url != NULL)
-				{
-					GlyrMemCache * result = DL_init();
-					result->data = url;
-					result->size = end_of_url - find;
+    while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && continue_search(urlc,capo->s))
+    {
+        gchar * end_of_url = NULL;
+        find += strlen(FIRST_RESULT);
+        if( (end_of_url = strstr(find, END_OF_URL)) != NULL)
+        {
+            if(check_image_size(capo->s,find) == TRUE)
+            {
+                gchar * url = copy_value(find,end_of_url);
+                if(url != NULL)
+                {
+                    GlyrMemCache * result = DL_init();
+                    result->data = url;
+                    result->size = end_of_url - find;
 
-					r_list = g_list_prepend(r_list,result);
-					urlc++;
-				}
-			}
-		}
-	}
-	return r_list;
+                    r_list = g_list_prepend(r_list,result);
+                    urlc++;
+                }
+            }
+        }
+    }
+    return r_list;
 }
 
 /* ------------------------- */
 
 GList * cover_google_parse(cb_object * capo)
 {
-	return generic_google_parse(capo);
+    return generic_google_parse(capo);
 }
 
 /* ------------------------- */
 
 MetaDataSource cover_google_src =
 {
-	.name      = "google",
-	.key       = 'g',
-	.parser    = cover_google_parse,
-	.get_url   = cover_google_url,
-	.type      = GET_COVERART,
-	.quality   = 35,
-	.speed     = 99,
-	.endmarker = NULL,
-	.free_url  = true
+    .name      = "google",
+    .key       = 'g',
+    .parser    = cover_google_parse,
+    .get_url   = cover_google_url,
+    .type      = GET_COVERART,
+    .quality   = 35,
+    .speed     = 99,
+    .endmarker = NULL,
+    .free_url  = true
 };

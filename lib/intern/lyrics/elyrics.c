@@ -25,26 +25,26 @@
 
 const gchar * lyrics_elyrics_url(GlyrQuery * settings)
 {
-	gchar * result_url = NULL;
+    gchar * result_url = NULL;
 
-	gchar * space_to_min_artist = strreplace(settings->artist," ","-");
-	gchar * space_to_min_title  = strreplace(settings->title, " ","-");
-	if(space_to_min_artist && space_to_min_title)
-	{
-		gchar * prep_title  = prepare_string(space_to_min_title,FALSE);
-		gchar * prep_artist = prepare_string(space_to_min_artist,FALSE);
-		
-		if(prep_title && prep_artist)
-		{
-			result_url = g_strdup_printf(ELYRICS_BASE_URL,prep_artist[0],prep_artist,prep_title);
-			g_free(prep_title);
-			g_free(prep_artist);
-		}
+    gchar * space_to_min_artist = strreplace(settings->artist," ","-");
+    gchar * space_to_min_title  = strreplace(settings->title, " ","-");
+    if(space_to_min_artist && space_to_min_title)
+    {
+        gchar * prep_title  = prepare_string(space_to_min_title,FALSE);
+        gchar * prep_artist = prepare_string(space_to_min_artist,FALSE);
 
-		g_free(space_to_min_artist);
-		g_free(space_to_min_title);
-	}
-	return result_url;
+        if(prep_title && prep_artist)
+        {
+            result_url = g_strdup_printf(ELYRICS_BASE_URL,prep_artist[0],prep_artist,prep_title);
+            g_free(prep_title);
+            g_free(prep_artist);
+        }
+
+        g_free(space_to_min_artist);
+        g_free(space_to_min_title);
+    }
+    return result_url;
 }
 
 /*---------------------------------------------------*/
@@ -57,25 +57,25 @@ const gchar * lyrics_elyrics_url(GlyrQuery * settings)
 /* This data is seperated from the actual lyrics => remove it from here */
 static void remove_from_string(gchar * string)
 {
-	gchar * from_middle = strstr(string,FROM_MIDDLE);
-	if(from_middle != NULL)
-	{
-		gchar * from_end = strstr(from_middle,FROM_END);
-		if(from_end != NULL)
-		{
-			gchar * from_start = from_middle;
-			while(from_start[0] && from_start[0] != '>')
-			{
-				from_start--;
-			}
+    gchar * from_middle = strstr(string,FROM_MIDDLE);
+    if(from_middle != NULL)
+    {
+        gchar * from_end = strstr(from_middle,FROM_END);
+        if(from_end != NULL)
+        {
+            gchar * from_start = from_middle;
+            while(from_start[0] && from_start[0] != '>')
+            {
+                from_start--;
+            }
 
-			if(from_start != NULL)
-			{
-				gsize memlen = from_end - from_start;
-				memset(from_start,' ',memlen);
-			}
-		}
-	}
+            if(from_start != NULL)
+            {
+                gsize memlen = from_end - from_start;
+                memset(from_start,' ',memlen);
+            }
+        }
+    }
 }
 
 /*---------------------------------------------------*/
@@ -86,48 +86,48 @@ static void remove_from_string(gchar * string)
 
 static GList * lyrics_elyrics_parse(cb_object * capo)
 {
-	GList * results = NULL;
-	gchar * lyrics_begin = strstr(capo->cache->data,LYRICS_BEGIN);
-	if(lyrics_begin != NULL)
-	{
-		if(g_strstr_len(lyrics_begin,250,BAD_STRING) == NULL)
-		{
-			gchar * lyrics_end = strstr(lyrics_begin,LYRICS_ALT_END);
-			if(lyrics_end == NULL)
-			{
-				lyrics_end = strstr(lyrics_begin,LYRICS_END);
-			}
+    GList * results = NULL;
+    gchar * lyrics_begin = strstr(capo->cache->data,LYRICS_BEGIN);
+    if(lyrics_begin != NULL)
+    {
+        if(g_strstr_len(lyrics_begin,250,BAD_STRING) == NULL)
+        {
+            gchar * lyrics_end = strstr(lyrics_begin,LYRICS_ALT_END);
+            if(lyrics_end == NULL)
+            {
+                lyrics_end = strstr(lyrics_begin,LYRICS_END);
+            }
 
-			if(lyrics_end != NULL)
-			{
-				gchar * data = copy_value(lyrics_begin,lyrics_end);
-				if(data != NULL)
-				{
-					GlyrMemCache * item = DL_init();
-					remove_from_string(data);
-					item->data = data;
-					item->size = lyrics_end - lyrics_begin;
+            if(lyrics_end != NULL)
+            {
+                gchar * data = copy_value(lyrics_begin,lyrics_end);
+                if(data != NULL)
+                {
+                    GlyrMemCache * item = DL_init();
+                    remove_from_string(data);
+                    item->data = data;
+                    item->size = lyrics_end - lyrics_begin;
 
-					results = g_list_prepend(results,item);
-				}
-			}
-		}
-	}
-	return results;
+                    results = g_list_prepend(results,item);
+                }
+            }
+        }
+    }
+    return results;
 }
 
 /*---------------------------------------------------*/
 
 MetaDataSource lyrics_elyrics_src =
 {
-	.name = "elyrics",
-	.key  = 'e',
-	.encoding  = "LATIN1",
-	.parser    = lyrics_elyrics_parse,
-	.get_url   = lyrics_elyrics_url,
-	.type      = GET_LYRICS,
-	.endmarker = NULL,
-	.quality   = 75,
-	.speed     = 75,
-	.free_url  = true
+    .name = "elyrics",
+    .key  = 'e',
+    .encoding  = "LATIN1",
+    .parser    = lyrics_elyrics_parse,
+    .get_url   = lyrics_elyrics_url,
+    .type      = GET_LYRICS,
+    .endmarker = NULL,
+    .quality   = 75,
+    .speed     = 75,
+    .free_url  = true
 };

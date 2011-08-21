@@ -39,14 +39,14 @@
 #define DEFAULT_FUZZYNESS 4
 #define DEFAULT_PROXY NULL
 #define DEFAULT_QSRATIO 0.85
-#define DEFAULT_FORCE_UTF8 false 
+#define DEFAULT_FORCE_UTF8 false
 
-/* Disallow *.gif, mostly bad quality 
+/* Disallow *.gif, mostly bad quality
  * jpeg and jpg, because some not standardaware
  * servers give MIME types like image/jpg
  * (which should be image/jpeg usually)
  */
-#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg" 
+#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg"
 
 /* Be honest by default */
 #define DEFAULT_USERAGENT "libglyr"
@@ -223,33 +223,33 @@ typedef struct GlyrQuery
 } GlyrQuery;
 
 /**
-* @brief 
+* @brief
 */
 typedef struct GlyrSourceInfo
 {
-	char key;
+    char key;
 
-	enum GLYR_GET_TYPE type;
-	int quality;
-	int speed;	
+    enum GLYR_GET_TYPE type;
+    int quality;
+    int speed;
 
-	char * name;
-	struct GlyrSourceInfo * next;
-	struct GlyrSourceInfo * prev;
+    char * name;
+    struct GlyrSourceInfo * next;
+    struct GlyrSourceInfo * prev;
 } GlyrSourceInfo;
 
 /**
-* @brief 
+* @brief
 */
-typedef struct GlyrFetcherInfo 
+typedef struct GlyrFetcherInfo
 {
-	char * name;
-	enum GLYR_GET_TYPE type;		
+    char * name;
+    enum GLYR_GET_TYPE type;
 
-	GlyrSourceInfo * head;
+    GlyrSourceInfo * head;
 
-	struct GlyrFetcherInfo * next;
-	struct GlyrFetcherInfo * prev;
+    struct GlyrFetcherInfo * next;
+    struct GlyrFetcherInfo * prev;
 } GlyrFetcherInfo;
 
 /**
@@ -296,12 +296,12 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 {
     GlyrFetcherInfo()
     {
-	return glyr_get_plugin_info();
+        return glyr_get_plugin_info();
     }
 
     ~GlyrFetcherInfo()
     {
-	glyr_free_plugin_info(&($self));
+        glyr_free_plugin_info(&($self));
     }
 }
 #endif

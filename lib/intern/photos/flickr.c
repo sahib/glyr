@@ -27,21 +27,21 @@ const char * photos_flickr_url(GlyrQuery * settings)
 {
     if(settings->img_max_size <= 175 || settings->img_max_size == -1)
     {
-	return NULL;
+        return NULL;
     }
 
     return g_strdup_printf("http://api.flickr.com/services/rest/"
-                         "?method=flickr.photos.search&"
-                         "api_key="API_KEY_FLICKR"&"
-                         "tags=%s&"
-                         "media=photos&"
-			 "group_id=29928242@N00&"
-			 "content_type=6&"
-			 "sort=interestingness-asc&"
-                         "per_page=%d",
-                         settings->artist,
-                         settings->number
-                        );
+                           "?method=flickr.photos.search&"
+                           "api_key="API_KEY_FLICKR"&"
+                           "tags=%s&"
+                           "media=photos&"
+                           "group_id=29928242@N00&"
+                           "content_type=6&"
+                           "sort=interestingness-asc&"
+                           "per_page=%d",
+                           settings->artist,
+                           settings->number
+                          );
 }
 
 static char * get_field_by_name(const char * string, const char * name)
@@ -93,7 +93,7 @@ GList * photos_flickr_parse(cb_object * capo)
 
                 GlyrMemCache * cache = DL_init();
                 cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
-		cache->size = strlen(cache->data);
+                cache->size = strlen(cache->data);
                 r_list = g_list_prepend(r_list,cache);
 
                 if(ID)

@@ -60,7 +60,7 @@ int main(void)
     /* Wait for threads to join, get results */
     a = g_thread_join(thread_a);
     b = g_thread_join(thread_b);
-    
+
     puts("Joined!\n---> Data: ");
 
     if(a && b)

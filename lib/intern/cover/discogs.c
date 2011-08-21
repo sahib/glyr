@@ -114,7 +114,7 @@ GList * cover_discogs_parse(cb_object * capo)
                                         char * size = copy_value(imgurl_begin+strlen(IMGURL_BEGIN),imgurl_endin);
                                         if(size)
                                         {
-					    if(size_is_okay(atoi(size),capo->s->img_min_size,capo->s->img_max_size))
+                                            if(size_is_okay(atoi(size),capo->s->img_min_size,capo->s->img_max_size))
                                             {
                                                 char * uri_begin = strstr(imgurl_endin,URL_BEGIN);
                                                 if(uri_begin)
