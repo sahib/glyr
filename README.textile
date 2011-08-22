@@ -1,12 +1,3 @@
-<style type="text/css">
-<!--
-.lnr { color: #a8a8a8; background-color: #080808; }
-.Conditional { color: #8787ff; }
-.String { color: #87af5f; }
-.rubyStringDelimiter { color: #afaf5f; }
-.rubyConstant { color: #d75f5f; }
--->
-</style>
 <h1>_Glyr_ is a searcheninge for musicrelated metadata</h1>
 
 It comes both in a commandline interface tool and as a C library, both with an easy to use interface.
@@ -72,24 +63,7 @@ Indeed. Should have named it 'Glyros'.
 
 <h3>Is it hard to write something with it?</h3>
 A decent knowledge of C might be required, but the code is staright forward.
-In the ruby wrapper you can almost use english to order covers:
-
-
-
-<pre>
-<span class="lnr"> 1 </span>spit = <span class="rubyConstant">GlyrosSpit</span>.new <br>
-<span class="lnr"> 2 </span>spit.artist = <span class="rubyStringDelimiter">&quot;</span><span class="String">Equilibrium</span><span class="rubyStringDelimiter">&quot;</span><br>
-<span class="lnr"> 3 </span>spit.album  = <span class="rubyStringDelimiter">&quot;</span><span class="String">Sagas</span><span class="rubyStringDelimiter">&quot;</span><br>
-<span class="lnr"> 4 </span>spit.type   = <span class="rubyConstant">Glyros</span>::<span class="rubyConstant">GET_COVERART</span><br>
-<span class="lnr"> 5 </span>list = spit.get()
-<br><span class="lnr"> 6 </span>
-<br><span class="lnr"> 7 </span><span class="Conditional">unless</span> list.nil? <span class="Conditional">then</span>
-<br><span class="lnr"> 8 </span>   bq. list.write_to_file(<span class="rubyStringDelimiter">&quot;</span><span class="String">mycover.png</span><span class="rubyStringDelimiter">&quot;</span>)
-<br><span class="lnr"> 9 </span><span class="Conditional">else</span>
-<br><span class="lnr">10 </span>   puts <span class="rubyStringDelimiter">&quot;</span><span class="String">Whoops, not found.</span><span class="rubyStringDelimiter">&quot;</span>
-<br><span class="lnr">11 </span><span class="Conditional">end</span>
-</pre>
-
+In the ruby wrapper you can almost use "english to order covers":http://sahib.github.com/glyr/ruby_example.html .
 
 Bash scripts are even easier:
 @glyrc cover --artist Equilibrium --album Sagas@
