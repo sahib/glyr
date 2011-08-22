@@ -89,6 +89,7 @@ In the ruby wrapper you can almost use english to order covers:
 <br><span class="lnr">11 </span><span class="Conditional">end</span>
 </pre>
 
+
 Bash scripts are even easier:
 @glyrc cover --artist Equilibrium --album Sagas@
 
@@ -140,7 +141,7 @@ Also bugreports (well, there are no bugs, just in case) are appreciated, or just
 Those help to make the documentation more clear.
 
 <h3>DONATE</h3>
-You also might consider a small (CS-Students are already motivated by 1 Cent <img src="http://www.blendpolis.de/images/smilies/icon_wink.gif"/>) donation if you use any of my software in a commercial environement:<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://github.com/sahib/glyr"></a>
+You also might consider a small (CS-Students are already motivated by 1 Cent <img src="http://www.blendpolis.de/images/smilies/icon_wink.gif"/>) donation if you use feel like it:<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://github.com/sahib/glyr"></a>
 <noscript><a href="http://flattr.com/thing/302682/libglyr" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
 (For now only possible via Flattr or "Paypal":http://sahib.github.com/donate.html , you gonna need an account there - Sorry)
