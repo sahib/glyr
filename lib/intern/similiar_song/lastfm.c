@@ -20,11 +20,9 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-#define API_KEY API_KEY_LASTFM
-
-const char * similiar_song_lastfm_url(GlyrQuery * sets)
+const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 {
-    return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=%artist%&track=%title%&api_key="API_KEY;
+    return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=%artist%&track=%title%&api_key="API_KEY_LASTFM;
 }
 
 #define TRACK_BEGIN "<track>"
@@ -42,19 +40,12 @@ const char * similiar_song_lastfm_url(GlyrQuery * sets)
 #define URL_BEGIN "<url>"
 #define URL_ENDIN "</url>"
 
-#define IMAGE_S_BEGIN "<image size=\"small\">"
-#define IMAGE_M_BEGIN "<image size=\"medium\">"
-#define IMAGE_L_BEGIN "<image size=\"large\">"
-#define IMAGE_E_BEGIN "<image size=\"extralarge\">"
-#define IMAGE_X_BEGIN "<image size=\"mega\">"
-#define IMAGE_ENDIN "</image>"
-
-static char * in_tag(const char * string, const char * begin, const char * endin)
+static gchar * in_tag(const gchar * string, const gchar * begin, const gchar * endin)
 {
-    char * bp = strstr(string,begin);
+    gchar * bp = strstr(string,begin);
     if(bp != NULL)
     {
-        char * ep = strstr(bp,endin);
+        gchar * ep = strstr(bp,endin);
         if(ep != NULL && ep > bp)
         {
             return copy_value(bp+strlen(begin),ep);
@@ -67,9 +58,9 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
 {
     GList * r_list = NULL;
 
-    int urlc = 0;
-    char * begin = capo->cache->data;
-    char * endin = NULL;
+    gint urlc = 0;
+    gchar * begin = capo->cache->data;
+    gchar * endin = NULL;
 
     while((begin = strstr(begin, TRACK_BEGIN)) != NULL &&
             (endin = strstr(begin, TRACK_ENDIN)) != NULL &&
@@ -78,20 +69,15 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
         endin += strlen(TRACK_ENDIN);
         *(endin-1) = '\0';
 
-        char * track   = in_tag(begin,NAME_BEGIN,NAME_ENDIN);
-        char * match   = in_tag(begin,MATCH_BEGIN,MATCH_ENDIN);
-        char * url     = in_tag(begin,URL_BEGIN,URL_ENDIN);
-        char * img_s   = in_tag(begin,IMAGE_S_BEGIN,IMAGE_ENDIN);
-        char * img_m   = in_tag(begin,IMAGE_M_BEGIN,IMAGE_ENDIN);
-        char * img_l   = in_tag(begin,IMAGE_L_BEGIN,IMAGE_ENDIN);
-        char * img_e   = in_tag(begin,IMAGE_E_BEGIN,IMAGE_ENDIN);
-        char * img_x   = in_tag(begin,IMAGE_X_BEGIN,IMAGE_ENDIN);
+        gchar * track   = in_tag(begin,NAME_BEGIN,NAME_ENDIN);
+        gchar * match   = in_tag(begin,MATCH_BEGIN,MATCH_ENDIN);
+        gchar * url     = in_tag(begin,URL_BEGIN,URL_ENDIN);
 
-        char * artist = NULL;
-        char * begin_artist = begin;
-        char * endin_artist = NULL;
-        if ((begin_artist = strstr(begin_artist, ARTIST_BEGIN)) != NULL &&
-                (endin_artist = strstr(begin_artist, ARTIST_ENDIN)) != NULL)
+        gchar * artist = NULL;
+        gchar * begin_artist = begin;
+        gchar * endin_artist = NULL;
+        if((begin_artist = strstr(begin_artist, ARTIST_BEGIN)) != NULL &&
+           (endin_artist = strstr(begin_artist, ARTIST_ENDIN)) != NULL)
         {
             endin_artist += strlen(ARTIST_ENDIN);
             *(endin_artist-1) = '\0';
@@ -99,8 +85,7 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
             artist  = in_tag(begin_artist,NAME_BEGIN,NAME_ENDIN);
         }
 
-        char * composed = g_strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s",track,artist,match,url,img_s,img_m,img_l,img_e,img_x);
-
+        gchar * composed = g_strdup_printf("%s\n%s\n%s\n%s\n",track,artist,match,url);
         if(composed != NULL)
         {
             GlyrMemCache * result = DL_init();
@@ -121,16 +106,6 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
             g_free(match);
         if(url)
             g_free(url);
-        if(img_s)
-            g_free(img_s);
-        if(img_m)
-            g_free(img_m);
-        if(img_l)
-            g_free(img_l);
-        if(img_e)
-            g_free(img_e);
-        if(img_x)
-            g_free(img_x);
 
         begin=endin;
     }

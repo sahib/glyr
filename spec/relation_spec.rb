@@ -42,12 +42,4 @@ describe "relations" do
 			puts list.first.data
 		end
 	end
-=begin
-	describe "Cher - Believe (title) " do
-		it "Should return a link" do
-			@spit.artist = "Cher"
-			@spit.title  = "Believe"
-		end
-	end 
-=end
 end
