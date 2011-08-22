@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<title>/tmp/ruby_example.rb.html</title>
+<meta name="Generator" content="Vim/7.3">
+<meta name="plugin-version" content="vim7.3_v10">
+<meta name="syntax" content="ruby">
+<meta name="settings" content="number_lines,use_css,expand_tabs">
+<style type="text/css">
+<!--
+pre { font-family: monospace; color: #d0d0d0; background-color: #1c1c1c; }
+body { font-family: monospace; color: #d0d0d0; background-color: #1c1c1c; }
+.lnr { color: #a8a8a8; background-color: #080808; }
+.Conditional { color: #8787ff; }
+.String { color: #87af5f; background-color: #121212; }
+.rubyStringDelimiter { color: #afaf5f; }
+.rubyConstant { color: #d75f5f; }
+-->
+</style>
+</head>
+<body>
+<pre>
+<span class="lnr"> 1 </span>spit = <span class="rubyConstant">GlyrosSpit</span>.new
+<span class="lnr"> 2 </span>spit.artist = <span class="rubyStringDelimiter">&quot;</span><span class="String">Equilibrium</span><span class="rubyStringDelimiter">&quot;</span>
+<span class="lnr"> 3 </span>spit.album  = <span class="rubyStringDelimiter">&quot;</span><span class="String">Sagas</span><span class="rubyStringDelimiter">&quot;</span>
+<span class="lnr"> 4 </span>spit.type   = <span class="rubyConstant">Glyros</span>::<span class="rubyConstant">GET_COVERART</span>
+<span class="lnr"> 5 </span>list = spit.get()
+<span class="lnr"> 6 </span>
+<span class="lnr"> 7 </span><span class="Conditional">unless</span> list.nil? <span class="Conditional">then</span>
+<span class="lnr"> 8 </span>   bq. list.write_to_file(<span class="rubyStringDelimiter">&quot;</span><span class="String">mycover.png</span><span class="rubyStringDelimiter">&quot;</span>)
+<span class="lnr"> 9 </span><span class="Conditional">else</span>
+<span class="lnr">10 </span>   puts <span class="rubyStringDelimiter">&quot;</span><span class="String">Whoops, not found.</span><span class="rubyStringDelimiter">&quot;</span>
+<span class="lnr">11 </span><span class="Conditional">end</span>
+</pre>
+</body>
+</html>
