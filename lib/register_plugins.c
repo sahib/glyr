@@ -82,49 +82,53 @@ GList * r_getSList(void)
     return glyrMetaDataSourceList;
 }
 
+void plugin_add_to_list(GList ** list, void * data)
+{
+	if(list != NULL)
+	{
+		*list = g_list_prepend(*list,data);
+	}
+}
+
 /* --------------------------------------- */
 
 static void register_provider_plugins(void)
 {
-// Disabled due to bad quality:
-//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_darklyrics_src);
-//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_directlyrics_src);
-//    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_songlyrics_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_allmusic_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_lastfm_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&ainfo_lyricsreg_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&albumlist_musicbrainz_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_albumart_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_allmusic_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_amazon_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_coverhunt_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_discogs_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_google_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_lastfm_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&cover_lyricswiki_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lipwalk_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyrdb_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyricsreg_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyricstime_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyricsvip_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyricswiki_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_lyrix_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_magistrix_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metrolyrics_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_metallum_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&lyrics_elyrics_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_flickr_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_google_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_lastfm_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&photos_singerpictures_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&relations_musicbrainz_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_allmusic_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_amazon_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&review_metallum_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&similar_artist_lastfm_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&similar_song_lastfm_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&tags_musicbrainz_src);
-    glyrMetaDataSourceList = g_list_prepend(glyrMetaDataSourceList,&tracklist_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_allmusic_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_lyricsreg_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_lyricswiki_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lipwalk_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyrdb_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyricsreg_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyricstime_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyricsvip_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyricswiki_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyrix_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_magistrix_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metallum_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_elyrics_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_singerpictures_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&similar_artist_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&similar_song_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&tags_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&tracklist_musicbrainz_src);
 }
 
 /* --------------------------------------- */
@@ -174,17 +178,17 @@ static void init_provider_list(void)
 void register_fetcher_plugins(void)
 {
     /* add ypurs here */
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_cover);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_lyrics);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_artistphotos);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_artistbio);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_similiar_artists);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_similar_song);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_review);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_albumlist);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_tags);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_relations);
-    glyrMetaDataPluginList = g_list_prepend(glyrMetaDataPluginList,&glyrFetcher_tracklist);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_cover);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_lyrics);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_artistphotos);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_artistbio);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_similiar_artists);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_similar_song);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_review);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_albumlist);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_tags);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_relations);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_tracklist);
 
     /* call init() */
     for(GList * elem = glyrMetaDataPluginList; elem; elem = elem->next)

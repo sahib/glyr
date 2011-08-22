@@ -25,6 +25,8 @@ const gchar * tracklist_musicbrainz_url(GlyrQuery * sets)
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=Official&limit=10&title=%album%&limit=1";
 }
 
+/* ----------------------------------------- */
+
 #define REL_ID_BEGIN "id=\""
 #define REL_ID_ENDIN "\" ext:score="
 #define REL_ID_FORM  "http://musicbrainz.org/ws/1/release/%s?type=xml&inc=tracks"
@@ -48,8 +50,8 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
     while(continue_search(item_ctr,capo->s) && (beg = strstr(beg + (sizeof TIT_BEGIN) - 1,TIT_BEGIN)) != NULL)
     {
         gchar * dy;
-        gchar * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN));
-        gchar * durat = copy_value(strstr(beg,DUR_BEGIN)+strlen(DUR_BEGIN),(dy = strstr(beg,DUR_ENDIN)));
+        gchar * value = copy_value(beg+(sizeof TIT_BEGIN) - 1,strstr(beg,TIT_ENDIN));
+        gchar * durat = copy_value(strstr(beg,DUR_BEGIN) + (sizeof DUR_BEGIN) - 1,(dy = strstr(beg,DUR_ENDIN)));
         if(value != NULL && durat != NULL)
         {
             GlyrMemCache * cont = DL_init();

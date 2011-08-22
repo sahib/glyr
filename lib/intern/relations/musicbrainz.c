@@ -22,75 +22,88 @@
 
 /*--------------------------------------------------------*/
 
-#define RELATION_BEGIN_TYPE "<relation type=\""
-
-/* Wrap around the (a bit more) generic versions */
-GList * relations_musicbrainz_parse(cb_object * capo)
+static gchar * get_value(gchar * ref, gchar * name)
 {
-    GList * results = NULL;
-    GlyrMemCache  * infobuf = generic_musicbrainz_parse(capo,"url-rels");
-
-    if(infobuf)
-    {
-        size_t nlen = strlen(RELATION_BEGIN_TYPE);
-        char * node = strstr(infobuf->data,"<relation-list target-type=\"Url\">");
-        if(node != NULL)
-        {
-            int ctr = 0;
-            while(continue_search(ctr,capo->s) && (node = strstr(node+1,RELATION_BEGIN_TYPE)) )
-            {
-                char * end_of_type = strchr(node+nlen,'"');
-                if(!end_of_type)
-                    continue;
-
-                char * beg_of_target = strchr(end_of_type+1,'"');
-                if(!beg_of_target)
-                    continue;
-
-                char * end_of_target = strchr(beg_of_target+1,'"');
-                if(!end_of_target)
-                    continue;
-
-                char * type = copy_value(node+nlen,end_of_type);
-                char * target = copy_value(beg_of_target+1,end_of_target);
-                if(type != NULL && target != NULL)
-                {
-                    GlyrMemCache * tmp = DL_init();
-                    tmp->data = g_strdup_printf("%s:%s",type,target);
-                    tmp->size = strlen(tmp->data);
-                    tmp->type = TYPE_RELATION;
-                    tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
-                    results = g_list_prepend(results,tmp);
-                    ctr++;
-
-                    g_free(type);
-                    g_free(target);
-                }
-            }
-        }
-        DL_free(infobuf);
-    }
-    return results;
+	gchar * result = NULL;
+	gchar * find = strstr(ref,name);
+	if(find != NULL)
+	{
+		find += strlen(name);
+		gchar * end = strchr(find,'"');
+		if(end != NULL)
+		{
+			result = copy_value(find,end);
+		}
+	}
+	return result;
 }
 
 /*--------------------------------------------------------*/
 
-const char * relations_musicbrainz_url(GlyrQuery * sets)
+#define RELATION_TARGET_TYPE "<relation-list target-type=\"Url\">"
+#define RELATION_BEGIN_TYPE  "<relation"
+
+/* Wrap around the (a bit more) generic versions */
+GList * relations_musicbrainz_parse(cb_object * capo)
 {
-    return generic_musicbrainz_url(sets);
+		GList * results = NULL;
+		gint mbid_marker = 0;
+		while(continue_search(g_list_length(results), capo->s))
+		{
+				GlyrMemCache  * infobuf = generic_musicbrainz_parse(capo,&mbid_marker,"url-rels");
+				if(infobuf == NULL)
+				{
+						break;
+				}
+				gsize nlen = (sizeof RELATION_BEGIN_TYPE) - 1;
+				gchar * node = strstr(infobuf->data,RELATION_TARGET_TYPE);
+				if(node != NULL)
+				{
+						gint ctr = 0;
+						while(continue_search(ctr,capo->s) && (node = strstr(node+nlen,RELATION_BEGIN_TYPE)) )
+						{
+								node += nlen;
+								gchar * target = get_value(node,"target=\"");
+								gchar * type   = get_value(node,"type=\"");
+
+								if(type != NULL && target != NULL)
+								{
+										GlyrMemCache * tmp = DL_init();
+										tmp->data = g_strdup_printf("%s:%s",type,target);
+										tmp->size = strlen(tmp->data);
+										tmp->type = TYPE_RELATION;
+										tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
+										results = g_list_prepend(results,tmp);
+										ctr++;
+
+										g_free(type);
+										g_free(target);
+								}
+						}
+				}
+				DL_free(infobuf);
+		}
+		return results;
+}
+
+/*--------------------------------------------------------*/
+
+const gchar * relations_musicbrainz_url(GlyrQuery * sets)
+{
+		return generic_musicbrainz_url(sets);
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource relations_musicbrainz_src =
 {
-    .name = "musicbrainz",
-    .key  = 'm',
-    .parser    = relations_musicbrainz_parse,
-    .get_url   = relations_musicbrainz_url,
-    .type      = GET_RELATIONS,
-    .quality   = 80,
-    .speed     = 80,
-    .endmarker = NULL,
-    .free_url  = true
+		.name = "musicbrainz",
+		.key  = 'm',
+		.parser    = relations_musicbrainz_parse,
+		.get_url   = relations_musicbrainz_url,
+		.type      = GET_RELATIONS,
+		.quality   = 80,
+		.speed     = 80,
+		.endmarker = NULL,
+		.free_url  = true
 };

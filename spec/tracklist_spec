@@ -23,5 +23,16 @@ describe "tracklist" do
 				puts "##{"%02d" % x}: [#{"%02d" % (track.duration/60)}:#{"%02d" % (track.duration%60)}] #{track.data} "
 			end
 		end
+	end
+
+	describe "Not found case" do 
+		it "should return an empy array" do
+			@spit.artist = "Long string musicbrainz won't find at all"
+			@spit.album  = "Same here, no album like this in DB"
+			list = @spit.get
+		
+			list.should be_an_instance_of Array
+			list.size.should equal 0
+		end
 	end	
 end

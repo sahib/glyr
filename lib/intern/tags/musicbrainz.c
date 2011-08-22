@@ -58,9 +58,9 @@ static int please_what_type(GlyrQuery * s)
 /*  */
 const char * generic_musicbrainz_url(GlyrQuery * sets)
 {
-    const char * wrap_a = sets->artist ? "%artist%" : "";
-    const char * wrap_b = sets->album  ? "%album%"  : "";
-    const char * wrap_t = sets->title  ? "%title%"  : "";
+    const gchar * wrap_a = sets->artist ? "%artist%" : "";
+    const gchar * wrap_b = sets->album  ? "%album%"  : "";
+    const gchar * wrap_t = sets->title  ? "%title%"  : "";
 
     switch(please_what_type(sets))
     {
@@ -79,14 +79,14 @@ const char * generic_musicbrainz_url(GlyrQuery * sets)
 
 #define ID_BEGIN "id=\""
 
-const char * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, size_t * offset)
+const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
 {
-    if(!c || !s || !offset)
+    if(c==NULL || s==NULL || offset==NULL)
         return NULL;
 
-    const char * searchterm  = NULL;
-    const char * checkstring = NULL;
-    const char * comparestr  = NULL;
+    const gchar * searchterm  = NULL;
+    const gchar * checkstring = NULL;
+    const gchar * comparestr  = NULL;
 
     switch(please_what_type(s))
     {
@@ -106,85 +106,84 @@ const char * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, size_t * offset)
         comparestr  = s->artist;
         break;
     default:
-        glyr_message(0,s,"Warning: (tags/musicbrainz.c) Unable to determine type.\n");
+        glyr_message(1,s,"Warning: (tags/musicbrainz.c) Unable to determine type.\n");
     }
 
-    const char * mbid = NULL;
+    const gchar * mbid = NULL;
     if(searchterm != NULL)
     {
-        char * node = c->data + *(offset);
-        char * search_check = NULL;
-        size_t nlen = strlen(ID_BEGIN);
-        size_t clen = strlen(checkstring);
+        gchar * node = c->data + *offset;
+        gchar * search_check = NULL;
+        gsize nlen = (sizeof ID_BEGIN) - 1;
+        gsize clen = strlen(checkstring);
 
-        while( node && (node = strstr(node,searchterm)) && !mbid)
+        while( (node = strstr(node,searchterm)) && mbid == NULL)
         {
-            if( !(node = strstr(node,ID_BEGIN)) )
+            if(!(node = strstr(node,ID_BEGIN)))
                 continue;
 
-            if(! (search_check = strstr(node,checkstring)) )
+            if(!(search_check = strstr(node,checkstring)))
                 continue;
 
-            char * to_compare = copy_value(search_check+clen,strstr(search_check+clen,"</"));
+			search_check += clen;
+            gchar * to_compare = copy_value(search_check,strstr(search_check,"</"));
             if(to_compare != NULL)
             {
-                if(levenshtein_strcmp(to_compare,comparestr) < s->fuzzyness)
-                {
-                    mbid = (char*)copy_value(node+nlen,strchr(node+nlen,'"'));
-                    if(mbid && !(*mbid))
-                    {
-                        g_free((char*)mbid);
-                        mbid = NULL;
-                    }
-                }
-                g_free(to_compare);
-            }
-            node++;
-        }
-        *offset = node - c->data;
-    }
-    return mbid;
+				gchar * escaped = beautify_lyrics(to_compare);
+				if(escaped != NULL)
+				{
+						if(levenshtein_strcmp(escaped,comparestr) < s->fuzzyness)
+						{
+								mbid = (gchar*)copy_value(node+nlen,strchr(node+nlen,'"'));
+						}
+						g_free(escaped);
+				}
+				g_free(to_compare);
+			}
+			node += (sizeof ID_BEGIN) - 1;
+		}
+		*offset = node - c->data;
+	}
+	return mbid;
 }
 
 /*--------------------------------------------------------*/
 
 // Returns only a parseable memcache
-GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
+GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include)
 {
-    size_t offset = 0;
-    const char * mbid = NULL;
-    GlyrMemCache * info = NULL;
+		gsize offset = 0;
+		const gchar * mbid = NULL;
+		GlyrMemCache * info = NULL;
 
-    int ctr = 0;
+		while(offset < capo->cache->size && info==NULL && (mbid = get_mbid_from_xml(capo->s,capo->cache,last_mbid)))
+		{
+				if(mbid != NULL)
+				{
+						const gchar * type = NULL;
+						switch(please_what_type(capo->s))
+						{
+								case TYPE_TAG_TITLE:
+										type = "track";
+										break;
+								case TYPE_TAG_ALBUM:
+										type = "release";
+										break;
+								case TYPE_TAG_ARTIST:
+										type = "artist";
+										break;
+						}
 
-    while(continue_search(ctr,capo->s) && !info && (mbid = get_mbid_from_xml(capo->s,capo->cache,&offset)) )
-    {
-        if(mbid != NULL)
-        {
-            const char * type = NULL;
-            switch(please_what_type(capo->s))
-            {
-            case TYPE_TAG_TITLE:
-                type = "track";
-                break;
-            case TYPE_TAG_ALBUM:
-                type = "release";
-                break;
-            case TYPE_TAG_ARTIST:
-                type = "artist";
-                break;
-            }
-
-            char * info_page_url = g_strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
-            if(info_page_url)
-            {
-                info = download_single(info_page_url,capo->s,NULL);
-                g_free(info_page_url);
-            }
-            g_free((char*)mbid);
-        }
-    }
-    return info;
+						gchar * info_page_url = g_strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
+						if(info_page_url)
+						{
+								info = download_single(info_page_url,capo->s,NULL);
+								g_free(info_page_url);
+						}
+						g_free((gchar*)mbid);
+				}
+		}
+		return info;
 }
 
 /*--------------------------------------------------------*/
@@ -192,64 +191,65 @@ GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, const char * include)
 /* Wrap around the (a bit more) generic versions */
 GList * tags_musicbrainz_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
-    GlyrMemCache  * info = generic_musicbrainz_parse(capo,"tags");
-    if(info)
-    {
-        int type_num = please_what_type(capo->s);
-        char * tag_node = info->data;
-        while( (tag_node = strstr(tag_node + 1,"<tag")) )
-        {
-            char * tag_begin = strchr(tag_node+1,'>');
-            if(!tag_begin)
-                continue;
+		GList * results = NULL;
+		gint mbid_marker = 0;
+		while(continue_search(g_list_length(results), capo->s))
+		{
+				GlyrMemCache  * info = generic_musicbrainz_parse(capo,&mbid_marker,"tags");
+				if(info == NULL)
+				{
+						break;
+				}
+				gint type_num = please_what_type(capo->s);
+				gchar * tag_node = info->data;
+				while( (tag_node = strstr(tag_node + 1,"<tag")) )
+				{
+						gchar * tag_begin = strchr(tag_node+1,'>');
+						if(!tag_begin)
+								continue;
 
-            char * tag_endin = strchr(tag_begin,'<');
-            if(!tag_endin)
-                continue;
+						tag_begin++;
+						gchar * tag_endin = strchr(tag_begin,'<');
+						if(!tag_endin)
+								continue;
 
-            char * value = copy_value(++tag_begin,tag_endin);
-            if(value)
-            {
-                if(*value)
-                {
-                    GlyrMemCache * tmp = DL_init();
-                    tmp->data = value;
-                    tmp->size = tag_endin - tag_begin;
-                    tmp->type = type_num;
-                    tmp->dsrc = info->dsrc ? strdup(info->dsrc) : NULL;
+						gchar * value = copy_value(tag_begin,tag_endin);
+						if(value != NULL)
+						{
+								if(strlen(value) > 0)
+								{
+										GlyrMemCache * tmp = DL_init();
+										tmp->data = value;
+										tmp->size = tag_endin - tag_begin;
+										tmp->type = type_num;
 
-                    r_list = g_list_prepend(r_list,tmp);
-                }
-                else
-                {
-                    g_free(value);
-                }
-            }
-        }
-        DL_free(info);
-    }
-    return r_list;
+										results = g_list_prepend(results,tmp);
+								}
+						}
+				}
+				DL_free(info);
+		}
+		return results;
 }
 
 /*--------------------------------------------------------*/
 
 const char * tags_musicbrainz_url(GlyrQuery * sets)
 {
-    return generic_musicbrainz_url(sets);
+		return generic_musicbrainz_url(sets);
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource tags_musicbrainz_src =
 {
-    .name = "musicbrainz",
-    .key  = 'm',
-    .parser    = tags_musicbrainz_parse,
-    .get_url   = tags_musicbrainz_url,
-    .endmarker = NULL,
-    .free_url  = true,
-    .quality   = 90,
-    .speed     = 90,
-    .type      = GET_TAGS
+		.name = "musicbrainz",
+		.key  = 'm',
+		.parser    = tags_musicbrainz_parse,
+		.get_url   = tags_musicbrainz_url,
+		.endmarker = NULL,
+		.free_url  = true,
+		.quality   = 90,
+		.speed     = 90,
+		.type      = GET_TAGS
 };
