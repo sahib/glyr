@@ -1,3 +1,12 @@
+<style type="text/css">
+<!--
+.lnr { color: #a8a8a8; background-color: #080808; }
+.Conditional { color: #8787ff; }
+.String { color: #87af5f; }
+.rubyStringDelimiter { color: #afaf5f; }
+.rubyConstant { color: #d75f5f; }
+-->
+</style>
 <h1>_Glyr_ is a searcheninge for musicrelated metadata</h1>
 
 It comes both in a commandline interface tool and as a C library, both with an easy to use interface.
@@ -65,15 +74,7 @@ Indeed. Should have named it 'Glyros'.
 A decent knowledge of C might be required, but the code is staright forward.
 In the ruby wrapper you can almost use english to order covers:
 
-<style type="text/css">
-<!--
-.lnr { color: #a8a8a8; background-color: #080808; }
-.Conditional { color: #8787ff; }
-.String { color: #87af5f; }
-.rubyStringDelimiter { color: #afaf5f; }
-.rubyConstant { color: #d75f5f; }
--->
-</style>
+
 
 <pre>
 <span class="lnr"> 1 </span>spit = <span class="rubyConstant">GlyrosSpit</span>.new <br>
