@@ -164,8 +164,7 @@ static void get_list_from_type(MetaDataFetcher * fetch)
 
 static void init_provider_list(void)
 {
-    GList * fetch;
-    for(fetch = glyrMetaDataPluginList; fetch; fetch = fetch->next)
+    for(GList * fetch = glyrMetaDataPluginList; fetch; fetch = fetch->next)
         get_list_from_type((MetaDataFetcher *)(fetch->data));
 }
 

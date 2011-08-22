@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * tracklist_musicbrainz_url(GlyrQuery * sets)
+const gchar * tracklist_musicbrainz_url(GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=Official&limit=10&title=%album%&limit=1";
 }
@@ -40,9 +40,12 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
 {
     gchar * beg = (gchar*)data;
     GList * collection = NULL;
-    gint ctr = 0;
+    gint item_ctr = 0;
+    
+    /* Hop over album title */
+    beg = strstr(beg,TIT_BEGIN);
 
-    while(continue_search(ctr,capo->s) && (beg = strstr(beg+1,TIT_BEGIN)) != NULL)
+    while(continue_search(item_ctr,capo->s) && (beg = strstr(beg + (sizeof TIT_BEGIN) - 1,TIT_BEGIN)) != NULL)
     {
         gchar * dy;
         gchar * value = copy_value(beg+strlen(TIT_BEGIN),strstr(beg,TIT_ENDIN));
@@ -52,11 +55,11 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
             GlyrMemCache * cont = DL_init();
             cont->data = beautify_lyrics(value);
             cont->size = strlen(cont->data);
-            cont->duration = atoi(durat) / 1e3;
-            cont->dsrc = strdup(url);
+            cont->duration = strtol(durat,NULL,10) / 1e3;
+            cont->dsrc = g_strdup(url);
             collection = g_list_prepend(collection,cont);
 
-            ctr++;
+            item_ctr++;
 
             /* free & jump to next */
             g_free(value);
@@ -75,33 +78,42 @@ GList * tracklist_musicbrainz_parse(cb_object * capo)
     GList * ls = NULL;
     gchar * release_ID = NULL;
 
-    if( (release_ID = copy_value(strstr(capo->cache->data,REL_ID_BEGIN)+strlen(REL_ID_BEGIN),strstr(capo->cache->data,REL_ID_ENDIN))) != NULL)
-    {
-        char * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);
-        GlyrMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
-        if(dlData)
-        {
-            ls = traverse_xml(dlData->data,capo->url,capo);
-            DL_free(dlData);
-        }
-        g_free(release_page_info_url);
-        g_free(release_ID);
-    }
-    return ls;
+    gchar * rel_id_begin = strstr(capo->cache->data,REL_ID_BEGIN);
+	if(rel_id_begin != NULL)
+	{
+		    rel_id_begin += (sizeof REL_ID_BEGIN) - 1;
+			if((release_ID = copy_value(rel_id_begin, strstr(rel_id_begin,REL_ID_ENDIN))) != NULL)
+			{
+					gchar * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);
+					GlyrMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
+					if(dlData != NULL)
+					{
+							ls = traverse_xml(dlData->data,capo->url,capo);
+							if(ls != NULL)
+							{
+								ls = g_list_reverse(ls);
+							}
+							DL_free(dlData);
+					}
+					g_free(release_page_info_url);
+					g_free(release_ID);
+			}
+	}
+	return ls;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource tracklist_musicbrainz_src =
 {
-    .name = "musicbrainz",
-    .key  = 'm',
-    .parser    = tracklist_musicbrainz_parse,
-    .get_url   = tracklist_musicbrainz_url,
-    .quality   = 90,
-    .speed     = 90,
-    .endmarker = NULL,
-    .free_url  = false,
-    .type      = GET_TRACKLIST
+		.name = "musicbrainz",
+		.key  = 'm',
+		.parser    = tracklist_musicbrainz_parse,
+		.get_url   = tracklist_musicbrainz_url,
+		.quality   = 90,
+		.speed     = 90,
+		.endmarker = NULL,
+		.free_url  = false,
+		.type      = GET_TRACKLIST
 };
 

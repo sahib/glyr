@@ -98,12 +98,12 @@ class GlyrosSpit
 		@query = Glyros::GlyrQuery.new
 	end
 
-   def get(type_enum)
+   	def get(type_enum)
 		if type_enum.is_a? Integer
 		  Glyros::glyr_opt_type(@query,type_enum)
 		  return call_get
 		end
-      nil
+      		nil
 	end	
 
 	def get
@@ -295,8 +295,8 @@ class GlyrosSpit
 				# convert to a normal Ruby Array
 				# cachelist is of no use in such a powerful language
 				until cache_head == nil
-					convert << cache_head
-					cache_head.register_free()
+					convert.insert(0,cache_head)
+					cache_head.register_free
 					cache_head = cache_head.next
 				end
 		end

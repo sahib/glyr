@@ -37,7 +37,6 @@
 //* ------------------------------------------------------- */
 
 gboolean is_initalized = FALSE;
-const gchar * locale = NULL;
 
 //* ------------------------------------------------------- */
 
@@ -555,7 +554,7 @@ void glyr_init(void)
         }
 
         /* Locale */
-        if((locale = setlocale (LC_ALL, "")) == NULL)
+        if(setlocale (LC_ALL, "") == NULL)
         {
             glyr_message(-1,NULL,"glyr: Cannot set locale!\n");
         }
@@ -602,7 +601,7 @@ static void auto_detect_parallel(MetaDataFetcher * fetcher, GlyrQuery * query)
     {
         if(fetcher->default_parallel <= 0)
         {
-            gint div = (int)(1.0/CLAMP(query->qsratio,0.01,0.99) * 2);
+            gint div = (int)(1.0/(CLAMP(query->qsratio,0.01,0.99) * 2));
             query->parallel = (div == 0) ? 3 : g_list_length(fetcher->provider) / div;
         }
         else
@@ -663,7 +662,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
                     glyr_message(2,settings,"- Type     : %s\n\n",item->name);
 
                     /* Lookup what we search for here: Images (url, or raw) or text */
-                    settings->imagejob = !item->full_data;
+                    settings->imagejob = !(item->full_data);
 
                     /* If ->parallel is <= 0, it gets autodetected */
                     auto_detect_parallel(item, settings);

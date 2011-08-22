@@ -6,9 +6,9 @@ describe GlyrosSpit do
 	end
 	
 	describe "#new" do
-   	it "takes no parameter and returns a new spit" do
-        @spit.should be_an_instance_of GlyrosSpit
-   	end
+   	    it "takes no parameter and returns a new spit" do
+           @spit.should be_an_instance_of GlyrosSpit
+   	    end
 	end
 
 	describe "#get_plugin_info" do
