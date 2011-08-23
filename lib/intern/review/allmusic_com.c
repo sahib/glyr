@@ -31,7 +31,9 @@
 #define ARTIST_PART "<td>"
 #define ARTIST_END  "</td>"
 
-const char * review_allmusic_url(GlyrQuery * s)
+/*---------------------------------*/
+
+const gchar * review_allmusic_url(GlyrQuery * s)
 {
     return "http://www.allmusic.com/search/album/%album%";
 }
@@ -39,92 +41,90 @@ const char * review_allmusic_url(GlyrQuery * s)
 #define IMG_BEGIN "<p class=\"text\">"
 #define IMG_ENDIN "</p>"
 
+/*---------------------------------*/
+
 GlyrMemCache * parse_text(GlyrMemCache * to_parse)
 {
-    GlyrMemCache * rche = NULL;
-    char * text_begin = strstr(to_parse->data,IMG_BEGIN);
+    GlyrMemCache * return_cache = NULL;
+    gchar * text_begin = strstr(to_parse->data,IMG_BEGIN);
     if(text_begin != NULL)
     {
-        char * text_endin = strstr(text_begin,IMG_ENDIN);
-        if(text_endin != NULL && text_endin - (text_begin + strlen(IMG_BEGIN)) > 0)
+        gchar * text_endin = strstr(text_begin,IMG_ENDIN);
+        if(text_endin != NULL && text_endin - (text_begin + (sizeof IMG_BEGIN) - 1) > 0)
         {
-            char * text = copy_value(text_begin + strlen(IMG_BEGIN),text_endin);
+            gchar * text = copy_value(text_begin + (sizeof IMG_BEGIN) - 1,text_endin);
             if(text != NULL)
             {
-                remove_tags_from_string(text,-1,'<','>');
-
-                rche = DL_init();
-                rche->data = strip_html_unicode(text);
-                rche->size = strlen(rche->data);
-
-                g_free(text);
-                text = NULL;
+                return_cache = DL_init();
+                return_cache->data = text;
+                return_cache->size = strlen(text);
             }
         }
     }
-    return rche;
+    return return_cache;
 }
 
+/*---------------------------------*/
+
+#define TITLE_BEGIN  "<a href=\"\">Title</a></th>"
+#define SINGLE_ENDMARK "<div id=\"tracks\">"
 
 GList * review_allmusic_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
-    if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
+    GList * result_list = NULL;
+    if(strstr(capo->cache->data,TITLE_BEGIN) != NULL)
     {
+		/* We're directly on the start site */
         GlyrMemCache * result = parse_text(capo->cache);
-        r_list = g_list_prepend(r_list, result);
-        return r_list;
+        result_list = g_list_prepend(result_list, result);
+        return result_list;
     }
 
-    char * search_begin = NULL;
+    gchar * search_begin = NULL;
     if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
     {
+		/* Oh, nothing found */
         return NULL;
     }
 
-    int urlc = 0;
-    char *  node = search_begin;
-    while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
+    gchar *  node = search_begin;
+    while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,SEARCH_NODE)))
     {
-        char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
+        gchar * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
         if(url != NULL)
         {
-            // We have the URL - now check the artist to be the one
-            char * rr = strstr(node+1,ARTIST_PART);
+            /* We have the URL - now check the artist to be the one we want */
+            gchar * rr = strstr(node+1,ARTIST_PART);
             if(rr != NULL)
             {
-                char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
+                gchar * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
                 if(artist != NULL)
                 {
                     if(levenshtein_strcasecmp(capo->s->artist,artist) <= capo->s->fuzzyness - 1 /* bit dangerouse here*/)
                     {
-                        char * review_url = g_strdup_printf("%s/review",url);
+                        gchar * review_url = g_strdup_printf("%s/review",url);
                         if(review_url)
                         {
-                            GlyrMemCache * dl = download_single(review_url,capo->s,"<div id=\"tracks\">");
+                            GlyrMemCache * dl = download_single(review_url,capo->s,SINGLE_ENDMARK);
                             if(dl != NULL)
                             {
                                 GlyrMemCache * result = parse_text(dl);
                                 if(result != NULL)
                                 {
-                                    r_list = g_list_prepend(r_list,result);
-                                    urlc++;
+                                    result_list = g_list_prepend(result_list,result);
                                 }
                                 DL_free(dl);
                             }
                             g_free(review_url);
-                            review_url = NULL;
                         }
                     }
                 }
                 g_free(artist);
-                artist=NULL;
             }
             g_free(url);
-            url=NULL;
         }
     }
-    return r_list;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/
@@ -135,7 +135,6 @@ MetaDataSource review_allmusic_src =
     .key  = 'm',
     .parser    = review_allmusic_parse,
     .get_url   = review_allmusic_url,
-    .endmarker = "<div id=\"right-sidebar\">",
     .quality   = 75,
     .speed     = 40,
     .free_url  = false,

@@ -415,7 +415,7 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
     // when amazon's startpage showed me "Hooray for Boobies",
     // because I searched for the Bloodhoundgang album...
     // (because I have it already of course! ;-))
-    curl_easy_setopt(eh, CURLOPT_COOKIEJAR ,"");
+   // curl_easy_setopt(eh, CURLOPT_COOKIEJAR ,"");
 }
 
 /*--------------------------------------------------------*/

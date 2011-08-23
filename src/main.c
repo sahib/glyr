@@ -561,7 +561,7 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     int * current = s->callback.user_pointer;
 
     // Text Represantation of this item
-    if(s->verbosity > 1)
+    if(s->verbosity >= 1)
     {
         print_item(s,c,*(current));
     }
@@ -571,8 +571,8 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     {
         gsize write_len = strlen(write_to);
         if(g_ascii_strncasecmp(write_to,"stdout",write_len) == 0||
-                g_ascii_strncasecmp(write_to,"stderr",write_len) == 0||
-                g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
+           g_ascii_strncasecmp(write_to,"stderr",write_len) == 0||
+           g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
         {
             glyr_write(c,write_to);
         }
@@ -583,8 +583,8 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
             {
                 if(s->verbosity > 1)
                 {
-                    message(2,s,stderr,"\nWRITE to '%s'\n",path);
-                    message(2,s,stderr,"////////////////////\n");
+                    message(1,s,stderr,"\nWRITE to '%s'\n",path);
+                    message(1,s,stderr,"////////////////////\n");
                 }
 
                 if(glyr_write(c,path) == -1)

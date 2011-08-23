@@ -3,10 +3,10 @@
 
 /* Monstress of URL - thanks Wireshark.. */
 #define AJAX_URL "http://www.metal-archives.com/search/ajax-advanced/searching/albums/" \
- 	         "?bandName=%artist%&exactBandMatch=1&releaseTitle=%album%"             \
-		 "&exactReleaseMatch=0&releaseType=&_=1313619222250&sEcho=1"            \
-		 "&iColumns=3&sColumns=&iDisplayStart=0"                                \
-		 "&iDisplayLength=100&sNames=%%2C%%2C"
+ 	             "?bandName=%artist%&exactBandMatch=1&releaseTitle=%album%"             \
+		         "&exactReleaseMatch=0&releaseType=&_=1313619222250&sEcho=1"            \
+		         "&iColumns=3&sColumns=&iDisplayStart=0"                                \
+		         "&iDisplayLength=100&sNames=%%2C%%2C"
 
 const gchar * review_metallum_url(GlyrQuery * s)
 {
@@ -63,7 +63,7 @@ GList * review_metallum_parse(cb_object * capo)
     {
         node_ctr++;
 
-        /* Only take the album url */
+        /* Only take the album url, not the other urls */
         if(node_ctr % 2 == 0)
         {
             node += nodelen;

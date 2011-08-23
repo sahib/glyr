@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * review_amazon_url(GlyrQuery * settings)
+const gchar * review_amazon_url(GlyrQuery * settings)
 {
     return generic_amazon_url(settings,"EditorialReview");
 }
@@ -30,29 +30,23 @@ const char * review_amazon_url(GlyrQuery * settings)
 #define TheEndofCt "</Content>"
 GList * review_amazon_parse(cb_object * capo)
 {
-    char * node = capo->cache->data;
-    size_t clen = strlen(TheContent);
-
+    gchar * node = capo->cache->data;
+    gsize conlen = (sizeof TheContent) - 1;
     GList * cList = NULL;
-
-    size_t iter = 0;
-    while( (node = strstr(node+1,TheContent)) != NULL && continue_search(iter,capo->s))
+    while(continue_search(g_list_length(cList),capo->s) && (node = strstr(node+conlen,TheContent)) != NULL)
     {
-        char * endOfText = strstr(node+clen,TheEndofCt);
-        char * text = copy_value(node+clen,endOfText);
+        gchar * endOfText = strstr(node+conlen,TheEndofCt);
+        gchar * text = copy_value(node+conlen,endOfText);
         if(text)
         {
-            // Ignore reviews with 300 chars
-            // as mostly just advertisement
-            if((endOfText - (node+clen)) > 350)
+            /* Ignore reviews with 350 chars
+             * as mostly just advertisement */
+            if((endOfText - (node+conlen)) > 350)
             {
                 GlyrMemCache * tmp = DL_init();
                 tmp->data = beautify_lyrics(text);
                 tmp->size = tmp->data ? strlen(tmp->data) : 0;
                 tmp->dsrc = strdup(capo->url);
-
-                iter++;
-
                 cList = g_list_prepend(cList,tmp);
             }
             g_free(text);

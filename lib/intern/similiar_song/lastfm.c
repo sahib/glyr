@@ -56,15 +56,13 @@ static gchar * in_tag(const gchar * string, const gchar * begin, const gchar * e
 
 GList * similiar_song_lastfm_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
-
-    gint urlc = 0;
+    GList * results = NULL;
     gchar * begin = capo->cache->data;
     gchar * endin = NULL;
 
     while((begin = strstr(begin, TRACK_BEGIN)) != NULL &&
-            (endin = strstr(begin, TRACK_ENDIN)) != NULL &&
-            continue_search(urlc,capo->s))
+          (endin = strstr(begin, TRACK_ENDIN)) != NULL &&
+          continue_search(g_list_length(results),capo->s))
     {
         endin += strlen(TRACK_ENDIN);
         *(endin-1) = '\0';
@@ -79,9 +77,8 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
         if((begin_artist = strstr(begin_artist, ARTIST_BEGIN)) != NULL &&
            (endin_artist = strstr(begin_artist, ARTIST_ENDIN)) != NULL)
         {
-            endin_artist += strlen(ARTIST_ENDIN);
+            endin_artist += (sizeof ARTIST_ENDIN) - 1;
             *(endin_artist-1) = '\0';
-
             artist  = in_tag(begin_artist,NAME_BEGIN,NAME_ENDIN);
         }
 
@@ -89,40 +86,34 @@ GList * similiar_song_lastfm_parse(cb_object * capo)
         if(composed != NULL)
         {
             GlyrMemCache * result = DL_init();
-
             result->data = composed;
             result->size = strlen(composed);
             result->dsrc = strdup(capo->url);
 
-            r_list = g_list_prepend(r_list, result);
-            urlc++;
+            results = g_list_prepend(results, result);
         }
 
-        if(track)
-            g_free(track);
-        if(artist)
-            g_free(artist);
-        if(match)
-            g_free(match);
-        if(url)
-            g_free(url);
+		g_free(track);
+		g_free(artist);
+		g_free(match);
+		g_free(url);
 
-        begin=endin;
-    }
-    return r_list;
+		begin=endin;
+	}
+	return results;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource similar_song_lastfm_src =
 {
-    .name = "lastfm",
-    .key  = 'l',
-    .parser    = similiar_song_lastfm_parse,
-    .get_url   = similiar_song_lastfm_url,
-    .quality   = 90,
-    .speed     = 90,
-    .endmarker = NULL,
-    .free_url  = false,
-    .type      = GET_SIMILIAR_SONGS
+		.name = "lastfm",
+		.key  = 'l',
+		.parser    = similiar_song_lastfm_parse,
+		.get_url   = similiar_song_lastfm_url,
+		.quality   = 90,
+		.speed     = 90,
+		.endmarker = NULL,
+		.free_url  = false,
+		.type      = GET_SIMILIAR_SONGS
 };

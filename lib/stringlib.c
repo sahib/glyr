@@ -670,7 +670,6 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
                         tLen = (tLen < rest) ? tLen : rest;
                         memcpy (string+n, Tpon, tLen);
                         memmove(Tpon,Tpon+tLen,rest-tLen);
-
                         ctr += tLen;
                     }
                 }

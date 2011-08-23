@@ -110,7 +110,7 @@ you can also drop me a mail: <sahib@online.de>
 
 Thanks for any help in advance!
 
-<h3>Write software that uses glyr</h3>
+<h3>WRITE SOFTWARE THAT USES GLYR</h3>
 May sound strange, but you're giving me a reason to maintain it, write new providers etc.
 Also bugreports (well, there are no bugs, just in case) are appreciated, or just questions.
 Those help to make the documentation more clear.
