@@ -25,7 +25,7 @@
 
 /*--------------------------------------------------------*/
 
-const char * lyrics_lyricswiki_url(GlyrQuery * settings)
+const gchar * lyrics_lyricswiki_url(GlyrQuery * settings)
 {
     return LW_URL;
 }
@@ -33,10 +33,9 @@ const char * lyrics_lyricswiki_url(GlyrQuery * settings)
 /*--------------------------------------------------------*/
 
 // Compare response, so lyricswiki's search did not fool us
-// This is to prevent completely wrong results, therfore the quite high tolerance
-bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * capo)
+gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_object * capo)
 {
-    bool res = false;
+    gboolean res = false;
     if(to_artist && to_title && capo)
     {
         gchar * tmp_artist = copy_value(to_artist,strstr(to_artist,"</artist>"));
@@ -45,14 +44,14 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
             gchar * tmp_title = copy_value(to_title, strstr(to_title ,"</song>" ));
             if(tmp_title != NULL)
             {
-                char * cmp_a =  g_strdup_printf("<artist>%s",capo->s->artist);
+                gchar * cmp_a =  g_strdup_printf("<artist>%s",capo->s->artist);
                 if(cmp_a != NULL)
                 {
-                    char * cmp_t =  g_strdup_printf("<song>%s",capo->s->title);
+                    gchar * cmp_t =  g_strdup_printf("<song>%s",capo->s->title);
                     if(cmp_t != NULL)
                     {
                         if((levenshtein_strcasecmp(cmp_a,tmp_artist) <= capo->s->fuzzyness &&
-                                levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
+                            levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
                         {
                             res = true;
                         }
@@ -71,61 +70,54 @@ bool lv_cmp_content(const char *to_artist, const char * to_title, cb_object * ca
 
 /*--------------------------------------------------------*/
 
+#define LYR_BEGIN "'17'/></a></div>"
+#define LYR_ENDIN "<!--"
+
 GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
-    GlyrMemCache * result = NULL;
-    GList * r_list = NULL;
-
+    GList * result_list = NULL;
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
-        char *find, *endTag;
-        if( (find = strstr(capo->cache->data,"<url>")))
+        gchar *find, *endTag;
+        if((find = strstr(capo->cache->data,"<url>")) != NULL)
         {
             nextTag(find);
-            if( (endTag = strstr(find, "</url>")))
+            if((endTag = strstr(find, "</url>")) != NULL)
             {
-                char * wiki_page_url = copy_value(find,endTag);
-                if(wiki_page_url)
+                gchar * wiki_page_url = copy_value(find,endTag);
+                if(wiki_page_url != NULL)
                 {
                     GlyrMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
-                    if(new_cache)
+                    if(new_cache != NULL)
                     {
-                        char *lyr_begin, *lyr_end;
-                        if( (lyr_begin = strstr(new_cache->data, "'17'/></a></div>")) )
+                        gchar *lyr_begin, *lyr_end;
+                        if( (lyr_begin = strstr(new_cache->data,LYR_BEGIN)) != NULL)
                         {
                             nextTag(lyr_begin);
                             nextTag(lyr_begin);
                             nextTag(lyr_begin);
 
-                            if( (lyr_end = strstr(lyr_begin, "<!--")))
+                            if((lyr_end = strstr(lyr_begin,LYR_ENDIN)) != NULL) 
                             {
-                                char * lyr = copy_value(lyr_begin,lyr_end);
+                                gchar * lyr = copy_value(lyr_begin,lyr_end);
                                 if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL)
                                 {
-                                    result = DL_init();
+                                    GlyrMemCache * result = DL_init();
                                     result->data = lyr;
                                     result->size = ABS(lyr_end - lyr_begin);
                                     result->dsrc = strdup(wiki_page_url);
+        							result_list = g_list_prepend(result_list,result);
                                 }
-                                lyr_end=NULL;
                             }
-                            lyr_begin=NULL;
                         }
                         DL_free(new_cache);
                     }
                     g_free(wiki_page_url);
                 }
-                endTag=NULL;
             }
-            find=NULL;
         }
     }
-
-    if(result)
-    {
-        r_list = g_list_prepend(r_list,result);
-    }
-    return r_list;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/

@@ -27,20 +27,23 @@ const char * lyrics_magistrix_url(GlyrQuery * settings)
     return MG_URL;
 }
 
+/*--------------------------------------------------------*/
 
 #define OPT_START "<img align=\"absmiddle\" alt=\"Phone2\""
 #define OPT_END   "<img align=\"absmiddle\" alt=\"Phone\""
 
+/*--------------------------------------------------------*/
+
 static GlyrMemCache * parse_lyric_page(const char * buffer)
 {
     GlyrMemCache * result = NULL;
-    if(buffer)
+    if(buffer != NULL)
     {
-        char * begin = strstr(buffer,"<div id='songtext'>");
-        if(begin)
+        gchar * begin = strstr(buffer,"<div id='songtext'>");
+        if(begin != NULL)
         {
             begin = strstr(begin,"</div>");
-            if(begin)
+            if(begin != NULL)
             {
                 /* Another running gag during developement */
                 gchar * ring_tone = strstr(begin,OPT_START);
@@ -55,10 +58,10 @@ static GlyrMemCache * parse_lyric_page(const char * buffer)
                     end = strstr(begin+1,"</div>");
                 }
 
-                if(end)
+                if(end != NULL)
                 {
-                    char * lyr = copy_value(begin,end);
-                    if(lyr)
+                    gchar * lyr = copy_value(begin,end);
+                    if(lyr != NULL)
                     {
                         result = DL_init();
                         result->data = strreplace(lyr,"<br />","");
@@ -72,104 +75,144 @@ static GlyrMemCache * parse_lyric_page(const char * buffer)
     return result;
 }
 
-static bool approve_content(char * content, const char * compare, size_t fuzz)
-{
-    if(compare)
-    {
-        char * tmp = strdup(compare);
-        if(levenshtein_strcasecmp(content,tmp) <= fuzz)
-        {
-            g_free(tmp);
-            return true;
-        }
-        g_free(tmp);
-    }
-    return false;
-}
+/*--------------------------------------------------------*/
 
 #define ARTIST_BEGIN "class=\"artistIcon bgMove\">"
 #define TITLE_BEGIN "\" class=\"lyricIcon bgMove\">"
-#define URL_BEGIN   "<a href=\""
-#define SEARCH_END   "</a>"
-#define MAX_TRIES 7
+#define ARTIST_ENDIN "</a>"
+#define TITLE_ENDING "</a>"
+
+static gboolean convert_levenshtein(GlyrQuery * s, gchar * content, gchar * compare)
+{
+	gboolean result = FALSE;
+    if(compare != NULL)
+    {
+		gchar * normalized = beautify_lyrics(content);
+		if(normalized != NULL)
+		{
+        	if(levenshtein_strcasecmp(normalized,compare) <= s->fuzzyness)
+        	{
+				result = TRUE;
+        	}
+			g_free(normalized);
+		}
+    }
+    return result;
+}
+
+/*--------------------------------------------------------*/
+
+static gboolean approve_content(GlyrQuery * s, gchar * node)
+{
+	gboolean result = FALSE;
+	gchar * artist_begin = strstr(node,ARTIST_BEGIN);
+	if(artist_begin != NULL)
+	{
+		gsize artist_beg_len = (sizeof ARTIST_BEGIN) - 1;
+		gchar * artist = copy_value(artist_begin + artist_beg_len, strstr(node,ARTIST_ENDIN));
+		if(artist != NULL)
+		{
+			if(convert_levenshtein(s,artist,s->artist))
+			{
+				gchar * title_begin = strstr(node,TITLE_BEGIN);
+				if(title_begin != NULL)
+				{
+					gsize title_beg_len = (sizeof TITLE_BEGIN) - 1;
+					gchar * title = copy_value(title_begin + title_beg_len,strstr(title_begin,TITLE_ENDING));
+					if(title != NULL)
+					{
+						if(convert_levenshtein(s,title,s->title))
+						{
+								result = TRUE;
+						}
+						g_free(title);
+					}
+				}
+			}
+			g_free(artist);
+		}
+	}
+	return result;
+}
+
+/*--------------------------------------------------------*/
+
+#define URL_BEGIN "<a href=\""
+#define MAX_TRIES 5
+#define NODE_BEGIN "<tr class='topLine'>"
+#define COMMENT_ENDMARK "<div class='comments'"
+
+/*--------------------------------------------------------*/
+
+static void query_search_page_results(cb_object * capo, GList ** result_list)
+{
+	gchar * node = capo->cache->data;
+	gint pages_tried_counter = 0;
+	gsize node_begin_len = (sizeof NODE_BEGIN) - 1;
+	while(continue_search(g_list_length(*result_list),capo->s) && (node = strstr(node+node_begin_len,NODE_BEGIN)) && MAX_TRIES >= pages_tried_counter)
+	{
+		if(approve_content(capo->s, node) == TRUE)
+		{
+			gchar * url_begin = strstr(node,URL_BEGIN);
+			if(url_begin != NULL)
+			{
+				gsize url_begin_len = (sizeof URL_BEGIN) - 1;
+				url_begin = strstr(url_begin + url_begin_len, URL_BEGIN);
+				if(url_begin != NULL)
+				{
+					url_begin += url_begin_len;
+					gchar * url = copy_value(url_begin,strstr(url_begin,TITLE_BEGIN));
+					if(url != NULL)
+					{
+						gchar * dl_url = g_strdup_printf("www.magistrix.de%s",url);
+						if(dl_url != NULL)
+						{
+							/* Skip download of comments */
+							pages_tried_counter += 1;
+							GlyrMemCache * dl_cache = download_single(dl_url,capo->s,COMMENT_ENDMARK);
+							if(dl_cache != NULL)
+							{
+								GlyrMemCache * result = parse_lyric_page(dl_cache->data);
+								if(result != NULL)
+								{
+									result->dsrc = g_strdup(dl_url);
+									*result_list = g_list_prepend(*result_list,result);
+								}
+								DL_free(dl_cache);
+							}
+							g_free(dl_url);
+						}
+						g_free(url);
+					}
+				}
+			}
+		}
+	}
+}
+
+/*--------------------------------------------------------*/
 
 GList * lyrics_magistrix_parse (cb_object * capo)
 {
-    GList * r_list=NULL;
-    if( strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   // No songtext page?
+    GList * result_list = NULL;
+    if(strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   /* "No songtext" page? */
     {
-        if( strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   // Are we not on the search result page?
+        if(strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   /* Are we not on the search result page? */
         {
             GlyrMemCache * result = parse_lyric_page(capo->cache->data);
-            if(result)
+            if(result != NULL)
             {
-                result->dsrc = strdup(capo->url);
-                r_list = g_list_prepend(r_list,result);
+                result_list = g_list_prepend(result_list,result);
             }
         }
         else
         {
-            char * node = capo->cache->data;
-            int ctr = 0, urlc = 0;
-            while( (node = strstr(node+1,"<tr class='topLine'>")) && MAX_TRIES >= ctr && continue_search(urlc,capo->s))
-            {
-                ctr++;
-                char * artist = copy_value(strstr(node,ARTIST_BEGIN)+strlen(ARTIST_BEGIN),strstr(node,"</a>"));
-                if(artist)
-                {
-                    if(approve_content(artist,capo->s->artist,capo->s->fuzzyness))
-                    {
-                        char * title_begin = strstr(node,TITLE_BEGIN);
-                        if(title_begin)
-                        {
-                            char * title = copy_value(title_begin+strlen(TITLE_BEGIN),strstr(title_begin,"</a>"));
-                            if(title)
-                            {
-                                if(approve_content(title,capo->s->title,capo->s->fuzzyness))
-                                {
-                                    char * url_begin = strstr(node,URL_BEGIN);
-                                    if(url_begin)
-                                    {
-                                        url_begin = strstr(url_begin+1,URL_BEGIN);
-                                        if(url_begin)
-                                        {
-                                            char * url = copy_value(url_begin+strlen(URL_BEGIN),title_begin);
-                                            if(url)
-                                            {
-                                                char * dl_url = g_strdup_printf("www.magistrix.de%s",url);
-                                                if(dl_url)
-                                                {
-                                                    // We don't need the ugly comments
-                                                    GlyrMemCache * dl_cache = download_single(dl_url,capo->s,"<div class='comments'");
-                                                    if(dl_cache)
-                                                    {
-                                                        GlyrMemCache * result = parse_lyric_page(dl_cache->data);
-                                                        if(result)
-                                                        {
-                                                            urlc++;
-                                                            result->dsrc = strdup(dl_url);
-                                                            r_list = g_list_prepend(r_list,result);
-                                                        }
-                                                        DL_free(dl_cache);
-                                                    }
-                                                    g_free(dl_url);
-                                                }
-                                                g_free(url);
-                                            }
-                                        }
-                                    }
-                                }
-                                g_free(title);
-                            }
-                        }
-                    }
-                    g_free(artist);
-                }
-            }
+			query_search_page_results(capo,&result_list);
         }
     }
-    return r_list;
+    return result_list;
 }
+
 /*--------------------------------------------------------*/
 
 MetaDataSource lyrics_magistrix_src =
@@ -179,7 +222,7 @@ MetaDataSource lyrics_magistrix_src =
     .parser    = lyrics_magistrix_parse,
     .get_url   = lyrics_magistrix_url,
     .type      = GET_LYRICS,
-    .quality   = 25,
+    .quality   = 60,
     .speed     = 70,
     .endmarker = NULL,
     .free_url  = false

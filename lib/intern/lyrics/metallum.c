@@ -2,19 +2,25 @@
 #include "../../stringlib.h"
 
 #define AJAX_URL "http://www.metal-archives.com/search/ajax-advanced/searching/songs/" \
-		 "?songTitle=%title%&bandName=%artist%"                                \
-		 "&_=1313668588182&sEcho=1&iColumns=5&sColumns=&iDisplayStart=0"       \
-		 "&iDisplayLength=100&sNames=%%2C%%2C%%2C%%2C"
+		         "?songTitle=%title%&bandName=%artist%"                                \
+		         "&_=1313668588182&sEcho=1&iColumns=5&sColumns=&iDisplayStart=0"       \
+		         "&iDisplayLength=100&sNames=%%2C%%2C%%2C%%2C"
 
 #define SUBST_URL "http://www.metal-archives.com/release/ajax-view-lyrics/id/%s"
+
+/*--------------------------------------------------------*/
 
 const gchar * lyrics_metallum_url(GlyrQuery * s)
 {
     return AJAX_URL;
 }
 
+/*--------------------------------------------------------*/
+
 #define ID_START "id=\\\"lyricsLink_"
 #define ID_END   "\\\""
+
+/*--------------------------------------------------------*/
 
 GList * lyrics_metallum_parse(cb_object * capo)
 {
@@ -32,10 +38,6 @@ GList * lyrics_metallum_parse(cb_object * capo)
                 GlyrMemCache * content_cache = download_single(content_url,capo->s,NULL);
                 if(content_cache != NULL)
                 {
-                    gchar * no_newlines = strreplace(content_cache->data,"<br />","");
-                    g_free(content_cache->data);
-                    content_cache->data = no_newlines;
-                    content_cache->size = strlen(no_newlines);
                     result_items = g_list_prepend(result_items, content_cache);
                 }
                 g_free(content_url);
@@ -46,6 +48,8 @@ GList * lyrics_metallum_parse(cb_object * capo)
     return result_items;
 }
 
+/*--------------------------------------------------------*/
+
 MetaDataSource lyrics_metallum_src =
 {
     .name = "metallum",
@@ -53,7 +57,7 @@ MetaDataSource lyrics_metallum_src =
     .parser    = lyrics_metallum_parse,
     .get_url   = lyrics_metallum_url,
     .endmarker = NULL,
-    .quality   = 70,
+    .quality   = 55,
     .speed     = 70,
     .free_url  = false,
     .type      = GET_LYRICS

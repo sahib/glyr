@@ -274,6 +274,14 @@ class GlyrosSpit
 		Glyros::glyr_opt_qsratio(@query,qsratio)
 	end
 
+	def force_utf8?
+		@query.force_utf8
+	end
+
+	def force_utf8=(will_force) 
+		Glyros::glyr_opt_force_utf8(@query,will_force)
+	end
+
 	def self.type_to_s(mytype)
 		Glyros::glyr_type_to_string(mytype)
 	end	

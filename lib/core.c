@@ -1040,7 +1040,6 @@ static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
                 /* UTF8 was forced, and this cache didn't pass -> deletre */
                 glyr_message(2,query,"!");
 
-
                 DL_free(cache);
                 deleted++;
 
