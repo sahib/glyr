@@ -26,8 +26,8 @@
 
 const char * photos_google_url(GlyrQuery * s)
 {
-    const char * result = NULL;
-    char * searchterm = strdup("%artist%+band+photos");
+    const gchar * result = NULL;
+    gchar * searchterm = g_strdup("%artist%+band+photos");
     if(searchterm != NULL)
     {
         result = generic_google_url(s,searchterm);

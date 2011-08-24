@@ -23,6 +23,8 @@
 #define LINE_BEGIN "<photo id="
 #define LINE_ENDIN "/>"
 
+/*------------------------------------*/
+
 const char * photos_flickr_url(GlyrQuery * settings)
 {
     if(settings->img_max_size <= 175 || settings->img_max_size == -1)
@@ -43,6 +45,8 @@ const char * photos_flickr_url(GlyrQuery * settings)
                            settings->number
                           );
 }
+
+/*------------------------------------*/
 
 static char * get_field_by_name(const char * string, const char * name)
 {
@@ -68,21 +72,16 @@ static char * get_field_by_name(const char * string, const char * name)
 
 GList * photos_flickr_parse(cb_object * capo)
 {
-    // Needed: ID,secret,server,farm
-    char * ph_begin = capo->cache->data;
-    size_t urlc = 0;
-    GList * r_list = NULL;
+    gchar * ph_begin = capo->cache->data;
+    GList * result_list = NULL;
 
-    while( (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL && continue_search(urlc,capo->s))
+    while(continue_search(g_list_length(result_list),capo->s) && (ph_begin=strstr(ph_begin,LINE_BEGIN)) != NULL)
     {
-        if(! *(++ph_begin))
-            continue;
-
-        char * ph_end = strstr(ph_begin,LINE_ENDIN);
-        if(ph_end)
+        gchar * ph_end = strstr(ph_begin,LINE_ENDIN);
+        if(ph_end != NULL)
         {
-            char * linebf = copy_value(ph_begin,ph_end);
-            if(linebf)
+            gchar * linebf = copy_value(ph_begin,ph_end);
+            if(linebf != NULL)
             {
                 gchar * ID = get_field_by_name(linebf, "id=");
                 gchar * SC = get_field_by_name(linebf, "secret=");
@@ -94,35 +93,29 @@ GList * photos_flickr_parse(cb_object * capo)
                 GlyrMemCache * cache = DL_init();
                 cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
                 cache->size = strlen(cache->data);
-                r_list = g_list_prepend(r_list,cache);
+                result_list = g_list_prepend(result_list,cache);
 
-                if(ID)
-                    g_free(ID);
-                if(SC)
-                    g_free(SC);
-                if(SV)
-                    g_free(SV);
-                if(FR)
-                    g_free(FR);
-
-                urlc++;
-            }
-        }
+		g_free(ID);
+		g_free(SC);
+		g_free(SV);
+		g_free(FR);
+	    }
+	}
     }
-    return r_list;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource photos_flickr_src =
 {
-    .name = "flickr",
-    .key  = 'f',
-    .parser    = photos_flickr_parse,
-    .get_url   = photos_flickr_url,
-    .type      = GET_ARTIST_PHOTOS,
-    .quality   = 40,
-    .speed     = 65,
-    .endmarker = NULL,
-    .free_url  = true
+	.name = "flickr",
+	.key  = 'f',
+	.parser    = photos_flickr_parse,
+	.get_url   = photos_flickr_url,
+	.type      = GET_ARTIST_PHOTOS,
+	.quality   = 40,
+	.speed     = 65,
+	.endmarker = NULL,
+	.free_url  = true
 };

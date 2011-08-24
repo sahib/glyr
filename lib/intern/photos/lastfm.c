@@ -100,10 +100,9 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
 GList * photos_lastfm_parse(cb_object * capo)
 {
     gchar * root = capo->cache->data;
-    GList * r_list = NULL;
-    gsize urlc = 0;
+    GList * result_list = NULL;
 
-    while ( (root = strstr(root,SIZE_FO)) != NULL && continue_search(urlc,capo->s))
+    while (continue_search(g_list_length(result_list),capo->s) && (root = strstr(root,SIZE_FO)) != NULL)
     {
         gchar * begin = root + strlen(SIZE_FO);
         if(size_fits(capo->s,&begin) == TRUE)
@@ -117,14 +116,13 @@ GList * photos_lastfm_parse(cb_object * capo)
                     GlyrMemCache * cache = DL_init();
                     cache->data = urlb;
                     cache->size = strlen(urlb);
-                    r_list = g_list_prepend(r_list,cache);
-                    urlc++;
+                    result_list = g_list_prepend(result_list,cache);
                 }
             }
         }
-        root += strlen(SIZE_FO) - 1;
+        root += (sizeof SIZE_FO) - 1;
     }
-    return r_list;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/

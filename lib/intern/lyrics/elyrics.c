@@ -55,7 +55,7 @@ const gchar * lyrics_elyrics_url(GlyrQuery * settings)
 #define BAD_STRING "Lyrics removed for copyright protection!"
 
 /* This data is seperated from the actual lyrics => remove it from here */
-static void remove_from_string(gchar * string)
+static void remove_from_from_string(gchar * string)
 {
     gchar * from_middle = strstr(string,FROM_MIDDLE);
     if(from_middle != NULL)
@@ -100,18 +100,16 @@ static GList * lyrics_elyrics_parse(cb_object * capo)
 
             if(lyrics_end != NULL)
             {
-                gchar * data = copy_value(lyrics_begin,lyrics_end);
-                if(data != NULL)
-                {
-                    GlyrMemCache * item = DL_init();
-                    remove_from_string(data);
-                    item->data = data;
-                    item->size = lyrics_end - lyrics_begin;
+		    /* Modifying original buffer is allowed */
+		    lyrics_end[0] = '\0';
 
-                    results = g_list_prepend(results,item);
-                }
-            }
-        }
+		    GlyrMemCache * item = DL_init();
+		    remove_from_from_string(lyrics_begin);
+		    item->data = g_strdup(lyrics_begin);
+		    item->size = lyrics_end - lyrics_begin;
+		    results = g_list_prepend(results,item);
+	    }
+	}
     }
     return results;
 }
@@ -120,14 +118,14 @@ static GList * lyrics_elyrics_parse(cb_object * capo)
 
 MetaDataSource lyrics_elyrics_src =
 {
-    .name = "elyrics",
-    .key  = 'e',
-    .encoding  = "LATIN1",
-    .parser    = lyrics_elyrics_parse,
-    .get_url   = lyrics_elyrics_url,
-    .type      = GET_LYRICS,
-    .endmarker = NULL,
-    .quality   = 75,
-    .speed     = 75,
-    .free_url  = true
+	.name = "elyrics",
+	.key  = 'e',
+	.encoding  = "LATIN1",
+	.parser    = lyrics_elyrics_parse,
+	.get_url   = lyrics_elyrics_url,
+	.type      = GET_LYRICS,
+	.endmarker = NULL,
+	.quality   = 75,
+	.speed     = 75,
+	.free_url  = true
 };

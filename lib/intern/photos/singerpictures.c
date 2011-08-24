@@ -83,7 +83,7 @@ static gboolean check_image_size(GlyrQuery * s, gchar * ref_to_img_start)
             gint ratio = (x+y)/2;
 
             if((s->img_min_size == -1 || ratio >= s->img_min_size) &&
-                    (s->img_max_size == -1 || ratio <= s->img_max_size))
+               (s->img_max_size == -1 || ratio <= s->img_max_size))
                 result = TRUE;
         }
     }

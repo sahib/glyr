@@ -122,6 +122,9 @@ void help_short(GlyrQuery * s)
             IN"-8 --force-utf8       Forces utf8 encoding for text items, invalid encodings get sorted out\n"
             IN"-j --callback         Command: Set a bash command to be executed when a item is finished downloading;\n"
             IN"                      The special string <path> is expanded with the actual path to the data.\n"
+	    IN"\n\n"
+	    "With each item received you get a link to the original source, please refer to the individual terms of use,\n"
+	    "copying and distributing of this data might be not allowed.\n"
            );
 
     message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",glyr_version());
