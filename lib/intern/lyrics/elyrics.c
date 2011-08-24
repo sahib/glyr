@@ -100,7 +100,9 @@ static GList * lyrics_elyrics_parse(cb_object * capo)
 
             if(lyrics_end != NULL)
             {
-		    /* Modifying original buffer is allowed */
+		    /* Modifying original buffer is allowed 
+		     * As long it's not saved in the result cache
+		     * */
 		    lyrics_end[0] = '\0';
 
 		    GlyrMemCache * item = DL_init();

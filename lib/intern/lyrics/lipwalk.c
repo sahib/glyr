@@ -20,7 +20,6 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define IS_NOT_SEARCH_PAGE "<div id=\"lyrics\">"
 #define TRACK_BEGIN "<li class=\"trackname\"><a href=\""
 #define TRACK_ENDIN "\">"
 #define TRACK_DESCR "</a>"
@@ -40,8 +39,10 @@ const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
 static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 {
 	gchar * start = NULL;
-	gchar * end = NULL;
+	gchar * end   = NULL;
 	gchar * content = NULL;
+
+if(cache) puts(cache->data);
 
 	GlyrMemCache * result_cache = NULL;
 	if (cache && (start = strstr(cache->data,START)) != NULL)
@@ -96,16 +97,14 @@ static gboolean validate_track_description(GlyrQuery * query, gchar * descriptio
 
 GList * lyrics_lipwalk_parse(cb_object *capo)
 {
-
 	GList * result_list  = NULL;
-	if(strstr(capo->cache->data,IS_NOT_SEARCH_PAGE) != NULL)
+	if(strstr(capo->cache->data,START) != NULL)
 	{
 		GlyrMemCache * result_cache = parse_lyrics_page(capo->cache);
 		result_list = g_list_prepend(result_list,result_cache);
 	} 
 	else /* Oops, we're on the search results page, things are complicated now */
 	{    /* Happens with "In Flames" - "Trigger" e.g.                          */
-
 		gchar * search_node = capo->cache->data;
 		gsize track_len = (sizeof TRACK_BEGIN) - 1;
 		while(continue_search(g_list_length(result_list),capo->s) && (search_node = strstr(search_node + track_len,TRACK_BEGIN)))
@@ -152,8 +151,8 @@ MetaDataSource lyrics_lipwalk_src =
 	.parser    = lyrics_lipwalk_parse,
 	.get_url   = lyrics_lipwalk_url,
 	.type      = GET_LYRICS,
-	.quality   = 90,
-	.speed     = 90,
+	.quality   = 85,
+	.speed     = 60,
 	.endmarker = NULL,
 	.free_url  = false
 };
