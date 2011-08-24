@@ -25,16 +25,18 @@
 #define MAX_TRIES 5
 
 // Just return URL
-const char * lyrics_metrolyrics_url(GlyrQuery * settings)
+const gchar * lyrics_metrolyrics_url(GlyrQuery * settings)
 {
     return ML_URL;
 }
 
-static void replace_from_message_inline(char * text)
+/*--------------------------------------------------------*/
+
+static void replace_from_message_inline(gchar * text)
 {
     if(text != NULL)
     {
-        char * from_msg_start = strstr(text,"[ From: ");
+        gchar * from_msg_start = strstr(text,"[ From: ");
         if(from_msg_start != NULL)
         {
             while(from_msg_start[0] != '\n' && from_msg_start[0])
@@ -51,31 +53,36 @@ static void replace_from_message_inline(char * text)
     }
 }
 
-static GlyrMemCache * parse_lyrics_page(const char * buffer)
+/*--------------------------------------------------------*/
+#define LYRICS_DIV "<div id=\"lyrics\">"
+#define LYRICS_END "</div>"
+
+static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
 {
     GlyrMemCache * result = NULL;
-    if(buffer)
+    if(buffer != NULL)
     {
-        char * begin = strstr(buffer,"<div id=\"lyrics\">");
-        if(begin)
+        gchar * begin = strstr(buffer,LYRICS_DIV);
+        if(begin != NULL)
         {
-            char * end = strstr(begin,"</div>");
-            if(end)
+            gchar * end = strstr(begin,LYRICS_END);
+            if(end != NULL)
             {
-                char * lyr = copy_value(begin,end);
-                if(lyr)
+                gchar * lyr = copy_value(begin,end);
+                if(lyr != NULL)
                 {
                     result = DL_init();
                     replace_from_message_inline(lyr);
-                    result->data = strreplace(lyr,"</span>","");
+                    result->data = lyr;
                     result->size = strlen(result->data);
-                    g_free(lyr);
                 }
             }
         }
     }
     return result;
 }
+
+/*--------------------------------------------------------*/
 
 static bool approve_content(char * content, const char * compare, size_t fuzz)
 {
@@ -97,51 +104,55 @@ static bool approve_content(char * content, const char * compare, size_t fuzz)
     return result;
 }
 
+/*--------------------------------------------------------*/
+
 #define ROOT_NODE "<div id=\"listResults\">"
 #define NODE_BEGIN "<a href=\""
 #define NODE_ENDIN "\" title=\""
 #define TITLE_END  " Lyrics"
+#define NEXT_NODE "<li>"
+#define PAGES "<ul id=\"pages\">"
 
 GList * lyrics_metrolyrics_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
-    char * root = strstr(capo->cache->data,ROOT_NODE);
-    if(root)
+    GList * result_list = NULL;
+    gchar * root = strstr(capo->cache->data,ROOT_NODE);
+    if(root != NULL)
     {
-        size_t tries = 0;
-        char * node = root;
-        while(node && (node = strstr(node+1,NODE_BEGIN)) && (tries++) < MAX_TRIES && continue_search(tries,capo->s))
+        gsize tries = 0;
+        gchar * node = root;
+        while(continue_search(tries,capo->s) && (node = strstr(node+1,NODE_BEGIN)) && tries++ < MAX_TRIES)
         {
-            char * title_beg = strstr(node,NODE_ENDIN);
-            if(title_beg)
+            gchar * title_beg = strstr(node,NODE_ENDIN);
+            if(title_beg != NULL)
             {
-                char * title_end = strstr(title_beg,TITLE_END);
-                if(title_end)
+                gchar * title_end = strstr(title_beg,TITLE_END);
+                if(title_end != NULL)
                 {
-                    char * title = copy_value(title_beg+strlen(NODE_ENDIN),title_end);
+					gsize node_begin_len = (sizeof NODE_BEGIN) - 1;
+                    gchar * title = copy_value(title_beg + node_begin_len,title_end);
                     if(title)
                     {
                         if(approve_content(title,capo->s->title,capo->s->fuzzyness))
                         {
-                            char * url = copy_value(node+strlen(NODE_BEGIN),title_beg);
-                            if(url)
+							gsize node_endin_len = (sizeof NODE_ENDIN) - 1;
+                            gchar * url = copy_value(node + node_endin_len, title_beg);
+                            if(url != NULL)
                             {
-                                char * dl_url = g_strdup_printf("www.metrolyrics.com%s",url);
-                                if(dl_url)
+                                gchar * dl_url = g_strdup_printf("www.metrolyrics.com%s",url);
+                                GlyrMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
+                                if(dl_cache)
                                 {
-                                    GlyrMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
-                                    if(dl_cache)
+                                    GlyrMemCache * result = parse_lyrics_page(dl_cache->data);
+                                    if(result)
                                     {
-                                        GlyrMemCache * result = parse_lyrics_page(dl_cache->data);
-                                        if(result)
-                                        {
-                                            result->dsrc = strdup(dl_url);
-                                            r_list = g_list_prepend(r_list,result);
-                                        }
-                                        DL_free(dl_cache);
-                                    }
-                                    g_free(dl_url);
+                                        result->dsrc = strdup(dl_url);
+                                        result_list = g_list_prepend(result_list,result);
+									}
+                                	DL_free(dl_cache);
                                 }
+
+                                g_free(dl_url);
                                 g_free(url);
                             }
                         }
@@ -149,16 +160,17 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                     }
                 }
             }
-            // check if we accidentally reached end of results
-            char * dist = strstr(node,"<ul id=\"pages\">");
+            /* check if we accidentally reached end of results */
+            gchar * dist = strstr(node,PAGES);
 
-            // hop to next node
-            node = strstr(title_beg,"<li>");
+            /* hop to next node */
+            node = strstr(title_beg,NEXT_NODE);
 
+			/* Only advertisment behind dist */
             if(node > dist) break;
         }
     }
-    return r_list;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/
@@ -170,7 +182,7 @@ MetaDataSource lyrics_metrolyrics_src =
     .parser    = lyrics_metrolyrics_parse,
     .get_url   = lyrics_metrolyrics_url,
     .type      = GET_LYRICS,
-    .quality   = 25,
+    .quality   = 35,
     .speed     = 40,
     .endmarker = NULL,
     .free_url  = false
