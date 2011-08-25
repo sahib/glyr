@@ -23,24 +23,24 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-#define API_KEY API_KEY_LASTFM
+/* ----------------------------------------------- */
 
 const char * cover_lastfm_url(GlyrQuery * sets)
 {
-    if(sets->img_min_size <= 350 || sets->img_min_size == -1)
-    {
-        return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY;
-    }
-    return NULL;
+    return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY_LASTFM;
 }
+
+/* ----------------------------------------------- */
+
+#define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
 GList * cover_lastfm_parse(cb_object *capo)
 {
-    // Handle size requirements (Default to large)
+    /* Handle size requirements (Default to large) */
     const char *tag_ssize = NULL ;
     const char *tag_esize = "</image>";
 
-    // find desired size
+    /* find desired size */
     if( size_is_okay(300,capo->s->img_min_size,capo->s->img_max_size) )
         tag_ssize = "<image size=\"extralarge\">";
     else if( size_is_okay(125,capo->s->img_min_size,capo->s->img_max_size) )
@@ -52,39 +52,39 @@ GList * cover_lastfm_parse(cb_object *capo)
     else if ( true || false )
         tag_ssize = "<image size=\"extralarge\">";
 
-    // The (perhaps) result
+    /* The result (perhaps) */
     GlyrMemCache * result = NULL;
-    GList * r_list = NULL;
+    GList * result_list = NULL;
+    gchar * find  = capo->cache->data;
+	gsize tag_len = strlen(tag_ssize);
 
-    int urlc = 0;
-
-    char * find = capo->cache->data;
-    while( (find = strstr(find+1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
+    while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find+1, tag_ssize)) != NULL)
     {
-        char * end_tag = NULL;
-        if( (end_tag = strstr(find, tag_esize)) != NULL)
+        gchar * end_tag;
+        if((end_tag = strstr(find,tag_esize)) != NULL)
         {
-            char * url = NULL;
-            if( (url = copy_value(find + strlen(tag_ssize), end_tag)) != NULL)
+            gchar * url;
+			find += tag_len;
+            if((url = copy_value(find,end_tag)) != NULL)
             {
-                if(strcmp(url,"http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"))
+                if(strcmp(url,BAD_DEFAULT_IMAGE) != 0)
                 {
                     result = DL_init();
                     result->data = url;
-                    result->size = end_tag - (find + strlen(tag_ssize));
-                    r_list = g_list_prepend(r_list,result);
-                    urlc++;
+                    result->size = end_tag - find;
+                    result_list = g_list_prepend(result_list,result);
                 }
                 else
                 {
                     g_free(url);
-                    url=NULL;
                 }
             }
         }
     }
-    return r_list;
+    return result_list;
 }
+
+/* ----------------------------------------------- */
 
 MetaDataSource cover_lastfm_src =
 {
@@ -94,7 +94,7 @@ MetaDataSource cover_lastfm_src =
     .get_url   = cover_lastfm_url,
     .type      = GET_COVERART,
     .quality   = 90,
-    .speed     = 85,
+    .speed     = 75,
     .endmarker = NULL,
     .free_url  = false
 };

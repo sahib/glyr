@@ -139,15 +139,14 @@ const char * cover_google_url(GlyrQuery * s)
 
 GList * generic_google_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
+    GList * result_list = NULL;
     gchar * find = capo->cache->data;
-    gsize urlc = 0;
 
-    while( (find =  strstr(find+1,FIRST_RESULT)) != NULL && continue_search(urlc,capo->s))
+    while(continue_search(g_list_length(result_list),capo->s) && (find =  strstr(find+1,FIRST_RESULT)) != NULL)
     {
         gchar * end_of_url = NULL;
         find += strlen(FIRST_RESULT);
-        if( (end_of_url = strstr(find, END_OF_URL)) != NULL)
+        if((end_of_url = strstr(find, END_OF_URL)) != NULL)
         {
             if(check_image_size(capo->s,find) == TRUE)
             {
@@ -157,14 +156,12 @@ GList * generic_google_parse(cb_object * capo)
                     GlyrMemCache * result = DL_init();
                     result->data = url;
                     result->size = end_of_url - find;
-
-                    r_list = g_list_prepend(r_list,result);
-                    urlc++;
+                    result_list = g_list_prepend(result_list,result);
                 }
             }
         }
     }
-    return r_list;
+    return result_list;
 }
 
 /* ------------------------- */

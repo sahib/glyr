@@ -46,7 +46,7 @@
  * servers give MIME types like image/jpg
  * (which should be image/jpeg usually)
  */
-#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg"
+#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
 #define DEFAULT_USERAGENT "libglyr"

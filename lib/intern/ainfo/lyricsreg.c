@@ -21,50 +21,64 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define INFO_BEGIN "</script><br />"
-#define INFO_ENDIN "<br />"
+#define INFO_BEGIN "<div id=\"content\">"
+#define OPTN_BEGIN "Biography:<br />"
+#define INFO_ENDIN "</div>"
+/*-------------------------------------*/
 
-const char * ainfo_lyricsreg_url(GlyrQuery * s)
+const gchar * ainfo_lyricsreg_url(GlyrQuery * s)
 {
     return "http://www.lyricsreg.com/biography/%artist%/";
 }
 
+/*-------------------------------------*/
+
 GList * ainfo_lyricsreg_parse(cb_object * capo)
 {
-    GList * ls = NULL;
-    size_t ib_len = strlen(INFO_BEGIN);
-    char * point_to_start = strstr(capo->cache->data,INFO_BEGIN);
+    GList * result_list = NULL;
+    gchar * point_to_start = strstr(capo->cache->data,INFO_BEGIN);
     if(point_to_start != NULL)
     {
-        point_to_start += ib_len;
-        char * mend = strstr(point_to_start, INFO_ENDIN);
-        char * info = copy_value(point_to_start, mend);
-        if(info != NULL && (mend-point_to_start) > 150)
-        {
-            GlyrMemCache * tmp = DL_init();
-            tmp->data = beautify_lyrics(info);
-            tmp->size = (tmp->data) ? strlen(tmp->data) : 0;
-            tmp->dsrc = strdup(capo->url);
+		gchar * opt_begin = strstr(point_to_start,OPTN_BEGIN);
+		gsize skip_len = (sizeof INFO_BEGIN) - 1;
+		if(opt_begin != NULL)
+		{
+				point_to_start = opt_begin;
+				skip_len = (sizeof OPTN_BEGIN) - 1;
+		}
 
-            ls = g_list_prepend(ls,tmp);
-
-            g_free(info);
-        }
-    }
-    return ls;
+        point_to_start += skip_len;
+        gchar * end = strstr(point_to_start, INFO_ENDIN);
+		if(end != NULL)
+		{
+				gsize info_len = end - point_to_start;
+				if(info_len > 150)
+				{
+						gchar * info = copy_value(point_to_start, end);
+						if(info != NULL)
+						{
+								GlyrMemCache * result = DL_init();
+								result->data = info;
+								result->size = info_len; 
+								result_list = g_list_prepend(result_list,result);
+						}
+				}
+		}
+	}
+	return result_list;
 }
 
 /*-------------------------------------*/
 
 MetaDataSource ainfo_lyricsreg_src =
 {
-    .name      = "lyricsreg",
-    .key       = 'r',
-    .free_url  = false,
-    .type      = GET_ARTISTBIO,
-    .parser    = ainfo_lyricsreg_parse,
-    .get_url   = ainfo_lyricsreg_url,
-    .quality   = 25,
-    .speed     = 50,
-    .endmarker = NULL
+		.name      = "lyricsreg",
+		.key       = 'r',
+		.free_url  = false,
+		.type      = GET_ARTISTBIO,
+		.parser    = ainfo_lyricsreg_parse,
+		.get_url   = ainfo_lyricsreg_url,
+		.quality   = 35,
+		.speed     = 50,
+		.endmarker = NULL
 };

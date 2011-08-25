@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * albumlist_musicbrainz_url(GlyrQuery * sets)
+const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
 }
@@ -35,26 +35,25 @@ const char * albumlist_musicbrainz_url(GlyrQuery * sets)
 GList * albumlist_musicbrainz_parse(cb_object * capo)
 {
     GList * collection = NULL;
-    int ctr = 0;
-    char * node = capo->cache->data;
-    while(continue_search(ctr,capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
+    gchar * node = capo->cache->data;
+
+    while(continue_search(g_list_length(collection),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
     {
-        char * name = copy_value(strstr(node,TITLE_BEGIN) + strlen(TITLE_BEGIN),strstr(node,TITLE_ENDIN) + strlen(TITLE_ENDIN));
-        if(name != NULL)
-        {
-            GlyrMemCache * c = DL_init();
-            c->data = beautify_lyrics(name);
-
-            if(c->data != NULL)
-            {
-                c->size = strlen(c->data);
-            }
-
-
-            c->dsrc = strdup(capo->url);
-            collection = g_list_prepend(collection,c);
-            g_free(name);
-            ctr++;
+		gchar * title_begin = strstr(node,TITLE_BEGIN);
+		gchar * title_endin = strstr(node,TITLE_ENDIN);
+		if(title_begin != NULL && title_endin != NULL)
+		{
+			gsize title_beg_len = (sizeof TITLE_BEGIN) - 1;
+			gsize title_end_len = (sizeof TITLE_ENDIN) - 1;
+        	gchar * name = copy_value(title_begin + title_beg_len, title_endin + title_end_len);
+        	if(name != NULL)
+        	{
+            	GlyrMemCache * c = DL_init();
+            	c->data = beautify_lyrics(name);
+            	c->size = (c->data) ? strlen(c->data) : 0;
+            	collection = g_list_prepend(collection,c);
+            	g_free(name);
+			}
         }
     }
     return collection;

@@ -21,14 +21,44 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const char * cover_lyricswiki_url(GlyrQuery * sets)
+const gchar * cover_lyricswiki_url(GlyrQuery * sets)
 {
-    if(sets->img_min_size < 500)
-        return "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
-
-    return NULL;
+	const gchar * url = NULL;
+    if(sets->img_min_size < 650)
+	{
+        url = "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
+	}
+    return url;
 }
 
+/*-----------------------------------------------*/
+
+static gboolean check_file_format(GlyrQuery * query, gchar * filename)
+{
+		gboolean result = FALSE;
+		gsize length = strlen(filename);
+		gsize offset = 0;
+		gchar *token = NULL;
+
+		gchar ** token_list = g_strsplit(query->allowed_formats,DEFAULT_FROM_ARGUMENT_DELIM,0);
+		while((token = token_list[offset]) != NULL)
+		{
+				if(g_str_has_suffix(filename,token) == TRUE)
+				{
+						result = TRUE;
+						gsize format_pos = length - strlen(token);
+						filename[format_pos] = '\0';
+						if(format_pos != 0 && filename[format_pos-1] == '.')
+						{
+								filename[format_pos-1] = '\0';
+						}
+						break;
+				}
+				offset++;
+		}
+		g_strfreev(token_list);
+		return result;
+}
 
 /**
 -- Example snippet
@@ -43,102 +73,74 @@ const char * cover_lyricswiki_url(GlyrQuery * sets)
 #define END_TAG "\" timestamp=\""
 #define URL_MARKER "url=\""
 #define URL_END "\" descriptionurl="
+#define NEXT_NAME "<img name=\""
 
 GList * cover_lyricswiki_parse(cb_object * capo)
 {
-    char * find=capo->cache->data;
-    char * endTag   = NULL;
+    gchar * find = capo->cache->data;
+    gchar * endTag   = NULL;
+    GList * result_list = NULL;
 
-    int urlc = 0;
-    GList * r_list = NULL;
+	gchar * escaped_album_name = strreplace(capo->s->album," ","_");
+	if(escaped_album_name != NULL)
+	{
+			/* Go through all names and compare them with Levenshtein */
+			while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find+(sizeof IMG_TAG) - 1,IMG_TAG)) != NULL)
+			{
+					/* Find end & start of the name */
+					find  += (sizeof IMG_TAG) - 1;
+					endTag = strstr(find,END_TAG);
 
-    char *tmp = strreplace(capo->s->album," ","_");
-    if(tmp)
-    {
-        char * _album = g_utf8_strdown(tmp,-1);
-        if(_album)
-        {
-            // Go through all names and compare them with Levenshtein
-            while(find && (find = strstr(find+1,IMG_TAG)) != NULL && continue_search(urlc,capo->s))
-            {
-                // Find end & start of the name
-                find  += strlen(IMG_TAG);
-                endTag = strstr(find,END_TAG);
+					if(endTag == NULL || endTag <= find)
+							continue;
 
-                if(endTag == NULL || endTag <= find)
-                    continue;
+					/* Copy the name of the current album */
+					gchar * name = copy_value(find,endTag);
+					if(name != NULL)
+					{
+							if(check_file_format(capo->s,name) && levenshtein_strcasecmp(escaped_album_name,name) <= capo->s->fuzzyness)
+							{
+									gchar * url_start = strstr(endTag,URL_MARKER);
+									if(url_start != NULL)
+									{
+											gchar * url_end = NULL;
+											url_start += (sizeof URL_MARKER) - 1;
+											gchar * url = copy_value(url_start, (url_end = strstr(url_start,URL_END)));
 
-                // Copy the name of the current album
-                char * name = copy_value(find,endTag);
-                if(name)
-                {
-                    // Remove .png / .jpg ...
-                    int ll = endTag - find;
-                    for(; ll; ll--)
-                        if(name[ll] == '.')
-                            name[ll] = '\0';
+											if(url != NULL)
+											{
+													GlyrMemCache * result = DL_init();
+													result->data = url;
+													result->size = url_end - url_start;
+													result_list = g_list_prepend(result_list,result);
+											}
+									}
+							}
 
-                    // Compare only lower case strings...
-                    gchar * down_name = g_utf8_strdown(name,-1);
-                    if(down_name)
-                    {
-                        // Allow max. 2 'typos'
-                        if(levenshtein_strcmp(_album, down_name) < capo->s->fuzzyness)
-                        {
-                            char *url_start = strstr(endTag,URL_MARKER);
-                            if(url_start)
-                            {
-                                url_start += strlen(URL_MARKER);
-                                char *url_end   = strstr(url_start,URL_END);
-                                if(url_end)
-                                {
-                                    char * url = copy_value(url_start, url_end);
-                                    if(url)
-                                    {
-                                        GlyrMemCache * result = DL_init();
-                                        result->data = url;
-                                        result->size = url_end - url_start;
-                                        r_list = g_list_prepend(r_list,result);
-                                        urlc++;
-                                    }
+							/* Get next img tag */
+							find = strstr(endTag,NEXT_NAME);
+							g_free(name);
 
-                                    url_end=NULL;
-                                }
-
-                                url_start=NULL;
-                            }
-                        }
-
-                        // Get next img tag
-                        find = strstr(endTag,"<img name=\"");
-                        g_free(down_name);
-                        down_name=NULL;
-                    }
-                }
-                g_free(name);
-                name=NULL;
-            }
-            g_free(_album);
-            _album=NULL;
-        }
-
-        g_free(tmp);
-        tmp=NULL;
-    }
-    return r_list;
+							/* Whoops, right into nonexistence.. */
+							if(find == NULL) break;
+					}
+			}
+			g_free(escaped_album_name);
+	}
+	return result_list;
 }
 
 /*-----------------------------------------------*/
 
 MetaDataSource cover_lyricswiki_src =
 {
-    .name      = "lyricswiki",
-    .key       = 'w',
-    .parser    = cover_lyricswiki_parse,
-    .get_url   = cover_lyricswiki_url,
-    .type      = GET_COVERART,
-    .quality   = 75,
-    .speed     = 65,
-    .endmarker = NULL,
-    .free_url  = false
+		.name      = "lyricswiki",
+		.key       = 'w',
+		.parser    = cover_lyricswiki_parse,
+		.get_url   = cover_lyricswiki_url,
+		.type      = GET_COVERART,
+		.quality   = 75,
+		.speed     = 85,
+		.endmarker = NULL,
+		.free_url  = false
 };

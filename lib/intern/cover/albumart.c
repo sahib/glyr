@@ -21,34 +21,36 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const char * cover_albumart_url(GlyrQuery * sets)
+const gchar * cover_albumart_url(GlyrQuery * sets)
 {
-    int i = sets->img_min_size;
-    int e = sets->img_max_size;
+    gint i = sets->img_min_size;
+    gint e = sets->img_max_size;
 
     if((e >= 50 || e==-1) && (i == -1 || i < 450))
+	{
         return "http://www.albumart.org/index.php?srchkey=%artist%+%album%&itempage=1&newsearch=1&searchindex=Music";
-
+	}
     return NULL;
 }
 
 #define AMZ "http://ecx.images-amazon.com/images/"
+#define NODE_START "<div id=\"main\">"
+#define NODE_NEXT
 
 GList * cover_albumart_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
+    GList * result_list = NULL;
+    gchar * node = strstr(capo->cache->data,NODE_START);
 
-    char * node = strstr(capo->cache->data,"<div id=\"main\">");
-    if(node)
+    if(node != NULL)
     {
-        size_t size_it = 2;
+        gsize size_it = 2;
         if(capo->s->img_max_size < 450 && capo->s->img_max_size != -1 && capo->s->img_min_size < 160)
         {
             size_it = 1;
         }
 
-        size_t urlc = 0;
-        while( (node = strstr(node+1,"<li><div style=\"")) && continue_search(urlc,capo->s))
+        while(continue_search(urlc,capo->s) (node = strstr(node+1,"<li><div style=\"")))
         {
             size_t i = 0;
             char * img_tag = node;
