@@ -27,12 +27,12 @@
 
 const char * photos_flickr_url(GlyrQuery * settings)
 {
-    if(settings->img_max_size <= 175 || settings->img_max_size == -1)
+    if(settings->img_max_size <= 175 && settings->img_max_size != -1)
     {
         return NULL;
     }
 
-    return g_strdup_printf("http://api.flickr.com/services/rest/"
+    gchar * url = g_strdup_printf("http://api.flickr.com/services/rest/"
                            "?method=flickr.photos.search&"
                            "api_key="API_KEY_FLICKR"&"
                            "tags=%s&"
@@ -44,6 +44,7 @@ const char * photos_flickr_url(GlyrQuery * settings)
                            settings->artist,
                            settings->number
                           );
+    return url;
 }
 
 /*------------------------------------*/
@@ -69,6 +70,8 @@ static char * get_field_by_name(const char * string, const char * name)
     }
     return NULL;
 }
+
+/*--------------------------------------------------------*/
 
 GList * photos_flickr_parse(cb_object * capo)
 {

@@ -117,7 +117,6 @@ GList * cover_allmusic_parse(cb_object * capo)
                                 GlyrMemCache * result = parse_cover_page(dl_cache);
                                 if(result != NULL && result->data)
                                 {
-									puts(result->data);
                                     result_list = g_list_prepend(result_list,result);
                                 }
                                 DL_free(dl_cache);

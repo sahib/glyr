@@ -762,7 +762,7 @@ int glyr_write(GlyrMemCache * data, const char * path)
 
 static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
 {
-    int result = GLYRE_OK;
+    gint result = GLYRE_OK;
     if(s && arg && at >= 0 && at < 10)
     {
         if(s->info[at] != NULL)

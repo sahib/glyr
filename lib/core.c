@@ -1299,7 +1299,7 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
     for(GList * source = source_list; source != NULL; source = source->next)
     {
         MetaDataSource * item = source->data;
-        if(item != NULL /*&& provider_is_enabled(query,item)*/)
+        if(item != NULL)
         {
             /* get the url of this MetaDataSource */
             const gchar * lookup_url = item->get_url(query);
