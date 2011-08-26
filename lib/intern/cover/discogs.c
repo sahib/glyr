@@ -32,154 +32,146 @@
 #define URL_ENDIN "\" uri150="
 #define IMG_TYPE "primary"
 
-#define MAX_TRIES 5
-
-const char * cover_discogs_url(GlyrQuery * sets)
+const gchar * cover_discogs_url(GlyrQuery * sets)
 {
     if(sets->img_max_size >= 300 || sets->img_max_size == -1)
     {
         return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY_DISCOGS;
     }
-
     return NULL;
 }
 
-// The discogs.com parser is a little more complicated...
+/*------------------------------------------------*/
+
+static gboolean check_image_size(GlyrQuery * query, gchar * image_begin, gchar * image_ending)
+{
+	gboolean result = FALSE;
+	gsize offset = (sizeof IMGURL_BEGIN) - 1;
+	gchar * size_string = copy_value(image_begin + offset, image_ending);
+	if(size_string != NULL)
+	{
+		gsize numeric_size = strtol(size_string,NULL,10);
+		result = size_is_okay(numeric_size,query->img_min_size,query->img_max_size);
+		g_free(size_string);
+	}
+	return result;
+}
+
+/*------------------------------------------------*/
+
+static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList ** result_list)
+{
+		if(tmp_cache != NULL)
+		{
+				/* Parsing the image url from here on */
+				char * imgurl_begin = tmp_cache->data;
+				while(continue_search(g_list_length(*result_list),query) && (imgurl_begin = strstr(imgurl_begin+1,IMGURL_BEGIN)) != NULL)
+				{
+						gint img_type;
+						gchar * is_primary = strstr(imgurl_begin,IMG_TYPE);
+						if(((is_primary - imgurl_begin) > 42) )
+								continue;
+
+						if(is_primary != NULL)
+								img_type = TYPE_COVER_PRI;
+						else
+								img_type = TYPE_COVER_SEC;
+
+						gchar * imgurl_ending = strstr(imgurl_begin,IMGURL_ENDIN);
+						if(imgurl_ending != NULL && check_image_size(query,imgurl_begin, imgurl_ending) == TRUE)
+						{
+								gchar * final_url_begin = strstr(imgurl_ending,URL_BEGIN);
+								if(final_url_begin != NULL)
+								{
+										gchar * final_url = copy_value(final_url_begin + (sizeof URL_BEGIN)- 1, strstr(final_url_begin,URL_ENDIN));
+										if(final_url != NULL)
+										{
+												GlyrMemCache * result = DL_init();
+												result->data = final_url;
+												result->size = strlen(result->data);
+												result->type = img_type;
+												*result_list = g_list_prepend(*result_list,result);
+										}
+								}
+						}
+				}
+				DL_free(tmp_cache);
+		}
+}
+
+/*------------------------------------------------*/
+
+static gboolean validate_title(GlyrQuery * query, gchar * release_node)
+{
+		gboolean result = FALSE;
+
+		/* Find title in node */
+		gchar * title_begin = strstr(release_node,TITLE_BEGIN);
+		if(!title_begin) return result;
+
+		/* Find end of value */
+		gchar * title_endin = strstr(release_node,TITLE_ENDIN);
+		if(!title_endin) return result;
+
+		/* Go to beginning of value and get it */
+		gchar * title_value = copy_value(title_begin + (sizeof TITLE_BEGIN) - 1, title_endin);
+		if(levenshtein_strcasecmp(title_value,query->album) <= query->fuzzyness)
+		{
+				result = TRUE;
+		}
+		g_free(title_value);
+		return result;
+}
+
+/*------------------------------------------------*/
+
+/* The discogs.com parser is a little more complicated... */
 GList * cover_discogs_parse(cb_object * capo)
 {
-    GList * r_list=NULL;
+		GList * result_list = NULL;
 
-    // Go through all release node
-    int urlc = 0;
-    char * release_node = capo->cache->data;
-    while((release_node = strstr(release_node+1,RELEASE_ID)) != NULL && continue_search(urlc,capo->s))
-    {
-        // Find title in node
-        char * title_begin = strstr(release_node,TITLE_BEGIN);
-        if(!title_begin) continue;
-
-        // Find end of value
-        char * title_endin = strstr(release_node,TITLE_ENDIN);
-        if(!title_endin) continue;
-
-        // Go to beginning of value and get it
-        char * title_value = copy_value(title_begin + strlen(TITLE_BEGIN),title_endin);
-        if(title_value)
-        {
-            // Assure ptr not being reused
-            title_begin = NULL;
-            title_endin = NULL;
-
-            // Compare with levenshtein
-            if(levenshtein_strcmp(title_value,capo->s->album) <= capo->s->fuzzyness - 1)
-            {
-                // Get release ID
-                char * release_end = strstr(release_node, RELEASE_END);
-                if(release_end)
-                {
-                    // Copy ID from cache
-                    char * release_ID = copy_value(release_node+strlen(RELEASE_ID),release_end);
-                    if(release_ID)
-                    {
-                        release_end = NULL;
-
-                        // Construct release_url
-                        char *release_url = g_strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY,release_ID);
-                        if(release_url)
-                        {
-                            // Only download till artists tag.
-                            GlyrMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
-                            if(tmp_cache && tmp_cache->data && tmp_cache->size)
-                            {
-                                // Parsing the image url from here on
-                                char * imgurl_begin = tmp_cache->data;
-                                while((imgurl_begin = strstr(imgurl_begin+1,IMGURL_BEGIN)) != NULL)
-                                {
-                                    int img_type;
-
-                                    char * is_primary = strstr(imgurl_begin,IMG_TYPE);
-                                    if( ((is_primary - imgurl_begin) > 42) )
-                                        continue;
-
-                                    if(is_primary != NULL)
-                                        img_type = TYPE_COVER_PRI;
-                                    else
-                                        img_type = TYPE_COVER_SEC;
-
-                                    char * imgurl_endin = strstr(imgurl_begin,IMGURL_ENDIN);
-                                    if(imgurl_endin)
-                                    {
-                                        char * size = copy_value(imgurl_begin+strlen(IMGURL_BEGIN),imgurl_endin);
-                                        if(size)
-                                        {
-                                            if(size_is_okay(atoi(size),capo->s->img_min_size,capo->s->img_max_size))
-                                            {
-                                                char * uri_begin = strstr(imgurl_endin,URL_BEGIN);
-                                                if(uri_begin)
-                                                {
-                                                    char * uri_endin = strstr(uri_begin,URL_ENDIN);
-                                                    if(uri_endin)
-                                                    {
-                                                        char * url = copy_value(uri_begin+strlen(URL_BEGIN),uri_endin);
-                                                        if(url)
-                                                        {
-                                                            GlyrMemCache * result = DL_init();
-                                                            if(result)
-                                                            {
-                                                                result->data = url;
-                                                                result->size = uri_endin - (uri_begin + strlen(URL_BEGIN));
-                                                                result->type = img_type;
-                                                                r_list = g_list_prepend(r_list,result);
-                                                                urlc++;
-                                                            }
-                                                            else
-                                                            {
-                                                                g_free(url);
-                                                                url=NULL;
-                                                            }
-                                                        }
-
-                                                    }
-                                                    uri_endin=NULL;
-                                                }
-                                                uri_begin=NULL;
-                                            }
-                                        }
-
-                                        g_free(size);
-                                        size=NULL;
-                                    }
-                                }
-                                DL_free(tmp_cache);
-                                tmp_cache=NULL;
-                            }
-
-                            g_free(release_url);
-                            release_url=NULL;
-                        }
-
-                        g_free(release_ID);
-                        release_ID=NULL;
-                    }
-                }
-            }
-            g_free(title_value);
-            title_value = NULL;
-        }
-    }
-
-    return r_list;
+		/* Go through all release nodes */
+		gchar * release_node = capo->cache->data;
+		while(continue_search(g_list_length(result_list),capo->s) && (release_node = strstr(release_node+1,RELEASE_ID)) != NULL)
+		{
+				if(validate_title(capo->s,release_node) == TRUE)
+				{
+						/* Get release ID */
+						gchar * release_end = strstr(release_node, RELEASE_END);
+						if(release_end)
+						{
+								// Copy ID from cache
+								gchar * release_ID = copy_value(release_node+strlen(RELEASE_ID),release_end);
+								if(release_ID != NULL)
+								{
+										/*Construct release_url */
+										gchar *release_url = g_strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY_DISCOGS,release_ID);
+										if(release_url != NULL)
+										{
+												/* Only download till artists tag */
+												GlyrMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
+												parse_single_page(capo->s,tmp_cache,&result_list);
+												g_free(release_url);
+										}
+										g_free(release_ID);
+								}
+						}
+				}
+		}
+		return result_list;
 }
+
+/*------------------------------------------------*/
 
 MetaDataSource cover_discogs_src =
 {
-    .name      = "discogs",
-    .key       = 'd',
-    .parser    = cover_discogs_parse,
-    .get_url   = cover_discogs_url,
-    .type      = GET_COVERART,
-    .quality   = 60,
-    .speed     = 60,
-    .endmarker = NULL,
-    .free_url  = false
+		.name      = "discogs",
+		.key       = 'd',
+		.parser    = cover_discogs_parse,
+		.get_url   = cover_discogs_url,
+		.type      = GET_COVERART,
+		.quality   = 50,
+		.speed     = 35,
+		.endmarker = NULL,
+		.free_url  = false
 };

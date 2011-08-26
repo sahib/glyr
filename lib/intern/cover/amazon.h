@@ -22,8 +22,6 @@
 #define AMAZON_H
 
 #include "../../core.h"
-const char   * cover_amazon_url(GlyrQuery * sets);
-GList * cover_amazon_parse(cb_object *capo);
 const char * generic_amazon_url(GlyrQuery * sets, const char * response_group);
 
 #endif

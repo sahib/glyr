@@ -815,7 +815,11 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                         glyr_message(3,capo->s,"- glyr: Downloaderror: %s [errno:%d]\n",
                                      errstring ? errstring : "Unknown Error",
                                      msg->data.result);
-                        glyr_message(3,capo->s,"  On URL: %s\n",capo->url);
+                        glyr_message(3,capo->s,"  On URL: ");
+						if(capo->s->verbosity >= 3)
+						{
+								puts(capo->url);
+						}
 
                         DL_free(capo->cache);
                         capo->cache = NULL;

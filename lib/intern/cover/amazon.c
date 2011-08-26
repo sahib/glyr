@@ -20,8 +20,9 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../../glyr.h"
 
+
+//FIXME: Compare if results fit
 // Example snippet of what we parse:
 /***
 
@@ -88,49 +89,52 @@ const char * generic_amazon_url(GlyrQuery * sets, const char * response_group)
     return NULL;
 }
 
-const char * cover_amazon_url(GlyrQuery * sets)
+/*-------------------------------------------------*/
+
+const gchar * cover_amazon_url(GlyrQuery * sets)
 {
     return generic_amazon_url(sets,"Images");
 }
 
+/*-------------------------------------------------*/
+
+#define END_OF_URL "</URL>"
 #define C_MAX(X) (capo->s->img_max_size <  X && capo->s->img_max_size != -1)
 #define C_MIN(X) (capo->s->img_min_size >= X && capo->s->img_min_size != -1)
 
 GList * cover_amazon_parse(cb_object *capo)
 {
-    const char *tag_ssize = (capo->s->img_max_size == -1 && capo->s->img_min_size == -1) ? "<LargeImage>"  :
-                            (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :
-                            (C_MAX( 70) && C_MIN(30)) ? "<SmallImage>"  :
-                            (C_MAX(150) && C_MIN(70)) ? "<MediumImage>" :
-                            "<LargeImage>"  ;
-#undef MAX
-#undef MIN
+    const gchar *tag_ssize = (capo->s->img_max_size == -1 && capo->s->img_min_size == -1) ? "<LargeImage>"  :
+                             (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :
+                             (C_MAX( 70) && C_MIN(30)) ? "<SmallImage>"  :
+                             (C_MAX(150) && C_MIN(70)) ? "<MediumImage>" :
+                             "<LargeImage>"  ;
 
-    int urlc = 0;
-    GList * r_list = NULL;
-
-    char * find = capo->cache->data;
-    while( (find = strstr(find +1, tag_ssize)) != NULL && continue_search(urlc,capo->s))
+    GList * result_list = NULL;
+    gchar * find = capo->cache->data;
+    while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find + strlen(tag_ssize), tag_ssize)) != NULL)
     {
         /* Next two XML tags not relevant */
         nextTag(find);
         nextTag(find);
-        char * endTag = NULL;
-        if( (endTag = strstr(find, "</URL>")) != NULL)
+
+        gchar * endTag = NULL;
+        if((endTag = strstr(find, END_OF_URL)) != NULL)
         {
-            char * result_url = copy_value(find,endTag);
-            if(result_url)
+            gchar * result_url = copy_value(find,endTag);
+            if(result_url != NULL)
             {
-                GlyrMemCache * result_cache = DL_init();
-                result_cache->data = result_url;
-                result_cache->size = strlen(result_url);
-                r_list = g_list_prepend(r_list,result_cache);
-                urlc++;
+                GlyrMemCache * result = DL_init();
+                result->data = result_url;
+                result->size = endTag - find;
+                result_list = g_list_prepend(result_list,result);
             }
         }
     }
-    return r_list;
+    return result_list;
 }
+
+/*-------------------------------------------------*/
 
 MetaDataSource cover_amazon_src =
 {

@@ -22,92 +22,91 @@
 #include "../../core.h"
 
 /*
- * Provider will be removed if down any longer..
+ * Coverhunt seems to have some load problems at time of writing...
 */
 
-const char * cover_coverhunt_url(GlyrQuery * sets)
+const gchar * cover_coverhunt_url(GlyrQuery * sets)
 {
     if(sets->img_min_size <= 500 || sets->img_min_size == -1)
+	{
         return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
-
+	}
     return NULL;
 }
 
-static bool check_size(const char * art_root, const char *hw, cb_object * capo)
+static gboolean check_size(const char * art_root, const char *hw, cb_object * capo)
 {
-    char * begin = strstr(art_root,hw);
-    if(begin)
+    gchar * begin = strstr(art_root,hw);
+    if(begin != NULL)
     {
-        char * end = strchr(begin,' ');
-        char * buf = copy_value(begin+strlen(hw),end);
-        if(buf)
+        gchar * end = strchr(begin,' ');
+        gchar * buf = copy_value(begin+strlen(hw),end);
+        if(buf != NULL)
         {
-            int atoid = atoi(buf);
-
+            gint atoid = strtol(buf,NULL,10);
             g_free(buf);
+
             if((atoid >= capo->s->img_min_size || capo->s->img_min_size == -1) &&
-                    (atoid <= capo->s->img_max_size || capo->s->img_max_size == -1)  )
-                return true;
+               (atoid <= capo->s->img_max_size || capo->s->img_max_size == -1)  )
+                return TRUE;
         }
     }
-    return false;
+    return FALSE;
 }
 
 #define SEARCH_RESULT_BEGIN "<table><tr><td"
 #define IMG_START "<img src=\""
 #define NODE_BEGIN "<a href=\"/go/"
 
-// Take the first link we find.
-// coverhunt sadly offers  no way to check if the
-// image is really related to the query we're searching for
+/* Take the first link we find.
+ * coverhunt sadly offers  no way to check if the
+ * image is really related to the query we're searching for
+ */
 GList * cover_coverhunt_parse(cb_object *capo)
 {
-    GList * r_list = NULL;
+    GList * result_list = NULL;
 
-    // navigate to start of search results
-    char * table_start;
+    /* navigate to start of search results */
+    gchar * table_start;
     if( (table_start = strstr(capo->cache->data,SEARCH_RESULT_BEGIN)) == NULL)
     {
+		/* Whoops, nothing to see here */
         return NULL;
     }
 
-    int urlc = 0;
-
-
-    while( (table_start = strstr(table_start + 1,NODE_BEGIN)) && continue_search(urlc,capo->s))
+    while(continue_search(g_list_length(result_list),capo->s) && (table_start = strstr(table_start + 1,NODE_BEGIN)))
     {
-        char * table_end = NULL;
+        gchar * table_end = NULL;
         if( (table_end = strstr(table_start,"\">")) != NULL)
         {
-            char * go_url = copy_value(table_start + strlen(NODE_BEGIN),table_end);
+            gchar * go_url = copy_value(table_start + strlen(NODE_BEGIN),table_end);
             if(go_url)
             {
-                char * real_url = g_strdup_printf("http://www.coverhunt.com/go/%s",go_url);
-                if(real_url)
+                gchar * real_url = g_strdup_printf("http://www.coverhunt.com/go/%s",go_url);
+                if(real_url != NULL)
                 {
                     GlyrMemCache * search_buf = download_single(real_url,capo->s,"<div id=\"right\">");
-                    if(search_buf)
+                    if(search_buf != NULL)
                     {
-                        char * artwork = strstr(search_buf->data, "<div class=\"artwork\">");
-                        if(artwork)
+                        gchar * artwork = strstr(search_buf->data, "<div class=\"artwork\">");
+                        if(artwork != NULL)
                         {
                             if(check_size(artwork,"height=",capo) && check_size(artwork,"width=",capo))
                             {
-                                char * img_start = strstr(artwork,IMG_START);
-                                if(img_start)
+                                gchar * img_start = strstr(artwork,IMG_START);
+                                if(img_start != NULL)
                                 {
-                                    img_start += strlen(IMG_START);
-                                    char * img_end = strstr(img_start,"\" ");
-                                    if(img_end)
+                                    img_start += (sizeof IMG_START) - 1;
+                                    gchar * img_end = strstr(img_start,"\" ");
+                                    if(img_end != NULL)
                                     {
-                                        char * url = copy_value(img_start,img_end);
-                                        if(url)
+                                        gchar * url = copy_value(img_start,img_end);
+                                        if(url != NULL)
                                         {
                                             GlyrMemCache * shell = DL_init();
                                             shell->data = url;
                                             shell->size = img_end - img_start;
-                                            r_list = g_list_prepend(r_list,shell);
-                                            urlc++;
+                                            result_list = g_list_prepend(result_list,shell);
                                         }
                                     }
                                 }
@@ -121,9 +120,10 @@ GList * cover_coverhunt_parse(cb_object *capo)
             }
         }
     }
-    return r_list;
+    return result_list;
 }
 
+/* Queued last, as long coverhunt is down */
 MetaDataSource cover_coverhunt_src =
 {
     .name      = "coverhunt",
@@ -132,7 +132,7 @@ MetaDataSource cover_coverhunt_src =
     .get_url   = cover_coverhunt_url,
     .type      = GET_COVERART,
     .endmarker = "<div id=\"footer\">",
-    .quality   = 70,
-    .speed     = 40,
+    .quality   = 0, /* ex. 70 */
+    .speed     = 0, /* ex. 40 */
     .free_url  = false
 };

@@ -25,112 +25,114 @@
 const char * cover_allmusic_url(GlyrQuery * s)
 {
     if(s->img_min_size < 200)
+	{
         return "http://www.allmusic.com/search/album/%album%";
-
+	}
     return NULL;
 }
 
 // begin of search results
 #define SEARCH_TREE_BEGIN "<table class=\"search-results\""
 
-// sole search result
+//*sole search result */
 #define SEARCH_NODE "<td><a href=\""
 #define SEARCH_DELM "\">"
 
-// artist
+/* artist */
 #define ARTIST_PART "<td>"
 #define ARTIST_END  "</td>"
 #define IMG_BEGIN "<div class=\"image\"> <img src=\""
 #define IMG_ENDIN "\" alt=\""
 
-GlyrMemCache * parse_cover_page(GlyrMemCache * dl)
+#define BAD_URL "/img/pages/site/icons/no_cover_200.gif"
+
+GlyrMemCache * parse_cover_page(GlyrMemCache * dl_cache)
 {
-    GlyrMemCache * rc = NULL;
-    if(dl != NULL)
+    GlyrMemCache * result = NULL;
+    if(dl_cache != NULL)
     {
-        char * img_begin = strstr(dl->data,IMG_BEGIN);
+        gchar * img_begin = strstr(dl_cache->data,IMG_BEGIN);
         if(img_begin != NULL)
         {
-            char * img_url = copy_value(img_begin + strlen(IMG_BEGIN), strstr(img_begin,IMG_ENDIN));
+			gchar * img_end = strstr(img_begin,IMG_ENDIN);
+			img_begin += (sizeof IMG_BEGIN) - 1;
+            gchar * img_url = copy_value(img_begin,img_end);
             if(img_url != NULL)
             {
-                if(strcmp(img_url,"/img/pages/site/icons/no_cover_200.gif"))
+                if(strcmp(img_url,BAD_URL) != 0)
                 {
-                    rc = DL_init();
-                    rc->data = img_url;
-                    rc->size = strlen(img_url);
+                    result = DL_init();
+                    result->data = img_url;
+                    result->size = img_end - img_begin;
                 }
                 else
                 {
                     g_free(img_url);
-                    img_url=NULL;
                 }
             }
         }
     }
-    return rc;
+    return result;
 }
 
+/*--------------------------------------*/
+
+#define TITLE_TAG "<a href=\"\">Title</a></th>"
 GList * cover_allmusic_parse(cb_object * capo)
 {
-    GList * r_list = NULL;
-    if( strstr(capo->cache->data, "<a href=\"\">Title</a></th>") )
+    GList * result_list = NULL;
+    if(strstr(capo->cache->data,TITLE_TAG) != NULL)
     {
+		/* Horray, directly hit the page */
         GlyrMemCache * result = parse_cover_page(capo->cache);
-        r_list = g_list_prepend(r_list, result);
-        return r_list;
+        result_list = g_list_prepend(result_list, result);
+        return result_list;
     }
 
-    char * search_begin = NULL;
-    if( (search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
+    gchar * search_begin = NULL;
+    if((search_begin = strstr(capo->cache->data, SEARCH_TREE_BEGIN)) == NULL)
     {
+		/* No page. Crap. */
         return NULL;
     }
 
-    int urlc = 0;
-    char *  node = search_begin;
-    while( (node = strstr(node+1,SEARCH_NODE)) && continue_search(urlc,capo->s))
+    gchar *  node = search_begin;
+    while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,SEARCH_NODE)))
     {
-        char * url = copy_value(node+strlen(SEARCH_NODE),strstr(node,SEARCH_DELM));
+        gchar * url = copy_value(node + (sizeof SEARCH_NODE) - 1, strstr(node,SEARCH_DELM));
         if(url != NULL)
         {
-            // We have the URL - now check the artist to be the one
-            char * rr = strstr(node+1,ARTIST_PART);
-            if(rr != NULL)
+            /* We have the URL - now check the artist to be the one */
+            gchar * artist_begin = strstr(node+1,ARTIST_PART);
+            if(artist_begin != NULL)
             {
-                char * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
+                gchar * artist = copy_value(artist_begin + (sizeof ARTIST_PART) - 1, strstr(artist_begin,ARTIST_END));
                 if(artist != NULL)
                 {
-                    char * orig_artist = strdup(capo->s->artist);
-                    if(orig_artist)
-                    {
-                        if(levenshtein_strcasecmp(orig_artist,artist) <= capo->s->fuzzyness)
+                        if(levenshtein_strcasecmp(capo->s->artist,artist) <= capo->s->fuzzyness)
                         {
-                            GlyrMemCache * dl = download_single(url,capo->s,"<div class=\"artist\">");
-                            if(dl != NULL)
+                            GlyrMemCache * dl_cache = download_single(url,capo->s,"<div class=\"artist\">");
+                            if(dl_cache != NULL)
                             {
-                                GlyrMemCache * result = parse_cover_page(dl);
+                                GlyrMemCache * result = parse_cover_page(dl_cache);
                                 if(result != NULL && result->data)
                                 {
-                                    r_list = g_list_prepend(r_list,result);
-                                    urlc++;
+									puts(result->data);
+                                    result_list = g_list_prepend(result_list,result);
                                 }
-                                DL_free(dl);
+                                DL_free(dl_cache);
                             }
                         }
-                        g_free(orig_artist);
-                        orig_artist=NULL;
-                    }
                 }
                 g_free(artist);
-                artist=NULL;
             }
             g_free(url);
-            url=NULL;
         }
     }
-    return r_list;
+    return result_list;
 }
+
+/*--------------------------------------*/
 
 MetaDataSource cover_allmusic_src =
 {

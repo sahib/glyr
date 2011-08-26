@@ -27,7 +27,7 @@
 #define FIRST_RESULT "<a href=\"/imgres?imgurl="
 #define END_OF_URL "&amp;imgrefurl="
 
-const char * generic_google_url(GlyrQuery * sets, const char * searchterm)
+const gchar * generic_google_url(GlyrQuery * sets, const gchar * searchterm)
 {
     const gchar * lang = NULL;
     if(!strcasecmp(sets->lang,"us"))
@@ -123,7 +123,7 @@ static gboolean check_image_size(GlyrQuery * s, gchar * ref)
 
 /* ------------------------- */
 
-const char * cover_google_url(GlyrQuery * s)
+const gchar * cover_google_url(GlyrQuery * s)
 {
     const gchar * result = NULL;
     gchar * searchterm = g_strdup("%artist%+%album%+album");
