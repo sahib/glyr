@@ -18,13 +18,13 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-// Borrowing actual implementation from cover:google.c
-#include "../cover/google.h"
-
 #include "../../core.h"
 #include "../../stringlib.h"
+#include "../common.h"
 
-const char * photos_google_url(GlyrQuery * s)
+/*--------------------------------------------------------*/
+
+const gchar * photos_google_url(GlyrQuery * s)
 {
     const gchar * result = NULL;
     gchar * searchterm = g_strdup("%artist%+band+photos");
@@ -35,6 +35,8 @@ const char * photos_google_url(GlyrQuery * s)
     }
     return result;
 }
+
+/*--------------------------------------------------------*/
 
 GList * photos_google_parse(cb_object * capo)
 {

@@ -26,29 +26,29 @@
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    GList * l =  generic_img_finalizer(s,list,stop_me,TYPE_COVER);
-    return l;
+    return generic_img_finalizer(s,list,stop_me,TYPE_COVER);
 }
 
 /* ------------------------------------- */
 
 bool vdt_cover(GlyrQuery * settings)
 {
-    if (settings && settings->artist && settings->album)
+    if(settings && settings->artist && settings->album)
     {
-        /* validate size */
-        if(settings->img_min_size <= 0)
-            settings->img_min_size = -1;
+		if(settings->artist[0] && settings->album[0])
+		{
+				/* validate size */
+				if(settings->img_min_size <= 0)
+					settings->img_min_size = -1;
 
-        if(settings->img_max_size <= 0)
-            settings->img_max_size = -1;
+				if(settings->img_max_size <= 0)
+					settings->img_max_size = -1;
 
-        return true;
+				return TRUE;
+		}
     }
-    else
-    {
-        return false;
-    }
+    glyr_message(2,settings,"Artist and Album is needed to retrieve coverart.\n");
+    return FALSE;
 }
 
 /* ------------------------------------- */

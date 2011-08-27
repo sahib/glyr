@@ -23,6 +23,11 @@
 #include <getopt.h>
 #include <glib.h>
 
+#ifndef WIN32
+  /* Backtrace*/
+  #include <execinfo.h>
+#endif
+
 /* Somehow needed for g_vasprintf */
 #include <glib/gprintf.h>
 
@@ -36,7 +41,9 @@
 const gchar * exec_on_call = NULL;
 gchar * write_to = NULL;
 
-int message(int verbosity, GlyrQuery * s, FILE * stream, const char * fmt, ...)
+//* ------------------------------------------------------- */
+
+static gint message(gint verbosity, GlyrQuery * s, FILE * stream, const gchar * fmt, ...)
 {
     int written_bytes = -1;
     if(s || verbosity == -1)
@@ -62,6 +69,57 @@ int message(int verbosity, GlyrQuery * s, FILE * stream, const char * fmt, ...)
     }
     return written_bytes;
 }
+
+//* ------------------------------------------------------- */
+
+#ifndef WIN32
+#define STACK_FRAME_SIZE 20
+
+/* Obtain a backtrace and print it to stdout. */
+static void print_trace(void)
+{
+    void * array[STACK_FRAME_SIZE];
+    gchar ** bt_info_list;
+    gsize size, it = 0;
+
+    size = backtrace (array, STACK_FRAME_SIZE);
+    bt_info_list = backtrace_symbols(array, size);
+
+    for (it = 0; it < size; it++)
+    {
+        g_printerr("    [#%02u] %s\n",(gint)it+1, bt_info_list[it]);
+    }
+
+    g_printerr("\n%zd calls in total are shown.\n", size);
+    g_free(bt_info_list);
+}
+#endif
+
+//* ------------------------------------------------------- */
+
+static void sig_handler(int signal)
+{
+    switch(signal)
+    {
+    case SIGABRT :
+    case SIGFPE  :
+    case SIGSEGV : /* sigh */
+        message(-1,NULL,stderr,"\nFATAL: libglyr stopped/crashed due to a %s of death.\n",g_strsignal(signal));
+        message(-1,NULL,stderr,"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
+        message(-1,NULL,stderr,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
+        message(-1,NULL,stderr,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
+        message(-1,NULL,stderr,"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
+#ifndef WIN32
+        message(-1,NULL,stderr,"\nA list of the last called functions follows, please add this to your report:\n");
+        print_trace();
+#endif
+        message(-1,NULL,stderr,"\n(Thanks, and Sorry for any bad feelings.)\n\n");
+        break;
+    }
+    exit(EXIT_FAILURE);
+}
+
+
 //* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
@@ -660,7 +718,11 @@ enum GLYR_GET_TYPE get_type_from_string(gchar * string)
 
 int main(int argc, char * argv[])
 {
-    int result = EXIT_SUCCESS;
+    /* Try to print informative output */
+    signal(SIGSEGV, sig_handler);
+
+    /* Assume success */
+    gint result = EXIT_SUCCESS;
 
     /* Init. You _have_ to call this before making any calls */
     glyr_init();

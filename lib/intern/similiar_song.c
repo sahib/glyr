@@ -26,10 +26,11 @@
 
 bool vdt_similar_song(GlyrQuery * settings)
 {
-    if(settings && settings->artist && settings->title)
+    if(settings && settings->artist && settings->title && settings->artist[0] && settings->title[0])
     {
         return true;
     }
+    glyr_message(2,settings,"Artist and Title is needed to retrieve similarsongs.\n");
     return false;
 }
 

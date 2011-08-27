@@ -81,7 +81,7 @@ GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean
 
 /*--------------------------------------------------------*/
 
-static GList * test_async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
+static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
 {
     if(capo->cache != NULL && userptr != NULL)
     {
@@ -146,9 +146,9 @@ GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, e
 
         /* Hashtable to associate the provider name with the corresponding URL */
         GHashTable * cache_url_table = g_hash_table_new_full(g_str_hash,g_str_equal,
-                                       NULL,
-                                       (GDestroyNotify)DL_free
-                                                            );
+ 						                                      NULL,
+                        					                  (GDestroyNotify)DL_free
+                                                          	);
 
         /* Iterate over all caches and turn them to GList */
         for(GList * item = list; item; item = item->next)
@@ -171,7 +171,7 @@ GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, e
         };
 
         /* Download images in parallel */
-        GList * dl_raw_images = async_download(url_list,NULL,s,1,(g_list_length(url_list)/2),test_async_dl_callback,&userptr,FALSE);
+        GList * dl_raw_images = async_download(url_list,NULL,s,1,(g_list_length(url_list)/2),async_dl_callback,&userptr,FALSE);
 
         /* Default to the given type */
         for(GList * elem = dl_raw_images; elem; elem = elem->next)

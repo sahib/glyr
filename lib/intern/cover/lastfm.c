@@ -18,10 +18,9 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include "lastfm.h"
-#include "../../utils.h"
 #include "../../stringlib.h"
 #include "../../core.h"
+#include "../common.h"
 
 /* ----------------------------------------------- */
 

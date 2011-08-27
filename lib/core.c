@@ -320,9 +320,9 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         CURLcode rc = CURLE_OK;
 
         info = g_malloc0(sizeof(struct header_data));
-        gchar * link_user_agent =  g_strdup_printf("%s/linkvalidator",useragent);
+        gchar * link_user_agent =  g_strdup_printf("%s / linkvalidator",useragent);
 
-        curl_easy_setopt(eh, CURLOPT_TIMEOUT, 5);
+        curl_easy_setopt(eh, CURLOPT_TIMEOUT, 10);
         curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
         curl_easy_setopt(eh, CURLOPT_USERAGENT, link_user_agent);
         curl_easy_setopt(eh, CURLOPT_URL,url);
@@ -394,7 +394,7 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
     // Pass vars to curl
     curl_easy_setopt(eh, CURLOPT_URL, url);
     curl_easy_setopt(eh, CURLOPT_PRIVATE, magic_private_ptr);
-    curl_easy_setopt(eh, CURLOPT_VERBOSE, (s->verbosity == 4));
+    curl_easy_setopt(eh, CURLOPT_VERBOSE, (s->verbosity >= 4));
     curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, DL_buffer);
     curl_easy_setopt(eh, CURLOPT_WRITEDATA, (void *)cache);
 

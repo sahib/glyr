@@ -20,17 +20,16 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../../utils.h"
+#include "../common.h"
 
 #define RELEASE_ID  "<release id=\""
 #define RELEASE_END "\" "
 #define TITLE_BEGIN "<title>"
 #define TITLE_ENDIN "</title>"
-#define IMGURL_BEGIN "<image height=\""
-#define IMGURL_ENDIN "\" type=\""
+#define IMGNODE_BEGIN "<image "
 #define URL_BEGIN "uri=\""
-#define URL_ENDIN "\" uri150="
 #define IMG_TYPE "primary"
+#define NODE_END "\" "
 
 const gchar * cover_discogs_url(GlyrQuery * sets)
 {
@@ -43,16 +42,20 @@ const gchar * cover_discogs_url(GlyrQuery * sets)
 
 /*------------------------------------------------*/
 
-static gboolean check_image_size(GlyrQuery * query, gchar * image_begin, gchar * image_ending)
+static gboolean check_image_size(GlyrQuery * query, gchar * image_begin)
 {
 	gboolean result = FALSE;
-	gsize offset = (sizeof IMGURL_BEGIN) - 1;
-	gchar * size_string = copy_value(image_begin + offset, image_ending);
-	if(size_string != NULL)
+	gchar * height = discogs_get_value(image_begin,"height=\"",NODE_END);
+	gchar * width  = discogs_get_value(image_begin,"width=\"", NODE_END);
+	if(width && height)
 	{
-		gsize numeric_size = strtol(size_string,NULL,10);
-		result = size_is_okay(numeric_size,query->img_min_size,query->img_max_size);
-		g_free(size_string);
+		gint numeric_width  = strtol(width, NULL,10);
+		gint numeric_height = strtol(height,NULL,10);
+		gint ratio = (numeric_width + numeric_height) / 2;
+		result = size_is_okay(ratio,query->img_min_size,query->img_max_size);
+
+		g_free(height);
+		g_free(width);
 	}
 	return result;
 }
@@ -65,11 +68,11 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 		{
 				/* Parsing the image url from here on */
 				char * imgurl_begin = tmp_cache->data;
-				while(continue_search(g_list_length(*result_list),query) && (imgurl_begin = strstr(imgurl_begin+1,IMGURL_BEGIN)) != NULL)
+				while((imgurl_begin = strstr(imgurl_begin + (sizeof IMGNODE_BEGIN) - 1,IMGNODE_BEGIN)) != NULL)
 				{
-						gint img_type;
+						enum GLYR_DATA_TYPE img_type;
 						gchar * is_primary = strstr(imgurl_begin,IMG_TYPE);
-						if(((is_primary - imgurl_begin) > 42) )
+						if(((is_primary - imgurl_begin) > 42))
 								continue;
 
 						if(is_primary != NULL)
@@ -77,21 +80,17 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 						else
 								img_type = TYPE_COVER_SEC;
 
-						gchar * imgurl_ending = strstr(imgurl_begin,IMGURL_ENDIN);
-						if(imgurl_ending != NULL && check_image_size(query,imgurl_begin, imgurl_ending) == TRUE)
+
+						if(check_image_size(query,imgurl_begin) == TRUE)
 						{
-								gchar * final_url_begin = strstr(imgurl_ending,URL_BEGIN);
-								if(final_url_begin != NULL)
+								gchar * final_url = discogs_get_value(imgurl_begin,URL_BEGIN,NODE_END);
+								if(final_url != NULL)
 								{
-										gchar * final_url = copy_value(final_url_begin + (sizeof URL_BEGIN)- 1, strstr(final_url_begin,URL_ENDIN));
-										if(final_url != NULL)
-										{
-												GlyrMemCache * result = DL_init();
-												result->data = final_url;
-												result->size = strlen(result->data);
-												result->type = img_type;
-												*result_list = g_list_prepend(*result_list,result);
-										}
+										GlyrMemCache * result = DL_init();
+										result->data = final_url;
+										result->size = strlen(result->data);
+										result->type = img_type;
+										*result_list = g_list_prepend(*result_list,result);
 								}
 						}
 				}
@@ -104,23 +103,42 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 static gboolean validate_title(GlyrQuery * query, gchar * release_node)
 {
 		gboolean result = FALSE;
+		gchar * title_value = discogs_get_value(release_node,TITLE_BEGIN,TITLE_ENDIN);
 
-		/* Find title in node */
-		gchar * title_begin = strstr(release_node,TITLE_BEGIN);
-		if(!title_begin) return result;
-
-		/* Find end of value */
-		gchar * title_endin = strstr(release_node,TITLE_ENDIN);
-		if(!title_endin) return result;
-
-		/* Go to beginning of value and get it */
-		gchar * title_value = copy_value(title_begin + (sizeof TITLE_BEGIN) - 1, title_endin);
-		if(levenshtein_strcasecmp(title_value,query->album) <= query->fuzzyness)
+		if(title_value && levenshtein_strcasecmp(title_value,query->album) <= query->fuzzyness)
 		{
 				result = TRUE;
 		}
 		g_free(title_value);
 		return result;
+}
+
+/*------------------------------------------------*/
+
+/* Most of the time there are no primary covers, just to be sure */
+static void sort_primary_before_secondary(GList ** result_list)
+{
+		if(result_list != NULL && *result_list != NULL)
+		{
+				GList * last_element = *result_list;
+				while(TRUE)
+				{
+						GList * elem = NULL;
+						for(elem = last_element; elem; elem = elem->next)
+						{
+								GlyrMemCache * item = elem->data;
+								if(item->type == TYPE_COVER_PRI)
+								{
+										last_element = elem->next;
+										*result_list = g_list_delete_link(*result_list,elem);
+										*result_list = g_list_prepend(*result_list,item);
+										break;
+								}
+						}
+
+						if(elem == NULL) break;
+				}
+		}
 }
 
 /*------------------------------------------------*/
@@ -138,10 +156,10 @@ GList * cover_discogs_parse(cb_object * capo)
 				{
 						/* Get release ID */
 						gchar * release_end = strstr(release_node, RELEASE_END);
-						if(release_end)
+						if(release_end != NULL)
 						{
 								// Copy ID from cache
-								gchar * release_ID = copy_value(release_node+strlen(RELEASE_ID),release_end);
+								gchar * release_ID = copy_value(release_node + (sizeof RELEASE_ID) - 1,release_end);
 								if(release_ID != NULL)
 								{
 										/*Construct release_url */
@@ -158,6 +176,7 @@ GList * cover_discogs_parse(cb_object * capo)
 						}
 				}
 		}
+		sort_primary_before_secondary(&result_list);
 		return result_list;
 }
 

@@ -77,11 +77,16 @@ GList * r_getFList(void)
 {
     return glyrMetaDataPluginList;
 }
+
+/* --------------------------------------- */
+
 /* Get Source list */
 GList * r_getSList(void)
 {
     return glyrMetaDataSourceList;
 }
+
+/* --------------------------------------- */
 
 void plugin_add_to_list(GList ** list, void * data)
 {
@@ -102,7 +107,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
+
+    //FIXME: Coverhunt seems to be down. Add again when up and running
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
+
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_lastfm_src);

@@ -26,13 +26,13 @@
 
 bool get_albumlist(GlyrQuery * settings)
 {
-    if(settings && settings->artist)
+    if(settings && settings->artist && settings->artist[0])
     {
         return true;
     }
     else
     {
-        glyr_message(2,settings,C_R"* "C_"Artist is needed to retrieve a albumlist (o rly?).\n");
+        glyr_message(2,settings,"Artist is needed to retrieve a albumlist.\n");
         return false;
     }
 }

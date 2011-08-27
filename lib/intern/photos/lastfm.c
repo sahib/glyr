@@ -19,12 +19,9 @@
 **************************************************************/
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../../utils.h"
+#include "../common.h"
 
 #define SIZE_FO "<size name=\""
-//#define SIZE_FO "<size name=\"extralarge\""
-#define API_KEY API_KEY_LASTFM
-
 #define URL_BEGIN "\">"
 #define URL_ENDIN "</size>"
 
@@ -32,7 +29,7 @@
 
 const gchar * photos_lastfm_url(GlyrQuery * settings)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY;
+    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY_LASTFM;
 }
 
 /* -------------------------------------------- */

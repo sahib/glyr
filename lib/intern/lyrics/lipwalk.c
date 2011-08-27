@@ -42,8 +42,6 @@ static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 	gchar * end   = NULL;
 	gchar * content = NULL;
 
-if(cache) puts(cache->data);
-
 	GlyrMemCache * result_cache = NULL;
 	if (cache && (start = strstr(cache->data,START)) != NULL)
 	{

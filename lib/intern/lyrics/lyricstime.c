@@ -94,7 +94,6 @@ static gboolean validate_artist(cb_object * capo, gchar * backpointer)
 										gchar * artist_val = copy_value(artist_beg,artist_end);
 										if(artist_val != NULL)
 										{
-												puts(artist_val);
 												if(levenshtein_strcasecmp(artist_val,capo->s->artist) <= capo->s->fuzzyness)
 												{
 														i_shall_continue = true;

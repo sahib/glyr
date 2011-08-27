@@ -30,26 +30,6 @@
 #include <curl/curl.h>
 #include <glib.h>
 
-#define PRT_COLOR glyr_USE_COLOR
-#define USE_COLOR
-#ifdef  USE_COLOR
-#define C_B "\x1b[34;01m" // blue
-#define C_M "\x1b[35;01m" // magenta
-#define C_C "\x1b[36;01m" // Cyan
-#define C_R "\x1b[31;01m" // Red
-#define C_G "\x1b[32;01m" // Green
-#define C_Y "\x1b[33;01m" // Yellow
-#define C_  "\x1b[0m"     // Reset
-#else
-#define C_B "" // blue
-#define C_M "" // magenta
-#define C_C "" // Cyan
-#define C_R "" // Red
-#define C_G "" // Green
-#define C_Y "" // Yellow
-#define C_  "" // Reset
-#endif
-
 // libglyr uses checksums to filter double items
 // Also you can use those as easy comparasion method
 // There is no valid reason to diasable this actually

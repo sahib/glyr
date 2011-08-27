@@ -26,15 +26,16 @@
 
 bool vdt_tags(GlyrQuery * settings)
 {
-    if(settings && settings->artist &&
-            !(settings && settings->artist && /* Impossible to get tags of a title without album */
-              settings->album == NULL &&
-              settings->title != NULL
-             )
+    if(settings && settings->artist  &&
+      !(settings && settings->artist && /* Impossible to get tags of a title without album */
+        settings->album == NULL      &&
+        settings->title != NULL
+       )
       )
     {
         return true;
     }
+	glyr_message(2,settings,"At least the artist is needed to get tags.\n");
     return false;
 }
 

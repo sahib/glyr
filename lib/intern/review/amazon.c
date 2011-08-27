@@ -17,9 +17,9 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
-#include "../cover/amazon.h"
 #include "../../core.h"
 #include "../../stringlib.h"
+#include "../common.h"
 
 const gchar * review_amazon_url(GlyrQuery * settings)
 {

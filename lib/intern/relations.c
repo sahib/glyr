@@ -26,20 +26,17 @@
 
 bool vdt_relations(GlyrQuery * settings)
 {
-    if(settings && settings->artist)
+    if(settings && settings->artist && settings->artist[0])
     {
         return true;
-    }
-    else
-    {
-        glyr_message(2,settings,C_R"* "C_"At least the artist is needed to get relations.\n");
-        return false;
-    }
+	}
+	glyr_message(2,settings,"At least the artist is needed to get relations.\n");
+	return false;
 }
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
+		return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
 }
 
 //-------------------------------------
@@ -47,11 +44,11 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_relations =
 {
-    .name = "relations",
-    .type = GET_RELATIONS,
-    .validate  = vdt_relations,
-    .full_data = TRUE,
-    .init    = NULL,
-    .destroy = NULL,
-    .finalize = factory
+		.name = "relations",
+		.type = GET_RELATIONS,
+		.validate  = vdt_relations,
+		.full_data = TRUE,
+		.init    = NULL,
+		.destroy = NULL,
+		.finalize = factory
 };

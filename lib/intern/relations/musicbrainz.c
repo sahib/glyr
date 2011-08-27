@@ -18,7 +18,7 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 #include "../../stringlib.h"
-#include "../tags/musicbrainz.h"
+#include "../common.h"
 
 /*--------------------------------------------------------*/
 

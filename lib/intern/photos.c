@@ -26,22 +26,19 @@
 
 bool vdt_photos(GlyrQuery * settings)
 {
-    if (settings && settings->artist)
+    if (settings && settings->artist && settings->artist[0])
     {
         return true;
-    }
-    else
-    {
-        glyr_message(2,settings,C_R"*"C_" Artist is needed to download artist-related photos!\n");
-        return false;
-    }
+	}
+	glyr_message(2,settings,"Artist is needed to download artistrelated photos!\n");
+	return false;
 }
 
 /*--------------------------------*/
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_img_finalizer(s,list,stop_me,TYPE_PHOTOS);
+		return generic_img_finalizer(s,list,stop_me,TYPE_PHOTOS);
 }
 
 /*--------------------------------*/
@@ -49,12 +46,12 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistphotos =
 {
-    .name = "artistphoto",
-    .type = GET_ARTIST_PHOTOS,
-    .validate  = vdt_photos,
-    .full_data = FALSE,
-    .init    = NULL,
-    .destroy = NULL,
-    .finalize = factory,
-    .default_parallel = 2
+		.name = "artistphoto",
+		.type = GET_ARTIST_PHOTOS,
+		.validate  = vdt_photos,
+		.full_data = FALSE,
+		.init    = NULL,
+		.destroy = NULL,
+		.finalize = factory,
+		.default_parallel = 2
 };

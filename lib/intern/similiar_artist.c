@@ -26,10 +26,11 @@
 
 bool vdt_similiar(GlyrQuery * settings)
 {
-    if(settings && settings->artist)
+    if(settings && settings->artist && settings->artist[0])
     {
         return true;
     }
+    glyr_message(2,settings,"Artist is needed to retrieve similar artists.\n");
     return false;
 }
 

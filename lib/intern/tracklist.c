@@ -26,10 +26,11 @@
 
 bool vdt_tracklist(GlyrQuery * settings)
 {
-    if(settings && settings->artist && settings->album)
+    if(settings && settings->artist && settings->album && settings->album[0] && settings->artist[0])
     {
         return true;
     }
+	glyr_message(2,settings,"At least the artist and album is needed for a tracklist.\n");
     return false;
 }
 
