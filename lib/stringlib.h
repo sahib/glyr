@@ -34,6 +34,9 @@ gsize levenshtein_strcmp(const gchar * string, const gchar * other);
 /* Same as above, but converts to lowercase before */
 gsize levenshtein_strcasecmp(const gchar * sstring, const gchar * other);
 
+/* Additionally normalizes string before comparing with levenshtein_strcasecmp */
+gsize levenshtein_strnormcmp(const gchar * string, const gchar * other);
+
 /* Replaces 'subs' with 'with' in string, returns newly allocated string or NULL */
 gchar * strreplace(const gchar * string, const gchar * subs, const gchar * with);
 

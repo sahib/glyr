@@ -84,24 +84,9 @@ static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
 
 /*--------------------------------------------------------*/
 
-static bool approve_content(char * content, const char * compare, size_t fuzz)
+static gboolean approve_content(gchar * content, const gchar * compare, gsize fuzz)
 {
-    bool result = false;
-    char * plain = beautify_lyrics(content); // cheap & well working ;-)
-    if(plain)
-    {
-        char * tmp = strdup(compare);
-        if(tmp)
-        {
-            if(levenshtein_strcasecmp(plain,tmp) <= fuzz)
-                result = true;
-
-            g_free(tmp);
-        }
-        g_free(plain);
-    }
-
-    return result;
+    return (levenshtein_strnormcmp(content,compare) <= fuzz);
 }
 
 /*--------------------------------------------------------*/

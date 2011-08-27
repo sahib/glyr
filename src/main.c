@@ -718,6 +718,13 @@ enum GLYR_GET_TYPE get_type_from_string(gchar * string)
 
 int main(int argc, char * argv[])
 {
+/*
+#include "../lib/stringlib.h"
+    gchar * pretty = strip_lint_from_names(argv[1]);
+g_print("%s\n",pretty);
+     g_free(pretty);
+exit(0);
+*/
     /* Try to print informative output */
     signal(SIGSEGV, sig_handler);
 
@@ -796,10 +803,10 @@ int main(int argc, char * argv[])
             }
 
 
-            // Clean memory alloc'd by settings
-            glyr_destroy_query( &my_query);
         }
-        /* Translator mode - simple interface to google translator */
+        // Clean memory alloc'd by settings
+        glyr_destroy_query( &my_query);
+
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
     {

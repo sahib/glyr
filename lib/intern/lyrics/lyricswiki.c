@@ -44,22 +44,13 @@ gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_obje
             gchar * tmp_title = copy_value(to_title, strstr(to_title ,"</song>" ));
             if(tmp_title != NULL)
             {
-                gchar * cmp_a =  g_strdup_printf("<artist>%s",capo->s->artist);
-                if(cmp_a != NULL)
-                {
-                    gchar * cmp_t =  g_strdup_printf("<song>%s",capo->s->title);
-                    if(cmp_t != NULL)
-                    {
-                        if((levenshtein_strcasecmp(cmp_a,tmp_artist) <= capo->s->fuzzyness &&
-                            levenshtein_strcasecmp(cmp_t,tmp_title)  <= capo->s->fuzzyness ))
-                        {
-                            res = true;
-                        }
-                        g_free(cmp_t);
-                    }
-                    g_free(cmp_a);
-                }
-                g_free(tmp_title);
+				 /* levenshtein_strnormcmp takes care of those brackets */
+                 if((levenshtein_strnormcmp(capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
+                     levenshtein_strnormcmp(capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
+                 {
+                     res = true;
+                 }
+                 g_free(tmp_title);
             }
             g_free(tmp_artist);
         }

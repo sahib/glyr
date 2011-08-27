@@ -106,13 +106,10 @@ static gboolean approve_content(GlyrQuery * query, gchar * ref)
 					gchar * artist_html = copy_value(ref, end_of_artist);
 					if(artist_html != NULL)
 					{
-						gchar * artist_unicode = beautify_lyrics(artist_html);
-						if(levenshtein_strcasecmp(artist_unicode,query->artist) <= query->fuzzyness)
+						if(levenshtein_strnormcmp(artist_html,query->artist) <= query->fuzzyness)
 						{
 								result = TRUE;
 						}
-
-						g_free(artist_unicode);
 						g_free(artist_html);
 					}
 			}

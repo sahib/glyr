@@ -108,6 +108,77 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
 
 /* ------------------------------------------------------------- */
 
+/**
+ * @brief Strips lint like "feat.", "CD1" etc.
+ *
+ * @param the string
+ *
+ * @return a newly allocated string
+ */
+gchar * delete_string[][2] = {
+	{"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
+	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
+	{"(\\(|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
+	{"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
+};	
+
+gchar * strip_lint_from_names(const gchar * string)
+{
+	gchar * result_string = (gchar*)string;
+	gint string_size = sizeof(delete_string)/ (2*sizeof(gchar*));
+
+	/* Match strings to delete */
+	for(gint it = 0; it < string_size; it++)
+	{
+		GError * match_error = NULL;
+		GRegex * regex = g_regex_new(delete_string[it][0],G_REGEX_CASELESS | G_REGEX_MULTILINE,0,&match_error);
+
+		if(regex != NULL)
+		{
+			GMatchInfo * match_info;
+			g_regex_match_full(regex, string, -1, 0, 0, &match_info,&match_error);
+			while (g_match_info_matches (match_info))
+			{
+			      gchar *word = g_match_info_fetch(match_info, 0);
+			      gchar * old_memory = result_string;
+			      result_string = strreplace(old_memory,word,delete_string[it][1]);
+			      if(old_memory != string)
+			      {
+				 g_free(old_memory);
+			      }
+
+			      g_match_info_next(match_info, &match_error);
+			      g_free (word);
+			}
+			g_match_info_free(match_info);
+			g_regex_unref(regex);
+		}
+
+		if(match_error != NULL)
+    		{
+      			g_printerr ("glyr: Error while matching: %s\n", match_error->message);
+      			g_error_free(match_error);
+    		}
+	}
+
+	/* Trim it the old way - we have to dup the string anyway */
+	if(result_string != NULL)
+	{
+		gsize result_len = strlen(result_string);  
+        	gchar * trim = g_malloc0(result_len + 1);
+        	trim_copy(result_string,trim);
+		if(result_string != string)
+		{
+			g_free(result_string);
+		}
+		result_string = trim;
+	}
+
+	return result_string;
+}
+
+/* ------------------------------------------------------------- */
+
 gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 {
     gsize diff = 0;
@@ -117,7 +188,17 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
         gchar * lower_string = g_utf8_strdown(string,-1);
         gchar * lower_other  = g_utf8_strdown(other, -1);
 
-        diff = levenshtein_strcmp(lower_string, lower_other);
+	if(lower_string && lower_other)
+	{
+		gchar * normalized_lower = g_utf8_normalize(lower_string,-1,G_NORMALIZE_NFKC);
+		gchar * normalized_other = g_utf8_normalize(lower_other, -1,G_NORMALIZE_NFKC);
+		if(normalized_lower && normalized_other)
+		{
+        		diff = levenshtein_strcmp(normalized_lower, normalized_other);
+		}
+		g_free(normalized_lower);
+		g_free(normalized_other);
+	}
 
         /* Free 'em */
         g_free(lower_string);
@@ -128,13 +209,45 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 
 /* ------------------------------------------------------------- */
 
+/* Tries to strip unused strings before comparing with levenshtein_strcasecmp */
+gsize levenshtein_strnormcmp(const gchar * string, const gchar * other)
+{
+	gsize diff = 0;
+	if(string != NULL && other != NULL)
+	{
+		gchar * norm_string = strip_lint_from_names(string);
+		gchar * norm_other  = strip_lint_from_names(other);
+		if(norm_string && norm_other)
+		{
+			gchar * pretty_string = beautify_lyrics(norm_string);
+			gchar * pretty_other  = beautify_lyrics(norm_other);
+
+			if(pretty_string && pretty_other)
+			{
+				diff = levenshtein_strcasecmp(pretty_string,pretty_other);
+			}
+
+			g_free(pretty_string);
+			g_free(pretty_other);
+		}
+		g_free(norm_string);
+		g_free(norm_other);
+	}
+	return diff;
+}
+
+/* ------------------------------------------------------------- */
+
 gchar * strreplace(const char * string, const char * subs, const char * with)
 {
     gchar * result = NULL;
-    if(string != NULL)
+    if(string != NULL && string[0] != '\0')
     {
         gchar ** split = g_strsplit(string,subs,0);
-        result = g_strjoinv(with,split);
+	if(split != NULL)
+	{
+        	result = g_strjoinv(with,split);
+	}
         g_strfreev(split);
     }
     return result;
@@ -153,12 +266,17 @@ gchar * prepare_string(const gchar * input, gboolean delintify)
             gchar * normalized = g_utf8_normalize(downed,-1,G_NORMALIZE_NFKC);
             if(normalized != NULL)
             {
-                result = curl_easy_escape(NULL,normalized,0);
-                if(result != NULL && delintify == TRUE)
-                {
-                    remove_tags_from_string(result,-1,'(',')');
+		gchar * no_lint = strip_lint_from_names(normalized);
+		if(no_lint != NULL)
+		{
+                	result = curl_easy_escape(NULL,no_lint,0);
+   	                if(result != NULL && delintify == TRUE)
+           	        {
+                   		remove_tags_from_string(result,-1,'(',')');
 
-                }
+                	}
+			g_free(no_lint);
+		}
                 g_free(normalized);
             }
             g_free(downed);
@@ -744,11 +862,20 @@ gchar * beautify_lyrics(const gchar * lyrics)
                 i = j + 1;
             }
 
-            Len -= remove_tags_from_string(unicode,Len,'<','>');
-
             gint less = 0;
-            result = trim_after_newline(unicode,Len,&less);
+            Len -= remove_tags_from_string(unicode,Len,'<','>');
+            gchar * trimmed = trim_after_newline(unicode,Len,&less);
             g_free(unicode);
+
+	    if(trimmed && g_utf8_validate(trimmed,-1,NULL) == TRUE)
+	    {
+		    result = g_utf8_normalize(trimmed,-1,G_NORMALIZE_NFKC);
+		    g_free(trimmed);
+	    }
+	    else
+            {
+		    result = trimmed;
+            }
         }
         g_free(strip);
     }

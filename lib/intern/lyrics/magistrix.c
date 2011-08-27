@@ -87,15 +87,10 @@ static gboolean convert_levenshtein(GlyrQuery * s, gchar * content, gchar * comp
 	gboolean result = FALSE;
     if(compare != NULL)
     {
-		gchar * normalized = beautify_lyrics(content);
-		if(normalized != NULL)
-		{
-        	if(levenshtein_strcasecmp(normalized,compare) <= s->fuzzyness)
-        	{
-				result = TRUE;
-        	}
-			g_free(normalized);
-		}
+       	if(levenshtein_strnormcmp(compare,content) <= s->fuzzyness)
+       	{
+			result = TRUE;
+       	}
     }
     return result;
 }

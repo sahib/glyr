@@ -90,7 +90,7 @@ GList * lyrics_lyrixat_parse(cb_object * capo)
 										gchar * title = copy_value(title_tag + tag_end_len,title_end);
 										if(title != NULL)
 										{
-												if(levenshtein_strcmp(title,capo->s->title) <= capo->s->fuzzyness)
+												if(levenshtein_strnormcmp(title,capo->s->title) <= capo->s->fuzzyness)
 												{
 														gchar * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
 														if(url_part != NULL)

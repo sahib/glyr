@@ -163,7 +163,7 @@ describe "lyrics" do
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
 			list.size.should equal 1
-			list.first.size.should be >= 100
+			list.first.size.should be >= 60
 		end
 
 		it "should find nothing at all" do

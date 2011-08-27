@@ -69,10 +69,7 @@ static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
 #define SEARCH_ENDIN "</div>"
 #define NODE_BEGIN   "<li><a href=\""
 #define NODE_ENDIN   "\">"
-
 #define SPAN_BEGIN "<span class"
-
-
 #define ARTIST_BEG "<b>"
 #define ARTIST_END "</b>"
 
@@ -94,7 +91,7 @@ static gboolean validate_artist(cb_object * capo, gchar * backpointer)
 										gchar * artist_val = copy_value(artist_beg,artist_end);
 										if(artist_val != NULL)
 										{
-												if(levenshtein_strcasecmp(artist_val,capo->s->artist) <= capo->s->fuzzyness)
+												if(levenshtein_strnormcmp(artist_val,capo->s->artist) <= capo->s->fuzzyness)
 												{
 														i_shall_continue = true;
 												}

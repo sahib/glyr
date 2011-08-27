@@ -42,6 +42,7 @@ const char * err_strings[] =
     "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
     "No valid provider specified in glyr_opt_from()",  /* GLYRE_NO_PROVIDER  */
     "Unknown GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
+	"Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
     "Cache was skipped due to user",                   /* GLYRE_SKIP         */
     "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
     "Stopped by callback (pre)",                       /* GLYRE_STOP_PRE     */
@@ -590,7 +591,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
             {
 
                 /* validate may be NULL, default to true */
-                bool isValid = true;
+                gboolean isValid = true;
                 if(item->validate != NULL)
                 {
                     isValid = item->validate(settings);
@@ -615,6 +616,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
                 else
                 {
                     glyr_message(2,settings,"Insufficient amount of data supplied for this fetcher.\n");
+					if(e) *e = GLYRE_INSUFF_DATA;
                 }
             }
         }

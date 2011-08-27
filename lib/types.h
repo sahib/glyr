@@ -36,7 +36,7 @@
 #define DEFAULT_DOWNLOAD true
 #define DEFAULT_GROUPEDL true
 #define DEFAULT_FROM_ARGUMENT_DELIM ";"
-#define DEFAULT_FUZZYNESS 4
+#define DEFAULT_FUZZYNESS 3
 #define DEFAULT_PROXY NULL
 #define DEFAULT_QSRATIO 0.85
 #define DEFAULT_FORCE_UTF8 false
@@ -79,6 +79,7 @@ enum GLYR_ERROR
     GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_opt_() */
     GLYRE_NO_PROVIDER,  /*!< setttings->provider == NULL */
     GLYRE_UNKNOWN_GET,  /*!< settings->type is not valid */
+    GLYRE_INSUFF_DATA,  /*!< Insufficient data supplied; (artist/album/title) missing */
     GLYRE_SKIP,         /*!< If returned by callback, cache is wont be added to results */
     GLYRE_STOP_POST,    /*!< Will stop searching, but still add the current item */
     GLYRE_STOP_PRE,     /*!< Will stop searching, but won't add the current item */

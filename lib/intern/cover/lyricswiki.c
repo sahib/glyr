@@ -98,7 +98,7 @@ GList * cover_lyricswiki_parse(cb_object * capo)
 					gchar * name = copy_value(find,endTag);
 					if(name != NULL)
 					{
-							if(check_file_format(capo->s,name) && levenshtein_strcasecmp(escaped_album_name,name) <= capo->s->fuzzyness)
+							if(check_file_format(capo->s,name) && levenshtein_strnormcmp(escaped_album_name,name) <= capo->s->fuzzyness)
 							{
 									gchar * url_start = strstr(endTag,URL_MARKER);
 									if(url_start != NULL)

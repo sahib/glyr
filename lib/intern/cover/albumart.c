@@ -35,16 +35,6 @@ const gchar * cover_albumart_url(GlyrQuery * sets)
 
 /*------------------------------------*/
 
-#define ARTIST_START "http://www.amazon"
-
-static gboolean validate_artist_and_album(GlyrQuery * query, gchar * ref)
-{
-	//FIXME
-	return TRUE;
-}
-
-/*------------------------------------*/
-
 #define NODE_START "<div id=\"main\">"
 #define NODE_NEXT "<li><div style=\""
 #define AMZ "http://ecx.images-amazon.com/images/"
@@ -52,6 +42,7 @@ static gboolean validate_artist_and_album(GlyrQuery * query, gchar * ref)
 
 GList * cover_albumart_parse(cb_object * capo)
 {
+		puts(capo->cache->data);
     GList * result_list = NULL;
     gchar * node = strstr(capo->cache->data,NODE_START);
     if(node != NULL)
@@ -63,50 +54,47 @@ GList * cover_albumart_parse(cb_object * capo)
             size_it = 1;
         }
 
-		if(validate_artist_and_album(capo->s, node))
+		/* Go through all nodes */
+		while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,NODE_NEXT)))
 		{
-				/* Go through all nodes */
-				while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,NODE_NEXT)))
-				{
-					gchar * img_tag = node;
-					gchar * img_end = NULL;
+				gchar * img_tag = node;
+				gchar * img_end = NULL;
 
-					for(gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1)
-					{
+				for(gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1)
+				{
 						if((img_tag = strstr(img_tag,AMZ)) == NULL)
 						{
-							break;
+								break;
 						}
-					}
+				}
 
-					if((img_end  = strstr(img_tag,IMG_FORMAT)) != NULL)
-					{
+				if((img_end  = strstr(img_tag,IMG_FORMAT)) != NULL)
+				{
 						gchar * img_url = copy_value(img_tag,img_end);
 						if(img_url != NULL)
 						{
-							GlyrMemCache * result = DL_init();
-							result->data = g_strdup_printf(AMZ"%s"IMG_FORMAT, img_url);
-							result->size = strlen(result->data);
-							result_list = g_list_prepend(result_list,result);
-							g_free(img_url);
+								GlyrMemCache * result = DL_init();
+								result->data = g_strdup_printf(AMZ"%s"IMG_FORMAT, img_url);
+								result->size = strlen(result->data);
+								result_list = g_list_prepend(result_list,result);
+								g_free(img_url);
 						}
-					}
 				}
 		}
-    }
-    return result_list;
+	}
+	return result_list;
 }
 
 /*------------------------------------*/
 
 MetaDataSource cover_albumart_src =
 {
-    .name      = "albumart",
-    .key       = 'b',
-    .parser    = cover_albumart_parse,
-    .get_url   = cover_albumart_url,
-    .type      = GET_COVERART,
-    .quality   = 80,
-    .speed     = 65,
-    .free_url  = false
+		.name      = "albumart",
+		.key       = 'b',
+		.parser    = cover_albumart_parse,
+		.get_url   = cover_albumart_url,
+		.type      = GET_COVERART,
+		.quality   = 80,
+		.speed     = 65,
+		.free_url  = false
 };
