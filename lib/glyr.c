@@ -42,7 +42,7 @@ const char * err_strings[] =
     "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
     "No valid provider specified in glyr_opt_from()",  /* GLYRE_NO_PROVIDER  */
     "Unknown GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
-	"Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
+    "Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
     "Cache was skipped due to user",                   /* GLYRE_SKIP         */
     "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
     "Stopped by callback (pre)",                       /* GLYRE_STOP_PRE     */
@@ -55,7 +55,7 @@ const char * err_strings[] =
 static gchar * auto_choose_lang(GlyrQuery * query)
 {
     gchar * result_lang = NULL;
-    const gchar * const * possible_locales = g_get_language_names ();
+    const gchar * const * possible_locales = g_get_language_names();
     if(possible_locales != NULL)
     {
         gchar * wanted = "en";
@@ -72,7 +72,6 @@ static gchar * auto_choose_lang(GlyrQuery * query)
         result_lang = g_strdup(wanted);
         glyr_message(2,query,"- Language : %s\n",result_lang);
     }
-    g_strfreev((gchar**)possible_locales);
     return result_lang;
 }
 
