@@ -20,9 +20,6 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define SUMMARY_BEGIN "<summary><![CDATA["
-#define SUMMARY_ENDIN "]]></summary>"
-
 #define CONTENT_BEGIN "<content><![CDATA["
 #define CONTENT_ENDIN "User-contributed text"
 #define OTHER_ENDIN "]]></content>"
@@ -30,7 +27,7 @@
 const gchar * ainfo_lastfm_url(GlyrQuery * s)
 {
 	gchar * url = NULL;
-    gchar * right_artist = strreplace(s->artist," ","+");
+    	gchar * right_artist = strreplace(s->artist," ","+");
 	if(right_artist != NULL)
 	{
     	url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,s->lang);
@@ -53,7 +50,7 @@ GList * ainfo_lastfm_parse(cb_object * capo)
 
 		if(content_begin && content_endin)
 		{
-				content_begin += (sizeof CONTENT_BEGIN);
+				content_begin += (sizeof CONTENT_BEGIN) - 1;
 				gchar * content = copy_value(content_begin,content_endin);
 				if(content != NULL)
 				{
