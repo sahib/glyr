@@ -70,7 +70,7 @@ MetaDataFetcher glyrFetcher_lyrics =
 		.init    = NULL,
 		.destroy = NULL,
 		.finalize = factory,
-		.default_parallel = 3
+		.default_parallel = 2
 };
 
 /* ------------------------------------- */

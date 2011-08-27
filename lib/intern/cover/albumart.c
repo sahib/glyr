@@ -42,7 +42,6 @@ const gchar * cover_albumart_url(GlyrQuery * sets)
 
 GList * cover_albumart_parse(cb_object * capo)
 {
-		puts(capo->cache->data);
     GList * result_list = NULL;
     gchar * node = strstr(capo->cache->data,NODE_START);
     if(node != NULL)

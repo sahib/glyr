@@ -47,6 +47,7 @@ static int _msg(const char * fmt, va_list params)
     {
         g_printerr(tmp_buf);
         g_free(tmp_buf);
+		tmp_buf = NULL;
     }
     return written;
 }
