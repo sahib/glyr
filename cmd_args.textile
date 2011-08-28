@@ -1,6 +1,6 @@
 ---
 title: Commandline arguments
-layout: default
+layout: post
 ---
 h2. Commandline arguments
 
