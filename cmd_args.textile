@@ -2,6 +2,23 @@
 title: Commandline arguments
 layout: post
 ---
+
+<meta name="Generator" content="Vim/7.3">
+<meta name="plugin-version" content="vim7.3_v10">
+<meta name="syntax" content="ruby">
+<meta name="settings" content="number_lines,use_css,expand_tabs">
+<style type="text/css">
+<!--
+pre { font-family: monospace; color: #d0d0d0; background-color: #1c1c1c; }
+body { font-family: monospace; color: #d0d0d0; background-color: #1c1c1c; }
+.lnr { color: #a8a8a8; background-color: #080808; }
+.Conditional { color: #8787ff; }
+.String { color: #87af5f; background-color: #121212; }
+.rubyStringDelimiter { color: #afaf5f; }
+.rubyConstant { color: #d75f5f; }
+-->
+</style>
+
 h2. Commandline arguments
 
 You might want to read "the README":https://github.com/sahib/glyr first.
