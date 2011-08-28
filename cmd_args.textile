@@ -2,7 +2,6 @@
 title: Commandline arguments
 layout: post
 ---
-
 <meta name="Generator" content="Vim/7.3">
 <meta name="plugin-version" content="vim7.3_v10">
 <meta name="syntax" content="ruby">
