@@ -1,64 +1,142 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
-<head>
-   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-   <title>{{ page.title }}</title>
-   <meta name="author" content="Tom Preston-Werner" />
-   <link href="http://feeds.feedburner.com/tom-preston-werner" rel="alternate" title="Tom Preston-Werner" type="application/atom+xml" />
 
-   <!-- syntax highlighting CSS -->
-   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+<html>
+  <head>
 
-   <!-- Homepage CSS -->
-   <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
-   <!-- Typekit -->
-   <script type="text/javascript" src="http://use.typekit.com/jpd0pfm.js"></script>
-   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
-</head>
-<body>
+    <title>{% if page.title %}{{ page.title }} | {% endif %}User Obsessed: On building software for people</title>
 
-<div class="site">
-  <div class="title">
-    <a href="/">Tom Preston-Werner</a>
-    <a class="extra" href="/">home</a>
-  </div>
-  
-  {{ content }}
-  
-  <div class="footer">
-    <div class="contact">
-      <p>
-        Tom Preston-Werner<br />
-        Cofounder of <a href="http://github.com/">GitHub</a><br />
-        tom@mojombo.com
-      </p>
-    </div>
-    <div class="contact">
-      <p>
-        <a href="http://github.com/mojombo/">github.com/mojombo</a><br />
-        <a href="http://twitter.com/mojombo/">twitter.com/mojombo</a><br />
-        <a href="http://flickr.com/photos/mojombo/">flickr.com/photos/mojombo</a>
-      </p>
-    </div>
-    <div class="rss">
-      <a href="http://feeds.feedburner.com/tom-preston-werner">
-        <img src="/images/rss.png" alt="Subscribe to RSS Feed" />
-      </a>
-    </div>
-  </div>
-</div>
+    <script type="text/javascript" src="http://use.typekit.com/jjw2jrj.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 
-<a href="http://github.com/mojombo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
+    <link type="text/css" rel="stylesheet" href="/stylesheets/reset.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/screen.css">
+    <link type="text/css" rel="stylesheet" href="/stylesheets/code.css">
+    <link rel="alternate" type="application/atom+xml"
+      title="User Obsessed Feed" href="http://feeds.feedburner.com/userobsessed" />
 
-<script type="text/javascript">
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-var pageTracker = _gat._getTracker("UA-6016902-1");
-pageTracker._trackPageview();
-</script>
+    <link rel="apple-touch-icon" href="/images/iOS-114.png" />
+    <link rel="apple-touch-icon-precomposed" href="/images/iOS-57.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" media="screen and (resolution: 132dpi)" href="/images/iOS-72.png" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" media="screen and (resolution: 326dpi)" href="/images/iOS-114.png" />
 
-</body>
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+
+
+
+  </head>
+  <body class="{{ page.layout }}">
+
+    <section id="main">
+
+      <section id="masthead" class="group">
+        <header class="group">
+          <p><a href="/">User<br>Obsessed</a></p>
+          <h1>On building software for people</h1>
+          <img src="/images/uo-logo.png">
+        </header>
+      </section>
+
+      <section id="focus" class="group">
+
+        <section id="content" class="group">
+          {{ content }}
+        </section>
+
+        <section id="sidebar">
+
+          <section id="meta-col1" class="meta group">
+            <aside id="about">
+              <header>
+                <h3>About</h3>
+              </header>
+              <p>
+                User Obsessed is a blog that explores the role developers play in defining the way users experience software. <a href="/about">See more.</a>
+              </p>
+            </aside>
+
+            <aside>
+              <header>
+                <h3>Stay up to date</h3>
+              </header>
+              <nav>
+                <ul>
+                  <li class="icon rss"><a href="http://feeds.feedburner.com/userobsessed">RSS</a></li>
+                  <li class="icon twitter"><a href="http://twitter.com/userobsessed">Twitter</a></li>
+                  <li class="icon"><a href="/subscribe">More</a></li>
+                </ul>
+              </nav>
+            </aside>
+
+            <aside id="ads">
+            <p>
+              <a href="/reviews/2011/01/13/review-authoring-ebooks-by-jeremy-mcanally/">
+                <img src="/images/authoring-ebooks-ad.png">
+              </a>
+            </p>
+            </aside>
+
+          </section>
+
+          <section id="meta-col2" class="meta group">
+
+            <aside id="bio">
+              <header>
+                <h3>The Author</h3>
+              </header>
+              <p>
+              My name is Joe Fiorini. I am a web developer from Cleveland, Ohio. I work for <a href="http://leandog.com">LeanDog Software</a> where I build software using <a href="http://www.rubyonrails.org">Ruby on Rails</a>. <a href="/bio">See more.</a>
+              </p>
+            </aside>
+
+            <aside>
+              <nav id="extra">
+                <ul>
+                  <li><a href="/colophon">Colophon</a></li>
+                  <li><a href="/contact">Contact</a></li>
+                </ul>
+              </nav>
+            </aside>
+
+          </section>
+
+        </section>
+
+      </section>
+
+      <section id="footer" class="group">
+        <footer class="group">
+          <nav id="site">
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+              <li><a href="/subscribe">Subscribe</a></li>
+              <li><a href="/colophon">Colophon</a></li>
+            </ul>
+          </nav>
+          <p class="copyright">
+            &copy;2011 &ndash; Joe Fiorini
+          </p>
+        </footer>
+      </section>
+
+    </section>
+
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-23094691-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+
+  </body>
 </html>
