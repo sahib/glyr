@@ -45,8 +45,8 @@ const gchar * cover_discogs_url(GlyrQuery * sets)
 static gboolean check_image_size(GlyrQuery * query, gchar * image_begin)
 {
 	gboolean result = FALSE;
-	gchar * height = getsearch_value(image_begin,"height=\"",NODE_END);
-	gchar * width  = getsearch_value(image_begin,"width=\"", NODE_END);
+	gchar * height = get_search_value(image_begin,"height=\"",NODE_END);
+	gchar * width  = get_search_value(image_begin,"width=\"", NODE_END);
 	if(width && height)
 	{
 		gint numeric_width  = strtol(width, NULL,10);
@@ -83,7 +83,7 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 
 						if(check_image_size(query,imgurl_begin) == TRUE)
 						{
-								gchar * final_url = getsearch_value(imgurl_begin,URL_BEGIN,NODE_END);
+								gchar * final_url = get_search_value(imgurl_begin,URL_BEGIN,NODE_END);
 								if(final_url != NULL)
 								{
 										GlyrMemCache * result = DL_init();
@@ -103,7 +103,7 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 static gboolean validate_title(GlyrQuery * query, gchar * release_node)
 {
 		gboolean result = FALSE;
-		gchar * album_value = getsearch_value(release_node,TITLE_BEGIN,TITLE_ENDIN);
+		gchar * album_value = get_search_value(release_node,TITLE_BEGIN,TITLE_ENDIN);
 		if(album_value && levenshtein_strnormcmp(album_value,query->album) <= query->fuzzyness)
 		{
 				result = TRUE;

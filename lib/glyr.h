@@ -98,15 +98,6 @@ extern "C"
     GlyrMemCache * glyr_new_cache(void);
 
     /**
-    * @brief Produces an exact copy of the GlyrMemCache source.
-    *
-    * @param source The GlyrMemCache to copy
-    *
-    * @return A newly allocated GlyrMemCache
-    */
-    GlyrMemCache * glyr_copy_cache(GlyrMemCache * source);
-
-    /**
     * @brief Free the GlyrMemCache pointed to by c. You should set it to NULL also, as using it after this will crash your program.
     *
     * @param c An allocated GlyrMemCache

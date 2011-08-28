@@ -21,6 +21,7 @@
 #include "../../stringlib.h"
 
 #define BAD_STRING "Special:Random" /* This has been a running gag during developement: "I want to edit metadata!" */
+#define EXTERNAL_LINKS "<span class=\"plainlinks\""
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=%artist%&song=%title%"
 
 /*--------------------------------------------------------*/
@@ -69,44 +70,25 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
     GList * result_list = NULL;
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
-        gchar *find, *endTag;
-        if((find = strstr(capo->cache->data,"<url>")) != NULL)
-        {
-            nextTag(find);
-            if((endTag = strstr(find, "</url>")) != NULL)
-            {
-                gchar * wiki_page_url = copy_value(find,endTag);
-                if(wiki_page_url != NULL)
-                {
-                    GlyrMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
-                    if(new_cache != NULL)
-                    {
-                        gchar *lyr_begin, *lyr_end;
-                        if( (lyr_begin = strstr(new_cache->data,LYR_BEGIN)) != NULL)
-                        {
-                            nextTag(lyr_begin);
-                            nextTag(lyr_begin);
-                            nextTag(lyr_begin);
-
-                            if((lyr_end = strstr(lyr_begin,LYR_ENDIN)) != NULL) 
-                            {
-                                gchar * lyr = copy_value(lyr_begin,lyr_end);
-                                if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL)
-                                {
-                                    GlyrMemCache * result = DL_init();
-                                    result->data = lyr;
-                                    result->size = ABS(lyr_end - lyr_begin);
-                                    result->dsrc = strdup(wiki_page_url);
-        							result_list = g_list_prepend(result_list,result);
-                                }
-                            }
-                        }
-                        DL_free(new_cache);
-                    }
-                    g_free(wiki_page_url);
-                }
-            }
-        }
+	    gchar * wiki_page_url = get_search_value(capo->cache->data,"<url>","</url>");
+	    if(wiki_page_url != NULL)
+	    {
+		    GlyrMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
+		    if(new_cache != NULL)
+		    {
+			    gchar * lyr = get_search_value(new_cache->data,LYR_BEGIN,LYR_ENDIN);
+			    if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL && strstr(lyr,EXTERNAL_LINKS) == NULL)
+			    {
+				    GlyrMemCache * result = DL_init();
+				    result->data = lyr;
+				    result->size = strlen(result->data);
+				    result->dsrc = g_strdup(wiki_page_url);
+				    result_list  = g_list_prepend(result_list,result);
+			    }
+			    DL_free(new_cache);
+		    }
+		    g_free(wiki_page_url);
+	    }
     }
     return result_list;
 }
@@ -115,13 +97,13 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
 
 MetaDataSource lyrics_lyricswiki_src =
 {
-    .name = "lyricswiki",
-    .key  = 'w',
-    .parser    = lyrics_lyricswiki_parse,
-    .get_url   = lyrics_lyricswiki_url,
-    .type      = GET_LYRICS,
-    .quality   = 95,
-    .speed     = 95,
-    .endmarker = NULL,
-    .free_url  = false
+	.name = "lyricswiki",
+	.key  = 'w',
+	.parser    = lyrics_lyricswiki_parse,
+	.get_url   = lyrics_lyricswiki_url,
+	.type      = GET_LYRICS,
+	.quality   = 95,
+	.speed     = 95,
+	.endmarker = NULL,
+	.free_url  = false
 };

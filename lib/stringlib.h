@@ -79,4 +79,6 @@ gchar * beautify_lyrics(const gchar * lyrics);
 /* "Normalizes" a string, suitable for URls afterwards */
 gchar * prepare_string(const gchar * input, gboolean delinitfy);
 
+gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string);
+
 #endif

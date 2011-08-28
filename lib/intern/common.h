@@ -29,7 +29,6 @@ const gchar * generic_amazon_url(GlyrQuery * sets, const gchar * response_group)
 const gchar * generic_google_url(GlyrQuery * sets, const gchar * searchterm);
 GList * generic_google_parse(cb_object * capo);
 gboolean size_is_okay(int sZ, int min, int max);
-gchar * getsearch_value(gchar * ref, gchar * name, gchar * end_string);
 
 /* Tags, relations */
 GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include);

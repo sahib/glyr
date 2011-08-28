@@ -1027,3 +1027,17 @@ gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * 
 
 /* ------------------------------------------------------------- */
 
+gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string)
+{
+	gchar * result = NULL;
+	if(ref && name)
+	{
+		gchar * begin = strstr(ref,name);
+		if(begin != NULL)
+		{
+			begin += strlen(name);
+			result = copy_value(begin,strstr(begin,end_string));
+		}
+	}	
+	return result;
+}

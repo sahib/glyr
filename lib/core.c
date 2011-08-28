@@ -85,19 +85,6 @@ int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 
 /*--------------------------------------------------------*/
 
-GlyrMemCache * DL_copy(GlyrMemCache * src)
-{
-    GlyrMemCache * new = NULL;
-    if(src != NULL)
-    {
-        new = g_malloc0(sizeof(GlyrMemCache));
-        memcpy(new,src, sizeof(GlyrMemCache));
-    }
-    return new;
-}
-
-/*--------------------------------------------------------*/
-
 /* cache incoming data in a GlyrMemCache */
 static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {

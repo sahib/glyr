@@ -350,19 +350,4 @@ const gchar * generic_amazon_url(GlyrQuery * sets, const gchar * response_group)
     return NULL;
 }
 
-/*------------------------------------------------*/
-
-gchar * getsearch_value(gchar * ref, gchar * name, gchar * end_string)
-{
-	gchar * result = NULL;
-	if(ref && name)
-	{
-		gchar * begin = strstr(ref,name);
-		if(begin != NULL)
-		{
-			begin += strlen(name);
-			result = copy_value(begin,strstr(begin,end_string));
-		}
-	}	
-	return result;
-}
+/* ------------------------------------------------------------- */

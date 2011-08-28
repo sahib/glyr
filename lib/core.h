@@ -129,12 +129,10 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 
 /*------------------------------------------------------*/
 
-gboolean continue_search(gint current, GlyrQuery * s);
-void update_md5sum(GlyrMemCache * c);
-
 GlyrMemCache * DL_init(void);
-GlyrMemCache * DL_copy(GlyrMemCache * src);
 void DL_free(GlyrMemCache *cache);
+void update_md5sum(GlyrMemCache * c);
 void glist_free_full(GList * List, void (* free_func)(void * ptr));
+gboolean continue_search(gint current, GlyrQuery * s);
 
 #endif

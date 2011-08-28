@@ -41,8 +41,8 @@ const gchar * photos_discogs_url(GlyrQuery * sets)
 static gboolean check_size(GlyrQuery * s, gchar * ref)
 {
 	gboolean result = FALSE;
-	gchar * height_string = getsearch_value(ref,"height=\"",NODE_END);
-	gchar * width_string  = getsearch_value(ref,"width=\"",NODE_END);
+	gchar * height_string = get_search_value(ref,"height=\"",NODE_END);
+	gchar * width_string  = get_search_value(ref,"width=\"",NODE_END);
 	if(height_string && width_string)
 	{
 			gint height_num = strtol(height_string,NULL,10);
@@ -76,8 +76,8 @@ GList * photos_discogs_parse(cb_object * capo)
 						node += node_next_len;
 						if(check_size(capo->s,node) == TRUE)
 						{
-								gchar * type = getsearch_value(node,"type=\"",NODE_END);
-								gchar * url  = getsearch_value(node,"uri=\"",NODE_END);
+								gchar * type = get_search_value(node,"type=\"",NODE_END);
+								gchar * url  = get_search_value(node,"uri=\"",NODE_END);
 								if(url != NULL)
 								{
 										GlyrMemCache * result = DL_init();

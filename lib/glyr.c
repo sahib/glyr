@@ -58,8 +58,11 @@ static gchar * auto_choose_lang(GlyrQuery * query)
     const gchar * const * possible_locales = g_get_language_names();
     if(possible_locales != NULL)
     {
+	/* Default to english anyway */
         gchar * wanted = "en";
         gsize min_length = INT_MAX;
+
+	/* This is weird. */
         for(gint i = 0; possible_locales[i]; i++)
         {
             gsize loc_len = strlen(possible_locales[i]);
@@ -69,7 +72,7 @@ static gchar * auto_choose_lang(GlyrQuery * query)
                 min_length = loc_len;
             }
         }
-        result_lang = g_strdup(wanted);
+        result_lang = wanted;
         glyr_message(2,query,"- Language : %s\n",result_lang);
     }
     return result_lang;
@@ -82,13 +85,6 @@ static void set_query_on_defaults(GlyrQuery * glyrs);
 
 /*--------------------------------------------------------*/
 /*-------------------- OTHER -----------------------------*/
-/*--------------------------------------------------------*/
-
-GlyrMemCache * glyr_copy_cache(GlyrMemCache * source)
-{
-    return DL_copy(source);
-}
-
 /*--------------------------------------------------------*/
 
 // return a descriptive string on error ID
@@ -244,17 +240,15 @@ enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
 
 /*-----------------------------------------------*/
 
-#define AUTO_STRING "auto"
 enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(langcode != NULL)
     {
-        if(g_ascii_strncasecmp(AUTO_STRING,langcode,(sizeof AUTO_STRING) - 1) == 0)
+        if(strcasecmp("auto",langcode) == 0)
         {
             gchar * auto_lang = auto_choose_lang(s);
-            glyr_set_info(s,7,auto_lang);
-            g_free(auto_lang);
+	    s->lang = auto_lang;
         }
         else
         {
@@ -264,7 +258,6 @@ enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
     }
     return GLYRE_BAD_VALUE;
 }
-#undef AUTO_STRING
 
 /*-----------------------------------------------*/
 
@@ -371,6 +364,11 @@ enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
 
 static void set_query_on_defaults(GlyrQuery * glyrs)
 {
+    if(glyrs == NULL)
+    {
+        return;
+    }
+
     /* Initialize free pointer pool */
     memset(glyrs,0,sizeof(GlyrQuery));
 
@@ -389,7 +387,6 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->redirects = DEFAULT_REDIRECTS;
     glyrs->timeout   = DEFAULT_TIMEOUT;
     glyrs->verbosity = DEFAULT_VERBOSITY;
-    glyrs->lang = DEFAULT_LANG;
     glyrs->plugmax = DEFAULT_PLUGMAX;
     glyrs->download = DEFAULT_DOWNLOAD;
     glyrs->fuzzyness = DEFAULT_FUZZYNESS;
@@ -399,6 +396,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->useragent = DEFAULT_USERAGENT;
     glyrs->force_utf8 = DEFAULT_FORCE_UTF8;
     glyrs->itemctr = 0;
+    glyrs->lang = auto_choose_lang(glyrs);
 }
 
 /*-----------------------------------------------*/
@@ -412,11 +410,11 @@ void glyr_init_query(GlyrQuery * glyrs)
 
 void glyr_destroy_query(GlyrQuery * sets)
 {
-    if(sets)
+    if(sets != NULL)
     {
         for(gsize i = 0; i < 10; i++)
         {
-            if(sets->info[i])
+            if(sets->info[i] != NULL)
             {
                 g_free((char*)sets->info[i]);
                 sets->info[i] = NULL;
@@ -615,7 +613,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
                 else
                 {
                     glyr_message(2,settings,"Insufficient amount of data supplied for this fetcher.\n");
-					if(e) *e = GLYRE_INSUFF_DATA;
+		    if(e) *e = GLYRE_INSUFF_DATA;
                 }
             }
         }
@@ -623,7 +621,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
         /* Make this query reusable */
         settings->itemctr = 0;
 
-
+	/* Start of the returned list */
         GlyrMemCache * head = NULL;
 
         /* free if empty */
@@ -736,6 +734,7 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
             s->useragent = (gchar*)s->info[at];
             break;
         case 7:
+puts("----Set Lang");
             s->lang = (gchar*)s->info[at];
             break;
         default:
