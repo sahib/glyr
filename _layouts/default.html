@@ -1,108 +1,64 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>{{ page.title }}</title>
+   <meta name="author" content="Tom Preston-Werner" />
+   <link href="http://feeds.feedburner.com/tom-preston-werner" rel="alternate" title="Tom Preston-Werner" type="application/atom+xml" />
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+   <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="/css/syntax.css" type="text/css" />
+
+   <!-- Homepage CSS -->
+   <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen, projection" />
+
+   <!-- Typekit -->
+   <script type="text/javascript" src="http://use.typekit.com/jpd0pfm.js"></script>
+   <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+</head>
+<body>
+
+<div class="site">
+  <div class="title">
+    <a href="/">Tom Preston-Werner</a>
+    <a class="extra" href="/">home</a>
+  </div>
   
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>GitHub Pages - {{ page.title }}</title>
-    <link href="/shared/css/documentation.css" media="screen" rel="stylesheet" type="text/css">
-    <link href="/shared/css/pygments.css" media="screen" rel="stylesheet" type="text/css">
-    <script src="/shared/js/jquery.js" type="text/javascript"></script>
-    <script src="/shared/js/documentation.js" type="text/javascript"></script>
-  </head>
+  {{ content }}
   
-  <body>
-    <div id="main">
-      <div id="header-wrapper">
-        <div id="header" class="basic" >
-          <div class="site">
-              <a class="logo" href="/"><img src="logo_pages.png" alt="github pages" width="196" height="45"/></a>
-            <div class="topsearch">
-              <ul class="nav logged_out">
-                <li><a href="http://support.github.com/">Support</a></li>
-                <li><a href="http://github.com/">Back to GitHub</a></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div id="wrapper">
-        <div id="content" class="site">
-
-          {{ content }}
-
-        </div>
-      </div>
-
-      <div class="push"></div>
+  <div class="footer">
+    <div class="contact">
+      <p>
+        Tom Preston-Werner<br />
+        Cofounder of <a href="http://github.com/">GitHub</a><br />
+        tom@mojombo.com
+      </p>
     </div>
+    <div class="contact">
+      <p>
+        <a href="http://github.com/mojombo/">github.com/mojombo</a><br />
+        <a href="http://twitter.com/mojombo/">twitter.com/mojombo</a><br />
+        <a href="http://flickr.com/photos/mojombo/">flickr.com/photos/mojombo</a>
+      </p>
+    </div>
+    <div class="rss">
+      <a href="http://feeds.feedburner.com/tom-preston-werner">
+        <img src="/images/rss.png" alt="Subscribe to RSS Feed" />
+      </a>
+    </div>
+  </div>
+</div>
 
-     <div id="footer" >
-      <div class="upper_footer">
-        <div class="footer_inner clearfix">
+<a href="http://github.com/mojombo"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub" /></a>
 
-        <!--[if IE]><h4 id="blacktocat_ie">GitHub Links</h4><![endif]-->
-        <![if !IE]><h4 id="blacktocat">GitHub Links</h4><![endif]>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+var pageTracker = _gat._getTracker("UA-6016902-1");
+pageTracker._trackPageview();
+</script>
 
-        <ul class="footer_nav">
-          <h4>GitHub</h4>
-          <li><a href="https://github.com/about">About</a></li>
-          <li><a href="https://github.com/blog">Blog</a></li>
-          <li><a href="https://github.com/contact">Contact &amp; Support</a></li>
-          <li><a href="https://github.com/training">Training</a></li>
-          <li><a href="http://status.github.com/">Site Status</a></li>
-        </ul>
-
-        <ul class="footer_nav">
-          <h4>Tools</h4>
-          <li><a href="http://mac.github.com/">GitHub for Mac</a></li>
-          <li><a href="gist.github.com">Gist</a></li>
-          <li><a href="http://fi.github.com/">Enterprise Install</a></li>
-          <li><a href="http://jobs.github.com/">Job Board</a></li>
-        </ul>
-
-        <ul class="footer_nav">
-          <h4>Extras</h4>
-          <li><a href="http://shop.github.com/">Shop</a></li>
-          <li><a href="http://octodex.github.com/">The Octodex</a></li>
-        </ul>
-
-        <ul class="footer_nav">
-          <h4>Documentation</h4>
-          <li><a href="http://help.github.com/">GitHub Help</a></li>
-          <li><a href="http://developer.github.com/">Developer API</a></li>
-          <li><a href="http://github.github.com/github-flavored-markdown/">GitHub Flavored Markdown</a></li>
-          <li><a href="http://pages.github.com/">GitHub Pages</a></li>
-        </ul>
-
-        </div><!-- /.site -->
-      </div><!-- /.upper_footer -->
-
-      <div class="lower_footer">
-        <div class="footer_inner clearfix">
-            <div id="legal"> 
-              <!--[if IE]><a class="home_ie" href="http://github.com">Home</a><![endif]-->
-              <![if !IE]><a class="home" href="http://github.com">Home</a><![endif]>
-              
-              <ul id="legal_links">
-                <li><a href="http://help.github.com/terms-of-service/">Terms of Service</a></li>
-                <li><a href="http://help.github.com/privacy-policy/">Privacy</a></li>
-                <li><a href="http://help.github.com/security/">Security</a></li>
-              </ul>
-
-              <p>&copy; <span id="year">year</span> GitHub Inc. All rights reserved.</p>
-            </div><!-- /#legal or /#legal_ie-->
-
-            <div class="sponsor">
-              <a href="http://www.rackspace.com" class="logo">
-                <img src="/shared/images/rackspace_logo.png" alt="Dedicated Server" width="38" height="36">
-              </a>
-              Powered by the <a href="http://www.rackspace.com ">Dedicated
-              Servers</a> and<br/> <a href="http://www.rackspacecloud.com">Cloud
-              Computing</a> of Rackspace Hosting<span>&reg;</span>
-          </div>
-        </div><!-- /.site -->
-      </div><!-- /.lower_footer -->
-    </div><!-- /#footer -->
-  </body>
+</body>
 </html>
