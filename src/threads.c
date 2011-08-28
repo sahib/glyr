@@ -16,7 +16,7 @@ static void * call_get(void * p)
     return r;
 }
 
-static void configure(GlyrQuery * s, enum GLYR_GET_TYPE type)
+static void configure(GlyrQuery * s, enum GLYR_GLYR_GET_TYPE type)
 {
     glyr_init_query(s);
     glyr_opt_artist(s,"Die Apokalyptischen Reiter");
@@ -46,8 +46,8 @@ int main(void)
 
     /* Fill some silly values */
     GlyrQuery query_long, query_longer;
-    configure(&query_long,GET_SIMILIAR_ARTISTS);
-    configure(&query_longer,GET_LYRICS);
+    configure(&query_long,GLYR_GET_SIMILIAR_ARTISTS);
+    configure(&query_longer,GLYR_GET_LYRICS);
 
     GlyrMemCache * a, * b;
 

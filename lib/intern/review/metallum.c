@@ -94,6 +94,6 @@ MetaDataSource review_metallum_src =
     .quality   = 95,
     .speed     = 70,
     .free_url  = false,
-    .type      = GET_ALBUM_REVIEW
+    .type      = GLYR_GET_ALBUM_REVIEW
 };
 

@@ -38,7 +38,7 @@ bool vdt_photos(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-		return generic_img_finalizer(s,list,stop_me,TYPE_PHOTOS);
+		return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_PHOTOS);
 }
 
 /*--------------------------------*/
@@ -47,7 +47,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_artistphotos =
 {
 		.name = "artistphoto",
-		.type = GET_ARTIST_PHOTOS,
+		.type = GLYR_GET_ARTIST_PHOTOS,
 		.validate  = vdt_photos,
 		.full_data = FALSE,
 		.init    = NULL,

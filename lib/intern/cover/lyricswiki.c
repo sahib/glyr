@@ -40,7 +40,7 @@ static gboolean check_file_format(GlyrQuery * query, gchar * filename)
 		gsize offset = 0;
 		gchar *token = NULL;
 
-		gchar ** token_list = g_strsplit(query->allowed_formats,DEFAULT_FROM_ARGUMENT_DELIM,0);
+		gchar ** token_list = g_strsplit(query->allowed_formats,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,0);
 		while((token = token_list[offset]) != NULL)
 		{
 				if(g_str_has_suffix(filename,token) == TRUE)
@@ -138,7 +138,7 @@ MetaDataSource cover_lyricswiki_src =
 		.key       = 'w',
 		.parser    = cover_lyricswiki_parse,
 		.get_url   = cover_lyricswiki_url,
-		.type      = GET_COVERART,
+		.type      = GLYR_GET_COVERART,
 		.quality   = 75,
 		.speed     = 85,
 		.endmarker = NULL,

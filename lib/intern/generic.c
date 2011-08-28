@@ -41,7 +41,7 @@ GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean
         if(add_to_list == TRUE)
         {
             /* Set to some default type */
-            if(item->type == TYPE_NOIDEA)
+            if(item->type == GLYR_TYPE_NOIDEA)
             {
                 item->type = type;
             }
@@ -100,7 +100,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
                 capo->cache->prov       = (old_cache->prov!=NULL) ? g_strdup(old_cache->prov) : NULL;
                 capo->cache->img_format = (old_cache->img_format) ? g_strdup(old_cache->img_format) : NULL;
 
-                if(capo->cache->type == TYPE_NOIDEA)
+                if(capo->cache->type == GLYR_TYPE_NOIDEA)
                 {
                     capo->cache->type = saver->type;
                 }
@@ -137,7 +137,7 @@ GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, e
             GlyrMemCache * img = elem->data;
             img->is_image = false;
         }
-        return generic_txt_finalizer(s,list,stop_me,TYPE_IMG_URL);
+        return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_IMG_URL);
     }
     else
     {
@@ -177,7 +177,7 @@ GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, e
         for(GList * elem = dl_raw_images; elem; elem = elem->next)
         {
             GlyrMemCache * item = elem->data;
-            if(item && item->type == TYPE_NOIDEA)
+            if(item && item->type == GLYR_TYPE_NOIDEA)
             {
                 item->type = type;
             }

@@ -45,14 +45,14 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 				if(item != NULL)
 				{
 
-						gchar * temp = beautify_lyrics(item->data);
+						gchar * temp = beautify_string(item->data);
 						g_free(item->data);
 						item->data = temp;
 						item->size = (item->data) ? strlen(item->data) : 0;
 				}
 		}
 
-		return generic_txt_finalizer(s,list,stop_me,TYPE_REVIEW);
+		return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_REVIEW);
 }
 
 /*----------------------------------------------------------------*/
@@ -61,7 +61,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_review =
 {
 		.name = "albumreview",
-		.type = GET_ALBUM_REVIEW,
+		.type = GLYR_GET_ALBUM_REVIEW,
 		.validate  = vdt_review,
 		.full_data = TRUE,
 		.init    = NULL,

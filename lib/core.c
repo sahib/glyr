@@ -134,7 +134,7 @@ void DL_free(GlyrMemCache *cache)
         }
 
         cache->size = 0;
-        cache->type = TYPE_NOIDEA;
+        cache->type = GLYR_TYPE_NOIDEA;
 
         g_free(cache->img_format);
         g_free(cache);
@@ -150,7 +150,7 @@ GlyrMemCache* DL_init(void)
     GlyrMemCache *cache = g_malloc0(sizeof(GlyrMemCache));
     memset(cache,0,sizeof(GlyrMemCache));
     cache->duration = 0;
-    cache->type = TYPE_NOIDEA;
+    cache->type = GLYR_TYPE_NOIDEA;
     return cache;
 }
 
@@ -932,7 +932,7 @@ static gboolean format_is_allowed(gchar * format, gchar * allowed)
         gsize offset = 0;
         gsize len = strlen(allowed);
 
-        while(!result && (token = get_next_word(allowed,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) != NULL)
+        while(!result && (token = get_next_word(allowed,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)) != NULL)
         {
             result = (g_strcmp0(token,format) == 0);
             g_free(token);
@@ -954,7 +954,7 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
     gchar * allowed_formats = s->allowed_formats;
     if(allowed_formats == NULL)
     {
-        allowed_formats = DEFAULT_ALLOWED_FORMATS;
+        allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
     }
 
     /* Now compare it agains the format. */
@@ -1194,7 +1194,7 @@ static gboolean provider_is_enabled(GlyrQuery * s, MetaDataSource * f)
         gsize offset = 0;
 
         gchar * token = NULL;
-        while((token = get_next_word(s->from,DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
+        while((token = get_next_word(s->from,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
         {
             if(token != NULL)
             {

@@ -26,7 +26,7 @@
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_img_finalizer(s,list,stop_me,TYPE_COVER);
+    return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_COVER);
 }
 
 /* ------------------------------------- */
@@ -57,7 +57,7 @@ bool vdt_cover(GlyrQuery * settings)
 MetaDataFetcher glyrFetcher_cover =
 {
     .name = "cover",
-    .type = GET_COVERART,
+    .type = GLYR_GET_COVERART,
     .validate  = vdt_cover,
     .full_data = FALSE,
     .init    = NULL,

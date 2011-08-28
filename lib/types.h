@@ -24,32 +24,32 @@
 #include <stdbool.h>
 
 /* Default values */
-#define DEFAULT_REDIRECTS 3L
-#define DEFAULT_TIMEOUT  20L
-#define DEFAULT_PARALLEL 0L
-#define DEFAULT_CMINSIZE 130
-#define DEFAULT_CMAXSIZE -1
-#define DEFAULT_VERBOSITY 0
-#define DEFAULT_NUMBER 1
-#define DEFAULT_PLUGMAX -1
-#define DEFAULT_LANG "en"
-#define DEFAULT_DOWNLOAD true
-#define DEFAULT_GROUPEDL true
-#define DEFAULT_FROM_ARGUMENT_DELIM ";"
-#define DEFAULT_FUZZYNESS 4
-#define DEFAULT_PROXY NULL
-#define DEFAULT_QSRATIO 0.85
-#define DEFAULT_FORCE_UTF8 false
+#define GLYR_DEFAULT_REDIRECTS 3L
+#define GLYR_DEFAULT_TIMEOUT  20L
+#define GLYR_DEFAULT_PARALLEL 0L
+#define GLYR_DEFAULT_CMINSIZE 130
+#define GLYR_DEFAULT_CMAXSIZE -1
+#define GLYR_DEFAULT_VERBOSITY 0
+#define GLYR_DEFAULT_NUMBER 1
+#define GLYR_DEFAULT_PLUGMAX -1
+#define GLYR_DEFAULT_LANG "auto"
+#define GLYR_DEFAULT_DOWNLOAD true
+#define GLYR_DEFAULT_GROUPEDL true
+#define GLYR_DEFAULT_FROM_ARGUMENT_DELIM ";"
+#define GLYR_DEFAULT_FUZZYNESS 4
+#define GLYR_DEFAULT_PROXY NULL
+#define GLYR_DEFAULT_QSRATIO 0.85
+#define GLYR_DEFAULT_FORCE_UTF8 false
 
 /* Disallow *.gif, mostly bad quality
  * jpeg and jpg, because some not standardaware
  * servers give MIME types like image/jpg
  * (which should be image/jpeg usually)
  */
-#define DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
+#define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define DEFAULT_USERAGENT "libglyr"
+#define GLYR_DEFAULT_USERAGENT "libglyr"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -87,25 +87,25 @@ enum GLYR_ERROR
 };
 
 /**
-* @brief Enumeration of all getters, GlyrQuery is initalized to GET_UNSURE
+* @brief Enumeration of all getters, GlyrQuery is initalized to GLYR_GET_UNSURE
 *
 *  The type of metadata to get, names are selfexplanatory
 *  Requirements are given in braces, [] means optional.
 */
-enum GLYR_GET_TYPE
+enum GLYR_GLYR_GET_TYPE
 {
-    GET_COVERART = 1, /*!< Get coverart for (artist|album) */
-    GET_LYRICS = 2, /*!< Get lyrics for (artist|[album]|artist) */
-    GET_ARTIST_PHOTOS = 3, /*!< Get pics for (artist) */
-    GET_ARTISTBIO = 4, /*!< Get bio of (artist) */
-    GET_SIMILIAR_ARTISTS = 5, /*!< Get similiar artists to (artist) */
-    GET_SIMILIAR_SONGS = 6, /*!< Get similiar songs (artist|title) */
-    GET_ALBUM_REVIEW = 7, /*!< Get album review to (artist|album) */
-    GET_TRACKLIST = 8, /*!< Get list of tracks for album (artist|album) */
-    GET_TAGS = 9, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
-    GET_RELATIONS = 10, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
-    GET_ALBUMLIST= 11, /*!< Get a list of albums by (artist) */
-    GET_UNSURE = 12 /*!< Do nothing but relax */
+    GLYR_GET_COVERART = 1, /*!< Get coverart for (artist|album) */
+    GLYR_GET_LYRICS = 2, /*!< Get lyrics for (artist|[album]|artist) */
+    GLYR_GET_ARTIST_PHOTOS = 3, /*!< Get pics for (artist) */
+    GLYR_GET_ARTISTBIO = 4, /*!< Get bio of (artist) */
+    GLYR_GET_SIMILIAR_ARTISTS = 5, /*!< Get similiar artists to (artist) */
+    GLYR_GET_SIMILIAR_SONGS = 6, /*!< Get similiar songs (artist|title) */
+    GLYR_GET_ALBUM_REVIEW = 7, /*!< Get album review to (artist|album) */
+    GLYR_GET_TRACKLIST = 8, /*!< Get list of tracks for album (artist|album) */
+    GLYR_GET_TAGS = 9, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
+    GLYR_GET_RELATIONS = 10, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
+    GLYR_GET_ALBUMLIST= 11, /*!< Get a list of albums by (artist) */
+    GLYR_GET_UNSURE = 12 /*!< Do nothing but relax */
 };
 
 /**
@@ -113,25 +113,25 @@ enum GLYR_GET_TYPE
 */
 enum GLYR_DATA_TYPE
 {
-    TYPE_NOIDEA, /*!< You shouldn't get this */
-    TYPE_LYRICS, /*!< Lyrics. */
-    TYPE_REVIEW, /*!< Album reviews */
-    TYPE_PHOTOS, /*!< Pics showing a certain band */
-    TYPE_COVER,  /*!< Coverart */
-    TYPE_COVER_PRI, /*!< A cover known to be the front side of the album */
-    TYPE_COVER_SEC, /*!< A cover known to be the backside, inlet etc. */
-    TYPE_AINFO,  /*!< Artist bio */
-    TYPE_SIMILIAR, /*!< Similiar artists */
-    TYPE_SIMILIAR_SONG, /*!< Similar songs */
-    TYPE_ALBUMLIST, /*!< List of albums, each cache containing one name */
-    TYPE_TAGS,	/*!< List of (random) tags, each cache containing one name */
-    TYPE_TAG_ARTIST,/*!< Tag associated with the artist */
-    TYPE_TAG_ALBUM, /*!< Tag associated with the album */
-    TYPE_TAG_TITLE, /*!< Tag associated with the album */
-    TYPE_RELATION,  /*!< Random relation, each cache containing one link */
-    TYPE_IMG_URL,   /*!< URL pointing to an image */
-    TYPE_TXT_URL,   /*!< URL pointing to some text content */
-    TYPE_TRACK	/*!< List of tracknames, each cache containing one name */
+    GLYR_TYPE_NOIDEA, /*!< You shouldn't get this */
+    GLYR_TYPE_LYRICS, /*!< Lyrics. */
+    GLYR_TYPE_REVIEW, /*!< Album reviews */
+    GLYR_TYPE_PHOTOS, /*!< Pics showing a certain band */
+    GLYR_TYPE_COVER,  /*!< Coverart */
+    GLYR_TYPE_COVER_PRI, /*!< A cover known to be the front side of the album */
+    GLYR_TYPE_COVER_SEC, /*!< A cover known to be the backside, inlet etc. */
+    GLYR_TYPE_AINFO,  /*!< Artist bio */
+    GLYR_TYPE_SIMILIAR, /*!< Similiar artists */
+    GLYR_TYPE_SIMILIAR_SONG, /*!< Similar songs */
+    GLYR_TYPE_ALBUMLIST, /*!< List of albums, each cache containing one name */
+    GLYR_TYPE_TAGS,	/*!< List of (random) tags, each cache containing one name */
+    GLYR_TYPE_TAG_ARTIST,/*!< Tag associated with the artist */
+    GLYR_TYPE_TAG_ALBUM, /*!< Tag associated with the album */
+    GLYR_TYPE_TAG_TITLE, /*!< Tag associated with the album */
+    GLYR_TYPE_RELATION,  /*!< Random relation, each cache containing one link */
+    GLYR_TYPE_IMG_URL,   /*!< URL pointing to an image */
+    GLYR_TYPE_TXT_URL,   /*!< URL pointing to some text content */
+    GLYR_TYPE_TRACK	/*!< List of tracknames, each cache containing one name */
 };
 
 
@@ -146,7 +146,7 @@ typedef struct GlyrMemCache
     size_t size;        /*!< Size of data, cahnge this if you changed the data field. */
     char  *dsrc;        /*!< Source of data, i.e. an exact URL to the place where it has been found. */
     char  *prov;        /*!< The name of the provider which found this item */
-    int   type;         /*!< The metadata type, is one of the GLYR_GET_TYPE enum */
+    int   type;         /*!< The metadata type, is one of the GLYR_GLYR_GET_TYPE enum */
     int   duration;     /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
     bool  is_image;     /*!< Wether it is an image or a textitem */
     char * img_format;  /*!< If it as an image, the imageformat (usually 'png' or 'jpeg') */
@@ -168,7 +168,7 @@ typedef struct GlyrMemCache
 */
 typedef struct GlyrQuery
 {
-    enum GLYR_GET_TYPE type; /*!< What type of data to get */
+    enum GLYR_GLYR_GET_TYPE type; /*!< What type of data to get */
 
     int number; /*!< Number of items to download */
     int plugmax; /*!< Number of items a single provider may download */
@@ -230,7 +230,7 @@ typedef struct GlyrSourceInfo
 {
     char key;
 
-    enum GLYR_GET_TYPE type;
+    enum GLYR_GLYR_GET_TYPE type;
     int quality;
     int speed;
 
@@ -245,7 +245,7 @@ typedef struct GlyrSourceInfo
 typedef struct GlyrFetcherInfo
 {
     char * name;
-    enum GLYR_GET_TYPE type;
+    enum GLYR_GLYR_GET_TYPE type;
 
     GlyrSourceInfo * head;
 

@@ -176,17 +176,17 @@ gint please_what_type(GlyrQuery * s)
 {
     int result = -1;
     if(s->artist && !s->album && !s->title)
-        result = TYPE_TAG_ARTIST;
+        result = GLYR_TYPE_TAG_ARTIST;
     else if(!s->artist && !s->album && s->title)
-        result = TYPE_TAG_TITLE;
+        result = GLYR_TYPE_TAG_TITLE;
     else if(!s->artist && s->album && !s->title)
-        result = TYPE_TAG_ALBUM;
+        result = GLYR_TYPE_TAG_ALBUM;
     else if(s->artist && s->album && s->title)
-        result = TYPE_TAG_TITLE;
+        result = GLYR_TYPE_TAG_TITLE;
     else if(s->artist && !s->album && s->title)
-        result = TYPE_TAG_TITLE;
+        result = GLYR_TYPE_TAG_TITLE;
     else if(s->artist && s->album && !s->title)
-        result = TYPE_TAG_ALBUM;
+        result = GLYR_TYPE_TAG_ALBUM;
     else
         result = -1;
 
@@ -203,11 +203,11 @@ const gchar * generic_musicbrainz_url(GlyrQuery * sets)
 
     switch(please_what_type(sets))
     {
-    case TYPE_TAG_TITLE :
+    case GLYR_TYPE_TAG_TITLE :
         return g_strdup_printf("http://musicbrainz.org/ws/1/track/?type=xml&title=%s&artist=%s&release=%s",wrap_t,wrap_a,wrap_b);
-    case TYPE_TAG_ALBUM :
+    case GLYR_TYPE_TAG_ALBUM :
         return g_strdup_printf("http://musicbrainz.org/ws/1/release/?type=xml&title=%s&artist=%s",wrap_b,wrap_a);
-    case TYPE_TAG_ARTIST:
+    case GLYR_TYPE_TAG_ARTIST:
         return g_strdup_printf("http://musicbrainz.org/ws/1/artist/?type=xml&name=%s",wrap_a);
     default:
         return NULL;
@@ -228,17 +228,17 @@ const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
 
     switch(please_what_type(s))
     {
-    case TYPE_TAG_TITLE:
+    case GLYR_TYPE_TAG_TITLE:
         checkstring = "<title>";
         searchterm  = "<track ";
         comparestr  = s->title;
         break;
-    case TYPE_TAG_ALBUM:
+    case GLYR_TYPE_TAG_ALBUM:
         checkstring = "<title>";
         searchterm  = "<release ";
         comparestr  = s->album;
         break;
-    case TYPE_TAG_ARTIST:
+    case GLYR_TYPE_TAG_ARTIST:
         checkstring = "<name>";
         searchterm  = "<artist ";
         comparestr  = s->artist;
@@ -296,13 +296,13 @@ GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, con
 						const gchar * type = NULL;
 						switch(please_what_type(capo->s))
 						{
-								case TYPE_TAG_TITLE:
+								case GLYR_TYPE_TAG_TITLE:
 										type = "track";
 										break;
-								case TYPE_TAG_ALBUM:
+								case GLYR_TYPE_TAG_ALBUM:
 										type = "release";
 										break;
-								case TYPE_TAG_ARTIST:
+								case GLYR_TYPE_TAG_ARTIST:
 										type = "artist";
 										break;
 						}

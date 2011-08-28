@@ -47,7 +47,7 @@ GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 				GlyrMemCache * item = elem->data;
 				if(item != NULL)
 				{
-						gchar * temp = beautify_lyrics(item->data);
+						gchar * temp = beautify_string(item->data);
 						g_free(item->data);
 						item->data = temp;
 						item->size = (item->data) ? strlen(item->data) : 0;
@@ -55,7 +55,7 @@ GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 		}
 
 		/* Let the rest do by the norma generic finalizer */
-		return generic_txt_finalizer(s,list,stop_me,TYPE_LYRICS);
+		return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS);
 }
 
 /* ------------------------------------- */
@@ -64,7 +64,7 @@ GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_lyrics =
 {
 		.name = "lyrics",
-		.type = GET_LYRICS,
+		.type = GLYR_GET_LYRICS,
 		.validate  = vdt_lyrics,
 		.full_data = TRUE,
 		.init    = NULL,

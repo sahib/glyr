@@ -31,7 +31,7 @@ const char * cover_lastfm_url(GlyrQuery * sets)
 
 /* ----------------------------------------------- */
 
-#define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
+#define BAD_GLYR_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
 GList * cover_lastfm_parse(cb_object *capo)
 {
@@ -66,7 +66,7 @@ GList * cover_lastfm_parse(cb_object *capo)
 			find += tag_len;
             if((url = copy_value(find,end_tag)) != NULL)
             {
-                if(strcmp(url,BAD_DEFAULT_IMAGE) != 0)
+                if(strcmp(url,BAD_GLYR_DEFAULT_IMAGE) != 0)
                 {
                     result = DL_init();
                     result->data = url;
@@ -91,7 +91,7 @@ MetaDataSource cover_lastfm_src =
     .key       = 'l',
     .parser    = cover_lastfm_parse,
     .get_url   = cover_lastfm_url,
-    .type      = GET_COVERART,
+    .type      = GLYR_GET_COVERART,
     .quality   = 90,
     .speed     = 75,
     .endmarker = NULL,

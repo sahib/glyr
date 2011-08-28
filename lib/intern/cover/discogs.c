@@ -76,9 +76,9 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 								continue;
 
 						if(is_primary != NULL)
-								img_type = TYPE_COVER_PRI;
+								img_type = GLYR_TYPE_COVER_PRI;
 						else
-								img_type = TYPE_COVER_SEC;
+								img_type = GLYR_TYPE_COVER_SEC;
 
 
 						if(check_image_size(query,imgurl_begin) == TRUE)
@@ -126,7 +126,7 @@ static void sort_primary_before_secondary(GList ** result_list)
 						for(elem = last_element; elem; elem = elem->next)
 						{
 								GlyrMemCache * item = elem->data;
-								if(item->type == TYPE_COVER_PRI)
+								if(item->type == GLYR_TYPE_COVER_PRI)
 								{
 										last_element = elem->next;
 										*result_list = g_list_delete_link(*result_list,elem);
@@ -187,7 +187,7 @@ MetaDataSource cover_discogs_src =
 		.key       = 'd',
 		.parser    = cover_discogs_parse,
 		.get_url   = cover_discogs_url,
-		.type      = GET_COVERART,
+		.type      = GLYR_GET_COVERART,
 		.quality   = 50,
 		.speed     = 35,
 		.endmarker = NULL,

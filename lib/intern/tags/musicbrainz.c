@@ -98,5 +98,5 @@ MetaDataSource tags_musicbrainz_src =
 		.free_url  = true,
 		.quality   = 90,
 		.speed     = 90,
-		.type      = GET_TAGS
+		.type      = GLYR_GET_TAGS
 };

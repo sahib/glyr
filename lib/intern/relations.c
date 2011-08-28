@@ -36,7 +36,7 @@ bool vdt_relations(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-		return generic_txt_finalizer(s,list,stop_me,TYPE_RELATION);
+		return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_RELATION);
 }
 
 //-------------------------------------
@@ -45,7 +45,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_relations =
 {
 		.name = "relations",
-		.type = GET_RELATIONS,
+		.type = GLYR_GET_RELATIONS,
 		.validate  = vdt_relations,
 		.full_data = TRUE,
 		.init    = NULL,

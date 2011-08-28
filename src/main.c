@@ -559,40 +559,40 @@ char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
     char * m_path = NULL;
     switch(s->type)
     {
-    case GET_COVERART:
+    case GLYR_GET_COVERART:
         m_path = path_covers(s,sd,iter);
         break;
-    case GET_LYRICS:
+    case GLYR_GET_LYRICS:
         m_path = path_lyrics(s,sd,iter);
         break;
-    case GET_ARTIST_PHOTOS:
+    case GLYR_GET_ARTIST_PHOTOS:
         m_path = path_photos(s,sd,iter);
         break;
-    case GET_ARTISTBIO:
+    case GLYR_GET_ARTISTBIO:
         m_path = path_ainfo(s,sd,iter);
         break;
-    case GET_SIMILIAR_ARTISTS:
+    case GLYR_GET_SIMILIAR_ARTISTS:
         m_path = path_similiar(s,sd,iter);
         break;
-    case GET_SIMILIAR_SONGS:
+    case GLYR_GET_SIMILIAR_SONGS:
         m_path = path_similiar(s,sd,iter);
         break;
-    case GET_ALBUM_REVIEW:
+    case GLYR_GET_ALBUM_REVIEW:
         m_path = path_review(s,sd,iter);
         break;
-    case GET_TRACKLIST:
+    case GLYR_GET_TRACKLIST:
         m_path = path_tracklist(s,sd,iter);
         break;
-    case GET_ALBUMLIST:
+    case GLYR_GET_ALBUMLIST:
         m_path = path_albumlist(s,sd,iter);
         break;
-    case GET_TAGS:
+    case GLYR_GET_TAGS:
         m_path = path_tags(s,sd,iter);
         break;
-    case GET_RELATIONS:
+    case GLYR_GET_RELATIONS:
         m_path = path_relations(s,sd,iter);
         break;
-    case GET_UNSURE:
+    case GLYR_GET_UNSURE:
         message(-1,NULL,stderr,"glyrc: getPath(): Unknown type, Problem?\n");
     }
     return m_path;
@@ -689,9 +689,9 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-enum GLYR_GET_TYPE get_type_from_string(gchar * string)
+enum GLYR_GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
-    enum GLYR_GET_TYPE result = GET_UNSURE;
+    enum GLYR_GLYR_GET_TYPE result = GLYR_GET_UNSURE;
     GlyrFetcherInfo * info = glyr_get_plugin_info();
     if(info != NULL)
     {
@@ -763,7 +763,7 @@ exit(0);
         int item_counter = 0;
         glyr_opt_dlcallback(&my_query, callback, &item_counter);
 
-        if(my_query.type != GET_UNSURE)
+        if(my_query.type != GLYR_GET_UNSURE)
         {
             // Now start searching!
             int length = -1;

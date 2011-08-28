@@ -22,7 +22,7 @@ int main(void)
     glyr_init_query(&q);
 
     /* We want lyrics, well, I want. */
-    glyr_opt_type(&q,GET_LYRICS);
+    glyr_opt_type(&q,GLYR_GET_LYRICS);
 
     /* Set random artist/title -  you could also omit the album line */
     glyr_opt_artist(&q,(char*)"Die Ärzte");

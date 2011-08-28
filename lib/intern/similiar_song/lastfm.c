@@ -115,5 +115,5 @@ MetaDataSource similar_song_lastfm_src =
 		.speed     = 90,
 		.endmarker = NULL,
 		.free_url  = false,
-		.type      = GET_SIMILIAR_SONGS
+		.type      = GLYR_GET_SIMILIAR_SONGS
 };

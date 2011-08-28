@@ -41,7 +41,7 @@ const char * err_strings[] =
     "Bad value for glyr_opt_*()",                      /* GLYRE_BAD_VALUE    */
     "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
     "No valid provider specified in glyr_opt_from()",  /* GLYRE_NO_PROVIDER  */
-    "Unknown GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
+    "Unknown GLYR_GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
     "Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
     "Cache was skipped due to user",                   /* GLYRE_SKIP         */
     "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
@@ -129,11 +129,11 @@ enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, voi
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type)
+enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GLYR_GET_TYPE type)
 {
 
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    if(type < GET_UNSURE)
+    if(type < GLYR_GET_UNSURE)
     {
         s->type = type;
         return GLYRE_OK;
@@ -295,7 +295,7 @@ enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
 enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
-    glyr_set_info(s,5,(formats==NULL) ? DEFAULT_ALLOWED_FORMATS : formats);
+    glyr_set_info(s,5,(formats==NULL) ? GLYR_DEFAULT_ALLOWED_FORMATS : formats);
     return GLYRE_OK;
 }
 
@@ -372,7 +372,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     /* Initialize free pointer pool */
     memset(glyrs,0,sizeof(GlyrQuery));
 
-    glyrs->type = GET_UNSURE;
+    glyrs->type = GLYR_GET_UNSURE;
     glyrs->artist = NULL;
     glyrs->album  = NULL;
     glyrs->title  = NULL;
@@ -380,21 +380,21 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
 
-    glyrs->img_min_size = DEFAULT_CMINSIZE;
-    glyrs->img_max_size = DEFAULT_CMAXSIZE;
-    glyrs->number = DEFAULT_NUMBER;
-    glyrs->parallel  = DEFAULT_PARALLEL;
-    glyrs->redirects = DEFAULT_REDIRECTS;
-    glyrs->timeout   = DEFAULT_TIMEOUT;
-    glyrs->verbosity = DEFAULT_VERBOSITY;
-    glyrs->plugmax = DEFAULT_PLUGMAX;
-    glyrs->download = DEFAULT_DOWNLOAD;
-    glyrs->fuzzyness = DEFAULT_FUZZYNESS;
-    glyrs->proxy = DEFAULT_PROXY;
-    glyrs->qsratio = DEFAULT_QSRATIO;
-    glyrs->allowed_formats = DEFAULT_ALLOWED_FORMATS;
-    glyrs->useragent = DEFAULT_USERAGENT;
-    glyrs->force_utf8 = DEFAULT_FORCE_UTF8;
+    glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
+    glyrs->img_max_size = GLYR_DEFAULT_CMAXSIZE;
+    glyrs->number = GLYR_DEFAULT_NUMBER;
+    glyrs->parallel  = GLYR_DEFAULT_PARALLEL;
+    glyrs->redirects = GLYR_DEFAULT_REDIRECTS;
+    glyrs->timeout   = GLYR_DEFAULT_TIMEOUT;
+    glyrs->verbosity = GLYR_DEFAULT_VERBOSITY;
+    glyrs->plugmax = GLYR_DEFAULT_PLUGMAX;
+    glyrs->download = GLYR_DEFAULT_DOWNLOAD;
+    glyrs->fuzzyness = GLYR_DEFAULT_FUZZYNESS;
+    glyrs->proxy = GLYR_DEFAULT_PROXY;
+    glyrs->qsratio = GLYR_DEFAULT_QSRATIO;
+    glyrs->allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
+    glyrs->useragent = GLYR_DEFAULT_USERAGENT;
+    glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
     glyrs->itemctr = 0;
     glyrs->lang = auto_choose_lang(glyrs);
 }
@@ -754,43 +754,43 @@ const char * glyr_type_to_string(enum GLYR_DATA_TYPE type)
 {
     switch(type)
     {
-    case TYPE_COVER:
+    case GLYR_TYPE_COVER:
         return "cover";
-    case TYPE_COVER_PRI:
+    case GLYR_TYPE_COVER_PRI:
         return "cover (frontside)";
-    case TYPE_COVER_SEC:
+    case GLYR_TYPE_COVER_SEC:
         return "cover (backside or inlet)";
-    case TYPE_LYRICS:
+    case GLYR_TYPE_LYRICS:
         return "songtext";
-    case TYPE_PHOTOS:
+    case GLYR_TYPE_PHOTOS:
         return "band photo";
-    case TYPE_REVIEW:
+    case GLYR_TYPE_REVIEW:
         return "albumreview";
-    case TYPE_AINFO:
+    case GLYR_TYPE_AINFO:
         return "artistbio";
-    case TYPE_SIMILIAR:
+    case GLYR_TYPE_SIMILIAR:
         return "similiar artist";
-    case TYPE_SIMILIAR_SONG:
+    case GLYR_TYPE_SIMILIAR_SONG:
         return "similiar song";
-    case TYPE_TRACK:
+    case GLYR_TYPE_TRACK:
         return "trackname";
-    case TYPE_ALBUMLIST:
+    case GLYR_TYPE_ALBUMLIST:
         return "albumname";
-    case TYPE_TAGS:
+    case GLYR_TYPE_TAGS:
         return "some tag";
-    case TYPE_TAG_ARTIST:
+    case GLYR_TYPE_TAG_ARTIST:
         return "artisttag";
-    case TYPE_TAG_ALBUM:
+    case GLYR_TYPE_TAG_ALBUM:
         return "albumtag";
-    case TYPE_TAG_TITLE:
+    case GLYR_TYPE_TAG_TITLE:
         return "titletag";
-    case TYPE_RELATION:
+    case GLYR_TYPE_RELATION:
         return "relation";
-    case TYPE_IMG_URL:
+    case GLYR_TYPE_IMG_URL:
         return "Image URL";
-    case TYPE_TXT_URL:
+    case GLYR_TYPE_TXT_URL:
         return "HTML URL";
-    case TYPE_NOIDEA:
+    case GLYR_TYPE_NOIDEA:
     default:
         return "Unknown";
     }
@@ -813,7 +813,7 @@ void glyr_printitem(GlyrMemCache * cacheditem)
 
     // Each cache identified it's data by a constant
     g_printerr("\nTYPE: ");
-    if(cacheditem->type == TYPE_TRACK)
+    if(cacheditem->type == GLYR_TYPE_TRACK)
     {
         panic("[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
     }

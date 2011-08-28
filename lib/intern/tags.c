@@ -43,7 +43,7 @@ bool vdt_tags(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,TYPE_TAGS);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TAGS);
 }
 
 /*----------------------------------------------------------------*/
@@ -52,7 +52,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_tags =
 {
     .name = "tags",
-    .type = GET_TAGS,
+    .type = GLYR_GET_TAGS,
     .validate = vdt_tags,
     .full_data = TRUE,
     .init    = NULL,

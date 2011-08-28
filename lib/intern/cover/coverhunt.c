@@ -130,7 +130,7 @@ MetaDataSource cover_coverhunt_src =
     .key       = 'c',
     .parser    = cover_coverhunt_parse,
     .get_url   = cover_coverhunt_url,
-    .type      = GET_COVERART,
+    .type      = GLYR_GET_COVERART,
     .endmarker = "<div id=\"footer\">",
     .quality   = 0, /* ex. 70 */
     .speed     = 0, /* ex. 40 */

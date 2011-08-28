@@ -45,7 +45,7 @@ gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_obje
             gchar * tmp_title = copy_value(to_title, strstr(to_title ,"</song>" ));
             if(tmp_title != NULL)
             {
-				 /* levenshtein_strnormcmp takes care of those brackets */
+		 /* levenshtein_strnormcmp takes care of those brackets */
                  if((levenshtein_strnormcmp(capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
                      levenshtein_strnormcmp(capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
                  {
@@ -101,9 +101,9 @@ MetaDataSource lyrics_lyricswiki_src =
 	.key  = 'w',
 	.parser    = lyrics_lyricswiki_parse,
 	.get_url   = lyrics_lyricswiki_url,
-	.type      = GET_LYRICS,
+	.type      = GLYR_GET_LYRICS,
 	.quality   = 95,
-	.speed     = 95,
+	.speed     = 75,
 	.endmarker = NULL,
 	.free_url  = false
 };

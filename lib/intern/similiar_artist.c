@@ -38,7 +38,7 @@ bool vdt_similiar(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,TYPE_SIMILIAR_SONG);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG);
 }
 
 /*----------------------------------------------------------------*/
@@ -47,7 +47,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_similiar_artists =
 {
     .name = "similarartists",
-    .type = GET_SIMILIAR_ARTISTS,
+    .type = GLYR_GET_SIMILIAR_ARTISTS,
     .validate  = vdt_similiar,
     .full_data = TRUE,
     .init    = NULL,

@@ -125,14 +125,14 @@ extern "C"
     */
     enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
     /**
-    * @brief What type of metadata to search for. Must be one of GLYR_GET_TYPE enum.
+    * @brief What type of metadata to search for. Must be one of GLYR_GLYR_GET_TYPE enum.
     *
     * @param s The GlyrQuery settings struct to store this option in
-    * @param type A member of the GLYR_GET_TYPE enum, set this before you set anything else.
+    * @param type A member of the GLYR_GLYR_GET_TYPE enum, set this before you set anything else.
     *
     * @return an errorID
     */
-    enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type);
+    enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GLYR_GET_TYPE type);
     /**
     * @brief The artist field. libglyr will try to format it to fit the best.
     *
@@ -535,7 +535,7 @@ extern "C"
     /**
     * @brief Converts a GLYR_DATA_TYPE type to a string
     *
-    * @param type a member of the GLYR_DATA_TYPE enum, TYPE_COVER_PRI e.g.
+    * @param type a member of the GLYR_DATA_TYPE enum, GLYR_TYPE_COVER_PRI e.g.
     *
     * @return a statically allocated string, do not free
     */

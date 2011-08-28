@@ -44,7 +44,7 @@ GList * review_amazon_parse(cb_object * capo)
             if((endOfText - (node+conlen)) > 350)
             {
                 GlyrMemCache * tmp = DL_init();
-                tmp->data = beautify_lyrics(text);
+                tmp->data = beautify_string(text);
                 tmp->size = tmp->data ? strlen(tmp->data) : 0;
                 tmp->dsrc = strdup(capo->url);
                 cList = g_list_prepend(cList,tmp);
@@ -63,7 +63,7 @@ MetaDataSource review_amazon_src =
     .key  = 'a',
     .parser    = review_amazon_parse,
     .get_url   = review_amazon_url,
-    .type      = GET_ALBUM_REVIEW,
+    .type      = GLYR_GET_ALBUM_REVIEW,
     .quality   = 45,
     .speed     = 70,
     .endmarker = NULL,

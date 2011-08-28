@@ -138,5 +138,5 @@ MetaDataSource review_allmusic_src =
     .quality   = 75,
     .speed     = 40,
     .free_url  = false,
-    .type      = GET_ALBUM_REVIEW
+    .type      = GLYR_GET_ALBUM_REVIEW
 };

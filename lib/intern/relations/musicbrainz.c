@@ -40,7 +40,7 @@ static gchar * get_value(gchar * ref, gchar * name)
 
 /*--------------------------------------------------------*/
 
-#define RELATION_TARGET_TYPE "<relation-list target-type=\"Url\">"
+#define RELATION_TARGLYR_GET_TYPE "<relation-list target-type=\"Url\">"
 #define RELATION_BEGIN_TYPE  "<relation"
 
 /* Wrap around the (a bit more) generic versions */
@@ -56,7 +56,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
 						break;
 				}
 				gsize nlen = (sizeof RELATION_BEGIN_TYPE) - 1;
-				gchar * node = strstr(infobuf->data,RELATION_TARGET_TYPE);
+				gchar * node = strstr(infobuf->data,RELATION_TARGLYR_GET_TYPE);
 				if(node != NULL)
 				{
 						gint ctr = 0;
@@ -71,7 +71,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
 										GlyrMemCache * tmp = DL_init();
 										tmp->data = g_strdup_printf("%s:%s",type,target);
 										tmp->size = strlen(tmp->data);
-										tmp->type = TYPE_RELATION;
+										tmp->type = GLYR_TYPE_RELATION;
 										tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
 										results = g_list_prepend(results,tmp);
 										ctr++;
@@ -101,7 +101,7 @@ MetaDataSource relations_musicbrainz_src =
 		.key  = 'm',
 		.parser    = relations_musicbrainz_parse,
 		.get_url   = relations_musicbrainz_url,
-		.type      = GET_RELATIONS,
+		.type      = GLYR_GET_RELATIONS,
 		.quality   = 80,
 		.speed     = 80,
 		.endmarker = NULL,

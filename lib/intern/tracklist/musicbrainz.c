@@ -55,7 +55,7 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
         if(value != NULL && durat != NULL)
         {
             GlyrMemCache * cont = DL_init();
-            cont->data = beautify_lyrics(value);
+            cont->data = beautify_string(value);
             cont->size = strlen(cont->data);
             cont->duration = strtol(durat,NULL,10) / 1e3;
             cont->dsrc = g_strdup(url);
@@ -116,6 +116,6 @@ MetaDataSource tracklist_musicbrainz_src =
 		.speed     = 90,
 		.endmarker = NULL,
 		.free_url  = false,
-		.type      = GET_TRACKLIST
+		.type      = GLYR_GET_TRACKLIST
 };
 

@@ -38,7 +38,7 @@ bool vdt_tracklist(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,TYPE_TRACK);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TRACK);
 }
 
 /*----------------------------------------------------------------*/
@@ -47,7 +47,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_tracklist =
 {
     .name = "tracklist",
-    .type = GET_TRACKLIST,
+    .type = GLYR_GET_TRACKLIST,
     .validate  = vdt_tracklist,
     .full_data = TRUE,
     .init    = NULL,

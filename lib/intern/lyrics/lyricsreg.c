@@ -44,7 +44,7 @@ GList * lyrics_lyricsreg_parse(cb_object * capo)
 						if(no_br_tags != NULL)
 						{
 								GlyrMemCache * tmp = DL_init();
-								tmp->data = beautify_lyrics(no_br_tags);
+								tmp->data = beautify_string(no_br_tags);
 								tmp->size = tmp->data ? strlen(tmp->data) : 0;
 								g_free(no_br_tags);
 
@@ -66,7 +66,7 @@ MetaDataSource lyrics_lyricsreg_src =
 		.key  = 'r',
 		.parser    = lyrics_lyricsreg_parse,
 		.get_url   = lyrics_lyricsreg_url,
-		.type      = GET_LYRICS,
+		.type      = GLYR_GET_LYRICS,
 		.quality   = 42,
 		.speed     = 90,
 		.endmarker = NULL,

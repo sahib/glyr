@@ -60,6 +60,6 @@ MetaDataSource lyrics_metallum_src =
     .quality   = 55,
     .speed     = 70,
     .free_url  = false,
-    .type      = GET_LYRICS
+    .type      = GLYR_GET_LYRICS
 };
 

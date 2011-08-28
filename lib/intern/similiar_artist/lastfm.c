@@ -108,5 +108,5 @@ MetaDataSource similar_artist_lastfm_src =
 		.speed     = 90,
 		.endmarker = NULL,
 		.free_url  = false,
-		.type      = GET_SIMILIAR_ARTISTS
+		.type      = GLYR_GET_SIMILIAR_ARTISTS
 };

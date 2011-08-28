@@ -20,13 +20,13 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define GET_URL "http://www.lyricstime.com/search/?q=%artist%+%title%&t=default"
+#define GLYR_GET_URL "http://www.lyricstime.com/search/?q=%artist%+%title%&t=default"
 
 /*--------------------------------------------------------*/
 
 const char * lyrics_lyricstime_url(GlyrQuery * settings)
 {
-    return GET_URL;
+    return GLYR_GET_URL;
 }
 
 /*--------------------------------------------------------*/
@@ -51,7 +51,7 @@ static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
                 if(no_br_tags != NULL)
                 {
                     result = DL_init();
-                    result->data = beautify_lyrics(no_br_tags);
+                    result->data = beautify_string(no_br_tags);
                     result->size = (result->data) ? strlen(result->data) : 0;
                     result->dsrc = strdup(capo->url);
 
@@ -160,7 +160,7 @@ MetaDataSource lyrics_lyricstime_src =
 		.key  = 't',
 		.parser    = lyrics_lyricstime_parse,
 		.get_url   = lyrics_lyricstime_url,
-		.type      = GET_LYRICS,
+		.type      = GLYR_GET_LYRICS,
 		.quality   = 70,
 		.speed     = 60,
 		.endmarker = NULL,

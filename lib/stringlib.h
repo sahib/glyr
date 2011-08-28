@@ -74,7 +74,7 @@ gchar * unescape_html_UTF8(const gchar *data);
 gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album, const gchar * title);
 
 /* Runs many of the above funtions to make lyrics beautier */
-gchar * beautify_lyrics(const gchar * lyrics);
+gchar * beautify_string(const gchar * lyrics);
 
 /* "Normalizes" a string, suitable for URls afterwards */
 gchar * prepare_string(const gchar * input, gboolean delinitfy);

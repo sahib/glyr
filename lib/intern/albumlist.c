@@ -41,7 +41,7 @@ bool get_albumlist(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,TYPE_ALBUMLIST);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUMLIST);
 }
 
 //-------------------------------------
@@ -50,7 +50,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 MetaDataFetcher glyrFetcher_albumlist =
 {
     .name = "albumlist",
-    .type = GET_ALBUMLIST,
+    .type = GLYR_GET_ALBUMLIST,
     .validate  = get_albumlist,
     .full_data = TRUE,
     .init    = NULL,

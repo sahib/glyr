@@ -219,8 +219,8 @@ gsize levenshtein_strnormcmp(const gchar * string, const gchar * other)
 		gchar * norm_other  = strip_lint_from_names(other);
 		if(norm_string && norm_other)
 		{
-			gchar * pretty_string = beautify_lyrics(norm_string);
-			gchar * pretty_other  = beautify_lyrics(norm_other);
+			gchar * pretty_string = beautify_string(norm_string);
+			gchar * pretty_other  = beautify_string(norm_other);
 
 			if(pretty_string && pretty_other)
 			{
@@ -231,7 +231,7 @@ gsize levenshtein_strnormcmp(const gchar * string, const gchar * other)
 				gsize oth_len = strlen(pretty_other);
 				gsize ratio = (oth_len + str_len) / 2;
 
-				if((ratio - diff < ratio / 2 + 1 && diff <= DEFAULT_FUZZYNESS) || MIN(str_len,oth_len) <= diff)
+				if((ratio - diff < ratio / 2 + 1 && diff <= GLYR_DEFAULT_FUZZYNESS) || MIN(str_len,oth_len) <= diff)
 				{
 					/* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
 					//g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
@@ -841,7 +841,7 @@ static gchar * trim_after_newline(gchar * string, gsize Len, gint * less)
 
 /* Beautify lyrics in general, by removing endline spaces, *
  * trimming everything and removing double newlines        */
-gchar * beautify_lyrics(const gchar * lyrics)
+gchar * beautify_string(const gchar * lyrics)
 {
     gchar * result = NULL;
 

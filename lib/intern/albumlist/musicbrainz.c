@@ -49,7 +49,7 @@ GList * albumlist_musicbrainz_parse(cb_object * capo)
         	if(name != NULL)
         	{
             	GlyrMemCache * c = DL_init();
-            	c->data = beautify_lyrics(name);
+            	c->data = beautify_string(name);
             	c->size = (c->data) ? strlen(c->data) : 0;
             	collection = g_list_prepend(collection,c);
             	g_free(name);
@@ -68,7 +68,7 @@ MetaDataSource albumlist_musicbrainz_src =
     .free_url = false,
     .parser  = albumlist_musicbrainz_parse,
     .get_url = albumlist_musicbrainz_url,
-    .type    = GET_ALBUMLIST,
+    .type    = GLYR_GET_ALBUMLIST,
     .quality = 95,
     .speed   = 95,
     .endmarker = NULL
