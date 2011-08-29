@@ -9,5 +9,5 @@ GList * r_getFList(void);
 GList * r_getSList(void);
 
 GlyrFetcherInfo * get_plugin_info(void);
-void free_plugin_info(GlyrFetcherInfo ** infos);
+void free_plugin_info(GlyrFetcherInfo * infos);
 #endif

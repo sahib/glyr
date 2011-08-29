@@ -149,7 +149,7 @@ void help_short(GlyrQuery * s)
         g_print(" - %s\n", info->name);
         info = info->next;
     }
-    glyr_free_plugin_info(&track);
+    glyr_free_plugin_info(track);
 
 #define IN "    "
     message(-1,s,stderr,"\n\nOPTIONS:\n"
@@ -207,7 +207,7 @@ static void visualize_from_options(void)
             g_print("\n");
         }
     }
-    glyr_free_plugin_info(&info);
+    glyr_free_plugin_info(info);
 }
 
 /* --------------------------------------------------------- */
@@ -689,9 +689,9 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-enum GLYR_GLYR_GET_TYPE get_type_from_string(gchar * string)
+enum GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
-    enum GLYR_GLYR_GET_TYPE result = GLYR_GET_UNSURE;
+    enum GLYR_GET_TYPE result = GLYR_GET_UNSURE;
     GlyrFetcherInfo * info = glyr_get_plugin_info();
     if(info != NULL)
     {
@@ -708,7 +708,7 @@ enum GLYR_GLYR_GET_TYPE get_type_from_string(gchar * string)
     {
         g_printerr("Warning: Can't get type information. Probably a bug.\n");
     }
-    glyr_free_plugin_info(&info);
+    glyr_free_plugin_info(info);
     return result;
 }
 

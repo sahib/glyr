@@ -81,7 +81,7 @@ typedef struct MetaDataFetcher
     GList * provider;
 
     /* what this thing delievers; e.g. GLYR_GET_COVERART */
-    enum GLYR_GLYR_GET_TYPE type;
+    enum GLYR_GET_TYPE type;
 
     /* callbacks */
     bool (*validate)(GlyrQuery *);
@@ -112,7 +112,7 @@ typedef struct MetaDataSource
     const char  * (* get_url)(GlyrQuery *); 	/* called when the url of this provider is needed */
     gchar  * endmarker;              	        /* Download stops if this mark is found           */
 
-    enum GLYR_GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
+    enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
     gboolean free_url; /* URL is dyn. allocated - set this always! */
 
     gint quality;  /* Measurement of how good the content  usually is [0-100] */

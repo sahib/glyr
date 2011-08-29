@@ -129,7 +129,7 @@ enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, voi
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GLYR_GET_TYPE type)
+enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type)
 {
 
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -395,8 +395,8 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
     glyrs->useragent = GLYR_DEFAULT_USERAGENT;
     glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
-    glyrs->itemctr = 0;
     glyrs->lang = auto_choose_lang(glyrs);
+    glyrs->itemctr = 0;
 }
 
 /*-----------------------------------------------*/
@@ -841,7 +841,7 @@ GlyrFetcherInfo * glyr_get_plugin_info(void)
 
 /* --------------------------------------------------------- */
 
-void glyr_free_plugin_info(GlyrFetcherInfo ** info)
+void glyr_free_plugin_info(GlyrFetcherInfo * info)
 {
     free_plugin_info(info);
 }

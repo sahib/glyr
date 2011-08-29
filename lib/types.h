@@ -56,82 +56,111 @@
 /* --------------------------- */
 
 /**
-* @file types.h
-* @brief File containing all definitions used in the external API
-*
-* All defines/typedefs/enums/structs are here.
-* Onyl dependency is stdlib/stdbool
-*
-* @author Christopher Pahl
-* @version 0.6
-* @date 2011-06-14
-*/
-
-/**
-* @brief All possible errors that may be returned
-*/
+ * GLYR_ERROR:
+ * @GLYRE_UNKNOWN: Unknown error 
+ * @GLYRE_OK: everything is fine 
+ * @GLYRE_BAD_OPTION: you passed a bad option to glyr_opt_*()
+ * @GLYRE_BAD_VALUE: Invalid value in glyr_opt_*()
+ * @GLYRE_EMPTY_STRUCT: you passed an empty struct to glyr_opt_() 
+ * @GLYRE_NO_PROVIDER: setttings->provider == NULL
+ * @GLYRE_UNKNOWN_GET: settings->type is not valid
+ * @GLYRE_INSUFF_DATA: Insufficient data supplied; (artist/album/title) missing
+ * @GLYRE_SKIP: If returned by callback, cache wont be added to results
+ * @GLYRE_STOP_POST: Will stop searching, but still add the current item 
+ * @GLYRE_STOP_PRE: Will stop searching, but won't add the current item
+ * @GLYRE_NO_INIT: Library has not been initialized with glyr_init() yet
+ *
+ * Enum values used for the thing, to specify the thing.
+ *
+ **/
 enum GLYR_ERROR
 {
-    GLYRE_UNKNOWN = 0,  /*!< Unknown error */
-    GLYRE_OK,           /*!< everything is fine */
-    GLYRE_BAD_OPTION,   /*!< you passed a bad option to glyr_opt_() */
-    GLYRE_BAD_VALUE,    /*!< Invalid value in va_list */
-    GLYRE_EMPTY_STRUCT, /*!< you passed an empty struct to glyr_opt_() */
-    GLYRE_NO_PROVIDER,  /*!< setttings->provider == NULL */
-    GLYRE_UNKNOWN_GET,  /*!< settings->type is not valid */
-    GLYRE_INSUFF_DATA,  /*!< Insufficient data supplied; (artist/album/title) missing */
-    GLYRE_SKIP,         /*!< If returned by callback, cache is wont be added to results */
-    GLYRE_STOP_POST,    /*!< Will stop searching, but still add the current item */
-    GLYRE_STOP_PRE,     /*!< Will stop searching, but won't add the current item */
-    GLYRE_NO_INIT       /*!< Library has not been initialized with glyr_init() yet */
+    GLYRE_UNKNOWN = 0,  
+    GLYRE_OK,           
+    GLYRE_BAD_OPTION,  
+    GLYRE_BAD_VALUE,   
+    GLYRE_EMPTY_STRUCT,
+    GLYRE_NO_PROVIDER, 
+    GLYRE_UNKNOWN_GET, 
+    GLYRE_INSUFF_DATA, 
+    GLYRE_SKIP,        
+    GLYRE_STOP_POST,  
+    GLYRE_STOP_PRE,   
+    GLYRE_NO_INIT     
 };
 
 /**
-* @brief Enumeration of all getters, GlyrQuery is initalized to GLYR_GET_UNSURE
+* GLYR_GET_TYPE:
+* 
+* You tell libglyr what metadata you want by choosing one of the below
+* and set it via glyr_opt_type()
 *
-*  The type of metadata to get, names are selfexplanatory
-*  Requirements are given in braces, [] means optional.
+* The names should be self-explanatory, GET_UNSURE is the default is the default.
+*
 */
-enum GLYR_GLYR_GET_TYPE
+enum GLYR_GET_TYPE
 {
-    GLYR_GET_COVERART = 1, /*!< Get coverart for (artist|album) */
-    GLYR_GET_LYRICS = 2, /*!< Get lyrics for (artist|[album]|artist) */
-    GLYR_GET_ARTIST_PHOTOS = 3, /*!< Get pics for (artist) */
-    GLYR_GET_ARTISTBIO = 4, /*!< Get bio of (artist) */
-    GLYR_GET_SIMILIAR_ARTISTS = 5, /*!< Get similiar artists to (artist) */
-    GLYR_GET_SIMILIAR_SONGS = 6, /*!< Get similiar songs (artist|title) */
-    GLYR_GET_ALBUM_REVIEW = 7, /*!< Get album review to (artist|album) */
-    GLYR_GET_TRACKLIST = 8, /*!< Get list of tracks for album (artist|album) */
-    GLYR_GET_TAGS = 9, /*!< Get tags (i.e. words like 'Metal') for (artist|[album]|[title]) */
-    GLYR_GET_RELATIONS = 10, /*!< Get relations (e.g. links to last.fm/wikipedia) for (artist|[album]|[title]) */
-    GLYR_GET_ALBUMLIST= 11, /*!< Get a list of albums by (artist) */
-    GLYR_GET_UNSURE = 12 /*!< Do nothing but relax */
+    GLYR_GET_COVERART = 1, 
+    GLYR_GET_LYRICS, 
+    GLYR_GET_ARTIST_PHOTOS, 
+    GLYR_GET_ARTISTBIO, 
+    GLYR_GET_SIMILIAR_ARTISTS, 
+    GLYR_GET_SIMILIAR_SONGS,
+    GLYR_GET_ALBUM_REVIEW, 
+    GLYR_GET_TRACKLIST, 
+    GLYR_GET_TAGS, 
+    GLYR_GET_RELATIONS, 
+    GLYR_GET_ALBUMLIST, 
+    GLYR_GET_UNSURE 
 };
 
 /**
-* @brief All possible values the type field of GlyrMemCache can have
+* GLYR_DATA_TYPE:
+* @GLYR_TYPE_NOIDEA: You shouldn't get this 
+* @GLYR_TYPE_LYRICS: Songtext
+* @GLYR_TYPE_REVIEW: Albumreview
+* @GLYR_TYPE_PHOTOS: Pictures showing a certain band
+* @GLYR_TYPE_COVER: coverart
+* @GLYR_TYPE_COVER_PRI:  A cover known to be the front side of the album 
+* @GLYR_TYPE_COVER_SEC:  A cover known to be the backside: inlet etc. 
+* @GLYR_TYPE_AINFO: Artist bio 
+* @GLYR_TYPE_SIMILIAR: Similiar artists 
+* @GLYR_TYPE_SIMILIAR_SONG: Similar songs 
+* @GLYR_TYPE_ALBUMLIST: List of albums: each cache containing one name 
+* @GLYR_TYPE_TAGS: List of (random) tags: each cache containing one name 
+* @GLYR_TYPE_TAG_ARTIST: Tag associated with the artist 
+* @GLYR_TYPE_TAG_ALBUM: Tag associated with the album 
+* @GLYR_TYPE_TAG_TITLE: Tag associated with the album 
+* @GLYR_TYPE_RELATION: Random relation: each cache containing one link 
+* @GLYR_TYPE_IMG_URL: URL pointing to an image 
+* @GLYR_TYPE_TXT_URL: URL pointing to some text content 
+* @GLYR_TYPE_TRACK: List of tracknames: each cache containing one name 
+* 
+* Mainly used in the 'type' field of GlyrMemCache.
+* It describes what kind of data the cache holds.
+* 
 */
 enum GLYR_DATA_TYPE
 {
-    GLYR_TYPE_NOIDEA, /*!< You shouldn't get this */
-    GLYR_TYPE_LYRICS, /*!< Lyrics. */
-    GLYR_TYPE_REVIEW, /*!< Album reviews */
-    GLYR_TYPE_PHOTOS, /*!< Pics showing a certain band */
-    GLYR_TYPE_COVER,  /*!< Coverart */
-    GLYR_TYPE_COVER_PRI, /*!< A cover known to be the front side of the album */
-    GLYR_TYPE_COVER_SEC, /*!< A cover known to be the backside, inlet etc. */
-    GLYR_TYPE_AINFO,  /*!< Artist bio */
-    GLYR_TYPE_SIMILIAR, /*!< Similiar artists */
-    GLYR_TYPE_SIMILIAR_SONG, /*!< Similar songs */
-    GLYR_TYPE_ALBUMLIST, /*!< List of albums, each cache containing one name */
-    GLYR_TYPE_TAGS,	/*!< List of (random) tags, each cache containing one name */
-    GLYR_TYPE_TAG_ARTIST,/*!< Tag associated with the artist */
-    GLYR_TYPE_TAG_ALBUM, /*!< Tag associated with the album */
-    GLYR_TYPE_TAG_TITLE, /*!< Tag associated with the album */
-    GLYR_TYPE_RELATION,  /*!< Random relation, each cache containing one link */
-    GLYR_TYPE_IMG_URL,   /*!< URL pointing to an image */
-    GLYR_TYPE_TXT_URL,   /*!< URL pointing to some text content */
-    GLYR_TYPE_TRACK	/*!< List of tracknames, each cache containing one name */
+    GLYR_TYPE_NOIDEA, 
+    GLYR_TYPE_LYRICS, 
+    GLYR_TYPE_REVIEW, 
+    GLYR_TYPE_PHOTOS, 
+    GLYR_TYPE_COVER,  
+    GLYR_TYPE_COVER_PRI, 
+    GLYR_TYPE_COVER_SEC, 
+    GLYR_TYPE_AINFO,  
+    GLYR_TYPE_SIMILIAR, 
+    GLYR_TYPE_SIMILIAR_SONG, 
+    GLYR_TYPE_ALBUMLIST, 
+    GLYR_TYPE_TAGS,	
+    GLYR_TYPE_TAG_ARTIST,
+    GLYR_TYPE_TAG_ALBUM, 
+    GLYR_TYPE_TAG_TITLE, 
+    GLYR_TYPE_RELATION,  
+    GLYR_TYPE_IMG_URL,   
+    GLYR_TYPE_TXT_URL,   
+    GLYR_TYPE_TRACK	
 };
 
 
@@ -140,126 +169,164 @@ enum GLYR_DATA_TYPE
 *
 * It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr.
 */
+/**
+ * GlyrMemCache:
+ * @data: contains the data, string when @is_image is false, raw data otherwise
+ * @size: Size of this item in bytes
+ * @dsrc: URL pointing to the origin of this item.
+ * @prov: name of the provider that delivered this item.
+ * @type: The GLYR_DATA_TYPE of this item.
+ * @duration: For tracklist, only. Contains the tracklength in seconds.
+ * @is_image: Is this item an image?
+ * @img_format: Format of the image (png,jpeg), NULL if text item.
+ * @md5sum: A md5sum of the data field.
+ * @next: A pointer to the next item in the list, or NULL
+ * @prev: A pointer to the previous item in the list, or NULL
+ *
+ * GlyrMemCache represents a single item received by libglyr. 
+ * You should <emphasis>NOT</emphasis> any of the fields, it is meant to be read-only.
+ * 
+ */
 typedef struct GlyrMemCache
 {
-    char  *data;        /*!< Data buffer, you can safely read this field, but remember to update the size field if you change it and to free the memory if needed. */
-    size_t size;        /*!< Size of data, cahnge this if you changed the data field. */
-    char  *dsrc;        /*!< Source of data, i.e. an exact URL to the place where it has been found. */
-    char  *prov;        /*!< The name of the provider which found this item */
-    int   type;         /*!< The metadata type, is one of the GLYR_GLYR_GET_TYPE enum */
-    int   duration;     /*!< Duration of a song (in seconds). Only filled for the tracklist getter. */
-    bool  is_image;     /*!< Wether it is an image or a textitem */
-    char * img_format;  /*!< If it as an image, the imageformat (usually 'png' or 'jpeg') */
-    unsigned char md5sum[16]; /*!< A checksum of generated from the data field, used internally for duplicate checking, useable as identifier from data */
+    char  *data;        
+    size_t size;        
+    char  *dsrc;        
+    char  *prov;        
+    enum GLYR_DATA_TYPE type;
+    int   duration;     
+    bool  is_image;    
+    char * img_format; 
+    unsigned char md5sum[16]; 
 
     /* Linkage */
-    struct GlyrMemCache * next; /*!< Pointer to next cache in list, or NULL */
-    struct GlyrMemCache * prev; /*!< Pointer to prev cache in list, or NULL */
+    struct GlyrMemCache * next; 
+    struct GlyrMemCache * prev; 
 } GlyrMemCache;
 
 
 /**
-* @brief Structure controlling all of libglyr's options
+* GlyrQuery:
+* This structure holds all settings used to influence libglyr.
+* You should set all fields glyr_opt_*(), refer to the documentation there
+* to find out their exact meaning.
 *
-* You should modify this with the glyr_opt_* methods,\n
-* You can read all members directly.\n
-* Look up the corresponding glyr_opt_$name methods for more details.
-* For reading: Dynamically allocated members are stored in '.alloc'!
+* You can safely read from all fields and should free the query with glyr_destroy_query() after use.
+*
 */
 typedef struct GlyrQuery
 {
-    enum GLYR_GLYR_GET_TYPE type; /*!< What type of data to get */
+    /*< public >*/
+    enum GLYR_GET_TYPE type; 
 
-    int number; /*!< Number of items to download */
-    int plugmax; /*!< Number of items a single provider may download */
-    int verbosity; /*!<See glyr_opt_verbosity() for all levels */
-    size_t fuzzyness; /*!< Treshold for Levenshtein algorithm */
+    int number; 
+    int plugmax; 
+    int verbosity; 
+    size_t fuzzyness; 
 
-    int img_min_size; /*!< Min size a image may have */
-    int img_max_size; /*!< Max size a image may have */
+    int img_min_size; 
+    int img_max_size; 
 
-    long parallel; /*!< Max parallel downloads */
-    long timeout;  /*!< Max timeout for downloads */
-    long redirects;/*!< Max redirects for downloads */
+    long parallel; 
+    long timeout;  
+    long redirects;
 
-    bool force_utf8; /*!< For textitems only; Only accept items with valid UTF8 encoding  */
-    bool download; /*!< return only urls without downloading, converting glyr to a sort of search engine */
-    float qsratio; /*!< Weight speed or quality more, 0.0 = fullspeed; 1.0 = highest quality only */
+    bool force_utf8; 
+    bool download; 
+    float qsratio; 
+
+    /* Dynamic allocated */
+    const char * lang; 
+    const char * proxy; 
+    char * artist; 
+    char * album;  
+    char * title;  
+    char * from;   
+    char * allowed_formats; 
+    char * useragent; 
+
+    /*< private >*/
+    int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
+    char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
+    bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
 #ifdef COMING_FROM_SWIG
-    /* Make this fields immutable for languaging supporting it */
+    /* Make this fields immutable for languages supporting it */
     %immutable
     {
 #endif
-        /* Callback and userpointer */
+
+#ifndef __GTK_DOC_IGNORE__
         struct {
             enum GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
             void  * user_pointer;
         } callback;
-
-        /**
-        * @brief anonymous struct holding the source and target lang for gtrans
-        * If source is NULL, autodetection will be enabled,\n
-        * target has to be !NULL to enable translating
-        */
+#endif
 
 #ifdef COMING_FROM_SWIG
         %
     }
 #endif
-    /* Dynamic allocated */
-    const char * lang; /*!< language settings (for amazon / google / last.fm) */
-    const char * proxy; /*!< Proxy settings */
-    char * artist; /*!< artist field */
-    char * album;  /*!< album field */
-    char * title;  /*!< title field */
-    char * from;   /*!< String passed to glyr_opt_from() */
-    char * allowed_formats; /*!< Allowed formats for images, given as semicolon sperated list "png;jpeg;gif" */
-    char * useragent; /*!< Useragent for HTTP Requests */
-
-    int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
-    char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
-    bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
-
 } GlyrQuery;
 
 /**
-* @brief
-*/
+ * GlyrSourceInfo:
+ * @name: The name of the provider.
+ * @key: A one-letter shorter-form of @name
+ * @type: Tells what type of data this provider delivers
+ * @quality: A quality rating from 0-100
+ * @speed: A speed rating form 0
+ * @next: A pointer to the next provider.
+ * @prev: A pointer to the previous provider.
+ *
+ * 
+ * Represents a provider. 
+ *
+ * It's a simpler version of the internal version,
+ * with statically allocated data only,
+ * therefore you can modify and read to your liking.
+ * 
+ * It is freed when glyr_free_plugin_info() is called on it's GlyrFetcherInfo
+ */
 typedef struct GlyrSourceInfo
 {
+    char * name;
     char key;
-
-    enum GLYR_GLYR_GET_TYPE type;
+    enum GLYR_GET_TYPE type;
     int quality;
     int speed;
 
-    char * name;
     struct GlyrSourceInfo * next;
     struct GlyrSourceInfo * prev;
 } GlyrSourceInfo;
 
 /**
-* @brief
-*/
+ * GlyrFetcherInfo:
+ * @name: The name of the provider.
+ * @type: Tells what type of data this getter delivers.
+ * @head: A doubly linked list of GlyrSourceInfo (the provider available for this getter)
+ * @next: A pointer to the next provider.
+ * @prev: A pointer to the previous provider.
+ * 
+ * Represents a getter.
+ * 
+ * It's a simpler version of the internal version,
+ * therefore you can modify and read to your liking.
+ * 
+ * You should pass it to glyr_free_plugin_info() once done.
+ * 
+ * See the example at glyr_get_plugin_info() on how to use it.
+ */ 
 typedef struct GlyrFetcherInfo
 {
     char * name;
-    enum GLYR_GLYR_GET_TYPE type;
-
+    enum GLYR_GET_TYPE type;
     GlyrSourceInfo * head;
 
     struct GlyrFetcherInfo * next;
     struct GlyrFetcherInfo * prev;
 } GlyrFetcherInfo;
 
-/**
-* @brief typefef for the glyr_opt_dlcallback() option
-*
-* @param DL_callback A callback of the form: enum GLYR_ERROR cb(GlyrMemCache * dl, struct GlyrQuery * s)
-*
-* @return possibly an error or GLYRE_OK
-*/
 typedef enum GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 
 #ifdef COMING_FROM_SWIG

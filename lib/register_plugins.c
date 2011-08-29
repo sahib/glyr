@@ -326,18 +326,16 @@ static void free_single_item(GlyrFetcherInfo * info)
 
 /* --------------------------------------- */
 
-void free_plugin_info(GlyrFetcherInfo ** infos)
+void free_plugin_info(GlyrFetcherInfo * infos)
 {
     if(infos != NULL)
     {
-        GlyrFetcherInfo * fetch = infos[0];
+        GlyrFetcherInfo * fetch = infos;
         while(fetch != NULL)
         {
             GlyrFetcherInfo * to_delete = fetch;
             fetch = fetch->next;
-
             free_single_item(to_delete);
         }
-        *(infos) = NULL;
     }
 }

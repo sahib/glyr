@@ -21,15 +21,15 @@
 #define GLYR_H
 
 /**
-* @file glyr.h
-* @brief All method declaration here. You should only need to include this file.
-*
-* All stable API of libglyr is right here.
-*
-* @author Christopher Pahl
-* @version 0.6
-* @date 2011-06-14
-*/
+ * SECTION:Functions
+ * @short_description: method declarations
+ * @title: All functions needed to interact with libglyr
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/types.h
+ *
+ * All functions needed to interact with libglyr
+ */
 
 /* All structs used by glyr are here */
 #include "types.h"
@@ -39,507 +39,746 @@
 extern "C"
 {
 #endif
-    /**
-    * @brief call this at startup
-    * This is not threadsafe and glyr_cleanup should be called once for everytime you call glyr_init\n
-    * Actually this method is only there to initialize libcurl, glyr only depends on the settings struct.\n
-    */
-    void glyr_init(void);
 
-    /**
-    * @brief Call this at program termination.
-    * It's adviseable to call 'atexit(glyr_cleanup)' after glyr_init()\n
-    * Not threadsafe!\n
-    */
-    void glyr_cleanup(void);
+/**
+ * glyr_init:
+ *
+ * Init the library, this has to be called before any other calls from this library are made.
+ *
+ * You should call glyr_cleanup() once for every call of glyr_init()
+ * <note>
+ * <para>
+ * This function is not threadsafe.
+ * </para>
+ * </note>
+ **/
+void glyr_init(void);
 
-    /**
-    * @brief The 'main' method of glyr. It starts the searching according to the settings in the settings param
-    *
-    * @param settings The setting struct controlling glyr. (See the glyr_opt_* methods)
-    * @param error An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success
-    * @param length An optional pointer storing the length of the returned list
-    *
-    * It takes a pointer to a GlyrQuery struct filled to your needs via the glyr_opt_* methods,\n
-    * Once an item is found the callback (set via glyr_opt_dlcallback) is called with the item as parameter.\n
-    * After return all items are listed in a GlyCacheList ready to be accessed, remember to delete it with glyr_free_list when done.\n
-    *
-    * @return A GlyCacheList containing all found data. See the struct reference for further details.
-    */
-    GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * error, int * length);
-
-    /**
-    * @brief Init's the GlyrQuery structure to sane defaults.
-    * Call this after creating the variable.
-    *
-    * @param glyrs The fresh GlyrQuery to be init'd.
-    */
-    void glyr_init_query(GlyrQuery * glyrs);
-
-    /**
-    * @brief Free all memory associated with this query, and restore default settings.
-    * Do this always when you're done with this one.
-    * @param sets The GlyrQuery to be destroyed
-    */
-    void glyr_destroy_query(GlyrQuery * sets);
-
-    /**
-    * @brief Free the memory in the GlyCacheList returned by glyr_get
-    *
-    * @param head The GlyCacheList to be free'd
-    */
-    void glyr_free_list(GlyrMemCache * head);
-
-    /**
-    * @brief Returns a newly allocated and initialized GlyrMemCache, mostly for use with glyr_gtrans_*
-    * Don't forget to free it with glyr_free_cache
-    * @return A newly allocated GlyrMemCache
-    */
-    GlyrMemCache * glyr_new_cache(void);
-
-    /**
-    * @brief Free the GlyrMemCache pointed to by c. You should set it to NULL also, as using it after this will crash your program.
-    *
-    * @param c An allocated GlyrMemCache
-    */
-    void glyr_free_cache(GlyrMemCache * c);
-
-    /********************************************************
-     * GlyOpt methods ahead - use them to control glyr_get() *
-     ********************************************************/
-
-    /**
-    * @brief Set the callback that is executed once an item is ready downloaded
-    *
-    * @param settings The GlyrQuery settings struct to store this option in
-    * @param dl_cb The callback to register, must have a prototype like this:\n
-      	       enum GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
-    * @param userp A pointer to a custom variable you can access inside the callback via s->callback.user_pointer;
-    *
-    * Note that you can return a certain integer in the callback:\n
-    * GLYRE_IGNORE: To not add this item to the results.
-    * GLYRE_OK: To add this item to the results and continue happily.
-    * GLYRE_STOP_BY_CB: To stop right now and return the results. The last element will NOT be added.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
-    /**
-    * @brief What type of metadata to search for. Must be one of GLYR_GLYR_GET_TYPE enum.
-    *
-    * @param s The GlyrQuery settings struct to store this option in
-    * @param type A member of the GLYR_GLYR_GET_TYPE enum, set this before you set anything else.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GLYR_GET_TYPE type);
-    /**
-    * @brief The artist field. libglyr will try to format it to fit the best.
-    *
-    * @param s The GlyrQuery settings struct to store this option in
-    * @param artist A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
-    *
-    * This field is required for all getters. You are required to fill it.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
-    /**
-    * @brief The album field. libglyr will try to format it to fit the best.
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param album A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
-    *
-    *	Required for the following getters:
-    *	  - albumlist
-    *	  - cover
-    *	  - albumreview
-    *     - similarsongs
-    *	  - tracklist
-    *
-    *	Optional for those:
-    *	  - tags
-    *	  - relations
-    *
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
-    /**
-    * @brief The title field. libglyr will try to format it to fit the best.
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param title A nullterminated char, a copy of the string will be held internally so you can savely modify your version.
-    *
-    *	Required for:
-    *	  - lyrics
-    *	Optional for:
-    *	  - tags
-    *	  - relations
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
-    /**
-    * @brief Maximum size a cover may have (assuming the cover is quadratic, only one size is required)
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param size The max. size in pixel
-    *
-    * Please note: libglyr takes this as a hint, and not as an absolute measure. You may find yourself with slightly oversized or undersized covers,\n
-    * but generally overall in the range between min and max. \n
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
-    /**
-    * @brief Minimum size a image-item may have (assuming the image is quadratic, only one size is required)
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param size The min. size in pixel
-    *
-    * Note: Also see glyr_opt_img_maxsize()
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
-    /**
-    * @brief The number of jobs that may be started in parallel
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param val the number as unsigned long
-    *
-    * This does not acutally limit the number of parallel downloads,\n
-    * rather it limits the number of providers that are tried in parallel\n
-    * Set this to a value of 0 to let libglyr guess the best value.\n
-    *
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val);
-    /**
-    * @brief Amout of seconds to wait before cancelling an download
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param val Timeout in seconds.
-    *
-    * If more than one item is downloaded in parallel, the timeout will be changed accordingly.\n
-    * Default is 20 seconds.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val);
-    /**
-    * @brief Max number of redirects to
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param val an unsigned integer
-    *
-    * A value of 0 is allowed, but may break certain plugins.\n
-    * Default = 1\n
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val);
-
-    /**
-    * @brief  Set the useragent during making progresses
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param useragent a null terminated string containging everything you want
-    *
-    * Some provider may require an useragent, setting it to an empty string "" \n
-    * might not be safe therefore\n
-    * Default useragents is "libglyr/<version name>" or similar
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
-    /**
-    * @brief Language for providers offering multilingual data.
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param langcode
-    *	The language used for providers with multilingual content.
-    *	It is given in ISO-639-1 codes, i.e 'de','en','fr' etc.
-    *
-    *	List of providers recognizing this option:\n
-    *	   * cover/amazon (which amazon server to query)
-    *	   * cover/google (which google server to query)
-    *	   * ainfo/lastfm (the language the biography shall be in)\n
-    *
-    *	(Use only these providers if you really want ONLY localized content)\n
-    *	If no language specified the language defaults to english ("en")\n
-    *   The special value 'auto' is recognized, in which case the language will be\n
-    *   guessed from your current locale.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
-    /**
-    * @brief Set the number of items to search.
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param num the number as an integer
-    *
-    *	How many items to search for (1 to INT_MAX)\n
-    *	This is not the number of items actually returned then,\n
-    *	because libglyr is not able to find 300 songtexts of the same song,\n
-    *	or libglyr filters duplicate items before returning.\n
-    *       It will try to get as close to this number, but not higher.
-    *       If '0' is specified, libglyr will try to find all the things.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
-    /**
-    * @brief Set libglyr's verbosity level (debug)
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param level The level as an integer, see description below
-    *
-    *        0) nothing but fatal errors.\n
-    *        1) warnings and important notes.\n
-    *        2) normal, additional information what libglyr does.\n
-    *        3) basic debug output.\n
-    *        4) libcurl debug output.\n
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
-    /**
-    * @brief Define the providers you want to use
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param from a string, see below
-    *
-    *        Use this to define what providers you want to use.\n
-    *        Every provider has a name and a key which is merely a shortcut for the name.\n
-    *        Specify all providers in a semicolon seperated list.\n
-    *        Type 'glyrc -H' for a complete list of all providers for each getter.\n
-    *
-    *          Example:\n
-    *            "amazon;google" \n
-    *           "a;g" - same with keys\n
-    *
-    *        You can also prepend each word with a '+' or a '-' ('+' is assumend without),\n
-    *        which will add or remove this provider from the list respectively.\n
-    *        Additionally you may use the predefined groups 'safe','unsafe','fast','slow','special'.\n
-    *
-    *          Example:\n
-    *           "+fast;-amazon" which will enable last.fm and lyricswiki.\n
-    *
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
-
-    /**
-    * @brief Define the maximum number of items a provider may download
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param plugmax
-    *
-    *	Use this to scatter the results over more providers, to get different results.\n
-    *	You can set it also to -1 what allows an infinite number of items (=> default)
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
-
-    /**
-    * @brief Define allowed image formats
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param formats A comma seperated list of format specifiers, e.g. "png;jpeg"
-    *
-    * Awaits a string with a semicolon seperated list of allowed formats.\n
-    * The case of the format is ignored.\n
-    *
-    * Example:\n
-    * "png;jpg" would allow png,jpeg,jpg,JPEG,jpg, but not gifs.\n
-    * The names of the format are the MIME types found in HTTP headers.
-    * A list of types is here: http://www.w3schools.com/media/media_mimeref.asp
-    *
-    * A value of NULL will default to "png;jpeg;tiff"
-    *
-    * @return an errorID
-    */
-
-    enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
-    /**
-    * @brief Define if image items (i.e, covers, photos) are downloaded.
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param download
-    *
-    *        For image getters only.\n
-    *        If set to true images are also coviniently downloaded and returned.\n
-    *        Otherwise, just the URL is returned for your own use.\n
-    *
-    *        Default to 'true', 'false' would be a bit more searchengine like.\n
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
-
-    /**
-    * @brief Set the max. tolerance for fuzzy matching
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param fuzz
-    *
-    *	Set the maximum amount of inserts, edits and substitutions, a search results\n
-    *       may differ from the artist and/or album and/or title.\n
-    *       The difference between two strings is measured as the 'Levenshtein distance',\n
-    *       i.e, the total amount of inserts,edits and substitutes needed to convert string a to b.\n
-    *
-    *       Example:\n
-    *          "Equilibrium" <=> "Aqilibriums" => Distance=3\n
-    *          With a fuzzyness of 3 this would pass the check, with 2 it won't.\n
-    *
-    *       Higher values mean more search results, but more inaccuracy. \n
-    *       Default is 4.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
-
-    /**
-    * @brief Weight ratio between speed and quality
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param ratio A float, where 0.0 if full speed, and 1.0 full quality
-    *
-    *   0.00 means highest speed, you're kinda lucky if you have the right result there.
-    *   1.00 Takes possibly longer, but delivers usually good results.
-    *   0.85 is the current default value.
-    *
-    *   All other values, smaller 0.0, greater 1.0 are clamped to 0.0 / 1.0
-    *
-    * @return
-    */
-    enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
-
-    /**
-    * @brief Set the proxy to use
-    *
-    * @param s The GlyrQuery settings struct to store this option in.
-    * @param proxystring the proxy setting.
-    *
-    *  NULL for none, otherwise see the documentation of curl_easy_setopt(CURLOPT_PROXY) how to set this.
-    *  Synatx: [protocol://][user:pass@]Domain[:port]
-    *  Example: "http://Proxy.fh-hof.de:3128"
-    *
-    * If empty the global env $http_proxy shall be used, if present.
-    *
-    * @return an errorID
-    */
-    enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
-
-    /**
-    * @brief Forces UTF8 encoding for text items
-    *
-    * @param s A GlyrQuery with the timeout and redirect values filled to your needs.
-    * @param force_utf8 true to foce, false to accept other encodings
-    *
-    * Often this will option won't have serious impact, except for a view providers that don't deliever exact UTF8,
-    * due to corrupted data (twice encoded like metrolyrics), but may deliever subsets of UTF8.
-    * Check is done via g_utf8_validate()
-    *
-    * @return A GlyrMemCache containing the data
-    */
-    enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
-
-    /**
-    * @brief A convinience method to download the content at the URl $url, according to the settings in $s
-    * Actually only the redirect and timeout parameters are used here.
-    *
-    * @param url The url to download as nullterminated string. Must be a vaild URL.
-    * @param s A GlyrQuery with the timeout and redirect values filled to your needs.
-    *
-    * @return A GlyrMemCache containing the data
-    */
-    GlyrMemCache * glyr_download(const char * url, GlyrQuery * s);
-
-    /**
-    * @brief Many methods use an returnvalue, or error parameters to inform you about errors
-    * Use this method to get a descriptive message you can print.
-    *
-    * @param ID The returned error
-    *
-    * @return A descriptive nullterminated string, do not pass to free
-    */
-    const char * glyr_strerror(enum GLYR_ERROR ID);
-
-    /**
-    * @brief Returns versioning information, including compiletime
-    *
-    *  Example: \n
-    *    Version 0.4 (Larcenous Locust (dev)) of [May 20 2011] compiled at [19:12:37]
-    *
-    * @return A nullterminated string, do not free
-    */
-    const char * glyr_version(void);
-
-    /**
-    * @brief Writes data to a specified path
-    *
-    * @param data The data to write.
-    * @param path The path to write data at.
-    *
-    * Writes data to path $path, special values for $path can be 'stdout','stderr' or 'null',\n
-    * which are pretty selfexplaining.
-    *
-    * @return An error id.
-    */
-    int glyr_write(GlyrMemCache * data, const char * path);
+/**
+ * glyr_cleanup:
+ *
+ * Cleanup all parts of the library, you can use <function>atexit()</function>:
+ *
+ *
+ * <informalexample>
+ * <programlisting>
+ * gtk_init();
+ * atexit(gkt_destroy);
+ * </programlisting>
+ * </informalexample>
+ *
+ * <note>
+ * <para>
+ * This function is not threadsafe.
+ * </para>
+ * </note>
+ **/
+void glyr_cleanup(void);
 
 
-    /**
-    * @brief Updates the md5sum field of the cache c
-    *
-    * @param c a valid memcahe
-    */
-    void glyr_update_md5sum(GlyrMemCache * c);
+/**
+ * glyr_get:
+ * @settings: The setting struct controlling glyr. (See the glyr_opt_* methods)
+ * @error:  An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success, or %NULL
+ * @length: length An optional pointer storing the length of the returned list, or %NULL
+ *
+ * @settings is pointer to a #GlyrQuery struct filled to your needs via the glyr_opt_* methods,
+ *
+ * Once an item is found the callback (set via glyr_opt_dlcallback()) is called anytime a item is ready
+ * 
+ *
+ * Returns:: a doubly linked list of #GlyrMemCache, which should be freed by passing any element of the to glyr_free_list()
+ *
+ */
+GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * error, int * length);
+
+/**
+ * glyr_init_query:
+ * @query: The GlyrQuery to initialize to defaultsettings.
+ *
+ * This functions may allocate dynamic memory. It should be freed with glyr_init_query() after use.
+ * 
+ */
+void glyr_init_query(GlyrQuery * query);
+
+/**
+ * glyr_destroy_query:
+ * @query: The GlyrQuery to destroy.
+ *
+ * Deletes all modifications and frees dynamic memory. It can be reused, as fresh from glyr_init_query()
+ * 
+ */
+void glyr_destroy_query(GlyrQuery * query);
+
+/**
+ * glyr_free_list:
+ * @head: The head of the doubly linked list that should be freed.
+ *
+ * Deletes all dynamic memory by calling glyr_free_cache() on each cache.
+ * 
+ */
+void glyr_free_list(GlyrMemCache * head);
+
+/**
+ * glyr_new_cache:
+ *
+ * Initializes a new memcache.
+ *
+ * Normally you never need to do this.
+ *
+ * Don't forget to free the cache with glyr_free_cache()
+ *
+ * Returns:: A newly allocated and initialized memcache with no data. 
+ */
+GlyrMemCache * glyr_new_cache(void);
+
+/**
+ * glyr_free_cache:
+ * @cache: Frees the (valid allocated) cache pointed to by @cache
+ */
+void glyr_free_cache(GlyrMemCache * cache);
+
+/********************************************************
+* GlyOpt methods ahead - use them to control glyr_get() *
+********************************************************/
+
+/**
+* glyr_opt_dlcallback:
+* @settings: The GlyrQuery settings struct to store this option in.
+* @dl_cb: The callback to register, must have a prototype like this.
+* @userp: A pointer to a custom variable you can access inside the callback via <structfield>s->callback.user_pointer</structfield>
+*
+* The callback should have the following form:
+* <informalexample>
+* <programlisting>
+* enum GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
+* </programlisting>
+* </informalexample>
+* 
+* Note that you can return certaing members of GLYR_ERROR in the callback:
+
+* %GLYRE_SKIP: To not add this item to the results.
+
+* %GLYRE_OK: To add this item to the results and continue happily.
+
+* %GLYRE_STOP_POST: To stop right now and return the results. The current element will be added.
+
+* %GLYRE_STOP_PRE: To stop right now and return the results. The current element will NOT be added.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
+
+/**
+* glyr_opt_type:
+* @s: The GlyrQuery settings struct to store this option in.
+* @type: The type of metadata you want to get.
+*
+* Example: %GLYR_GET_COVERART
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type);
+
+/**
+* glyr_opt_artist:
+* @s: The GlyrQuery settings struct to store this option in.
+* @artist: The artist you want to search for, %NULL and "" is not valid.
+*
+* This is needed for all types of metadata.
+* Libglyr keeps a copy of this string internally.  
+*
+* <note>
+* <para>
+* libglyr applies some basic normalization, like " artistX feat. artistY" -> "artistX"
+* </para>
+* </note>
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
+
+/**
+* glyr_opt_album:
+* @s: The GlyrQuery settings struct to store this option in.
+* @album: The album you want to search for, %NULL and "" is not valid.
+*
+* This field is required for the following types:
+* <itemizedlist>
+* <listitem>
+* <para>
+* %GLYR_GET_COVERART
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* %GLYR_GET_ALBUM_REVIEW
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* %GLYR_GET_TRACKLIST
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Optional for the following types:
+* <itemizedlist>
+* <listitem>
+* <para>
+* %GLYR_GET_RELATIONS
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* %GLYR_GET_TAGS
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Libglyr keeps a copy of this string internally.
+*
+* <note>
+* <para>
+* libglyr applies some basic normalization, like " CoOl_album CD01 (20.7)" -> "cool_album"
+* </para>
+* </note>
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
+
+/**
+* glyr_opt_title:
+* @s: The GlyrQuery settings struct to store this option in.
+* @title: The album you want to search for, %NULL and "" is not valid.
+*
+* This field is required for the following types:
+* <itemizedlist>
+* <listitem>
+* <para>
+* %GLYR_GET_LYRICS
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* %GLYR_GET_SIMILIAR_SONGS
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Optional for the following types:
+* <itemizedlist>
+* <listitem>
+* <para>
+* %GLYR_GET_RELATIONS
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* %GLYR_GET_TAGS
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Libglyr keeps a copy of this string internally.
+*
+* <note>
+* <para>
+* libglyr applies some basic normalization, like "Songtitle (blahblah remix)" -> "Songtitle"
+* </para>
+* </note>
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
+
+/**
+* glyr_opt_:
+* @s: The GlyrQuery settings struct to store this option in.
+* @ype: 
+*
+* 
+*
+* Returns: an error ID
+*/
 
 
-    /**
-    * @brief Prints information about a GlyrMemCache to stderr
-    *
-    * @param cacheditem The GlyrMemCache to be printed
-    */
-    void glyr_printitem(GlyrMemCache * cacheditem);
+/**
+* glyr_opt_img_minsize:
+* @s: The GlyrQuery settings struct to store this option in.
+* @size: The minimum size in pixels an image may have, assuming it to be quadratic 
+*
+* <note>
+* <para>
+* This is only taken as a hint, returned images are not necessarily higher than this size, but should be around it.
+* </para>
+* </note>
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
+
+/**
+* glyr_opt_img_maxsize:
+* @s: The GlyrQuery settings struct to store this option in.
+* @size: The maxmimum size in pixels an image may have, assuming it to be quadratic 
+*
+* <note>
+* <para>
+* This is only taken as a hint, returned images are not necessarily below this size, but should be around it.
+* </para>
+* </note>
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
+
+/**
+* glyr_opt_parallel:
+* @s: The GlyrQuery settings struct to store this option in.
+* @parallel_jobs: The number of providers that are queried in parallel.
+*
+* A value of 0 lets libglyr chooses this value itself. This is the default.
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long parallel_jobs);
+
+/**
+* glyr_opt_timeout:
+* @s: The GlyrQuery settings struct to store this option in.
+* @timeout: Maximum number of seconds to wait before canceling a download.
+*
+* Default is 20 seconds
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long timeout);
+
+/**
+* glyr_opt_redirects:
+* @s: The GlyrQuery settings struct to store this option in.
+* @redirects: Maximum number of redirects before canceling a download.
+*
+* A value of 0 is allowed but may break some plugins.
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long redirects);
+
+/**
+* glyr_opt_useragent:
+* @s: The GlyrQuery settings struct to store this option in.
+* @useragent: A string that is used as useragent in HTTP requests.
+*
+* Some providers require an valid useragent, an empty string might break these therefore.
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
 
 
-    /**
-    * @brief get information about existing Fetcher and Source
-    *
-    *
-    * A Doubly linked list of Fetcher is returned, each having a field 'head',
-    * being a pointer to a doubly linked list of GlyrSourceInfos
-    *
-    * @return A newly GlyrFetcherInfo structure, you can iterate over.
-    */
-    GlyrFetcherInfo * glyr_get_plugin_info(void);
+/**
+* glyr_opt_lang:
+* @s: The GlyrQuery settings struct to store this option in.
+* @langcode: An ISO 639-1 language code.
+*
+* Some providers offer localized content, or content only being available in certain countries.
+* Examples are: last.fm, amazon and google.
+* The language is given in ISO 639-1 codes like 'de' or 'en'.
+* Alternatively you can set it to 'auto', which will cause libglyr to guess your language by your locale. 
+* "auto" is the default behavior.
+* 
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
 
-    /**
-    * @brief Free the data from glyr_get_plugin_info()
-    *
-    * This method also set the pointer to NULL, for safety reasons.
-    *
-    * @param info A reference to the return value fo glyr_get_plugin_info()
-    */
-    void glyr_free_plugin_info(GlyrFetcherInfo ** info);
+/**
+* glyr_opt_number:
+* @s: The GlyrQuery settings struct to store this option in.
+* @num: Maximum number of items to get or 0 
+*
+* The maximum number of items to get in a glyr_get(), resulting number of items may be below @num but not higher.
+* A value of 0 causes libglyr to search till infinity.
+* Default is 1.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
 
-    /**
-    * @brief Converts a GLYR_DATA_TYPE type to a string
-    *
-    * @param type a member of the GLYR_DATA_TYPE enum, GLYR_TYPE_COVER_PRI e.g.
-    *
-    * @return a statically allocated string, do not free
-    */
-    const char * glyr_type_to_string(enum GLYR_DATA_TYPE type);
+/**
+* glyr_opt_verbosity:
+* @s: The GlyrQuery settings struct to store this option in.
+* @level: Define how verbose the library is.
+*
+* The verbosity level that is used by libglyr:
+* <itemizedlist>
+* <listitem>
+* <para>
+* 0: No output, but fatal errors.
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* 1: Basic warnings.
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* 2: Normal informal output
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* 3: Basic debug output
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* 4: Full debug output
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
+
+/**
+* glyr_opt_from:
+* @s: The GlyrQuery settings struct to store this option in.
+* @from: A comma separated list of provider names. 
+*
+*
+* Tell libglyr where you want your metadata want from.
+* You can get a full list of providers for each getter by running @glyrc @-L
+* The string you can pass here looks like this example for _cover_:
+* <informalexample>
+* <programlisting>
+* "lastfm;google"
+* </programlisting>
+* </informalexample>
+*
+* This would query to everybody's surprise"lastfm" and "google"
+* Alternatively you may use the string "all" in it:
+* <informalexample>
+* <programlisting>
+* "all;-lastfm;"
+* </programlisting>
+* </informalexample>
+* 
+* All providers except "lastfm" (therefore the '-') are used, a '+' is also allowed, which does plain nothing.
+* By default all built-in providers are used.
+* You can access the providernames by calling glyr_get_plugin_info()
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
+
+/**
+* glyr_opt_plugmax:
+* @s: The GlyrQuery settings struct to store this option in.
+* @plugmax: Maximum number of items a single provider may retrieve.
+*
+* Restricts providers to retrieve at max. @plugmax items, you might use this to get results
+* over several providers when glyr_opt_number() is set to something higher than 1.
+*
+* May be removed in future releases.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
+
+/**
+* glyr_opt_allowed_formats:
+* @s: The GlyrQuery settings struct to store this option in.
+* @formats: A commaseperated list of allowed formats.
+*
+* Restricts providers to retrieve at max. @plugmax items, you might use this to get results
+* over several providers when glyr_opt_number() is set to something higher than 1.
+*
+* For the getters GLYR_GET_COVERART and GLYR_GET_ARTIST_PHOTOS only.
+* The allowed formats for images, in a comma separated list.
+* Examples:
+* <itemizedlist>
+* <listitem>
+* <para>
+* "png;jpeg"
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* "png;jpeg;tiff;jpg;" (default) 
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* <note>
+* <para>
+* 'jpeg' *and* 'jpg' because some websites return strange mimetypes (should be 'jpeg' only)
+* </para>
+* </note>
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
+
+/**
+* glyr_opt_download:
+* @s: The GlyrQuery settings struct to store this option in.
+* @download: Wether to downlaod images or just to return the found URL.
+*
+* Imageproviders only return URLs, by default libglyr downloads these and
+* gives you the cache. By settings glyr_opt_download() to #FALSE you tell
+* libglyr that you want only the URLs (in a searchengine like fashion)
+*
+* An check for valid images is done however.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
+
+/**
+* glyr_opt_fuzzyness:
+* @s: The GlyrQuery settings struct to store this option in.
+* @fuzz: Maximal Levenshtein-distance tolerance may have, see below.
+*
+* libglyr features fuzzy matching to enhance search results.
+* Look at the string "Equilibrium" and the accidentally mistyped version "Aquillibriu":
+* Those strings will be compares using the "Levenshtein distance" (http://en.wikipedia.org/wiki/Levenshtein_distance) which basically counts
+* the number of insert, substitute and delete operations to transform Equilibrium"" into "Aquillibriu".
+* The distance in this case is 3 since three edit-operations are needed (one insert, substitute and deletion)
+*
+* The fuzziness parameter is the maximum distance two strings may have to match.
+* A high distance (like about 10) matches even badly mistyped strings, but also introduces bad results.
+* Low settings however will omit some good results.
+*
+* The default values is currently 4.
+* To be more secure some correction is applied:
+*
+* Examples:
+* <itemizedlist>
+* <listitem>
+* <para>
+* artist:Adele - album:19 
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* artist:Adele - album:21 
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* lv-distance = 2 which is <= 4
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* But since the lv-distance is the same as the length "21" it won't match.
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* The easiest way to prevent this though, is to properly tag your music. (http://musicbrainz.org/doc/MusicBrainz_Picard).
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
+
+/**
+* glyr_opt_qsratio:
+* @s: The GlyrQuery settings struct to store this option in.
+* @ratio: A float, in the range [0.0..1.0] specifying the ratio between quality and speed.
+*
+* 0.00 means highest speed, querying fast providers first.
+* 1.00 Takes possibly longer, but should deliver best results.
+* 0.85 is the current default value.
+*
+* All other values, smaller 0.0, greater 1.0 are clamped to [0.0..1.0]
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
+
+/**
+* glyr_opt_proxy:
+* @s: The GlyrQuery settings struct to store this option in.
+* @proxystring: The proxy to use, see below for the notation.
+*
+* The proxy to use, if any.
+* It is passed in the form: [protocol://][user:pass@]yourproxy.domain[:port]
+* Example:
+* <itemizedlist>
+* <listitem>
+* <para>
+* Proxy.fh-hof.de:3128
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* http://hman:rootroot@godserve.com:666
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* The environment variables http_proxy, ftp_proxy, all_proxy are respected, but are overwritten by this.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
+
+
+/**
+* glyr_opt_force_utf8:
+* @s: The GlyrQuery settings struct to store this option in.
+* @force_utf8: To force, or not to force.
+*
+* For textitems only.
+* Some _providers_ (like_metrolyrics_) might return text with strange encodings,
+* that can not be converted to regular UTF8, but might return a subset of UTF8.
+* This options forces @libglyr@ to prohibit those.
+*
+* Returns: an error ID
+*/
+enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
+
+/**
+* glyr_download:
+* @url: A valid url, for example returned by libglyr
+* @s: A settings struct managing timeout, useragent and redirects. 
+*
+* Downloads the data pointed to by @url and caches in it a GlyrMemCache, which is returned to you. 
+* Use glyr_free_cache() to free it after use.
+*
+* Returns: A GlyrMemCache containing the data, or %NULL on failure, use verbose output to find out why.
+*/
+GlyrMemCache * glyr_download(const char * url, GlyrQuery * s);
+
+/**
+* glyr_strerror:
+* @ID: a member of the GLYR_ERROR enum. 
+*
+* Gets a descriptive message from an error ID.
+*
+* Returns: a descriptive nullterminated string, do <emphasis>NOT</emphasis> pass to free
+*/
+const char * glyr_strerror(enum GLYR_ERROR ID);
+
+/**
+* glyr_version:
+*
+* Returns: the current version string. Example below.
+* 
+* Version 0.4 (Larcenous Locust [dev]) of [May 20 2011] compiled at [19:12:37]
+*
+* Retunrs a nullterminated string, do <emphasis>NOT</emphasis> pass it to free!
+*/
+const char * glyr_version(void);
+
+/**
+* glyr_write:
+* @cache: The data to write.
+* @path: The path to write data at.
+*
+* Write @cache to the path specified by @path.
+*
+* There are three special files:
+* <itemizedlist>
+* <listitem>
+* <para>
+* "stdout" -> Outputs file to stdout
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* "stderr" -> Outputs file to stderr
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* "null"   -> Outputs item nowhere
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Returns: the number of written bytes.
+*/
+int glyr_write(GlyrMemCache * cache, const char * path);
+
+
+/**
+* glyr_update_md5sum:
+* @cache: a valid memcahe
+*
+* Updates the md5sum field of @cache. 
+*
+*/
+void glyr_update_md5sum(GlyrMemCache * cache);
+
+
+/**
+* glyr_printitem:
+* @cache: The GlyrMemCache to be printed.
+*
+* A debug method to print all fields of @cache. 
+*
+*/
+void glyr_printitem(GlyrMemCache * cache);
+
+/**
+* glyr_get_plugin_info: 
+*
+* get information about existing Fetcher and Source
+* A Doubly linked list of Fetcher is returned, each having a field 'head',
+* being a pointer to a doubly linked list of GlyrSourceInfos
+*
+* It is best understood by an example:
+* <example>
+* <title>Using GlyrFetcherInfo:</title>
+* <programlisting>
+* static void visualize_from_options(void)
+* {
+*     GlyrFetcherInfo * info = glyr_get_plugin_info();
+*     if(info != NULL)
+*     {
+*         for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
+*         {
+*             printf("%s\n",elem0->name);
+*             for(GlyrSourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
+*             {
+*                 printf("  [%c] %s\n",elem1->key,elem1->name);
+*             }
+*             printf("\n");
+*         }
+*    }
+*    glyr_free_plugin_info(info);
+* }
+* </programlisting>
+* </example>
+*
+* Returns: A newly allocated GlyrFetcherInfo structure, you can iterate over.
+*/
+GlyrFetcherInfo * glyr_get_plugin_info(void);
+
+/**
+* glyr_free_plugin_info:
+* @info: The return value of glyr_get_plugin_info()
+*
+* Free the return value of glyr_get_plugin_info() pointed to by @info
+*/
+void glyr_free_plugin_info(GlyrFetcherInfo * info);
+
+/**
+* glyr_type_to_string:
+* @type: a member of the GLYR_DATA_TYPE enum, GLYR_TYPE_COVER_PRI for example
+*
+* Converts a type to a string.
+*
+* Returns: a statically allocated string, do not free
+*/
+const char * glyr_type_to_string(enum GLYR_DATA_TYPE type);
 
 #ifdef _cplusplus
 }

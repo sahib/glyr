@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
     glyr_init_query(&q);
 
     /* Say we want a Songtext */
-    enum GLYR_GLYR_GET_TYPE type = GLYR_GET_LYRICS;
+    enum GLYR_GET_TYPE type = GLYR_GET_LYRICS;
     glyr_opt_type(&q,type);
 
     /* Set at least the required fields to your needs        *
