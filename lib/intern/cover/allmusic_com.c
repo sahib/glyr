@@ -109,7 +109,7 @@ GList * cover_allmusic_parse(cb_object * capo)
                 gchar * artist = copy_value(artist_begin + (sizeof ARTIST_PART) - 1, strstr(artist_begin,ARTIST_END));
                 if(artist != NULL)
                 {
-                        if(levenshtein_strnormcmp(capo->s->artist,artist) <= capo->s->fuzzyness)
+                        if(levenshtein_strnormcmp(capo->s,capo->s->artist,artist) <= capo->s->fuzzyness)
                         {
                             GlyrMemCache * dl_cache = download_single(url,capo->s,"<div class=\"artist\">");
                             if(dl_cache != NULL)

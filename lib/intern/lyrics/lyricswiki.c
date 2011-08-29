@@ -46,8 +46,8 @@ gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_obje
             if(tmp_title != NULL)
             {
 		 /* levenshtein_strnormcmp takes care of those brackets */
-                 if((levenshtein_strnormcmp(capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
-                     levenshtein_strnormcmp(capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
+                 if((levenshtein_strnormcmp(capo->s,capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
+                     levenshtein_strnormcmp(capo->s,capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
                  {
                      res = true;
                  }
@@ -73,7 +73,7 @@ GList * lyrics_lyricswiki_parse(cb_object * capo)
 	    gchar * wiki_page_url = get_search_value(capo->cache->data,"<url>","</url>");
 	    if(wiki_page_url != NULL)
 	    {
-		    GlyrMemCache * new_cache = download_single(wiki_page_url, capo->s,NULL);
+		    GlyrMemCache * new_cache = download_single(wiki_page_url,capo->s,NULL);
 		    if(new_cache != NULL)
 		    {
 			    gchar * lyr = get_search_value(new_cache->data,LYR_BEGIN,LYR_ENDIN);

@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "relations" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_RELATIONS
+		@spit.type = Glyros::GLYR_GET_RELATIONS
 	end
 		
 	describe "Not found case" do 

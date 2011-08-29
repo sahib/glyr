@@ -106,7 +106,7 @@ static gboolean approve_content(GlyrQuery * query, gchar * ref)
 					gchar * artist_html = copy_value(ref, end_of_artist);
 					if(artist_html != NULL)
 					{
-						if(levenshtein_strnormcmp(artist_html,query->artist) <= query->fuzzyness)
+						if(levenshtein_strnormcmp(query,artist_html,query->artist) <= query->fuzzyness)
 						{
 								result = TRUE;
 						}

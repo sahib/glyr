@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "tracklist" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_TRACKLIST
+		@spit.type = Glyros::GLYR_GET_TRACKLIST
 	end
 
     describe "Equilibrium - Sagas" do

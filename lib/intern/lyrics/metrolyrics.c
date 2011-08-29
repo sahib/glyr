@@ -84,13 +84,6 @@ static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
 
 /*--------------------------------------------------------*/
 
-static gboolean approve_content(gchar * content, const gchar * compare, gsize fuzz)
-{
-    return (levenshtein_strnormcmp(content,compare) <= fuzz);
-}
-
-/*--------------------------------------------------------*/
-
 #define ROOT_NODE "<div id=\"listResults\">"
 #define NODE_BEGIN "<a href=\""
 #define NODE_ENDIN "\" title=\""
@@ -114,13 +107,13 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                 gchar * title_end = strstr(title_beg,TITLE_END);
                 if(title_end != NULL)
                 {
-					gsize node_begin_len = (sizeof NODE_BEGIN) - 1;
+		    gsize node_begin_len = (sizeof NODE_BEGIN) - 1;
                     gchar * title = copy_value(title_beg + node_begin_len,title_end);
-                    if(title)
+                    if(title != NULL)
                     {
-                        if(approve_content(title,capo->s->title,capo->s->fuzzyness))
+			if(levenshtein_strnormcmp(capo->s,capo->s->title,title) <= capo->s->fuzzyness)
                         {
-							gsize node_endin_len = (sizeof NODE_ENDIN) - 1;
+		  	    gsize node_endin_len = (sizeof NODE_ENDIN) - 1;
                             gchar * url = copy_value(node + node_endin_len, title_beg);
                             if(url != NULL)
                             {

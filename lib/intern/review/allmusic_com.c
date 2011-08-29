@@ -100,7 +100,7 @@ GList * review_allmusic_parse(cb_object * capo)
                 gchar * artist = copy_value(rr + strlen(ARTIST_PART), strstr(rr,ARTIST_END));
                 if(artist != NULL)
                 {
-                    if(levenshtein_strnormcmp(capo->s->artist,artist) <= capo->s->fuzzyness)
+                    if(levenshtein_strnormcmp(capo->s,capo->s->artist,artist) <= capo->s->fuzzyness)
                     {
                         gchar * review_url = g_strdup_printf("%s/review",url);
                         if(review_url)

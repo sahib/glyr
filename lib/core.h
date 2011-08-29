@@ -81,7 +81,7 @@ typedef struct MetaDataFetcher
     GList * provider;
 
     /* what this thing delievers; e.g. GLYR_GET_COVERART */
-    enum GLYR_GET_TYPE type;
+    GLYR_GET_TYPE type;
 
     /* callbacks */
     bool (*validate)(GlyrQuery *);
@@ -112,7 +112,7 @@ typedef struct MetaDataSource
     const char  * (* get_url)(GlyrQuery *); 	/* called when the url of this provider is needed */
     gchar  * endmarker;              	        /* Download stops if this mark is found           */
 
-    enum GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
+    GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
     gboolean free_url; /* URL is dyn. allocated - set this always! */
 
     gint quality;  /* Measurement of how good the content  usually is [0-100] */
@@ -123,7 +123,7 @@ typedef struct MetaDataSource
 /*------------------------------------------------------*/
 
 typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
-GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err);
+GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err);
 GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr, gboolean free_caches);
 GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end);
 

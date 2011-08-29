@@ -107,7 +107,7 @@ class GlyrosSpit
 	end	
 
 	def get
-		unless @query.type == Glyros::GET_UNSURE
+		unless @query.type == Glyros::GLYR_GET_UNSURE
 			return call_get
 		end
 		nil
@@ -322,7 +322,7 @@ def test_me
 	q.title  = "Die Boten"
 
 	puts("---------------------------")
-	q.get(Glyros::GET_LYRICS).each do |item|
+	q.get(Glyros::GLYR_GET_LYRICS).each do |item|
 		puts "Recieved a #{GlyrosSpit.type_to_s(item.type)}:"
 		item.print
 	end

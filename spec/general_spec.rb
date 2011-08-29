@@ -11,7 +11,7 @@ describe "libglyr [general fetchers]" do
 	
 	describe "lyrics" do
 		it "should get me a non empty array with exactly one element " do
-			@spit.type = Glyros::GET_LYRICS
+			@spit.type = Glyros::GLYR_GET_LYRICS
 			done = @spit.get
 			done.should be_an_instance_of Array
 			done.should satisfy {|arr| arr.size == 1}
@@ -20,7 +20,7 @@ describe "libglyr [general fetchers]" do
 
 	describe "cover" do
 		it "should get me a non empty array with exactly one element " do
-			@spit.type = Glyros::GET_COVERART
+			@spit.type = Glyros::GLYR_GET_COVERART
 			done = @spit.get
 			done.should be_an_instance_of Array
 			done.should satisfy {|arr| arr.size == 1}
@@ -29,7 +29,7 @@ describe "libglyr [general fetchers]" do
 	
 	describe "biography" do
 		it "should get me a non empty array with exactly one element " do
-			@spit.type = Glyros::GET_ARTISTBIO
+			@spit.type = Glyros::GLYR_GET_ARTISTBIO
 			done = @spit.get
 			done.should be_an_instance_of Array
 			done.should satisfy {|arr| arr.size == 1}

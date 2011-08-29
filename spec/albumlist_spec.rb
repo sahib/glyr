@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "albumlist" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_ALBUMLIST
+		@spit.type = Glyros::GLYR_GET_ALBUMLIST
 	end
 
 	describe "musicbrainz" do

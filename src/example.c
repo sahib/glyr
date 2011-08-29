@@ -25,7 +25,7 @@ static void print_item(GlyrMemCache * cacheditem, int num)
 /* ------------------------------------------ */
 
 /* This is called whenever glyr gets a ready to use item */
-static enum GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
+static GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
 {
     /* You can pass a void pointer to the callback,
      * by passing it as third argument to glyr_opt_dlcallback()
@@ -62,7 +62,7 @@ int main(int argc, char * argv[])
     glyr_init_query(&q);
 
     /* Say we want a Songtext */
-    enum GLYR_GET_TYPE type = GLYR_GET_LYRICS;
+    GLYR_GET_TYPE type = GLYR_GET_LYRICS;
     glyr_opt_type(&q,type);
 
     /* Set at least the required fields to your needs        *
@@ -88,7 +88,7 @@ int main(int argc, char * argv[])
     // Call the most important command: GET!
     // This returned a list of (GlyrMemCache *)s
     // Each containing ONE item. (i.e. a songtext)
-    enum GLYR_ERROR err;
+    GLYR_ERROR err;
     GlyrMemCache * it = glyr_get(&q,&err,NULL);
 
     if(err != GLYRE_OK)

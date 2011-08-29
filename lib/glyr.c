@@ -88,7 +88,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs);
 /*--------------------------------------------------------*/
 
 // return a descriptive string on error ID
-const char * glyr_strerror(enum GLYR_ERROR ID)
+const char * glyr_strerror(GLYR_ERROR ID)
 {
     if(ID < (sizeof(err_strings)/sizeof(const char *)))
     {
@@ -116,7 +116,7 @@ const char * glyr_version(void)
 /*-----------------------------------------------*/
 
 // Seperate method because va_arg struggles with function pointers
-enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp)
+GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp)
 {
     if(settings)
     {
@@ -129,7 +129,7 @@ enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, voi
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type)
+GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
 {
 
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -143,7 +143,7 @@ enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
+GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,0,artist);
@@ -152,7 +152,7 @@ enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
+GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,1,album);
@@ -161,7 +161,7 @@ enum GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_title(GlyrQuery * s, char * title)
+GLYR_ERROR glyr_opt_title(GlyrQuery * s, char * title)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,2,title);
@@ -188,7 +188,7 @@ static int size_set(int * ref, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
+GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     return size_set(&s->img_max_size,size);
@@ -196,7 +196,7 @@ enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
+GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     return size_set(&s->img_min_size,size);
@@ -204,7 +204,7 @@ enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
+GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->parallel = (long)val;
@@ -213,7 +213,7 @@ enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
+GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->timeout = (long)val;
@@ -222,7 +222,7 @@ enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
+GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->redirects = (long)val;
@@ -231,7 +231,7 @@ enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
+GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,6,(useragent) ? useragent : "");
@@ -240,7 +240,7 @@ enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
+GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(langcode != NULL)
@@ -261,7 +261,7 @@ enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
+GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->number = num == 0 ? INT_MAX : num;
@@ -270,7 +270,7 @@ enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
+GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->verbosity = level;
@@ -279,7 +279,7 @@ enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
+GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(from != NULL)
@@ -292,7 +292,7 @@ enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
+GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,5,(formats==NULL) ? GLYR_DEFAULT_ALLOWED_FORMATS : formats);
@@ -301,7 +301,7 @@ enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
+GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     if(plugmax < 0)
@@ -315,7 +315,7 @@ enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
+GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->qsratio = MIN(MAX(ratio,0.0),1.0);
@@ -324,7 +324,7 @@ enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
+GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info(s,3,proxystring);
@@ -333,7 +333,7 @@ enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
+GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->fuzzyness = fuzz;
@@ -342,7 +342,7 @@ enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
+GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->download = download;
@@ -351,7 +351,7 @@ enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
 
 /*-----------------------------------------------*/
 
-enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
+GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
 {
     if(s == NULL) return GLYRE_EMPTY_STRUCT;
     s->force_utf8 = force_utf8;
@@ -551,7 +551,7 @@ static void auto_detect_parallel(MetaDataFetcher * fetcher, GlyrQuery * query)
 
 /*-----------------------------------------------*/
 
-GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * e, int * length)
+GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 {
     if(is_initalized == FALSE)
     {
@@ -750,7 +750,7 @@ puts("----Set Lang");
 
 /*-----------------------------------------------*/
 
-const char * glyr_type_to_string(enum GLYR_DATA_TYPE type)
+const char * glyr_type_to_string(GLYR_DATA_TYPE type)
 {
     switch(type)
     {

@@ -1377,7 +1377,7 @@ static void print_trigger(GlyrQuery * query, GList * src_list)
 
 /*--------------------------------------------------------*/
 
-GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, enum GLYR_ERROR * err)
+GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err)
 {
     gsize list_len = g_list_length(fetcher->provider);
     gint fired[list_len];

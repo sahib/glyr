@@ -210,7 +210,7 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 /* ------------------------------------------------------------- */
 
 /* Tries to strip unused strings before comparing with levenshtein_strcasecmp */
-gsize levenshtein_strnormcmp(const gchar * string, const gchar * other)
+gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const gchar * other)
 {
 	gsize diff = 100;
 	if(string != NULL && other != NULL)
@@ -230,8 +230,12 @@ gsize levenshtein_strnormcmp(const gchar * string, const gchar * other)
 				gsize str_len = strlen(pretty_string);
 				gsize oth_len = strlen(pretty_other);
 				gsize ratio = (oth_len + str_len) / 2;
+				gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
 
-				if((ratio - diff < ratio / 2 + 1 && diff <= GLYR_DEFAULT_FUZZYNESS) || MIN(str_len,oth_len) <= diff)
+				/* Useful for debugging */
+				//g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
+
+				if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
 				{
 					/* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
 					//g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);

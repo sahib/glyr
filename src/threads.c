@@ -16,7 +16,7 @@ static void * call_get(void * p)
     return r;
 }
 
-static void configure(GlyrQuery * s, enum GLYR_GET_TYPE type)
+static void configure(GlyrQuery * s, GLYR_GET_TYPE type)
 {
     glyr_init_query(s);
     glyr_opt_artist(s,"Die Apokalyptischen Reiter");

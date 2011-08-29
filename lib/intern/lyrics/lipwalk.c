@@ -75,7 +75,7 @@ static gboolean validate_track_description(GlyrQuery * query, gchar * descriptio
 		{
 			if(splitv[1] != NULL)
 			{
-				if(levenshtein_strnormcmp(query->title,splitv[1]) <= query->fuzzyness)
+				if(levenshtein_strnormcmp(query,query->title,splitv[1]) <= query->fuzzyness)
 				{
 					result = TRUE;
 				}

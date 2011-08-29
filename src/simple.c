@@ -31,7 +31,7 @@ int main(void)
 
     /* If any error occured it will be saved here, or GLYRE_OK */
     /* You could have also passed a NULL pointer to glyr_get() if you're not interested in this */
-    enum GLYR_ERROR err;
+    GLYR_ERROR err;
 
     /* Now get the job done! The 3rd  */
     GlyrMemCache * head = glyr_get(&q,&err,NULL);

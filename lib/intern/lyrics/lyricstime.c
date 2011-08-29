@@ -75,94 +75,94 @@ static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
 
 static gboolean validate_artist(cb_object * capo, gchar * backpointer)
 {
-		gboolean i_shall_continue = false;
-		if(backpointer != NULL)
+	gboolean i_shall_continue = false;
+	if(backpointer != NULL)
+	{
+		char * span = strstr(backpointer,SPAN_BEGIN);
+		if(span != NULL)
 		{
-				char * span = strstr(backpointer,SPAN_BEGIN);
-				if(span != NULL)
+			gchar * artist_beg = strstr(span,ARTIST_BEG);
+			if(artist_beg != NULL)
+			{
+				artist_beg += (sizeof ARTIST_BEG) - 1;
+				gchar * artist_end = strstr(artist_beg,ARTIST_END);
+				if(artist_end != NULL)
 				{
-						gchar * artist_beg = strstr(span,ARTIST_BEG);
-						if(artist_beg != NULL)
+					gchar * artist_val = copy_value(artist_beg,artist_end);
+					if(artist_val != NULL)
+					{
+						if(levenshtein_strnormcmp(capo->s,artist_val,capo->s->artist) <= capo->s->fuzzyness)
 						{
-								artist_beg += (sizeof ARTIST_BEG) - 1;
-								gchar * artist_end = strstr(artist_beg,ARTIST_END);
-								if(artist_end != NULL)
-								{
-										gchar * artist_val = copy_value(artist_beg,artist_end);
-										if(artist_val != NULL)
-										{
-												if(levenshtein_strnormcmp(artist_val,capo->s->artist) <= capo->s->fuzzyness)
-												{
-														i_shall_continue = true;
-												}
-												g_free(artist_val);
-										}
-								}
+							i_shall_continue = true;
 						}
+						g_free(artist_val);
+					}
 				}
+			}
 		}
-		return i_shall_continue;
+	}
+	return i_shall_continue;
 }
 
 /*--------------------------------------------------------*/
 
 GList * lyrics_lyricstime_parse(cb_object * capo)
 {
-		GList * rList = NULL;
-		char * start = capo->cache->data;
-		if(start != NULL)
+	GList * rList = NULL;
+	char * start = capo->cache->data;
+	if(start != NULL)
+	{
+		gchar * div_end = strstr(start,SEARCH_ENDIN);
+		gchar * node = capo->cache->data;
+		gchar * backpointer = node;
+		gsize nlen = (sizeof NODE_BEGIN) - 1;
+
+		while(continue_search(g_list_length(rList),capo->s) && (node = strstr(node+nlen,NODE_BEGIN)) != NULL)
 		{
-				gchar * div_end = strstr(start,SEARCH_ENDIN);
-				gchar * node = capo->cache->data;
-				gchar * backpointer = node;
-				gsize nlen = (sizeof NODE_BEGIN) - 1;
+			if(div_end >= node)
+				break;
 
-				while(continue_search(g_list_length(rList),capo->s) && (node = strstr(node+nlen,NODE_BEGIN)) != NULL)
+			if(validate_artist(capo,backpointer) == TRUE)
+			{
+				gchar * end_of_url = strstr(node+nlen,NODE_ENDIN);
+				if(end_of_url != NULL)
 				{
-						if(div_end >= node)
-								break;
-
-						if(validate_artist(capo,backpointer) == TRUE)
+					gchar * url = copy_value(node+nlen,end_of_url);
+					if(url != NULL)
+					{
+						gchar * full_url = g_strdup_printf("http://www.lyricstime.com%s",url);
+						GlyrMemCache * dl_cache = download_single(full_url,capo->s,NULL);
+						if(dl_cache)
 						{
-								gchar * end_of_url = strstr(node+nlen,NODE_ENDIN);
-								if(end_of_url != NULL)
-								{
-										gchar * url = copy_value(node+nlen,end_of_url);
-										if(url != NULL)
-										{
-												gchar * full_url = g_strdup_printf("http://www.lyricstime.com%s",url);
-												GlyrMemCache * dl_cache = download_single(full_url,capo->s,NULL);
-												if(dl_cache)
-												{
-														GlyrMemCache * parsed_cache = parse_page(dl_cache,capo);
-														if(parsed_cache != NULL)
-														{
-																rList = g_list_prepend(rList,parsed_cache);
-														}
-														DL_free(dl_cache);
-														g_free(full_url);
-												}
-												g_free(url);
-										}
-								}
+							GlyrMemCache * parsed_cache = parse_page(dl_cache,capo);
+							if(parsed_cache != NULL)
+							{
+								rList = g_list_prepend(rList,parsed_cache);
+							}
+							DL_free(dl_cache);
+							g_free(full_url);
 						}
-						backpointer = node;
+						g_free(url);
+					}
 				}
+			}
+			backpointer = node;
 		}
-		return rList;
+	}
+	return rList;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource lyrics_lyricstime_src =
 {
-		.name = "lyricstime",
-		.key  = 't',
-		.parser    = lyrics_lyricstime_parse,
-		.get_url   = lyrics_lyricstime_url,
-		.type      = GLYR_GET_LYRICS,
-		.quality   = 70,
-		.speed     = 60,
-		.endmarker = NULL,
-		.free_url  = false
+	.name = "lyricstime",
+	.key  = 't',
+	.parser    = lyrics_lyricstime_parse,
+	.get_url   = lyrics_lyricstime_url,
+	.type      = GLYR_GET_LYRICS,
+	.quality   = 70,
+	.speed     = 60,
+	.endmarker = NULL,
+	.free_url  = false
 };

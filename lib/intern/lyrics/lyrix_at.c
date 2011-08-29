@@ -40,85 +40,85 @@ const char * lyrics_lyrixat_url(GlyrQuery * settings)
 
 static void parse_lyrics_page(const gchar * url, GList ** result_list, cb_object * capo)
 {
-		GlyrMemCache * lyrcache = download_single(url,capo->s,"<!-- eBay Relevance Ad -->");
-		if(lyrcache != NULL)
+	GlyrMemCache * lyrcache = download_single(url,capo->s,"<!-- eBay Relevance Ad -->");
+	if(lyrcache != NULL)
+	{
+		gchar * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);
+		if(lyr_begin != NULL)
 		{
-				gchar * lyr_begin = strstr(lyrcache->data,LYRIC_BEGIN);
-				if(lyr_begin != NULL)
+			gchar * lyr_endin = strstr(lyr_begin,"<div>");
+			if(lyr_endin != NULL)
+			{
+				gchar * lyrics = copy_value(lyr_begin,lyr_endin);
+				if(lyrics != NULL)
 				{
-						gchar * lyr_endin = strstr(lyr_begin,"<div>");
-						if(lyr_endin != NULL)
-						{
-								gchar * lyrics = copy_value(lyr_begin,lyr_endin);
-								if(lyrics != NULL)
-								{
-										GlyrMemCache * result = DL_init();
-										result->data = strreplace(lyrics,"<br />","");
-										result->size = strlen(result->data);
-										result->dsrc = g_strdup(url);
-										*result_list = g_list_prepend(*result_list,result);
-								}
-								g_free(lyrics);
-						}
+					GlyrMemCache * result = DL_init();
+					result->data = strreplace(lyrics,"<br />","");
+					result->size = strlen(result->data);
+					result->dsrc = g_strdup(url);
+					*result_list = g_list_prepend(*result_list,result);
 				}
-				DL_free(lyrcache);
+				g_free(lyrics);
+			}
 		}
+		DL_free(lyrcache);
+	}
 }
 
 /*--------------------------------------------------------*/
 
 GList * lyrics_lyrixat_parse(cb_object * capo)
 {
-		/* lyrix.at does not offer any webservice -> use the searchfield to get some results */
-		GList * result_list = NULL;
-		gchar * search_begin_tag = capo->cache->data;
-		gint ctr = 0;
+	/* lyrix.at does not offer any webservice -> use the searchfield to get some results */
+	GList * result_list = NULL;
+	gchar * search_begin_tag = capo->cache->data;
+	gint ctr = 0;
 
-		while(continue_search(g_list_length(result_list),capo->s) && (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && MAX_TRIES >= ctr++)
+	while(continue_search(g_list_length(result_list),capo->s) && (search_begin_tag = strstr(search_begin_tag+1,SEARCH_START_TAG)) && MAX_TRIES >= ctr++)
+	{
+		gchar * url_tag = search_begin_tag;
+		url_tag = strstr(url_tag,URL_TAG_BEGIN);
+		if(url_tag != NULL)
 		{
-				gchar * url_tag = search_begin_tag;
-				url_tag = strstr(url_tag,URL_TAG_BEGIN);
-				if(url_tag != NULL)
+			gchar * title_tag = strstr(url_tag,URL_TAG_ENDIN);
+			if(title_tag)
+			{
+				gchar * title_end = strstr(title_tag,TITLE_END);
+				if(title_end != NULL)
 				{
-						gchar * title_tag = strstr(url_tag,URL_TAG_ENDIN);
-						if(title_tag)
+					gsize tag_end_len = (sizeof URL_TAG_ENDIN) - 1;
+					gchar * title = copy_value(title_tag + tag_end_len,title_end);
+					if(title != NULL)
+					{
+						if(levenshtein_strnormcmp(capo->s,title,capo->s->title) <= capo->s->fuzzyness)
 						{
-								gchar * title_end = strstr(title_tag,TITLE_END);
-								if(title_end != NULL)
-								{
-										gsize tag_end_len = (sizeof URL_TAG_ENDIN) - 1;
-										gchar * title = copy_value(title_tag + tag_end_len,title_end);
-										if(title != NULL)
-										{
-												if(levenshtein_strnormcmp(title,capo->s->title) <= capo->s->fuzzyness)
-												{
-														gchar * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
-														if(url_part != NULL)
-														{
-																gchar * url = g_strdup_printf("http://lyrix.at/de%s",url_part);
-																parse_lyrics_page(url,&result_list,capo);
-																g_free(url);
-																g_free(url_part);
-														}
-												}
-												g_free(title);
-										}
-								}
+							gchar * url_part = copy_value(url_tag+strlen(URL_TAG_BEGIN),title_tag);
+							if(url_part != NULL)
+							{
+								gchar * url = g_strdup_printf("http://lyrix.at/de%s",url_part);
+								parse_lyrics_page(url,&result_list,capo);
+								g_free(url);
+								g_free(url_part);
+							}
 						}
+						g_free(title);
+					}
 				}
+			}
 		}
-		return result_list;
+	}
+	return result_list;
 }
 /*--------------------------------------------------------*/
 
 MetaDataSource lyrics_lyrix_src =
 {
-		.name = "lyrix",
-		.key  = 'a',
-		.parser    = lyrics_lyrixat_parse,
-		.get_url   = lyrics_lyrixat_url,
-		.type      = GLYR_GET_LYRICS,
-		.quality   = 70,
-		.speed     = 50,
-		.free_url  = false
+	.name = "lyrix",
+	.key  = 'a',
+	.parser    = lyrics_lyrixat_parse,
+	.get_url   = lyrics_lyrixat_url,
+	.type      = GLYR_GET_LYRICS,
+	.quality   = 70,
+	.speed     = 50,
+	.free_url  = false
 };

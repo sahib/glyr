@@ -21,6 +21,7 @@
 #ifndef STRINGOP_H
 #define STRINGOP_H
 
+#include "types.h"
 #include <glib.h>
 
 /* Glyr's internal unicode stringlib - You're free to use it. */
@@ -35,7 +36,7 @@ gsize levenshtein_strcmp(const gchar * string, const gchar * other);
 gsize levenshtein_strcasecmp(const gchar * sstring, const gchar * other);
 
 /* Additionally normalizes string before comparing with levenshtein_strcasecmp */
-gsize levenshtein_strnormcmp(const gchar * string, const gchar * other);
+gsize levenshtein_strnormcmp(GlyrQuery * query, const gchar * string, const gchar * other);
 
 /* Replaces 'subs' with 'with' in string, returns newly allocated string or NULL */
 gchar * strreplace(const gchar * string, const gchar * subs, const gchar * with);

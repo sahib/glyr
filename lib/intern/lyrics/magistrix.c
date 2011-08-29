@@ -87,7 +87,7 @@ static gboolean convert_levenshtein(GlyrQuery * s, gchar * content, gchar * comp
 	gboolean result = FALSE;
     if(compare != NULL)
     {
-       	if(levenshtein_strnormcmp(compare,content) <= s->fuzzyness)
+       	if(levenshtein_strnormcmp(s,compare,content) <= s->fuzzyness)
        	{
 			result = TRUE;
        	}

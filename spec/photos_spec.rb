@@ -13,7 +13,7 @@ end
 describe "cover" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_ARTIST_PHOTOS
+		@spit.type = Glyros::GLYR_GET_ARTIST_PHOTOS
 	end	
 
 	describe "discogs" do

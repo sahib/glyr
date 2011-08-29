@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "similar_artists" do
 	before :each do 
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_SIMILIAR_ARTISTS
+		@spit.type = Glyros::GLYR_GET_SIMILIAR_ARTISTS
 	end
 
 	describe "last.fm - similar songs" do

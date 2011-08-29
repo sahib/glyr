@@ -24,50 +24,50 @@
 const gchar * cover_lyricswiki_url(GlyrQuery * sets)
 {
 	const gchar * url = NULL;
-    if(sets->img_min_size < 650)
+	if(sets->img_min_size < 650)
 	{
-        url = "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
+		url = "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
 	}
-    return url;
+	return url;
 }
 
 /*-----------------------------------------------*/
 
 static gboolean check_file_format(GlyrQuery * query, gchar * filename)
 {
-		gboolean result = FALSE;
-		gsize length = strlen(filename);
-		gsize offset = 0;
-		gchar *token = NULL;
+	gboolean result = FALSE;
+	gsize length = strlen(filename);
+	gsize offset = 0;
+	gchar *token = NULL;
 
-		gchar ** token_list = g_strsplit(query->allowed_formats,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,0);
-		while((token = token_list[offset]) != NULL)
+	gchar ** token_list = g_strsplit(query->allowed_formats,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,0);
+	while((token = token_list[offset]) != NULL)
+	{
+		if(g_str_has_suffix(filename,token) == TRUE)
 		{
-				if(g_str_has_suffix(filename,token) == TRUE)
-				{
-						result = TRUE;
-						gsize format_pos = length - strlen(token);
-						filename[format_pos] = '\0';
-						if(format_pos != 0 && filename[format_pos-1] == '.')
-						{
-								filename[format_pos-1] = '\0';
-						}
-						break;
-				}
-				offset++;
+			result = TRUE;
+			gsize format_pos = length - strlen(token);
+			filename[format_pos] = '\0';
+			if(format_pos != 0 && filename[format_pos-1] == '.')
+			{
+				filename[format_pos-1] = '\0';
+			}
+			break;
 		}
-		g_strfreev(token_list);
-		return result;
+		offset++;
+	}
+	g_strfreev(token_list);
+	return result;
 }
 
 /**
--- Example snippet
-<img name="Axxis_-_Access_All_Areas.jpg"
-	timestamp="2010-08-03T17:05:20Z"
-	url="http://images.wikia.com/lyricwiki/images/f/f9/Axxis_-_Access_All_Areas.jpg"
-	descriptionurl="http://lyrics.wikia.com/File:Axxis_-_Access_All_Areas.jpg"
-/>
-**/
+  -- Example snippet
+  <img name="Axxis_-_Access_All_Areas.jpg"
+  timestamp="2010-08-03T17:05:20Z"
+  url="http://images.wikia.com/lyricwiki/images/f/f9/Axxis_-_Access_All_Areas.jpg"
+  descriptionurl="http://lyrics.wikia.com/File:Axxis_-_Access_All_Areas.jpg"
+  />
+ **/
 
 #define IMG_TAG "_-_"
 #define END_TAG "\" timestamp=\""
@@ -77,55 +77,55 @@ static gboolean check_file_format(GlyrQuery * query, gchar * filename)
 
 GList * cover_lyricswiki_parse(cb_object * capo)
 {
-    gchar * find = capo->cache->data;
-    gchar * endTag   = NULL;
-    GList * result_list = NULL;
+	gchar * find = capo->cache->data;
+	gchar * endTag   = NULL;
+	GList * result_list = NULL;
 
 	gchar * escaped_album_name = strreplace(capo->s->album," ","_");
 	if(escaped_album_name != NULL)
 	{
-			/* Go through all names and compare them with Levenshtein */
-			while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find+(sizeof IMG_TAG) - 1,IMG_TAG)) != NULL)
+		/* Go through all names and compare them with Levenshtein */
+		while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find+(sizeof IMG_TAG) - 1,IMG_TAG)) != NULL)
+		{
+			/* Find end & start of the name */
+			find  += (sizeof IMG_TAG) - 1;
+			endTag = strstr(find,END_TAG);
+
+			if(endTag == NULL || endTag <= find)
+				continue;
+
+			/* Copy the name of the current album */
+			gchar * name = copy_value(find,endTag);
+			if(name != NULL)
 			{
-					/* Find end & start of the name */
-					find  += (sizeof IMG_TAG) - 1;
-					endTag = strstr(find,END_TAG);
-
-					if(endTag == NULL || endTag <= find)
-							continue;
-
-					/* Copy the name of the current album */
-					gchar * name = copy_value(find,endTag);
-					if(name != NULL)
+				if(check_file_format(capo->s,name) && levenshtein_strnormcmp(capo->s,escaped_album_name,name) <= capo->s->fuzzyness)
+				{
+					gchar * url_start = strstr(endTag,URL_MARKER);
+					if(url_start != NULL)
 					{
-							if(check_file_format(capo->s,name) && levenshtein_strnormcmp(escaped_album_name,name) <= capo->s->fuzzyness)
-							{
-									gchar * url_start = strstr(endTag,URL_MARKER);
-									if(url_start != NULL)
-									{
-											gchar * url_end = NULL;
-											url_start += (sizeof URL_MARKER) - 1;
-											gchar * url = copy_value(url_start, (url_end = strstr(url_start,URL_END)));
+						gchar * url_end = NULL;
+						url_start += (sizeof URL_MARKER) - 1;
+						gchar * url = copy_value(url_start, (url_end = strstr(url_start,URL_END)));
 
-											if(url != NULL)
-											{
-													GlyrMemCache * result = DL_init();
-													result->data = url;
-													result->size = url_end - url_start;
-													result_list = g_list_prepend(result_list,result);
-											}
-									}
-							}
-
-							/* Get next img tag */
-							find = strstr(endTag,NEXT_NAME);
-							g_free(name);
-
-							/* Whoops, right into nonexistence.. */
-							if(find == NULL) break;
+						if(url != NULL)
+						{
+							GlyrMemCache * result = DL_init();
+							result->data = url;
+							result->size = url_end - url_start;
+							result_list = g_list_prepend(result_list,result);
+						}
 					}
+				}
+
+				/* Get next img tag */
+				find = strstr(endTag,NEXT_NAME);
+				g_free(name);
+
+				/* Whoops, right into nonexistence.. */
+				if(find == NULL) break;
 			}
-			g_free(escaped_album_name);
+		}
+		g_free(escaped_album_name);
 	}
 	return result_list;
 }
@@ -134,13 +134,13 @@ GList * cover_lyricswiki_parse(cb_object * capo)
 
 MetaDataSource cover_lyricswiki_src =
 {
-		.name      = "lyricswiki",
-		.key       = 'w',
-		.parser    = cover_lyricswiki_parse,
-		.get_url   = cover_lyricswiki_url,
-		.type      = GLYR_GET_COVERART,
-		.quality   = 75,
-		.speed     = 85,
-		.endmarker = NULL,
-		.free_url  = false
+	.name      = "lyricswiki",
+	.key       = 'w',
+	.parser    = cover_lyricswiki_parse,
+	.get_url   = cover_lyricswiki_url,
+	.type      = GLYR_GET_COVERART,
+	.quality   = 75,
+	.speed     = 85,
+	.endmarker = NULL,
+	.free_url  = false
 };

@@ -73,7 +73,7 @@
  * Enum values used for the thing, to specify the thing.
  *
  **/
-enum GLYR_ERROR
+typedef enum
 {
     GLYRE_UNKNOWN = 0,  
     GLYRE_OK,           
@@ -87,7 +87,7 @@ enum GLYR_ERROR
     GLYRE_STOP_POST,  
     GLYRE_STOP_PRE,   
     GLYRE_NO_INIT     
-};
+}   GLYR_ERROR;
 
 /**
 * GLYR_GET_TYPE:
@@ -98,7 +98,7 @@ enum GLYR_ERROR
 * The names should be self-explanatory, GET_UNSURE is the default is the default.
 *
 */
-enum GLYR_GET_TYPE
+typedef enum
 {
     GLYR_GET_COVERART = 1, 
     GLYR_GET_LYRICS, 
@@ -112,7 +112,7 @@ enum GLYR_GET_TYPE
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
     GLYR_GET_UNSURE 
-};
+}   GLYR_GET_TYPE;
 
 /**
 * GLYR_DATA_TYPE:
@@ -140,7 +140,7 @@ enum GLYR_GET_TYPE
 * It describes what kind of data the cache holds.
 * 
 */
-enum GLYR_DATA_TYPE
+typedef enum
 {
     GLYR_TYPE_NOIDEA, 
     GLYR_TYPE_LYRICS, 
@@ -161,7 +161,7 @@ enum GLYR_DATA_TYPE
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
     GLYR_TYPE_TRACK	
-};
+}   GLYR_DATA_TYPE;
 
 
 /**
@@ -193,7 +193,7 @@ typedef struct GlyrMemCache
     size_t size;        
     char  *dsrc;        
     char  *prov;        
-    enum GLYR_DATA_TYPE type;
+    GLYR_DATA_TYPE type;
     int   duration;     
     bool  is_image;    
     char * img_format; 
@@ -217,7 +217,7 @@ typedef struct GlyrMemCache
 typedef struct GlyrQuery
 {
     /*< public >*/
-    enum GLYR_GET_TYPE type; 
+    GLYR_GET_TYPE type; 
 
     int number; 
     int plugmax; 
@@ -235,6 +235,12 @@ typedef struct GlyrQuery
     bool download; 
     float qsratio; 
 
+
+#ifdef COMING_FROM_SWIG
+    /* Make this fields immutable for languages supporting it */
+    %immutable
+    {
+#endif
     /* Dynamic allocated */
     const char * lang; 
     const char * proxy; 
@@ -250,15 +256,9 @@ typedef struct GlyrQuery
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
-#ifdef COMING_FROM_SWIG
-    /* Make this fields immutable for languages supporting it */
-    %immutable
-    {
-#endif
-
 #ifndef __GTK_DOC_IGNORE__
         struct {
-            enum GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
+            GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
             void  * user_pointer;
         } callback;
 #endif
@@ -292,7 +292,7 @@ typedef struct GlyrSourceInfo
 {
     char * name;
     char key;
-    enum GLYR_GET_TYPE type;
+    GLYR_GET_TYPE type;
     int quality;
     int speed;
 
@@ -320,14 +320,14 @@ typedef struct GlyrSourceInfo
 typedef struct GlyrFetcherInfo
 {
     char * name;
-    enum GLYR_GET_TYPE type;
+    GLYR_GET_TYPE type;
     GlyrSourceInfo * head;
 
     struct GlyrFetcherInfo * next;
     struct GlyrFetcherInfo * prev;
 } GlyrFetcherInfo;
 
-typedef enum GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
+typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 
 #ifdef COMING_FROM_SWIG
 %extend GlyrQuery
@@ -369,7 +369,7 @@ typedef enum GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 
     ~GlyrFetcherInfo()
     {
-        glyr_free_plugin_info(&($self));
+        glyr_free_plugin_info($self);
     }
 }
 #endif

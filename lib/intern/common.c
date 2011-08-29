@@ -263,11 +263,11 @@ const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
             if(!(search_check = strstr(node,checkstring)))
                 continue;
 
-			search_check += clen;
+	    search_check += clen;
             gchar * to_compare = copy_value(search_check,strstr(search_check,"</"));
             if(to_compare != NULL)
             {
-				if(levenshtein_strnormcmp(to_compare,comparestr) <= s->fuzzyness)
+				if(levenshtein_strnormcmp(s,to_compare,comparestr) <= s->fuzzyness)
 				{
 					mbid = (gchar*)copy_value(node+nlen,strchr(node+nlen,'"'));
 				}

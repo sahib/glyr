@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "review" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_ALBUM_REVIEW
+		@spit.type = Glyros::GLYR_GET_ALBUM_REVIEW
 	end
 
 	describe "allmusic_com" do

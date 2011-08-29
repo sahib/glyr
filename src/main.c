@@ -612,7 +612,7 @@ static void print_item(GlyrQuery *s, GlyrMemCache * cacheditem, int num)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
+static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 {
     // This is just to demonstrate the callback option.
     // Put anything in here that you want to be executed when
@@ -689,9 +689,9 @@ static enum GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-enum GLYR_GET_TYPE get_type_from_string(gchar * string)
+GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
-    enum GLYR_GET_TYPE result = GLYR_GET_UNSURE;
+    GLYR_GET_TYPE result = GLYR_GET_UNSURE;
     GlyrFetcherInfo * info = glyr_get_plugin_info();
     if(info != NULL)
     {
@@ -767,7 +767,7 @@ exit(0);
         {
             // Now start searching!
             int length = -1;
-            enum GLYR_ERROR get_error = GLYRE_OK;
+            GLYR_ERROR get_error = GLYRE_OK;
             GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
             if(my_list)

@@ -3,7 +3,7 @@ require_relative 'spec_helper.rb'
 describe "tags" do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_TAGS
+		@spit.type = Glyros::GLYR_GET_TAGS
 	end
 		
 	describe "Not found case" do 

@@ -25,13 +25,13 @@
 struct callback_save_struct
 {
     GHashTable * table;
-    enum GLYR_DATA_TYPE type;
+    GLYR_DATA_TYPE type;
 };
 
 /*--------------------------------------------------------*/
 
 /* Simple finalizer template sufficient for most */
-GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
+GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean * stop_me, GLYR_DATA_TYPE type)
 {
     gboolean add_to_list = TRUE;
     GList * almost_copied = NULL;
@@ -47,7 +47,7 @@ GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean
             }
 
             // call user defined callback
-            enum GLYR_ERROR response = GLYRE_OK;
+            GLYR_ERROR response = GLYRE_OK;
             if(settings->callback.download)
             {
                 // Call the usercallback
@@ -94,7 +94,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
         {
             GlyrMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
 
-            enum GLYR_ERROR response = GLYRE_OK;
+            GLYR_ERROR response = GLYRE_OK;
             if(old_cache != NULL)
             {
                 capo->cache->prov       = (old_cache->prov!=NULL) ? g_strdup(old_cache->prov) : NULL;
@@ -127,7 +127,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 
 /*--------------------------------------------------------*/
 
-GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, enum GLYR_DATA_TYPE type)
+GList * generic_img_finalizer(GlyrQuery * s, GList * list, gboolean * stop_me, GLYR_DATA_TYPE type)
 {
     /* Just return URLs */
     if(s->download == false)

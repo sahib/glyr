@@ -4,7 +4,7 @@ require_relative 'spec_helper.rb'
 describe 'artistbio' do
 	before :each do
 		@spit = GlyrosSpit.new
-		@spit.type = Glyros::GET_ARTISTBIO
+		@spit.type = Glyros::GLYR_GET_ARTISTBIO
 	end
 
 	describe "lastfm" do

@@ -90,7 +90,7 @@ void glyr_cleanup(void);
  * Returns:: a doubly linked list of #GlyrMemCache, which should be freed by passing any element of the to glyr_free_list()
  *
  */
-GlyrMemCache * glyr_get(GlyrQuery * settings, enum GLYR_ERROR * error, int * length);
+GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * error, int * length);
 
 /**
  * glyr_init_query:
@@ -151,7 +151,7 @@ void glyr_free_cache(GlyrMemCache * cache);
 * The callback should have the following form:
 * <informalexample>
 * <programlisting>
-* enum GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
+* GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
 * </programlisting>
 * </informalexample>
 * 
@@ -167,7 +167,7 @@ void glyr_free_cache(GlyrMemCache * cache);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
+GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp);
 
 /**
 * glyr_opt_type:
@@ -178,7 +178,7 @@ enum GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, voi
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type);
+GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type);
 
 /**
 * glyr_opt_artist:
@@ -196,7 +196,7 @@ enum GLYR_ERROR glyr_opt_type(GlyrQuery * s, enum GLYR_GET_TYPE type);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
+GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
 
 /**
 * glyr_opt_album:
@@ -246,7 +246,7 @@ enum GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
+GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
 
 /**
 * glyr_opt_title:
@@ -291,7 +291,7 @@ enum GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
+GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
 
 /**
 * glyr_opt_:
@@ -317,7 +317,7 @@ enum GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
+GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
 
 /**
 * glyr_opt_img_maxsize:
@@ -332,7 +332,7 @@ enum GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
+GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
 
 /**
 * glyr_opt_parallel:
@@ -343,7 +343,7 @@ enum GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long parallel_jobs);
+GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long parallel_jobs);
 
 /**
 * glyr_opt_timeout:
@@ -354,7 +354,7 @@ enum GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long parallel_jobs);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long timeout);
+GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long timeout);
 
 /**
 * glyr_opt_redirects:
@@ -365,7 +365,7 @@ enum GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long timeout);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long redirects);
+GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long redirects);
 
 /**
 * glyr_opt_useragent:
@@ -376,7 +376,7 @@ enum GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long redirects);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
+GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
 
 
 /**
@@ -392,7 +392,7 @@ enum GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
 * 
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
+GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
 
 /**
 * glyr_opt_number:
@@ -405,7 +405,7 @@ enum GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
+GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
 
 /**
 * glyr_opt_verbosity:
@@ -443,7 +443,7 @@ enum GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
+GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
 
 /**
 * glyr_opt_from:
@@ -474,7 +474,7 @@ enum GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
+GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
 
 /**
 * glyr_opt_plugmax:
@@ -488,7 +488,7 @@ enum GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
+GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 
 /**
 * glyr_opt_allowed_formats:
@@ -522,7 +522,7 @@ enum GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
+GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
 
 /**
 * glyr_opt_download:
@@ -537,7 +537,7 @@ enum GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
+GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
 
 /**
 * glyr_opt_fuzzyness:
@@ -585,7 +585,7 @@ enum GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
+GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
 
 /**
 * glyr_opt_qsratio:
@@ -600,7 +600,7 @@ enum GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
+GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
 
 /**
 * glyr_opt_proxy:
@@ -627,7 +627,7 @@ enum GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
+GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 
 
 /**
@@ -642,7 +642,7 @@ enum GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 *
 * Returns: an error ID
 */
-enum GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
+GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
 
 /**
 * glyr_download:
@@ -664,7 +664,7 @@ GlyrMemCache * glyr_download(const char * url, GlyrQuery * s);
 *
 * Returns: a descriptive nullterminated string, do <emphasis>NOT</emphasis> pass to free
 */
-const char * glyr_strerror(enum GLYR_ERROR ID);
+const char * glyr_strerror(GLYR_ERROR ID);
 
 /**
 * glyr_version:
@@ -778,7 +778,7 @@ void glyr_free_plugin_info(GlyrFetcherInfo * info);
 *
 * Returns: a statically allocated string, do not free
 */
-const char * glyr_type_to_string(enum GLYR_DATA_TYPE type);
+const char * glyr_type_to_string(GLYR_DATA_TYPE type);
 
 #ifdef _cplusplus
 }
