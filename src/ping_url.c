@@ -3,7 +3,7 @@
 #include "../lib/config.h"
 #include <string.h>
 
-/* Simple testprogram if a link give on the cmdline exists. */
+/* Simple testprogram to check the content-type header of any website given on the cmd. */
 
 struct header_data
 {

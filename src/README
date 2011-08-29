@@ -1,2 +1,2 @@
-This folder contains only the implementation of the commandline interface.
+This folder contains only the implementation of the commandline interface, and various examples.
 glyrc is linked against libglyr (built from sources in ../lib, stored in ../bin)
