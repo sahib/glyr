@@ -139,6 +139,20 @@ ADD_DEFINITIONS(-Wall -W -Wno-unused-parameter -Wno-strict-prototypes)
 ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
 ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 
+# uninstall target
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
+    IMMEDIATE @ONLY)
+
+add_custom_target(uninstall
+    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+
+#
+#
+# Ruby bindings
+# You gonna need swig && ruby 1.9.1 (+headers)
+#
 IF(SWIG_RUBY)
 	SET(INTERFACE_FILE "swig/glyros.i")
 	FIND_PACKAGE(SWIG REQUIRED)
