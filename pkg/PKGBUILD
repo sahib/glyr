@@ -1,0 +1,41 @@
+# Maintainer: Christopher Pahl <sahib@online.de>
+# glyr PKGBUILD for glyr 
+pkgname=glyr-git
+pkgver=20110830
+pkgrel=1
+pkgdesc="A metadata searchengine utility and library written in C"
+arch=('i686' 'x86_64')
+depends=(glib2 curl)
+provides=('glyr')
+conflicts=('glyr')
+makedepends=('git' 'cmake')
+license=('GPL3')
+url=("https://github.com/sahib/glyr")
+
+_gitroot="git://github.com/sahib/glyr.git"
+_gitname="glyr"
+
+build() 
+{
+    cd ${srcdir}/
+
+    msg "Connecting to the Git server...."
+    if [[ -d ${srcdir}/${_gitname} ]] ; then
+        cd ${_gitname}
+        git pull origin master
+	msg "Updating existing repo..."
+    else
+        git clone ${_gitroot}
+    fi
+    
+    msg "Git checkout done."
+    cd ${srcdir}/${_gitname}
+   
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr
+    make || return 1
+}
+
+package() {
+  cd "$srcdir/${_gitname}"
+  make DESTDIR=$pkgdir install || return 1
+}
