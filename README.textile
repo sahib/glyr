@@ -85,20 +85,22 @@ hack up little scripts showing covers on the desktop.. everything related to mus
 You could also extend libglyr itself but that's a little harder.
 
 <h3>Isn't there musicbrainz already?</h3>
-1) The kind of metadata downloaded by glyr differs heavily from musicbrainz.
-   i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
+# The kind of metadata downloaded by glyr differs heavily from musicbrainz.
+i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
 
-2) Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
-   Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
-   You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
+# Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
+Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
+You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
 
-<h2>AUTHOR</h2>
+h2. AUTHOR
+
 See the AUTHORS file that comes in glyr's distribution.
 See also COPYING to know about your rights.
 
 h2. CAN I HELP?
 
 h3. BUGS
+
 If you found one: _Meh. Sorry for that._
 If you file a bugreport: _Wow, thank you!_
 
