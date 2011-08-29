@@ -87,7 +87,6 @@ You could also extend libglyr itself but that's a little harder.
 <h3>Isn't there musicbrainz already?</h3>
 # The kind of metadata downloaded by glyr differs heavily from musicbrainz.
 i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
-
 # Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
 Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
 You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
