@@ -152,17 +152,22 @@ void help_short(GlyrQuery * s)
     glyr_free_plugin_info(track);
 
 #define IN "    "
-    message(-1,s,stderr,"\n\nOPTIONS:\n"
+    message(-1,s,stderr,"\nGENERAL OPTIONS:\n"
             IN"-f --from             String: Providers from where to get metadata. Refer to glyrc --list for a full list\n"
             IN"-w --write            Path: Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
+            IN"-n --number           Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
+            IN"-t --lang             String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
+            IN"-f --fuzzyness        Integer: Set treshold for level of Levenshtein algorithm.\n"
+            IN"-q --qsratio          Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
+            IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
+            IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
+	    "\nNETWORK OPTIONS\n"
             IN"-p --parallel         Integer: Define the number of downloads that may be performed in parallel.\n"
             IN"-u --useragent        String: The useragent to use during HTTP requests\n"
             IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
             IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
-            IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
-            IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
-            IN"-h --help             This text you unlucky wanderer are viewing.\n"
-            IN"-V --version          Print the version string.\n"
+            IN"-k --proxy            String: Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
+	    "\nPROVIDER SPECIFIC OPTIONS\n"
             IN"-d --download         Download Images.\n"
             IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
             IN"-a --artist           String: Artist name to search for\n"
@@ -170,22 +175,21 @@ void help_short(GlyrQuery * s)
             IN"-t --title            String: Songname to search for\n"
             IN"-e --maxsize          Integer: (images only) The maximum size a cover may have.\n"
             IN"-i --minsize          Integer: (images only) The minimum size a cover may have.\n"
-            IN"-n --number           Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
-            IN"-t --lang             String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
-            IN"-f --fuzzyness        Integer: Set treshold for level of Levenshtein algorithm.\n"
-            IN"-q --qsratio          Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
-            IN"-k --proxy	          String: Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
-            IN"-L --list             List all fetchers and source providers for each and exit.\n"
             IN"-F --formats          String: A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n"
             IN"-8 --force-utf8       Forces utf8 encoding for text items, invalid encodings get sorted out\n"
+	    "\nMISC OPTIONS\n"
             IN"-j --callback         Command: Set a bash command to be executed when a item is finished downloading;\n"
+            IN"-L --list             List all fetchers and source providers for each and exit.\n"
+            IN"-h --help             This text you unlucky wanderer are viewing.\n"
+            IN"-V --version          Print the version string.\n"
             IN"                      The special string <path> is expanded with the actual path to the data.\n"
 	    IN"\n\n"
 	    "With each item received you get a link to the original source, please refer to the individual terms of use,\n"
 	    "copying and distributing of this data might be not allowed.\n"
+	    "A more detailed version of this help can be found online: https://github.com/sahib/glyr/wiki/Commandline-arguments\n"
            );
 
-    message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n",glyr_version());
+    message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n\n",glyr_version());
     exit(EXIT_FAILURE);
 #undef IN
 }
