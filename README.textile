@@ -70,7 +70,6 @@ Bash scripts are even easier:
 @glyrc cover --artist Equilibrium --album Sagas@
 
 <h3>How..how am I supposed to use it?</h3>
-h6. 
 Well, as normal user you could use @glyrc@ to retrieve some metadata in a batchlike fashion.
 As developers you have lots of option, you could write glyr-plugins for musicplayers (gmpc!), set up a webserver with this,
 hack up little scripts showing covers on the desktop.. everything related to musicmetadat is possible here.
@@ -98,7 +97,6 @@ Use the "Issue Tracker":https://github.com/sahib/glyr/issues to share your find.
 Alternatively you may drop me a mail at <sahib@online.de>
 
 <h3>PATCHES</h3>
-h6. 
 If you hacked one: Excellent! Send it to me via mail or see below.
 If you want to add new providers you should look at the existing provider plugins to get an idea how to write one.
 Starting with lib/cover/lastfm.c isn't a bad idea either, because it is one of the very simple ones.
@@ -114,17 +112,21 @@ you can also drop me a mail: <sahib@online.de>
 Thanks for any help in advance!
 
 <h3>WRITE SOFTWARE THAT USES GLYR</h3>
-h6. 
 May sound strange, but you're giving me a reason to maintain it, write new providers etc.
 Also bugreports (well, there are no bugs, just in case) are appreciated, or just questions.
 Those help to make the documentation more clear.
 
 <h3>DONATE</h3>
-h6. 
 You also might consider a small (CS-Students are already motivated by 1 Cent <img src="http://www.blendpolis.de/images/smilies/icon_wink.gif"/>) donation if you use feel like it:<a class="FlattrButton" style="display:none;" rev="flattr;button:compact;" href="https://github.com/sahib/glyr"></a>
 <noscript><a href="http://flattr.com/thing/302682/libglyr" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a></noscript>
 (For now only possible via Flattr or "Paypal":http://sahib.github.com/donate.html , you gonna need an account there - Sorry)
+
+h3. DISCLAIMER
+As usual, no warranty is granted that this software works like expected.
+Refer to the GPLv3 copy you got with libglyr. It is "here":https://github.com/sahib/glyr/blob/master/COPYING
+Glyr is just a way to find the data, it does not own any rights on the data it found.
+Refer to the provider's terms of use. Every item you get from libglyr contains the name and a url to the provider.
 
 <br>
 <br>
