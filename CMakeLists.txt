@@ -173,12 +173,7 @@ IF(SWIG_RUBY)
 	ADD_CUSTOM_COMMAND (
 		TARGET glyros
 		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E make_directory bin/ruby
-		)
-	ADD_CUSTOM_COMMAND (
-		TARGET glyros
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E rename bin/libglyros.so bin/ruby/glyros.so
+		COMMAND ${CMAKE_COMMAND} -E rename bin/libglyros.so swig/ruby/glyros.so
 		)
 ENDIF(SWIG_RUBY)
 
