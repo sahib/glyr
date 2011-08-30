@@ -20,21 +20,10 @@
 #ifndef GLYR_H
 #define GLYR_H
 
-/**
- * SECTION:Functions
- * @short_description: method declarations
- * @title: All functions needed to interact with libglyr
- * @section_id:
- * @stability: Stable
- * @include: glyr/types.h
- *
- * All functions needed to interact with libglyr
- */
 
 /* All structs used by glyr are here */
 #include "types.h"
 
-/* */
 #ifdef __cplusplus
 extern "C"
 {
@@ -62,8 +51,8 @@ void glyr_init(void);
  *
  * <informalexample>
  * <programlisting>
- * gtk_init();
- * atexit(gkt_destroy);
+ * glyr_init();
+ * atexit(glyr_destroy);
  * </programlisting>
  * </informalexample>
  *

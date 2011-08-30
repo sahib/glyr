@@ -1,0 +1,4 @@
+h3. THE DOCUMENTATION
+
+h6. Is not here.
+It can be found online at "www.sahib.github.com/glyr":http://sahib.github.com/glyr/doc/html/index.html

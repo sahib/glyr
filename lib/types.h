@@ -90,11 +90,21 @@ typedef enum
 
 /**
 * GLYR_GET_TYPE:
+* @GLYR_GET_COVERART: Get Coverart.
+* @GLYR_GET_LYRICS:  Get Songtext
+* @GLYR_GET_ARTIST_PHOTOS: Get Live/Promotion/Fanartwork
+* @GLYR_GET_ARTISTBIO: Get information about this artist
+* @GLYR_GET_SIMILIAR_ARTISTS: get similar artists
+* @GLYR_GET_SIMILIAR_SONGS: get similar songs
+* @GLYR_GET_ALBUM_REVIEW: get album reviews
+* @GLYR_GET_TRACKLIST: get a tracklist for a specified album
+* @GLYR_GET_TAGS: get tags for a certain item
+* @GLYR_GET_RELATIONS: get relations for a certain item
+* @GLYR_GET_ALBUMLIST: get a list of albums from a certain artist
+* @GLYR_GET_UNSURE: The default value after initializing a query.
 * 
 * You tell libglyr what metadata you want by choosing one of the below
 * and set it via glyr_opt_type()
-*
-* The names should be self-explanatory, GET_UNSURE is the default is the default.
 *
 */
 typedef enum
@@ -162,15 +172,9 @@ typedef enum
     GLYR_TYPE_TRACK	
 }   GLYR_DATA_TYPE;
 
-
-/**
-* @brief Represents a single item.
-*
-* It's used all over the program, and is the actual struct you're working with and you're wanting from libglyr.
-*/
 /**
  * GlyrMemCache:
- * @data: contains the data, string when @is_image is false, raw data otherwise
+ * @data: contains the data, string when is_image is false, raw data otherwise
  * @size: Size of this item in bytes
  * @dsrc: URL pointing to the origin of this item.
  * @prov: name of the provider that delivered this item.
@@ -184,7 +188,6 @@ typedef enum
  *
  * GlyrMemCache represents a single item received by libglyr. 
  * You should <emphasis>NOT</emphasis> any of the fields, it is meant to be read-only.
- * 
  */
 typedef struct GlyrMemCache
 {
@@ -206,6 +209,7 @@ typedef struct GlyrMemCache
 
 /**
 * GlyrQuery:
+*
 * This structure holds all settings used to influence libglyr.
 * You should set all fields glyr_opt_*(), refer to the documentation there
 * to find out their exact meaning.
@@ -255,12 +259,10 @@ typedef struct GlyrQuery
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
-#ifndef __GTK_DOC_IGNORE__
         struct {
             GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
             void  * user_pointer;
         } callback;
-#endif
 
 #ifdef COMING_FROM_SWIG
         %
@@ -314,7 +316,7 @@ typedef struct GlyrSourceInfo
  * 
  * You should pass it to glyr_free_plugin_info() once done.
  * 
- * See the example at glyr_get_plugin_info() on how to use it.
+ * @see_also: glyr_get_plugin_info()
  */ 
 typedef struct GlyrFetcherInfo
 {
@@ -326,6 +328,15 @@ typedef struct GlyrFetcherInfo
     struct GlyrFetcherInfo * prev;
 } GlyrFetcherInfo;
 
+/**
+ * DL_callback:
+ * @dl: The current item you can investigate. Not NULL.
+ * @s: The GlyrQuery you initially passed to glyr_get()
+ * 
+ * Typedef'd version of the callback option used by glyr_opt_download()
+ *
+ * Returns: a GLYR_ERROR
+*/
 typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
 
 #ifdef COMING_FROM_SWIG
