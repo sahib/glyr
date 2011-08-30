@@ -49,7 +49,7 @@ h3. libglyr:
 
 See the "examples in src/":https://github.com/sahib/glyr/wiki for a quickstart.
 There's also a more "gentle (and brief) introduction.":https://github.com/sahib/glyr/wiki/Introduction-to-libglyr
-Also see the "API Reference":http://sahib.github.com/glyr/doc/html/glyr_8h.html
+Also see the "API Reference":http://sahib.github.com/glyr/doc/html/index.html
 Please note: The Api won't be guaranteed to be stable before version 0.9.
 
 h3. glyrc:

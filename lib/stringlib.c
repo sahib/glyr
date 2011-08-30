@@ -224,8 +224,8 @@ gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const g
 
 			if(pretty_string && pretty_other)
 			{
-				remove_tags_from_string(pretty_string,'(',')');
-				remove_tags_from_string(pretty_other, '(',')');
+				remove_tags_from_string(pretty_string,-1,'(',')');
+				remove_tags_from_string(pretty_other,-1, '(',')');
 
 				diff = levenshtein_strcasecmp(pretty_string,pretty_other);
 
