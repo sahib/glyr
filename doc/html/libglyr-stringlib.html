@@ -1,0 +1,213 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>stringlib</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="libglyr Reference Manual">
+<link rel="up" href="ch01.html" title="[Insert title here]">
+<link rel="prev" href="libglyr-apikeys.html" title="apikeys">
+<link rel="next" href="libglyr-register-plugins.html" title="register_plugins">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libglyr-apikeys.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libglyr Reference Manual</th>
+<td><a accesskey="n" href="libglyr-register-plugins.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libglyr-stringlib.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libglyr-stringlib.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="libglyr-stringlib"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libglyr-stringlib.top_of_page"></a>stringlib</span></h2>
+<p>stringlib</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libglyr-stringlib.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">#define             <a class="link" href="libglyr-stringlib.html#nextTag" title="nextTag()">nextTag</a>                             (PTR)
+<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-stringlib.html#levenshtein-strcmp" title="levenshtein_strcmp ()">levenshtein_strcmp</a>                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);
+<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-stringlib.html#levenshtein-strcasecmp" title="levenshtein_strcasecmp ()">levenshtein_strcasecmp</a>              (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sstring</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);
+<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-stringlib.html#levenshtein-strnormcmp" title="levenshtein_strnormcmp ()">levenshtein_strnormcmp</a>              (<em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#strreplace" title="strreplace ()">strreplace</a>                          (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *subs</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *with</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#convert-charset" title="convert_charset ()">convert_charset</a>                     (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *from</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *to</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> *new_size</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#strip-html-unicode" title="strip_html_unicode ()">strip_html_unicode</a>                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-stringlib.html#chomp-breakline" title="chomp_breakline ()">chomp_breakline</a>                     (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-stringlib.html#trim-copy" title="trim_copy ()">trim_copy</a>                           (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *input</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *output</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-stringlib.html#trim-inplace" title="trim_inplace ()">trim_inplace</a>                        (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *s</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#trim-nocopy" title="trim_nocopy ()">trim_nocopy</a>                         (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *s</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#copy-value" title="copy_value ()">copy_value</a>                          (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *begin</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *end</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#get-next-word" title="get_next_word ()">get_next_word</a>                       (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *delim</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> *offset</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> len</code></em>);
+<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-stringlib.html#remove-tags-from-string" title="remove_tags_from_string ()">remove_tags_from_string</a>             (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> length</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> start</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> end</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#unescape-html-UTF8" title="unescape_html_UTF8 ()">unescape_html_UTF8</a>                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *data</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#prepare-url" title="prepare_url ()">prepare_url</a>                         (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *URL</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *artist</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *album</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *title</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#beautify-string" title="beautify_string ()">beautify_string</a>                     (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *lyrics</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#prepare-string" title="prepare_string ()">prepare_string</a>                      (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *input</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> delinitfy</code></em>);
+<a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             <a class="link" href="libglyr-stringlib.html#get-search-value" title="get_search_value ()">get_search_value</a>                    (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *ref</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *end_string</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="libglyr-stringlib.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="libglyr-stringlib.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="nextTag"></a><h3>nextTag()</h3>
+<pre class="programlisting">#define nextTag(PTR) while(PTR[0] &amp;&amp; *PTR++ != '&gt;')
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="levenshtein-strcmp"></a><h3>levenshtein_strcmp ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               levenshtein_strcmp                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="levenshtein-strcasecmp"></a><h3>levenshtein_strcasecmp ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               levenshtein_strcasecmp              (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *sstring</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="levenshtein-strnormcmp"></a><h3>levenshtein_strnormcmp ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               levenshtein_strnormcmp              (<em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *other</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="strreplace"></a><h3>strreplace ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             strreplace                          (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *subs</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *with</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="convert-charset"></a><h3>convert_charset ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             convert_charset                     (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *from</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *to</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> *new_size</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="strip-html-unicode"></a><h3>strip_html_unicode ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             strip_html_unicode                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="chomp-breakline"></a><h3>chomp_breakline ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                chomp_breakline                     (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="trim-copy"></a><h3>trim_copy ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                trim_copy                           (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *input</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *output</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="trim-inplace"></a><h3>trim_inplace ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                trim_inplace                        (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *s</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="trim-nocopy"></a><h3>trim_nocopy ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             trim_nocopy                         (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *s</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="copy-value"></a><h3>copy_value ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             copy_value                          (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *begin</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *end</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="get-next-word"></a><h3>get_next_word ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             get_next_word                       (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *delim</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> *offset</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gsize"><span class="type">gsize</span></a> len</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="remove-tags-from-string"></a><h3>remove_tags_from_string ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               remove_tags_from_string             (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *string</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> length</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> start</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> end</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="unescape-html-UTF8"></a><h3>unescape_html_UTF8 ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             unescape_html_UTF8                  (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *data</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="prepare-url"></a><h3>prepare_url ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             prepare_url                         (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *URL</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *artist</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *album</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *title</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="beautify-string"></a><h3>beautify_string ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             beautify_string                     (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *lyrics</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="prepare-string"></a><h3>prepare_string ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             prepare_string                      (<em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *input</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gboolean"><span class="type">gboolean</span></a> delinitfy</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="get-search-value"></a><h3>get_search_value ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *             get_search_value                    (<em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *ref</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *name</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *end_string</code></em>);</pre>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.17</div>
+</body>
+</html>

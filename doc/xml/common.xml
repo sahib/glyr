@@ -4,12 +4,12 @@
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 ]>
-<refentry id="test-common">
+<refentry id="libglyr-common">
 <refmeta>
-<refentrytitle role="top_of_page" id="test-common.top_of_page">common</refentrytitle>
+<refentrytitle role="top_of_page" id="libglyr-common.top_of_page">common</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>
-  TEST Library
+  LIBGLYR Library
 </refmiscinfo>
 </refmeta>
 <refnamediv>
@@ -17,7 +17,7 @@
 <refpurpose></refpurpose>
 </refnamediv>
 
-<refsynopsisdiv id="test-common.synopsis" role="synopsis">
+<refsynopsisdiv id="libglyr-common.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis>const <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *       <link linkend="generic-amazon-url">generic_amazon_url</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *sets</parameter>,
@@ -36,61 +36,53 @@ const <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *       <lin
 </synopsis>
 </refsynopsisdiv>
 
-<refsect1 id="test-common.description" role="desc">
+<refsect1 id="libglyr-common.description" role="desc">
 <title role="desc.title">Description</title>
-<para>
-</para>
+
 </refsect1>
-<refsect1 id="test-common.details" role="details">
+<refsect1 id="libglyr-common.details" role="details">
 <title role="details.title">Details</title>
 <refsect2 id="generic-amazon-url" role="function">
 <title>generic_amazon_url ()</title>
 <indexterm zone="generic-amazon-url"><primary>generic_amazon_url</primary></indexterm>
 <programlisting>const <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *       generic_amazon_url                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *sets</parameter>,
                                                          <parameter>const <link linkend="gchar"><type>gchar</type></link> *response_group</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="generic-google-url" role="function">
 <title>generic_google_url ()</title>
 <indexterm zone="generic-google-url"><primary>generic_google_url</primary></indexterm>
 <programlisting>const <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *       generic_google_url                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *sets</parameter>,
                                                          <parameter>const <link linkend="gchar"><type>gchar</type></link> *searchterm</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="generic-google-parse" role="function">
 <title>generic_google_parse ()</title>
 <indexterm zone="generic-google-parse"><primary>generic_google_parse</primary></indexterm>
 <programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             generic_google_parse                (<parameter><link linkend="cb-object"><type>cb_object</type></link> *capo</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="size-is-okay" role="function">
 <title>size_is_okay ()</title>
 <indexterm zone="size-is-okay"><primary>size_is_okay</primary></indexterm>
 <programlisting><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            size_is_okay                        (<parameter><link linkend="int"><type>int</type></link> sZ</parameter>,
                                                          <parameter><link linkend="int"><type>int</type></link> min</parameter>,
                                                          <parameter><link linkend="int"><type>int</type></link> max</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="generic-musicbrainz-parse" role="function">
 <title>generic_musicbrainz_parse ()</title>
 <indexterm zone="generic-musicbrainz-parse"><primary>generic_musicbrainz_parse</primary></indexterm>
 <programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      generic_musicbrainz_parse           (<parameter><link linkend="cb-object"><type>cb_object</type></link> *capo</parameter>,
                                                          <parameter><link linkend="gint"><type>gint</type></link> *last_mbid</parameter>,
                                                          <parameter>const <link linkend="gchar"><type>gchar</type></link> *include</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="generic-musicbrainz-url" role="function">
 <title>generic_musicbrainz_url ()</title>
 <indexterm zone="generic-musicbrainz-url"><primary>generic_musicbrainz_url</primary></indexterm>
 <programlisting>const <link linkend="gchar"><returnvalue>gchar</returnvalue></link> *       generic_musicbrainz_url             (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *sets</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="please-what-type" role="function">
 <title>please_what_type ()</title>
 <indexterm zone="please-what-type"><primary>please_what_type</primary></indexterm>
 <programlisting><link linkend="gint"><returnvalue>gint</returnvalue></link>                please_what_type                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 
 </refsect1>
 

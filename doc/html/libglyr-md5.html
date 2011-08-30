@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>md5</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="libglyr Reference Manual">
+<link rel="up" href="ch01.html" title="[Insert title here]">
+<link rel="prev" href="libglyr-register-plugins.html" title="register_plugins">
+<link rel="next" href="libglyr-generic.html" title="generic">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libglyr-register-plugins.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libglyr Reference Manual</th>
+<td><a accesskey="n" href="libglyr-generic.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libglyr-md5.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libglyr-md5.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="libglyr-md5"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libglyr-md5.top_of_page"></a>md5</span></h2>
+<p>md5</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libglyr-md5.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis"><span class="returnvalue">void</span>                <a class="link" href="libglyr-md5.html#MDPrintArr" title="MDPrintArr ()">MDPrintArr</a>                          (<em class="parameter"><code>unsigned <span class="type">char</span> *digest</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-md5.html#MD5Init" title="MD5Init ()">MD5Init</a>                             (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-md5.html#MD5Final" title="MD5Final ()">MD5Final</a>                            (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-md5.html#MD5Update" title="MD5Update ()">MD5Update</a>                           (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">char</span> *in</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> size</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="libglyr-md5.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="libglyr-md5.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="MDPrintArr"></a><h3>MDPrintArr ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                MDPrintArr                          (<em class="parameter"><code>unsigned <span class="type">char</span> *digest</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MD5Init"></a><h3>MD5Init ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                MD5Init                             (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MD5Final"></a><h3>MD5Final ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                MD5Final                            (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="MD5Update"></a><h3>MD5Update ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                MD5Update                           (<em class="parameter"><code><span class="type">MD5_CTX</span> *context</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">char</span> *in</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> size</code></em>);</pre>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.17</div>
+</body>
+</html>

@@ -4,12 +4,12 @@
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 ]>
-<refentry id="test-generic">
+<refentry id="libglyr-generic">
 <refmeta>
-<refentrytitle role="top_of_page" id="test-generic.top_of_page">generic</refentrytitle>
+<refentrytitle role="top_of_page" id="libglyr-generic.top_of_page">generic</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>
-  TEST Library
+  LIBGLYR Library
 </refmiscinfo>
 </refmeta>
 <refnamediv>
@@ -17,7 +17,7 @@
 <refpurpose></refpurpose>
 </refnamediv>
 
-<refsynopsisdiv id="test-generic.synopsis" role="synopsis">
+<refsynopsisdiv id="libglyr-generic.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis><link linkend="GList"><returnvalue>GList</returnvalue></link> *             <link linkend="generic-txt-finalizer">generic_txt_finalizer</link>               (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
@@ -31,12 +31,11 @@
 </synopsis>
 </refsynopsisdiv>
 
-<refsect1 id="test-generic.description" role="desc">
+<refsect1 id="libglyr-generic.description" role="desc">
 <title role="desc.title">Description</title>
-<para>
-</para>
+
 </refsect1>
-<refsect1 id="test-generic.details" role="details">
+<refsect1 id="libglyr-generic.details" role="details">
 <title role="details.title">Details</title>
 <refsect2 id="generic-txt-finalizer" role="function">
 <title>generic_txt_finalizer ()</title>
@@ -45,8 +44,7 @@
                                                          <parameter><link linkend="GList"><type>GList</type></link> *list</parameter>,
                                                          <parameter><link linkend="gboolean"><type>gboolean</type></link> *stop_me</parameter>,
                                                          <parameter><link linkend="GLYR-DATA-TYPE:CAPS"><type>GLYR_DATA_TYPE</type></link> type</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="generic-img-finalizer" role="function">
 <title>generic_img_finalizer ()</title>
 <indexterm zone="generic-img-finalizer"><primary>generic_img_finalizer</primary></indexterm>
@@ -54,8 +52,7 @@
                                                          <parameter><link linkend="GList"><type>GList</type></link> *list</parameter>,
                                                          <parameter><link linkend="gboolean"><type>gboolean</type></link> *stop_me</parameter>,
                                                          <parameter><link linkend="GLYR-DATA-TYPE:CAPS"><type>GLYR_DATA_TYPE</type></link> type</parameter>);</programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 
 </refsect1>
 

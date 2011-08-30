@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>common</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="libglyr Reference Manual">
+<link rel="up" href="ch01.html" title="[Insert title here]">
+<link rel="prev" href="libglyr-generic.html" title="generic">
+<link rel="next" href="api-index-full.html" title="API Index">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libglyr-generic.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libglyr Reference Manual</th>
+<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libglyr-common.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libglyr-common.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="libglyr-common"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libglyr-common.top_of_page"></a>common</span></h2>
+<p>common</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libglyr-common.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="libglyr-common.html#generic-amazon-url" title="generic_amazon_url ()">generic_amazon_url</a>                  (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *response_group</code></em>);
+const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="libglyr-common.html#generic-google-url" title="generic_google_url ()">generic_google_url</a>                  (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *searchterm</code></em>);
+<a href="../glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             <a class="link" href="libglyr-common.html#generic-google-parse" title="generic_google_parse ()">generic_google_parse</a>                (<em class="parameter"><code><span class="type">cb_object</span> *capo</code></em>);
+<a href="../glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            <a class="link" href="libglyr-common.html#size-is-okay" title="size_is_okay ()">size_is_okay</a>                        (<em class="parameter"><code><span class="type">int</span> sZ</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> min</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> max</code></em>);
+<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-common.html#generic-musicbrainz-parse" title="generic_musicbrainz_parse ()">generic_musicbrainz_parse</a>           (<em class="parameter"><code><span class="type">cb_object</span> *capo</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *last_mbid</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *include</code></em>);
+const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       <a class="link" href="libglyr-common.html#generic-musicbrainz-url" title="generic_musicbrainz_url ()">generic_musicbrainz_url</a>             (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>);
+<a href="../glib/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                <a class="link" href="libglyr-common.html#please-what-type" title="please_what_type ()">please_what_type</a>                    (<em class="parameter"><code><span class="type">GlyrQuery</span> *s</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="libglyr-common.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="libglyr-common.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="generic-amazon-url"></a><h3>generic_amazon_url ()</h3>
+<pre class="programlisting">const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       generic_amazon_url                  (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *response_group</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="generic-google-url"></a><h3>generic_google_url ()</h3>
+<pre class="programlisting">const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       generic_google_url                  (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *searchterm</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="generic-google-parse"></a><h3>generic_google_parse ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Doubly-Linked-Lists.html#GList"><span class="returnvalue">GList</span></a> *             generic_google_parse                (<em class="parameter"><code><span class="type">cb_object</span> *capo</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="size-is-okay"></a><h3>size_is_okay ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gboolean"><span class="returnvalue">gboolean</span></a>            size_is_okay                        (<em class="parameter"><code><span class="type">int</span> sZ</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> min</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> max</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="generic-musicbrainz-parse"></a><h3>generic_musicbrainz_parse ()</h3>
+<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      generic_musicbrainz_parse           (<em class="parameter"><code><span class="type">cb_object</span> *capo</code></em>,
+                                                         <em class="parameter"><code><a href="../glib/glib-Basic-Types.html#gint"><span class="type">gint</span></a> *last_mbid</code></em>,
+                                                         <em class="parameter"><code>const <a href="../glib/glib-Basic-Types.html#gchar"><span class="type">gchar</span></a> *include</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="generic-musicbrainz-url"></a><h3>generic_musicbrainz_url ()</h3>
+<pre class="programlisting">const <a href="../glib/glib-Basic-Types.html#gchar"><span class="returnvalue">gchar</span></a> *       generic_musicbrainz_url             (<em class="parameter"><code><span class="type">GlyrQuery</span> *sets</code></em>);</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="please-what-type"></a><h3>please_what_type ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gint"><span class="returnvalue">gint</span></a>                please_what_type                    (<em class="parameter"><code><span class="type">GlyrQuery</span> *s</code></em>);</pre>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.17</div>
+</body>
+</html>

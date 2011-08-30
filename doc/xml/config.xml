@@ -4,12 +4,12 @@
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 ]>
-<refentry id="test-config">
+<refentry id="libglyr-config">
 <refmeta>
-<refentrytitle role="top_of_page" id="test-config.top_of_page">config</refentrytitle>
+<refentrytitle role="top_of_page" id="libglyr-config.top_of_page">config</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>
-  TEST Library
+  LIBGLYR Library
 </refmiscinfo>
 </refmeta>
 <refnamediv>
@@ -17,7 +17,7 @@
 <refpurpose></refpurpose>
 </refnamediv>
 
-<refsynopsisdiv id="test-config.synopsis" role="synopsis">
+<refsynopsisdiv id="libglyr-config.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis>#define             <link linkend="glyr-VERSION-MAJOR">glyr_VERSION_MAJOR</link>
@@ -28,48 +28,42 @@
 </synopsis>
 </refsynopsisdiv>
 
-<refsect1 id="test-config.description" role="desc">
+<refsect1 id="libglyr-config.description" role="desc">
 <title role="desc.title">Description</title>
-<para>
-</para>
+
 </refsect1>
-<refsect1 id="test-config.details" role="details">
+<refsect1 id="libglyr-config.details" role="details">
 <title role="details.title">Details</title>
 <refsect2 id="glyr-VERSION-MAJOR" role="macro">
 <title>glyr_VERSION_MAJOR</title>
 <indexterm zone="glyr-VERSION-MAJOR"><primary>glyr_VERSION_MAJOR</primary></indexterm>
 <programlisting>#define glyr_VERSION_MAJOR "0"
 </programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="glyr-VERSION-MINOR" role="macro">
 <title>glyr_VERSION_MINOR</title>
 <indexterm zone="glyr-VERSION-MINOR"><primary>glyr_VERSION_MINOR</primary></indexterm>
 <programlisting>#define glyr_VERSION_MINOR "8.4"
 </programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="glyr-VERSION-NAME" role="macro">
 <title>glyr_VERSION_NAME</title>
 <indexterm zone="glyr-VERSION-NAME"><primary>glyr_VERSION_NAME</primary></indexterm>
 <programlisting>#define glyr_VERSION_NAME  "Horny Hornet [dev]"
 </programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="glyr-USE-COLOR" role="macro">
 <title>glyr_USE_COLOR</title>
 <indexterm zone="glyr-USE-COLOR"><primary>glyr_USE_COLOR</primary></indexterm>
 <programlisting>#define glyr_USE_COLOR     true
 </programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 <refsect2 id="glyr-DEBUG" role="macro">
 <title>glyr_DEBUG</title>
 <indexterm zone="glyr-DEBUG"><primary>glyr_DEBUG</primary></indexterm>
 <programlisting>#define glyr_DEBUG         true
 </programlisting>
-<para>
-</para></refsect2>
+</refsect2>
 
 </refsect1>
 

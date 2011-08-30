@@ -6,168 +6,171 @@
 ]>
 <indexdiv>
 <indexdiv><title>A</title>
-<indexentry><primaryie linkends="API-KEY-AMAZON:CAPS"><link linkend="API-KEY-AMAZON:CAPS">API_KEY_AMAZON</link>, macro in <link linkend="test-apikeys">apikeys</link></primaryie></indexentry>
-<indexentry><primaryie linkends="API-KEY-DISCOGS:CAPS"><link linkend="API-KEY-DISCOGS:CAPS">API_KEY_DISCOGS</link>, macro in <link linkend="test-apikeys">apikeys</link></primaryie></indexentry>
-<indexentry><primaryie linkends="API-KEY-FLICKR:CAPS"><link linkend="API-KEY-FLICKR:CAPS">API_KEY_FLICKR</link>, macro in <link linkend="test-apikeys">apikeys</link></primaryie></indexentry>
-<indexentry><primaryie linkends="API-KEY-GTRANS:CAPS"><link linkend="API-KEY-GTRANS:CAPS">API_KEY_GTRANS</link>, macro in <link linkend="test-apikeys">apikeys</link></primaryie></indexentry>
-<indexentry><primaryie linkends="API-KEY-LASTFM:CAPS"><link linkend="API-KEY-LASTFM:CAPS">API_KEY_LASTFM</link>, macro in <link linkend="test-apikeys">apikeys</link></primaryie></indexentry>
-<indexentry><primaryie linkends="AsyncDLCB"><link linkend="AsyncDLCB">AsyncDLCB</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="async-download"><link linkend="async-download">async_download</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="API-KEY-AMAZON:CAPS"><link linkend="API-KEY-AMAZON:CAPS">API_KEY_AMAZON</link>, macro in <link linkend="libglyr-apikeys">apikeys</link></primaryie></indexentry>
+<indexentry><primaryie linkends="API-KEY-DISCOGS:CAPS"><link linkend="API-KEY-DISCOGS:CAPS">API_KEY_DISCOGS</link>, macro in <link linkend="libglyr-apikeys">apikeys</link></primaryie></indexentry>
+<indexentry><primaryie linkends="API-KEY-FLICKR:CAPS"><link linkend="API-KEY-FLICKR:CAPS">API_KEY_FLICKR</link>, macro in <link linkend="libglyr-apikeys">apikeys</link></primaryie></indexentry>
+<indexentry><primaryie linkends="API-KEY-GTRANS:CAPS"><link linkend="API-KEY-GTRANS:CAPS">API_KEY_GTRANS</link>, macro in <link linkend="libglyr-apikeys">apikeys</link></primaryie></indexentry>
+<indexentry><primaryie linkends="API-KEY-LASTFM:CAPS"><link linkend="API-KEY-LASTFM:CAPS">API_KEY_LASTFM</link>, macro in <link linkend="libglyr-apikeys">apikeys</link></primaryie></indexentry>
+<indexentry><primaryie linkends="AsyncDLCB"><link linkend="AsyncDLCB">AsyncDLCB</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="async-download"><link linkend="async-download">async_download</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>B</title>
-<indexentry><primaryie linkends="beautify-string"><link linkend="beautify-string">beautify_string</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="blacklist-build"><link linkend="blacklist-build">blacklist_build</link>, function in <link linkend="test-blacklist">blacklist</link></primaryie></indexentry>
-<indexentry><primaryie linkends="blacklist-destroy"><link linkend="blacklist-destroy">blacklist_destroy</link>, function in <link linkend="test-blacklist">blacklist</link></primaryie></indexentry>
+<indexentry><primaryie linkends="beautify-string"><link linkend="beautify-string">beautify_string</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="blacklist-build"><link linkend="blacklist-build">blacklist_build</link>, function in <link linkend="libglyr-blacklist">blacklist</link></primaryie></indexentry>
+<indexentry><primaryie linkends="blacklist-destroy"><link linkend="blacklist-destroy">blacklist_destroy</link>, function in <link linkend="libglyr-blacklist">blacklist</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>C</title>
-<indexentry><primaryie linkends="CALC-MD5SUMS:CAPS"><link linkend="CALC-MD5SUMS:CAPS">CALC_MD5SUMS</link>, macro in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="chomp-breakline"><link linkend="chomp-breakline">chomp_breakline</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-cleanup"><link linkend="glyr-cleanup">glyr_cleanup</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="continue-search"><link linkend="continue-search">continue_search</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="convert-charset"><link linkend="convert-charset">convert_charset</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="copy-value"><link linkend="copy-value">copy_value</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="CALC-MD5SUMS:CAPS"><link linkend="CALC-MD5SUMS:CAPS">CALC_MD5SUMS</link>, macro in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="chomp-breakline"><link linkend="chomp-breakline">chomp_breakline</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-cleanup"><link linkend="glyr-cleanup">glyr_cleanup</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="continue-search"><link linkend="continue-search">continue_search</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="convert-charset"><link linkend="convert-charset">convert_charset</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="copy-value"><link linkend="copy-value">copy_value</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>D</title>
-<indexentry><primaryie linkends="glyr-DEBUG"><link linkend="glyr-DEBUG">glyr_DEBUG</link>, macro in <link linkend="test-config">config</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"><link linkend="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS">GLYR_DEFAULT_ALLOWED_FORMATS</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-CMAXSIZE:CAPS"><link linkend="GLYR-DEFAULT-CMAXSIZE:CAPS">GLYR_DEFAULT_CMAXSIZE</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-CMINSIZE:CAPS"><link linkend="GLYR-DEFAULT-CMINSIZE:CAPS">GLYR_DEFAULT_CMINSIZE</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-DOWNLOAD:CAPS"><link linkend="GLYR-DEFAULT-DOWNLOAD:CAPS">GLYR_DEFAULT_DOWNLOAD</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-FORCE-UTF8:CAPS"><link linkend="GLYR-DEFAULT-FORCE-UTF8:CAPS">GLYR_DEFAULT_FORCE_UTF8</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"><link linkend="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS">GLYR_DEFAULT_FROM_ARGUMENT_DELIM</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-FUZZYNESS:CAPS"><link linkend="GLYR-DEFAULT-FUZZYNESS:CAPS">GLYR_DEFAULT_FUZZYNESS</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-GROUPEDL:CAPS"><link linkend="GLYR-DEFAULT-GROUPEDL:CAPS">GLYR_DEFAULT_GROUPEDL</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-LANG:CAPS"><link linkend="GLYR-DEFAULT-LANG:CAPS">GLYR_DEFAULT_LANG</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-NUMBER:CAPS"><link linkend="GLYR-DEFAULT-NUMBER:CAPS">GLYR_DEFAULT_NUMBER</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-PARALLEL:CAPS"><link linkend="GLYR-DEFAULT-PARALLEL:CAPS">GLYR_DEFAULT_PARALLEL</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-PLUGMAX:CAPS"><link linkend="GLYR-DEFAULT-PLUGMAX:CAPS">GLYR_DEFAULT_PLUGMAX</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-PROXY:CAPS"><link linkend="GLYR-DEFAULT-PROXY:CAPS">GLYR_DEFAULT_PROXY</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-QSRATIO:CAPS"><link linkend="GLYR-DEFAULT-QSRATIO:CAPS">GLYR_DEFAULT_QSRATIO</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-REDIRECTS:CAPS"><link linkend="GLYR-DEFAULT-REDIRECTS:CAPS">GLYR_DEFAULT_REDIRECTS</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-TIMEOUT:CAPS"><link linkend="GLYR-DEFAULT-TIMEOUT:CAPS">GLYR_DEFAULT_TIMEOUT</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-USERAGENT:CAPS"><link linkend="GLYR-DEFAULT-USERAGENT:CAPS">GLYR_DEFAULT_USERAGENT</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="GLYR-DEFAULT-VERBOSITY:CAPS"><link linkend="GLYR-DEFAULT-VERBOSITY:CAPS">GLYR_DEFAULT_VERBOSITY</link>, macro in <link linkend="test-types">types</link></primaryie></indexentry>
-<indexentry><primaryie linkends="destroy"><link linkend="destroy">destroy</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-destroy-query"><link linkend="glyr-destroy-query">glyr_destroy_query</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="DL-free"><link linkend="DL-free">DL_free</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="DL-init"><link linkend="DL-init">DL_init</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-download"><link linkend="glyr-download">glyr_download</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="download-single"><link linkend="download-single">download_single</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DATA-TYPE:CAPS"><link linkend="GLYR-DATA-TYPE:CAPS">GLYR_DATA_TYPE</link>, enum in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-DEBUG"><link linkend="glyr-DEBUG">glyr_DEBUG</link>, macro in <link linkend="libglyr-config">config</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"><link linkend="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS">GLYR_DEFAULT_ALLOWED_FORMATS</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-CMAXSIZE:CAPS"><link linkend="GLYR-DEFAULT-CMAXSIZE:CAPS">GLYR_DEFAULT_CMAXSIZE</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-CMINSIZE:CAPS"><link linkend="GLYR-DEFAULT-CMINSIZE:CAPS">GLYR_DEFAULT_CMINSIZE</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-DOWNLOAD:CAPS"><link linkend="GLYR-DEFAULT-DOWNLOAD:CAPS">GLYR_DEFAULT_DOWNLOAD</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-FORCE-UTF8:CAPS"><link linkend="GLYR-DEFAULT-FORCE-UTF8:CAPS">GLYR_DEFAULT_FORCE_UTF8</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"><link linkend="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS">GLYR_DEFAULT_FROM_ARGUMENT_DELIM</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-FUZZYNESS:CAPS"><link linkend="GLYR-DEFAULT-FUZZYNESS:CAPS">GLYR_DEFAULT_FUZZYNESS</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-LANG:CAPS"><link linkend="GLYR-DEFAULT-LANG:CAPS">GLYR_DEFAULT_LANG</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-NUMBER:CAPS"><link linkend="GLYR-DEFAULT-NUMBER:CAPS">GLYR_DEFAULT_NUMBER</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-PARALLEL:CAPS"><link linkend="GLYR-DEFAULT-PARALLEL:CAPS">GLYR_DEFAULT_PARALLEL</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-PLUGMAX:CAPS"><link linkend="GLYR-DEFAULT-PLUGMAX:CAPS">GLYR_DEFAULT_PLUGMAX</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-PROXY:CAPS"><link linkend="GLYR-DEFAULT-PROXY:CAPS">GLYR_DEFAULT_PROXY</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-QSRATIO:CAPS"><link linkend="GLYR-DEFAULT-QSRATIO:CAPS">GLYR_DEFAULT_QSRATIO</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-REDIRECTS:CAPS"><link linkend="GLYR-DEFAULT-REDIRECTS:CAPS">GLYR_DEFAULT_REDIRECTS</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-TIMEOUT:CAPS"><link linkend="GLYR-DEFAULT-TIMEOUT:CAPS">GLYR_DEFAULT_TIMEOUT</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-USERAGENT:CAPS"><link linkend="GLYR-DEFAULT-USERAGENT:CAPS">GLYR_DEFAULT_USERAGENT</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-DEFAULT-VERBOSITY:CAPS"><link linkend="GLYR-DEFAULT-VERBOSITY:CAPS">GLYR_DEFAULT_VERBOSITY</link>, macro in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="destroy"><link linkend="destroy">destroy</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-destroy-query"><link linkend="glyr-destroy-query">glyr_destroy_query</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="DL-callback"><link linkend="DL-callback">DL_callback</link>, user_function in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="DL-free"><link linkend="DL-free">DL_free</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="DL-init"><link linkend="DL-init">DL_init</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="download"><link linkend="download">download</link>, user_function in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-download"><link linkend="glyr-download">glyr_download</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="download-single"><link linkend="download-single">download_single</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>E</title>
-<indexentry><primaryie linkends="GLYR-ERROR:CAPS"><link linkend="GLYR-ERROR:CAPS">GLYR_ERROR</link>, enum in <link linkend="test-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-ERROR:CAPS"><link linkend="GLYR-ERROR:CAPS">GLYR_ERROR</link>, enum in <link linkend="libglyr-types">types</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>F</title>
-<indexentry><primaryie linkends="finalize"><link linkend="finalize">finalize</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-free-cache"><link linkend="glyr-free-cache">glyr_free_cache</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-free-list"><link linkend="glyr-free-list">glyr_free_list</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="free-plugin-info"><link linkend="free-plugin-info">free_plugin_info</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-free-plugin-info"><link linkend="glyr-free-plugin-info">glyr_free_plugin_info</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="finalize"><link linkend="finalize">finalize</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-free-cache"><link linkend="glyr-free-cache">glyr_free_cache</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-free-list"><link linkend="glyr-free-list">glyr_free_list</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-free-plugin-info"><link linkend="glyr-free-plugin-info">glyr_free_plugin_info</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="free-plugin-info"><link linkend="free-plugin-info">free_plugin_info</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>G</title>
-<indexentry><primaryie linkends="generic-amazon-url"><link linkend="generic-amazon-url">generic_amazon_url</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-google-parse"><link linkend="generic-google-parse">generic_google_parse</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-google-url"><link linkend="generic-google-url">generic_google_url</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-img-finalizer"><link linkend="generic-img-finalizer">generic_img_finalizer</link>, function in <link linkend="test-generic">generic</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-musicbrainz-parse"><link linkend="generic-musicbrainz-parse">generic_musicbrainz_parse</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-musicbrainz-url"><link linkend="generic-musicbrainz-url">generic_musicbrainz_url</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="generic-txt-finalizer"><link linkend="generic-txt-finalizer">generic_txt_finalizer</link>, function in <link linkend="test-generic">generic</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-get"><link linkend="glyr-get">glyr_get</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="get-next-word"><link linkend="get-next-word">get_next_word</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-get-plugin-info"><link linkend="glyr-get-plugin-info">glyr_get_plugin_info</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="get-plugin-info"><link linkend="get-plugin-info">get_plugin_info</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
-<indexentry><primaryie linkends="get-search-value"><link linkend="get-search-value">get_search_value</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="get-url"><link linkend="get-url">get_url</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glist-free-full"><link linkend="glist-free-full">glist_free_full</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-amazon-url"><link linkend="generic-amazon-url">generic_amazon_url</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-google-parse"><link linkend="generic-google-parse">generic_google_parse</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-google-url"><link linkend="generic-google-url">generic_google_url</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-img-finalizer"><link linkend="generic-img-finalizer">generic_img_finalizer</link>, function in <link linkend="libglyr-generic">generic</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-musicbrainz-parse"><link linkend="generic-musicbrainz-parse">generic_musicbrainz_parse</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-musicbrainz-url"><link linkend="generic-musicbrainz-url">generic_musicbrainz_url</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="generic-txt-finalizer"><link linkend="generic-txt-finalizer">generic_txt_finalizer</link>, function in <link linkend="libglyr-generic">generic</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-get"><link linkend="glyr-get">glyr_get</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="get-next-word"><link linkend="get-next-word">get_next_word</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-get-plugin-info"><link linkend="glyr-get-plugin-info">glyr_get_plugin_info</link>, function in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="get-plugin-info"><link linkend="get-plugin-info">get_plugin_info</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
+<indexentry><primaryie linkends="get-search-value"><link linkend="get-search-value">get_search_value</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="GLYR-GET-TYPE:CAPS"><link linkend="GLYR-GET-TYPE:CAPS">GLYR_GET_TYPE</link>, enum in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="get-url"><link linkend="get-url">get_url</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glist-free-full"><link linkend="glist-free-full">glist_free_full</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>I</title>
-<indexentry><primaryie linkends="init"><link linkend="init">init</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-init"><link linkend="glyr-init">glyr_init</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-init-query"><link linkend="glyr-init-query">glyr_init_query</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="is-blacklisted"><link linkend="is-blacklisted">is_blacklisted</link>, function in <link linkend="test-blacklist">blacklist</link></primaryie></indexentry>
+<indexentry><primaryie linkends="init"><link linkend="init">init</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-init"><link linkend="glyr-init">glyr_init</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-init-query"><link linkend="glyr-init-query">glyr_init_query</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="is-blacklisted"><link linkend="is-blacklisted">is_blacklisted</link>, function in <link linkend="libglyr-blacklist">blacklist</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>L</title>
-<indexentry><primaryie linkends="levenshtein-strcasecmp"><link linkend="levenshtein-strcasecmp">levenshtein_strcasecmp</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="levenshtein-strcmp"><link linkend="levenshtein-strcmp">levenshtein_strcmp</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="levenshtein-strnormcmp"><link linkend="levenshtein-strnormcmp">levenshtein_strnormcmp</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="levenshtein-strcasecmp"><link linkend="levenshtein-strcasecmp">levenshtein_strcasecmp</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="levenshtein-strcmp"><link linkend="levenshtein-strcmp">levenshtein_strcmp</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="levenshtein-strnormcmp"><link linkend="levenshtein-strnormcmp">levenshtein_strnormcmp</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>M</title>
-<indexentry><primaryie linkends="MD5Final"><link linkend="MD5Final">MD5Final</link>, function in <link linkend="test-md5">md5</link></primaryie></indexentry>
-<indexentry><primaryie linkends="MD5Init"><link linkend="MD5Init">MD5Init</link>, function in <link linkend="test-md5">md5</link></primaryie></indexentry>
-<indexentry><primaryie linkends="MD5Update"><link linkend="MD5Update">MD5Update</link>, function in <link linkend="test-md5">md5</link></primaryie></indexentry>
-<indexentry><primaryie linkends="MDPrintArr"><link linkend="MDPrintArr">MDPrintArr</link>, function in <link linkend="test-md5">md5</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-message"><link linkend="glyr-message">glyr_message</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="MD5Final"><link linkend="MD5Final">MD5Final</link>, function in <link linkend="libglyr-md5">md5</link></primaryie></indexentry>
+<indexentry><primaryie linkends="MD5Init"><link linkend="MD5Init">MD5Init</link>, function in <link linkend="libglyr-md5">md5</link></primaryie></indexentry>
+<indexentry><primaryie linkends="MD5Update"><link linkend="MD5Update">MD5Update</link>, function in <link linkend="libglyr-md5">md5</link></primaryie></indexentry>
+<indexentry><primaryie linkends="MDPrintArr"><link linkend="MDPrintArr">MDPrintArr</link>, function in <link linkend="libglyr-md5">md5</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-message"><link linkend="glyr-message">glyr_message</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>N</title>
-<indexentry><primaryie linkends="glyr-new-cache"><link linkend="glyr-new-cache">glyr_new_cache</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="nextTag"><link linkend="nextTag">nextTag</link>, macro in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-new-cache"><link linkend="glyr-new-cache">glyr_new_cache</link>, function in <link linkend="libglyr-types">types</link></primaryie></indexentry>
+<indexentry><primaryie linkends="nextTag"><link linkend="nextTag">nextTag</link>, macro in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>O</title>
-<indexentry><primaryie linkends="glyr-opt-album"><link linkend="glyr-opt-album">glyr_opt_album</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-allowed-formats"><link linkend="glyr-opt-allowed-formats">glyr_opt_allowed_formats</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-artist"><link linkend="glyr-opt-artist">glyr_opt_artist</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-dlcallback"><link linkend="glyr-opt-dlcallback">glyr_opt_dlcallback</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-download"><link linkend="glyr-opt-download">glyr_opt_download</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-force-utf8"><link linkend="glyr-opt-force-utf8">glyr_opt_force_utf8</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-from"><link linkend="glyr-opt-from">glyr_opt_from</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-fuzzyness"><link linkend="glyr-opt-fuzzyness">glyr_opt_fuzzyness</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-img-maxsize"><link linkend="glyr-opt-img-maxsize">glyr_opt_img_maxsize</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-img-minsize"><link linkend="glyr-opt-img-minsize">glyr_opt_img_minsize</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-lang"><link linkend="glyr-opt-lang">glyr_opt_lang</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-number"><link linkend="glyr-opt-number">glyr_opt_number</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-parallel"><link linkend="glyr-opt-parallel">glyr_opt_parallel</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-plugmax"><link linkend="glyr-opt-plugmax">glyr_opt_plugmax</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-proxy"><link linkend="glyr-opt-proxy">glyr_opt_proxy</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-qsratio"><link linkend="glyr-opt-qsratio">glyr_opt_qsratio</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-redirects"><link linkend="glyr-opt-redirects">glyr_opt_redirects</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-timeout"><link linkend="glyr-opt-timeout">glyr_opt_timeout</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-title"><link linkend="glyr-opt-title">glyr_opt_title</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-type"><link linkend="glyr-opt-type">glyr_opt_type</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-useragent"><link linkend="glyr-opt-useragent">glyr_opt_useragent</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-opt-verbosity"><link linkend="glyr-opt-verbosity">glyr_opt_verbosity</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-album"><link linkend="glyr-opt-album">glyr_opt_album</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-allowed-formats"><link linkend="glyr-opt-allowed-formats">glyr_opt_allowed_formats</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-artist"><link linkend="glyr-opt-artist">glyr_opt_artist</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-dlcallback"><link linkend="glyr-opt-dlcallback">glyr_opt_dlcallback</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-download"><link linkend="glyr-opt-download">glyr_opt_download</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-force-utf8"><link linkend="glyr-opt-force-utf8">glyr_opt_force_utf8</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-from"><link linkend="glyr-opt-from">glyr_opt_from</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-fuzzyness"><link linkend="glyr-opt-fuzzyness">glyr_opt_fuzzyness</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-img-maxsize"><link linkend="glyr-opt-img-maxsize">glyr_opt_img_maxsize</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-img-minsize"><link linkend="glyr-opt-img-minsize">glyr_opt_img_minsize</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-lang"><link linkend="glyr-opt-lang">glyr_opt_lang</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-number"><link linkend="glyr-opt-number">glyr_opt_number</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-parallel"><link linkend="glyr-opt-parallel">glyr_opt_parallel</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-plugmax"><link linkend="glyr-opt-plugmax">glyr_opt_plugmax</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-proxy"><link linkend="glyr-opt-proxy">glyr_opt_proxy</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-qsratio"><link linkend="glyr-opt-qsratio">glyr_opt_qsratio</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-redirects"><link linkend="glyr-opt-redirects">glyr_opt_redirects</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-timeout"><link linkend="glyr-opt-timeout">glyr_opt_timeout</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-title"><link linkend="glyr-opt-title">glyr_opt_title</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-type"><link linkend="glyr-opt-type">glyr_opt_type</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-useragent"><link linkend="glyr-opt-useragent">glyr_opt_useragent</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-opt-verbosity"><link linkend="glyr-opt-verbosity">glyr_opt_verbosity</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>P</title>
-<indexentry><primaryie linkends="panic"><link linkend="panic">panic</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="parser"><link linkend="parser">parser</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="please-what-type"><link linkend="please-what-type">please_what_type</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="prepare-string"><link linkend="prepare-string">prepare_string</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="prepare-url"><link linkend="prepare-url">prepare_url</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-printitem"><link linkend="glyr-printitem">glyr_printitem</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="panic"><link linkend="panic">panic</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="parser"><link linkend="parser">parser</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="please-what-type"><link linkend="please-what-type">please_what_type</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="prepare-string"><link linkend="prepare-string">prepare_string</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="prepare-url"><link linkend="prepare-url">prepare_url</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-printitem"><link linkend="glyr-printitem">glyr_printitem</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>R</title>
-<indexentry><primaryie linkends="register-fetcher-plugins"><link linkend="register-fetcher-plugins">register_fetcher_plugins</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
-<indexentry><primaryie linkends="remove-tags-from-string"><link linkend="remove-tags-from-string">remove_tags_from_string</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="r-getFList"><link linkend="r-getFList">r_getFList</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
-<indexentry><primaryie linkends="r-getSList"><link linkend="r-getSList">r_getSList</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
+<indexentry><primaryie linkends="register-fetcher-plugins"><link linkend="register-fetcher-plugins">register_fetcher_plugins</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
+<indexentry><primaryie linkends="remove-tags-from-string"><link linkend="remove-tags-from-string">remove_tags_from_string</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="r-getFList"><link linkend="r-getFList">r_getFList</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
+<indexentry><primaryie linkends="r-getSList"><link linkend="r-getSList">r_getSList</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>S</title>
-<indexentry><primaryie linkends="size-is-okay"><link linkend="size-is-okay">size_is_okay</link>, function in <link linkend="test-common">common</link></primaryie></indexentry>
-<indexentry><primaryie linkends="start-engine"><link linkend="start-engine">start_engine</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-strerror"><link linkend="glyr-strerror">glyr_strerror</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="strip-html-unicode"><link linkend="strip-html-unicode">strip_html_unicode</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="strreplace"><link linkend="strreplace">strreplace</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="size-is-okay"><link linkend="size-is-okay">size_is_okay</link>, function in <link linkend="libglyr-common">common</link></primaryie></indexentry>
+<indexentry><primaryie linkends="start-engine"><link linkend="start-engine">start_engine</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-strerror"><link linkend="glyr-strerror">glyr_strerror</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="strip-html-unicode"><link linkend="strip-html-unicode">strip_html_unicode</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="strreplace"><link linkend="strreplace">strreplace</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>T</title>
-<indexentry><primaryie linkends="trim-copy"><link linkend="trim-copy">trim_copy</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="trim-inplace"><link linkend="trim-inplace">trim_inplace</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="trim-nocopy"><link linkend="trim-nocopy">trim_nocopy</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-type-to-string"><link linkend="glyr-type-to-string">glyr_type_to_string</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="trim-copy"><link linkend="trim-copy">trim_copy</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="trim-inplace"><link linkend="trim-inplace">trim_inplace</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="trim-nocopy"><link linkend="trim-nocopy">trim_nocopy</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-type-to-string"><link linkend="glyr-type-to-string">glyr_type_to_string</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>U</title>
-<indexentry><primaryie linkends="unescape-html-UTF8"><link linkend="unescape-html-UTF8">unescape_html_UTF8</link>, function in <link linkend="test-stringlib">stringlib</link></primaryie></indexentry>
-<indexentry><primaryie linkends="unregister-fetcher-plugins"><link linkend="unregister-fetcher-plugins">unregister_fetcher_plugins</link>, function in <link linkend="test-register-plugins">register_plugins</link></primaryie></indexentry>
-<indexentry><primaryie linkends="update-md5sum"><link linkend="update-md5sum">update_md5sum</link>, function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-update-md5sum"><link linkend="glyr-update-md5sum">glyr_update_md5sum</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-USE-COLOR"><link linkend="glyr-USE-COLOR">glyr_USE_COLOR</link>, macro in <link linkend="test-config">config</link></primaryie></indexentry>
+<indexentry><primaryie linkends="unescape-html-UTF8"><link linkend="unescape-html-UTF8">unescape_html_UTF8</link>, function in <link linkend="libglyr-stringlib">stringlib</link></primaryie></indexentry>
+<indexentry><primaryie linkends="unregister-fetcher-plugins"><link linkend="unregister-fetcher-plugins">unregister_fetcher_plugins</link>, function in <link linkend="libglyr-register-plugins">register_plugins</link></primaryie></indexentry>
+<indexentry><primaryie linkends="update-md5sum"><link linkend="update-md5sum">update_md5sum</link>, function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-update-md5sum"><link linkend="glyr-update-md5sum">glyr_update_md5sum</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-USE-COLOR"><link linkend="glyr-USE-COLOR">glyr_USE_COLOR</link>, macro in <link linkend="libglyr-config">config</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>V</title>
-<indexentry><primaryie linkends="validate"><link linkend="validate">validate</link>, user_function in <link linkend="test-core">core</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-version"><link linkend="glyr-version">glyr_version</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-VERSION-MAJOR"><link linkend="glyr-VERSION-MAJOR">glyr_VERSION_MAJOR</link>, macro in <link linkend="test-config">config</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-VERSION-MINOR"><link linkend="glyr-VERSION-MINOR">glyr_VERSION_MINOR</link>, macro in <link linkend="test-config">config</link></primaryie></indexentry>
-<indexentry><primaryie linkends="glyr-VERSION-NAME"><link linkend="glyr-VERSION-NAME">glyr_VERSION_NAME</link>, macro in <link linkend="test-config">config</link></primaryie></indexentry>
+<indexentry><primaryie linkends="validate"><link linkend="validate">validate</link>, user_function in <link linkend="libglyr-core">core</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-version"><link linkend="glyr-version">glyr_version</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-VERSION-MAJOR"><link linkend="glyr-VERSION-MAJOR">glyr_VERSION_MAJOR</link>, macro in <link linkend="libglyr-config">config</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-VERSION-MINOR"><link linkend="glyr-VERSION-MINOR">glyr_VERSION_MINOR</link>, macro in <link linkend="libglyr-config">config</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-VERSION-NAME"><link linkend="glyr-VERSION-NAME">glyr_VERSION_NAME</link>, macro in <link linkend="libglyr-config">config</link></primaryie></indexentry>
 </indexdiv>
 <indexdiv><title>W</title>
-<indexentry><primaryie linkends="glyr-write"><link linkend="glyr-write">glyr_write</link>, function in <link linkend="test-glyr">glyr</link></primaryie></indexentry>
+<indexentry><primaryie linkends="glyr-write"><link linkend="glyr-write">glyr_write</link>, function in <link linkend="libglyr-glyr">glyr</link></primaryie></indexentry>
 </indexdiv>
 </indexdiv>

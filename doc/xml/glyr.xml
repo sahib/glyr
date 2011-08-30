@@ -4,12 +4,12 @@
 [
   <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 ]>
-<refentry id="test-glyr">
+<refentry id="libglyr-glyr">
 <refmeta>
-<refentrytitle role="top_of_page" id="test-glyr.top_of_page">glyr</refentrytitle>
+<refentrytitle role="top_of_page" id="libglyr-glyr.top_of_page">glyr</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>
-  TEST Library
+  LIBGLYR Library
 </refmiscinfo>
 </refmeta>
 <refnamediv>
@@ -17,7 +17,7 @@
 <refpurpose></refpurpose>
 </refnamediv>
 
-<refsynopsisdiv id="test-glyr.synopsis" role="synopsis">
+<refsynopsisdiv id="libglyr-glyr.synopsis" role="synopsis">
 <title role="synopsis.title">Synopsis</title>
 
 <synopsis><link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-init">glyr_init</link>                           (<parameter><type>void</type></parameter>);
@@ -89,12 +89,11 @@ const <link linkend="char"><returnvalue>char</returnvalue></link> *        <link
 </synopsis>
 </refsynopsisdiv>
 
-<refsect1 id="test-glyr.description" role="desc">
+<refsect1 id="libglyr-glyr.description" role="desc">
 <title role="desc.title">Description</title>
-<para>
-</para>
+
 </refsect1>
-<refsect1 id="test-glyr.details" role="details">
+<refsect1 id="libglyr-glyr.details" role="details">
 <title role="details.title">Details</title>
 <refsect2 id="glyr-init" role="function">
 <title>glyr_init ()</title>
@@ -121,8 +120,8 @@ Cleanup all parts of the library, you can use <function><link linkend="atexit"><
 <para>
 <informalexample>
 <programlisting>
-gtk_init();
-atexit(gkt_destroy);
+glyr_init();
+atexit(glyr_destroy);
 </programlisting>
 </informalexample>
 </para>
