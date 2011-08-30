@@ -1,0 +1,91 @@
+<!-- ##### SECTION Title ##### -->
+common
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### FUNCTION generic_amazon_url ##### -->
+<para>
+
+</para>
+
+@sets: 
+@response_group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION generic_google_url ##### -->
+<para>
+
+</para>
+
+@sets: 
+@searchterm: 
+@Returns: 
+
+
+<!-- ##### FUNCTION generic_google_parse ##### -->
+<para>
+
+</para>
+
+@capo: 
+@Returns: 
+
+
+<!-- ##### FUNCTION size_is_okay ##### -->
+<para>
+
+</para>
+
+@sZ: 
+@min: 
+@max: 
+@Returns: 
+
+
+<!-- ##### FUNCTION generic_musicbrainz_parse ##### -->
+<para>
+
+</para>
+
+@capo: 
+@last_mbid: 
+@include: 
+@Returns: 
+
+
+<!-- ##### FUNCTION generic_musicbrainz_url ##### -->
+<para>
+
+</para>
+
+@sets: 
+@Returns: 
+
+
+<!-- ##### FUNCTION please_what_type ##### -->
+<para>
+
+</para>
+
+@s: 
+@Returns: 
+
+

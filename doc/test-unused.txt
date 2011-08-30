@@ -1,0 +1,3 @@
+DL_callback
+GLYR_DATA_TYPE
+GLYR_GET_TYPE

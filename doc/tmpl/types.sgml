@@ -1,0 +1,166 @@
+<!-- ##### SECTION Title ##### -->
+types
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### MACRO GLYR_DEFAULT_REDIRECTS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_TIMEOUT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_PARALLEL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_CMINSIZE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_CMAXSIZE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_VERBOSITY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_NUMBER ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_PLUGMAX ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_LANG ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_DOWNLOAD ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_GROUPEDL ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_FROM_ARGUMENT_DELIM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_FUZZYNESS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_PROXY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_QSRATIO ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_FORCE_UTF8 ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_ALLOWED_FORMATS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO GLYR_DEFAULT_USERAGENT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### ENUM GLYR_ERROR ##### -->
+<para>
+
+</para>
+
+@GLYRE_UNKNOWN: 
+@GLYRE_OK: 
+@GLYRE_BAD_OPTION: 
+@GLYRE_BAD_VALUE: 
+@GLYRE_EMPTY_STRUCT: 
+@GLYRE_NO_PROVIDER: 
+@GLYRE_UNKNOWN_GET: 
+@GLYRE_INSUFF_DATA: 
+@GLYRE_SKIP: 
+@GLYRE_STOP_POST: 
+@GLYRE_STOP_PRE: 
+@GLYRE_NO_INIT: 
+

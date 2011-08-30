@@ -1,0 +1,264 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<refentry id="test-types">
+<refmeta>
+<refentrytitle role="top_of_page" id="test-types.top_of_page">types</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  TEST Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>types</refname>
+<refpurpose></refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="test-types.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>#define             <link linkend="GLYR-DEFAULT-REDIRECTS:CAPS">GLYR_DEFAULT_REDIRECTS</link>
+#define             <link linkend="GLYR-DEFAULT-TIMEOUT:CAPS">GLYR_DEFAULT_TIMEOUT</link>
+#define             <link linkend="GLYR-DEFAULT-PARALLEL:CAPS">GLYR_DEFAULT_PARALLEL</link>
+#define             <link linkend="GLYR-DEFAULT-CMINSIZE:CAPS">GLYR_DEFAULT_CMINSIZE</link>
+#define             <link linkend="GLYR-DEFAULT-CMAXSIZE:CAPS">GLYR_DEFAULT_CMAXSIZE</link>
+#define             <link linkend="GLYR-DEFAULT-VERBOSITY:CAPS">GLYR_DEFAULT_VERBOSITY</link>
+#define             <link linkend="GLYR-DEFAULT-NUMBER:CAPS">GLYR_DEFAULT_NUMBER</link>
+#define             <link linkend="GLYR-DEFAULT-PLUGMAX:CAPS">GLYR_DEFAULT_PLUGMAX</link>
+#define             <link linkend="GLYR-DEFAULT-LANG:CAPS">GLYR_DEFAULT_LANG</link>
+#define             <link linkend="GLYR-DEFAULT-DOWNLOAD:CAPS">GLYR_DEFAULT_DOWNLOAD</link>
+#define             <link linkend="GLYR-DEFAULT-GROUPEDL:CAPS">GLYR_DEFAULT_GROUPEDL</link>
+#define             <link linkend="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS">GLYR_DEFAULT_FROM_ARGUMENT_DELIM</link>
+#define             <link linkend="GLYR-DEFAULT-FUZZYNESS:CAPS">GLYR_DEFAULT_FUZZYNESS</link>
+#define             <link linkend="GLYR-DEFAULT-PROXY:CAPS">GLYR_DEFAULT_PROXY</link>
+#define             <link linkend="GLYR-DEFAULT-QSRATIO:CAPS">GLYR_DEFAULT_QSRATIO</link>
+#define             <link linkend="GLYR-DEFAULT-FORCE-UTF8:CAPS">GLYR_DEFAULT_FORCE_UTF8</link>
+#define             <link linkend="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS">GLYR_DEFAULT_ALLOWED_FORMATS</link>
+#define             <link linkend="GLYR-DEFAULT-USERAGENT:CAPS">GLYR_DEFAULT_USERAGENT</link>
+enum                <link linkend="GLYR-ERROR:CAPS">GLYR_ERROR</link>;
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="test-types.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+</para>
+</refsect1>
+<refsect1 id="test-types.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="GLYR-DEFAULT-REDIRECTS:CAPS" role="macro">
+<title>GLYR_DEFAULT_REDIRECTS</title>
+<indexterm zone="GLYR-DEFAULT-REDIRECTS:CAPS"><primary>GLYR_DEFAULT_REDIRECTS</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_REDIRECTS 3L
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-TIMEOUT:CAPS" role="macro">
+<title>GLYR_DEFAULT_TIMEOUT</title>
+<indexterm zone="GLYR-DEFAULT-TIMEOUT:CAPS"><primary>GLYR_DEFAULT_TIMEOUT</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_TIMEOUT  20L
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-PARALLEL:CAPS" role="macro">
+<title>GLYR_DEFAULT_PARALLEL</title>
+<indexterm zone="GLYR-DEFAULT-PARALLEL:CAPS"><primary>GLYR_DEFAULT_PARALLEL</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_PARALLEL 0L
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-CMINSIZE:CAPS" role="macro">
+<title>GLYR_DEFAULT_CMINSIZE</title>
+<indexterm zone="GLYR-DEFAULT-CMINSIZE:CAPS"><primary>GLYR_DEFAULT_CMINSIZE</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_CMINSIZE 130
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-CMAXSIZE:CAPS" role="macro">
+<title>GLYR_DEFAULT_CMAXSIZE</title>
+<indexterm zone="GLYR-DEFAULT-CMAXSIZE:CAPS"><primary>GLYR_DEFAULT_CMAXSIZE</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_CMAXSIZE -1
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-VERBOSITY:CAPS" role="macro">
+<title>GLYR_DEFAULT_VERBOSITY</title>
+<indexterm zone="GLYR-DEFAULT-VERBOSITY:CAPS"><primary>GLYR_DEFAULT_VERBOSITY</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_VERBOSITY 0
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-NUMBER:CAPS" role="macro">
+<title>GLYR_DEFAULT_NUMBER</title>
+<indexterm zone="GLYR-DEFAULT-NUMBER:CAPS"><primary>GLYR_DEFAULT_NUMBER</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_NUMBER 1
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-PLUGMAX:CAPS" role="macro">
+<title>GLYR_DEFAULT_PLUGMAX</title>
+<indexterm zone="GLYR-DEFAULT-PLUGMAX:CAPS"><primary>GLYR_DEFAULT_PLUGMAX</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_PLUGMAX -1
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-LANG:CAPS" role="macro">
+<title>GLYR_DEFAULT_LANG</title>
+<indexterm zone="GLYR-DEFAULT-LANG:CAPS"><primary>GLYR_DEFAULT_LANG</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_LANG "auto"
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-DOWNLOAD:CAPS" role="macro">
+<title>GLYR_DEFAULT_DOWNLOAD</title>
+<indexterm zone="GLYR-DEFAULT-DOWNLOAD:CAPS"><primary>GLYR_DEFAULT_DOWNLOAD</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_DOWNLOAD true
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-GROUPEDL:CAPS" role="macro">
+<title>GLYR_DEFAULT_GROUPEDL</title>
+<indexterm zone="GLYR-DEFAULT-GROUPEDL:CAPS"><primary>GLYR_DEFAULT_GROUPEDL</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_GROUPEDL true
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS" role="macro">
+<title>GLYR_DEFAULT_FROM_ARGUMENT_DELIM</title>
+<indexterm zone="GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"><primary>GLYR_DEFAULT_FROM_ARGUMENT_DELIM</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_FROM_ARGUMENT_DELIM ";"
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-FUZZYNESS:CAPS" role="macro">
+<title>GLYR_DEFAULT_FUZZYNESS</title>
+<indexterm zone="GLYR-DEFAULT-FUZZYNESS:CAPS"><primary>GLYR_DEFAULT_FUZZYNESS</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_FUZZYNESS 4
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-PROXY:CAPS" role="macro">
+<title>GLYR_DEFAULT_PROXY</title>
+<indexterm zone="GLYR-DEFAULT-PROXY:CAPS"><primary>GLYR_DEFAULT_PROXY</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_PROXY NULL
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-QSRATIO:CAPS" role="macro">
+<title>GLYR_DEFAULT_QSRATIO</title>
+<indexterm zone="GLYR-DEFAULT-QSRATIO:CAPS"><primary>GLYR_DEFAULT_QSRATIO</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_QSRATIO 0.85
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-FORCE-UTF8:CAPS" role="macro">
+<title>GLYR_DEFAULT_FORCE_UTF8</title>
+<indexterm zone="GLYR-DEFAULT-FORCE-UTF8:CAPS"><primary>GLYR_DEFAULT_FORCE_UTF8</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_FORCE_UTF8 false
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" role="macro">
+<title>GLYR_DEFAULT_ALLOWED_FORMATS</title>
+<indexterm zone="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"><primary>GLYR_DEFAULT_ALLOWED_FORMATS</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-DEFAULT-USERAGENT:CAPS" role="macro">
+<title>GLYR_DEFAULT_USERAGENT</title>
+<indexterm zone="GLYR-DEFAULT-USERAGENT:CAPS"><primary>GLYR_DEFAULT_USERAGENT</primary></indexterm>
+<programlisting>#define GLYR_DEFAULT_USERAGENT "libglyr"
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="GLYR-ERROR:CAPS" role="enum">
+<title>enum GLYR_ERROR</title>
+<indexterm zone="GLYR-ERROR:CAPS"><primary>GLYR_ERROR</primary></indexterm>
+<programlisting>typedef enum
+{
+    GLYRE_UNKNOWN = 0,  
+    GLYRE_OK,           
+    GLYRE_BAD_OPTION,  
+    GLYRE_BAD_VALUE,   
+    GLYRE_EMPTY_STRUCT,
+    GLYRE_NO_PROVIDER, 
+    GLYRE_UNKNOWN_GET, 
+    GLYRE_INSUFF_DATA, 
+    GLYRE_SKIP,        
+    GLYRE_STOP_POST,  
+    GLYRE_STOP_PRE,   
+    GLYRE_NO_INIT     
+}   GLYR_ERROR;
+</programlisting>
+<para>
+Enum values used for the thing, to specify the thing.
+</para><variablelist role="enum">
+<varlistentry id="GLYRE-UNKNOWN:CAPS" role="constant">
+<term><literal>GLYRE_UNKNOWN</literal></term>
+<listitem><simpara>Unknown error 
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-OK:CAPS" role="constant">
+<term><literal>GLYRE_OK</literal></term>
+<listitem><simpara>everything is fine 
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-BAD-OPTION:CAPS" role="constant">
+<term><literal>GLYRE_BAD_OPTION</literal></term>
+<listitem><simpara>you passed a bad option to glyr_opt_*()
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-BAD-VALUE:CAPS" role="constant">
+<term><literal>GLYRE_BAD_VALUE</literal></term>
+<listitem><simpara>Invalid value in glyr_opt_*()
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-EMPTY-STRUCT:CAPS" role="constant">
+<term><literal>GLYRE_EMPTY_STRUCT</literal></term>
+<listitem><simpara>you passed an empty struct to <link linkend="glyr-opt-"><function>glyr_opt_()</function></link> 
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-NO-PROVIDER:CAPS" role="constant">
+<term><literal>GLYRE_NO_PROVIDER</literal></term>
+<listitem><simpara>setttings->provider == NULL
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-UNKNOWN-GET:CAPS" role="constant">
+<term><literal>GLYRE_UNKNOWN_GET</literal></term>
+<listitem><simpara>settings->type is not valid
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-INSUFF-DATA:CAPS" role="constant">
+<term><literal>GLYRE_INSUFF_DATA</literal></term>
+<listitem><simpara>Insufficient data supplied; (artist/album/title) missing
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-SKIP:CAPS" role="constant">
+<term><literal>GLYRE_SKIP</literal></term>
+<listitem><simpara>If returned by callback, cache wont be added to results
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-STOP-POST:CAPS" role="constant">
+<term><literal>GLYRE_STOP_POST</literal></term>
+<listitem><simpara>Will stop searching, but still add the current item 
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-STOP-PRE:CAPS" role="constant">
+<term><literal>GLYRE_STOP_PRE</literal></term>
+<listitem><simpara>Will stop searching, but won't add the current item
+</simpara></listitem>
+</varlistentry>
+<varlistentry id="GLYRE-NO-INIT:CAPS" role="constant">
+<term><literal>GLYRE_NO_INIT</literal></term>
+<listitem><simpara>Library has not been initialized with <link linkend="glyr-init"><function>glyr_init()</function></link> yet
+</simpara></listitem>
+</varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+
+</refentry>

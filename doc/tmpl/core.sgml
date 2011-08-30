@@ -1,0 +1,198 @@
+<!-- ##### SECTION Title ##### -->
+core
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### MACRO CALC_MD5SUMS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION panic ##### -->
+<para>
+
+</para>
+
+@fmt: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION glyr_message ##### -->
+<para>
+
+</para>
+
+@v: 
+@s: 
+@fmt: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION validate ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION init ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### USER_FUNCTION destroy ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### USER_FUNCTION finalize ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Param2: 
+@Param3: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION parser ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION get_url ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Returns: 
+
+
+<!-- ##### USER_FUNCTION AsyncDLCB ##### -->
+<para>
+
+</para>
+
+@Param1: 
+@Param2: 
+@Param3: 
+@Param4: 
+@Returns: 
+
+
+<!-- ##### FUNCTION start_engine ##### -->
+<para>
+
+</para>
+
+@query: 
+@fetcher: 
+@err: 
+@Returns: 
+
+
+<!-- ##### FUNCTION async_download ##### -->
+<para>
+
+</para>
+
+@url_list: 
+@endmark_list: 
+@s: 
+@Param4: 
+@Param5: 
+@callback: 
+@userptr: 
+@free_caches: 
+@Returns: 
+
+
+<!-- ##### FUNCTION download_single ##### -->
+<para>
+
+</para>
+
+@url: 
+@s: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION DL_init ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION DL_free ##### -->
+<para>
+
+</para>
+
+@cache: 
+
+
+<!-- ##### FUNCTION update_md5sum ##### -->
+<para>
+
+</para>
+
+@c: 
+
+
+<!-- ##### FUNCTION glist_free_full ##### -->
+<para>
+
+</para>
+
+@List: 
+@free_func: 
+
+
+<!-- ##### FUNCTION continue_search ##### -->
+<para>
+
+</para>
+
+@current: 
+@s: 
+@Returns: 
+
+

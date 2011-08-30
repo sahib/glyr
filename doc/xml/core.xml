@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<refentry id="test-core">
+<refmeta>
+<refentrytitle role="top_of_page" id="test-core.top_of_page">core</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  TEST Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>core</refname>
+<refpurpose></refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="test-core.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>#define             <link linkend="CALC-MD5SUMS:CAPS">CALC_MD5SUMS</link>
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="panic">panic</link>                               (<parameter>const <link linkend="char"><type>char</type></link> *fmt</parameter>,
+                                                         <parameter>...</parameter>);
+<link linkend="int"><returnvalue>int</returnvalue></link>                 <link linkend="glyr-message">glyr_message</link>                        (<parameter><link linkend="int"><type>int</type></link> v</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *fmt</parameter>,
+                                                         <parameter>...</parameter>);
+<link linkend="bool"><returnvalue>bool</returnvalue></link>                (<link linkend="validate">*validate</link>)                         (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                (<link linkend="init">*init</link>)                             (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                (<link linkend="destroy">*destroy</link>)                          (<parameter><type>void</type></parameter>);
+<link linkend="GList"><returnvalue>GList</returnvalue></link> *             (<link linkend="finalize">*finalize</link>)                         (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>,
+                                                         <parameter><link linkend="GList"><type>GList</type></link> *Param2</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> *Param3</parameter>);
+<link linkend="GList"><returnvalue>GList</returnvalue></link> *             (<link linkend="parser">*parser</link>)                           (<parameter><type>struct cb_object</type> *Param1</parameter>);
+const <link linkend="char"><returnvalue>char</returnvalue></link> *        (<link linkend="get-url">*get_url</link>)                          (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>);
+<link linkend="GList"><returnvalue>GList</returnvalue></link> *             (<link linkend="AsyncDLCB">*AsyncDLCB</link>)                        (<parameter><link linkend="cb-object"><type>cb_object</type></link> *Param1</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *Param2</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> *Param3</parameter>,
+                                                         <parameter><link linkend="gint"><type>gint</type></link> *Param4</parameter>);
+<link linkend="GList"><returnvalue>GList</returnvalue></link> *             <link linkend="start-engine">start_engine</link>                        (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>,
+                                                         <parameter><link linkend="MetaDataFetcher"><type>MetaDataFetcher</type></link> *fetcher</parameter>,
+                                                         <parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> *err</parameter>);
+<link linkend="GList"><returnvalue>GList</returnvalue></link> *             <link linkend="async-download">async_download</link>                      (<parameter><link linkend="GList"><type>GList</type></link> *url_list</parameter>,
+                                                         <parameter><link linkend="GList"><type>GList</type></link> *endmark_list</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>long <link linkend="parallel-fac"><type>parallel_fac</type></link> Param4</parameter>,
+                                                         <parameter>long <link linkend="timeout-fac"><type>timeout_fac</type></link> Param5</parameter>,
+                                                         <parameter><link linkend="AsyncDLCB"><type>AsyncDLCB</type></link> callback</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *userptr</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> free_caches</parameter>);
+<link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      <link linkend="download-single">download_single</link>                     (<parameter>const <link linkend="char"><type>char</type></link> *url</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *end</parameter>);
+<link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      <link linkend="DL-init">DL_init</link>                             (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="DL-free">DL_free</link>                             (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="update-md5sum">update_md5sum</link>                       (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *c</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glist-free-full">glist_free_full</link>                     (<parameter><link linkend="GList"><type>GList</type></link> *List</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> (*free_func) (void * ptr)</parameter>);
+<link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="continue-search">continue_search</link>                     (<parameter><link linkend="gint"><type>gint</type></link> current</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="test-core.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+</para>
+</refsect1>
+<refsect1 id="test-core.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="CALC-MD5SUMS:CAPS" role="macro">
+<title>CALC_MD5SUMS</title>
+<indexterm zone="CALC-MD5SUMS:CAPS"><primary>CALC_MD5SUMS</primary></indexterm>
+<programlisting>#define CALC_MD5SUMS true
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="panic" role="function">
+<title>panic ()</title>
+<indexterm zone="panic"><primary>panic</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                panic                               (<parameter>const <link linkend="char"><type>char</type></link> *fmt</parameter>,
+                                                         <parameter>...</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="glyr-message" role="function">
+<title>glyr_message ()</title>
+<indexterm zone="glyr-message"><primary>glyr_message</primary></indexterm>
+<programlisting><link linkend="int"><returnvalue>int</returnvalue></link>                 glyr_message                        (<parameter><link linkend="int"><type>int</type></link> v</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *fmt</parameter>,
+                                                         <parameter>...</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="validate" role="function">
+<title>validate ()</title>
+<indexterm zone="validate"><primary>validate</primary></indexterm>
+<programlisting><link linkend="bool"><returnvalue>bool</returnvalue></link>                (*validate)                         (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="init" role="function">
+<title>init ()</title>
+<indexterm zone="init"><primary>init</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                (*init)                             (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="destroy" role="function">
+<title>destroy ()</title>
+<indexterm zone="destroy"><primary>destroy</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                (*destroy)                          (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="finalize" role="function">
+<title>finalize ()</title>
+<indexterm zone="finalize"><primary>finalize</primary></indexterm>
+<programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             (*finalize)                         (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>,
+                                                         <parameter><link linkend="GList"><type>GList</type></link> *Param2</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> *Param3</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="parser" role="function">
+<title>parser ()</title>
+<indexterm zone="parser"><primary>parser</primary></indexterm>
+<programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             (*parser)                           (<parameter><type>struct cb_object</type> *Param1</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="get-url" role="function">
+<title>get_url ()</title>
+<indexterm zone="get-url"><primary>get_url</primary></indexterm>
+<programlisting>const <link linkend="char"><returnvalue>char</returnvalue></link> *        (*get_url)                          (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *Param1</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="AsyncDLCB" role="function">
+<title>AsyncDLCB ()</title>
+<indexterm zone="AsyncDLCB"><primary>AsyncDLCB</primary></indexterm>
+<programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             (*AsyncDLCB)                        (<parameter><link linkend="cb-object"><type>cb_object</type></link> *Param1</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *Param2</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> *Param3</parameter>,
+                                                         <parameter><link linkend="gint"><type>gint</type></link> *Param4</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="start-engine" role="function">
+<title>start_engine ()</title>
+<indexterm zone="start-engine"><primary>start_engine</primary></indexterm>
+<programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             start_engine                        (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>,
+                                                         <parameter><link linkend="MetaDataFetcher"><type>MetaDataFetcher</type></link> *fetcher</parameter>,
+                                                         <parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> *err</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="async-download" role="function">
+<title>async_download ()</title>
+<indexterm zone="async-download"><primary>async_download</primary></indexterm>
+<programlisting><link linkend="GList"><returnvalue>GList</returnvalue></link> *             async_download                      (<parameter><link linkend="GList"><type>GList</type></link> *url_list</parameter>,
+                                                         <parameter><link linkend="GList"><type>GList</type></link> *endmark_list</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>long <link linkend="parallel-fac"><type>parallel_fac</type></link> Param4</parameter>,
+                                                         <parameter>long <link linkend="timeout-fac"><type>timeout_fac</type></link> Param5</parameter>,
+                                                         <parameter><link linkend="AsyncDLCB"><type>AsyncDLCB</type></link> callback</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *userptr</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> free_caches</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="download-single" role="function">
+<title>download_single ()</title>
+<indexterm zone="download-single"><primary>download_single</primary></indexterm>
+<programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      download_single                     (<parameter>const <link linkend="char"><type>char</type></link> *url</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *end</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="DL-init" role="function">
+<title>DL_init ()</title>
+<indexterm zone="DL-init"><primary>DL_init</primary></indexterm>
+<programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      DL_init                             (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="DL-free" role="function">
+<title>DL_free ()</title>
+<indexterm zone="DL-free"><primary>DL_free</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                DL_free                             (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="update-md5sum" role="function">
+<title>update_md5sum ()</title>
+<indexterm zone="update-md5sum"><primary>update_md5sum</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                update_md5sum                       (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *c</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="glist-free-full" role="function">
+<title>glist_free_full ()</title>
+<indexterm zone="glist-free-full"><primary>glist_free_full</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glist_free_full                     (<parameter><link linkend="GList"><type>GList</type></link> *List</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> (*free_func) (void * ptr)</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="continue-search" role="function">
+<title>continue_search ()</title>
+<indexterm zone="continue-search"><primary>continue_search</primary></indexterm>
+<programlisting><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            continue_search                     (<parameter><link linkend="gint"><type>gint</type></link> current</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>);</programlisting>
+<para>
+</para></refsect2>
+
+</refsect1>
+
+</refentry>

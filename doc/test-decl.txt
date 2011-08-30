@@ -1,0 +1,676 @@
+<FUNCTION>
+<NAME>MDPrintArr</NAME>
+<RETURNS>void  </RETURNS>
+unsigned char *digest 
+</FUNCTION>
+<FUNCTION>
+<NAME>MD5Init</NAME>
+<RETURNS>void  </RETURNS>
+MD5_CTX   * context 
+</FUNCTION>
+<FUNCTION>
+<NAME>MD5Final</NAME>
+<RETURNS>void  </RETURNS>
+MD5_CTX  * context 
+</FUNCTION>
+<FUNCTION>
+<NAME>MD5Update</NAME>
+<RETURNS>void  </RETURNS>
+MD5_CTX * context, unsigned char * in, unsigned int size 
+</FUNCTION>
+<MACRO>
+<NAME>nextTag</NAME>
+#define nextTag(PTR) while(PTR[0] && *PTR++ != '>')
+</MACRO>
+<FUNCTION>
+<NAME>levenshtein_strcmp</NAME>
+<RETURNS>gsize  </RETURNS>
+const gchar * string, const gchar * other 
+</FUNCTION>
+<FUNCTION>
+<NAME>levenshtein_strcasecmp</NAME>
+<RETURNS>gsize  </RETURNS>
+const gchar * sstring, const gchar * other 
+</FUNCTION>
+<FUNCTION>
+<NAME>levenshtein_strnormcmp</NAME>
+<RETURNS>gsize  </RETURNS>
+GlyrQuery * query, const gchar * string, const gchar * other 
+</FUNCTION>
+<FUNCTION>
+<NAME>strreplace</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * string, const gchar * subs, const gchar * with 
+</FUNCTION>
+<FUNCTION>
+<NAME>convert_charset</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * string, gchar * from, gchar * to, gsize * new_size 
+</FUNCTION>
+<FUNCTION>
+<NAME>strip_html_unicode</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * string 
+</FUNCTION>
+<FUNCTION>
+<NAME>chomp_breakline</NAME>
+<RETURNS>void  </RETURNS>
+gchar * string 
+</FUNCTION>
+<FUNCTION>
+<NAME>trim_copy</NAME>
+<RETURNS>void  </RETURNS>
+gchar *input, gchar *output 
+</FUNCTION>
+<FUNCTION>
+<NAME>trim_inplace</NAME>
+<RETURNS>void  </RETURNS>
+gchar *s 
+</FUNCTION>
+<FUNCTION>
+<NAME>trim_nocopy</NAME>
+<RETURNS>gchar  * </RETURNS>
+gchar *s 
+</FUNCTION>
+<FUNCTION>
+<NAME>copy_value</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * begin, const gchar * end 
+</FUNCTION>
+<FUNCTION>
+<NAME>get_next_word</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * string, const gchar * delim, gsize * offset, gsize len 
+</FUNCTION>
+<FUNCTION>
+<NAME>remove_tags_from_string</NAME>
+<RETURNS>gsize  </RETURNS>
+gchar * string, gint length, gchar start, gchar end 
+</FUNCTION>
+<FUNCTION>
+<NAME>unescape_html_UTF8</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar *data 
+</FUNCTION>
+<FUNCTION>
+<NAME>prepare_url</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * URL, const gchar * artist, const gchar * album, const gchar * title 
+</FUNCTION>
+<FUNCTION>
+<NAME>beautify_string</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * lyrics 
+</FUNCTION>
+<FUNCTION>
+<NAME>prepare_string</NAME>
+<RETURNS>gchar  * </RETURNS>
+const gchar * input, gboolean delinitfy 
+</FUNCTION>
+<FUNCTION>
+<NAME>get_search_value</NAME>
+<RETURNS>gchar  * </RETURNS>
+gchar * ref, gchar * name, gchar * end_string 
+</FUNCTION>
+<FUNCTION>
+<NAME>register_fetcher_plugins</NAME>
+<RETURNS>void    </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>unregister_fetcher_plugins</NAME>
+<RETURNS>void  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>r_getFList</NAME>
+<RETURNS>GList  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>r_getSList</NAME>
+<RETURNS>GList  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>get_plugin_info</NAME>
+<RETURNS>GlyrFetcherInfo  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>free_plugin_info</NAME>
+<RETURNS>void  </RETURNS>
+GlyrFetcherInfo * infos 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_init</NAME>
+<RETURNS>void  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_cleanup</NAME>
+<RETURNS>void  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_get</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+GlyrQuery * settings, GLYR_ERROR * error, int * length 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_init_query</NAME>
+<RETURNS>void  </RETURNS>
+GlyrQuery * query 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_destroy_query</NAME>
+<RETURNS>void  </RETURNS>
+GlyrQuery * query 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_free_list</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache * head 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_new_cache</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_free_cache</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache * cache 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_dlcallback</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * settings, DL_callback dl_cb, void * userp 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_type</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, GLYR_GET_TYPE type 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_artist</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, char * artist 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_album</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s,  char * album 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_title</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s,  char * title 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_img_minsize</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, int size 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_img_maxsize</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, int size 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_parallel</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, unsigned long parallel_jobs 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_timeout</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, unsigned long timeout 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_redirects</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, unsigned long redirects 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_useragent</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, const char * useragent 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_lang</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, char * langcode 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_number</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, unsigned int num 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_verbosity</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, unsigned int level 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_from</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, const char * from 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_plugmax</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, int plugmax 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_allowed_formats</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, const char * formats 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_download</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, bool download 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_fuzzyness</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, int fuzz 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_qsratio</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, float ratio 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_proxy</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, const char * proxystring 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_opt_force_utf8</NAME>
+<RETURNS>GLYR_ERROR  </RETURNS>
+GlyrQuery * s, bool force_utf8 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_download</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+const char * url, GlyrQuery * s 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_strerror</NAME>
+<RETURNS>const char  * </RETURNS>
+GLYR_ERROR ID 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_version</NAME>
+<RETURNS>const char  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_write</NAME>
+<RETURNS>int  </RETURNS>
+GlyrMemCache * cache, const char * path 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_update_md5sum</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache * cache 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_printitem</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache * cache 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_get_plugin_info</NAME>
+<RETURNS>GlyrFetcherInfo  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_free_plugin_info</NAME>
+<RETURNS>void  </RETURNS>
+GlyrFetcherInfo * info 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_type_to_string</NAME>
+<RETURNS>const char  * </RETURNS>
+GLYR_DATA_TYPE type 
+</FUNCTION>
+<MACRO>
+<NAME>GLYR_DEFAULT_REDIRECTS</NAME>
+#define GLYR_DEFAULT_REDIRECTS 3L
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_TIMEOUT</NAME>
+#define GLYR_DEFAULT_TIMEOUT  20L
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_PARALLEL</NAME>
+#define GLYR_DEFAULT_PARALLEL 0L
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_CMINSIZE</NAME>
+#define GLYR_DEFAULT_CMINSIZE 130
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_CMAXSIZE</NAME>
+#define GLYR_DEFAULT_CMAXSIZE -1
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_VERBOSITY</NAME>
+#define GLYR_DEFAULT_VERBOSITY 0
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_NUMBER</NAME>
+#define GLYR_DEFAULT_NUMBER 1
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_PLUGMAX</NAME>
+#define GLYR_DEFAULT_PLUGMAX -1
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_LANG</NAME>
+#define GLYR_DEFAULT_LANG "auto"
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_DOWNLOAD</NAME>
+#define GLYR_DEFAULT_DOWNLOAD true
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_GROUPEDL</NAME>
+#define GLYR_DEFAULT_GROUPEDL true
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_FROM_ARGUMENT_DELIM</NAME>
+#define GLYR_DEFAULT_FROM_ARGUMENT_DELIM ";"
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_FUZZYNESS</NAME>
+#define GLYR_DEFAULT_FUZZYNESS 4
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_PROXY</NAME>
+#define GLYR_DEFAULT_PROXY NULL
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_QSRATIO</NAME>
+#define GLYR_DEFAULT_QSRATIO 0.85
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_FORCE_UTF8</NAME>
+#define GLYR_DEFAULT_FORCE_UTF8 false
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_ALLOWED_FORMATS</NAME>
+#define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
+</MACRO>
+<MACRO>
+<NAME>GLYR_DEFAULT_USERAGENT</NAME>
+#define GLYR_DEFAULT_USERAGENT "libglyr"
+</MACRO>
+<ENUM>
+<NAME>GLYR_ERROR</NAME>
+typedef enum
+{
+    GLYRE_UNKNOWN = 0,  
+    GLYRE_OK,           
+    GLYRE_BAD_OPTION,  
+    GLYRE_BAD_VALUE,   
+    GLYRE_EMPTY_STRUCT,
+    GLYRE_NO_PROVIDER, 
+    GLYRE_UNKNOWN_GET, 
+    GLYRE_INSUFF_DATA, 
+    GLYRE_SKIP,        
+    GLYRE_STOP_POST,  
+    GLYRE_STOP_PRE,   
+    GLYRE_NO_INIT     
+}   GLYR_ERROR;
+</ENUM>
+<ENUM>
+<NAME>GLYR_GET_TYPE</NAME>
+typedef enum
+{
+    GLYR_GET_COVERART = 1, 
+    GLYR_GET_LYRICS, 
+    GLYR_GET_ARTIST_PHOTOS, 
+    GLYR_GET_ARTISTBIO, 
+    GLYR_GET_SIMILIAR_ARTISTS, 
+    GLYR_GET_SIMILIAR_SONGS,
+    GLYR_GET_ALBUM_REVIEW, 
+    GLYR_GET_TRACKLIST, 
+    GLYR_GET_TAGS, 
+    GLYR_GET_RELATIONS, 
+    GLYR_GET_ALBUMLIST, 
+    GLYR_GET_UNSURE 
+}   GLYR_GET_TYPE;
+</ENUM>
+<ENUM>
+<NAME>GLYR_DATA_TYPE</NAME>
+typedef enum
+{
+    GLYR_TYPE_NOIDEA, 
+    GLYR_TYPE_LYRICS, 
+    GLYR_TYPE_REVIEW, 
+    GLYR_TYPE_PHOTOS, 
+    GLYR_TYPE_COVER,  
+    GLYR_TYPE_COVER_PRI, 
+    GLYR_TYPE_COVER_SEC, 
+    GLYR_TYPE_AINFO,  
+    GLYR_TYPE_SIMILIAR, 
+    GLYR_TYPE_SIMILIAR_SONG, 
+    GLYR_TYPE_ALBUMLIST, 
+    GLYR_TYPE_TAGS,	
+    GLYR_TYPE_TAG_ARTIST,
+    GLYR_TYPE_TAG_ALBUM, 
+    GLYR_TYPE_TAG_TITLE, 
+    GLYR_TYPE_RELATION,  
+    GLYR_TYPE_IMG_URL,   
+    GLYR_TYPE_TXT_URL,   
+    GLYR_TYPE_TRACK	
+}   GLYR_DATA_TYPE;
+</ENUM>
+<USER_FUNCTION>
+<NAME>DL_callback</NAME>
+<RETURNS>GLYR_ERROR </RETURNS>
+GlyrMemCache * dl, struct GlyrQuery * s
+</USER_FUNCTION>
+<FUNCTION>
+<NAME>glyr_new_cache</NAME>
+<RETURNS>return  </RETURNS>
+ 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_get_plugin_info</NAME>
+<RETURNS>return  </RETURNS>
+ 
+</FUNCTION>
+<MACRO>
+<NAME>CALC_MD5SUMS</NAME>
+#define CALC_MD5SUMS true
+</MACRO>
+<FUNCTION>
+<NAME>panic</NAME>
+<RETURNS>void  </RETURNS>
+const char * fmt, ... 
+</FUNCTION>
+<FUNCTION>
+<NAME>glyr_message</NAME>
+<RETURNS>int  </RETURNS>
+int v, GlyrQuery * s, const char * fmt, ... 
+</FUNCTION>
+<USER_FUNCTION>
+<NAME>validate</NAME>
+<RETURNS>bool </RETURNS>
+GlyrQuery *
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>init</NAME>
+<RETURNS>void </RETURNS>
+void
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>destroy</NAME>
+<RETURNS>void </RETURNS>
+void
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>finalize</NAME>
+<RETURNS>GList *</RETURNS>
+GlyrQuery*,GList*,gboolean*
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>parser</NAME>
+<RETURNS>GList *</RETURNS>
+struct cb_object *
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>get_url</NAME>
+<RETURNS>const char *</RETURNS>
+GlyrQuery *
+</USER_FUNCTION>
+<USER_FUNCTION>
+<NAME>AsyncDLCB</NAME>
+<RETURNS>GList *</RETURNS>
+cb_object*,void *,bool*,gint*
+</USER_FUNCTION>
+<FUNCTION>
+<NAME>start_engine</NAME>
+<RETURNS>GList  * </RETURNS>
+GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err 
+</FUNCTION>
+<FUNCTION>
+<NAME>async_download</NAME>
+<RETURNS>GList  * </RETURNS>
+GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr, gboolean free_caches 
+</FUNCTION>
+<FUNCTION>
+<NAME>download_single</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+const char* url, GlyrQuery * s, const char * end 
+</FUNCTION>
+<FUNCTION>
+<NAME>DL_init</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>DL_free</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache *cache 
+</FUNCTION>
+<FUNCTION>
+<NAME>update_md5sum</NAME>
+<RETURNS>void  </RETURNS>
+GlyrMemCache * c 
+</FUNCTION>
+<FUNCTION>
+<NAME>glist_free_full</NAME>
+<RETURNS>void  </RETURNS>
+GList * List, void (* free_func)(void * ptr) 
+</FUNCTION>
+<FUNCTION>
+<NAME>continue_search</NAME>
+<RETURNS>gboolean  </RETURNS>
+gint current, GlyrQuery * s 
+</FUNCTION>
+<FUNCTION>
+<NAME>is_blacklisted</NAME>
+<RETURNS>gboolean  </RETURNS>
+gchar * URL 
+</FUNCTION>
+<FUNCTION>
+<NAME>blacklist_build</NAME>
+<RETURNS>void  </RETURNS>
+void 
+</FUNCTION>
+<FUNCTION>
+<NAME>blacklist_destroy</NAME>
+<RETURNS>void  </RETURNS>
+void 
+</FUNCTION>
+<MACRO>
+<NAME>glyr_VERSION_MAJOR</NAME>
+#define glyr_VERSION_MAJOR "0"
+</MACRO>
+<MACRO>
+<NAME>glyr_VERSION_MINOR</NAME>
+#define glyr_VERSION_MINOR "8.4"
+</MACRO>
+<MACRO>
+<NAME>glyr_VERSION_NAME</NAME>
+#define glyr_VERSION_NAME  "Horny Hornet [dev]"
+</MACRO>
+<MACRO>
+<NAME>glyr_USE_COLOR</NAME>
+#define glyr_USE_COLOR     true
+</MACRO>
+<MACRO>
+<NAME>glyr_DEBUG</NAME>
+#define glyr_DEBUG         true
+</MACRO>
+<MACRO>
+<NAME>API_KEY_DISCOGS</NAME>
+#define API_KEY_DISCOGS "adff651383"
+</MACRO>
+<MACRO>
+<NAME>API_KEY_AMAZON</NAME>
+#define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"
+</MACRO>
+<MACRO>
+<NAME>API_KEY_LASTFM</NAME>
+#define API_KEY_LASTFM  "7199021d9c8fbae507bf77d0a88533d7"
+</MACRO>
+<MACRO>
+<NAME>API_KEY_FLICKR</NAME>
+#define API_KEY_FLICKR  "b5af0c3230fb478d53b20835223d57a4"
+</MACRO>
+<MACRO>
+<NAME>API_KEY_GTRANS</NAME>
+#define API_KEY_GTRANS  "AIzaSyDzfBNb-W5G9pvZY6KGbEoRK4JvOIhUsjI"
+</MACRO>
+<FUNCTION>
+<NAME>generic_amazon_url</NAME>
+<RETURNS>const gchar  * </RETURNS>
+GlyrQuery * sets, const gchar * response_group 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_google_url</NAME>
+<RETURNS>const gchar  * </RETURNS>
+GlyrQuery * sets, const gchar * searchterm 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_google_parse</NAME>
+<RETURNS>GList  * </RETURNS>
+cb_object * capo 
+</FUNCTION>
+<FUNCTION>
+<NAME>size_is_okay</NAME>
+<RETURNS>gboolean  </RETURNS>
+int sZ, int min, int max 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_musicbrainz_parse</NAME>
+<RETURNS>GlyrMemCache  * </RETURNS>
+cb_object * capo, gint * last_mbid, const gchar * include 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_musicbrainz_url</NAME>
+<RETURNS>const gchar  * </RETURNS>
+GlyrQuery * sets 
+</FUNCTION>
+<FUNCTION>
+<NAME>please_what_type</NAME>
+<RETURNS>gint  </RETURNS>
+GlyrQuery * s 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_txt_finalizer</NAME>
+<RETURNS>GList  * </RETURNS>
+GlyrQuery * s, GList * list, gboolean * stop_me, GLYR_DATA_TYPE type 
+</FUNCTION>
+<FUNCTION>
+<NAME>generic_img_finalizer</NAME>
+<RETURNS>GList  * </RETURNS>
+GlyrQuery * s, GList * list, gboolean * stop_me, GLYR_DATA_TYPE type 
+</FUNCTION>

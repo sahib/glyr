@@ -1,0 +1,938 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<refentry id="test-glyr">
+<refmeta>
+<refentrytitle role="top_of_page" id="test-glyr.top_of_page">glyr</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  TEST Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>glyr</refname>
+<refpurpose></refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="test-glyr.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis><link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-init">glyr_init</link>                           (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-cleanup">glyr_cleanup</link>                        (<parameter><type>void</type></parameter>);
+<link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      <link linkend="glyr-get">glyr_get</link>                            (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *settings</parameter>,
+                                                         <parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> *error</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> *length</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-init-query">glyr_init_query</link>                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-destroy-query">glyr_destroy_query</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-free-list">glyr_free_list</link>                      (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *head</parameter>);
+<link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      <link linkend="glyr-new-cache">glyr_new_cache</link>                      (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-free-cache">glyr_free_cache</link>                     (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-dlcallback">glyr_opt_dlcallback</link>                 (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *settings</parameter>,
+                                                         <parameter><link linkend="DL-callback"><type>DL_callback</type></link> dl_cb</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *userp</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-type">glyr_opt_type</link>                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="GLYR-GET-TYPE:CAPS"><type>GLYR_GET_TYPE</type></link> type</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-artist">glyr_opt_artist</link>                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *artist</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-album">glyr_opt_album</link>                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *album</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-title">glyr_opt_title</link>                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *title</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-img-minsize">glyr_opt_img_minsize</link>                (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> size</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-img-maxsize">glyr_opt_img_maxsize</link>                (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> size</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-parallel">glyr_opt_parallel</link>                   (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> parallel_jobs</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-timeout">glyr_opt_timeout</link>                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> timeout</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-redirects">glyr_opt_redirects</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> redirects</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-useragent">glyr_opt_useragent</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *useragent</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-lang">glyr_opt_lang</link>                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *langcode</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-number">glyr_opt_number</link>                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>unsigned <link linkend="int"><type>int</type></link> num</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-verbosity">glyr_opt_verbosity</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>unsigned <link linkend="int"><type>int</type></link> level</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-from">glyr_opt_from</link>                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *from</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-plugmax">glyr_opt_plugmax</link>                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> plugmax</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-allowed-formats">glyr_opt_allowed_formats</link>            (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *formats</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-download">glyr_opt_download</link>                   (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> download</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-fuzzyness">glyr_opt_fuzzyness</link>                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> fuzz</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-qsratio">glyr_opt_qsratio</link>                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="float"><type>float</type></link> ratio</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-proxy">glyr_opt_proxy</link>                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *proxystring</parameter>);
+<link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          <link linkend="glyr-opt-force-utf8">glyr_opt_force_utf8</link>                 (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> force_utf8</parameter>);
+<link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      <link linkend="glyr-download">glyr_download</link>                       (<parameter>const <link linkend="char"><type>char</type></link> *url</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>);
+const <link linkend="char"><returnvalue>char</returnvalue></link> *        <link linkend="glyr-strerror">glyr_strerror</link>                       (<parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> ID</parameter>);
+const <link linkend="char"><returnvalue>char</returnvalue></link> *        <link linkend="glyr-version">glyr_version</link>                        (<parameter><type>void</type></parameter>);
+<link linkend="int"><returnvalue>int</returnvalue></link>                 <link linkend="glyr-write">glyr_write</link>                          (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *path</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-update-md5sum">glyr_update_md5sum</link>                  (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-printitem">glyr_printitem</link>                      (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);
+<link linkend="GlyrFetcherInfo"><returnvalue>GlyrFetcherInfo</returnvalue></link> *   <link linkend="glyr-get-plugin-info">glyr_get_plugin_info</link>                (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="glyr-free-plugin-info">glyr_free_plugin_info</link>               (<parameter><link linkend="GlyrFetcherInfo"><type>GlyrFetcherInfo</type></link> *info</parameter>);
+const <link linkend="char"><returnvalue>char</returnvalue></link> *        <link linkend="glyr-type-to-string">glyr_type_to_string</link>                 (<parameter><link linkend="GLYR-DATA-TYPE:CAPS"><type>GLYR_DATA_TYPE</type></link> type</parameter>);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="test-glyr.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+</para>
+</refsect1>
+<refsect1 id="test-glyr.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="glyr-init" role="function">
+<title>glyr_init ()</title>
+<indexterm zone="glyr-init"><primary>glyr_init</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_init                           (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+Init the library, this has to be called before any other calls from this library are made.
+</para>
+<para>
+You should call <link linkend="glyr-cleanup"><function>glyr_cleanup()</function></link> once for every call of <link linkend="glyr-init"><function>glyr_init()</function></link>
+<note>
+<para>
+This function is not threadsafe.
+</para>
+</note>
+</para></refsect2>
+<refsect2 id="glyr-cleanup" role="function">
+<title>glyr_cleanup ()</title>
+<indexterm zone="glyr-cleanup"><primary>glyr_cleanup</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_cleanup                        (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+Cleanup all parts of the library, you can use <function><link linkend="atexit"><function>atexit()</function></link></function>:
+</para>
+<para>
+<informalexample>
+<programlisting>
+gtk_init();
+atexit(gkt_destroy);
+</programlisting>
+</informalexample>
+</para>
+<para>
+<note>
+<para>
+This function is not threadsafe.
+</para>
+</note>
+</para></refsect2>
+<refsect2 id="glyr-get" role="function">
+<title>glyr_get ()</title>
+<indexterm zone="glyr-get"><primary>glyr_get</primary></indexterm>
+<programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      glyr_get                            (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *settings</parameter>,
+                                                         <parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> *error</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> *length</parameter>);</programlisting>
+<para>
+<parameter>settings</parameter> is pointer to a <link linkend="GlyrQuery"><type>GlyrQuery</type></link> struct filled to your needs via the glyr_opt_* methods,
+</para>
+<para>
+Once an item is found the callback (set via <link linkend="glyr-opt-dlcallback"><function>glyr_opt_dlcallback()</function></link>) is called anytime a item is ready
+</para><variablelist role="params">
+<varlistentry><term><parameter>settings</parameter>&#160;:</term>
+<listitem><simpara>The setting struct controlling glyr. (See the glyr_opt_* methods)</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>error</parameter>&#160;:</term>
+<listitem><simpara>An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success, or <link linkend="NULL:CAPS"><literal>NULL</literal></link></simpara></listitem></varlistentry>
+<varlistentry><term><parameter>length</parameter>&#160;:</term>
+<listitem><simpara>length An optional pointer storing the length of the returned list, or <link linkend="NULL:CAPS"><literal>NULL</literal></link></simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>: a doubly linked list of <link linkend="GlyrMemCache"><type>GlyrMemCache</type></link>, which should be freed by passing any element of the to <link linkend="glyr-free-list"><function>glyr_free_list()</function></link></simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-init-query" role="function">
+<title>glyr_init_query ()</title>
+<indexterm zone="glyr-init-query"><primary>glyr_init_query</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_init_query                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>);</programlisting>
+<para>
+This functions may allocate dynamic memory. It should be freed with <link linkend="glyr-init-query"><function>glyr_init_query()</function></link> after use.
+</para><variablelist role="params">
+<varlistentry><term><parameter>query</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery to initialize to defaultsettings.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-destroy-query" role="function">
+<title>glyr_destroy_query ()</title>
+<indexterm zone="glyr-destroy-query"><primary>glyr_destroy_query</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_destroy_query                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>);</programlisting>
+<para>
+Deletes all modifications and frees dynamic memory. It can be reused, as fresh from <link linkend="glyr-init-query"><function>glyr_init_query()</function></link>
+</para><variablelist role="params">
+<varlistentry><term><parameter>query</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery to destroy.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-free-list" role="function">
+<title>glyr_free_list ()</title>
+<indexterm zone="glyr-free-list"><primary>glyr_free_list</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_free_list                      (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *head</parameter>);</programlisting>
+<para>
+Deletes all dynamic memory by calling <link linkend="glyr-free-cache"><function>glyr_free_cache()</function></link> on each cache.
+</para><variablelist role="params">
+<varlistentry><term><parameter>head</parameter>&#160;:</term>
+<listitem><simpara>The head of the doubly linked list that should be freed.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-new-cache" role="function">
+<title>glyr_new_cache ()</title>
+<indexterm zone="glyr-new-cache"><primary>glyr_new_cache</primary></indexterm>
+<programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      glyr_new_cache                      (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+Initializes a new memcache.
+</para>
+<para>
+Normally you never need to do this.
+</para>
+<para>
+Don't forget to free the cache with <link linkend="glyr-free-cache"><function>glyr_free_cache()</function></link>
+</para><variablelist role="params">
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>: A newly allocated and initialized memcache with no data.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-free-cache" role="function">
+<title>glyr_free_cache ()</title>
+<indexterm zone="glyr-free-cache"><primary>glyr_free_cache</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_free_cache                     (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);</programlisting>
+<variablelist role="params">
+<varlistentry><term><parameter>cache</parameter>&#160;:</term>
+<listitem><simpara>Frees the (valid allocated) cache pointed to by <parameter>cache</parameter></simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-dlcallback" role="function">
+<title>glyr_opt_dlcallback ()</title>
+<indexterm zone="glyr-opt-dlcallback"><primary>glyr_opt_dlcallback</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_dlcallback                 (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *settings</parameter>,
+                                                         <parameter><link linkend="DL-callback"><type>DL_callback</type></link> dl_cb</parameter>,
+                                                         <parameter><link linkend="void"><type>void</type></link> *userp</parameter>);</programlisting>
+<para>
+The callback should have the following form:
+<informalexample>
+<programlisting>
+GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
+</programlisting>
+</informalexample>
+</para>
+<para>
+Note that you can return certaing members of GLYR_ERROR in the callback:
+</para>
+<para>
+<link linkend="GLYRE-SKIP:CAPS"><literal>GLYRE_SKIP</literal></link>: To not add this item to the results.
+</para>
+<para>
+<link linkend="GLYRE-OK:CAPS"><literal>GLYRE_OK</literal></link>: To add this item to the results and continue happily.
+</para>
+<para>
+<link linkend="GLYRE-STOP-POST:CAPS"><literal>GLYRE_STOP_POST</literal></link>: To stop right now and return the results. The current element will be added.
+</para>
+<para>
+<link linkend="GLYRE-STOP-PRE:CAPS"><literal>GLYRE_STOP_PRE</literal></link>: To stop right now and return the results. The current element will NOT be added.
+</para><variablelist role="params">
+<varlistentry><term><parameter>settings</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>dl_cb</parameter>&#160;:</term>
+<listitem><simpara>The callback to register, must have a prototype like this.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>userp</parameter>&#160;:</term>
+<listitem><simpara>A pointer to a custom variable you can access inside the callback via <structfield>s->callback.user_pointer</structfield></simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-type" role="function">
+<title>glyr_opt_type ()</title>
+<indexterm zone="glyr-opt-type"><primary>glyr_opt_type</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_type                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="GLYR-GET-TYPE:CAPS"><type>GLYR_GET_TYPE</type></link> type</parameter>);</programlisting>
+<para>
+Example: <link linkend="GLYR-GET-COVERART:CAPS"><literal>GLYR_GET_COVERART</literal></link>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>type</parameter>&#160;:</term>
+<listitem><simpara>The type of metadata you want to get.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-artist" role="function">
+<title>glyr_opt_artist ()</title>
+<indexterm zone="glyr-opt-artist"><primary>glyr_opt_artist</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_artist                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *artist</parameter>);</programlisting>
+<para>
+This is needed for all types of metadata.
+Libglyr keeps a copy of this string internally.  
+</para>
+<para>
+<note>
+<para>
+libglyr applies some basic normalization, like " artistX feat. artistY" -> "artistX"
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>artist</parameter>&#160;:</term>
+<listitem><simpara>The artist you want to search for, <link linkend="NULL:CAPS"><literal>NULL</literal></link> and "" is not valid.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-album" role="function">
+<title>glyr_opt_album ()</title>
+<indexterm zone="glyr-opt-album"><primary>glyr_opt_album</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_album                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *album</parameter>);</programlisting>
+<para>
+This field is required for the following types:
+<itemizedlist>
+<listitem>
+<para>
+<link linkend="GLYR-GET-COVERART:CAPS"><literal>GLYR_GET_COVERART</literal></link>
+</para>
+</listitem>
+<listitem>
+<para>
+<link linkend="GLYR-GET-ALBUM-REVIEW:CAPS"><literal>GLYR_GET_ALBUM_REVIEW</literal></link>
+</para>
+</listitem>
+<listitem>
+<para>
+<link linkend="GLYR-GET-TRACKLIST:CAPS"><literal>GLYR_GET_TRACKLIST</literal></link>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+Optional for the following types:
+<itemizedlist>
+<listitem>
+<para>
+<link linkend="GLYR-GET-RELATIONS:CAPS"><literal>GLYR_GET_RELATIONS</literal></link>
+</para>
+</listitem>
+<listitem>
+<para>
+<link linkend="GLYR-GET-TAGS:CAPS"><literal>GLYR_GET_TAGS</literal></link>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+Libglyr keeps a copy of this string internally.
+</para>
+<para>
+<note>
+<para>
+libglyr applies some basic normalization, like " CoOl_album CD01 (20.7)" -> "cool_album"
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>album</parameter>&#160;:</term>
+<listitem><simpara>The album you want to search for, <link linkend="NULL:CAPS"><literal>NULL</literal></link> and "" is not valid.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-title" role="function">
+<title>glyr_opt_title ()</title>
+<indexterm zone="glyr-opt-title"><primary>glyr_opt_title</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_title                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *title</parameter>);</programlisting>
+<para>
+This field is required for the following types:
+<itemizedlist>
+<listitem>
+<para>
+<link linkend="GLYR-GET-LYRICS:CAPS"><literal>GLYR_GET_LYRICS</literal></link>
+</para>
+</listitem>
+<listitem>
+<para>
+<link linkend="GLYR-GET-SIMILIAR-SONGS:CAPS"><literal>GLYR_GET_SIMILIAR_SONGS</literal></link>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+Optional for the following types:
+<itemizedlist>
+<listitem>
+<para>
+<link linkend="GLYR-GET-RELATIONS:CAPS"><literal>GLYR_GET_RELATIONS</literal></link>
+</para>
+</listitem>
+<listitem>
+<para>
+<link linkend="GLYR-GET-TAGS:CAPS"><literal>GLYR_GET_TAGS</literal></link>
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+Libglyr keeps a copy of this string internally.
+</para>
+<para>
+<note>
+<para>
+libglyr applies some basic normalization, like "Songtitle (blahblah remix)" -> "Songtitle"
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>title</parameter>&#160;:</term>
+<listitem><simpara>The album you want to search for, <link linkend="NULL:CAPS"><literal>NULL</literal></link> and "" is not valid.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-img-minsize" role="function">
+<title>glyr_opt_img_minsize ()</title>
+<indexterm zone="glyr-opt-img-minsize"><primary>glyr_opt_img_minsize</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_img_minsize                (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> size</parameter>);</programlisting>
+<para>
+<note>
+<para>
+This is only taken as a hint, returned images are not necessarily higher than this size, but should be around it.
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>size</parameter>&#160;:</term>
+<listitem><simpara>The minimum size in pixels an image may have, assuming it to be quadratic</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-img-maxsize" role="function">
+<title>glyr_opt_img_maxsize ()</title>
+<indexterm zone="glyr-opt-img-maxsize"><primary>glyr_opt_img_maxsize</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_img_maxsize                (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> size</parameter>);</programlisting>
+<para>
+<note>
+<para>
+This is only taken as a hint, returned images are not necessarily below this size, but should be around it.
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>size</parameter>&#160;:</term>
+<listitem><simpara>The maxmimum size in pixels an image may have, assuming it to be quadratic</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-parallel" role="function">
+<title>glyr_opt_parallel ()</title>
+<indexterm zone="glyr-opt-parallel"><primary>glyr_opt_parallel</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_parallel                   (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> parallel_jobs</parameter>);</programlisting>
+<para>
+A value of 0 lets libglyr chooses this value itself. This is the default.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>parallel_jobs</parameter>&#160;:</term>
+<listitem><simpara>The number of providers that are queried in parallel.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-timeout" role="function">
+<title>glyr_opt_timeout ()</title>
+<indexterm zone="glyr-opt-timeout"><primary>glyr_opt_timeout</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_timeout                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> timeout</parameter>);</programlisting>
+<para>
+Default is 20 seconds
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>timeout</parameter>&#160;:</term>
+<listitem><simpara>Maximum number of seconds to wait before canceling a download.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-redirects" role="function">
+<title>glyr_opt_redirects ()</title>
+<indexterm zone="glyr-opt-redirects"><primary>glyr_opt_redirects</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_redirects                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><type>unsigned long </type> redirects</parameter>);</programlisting>
+<para>
+A value of 0 is allowed but may break some plugins.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>redirects</parameter>&#160;:</term>
+<listitem><simpara>Maximum number of redirects before canceling a download.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-useragent" role="function">
+<title>glyr_opt_useragent ()</title>
+<indexterm zone="glyr-opt-useragent"><primary>glyr_opt_useragent</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_useragent                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *useragent</parameter>);</programlisting>
+<para>
+Some providers require an valid useragent, an empty string might break these therefore.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>useragent</parameter>&#160;:</term>
+<listitem><simpara>A string that is used as useragent in HTTP requests.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-lang" role="function">
+<title>glyr_opt_lang ()</title>
+<indexterm zone="glyr-opt-lang"><primary>glyr_opt_lang</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_lang                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="char"><type>char</type></link> *langcode</parameter>);</programlisting>
+<para>
+Some providers offer localized content, or content only being available in certain countries.
+Examples are: last.fm, amazon and google.
+The language is given in ISO 639-1 codes like 'de' or 'en'.
+Alternatively you can set it to 'auto', which will cause libglyr to guess your language by your locale. 
+"auto" is the default behavior.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>langcode</parameter>&#160;:</term>
+<listitem><simpara>An ISO 639-1 language code.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-number" role="function">
+<title>glyr_opt_number ()</title>
+<indexterm zone="glyr-opt-number"><primary>glyr_opt_number</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_number                     (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>unsigned <link linkend="int"><type>int</type></link> num</parameter>);</programlisting>
+<para>
+The maximum number of items to get in a <link linkend="glyr-get"><function>glyr_get()</function></link>, resulting number of items may be below <parameter>num</parameter> but not higher.
+A value of 0 causes libglyr to search till infinity.
+Default is 1.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>num</parameter>&#160;:</term>
+<listitem><simpara>Maximum number of items to get or 0</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-verbosity" role="function">
+<title>glyr_opt_verbosity ()</title>
+<indexterm zone="glyr-opt-verbosity"><primary>glyr_opt_verbosity</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_verbosity                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>unsigned <link linkend="int"><type>int</type></link> level</parameter>);</programlisting>
+<para>
+The verbosity level that is used by libglyr:
+<itemizedlist>
+<listitem>
+<para>
+0: No output, but fatal errors.
+</para>
+</listitem>
+<listitem>
+<para>
+1: Basic warnings.
+</para>
+</listitem>
+<listitem>
+<para>
+2: Normal informal output
+</para>
+</listitem>
+<listitem>
+<para>
+3: Basic debug output
+</para>
+</listitem>
+<listitem>
+<para>
+4: Full debug output
+</para>
+</listitem>
+</itemizedlist>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>level</parameter>&#160;:</term>
+<listitem><simpara>Define how verbose the library is.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-from" role="function">
+<title>glyr_opt_from ()</title>
+<indexterm zone="glyr-opt-from"><primary>glyr_opt_from</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_from                       (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *from</parameter>);</programlisting>
+<para>
+Tell libglyr where you want your metadata want from.
+You can get a full list of providers for each getter by running <parameter>glyrc</parameter> @-L
+The string you can pass here looks like this example for _cover_:
+<informalexample>
+<programlisting>
+"lastfm;google"
+</programlisting>
+</informalexample>
+</para>
+<para>
+This would query to everybody's surprise"lastfm" and "google"
+Alternatively you may use the string "all" in it:
+<informalexample>
+<programlisting>
+"all;-lastfm;"
+</programlisting>
+</informalexample>
+</para>
+<para>
+All providers except "lastfm" (therefore the '-') are used, a '+' is also allowed, which does plain nothing.
+By default all built-in providers are used.
+You can access the providernames by calling <link linkend="glyr-get-plugin-info"><function>glyr_get_plugin_info()</function></link>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>from</parameter>&#160;:</term>
+<listitem><simpara>A comma separated list of provider names.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-plugmax" role="function">
+<title>glyr_opt_plugmax ()</title>
+<indexterm zone="glyr-opt-plugmax"><primary>glyr_opt_plugmax</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_plugmax                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> plugmax</parameter>);</programlisting>
+<para>
+Restricts providers to retrieve at max. <parameter>plugmax</parameter> items, you might use this to get results
+over several providers when <link linkend="glyr-opt-number"><function>glyr_opt_number()</function></link> is set to something higher than 1.
+</para>
+<para>
+May be removed in future releases.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>plugmax</parameter>&#160;:</term>
+<listitem><simpara>Maximum number of items a single provider may retrieve.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-allowed-formats" role="function">
+<title>glyr_opt_allowed_formats ()</title>
+<indexterm zone="glyr-opt-allowed-formats"><primary>glyr_opt_allowed_formats</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_allowed_formats            (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *formats</parameter>);</programlisting>
+<para>
+Restricts providers to retrieve at max. <parameter>plugmax</parameter> items, you might use this to get results
+over several providers when <link linkend="glyr-opt-number"><function>glyr_opt_number()</function></link> is set to something higher than 1.
+</para>
+<para>
+For the getters GLYR_GET_COVERART and GLYR_GET_ARTIST_PHOTOS only.
+The allowed formats for images, in a comma separated list.
+Examples:
+<itemizedlist>
+<listitem>
+<para>
+"png;jpeg"
+</para>
+</listitem>
+<listitem>
+<para>
+"png;jpeg;tiff;jpg;" (default) 
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+<note>
+<para>
+'jpeg' *and* 'jpg' because some websites return strange mimetypes (should be 'jpeg' only)
+</para>
+</note>
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>formats</parameter>&#160;:</term>
+<listitem><simpara>A commaseperated list of allowed formats.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-download" role="function">
+<title>glyr_opt_download ()</title>
+<indexterm zone="glyr-opt-download"><primary>glyr_opt_download</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_download                   (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> download</parameter>);</programlisting>
+<para>
+Imageproviders only return URLs, by default libglyr downloads these and
+gives you the cache. By settings <link linkend="glyr-opt-download"><function>glyr_opt_download()</function></link> to <link linkend="FALSE:CAPS"><type>FALSE</type></link> you tell
+libglyr that you want only the URLs (in a searchengine like fashion)
+</para>
+<para>
+An check for valid images is done however.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>download</parameter>&#160;:</term>
+<listitem><simpara>Wether to downlaod images or just to return the found URL.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-fuzzyness" role="function">
+<title>glyr_opt_fuzzyness ()</title>
+<indexterm zone="glyr-opt-fuzzyness"><primary>glyr_opt_fuzzyness</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_fuzzyness                  (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="int"><type>int</type></link> fuzz</parameter>);</programlisting>
+<para>
+libglyr features fuzzy matching to enhance search results.
+Look at the string "Equilibrium" and the accidentally mistyped version "Aquillibriu":
+Those strings will be compares using the "Levenshtein distance" (http://en.wikipedia.org/wiki/Levenshtein_distance) which basically counts
+the number of insert, substitute and delete operations to transform Equilibrium"" into "Aquillibriu".
+The distance in this case is 3 since three edit-operations are needed (one insert, substitute and deletion)
+</para>
+<para>
+The fuzziness parameter is the maximum distance two strings may have to match.
+A high distance (like about 10) matches even badly mistyped strings, but also introduces bad results.
+Low settings however will omit some good results.
+</para>
+<para>
+The default values is currently 4.
+To be more secure some correction is applied:
+</para>
+<para>
+Examples:
+<itemizedlist>
+<listitem>
+<para>
+artist:Adele - album:19 
+</para>
+</listitem>
+<listitem>
+<para>
+artist:Adele - album:21 
+</para>
+</listitem>
+<listitem>
+<para>
+lv-distance = 2 which is &lt;= 4
+</para>
+</listitem>
+<listitem>
+<para>
+But since the lv-distance is the same as the length "21" it won't match.
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+The easiest way to prevent this though, is to properly tag your music. (http://musicbrainz.org/doc/MusicBrainz_Picard).
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>fuzz</parameter>&#160;:</term>
+<listitem><simpara>Maximal Levenshtein-distance tolerance may have, see below.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-qsratio" role="function">
+<title>glyr_opt_qsratio ()</title>
+<indexterm zone="glyr-opt-qsratio"><primary>glyr_opt_qsratio</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_qsratio                    (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="float"><type>float</type></link> ratio</parameter>);</programlisting>
+<para>
+0.00 means highest speed, querying fast providers first.
+1.00 Takes possibly longer, but should deliver best results.
+0.85 is the current default value.
+</para>
+<para>
+All other values, smaller 0.0, greater 1.0 are clamped to [0.0..1.0]
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>ratio</parameter>&#160;:</term>
+<listitem><simpara>A float, in the range [0.0..1.0] specifying the ratio between quality and speed.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-proxy" role="function">
+<title>glyr_opt_proxy ()</title>
+<indexterm zone="glyr-opt-proxy"><primary>glyr_opt_proxy</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_proxy                      (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *proxystring</parameter>);</programlisting>
+<para>
+The proxy to use, if any.
+It is passed in the form: [protocol://][user:pass@]yourproxy.domain[:port]
+Example:
+<itemizedlist>
+<listitem>
+<para>
+Proxy.fh-hof.de:3128
+</para>
+</listitem>
+<listitem>
+<para>
+http://hman:rootroot<parameter>godserve.com</parameter>:666
+</para>
+</listitem>
+</itemizedlist>
+</para>
+<para>
+The environment variables http_proxy, ftp_proxy, all_proxy are respected, but are overwritten by this.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>proxystring</parameter>&#160;:</term>
+<listitem><simpara>The proxy to use, see below for the notation.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-opt-force-utf8" role="function">
+<title>glyr_opt_force_utf8 ()</title>
+<indexterm zone="glyr-opt-force-utf8"><primary>glyr_opt_force_utf8</primary></indexterm>
+<programlisting><link linkend="GLYR-ERROR:CAPS"><returnvalue>GLYR_ERROR</returnvalue></link>          glyr_opt_force_utf8                 (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>,
+                                                         <parameter><link linkend="bool"><type>bool</type></link> force_utf8</parameter>);</programlisting>
+<para>
+For textitems only.
+Some _providers_ (like_metrolyrics_) might return text with strange encodings,
+that can not be converted to regular UTF8, but might return a subset of UTF8.
+This options forces <parameter>libglyr</parameter>@ to prohibit those.
+</para><variablelist role="params">
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>The GlyrQuery settings struct to store this option in.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>force_utf8</parameter>&#160;:</term>
+<listitem><simpara>To force, or not to force.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>an error ID</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-download" role="function">
+<title>glyr_download ()</title>
+<indexterm zone="glyr-download"><primary>glyr_download</primary></indexterm>
+<programlisting><link linkend="GlyrMemCache"><returnvalue>GlyrMemCache</returnvalue></link> *      glyr_download                       (<parameter>const <link linkend="char"><type>char</type></link> *url</parameter>,
+                                                         <parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *s</parameter>);</programlisting>
+<para>
+Downloads the data pointed to by <parameter>url</parameter> and caches in it a GlyrMemCache, which is returned to you. 
+Use <link linkend="glyr-free-cache"><function>glyr_free_cache()</function></link> to free it after use.
+</para><variablelist role="params">
+<varlistentry><term><parameter>url</parameter>&#160;:</term>
+<listitem><simpara>A valid url, for example returned by libglyr</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>s</parameter>&#160;:</term>
+<listitem><simpara>A settings struct managing timeout, useragent and redirects.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>A GlyrMemCache containing the data, or <link linkend="NULL:CAPS"><literal>NULL</literal></link> on failure, use verbose output to find out why.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-strerror" role="function">
+<title>glyr_strerror ()</title>
+<indexterm zone="glyr-strerror"><primary>glyr_strerror</primary></indexterm>
+<programlisting>const <link linkend="char"><returnvalue>char</returnvalue></link> *        glyr_strerror                       (<parameter><link linkend="GLYR-ERROR:CAPS"><type>GLYR_ERROR</type></link> ID</parameter>);</programlisting>
+<para>
+Gets a descriptive message from an error ID.
+</para><variablelist role="params">
+<varlistentry><term><parameter>ID</parameter>&#160;:</term>
+<listitem><simpara>a member of the GLYR_ERROR enum.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>a descriptive nullterminated string, do <emphasis>NOT</emphasis> pass to free</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-version" role="function">
+<title>glyr_version ()</title>
+<indexterm zone="glyr-version"><primary>glyr_version</primary></indexterm>
+<programlisting>const <link linkend="char"><returnvalue>char</returnvalue></link> *        glyr_version                        (<parameter><type>void</type></parameter>);</programlisting>
+<variablelist role="params">
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>the current version string. Example below.
+Version 0.4 (Larcenous Locust [dev]) of [May 20 2011] compiled at [19:12:37]
+Retunrs a nullterminated string, do <emphasis>NOT</emphasis> pass it to free!</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-write" role="function">
+<title>glyr_write ()</title>
+<indexterm zone="glyr-write"><primary>glyr_write</primary></indexterm>
+<programlisting><link linkend="int"><returnvalue>int</returnvalue></link>                 glyr_write                          (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>,
+                                                         <parameter>const <link linkend="char"><type>char</type></link> *path</parameter>);</programlisting>
+<para>
+Write <parameter>cache</parameter> to the path specified by <parameter>path</parameter>.
+</para>
+<para>
+There are three special files:
+<itemizedlist>
+<listitem>
+<para>
+"stdout" -> Outputs file to stdout
+</para>
+</listitem>
+<listitem>
+<para>
+"stderr" -> Outputs file to stderr
+</para>
+</listitem>
+<listitem>
+<para>
+"null"   -> Outputs item nowhere
+</para>
+</listitem>
+</itemizedlist>
+</para><variablelist role="params">
+<varlistentry><term><parameter>cache</parameter>&#160;:</term>
+<listitem><simpara>The data to write.</simpara></listitem></varlistentry>
+<varlistentry><term><parameter>path</parameter>&#160;:</term>
+<listitem><simpara>The path to write data at.</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>the number of written bytes.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-update-md5sum" role="function">
+<title>glyr_update_md5sum ()</title>
+<indexterm zone="glyr-update-md5sum"><primary>glyr_update_md5sum</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_update_md5sum                  (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);</programlisting>
+<para>
+Updates the md5sum field of <parameter>cache</parameter>.
+</para><variablelist role="params">
+<varlistentry><term><parameter>cache</parameter>&#160;:</term>
+<listitem><simpara>a valid memcahe</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-printitem" role="function">
+<title>glyr_printitem ()</title>
+<indexterm zone="glyr-printitem"><primary>glyr_printitem</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_printitem                      (<parameter><link linkend="GlyrMemCache"><type>GlyrMemCache</type></link> *cache</parameter>);</programlisting>
+<para>
+A debug method to print all fields of <parameter>cache</parameter>.
+</para><variablelist role="params">
+<varlistentry><term><parameter>cache</parameter>&#160;:</term>
+<listitem><simpara>The GlyrMemCache to be printed.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-get-plugin-info" role="function">
+<title>glyr_get_plugin_info ()</title>
+<indexterm zone="glyr-get-plugin-info"><primary>glyr_get_plugin_info</primary></indexterm>
+<programlisting><link linkend="GlyrFetcherInfo"><returnvalue>GlyrFetcherInfo</returnvalue></link> *   glyr_get_plugin_info                (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+get information about existing Fetcher and Source
+A Doubly linked list of Fetcher is returned, each having a field 'head',
+being a pointer to a doubly linked list of GlyrSourceInfos
+</para>
+<para>
+It is best understood by an example:
+<example>
+<title>Using GlyrFetcherInfo:</title>
+<programlisting>
+static void visualize_from_options(void)
+{
+    GlyrFetcherInfo * info = glyr_get_plugin_info();
+    if(info != NULL)
+    {
+        for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
+        {
+            printf("%s\n",elem0->name);
+            for(GlyrSourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
+            {
+                printf("  [%c] %s\n",elem1->key,elem1->name);
+            }
+            printf("\n");
+        }
+   }
+   glyr_free_plugin_info(info);
+}
+</programlisting>
+</example>
+</para><variablelist role="params">
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>A newly allocated GlyrFetcherInfo structure, you can iterate over.</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-free-plugin-info" role="function">
+<title>glyr_free_plugin_info ()</title>
+<indexterm zone="glyr-free-plugin-info"><primary>glyr_free_plugin_info</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                glyr_free_plugin_info               (<parameter><link linkend="GlyrFetcherInfo"><type>GlyrFetcherInfo</type></link> *info</parameter>);</programlisting>
+<para>
+Free the return value of <link linkend="glyr-get-plugin-info"><function>glyr_get_plugin_info()</function></link> pointed to by <parameter>info</parameter>
+</para><variablelist role="params">
+<varlistentry><term><parameter>info</parameter>&#160;:</term>
+<listitem><simpara>The return value of <link linkend="glyr-get-plugin-info"><function>glyr_get_plugin_info()</function></link></simpara></listitem></varlistentry>
+</variablelist></refsect2>
+<refsect2 id="glyr-type-to-string" role="function">
+<title>glyr_type_to_string ()</title>
+<indexterm zone="glyr-type-to-string"><primary>glyr_type_to_string</primary></indexterm>
+<programlisting>const <link linkend="char"><returnvalue>char</returnvalue></link> *        glyr_type_to_string                 (<parameter><link linkend="GLYR-DATA-TYPE:CAPS"><type>GLYR_DATA_TYPE</type></link> type</parameter>);</programlisting>
+<para>
+Converts a type to a string.
+</para><variablelist role="params">
+<varlistentry><term><parameter>type</parameter>&#160;:</term>
+<listitem><simpara>a member of the GLYR_DATA_TYPE enum, GLYR_TYPE_COVER_PRI for example</simpara></listitem></varlistentry>
+<varlistentry><term><emphasis>Returns</emphasis>&#160;:</term><listitem><simpara>a statically allocated string, do not free</simpara></listitem></varlistentry>
+</variablelist></refsect2>
+
+</refsect1>
+
+</refentry>

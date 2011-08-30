@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE book PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "">
+<book xmlns="http://www.devhelp.net/book" title="test Reference Manual" link="index.html" author="" name="test">
+  <chapters>
+    <sub name="[Insert title here]" link="ch01.html">
+      <sub name="md5" link="test-md5.html"/>
+      <sub name="stringlib" link="test-stringlib.html"/>
+      <sub name="register_plugins" link="test-register-plugins.html"/>
+      <sub name="glyr" link="test-glyr.html"/>
+      <sub name="types" link="test-types.html"/>
+      <sub name="core" link="test-core.html"/>
+      <sub name="blacklist" link="test-blacklist.html"/>
+      <sub name="config" link="test-config.html"/>
+      <sub name="apikeys" link="test-apikeys.html"/>
+      <sub name="common" link="test-common.html"/>
+      <sub name="generic" link="test-generic.html"/>
+    </sub>
+    <sub name="Object Hierarchy" link="object-tree.html"/>
+    <sub name="API Index" link="api-index-full.html"/>
+    <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
+  </chapters>
+  <functions>
+    <function name="MDPrintArr ()" link="test-md5.html#MDPrintArr"/>
+    <function name="MD5Init ()" link="test-md5.html#MD5Init"/>
+    <function name="MD5Final ()" link="test-md5.html#MD5Final"/>
+    <function name="MD5Update ()" link="test-md5.html#MD5Update"/>
+    <function name="nextTag()" link="test-stringlib.html#nextTag"/>
+    <function name="levenshtein_strcmp ()" link="test-stringlib.html#levenshtein-strcmp"/>
+    <function name="levenshtein_strcasecmp ()" link="test-stringlib.html#levenshtein-strcasecmp"/>
+    <function name="levenshtein_strnormcmp ()" link="test-stringlib.html#levenshtein-strnormcmp"/>
+    <function name="strreplace ()" link="test-stringlib.html#strreplace"/>
+    <function name="convert_charset ()" link="test-stringlib.html#convert-charset"/>
+    <function name="strip_html_unicode ()" link="test-stringlib.html#strip-html-unicode"/>
+    <function name="chomp_breakline ()" link="test-stringlib.html#chomp-breakline"/>
+    <function name="trim_copy ()" link="test-stringlib.html#trim-copy"/>
+    <function name="trim_inplace ()" link="test-stringlib.html#trim-inplace"/>
+    <function name="trim_nocopy ()" link="test-stringlib.html#trim-nocopy"/>
+    <function name="copy_value ()" link="test-stringlib.html#copy-value"/>
+    <function name="get_next_word ()" link="test-stringlib.html#get-next-word"/>
+    <function name="remove_tags_from_string ()" link="test-stringlib.html#remove-tags-from-string"/>
+    <function name="unescape_html_UTF8 ()" link="test-stringlib.html#unescape-html-UTF8"/>
+    <function name="prepare_url ()" link="test-stringlib.html#prepare-url"/>
+    <function name="beautify_string ()" link="test-stringlib.html#beautify-string"/>
+    <function name="prepare_string ()" link="test-stringlib.html#prepare-string"/>
+    <function name="get_search_value ()" link="test-stringlib.html#get-search-value"/>
+    <function name="register_fetcher_plugins ()" link="test-register-plugins.html#register-fetcher-plugins"/>
+    <function name="unregister_fetcher_plugins ()" link="test-register-plugins.html#unregister-fetcher-plugins"/>
+    <function name="r_getFList ()" link="test-register-plugins.html#r-getFList"/>
+    <function name="r_getSList ()" link="test-register-plugins.html#r-getSList"/>
+    <function name="get_plugin_info ()" link="test-register-plugins.html#get-plugin-info"/>
+    <function name="free_plugin_info ()" link="test-register-plugins.html#free-plugin-info"/>
+    <function name="glyr_init ()" link="test-glyr.html#glyr-init"/>
+    <function name="glyr_cleanup ()" link="test-glyr.html#glyr-cleanup"/>
+    <function name="glyr_get ()" link="test-glyr.html#glyr-get"/>
+    <function name="glyr_init_query ()" link="test-glyr.html#glyr-init-query"/>
+    <function name="glyr_destroy_query ()" link="test-glyr.html#glyr-destroy-query"/>
+    <function name="glyr_free_list ()" link="test-glyr.html#glyr-free-list"/>
+    <function name="glyr_new_cache ()" link="test-glyr.html#glyr-new-cache"/>
+    <function name="glyr_free_cache ()" link="test-glyr.html#glyr-free-cache"/>
+    <function name="glyr_opt_dlcallback ()" link="test-glyr.html#glyr-opt-dlcallback"/>
+    <function name="glyr_opt_type ()" link="test-glyr.html#glyr-opt-type"/>
+    <function name="glyr_opt_artist ()" link="test-glyr.html#glyr-opt-artist"/>
+    <function name="glyr_opt_album ()" link="test-glyr.html#glyr-opt-album"/>
+    <function name="glyr_opt_title ()" link="test-glyr.html#glyr-opt-title"/>
+    <function name="glyr_opt_img_minsize ()" link="test-glyr.html#glyr-opt-img-minsize"/>
+    <function name="glyr_opt_img_maxsize ()" link="test-glyr.html#glyr-opt-img-maxsize"/>
+    <function name="glyr_opt_parallel ()" link="test-glyr.html#glyr-opt-parallel"/>
+    <function name="glyr_opt_timeout ()" link="test-glyr.html#glyr-opt-timeout"/>
+    <function name="glyr_opt_redirects ()" link="test-glyr.html#glyr-opt-redirects"/>
+    <function name="glyr_opt_useragent ()" link="test-glyr.html#glyr-opt-useragent"/>
+    <function name="glyr_opt_lang ()" link="test-glyr.html#glyr-opt-lang"/>
+    <function name="glyr_opt_number ()" link="test-glyr.html#glyr-opt-number"/>
+    <function name="glyr_opt_verbosity ()" link="test-glyr.html#glyr-opt-verbosity"/>
+    <function name="glyr_opt_from ()" link="test-glyr.html#glyr-opt-from"/>
+    <function name="glyr_opt_plugmax ()" link="test-glyr.html#glyr-opt-plugmax"/>
+    <function name="glyr_opt_allowed_formats ()" link="test-glyr.html#glyr-opt-allowed-formats"/>
+    <function name="glyr_opt_download ()" link="test-glyr.html#glyr-opt-download"/>
+    <function name="glyr_opt_fuzzyness ()" link="test-glyr.html#glyr-opt-fuzzyness"/>
+    <function name="glyr_opt_qsratio ()" link="test-glyr.html#glyr-opt-qsratio"/>
+    <function name="glyr_opt_proxy ()" link="test-glyr.html#glyr-opt-proxy"/>
+    <function name="glyr_opt_force_utf8 ()" link="test-glyr.html#glyr-opt-force-utf8"/>
+    <function name="glyr_download ()" link="test-glyr.html#glyr-download"/>
+    <function name="glyr_strerror ()" link="test-glyr.html#glyr-strerror"/>
+    <function name="glyr_version ()" link="test-glyr.html#glyr-version"/>
+    <function name="glyr_write ()" link="test-glyr.html#glyr-write"/>
+    <function name="glyr_update_md5sum ()" link="test-glyr.html#glyr-update-md5sum"/>
+    <function name="glyr_printitem ()" link="test-glyr.html#glyr-printitem"/>
+    <function name="glyr_get_plugin_info ()" link="test-glyr.html#glyr-get-plugin-info"/>
+    <function name="glyr_free_plugin_info ()" link="test-glyr.html#glyr-free-plugin-info"/>
+    <function name="glyr_type_to_string ()" link="test-glyr.html#glyr-type-to-string"/>
+    <function name="GLYR_DEFAULT_REDIRECTS" link="test-types.html#GLYR-DEFAULT-REDIRECTS:CAPS"/>
+    <function name="GLYR_DEFAULT_TIMEOUT" link="test-types.html#GLYR-DEFAULT-TIMEOUT:CAPS"/>
+    <function name="GLYR_DEFAULT_PARALLEL" link="test-types.html#GLYR-DEFAULT-PARALLEL:CAPS"/>
+    <function name="GLYR_DEFAULT_CMINSIZE" link="test-types.html#GLYR-DEFAULT-CMINSIZE:CAPS"/>
+    <function name="GLYR_DEFAULT_CMAXSIZE" link="test-types.html#GLYR-DEFAULT-CMAXSIZE:CAPS"/>
+    <function name="GLYR_DEFAULT_VERBOSITY" link="test-types.html#GLYR-DEFAULT-VERBOSITY:CAPS"/>
+    <function name="GLYR_DEFAULT_NUMBER" link="test-types.html#GLYR-DEFAULT-NUMBER:CAPS"/>
+    <function name="GLYR_DEFAULT_PLUGMAX" link="test-types.html#GLYR-DEFAULT-PLUGMAX:CAPS"/>
+    <function name="GLYR_DEFAULT_LANG" link="test-types.html#GLYR-DEFAULT-LANG:CAPS"/>
+    <function name="GLYR_DEFAULT_DOWNLOAD" link="test-types.html#GLYR-DEFAULT-DOWNLOAD:CAPS"/>
+    <function name="GLYR_DEFAULT_GROUPEDL" link="test-types.html#GLYR-DEFAULT-GROUPEDL:CAPS"/>
+    <function name="GLYR_DEFAULT_FROM_ARGUMENT_DELIM" link="test-types.html#GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"/>
+    <function name="GLYR_DEFAULT_FUZZYNESS" link="test-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS"/>
+    <function name="GLYR_DEFAULT_PROXY" link="test-types.html#GLYR-DEFAULT-PROXY:CAPS"/>
+    <function name="GLYR_DEFAULT_QSRATIO" link="test-types.html#GLYR-DEFAULT-QSRATIO:CAPS"/>
+    <function name="GLYR_DEFAULT_FORCE_UTF8" link="test-types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS"/>
+    <function name="GLYR_DEFAULT_ALLOWED_FORMATS" link="test-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"/>
+    <function name="GLYR_DEFAULT_USERAGENT" link="test-types.html#GLYR-DEFAULT-USERAGENT:CAPS"/>
+    <function name="enum GLYR_ERROR" link="test-types.html#GLYR-ERROR:CAPS"/>
+    <function name="CALC_MD5SUMS" link="test-core.html#CALC-MD5SUMS:CAPS"/>
+    <function name="panic ()" link="test-core.html#panic"/>
+    <function name="glyr_message ()" link="test-core.html#glyr-message"/>
+    <function name="validate ()" link="test-core.html#validate"/>
+    <function name="init ()" link="test-core.html#init"/>
+    <function name="destroy ()" link="test-core.html#destroy"/>
+    <function name="finalize ()" link="test-core.html#finalize"/>
+    <function name="parser ()" link="test-core.html#parser"/>
+    <function name="get_url ()" link="test-core.html#get-url"/>
+    <function name="AsyncDLCB ()" link="test-core.html#AsyncDLCB"/>
+    <function name="start_engine ()" link="test-core.html#start-engine"/>
+    <function name="async_download ()" link="test-core.html#async-download"/>
+    <function name="download_single ()" link="test-core.html#download-single"/>
+    <function name="DL_init ()" link="test-core.html#DL-init"/>
+    <function name="DL_free ()" link="test-core.html#DL-free"/>
+    <function name="update_md5sum ()" link="test-core.html#update-md5sum"/>
+    <function name="glist_free_full ()" link="test-core.html#glist-free-full"/>
+    <function name="continue_search ()" link="test-core.html#continue-search"/>
+    <function name="is_blacklisted ()" link="test-blacklist.html#is-blacklisted"/>
+    <function name="blacklist_build ()" link="test-blacklist.html#blacklist-build"/>
+    <function name="blacklist_destroy ()" link="test-blacklist.html#blacklist-destroy"/>
+    <function name="glyr_VERSION_MAJOR" link="test-config.html#glyr-VERSION-MAJOR"/>
+    <function name="glyr_VERSION_MINOR" link="test-config.html#glyr-VERSION-MINOR"/>
+    <function name="glyr_VERSION_NAME" link="test-config.html#glyr-VERSION-NAME"/>
+    <function name="glyr_USE_COLOR" link="test-config.html#glyr-USE-COLOR"/>
+    <function name="glyr_DEBUG" link="test-config.html#glyr-DEBUG"/>
+    <function name="API_KEY_DISCOGS" link="test-apikeys.html#API-KEY-DISCOGS:CAPS"/>
+    <function name="API_KEY_AMAZON" link="test-apikeys.html#API-KEY-AMAZON:CAPS"/>
+    <function name="API_KEY_LASTFM" link="test-apikeys.html#API-KEY-LASTFM:CAPS"/>
+    <function name="API_KEY_FLICKR" link="test-apikeys.html#API-KEY-FLICKR:CAPS"/>
+    <function name="API_KEY_GTRANS" link="test-apikeys.html#API-KEY-GTRANS:CAPS"/>
+    <function name="generic_amazon_url ()" link="test-common.html#generic-amazon-url"/>
+    <function name="generic_google_url ()" link="test-common.html#generic-google-url"/>
+    <function name="generic_google_parse ()" link="test-common.html#generic-google-parse"/>
+    <function name="size_is_okay ()" link="test-common.html#size-is-okay"/>
+    <function name="generic_musicbrainz_parse ()" link="test-common.html#generic-musicbrainz-parse"/>
+    <function name="generic_musicbrainz_url ()" link="test-common.html#generic-musicbrainz-url"/>
+    <function name="please_what_type ()" link="test-common.html#please-what-type"/>
+    <function name="generic_txt_finalizer ()" link="test-generic.html#generic-txt-finalizer"/>
+    <function name="generic_img_finalizer ()" link="test-generic.html#generic-img-finalizer"/>
+  </functions>
+</book>

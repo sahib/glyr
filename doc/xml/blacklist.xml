@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<refentry id="test-blacklist">
+<refmeta>
+<refentrytitle role="top_of_page" id="test-blacklist.top_of_page">blacklist</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  TEST Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>blacklist</refname>
+<refpurpose></refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="test-blacklist.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            <link linkend="is-blacklisted">is_blacklisted</link>                      (<parameter><link linkend="gchar"><type>gchar</type></link> *URL</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="blacklist-build">blacklist_build</link>                     (<parameter><type>void</type></parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="blacklist-destroy">blacklist_destroy</link>                   (<parameter><type>void</type></parameter>);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="test-blacklist.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+</para>
+</refsect1>
+<refsect1 id="test-blacklist.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="is-blacklisted" role="function">
+<title>is_blacklisted ()</title>
+<indexterm zone="is-blacklisted"><primary>is_blacklisted</primary></indexterm>
+<programlisting><link linkend="gboolean"><returnvalue>gboolean</returnvalue></link>            is_blacklisted                      (<parameter><link linkend="gchar"><type>gchar</type></link> *URL</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="blacklist-build" role="function">
+<title>blacklist_build ()</title>
+<indexterm zone="blacklist-build"><primary>blacklist_build</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                blacklist_build                     (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="blacklist-destroy" role="function">
+<title>blacklist_destroy ()</title>
+<indexterm zone="blacklist-destroy"><primary>blacklist_destroy</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                blacklist_destroy                   (<parameter><type>void</type></parameter>);</programlisting>
+<para>
+</para></refsect2>
+
+</refsect1>
+
+</refentry>

@@ -1,0 +1,73 @@
+<!-- ##### SECTION Title ##### -->
+register_plugins
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### FUNCTION register_fetcher_plugins ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### FUNCTION unregister_fetcher_plugins ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### FUNCTION r_getFList ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION r_getSList ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION get_plugin_info ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION free_plugin_info ##### -->
+<para>
+
+</para>
+
+@infos: 
+
+

@@ -1,0 +1,57 @@
+<!-- ##### SECTION Title ##### -->
+config
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### MACRO glyr_VERSION_MAJOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO glyr_VERSION_MINOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO glyr_VERSION_NAME ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO glyr_USE_COLOR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO glyr_DEBUG ##### -->
+<para>
+
+</para>
+
+
+

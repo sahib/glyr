@@ -1,0 +1,216 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
+[
+  <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
+]>
+<refentry id="test-stringlib">
+<refmeta>
+<refentrytitle role="top_of_page" id="test-stringlib.top_of_page">stringlib</refentrytitle>
+<manvolnum>3</manvolnum>
+<refmiscinfo>
+  TEST Library
+</refmiscinfo>
+</refmeta>
+<refnamediv>
+<refname>stringlib</refname>
+<refpurpose></refpurpose>
+</refnamediv>
+
+<refsynopsisdiv id="test-stringlib.synopsis" role="synopsis">
+<title role="synopsis.title">Synopsis</title>
+
+<synopsis>#define             <link linkend="nextTag">nextTag</link>                             (PTR)
+<link linkend="gsize"><returnvalue>gsize</returnvalue></link>               <link linkend="levenshtein-strcmp">levenshtein_strcmp</link>                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);
+<link linkend="gsize"><returnvalue>gsize</returnvalue></link>               <link linkend="levenshtein-strcasecmp">levenshtein_strcasecmp</link>              (<parameter>const <link linkend="gchar"><type>gchar</type></link> *sstring</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);
+<link linkend="gsize"><returnvalue>gsize</returnvalue></link>               <link linkend="levenshtein-strnormcmp">levenshtein_strnormcmp</link>              (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="strreplace">strreplace</link>                          (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *subs</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *with</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="convert-charset">convert_charset</link>                     (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *from</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *to</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> *new_size</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="strip-html-unicode">strip_html_unicode</link>                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="chomp-breakline">chomp_breakline</link>                     (<parameter><link linkend="gchar"><type>gchar</type></link> *string</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="trim-copy">trim_copy</link>                           (<parameter><link linkend="gchar"><type>gchar</type></link> *input</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *output</parameter>);
+<link linkend="void"><returnvalue>void</returnvalue></link>                <link linkend="trim-inplace">trim_inplace</link>                        (<parameter><link linkend="gchar"><type>gchar</type></link> *s</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="trim-nocopy">trim_nocopy</link>                         (<parameter><link linkend="gchar"><type>gchar</type></link> *s</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="copy-value">copy_value</link>                          (<parameter>const <link linkend="gchar"><type>gchar</type></link> *begin</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *end</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="get-next-word">get_next_word</link>                       (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *delim</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> *offset</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> len</parameter>);
+<link linkend="gsize"><returnvalue>gsize</returnvalue></link>               <link linkend="remove-tags-from-string">remove_tags_from_string</link>             (<parameter><link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter><link linkend="gint"><type>gint</type></link> length</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> start</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> end</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="unescape-html-UTF8">unescape_html_UTF8</link>                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *data</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="prepare-url">prepare_url</link>                         (<parameter>const <link linkend="gchar"><type>gchar</type></link> *URL</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *artist</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *album</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *title</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="beautify-string">beautify_string</link>                     (<parameter>const <link linkend="gchar"><type>gchar</type></link> *lyrics</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="prepare-string">prepare_string</link>                      (<parameter>const <link linkend="gchar"><type>gchar</type></link> *input</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> delinitfy</parameter>);
+<link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             <link linkend="get-search-value">get_search_value</link>                    (<parameter><link linkend="gchar"><type>gchar</type></link> *ref</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *end_string</parameter>);
+</synopsis>
+</refsynopsisdiv>
+
+<refsect1 id="test-stringlib.description" role="desc">
+<title role="desc.title">Description</title>
+<para>
+</para>
+</refsect1>
+<refsect1 id="test-stringlib.details" role="details">
+<title role="details.title">Details</title>
+<refsect2 id="nextTag" role="macro">
+<title>nextTag()</title>
+<indexterm zone="nextTag"><primary>nextTag</primary></indexterm>
+<programlisting>#define nextTag(PTR) while(PTR[0] &amp;&amp; *PTR++ != '&gt;')
+</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="levenshtein-strcmp" role="function">
+<title>levenshtein_strcmp ()</title>
+<indexterm zone="levenshtein-strcmp"><primary>levenshtein_strcmp</primary></indexterm>
+<programlisting><link linkend="gsize"><returnvalue>gsize</returnvalue></link>               levenshtein_strcmp                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="levenshtein-strcasecmp" role="function">
+<title>levenshtein_strcasecmp ()</title>
+<indexterm zone="levenshtein-strcasecmp"><primary>levenshtein_strcasecmp</primary></indexterm>
+<programlisting><link linkend="gsize"><returnvalue>gsize</returnvalue></link>               levenshtein_strcasecmp              (<parameter>const <link linkend="gchar"><type>gchar</type></link> *sstring</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="levenshtein-strnormcmp" role="function">
+<title>levenshtein_strnormcmp ()</title>
+<indexterm zone="levenshtein-strnormcmp"><primary>levenshtein_strnormcmp</primary></indexterm>
+<programlisting><link linkend="gsize"><returnvalue>gsize</returnvalue></link>               levenshtein_strnormcmp              (<parameter><link linkend="GlyrQuery"><type>GlyrQuery</type></link> *query</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *other</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="strreplace" role="function">
+<title>strreplace ()</title>
+<indexterm zone="strreplace"><primary>strreplace</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             strreplace                          (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *subs</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *with</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="convert-charset" role="function">
+<title>convert_charset ()</title>
+<indexterm zone="convert-charset"><primary>convert_charset</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             convert_charset                     (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *from</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *to</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> *new_size</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="strip-html-unicode" role="function">
+<title>strip_html_unicode ()</title>
+<indexterm zone="strip-html-unicode"><primary>strip_html_unicode</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             strip_html_unicode                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="chomp-breakline" role="function">
+<title>chomp_breakline ()</title>
+<indexterm zone="chomp-breakline"><primary>chomp_breakline</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                chomp_breakline                     (<parameter><link linkend="gchar"><type>gchar</type></link> *string</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="trim-copy" role="function">
+<title>trim_copy ()</title>
+<indexterm zone="trim-copy"><primary>trim_copy</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                trim_copy                           (<parameter><link linkend="gchar"><type>gchar</type></link> *input</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *output</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="trim-inplace" role="function">
+<title>trim_inplace ()</title>
+<indexterm zone="trim-inplace"><primary>trim_inplace</primary></indexterm>
+<programlisting><link linkend="void"><returnvalue>void</returnvalue></link>                trim_inplace                        (<parameter><link linkend="gchar"><type>gchar</type></link> *s</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="trim-nocopy" role="function">
+<title>trim_nocopy ()</title>
+<indexterm zone="trim-nocopy"><primary>trim_nocopy</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             trim_nocopy                         (<parameter><link linkend="gchar"><type>gchar</type></link> *s</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="copy-value" role="function">
+<title>copy_value ()</title>
+<indexterm zone="copy-value"><primary>copy_value</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             copy_value                          (<parameter>const <link linkend="gchar"><type>gchar</type></link> *begin</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *end</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="get-next-word" role="function">
+<title>get_next_word ()</title>
+<indexterm zone="get-next-word"><primary>get_next_word</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             get_next_word                       (<parameter>const <link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *delim</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> *offset</parameter>,
+                                                         <parameter><link linkend="gsize"><type>gsize</type></link> len</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="remove-tags-from-string" role="function">
+<title>remove_tags_from_string ()</title>
+<indexterm zone="remove-tags-from-string"><primary>remove_tags_from_string</primary></indexterm>
+<programlisting><link linkend="gsize"><returnvalue>gsize</returnvalue></link>               remove_tags_from_string             (<parameter><link linkend="gchar"><type>gchar</type></link> *string</parameter>,
+                                                         <parameter><link linkend="gint"><type>gint</type></link> length</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> start</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> end</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="unescape-html-UTF8" role="function">
+<title>unescape_html_UTF8 ()</title>
+<indexterm zone="unescape-html-UTF8"><primary>unescape_html_UTF8</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             unescape_html_UTF8                  (<parameter>const <link linkend="gchar"><type>gchar</type></link> *data</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="prepare-url" role="function">
+<title>prepare_url ()</title>
+<indexterm zone="prepare-url"><primary>prepare_url</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             prepare_url                         (<parameter>const <link linkend="gchar"><type>gchar</type></link> *URL</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *artist</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *album</parameter>,
+                                                         <parameter>const <link linkend="gchar"><type>gchar</type></link> *title</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="beautify-string" role="function">
+<title>beautify_string ()</title>
+<indexterm zone="beautify-string"><primary>beautify_string</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             beautify_string                     (<parameter>const <link linkend="gchar"><type>gchar</type></link> *lyrics</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="prepare-string" role="function">
+<title>prepare_string ()</title>
+<indexterm zone="prepare-string"><primary>prepare_string</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             prepare_string                      (<parameter>const <link linkend="gchar"><type>gchar</type></link> *input</parameter>,
+                                                         <parameter><link linkend="gboolean"><type>gboolean</type></link> delinitfy</parameter>);</programlisting>
+<para>
+</para></refsect2>
+<refsect2 id="get-search-value" role="function">
+<title>get_search_value ()</title>
+<indexterm zone="get-search-value"><primary>get_search_value</primary></indexterm>
+<programlisting><link linkend="gchar"><returnvalue>gchar</returnvalue></link> *             get_search_value                    (<parameter><link linkend="gchar"><type>gchar</type></link> *ref</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *name</parameter>,
+                                                         <parameter><link linkend="gchar"><type>gchar</type></link> *end_string</parameter>);</programlisting>
+<para>
+</para></refsect2>
+
+</refsect1>
+
+</refentry>

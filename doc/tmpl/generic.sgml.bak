@@ -1,0 +1,48 @@
+<!-- ##### SECTION Title ##### -->
+generic
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### FUNCTION generic_txt_finalizer ##### -->
+<para>
+
+</para>
+
+@s: 
+@list: 
+@stop_me: 
+@type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION generic_img_finalizer ##### -->
+<para>
+
+</para>
+
+@s: 
+@list: 
+@stop_me: 
+@type: 
+@Returns: 
+
+

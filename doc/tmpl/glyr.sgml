@@ -1,0 +1,391 @@
+<!-- ##### SECTION Title ##### -->
+glyr
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### SECTION Image ##### -->
+
+
+<!-- ##### FUNCTION glyr_init ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### FUNCTION glyr_cleanup ##### -->
+<para>
+
+</para>
+
+@void: 
+
+
+<!-- ##### FUNCTION glyr_get ##### -->
+<para>
+
+</para>
+
+@settings: 
+@error: 
+@length: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_init_query ##### -->
+<para>
+
+</para>
+
+@query: 
+
+
+<!-- ##### FUNCTION glyr_destroy_query ##### -->
+<para>
+
+</para>
+
+@query: 
+
+
+<!-- ##### FUNCTION glyr_free_list ##### -->
+<para>
+
+</para>
+
+@head: 
+
+
+<!-- ##### FUNCTION glyr_new_cache ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_free_cache ##### -->
+<para>
+
+</para>
+
+@cache: 
+
+
+<!-- ##### FUNCTION glyr_opt_dlcallback ##### -->
+<para>
+
+</para>
+
+@settings: 
+@dl_cb: 
+@userp: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_type ##### -->
+<para>
+
+</para>
+
+@s: 
+@type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_artist ##### -->
+<para>
+
+</para>
+
+@s: 
+@artist: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_album ##### -->
+<para>
+
+</para>
+
+@s: 
+@album: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_title ##### -->
+<para>
+
+</para>
+
+@s: 
+@title: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_img_minsize ##### -->
+<para>
+
+</para>
+
+@s: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_img_maxsize ##### -->
+<para>
+
+</para>
+
+@s: 
+@size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_parallel ##### -->
+<para>
+
+</para>
+
+@s: 
+@parallel_jobs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_timeout ##### -->
+<para>
+
+</para>
+
+@s: 
+@timeout: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_redirects ##### -->
+<para>
+
+</para>
+
+@s: 
+@redirects: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_useragent ##### -->
+<para>
+
+</para>
+
+@s: 
+@useragent: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_lang ##### -->
+<para>
+
+</para>
+
+@s: 
+@langcode: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_number ##### -->
+<para>
+
+</para>
+
+@s: 
+@num: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_verbosity ##### -->
+<para>
+
+</para>
+
+@s: 
+@level: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_from ##### -->
+<para>
+
+</para>
+
+@s: 
+@from: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_plugmax ##### -->
+<para>
+
+</para>
+
+@s: 
+@plugmax: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_allowed_formats ##### -->
+<para>
+
+</para>
+
+@s: 
+@formats: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_download ##### -->
+<para>
+
+</para>
+
+@s: 
+@download: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_fuzzyness ##### -->
+<para>
+
+</para>
+
+@s: 
+@fuzz: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_qsratio ##### -->
+<para>
+
+</para>
+
+@s: 
+@ratio: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_proxy ##### -->
+<para>
+
+</para>
+
+@s: 
+@proxystring: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_opt_force_utf8 ##### -->
+<para>
+
+</para>
+
+@s: 
+@force_utf8: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_download ##### -->
+<para>
+
+</para>
+
+@url: 
+@s: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_strerror ##### -->
+<para>
+
+</para>
+
+@ID: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_version ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_write ##### -->
+<para>
+
+</para>
+
+@cache: 
+@path: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_update_md5sum ##### -->
+<para>
+
+</para>
+
+@cache: 
+
+
+<!-- ##### FUNCTION glyr_printitem ##### -->
+<para>
+
+</para>
+
+@cache: 
+
+
+<!-- ##### FUNCTION glyr_get_plugin_info ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION glyr_free_plugin_info ##### -->
+<para>
+
+</para>
+
+@info: 
+
+
+<!-- ##### FUNCTION glyr_type_to_string ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+
