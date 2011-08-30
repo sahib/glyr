@@ -319,9 +319,9 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         curl_easy_setopt(eh, CURLOPT_HEADER,TRUE);
 
         /* Dirty hack here: Amazon bitches at me when setting NOBODY to true *
-                 * But otherwise large images won't pass with other providers        *
-                 * Check domain therefore..
-                 */
+         * But otherwise large images won't pass with other providers        *
+         * Check domain therefore..
+         */
         if(strstr(url,"amazon") != NULL)
         {
             curl_easy_setopt(eh, CURLOPT_NOBODY,FALSE);
@@ -403,7 +403,7 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
     // when amazon's startpage showed me "Hooray for Boobies",
     // because I searched for the Bloodhoundgang album...
     // (because I have it already of course! ;-))
-   // curl_easy_setopt(eh, CURLOPT_COOKIEJAR ,"");
+    curl_easy_setopt(eh, CURLOPT_COOKIEJAR ,"");
 }
 
 /*--------------------------------------------------------*/

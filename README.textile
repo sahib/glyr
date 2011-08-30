@@ -12,7 +12,7 @@ work as a standalone program which is able to download:
 * tracklists of an album
 * a list of albums from a specific artist.
 * Tags, either related to artist, album or title
-* relations, like links, or "Artist X is married to Y"
+* relations, for example links to wikipedia
 * similar artists 
 * similar songs
 
@@ -55,7 +55,7 @@ Please note: The Api won't be guaranteed to be stable before version 0.9.
 h3. glyrc:
 
 Please refer to @glyrc -h@ which gives you a brief introduction to the arguments you can pass,
-See the "wiki":https://github.com/sahib/glyr/wiki for more detailed information about the options.
+See the "wiki":https://github.com/sahib/glyr/wiki/Commandline-arguments for more detailed information about the options.
 
 h2. FAQ
 
@@ -150,4 +150,4 @@ h3.
 
 h4. @footnotes@
 
-[1] Glyr has not been tested on Mac OSX yet. If you own an Apple device, any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes have to be done though.
+[1] Glyr has not been tested on Mac OSX yet. If you own a Mac, any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes need to be done though.
