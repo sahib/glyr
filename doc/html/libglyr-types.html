@@ -191,7 +191,10 @@ enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS
 }   GLYR_ERROR;
 </pre>
 <p>
-Enum values used for the thing, to specify the thing.
+All errors you can get, via <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> and the glyr_opt_* calls.
+</p>
+<p>
+Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror ()"><code class="function">glyr_strerror()</code></a> to convert them to meaningful strings.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -223,7 +226,7 @@ Enum values used for the thing, to specify the thing.
 </tr>
 <tr>
 <td><p><a name="GLYRE-NO-PROVIDER:CAPS"></a><span class="term"><code class="literal">GLYRE_NO_PROVIDER</code></span></p></td>
-<td>setttings-&gt;provider == NULL
+<td>No valid provider specified in <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a>
 </td>
 </tr>
 <tr>
