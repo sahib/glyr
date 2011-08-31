@@ -41,7 +41,7 @@ const char * err_strings[] =
     "Bad value for glyr_opt_*()",                      /* GLYRE_BAD_VALUE    */
     "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
     "No valid provider specified in glyr_opt_from()",  /* GLYRE_NO_PROVIDER  */
-    "Unknown GLYR_GET_TYPE in glyr_get()",                  /* GLYRE_UNKNOWN_GET  */
+    "Unknown GLYR_GET_TYPE in glyr_get()",             /* GLYRE_UNKNOWN_GET  */
     "Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
     "Cache was skipped due to user",                   /* GLYRE_SKIP         */
     "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */

@@ -32,13 +32,17 @@
 #include <glib/gprintf.h>
 
 /* All you need from libglyr */
-#include "../lib/glyr.h"
+#include "../../lib/glyr.h"
 
 /* Compile information, you do not have this header */
-#include "../lib/config.h"
+#include "../../lib/config.h"
+
+/* Silly autohelp feature */
+#include "autohelp.h"
 
 /* Globals */
 const gchar * exec_on_call = NULL;
+const gchar * from_string  = NULL;
 gchar * write_to = NULL;
 
 //* ------------------------------------------------------- */
@@ -266,11 +270,10 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {
             gsize opt_len = strlen(optarg);
             if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 ||
-                    g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
-                    g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
-                    g_file_test(optarg,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+               g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
+               g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
+               g_file_test(optarg,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
             {
-                puts(optarg);
                 *write_to = optarg;
             }
             else
@@ -282,6 +285,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         }
         case 'f':
             glyr_opt_from(glyrs,optarg);
+				from_string = optarg;
             break;
         case 'v':
             glyr_opt_verbosity(glyrs,atoi(optarg));
@@ -745,16 +749,26 @@ exit(0);
 
     if(argc >= 3)
     {
-        // The struct that control this beast
+        /* The struct that control this beast */
         GlyrQuery my_query;
 
-        // set it on default values
+        /* set it on default values */
         glyr_init_query(&my_query);
 
         /* Default to a bit more verbose mode */
         glyr_opt_verbosity(&my_query,2);
 
-        my_query.type = get_type_from_string(argv[1]);
+		  GLYR_GET_TYPE type = get_type_from_string(argv[1]);
+		  if(type == GLYR_GET_UNSURE)
+		  {
+				g_print("glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argv[1]);
+				suggest_other_getter(&my_query,argv[1]);
+				g_print("\n");
+				exit(-1);
+        }
+		
+		  /* Set the type */
+        my_query.type = type;
 
         parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
 
@@ -789,8 +803,8 @@ exit(0);
                     GlyrMemCache * elem = my_list;
                     while(elem != NULL)
                     {
-                    g_print("%s\n",elem->dsrc);
-                    elem = elem->next;
+                    		g_print("%s\n",elem->dsrc);
+                    		elem = elem->next;
                     }
                      */
 
@@ -801,6 +815,12 @@ exit(0);
                 glyr_free_list(my_list);
 
             }
+				else if(get_error == GLYRE_NO_PROVIDER)
+				{
+					g_print("--------------------\n");
+					g_print("glyr: \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
+					suggest_other_provider(&my_query,(gchar*)from_string);
+				}
             else if(get_error != GLYRE_OK)
             {
                 message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));

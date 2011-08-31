@@ -47,7 +47,7 @@ end
 create_dir_and_cd "doc"
 
 puts "-- Scanning directory"
-do_or_die("gtkdoc-scan --module='#{MODULE}' --source-dir '#{DIR}' # --ignore-headers '#{build_ignore_files}'")
+do_or_die("gtkdoc-scan --module='#{MODULE}' --source-dir '#{DIR}' --ignore-headers '#{build_ignore_files}'")
 puts " - done"
 
 puts "-- Setting up DB"

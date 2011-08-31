@@ -1,6 +1,6 @@
 #include <curl/curl.h>
 #include <glib.h>
-#include "../lib/config.h"
+#include "../../lib/config.h"
 #include <string.h>
 
 /* Simple testprogram to check the content-type header of any website given on the cmd. */

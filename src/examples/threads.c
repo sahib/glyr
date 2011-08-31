@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include <glib.h>
-#include "../lib/glyr.h"
+#include "../../lib/glyr.h"
 
 /*
  * Example program showing how to use libglyr with multiple threads.

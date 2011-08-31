@@ -12,7 +12,7 @@
 #include <string.h>
 
 /* Usually only this needs to be included */
-#include "../lib/glyr.h"
+#include "../../lib/glyr.h"
 
 
 static void print_item(GlyrMemCache * cacheditem, int num)
