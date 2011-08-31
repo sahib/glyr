@@ -20,7 +20,6 @@
 #ifndef GLYR_H
 #define GLYR_H
 
-
 /* All structs used by glyr are here */
 #include "types.h"
 

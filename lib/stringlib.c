@@ -118,6 +118,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
 gchar * delete_string[][2] = {
 	{"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
 	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
+	{"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
 	{"(\\(|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
 	{"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
 };	

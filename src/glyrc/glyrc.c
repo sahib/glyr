@@ -726,13 +726,6 @@ GLYR_GET_TYPE get_type_from_string(gchar * string)
 
 int main(int argc, char * argv[])
 {
-/*
-#include "../lib/stringlib.h"
-    gchar * pretty = strip_lint_from_names(argv[1]);
-g_print("%s\n",pretty);
-     g_free(pretty);
-exit(0);
-*/
     /* Try to print informative output */
     signal(SIGSEGV, sig_handler);
 
@@ -792,21 +785,20 @@ exit(0);
             {
                 if(get_error == GLYRE_OK)
                 {
+#if 0
                     /* This is the place where you would work with the cachelist *
                        As the callback is used in glyrc this is just plain empty *
                        Useful if you need to cache the data (e.g. for batch jobs *
                        Left only for the reader's informatiom, no functions here *
                      */
 
-                    /*
-                    // Example to print it all out
                     GlyrMemCache * elem = my_list;
                     while(elem != NULL)
                     {
                     		g_print("%s\n",elem->dsrc);
                     		elem = elem->next;
                     }
-                     */
+#endif 
 
                     message(2,&my_query,stderr,"- In total %d item(s) found.\n",length);
                 }

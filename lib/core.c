@@ -89,7 +89,7 @@ int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {
     size_t realsize = size * nmemb;
-    struct GlyrMemCache *mem = (struct GlyrMemCache *)cache;
+    GlyrMemCache *mem = (GlyrMemCache *)cache;
 
     mem->data = realloc(mem->data, mem->size + realsize + 1);
     if (mem->data)

@@ -58,9 +58,9 @@
  * GLYR_ERROR:
  * @GLYRE_UNKNOWN: Unknown error 
  * @GLYRE_OK: everything is fine 
- * @GLYRE_BAD_OPTION: you passed a bad option to glyr_opt_*()
- * @GLYRE_BAD_VALUE: Invalid value in glyr_opt_*()
- * @GLYRE_EMPTY_STRUCT: you passed an empty struct to glyr_opt_() 
+ * @GLYRE_BAD_OPTION: you passed a bad option to glyr_opt_*
+ * @GLYRE_BAD_VALUE: Invalid value in glyr_opt_*
+ * @GLYRE_EMPTY_STRUCT: you passed an empty struct to glyr_opt_ 
  * @GLYRE_NO_PROVIDER: setttings->provider == NULL
  * @GLYRE_UNKNOWN_GET: settings->type is not valid
  * @GLYRE_INSUFF_DATA: Insufficient data supplied; (artist/album/title) missing
@@ -189,36 +189,53 @@ typedef enum
  * GlyrMemCache represents a single item received by libglyr. 
  * You should <emphasis>NOT</emphasis> any of the fields, it is meant to be read-only.
  */
-typedef struct GlyrMemCache
-{
-    char  *data;        
-    size_t size;        
-    char  *dsrc;        
-    char  *prov;        
-    GLYR_DATA_TYPE type;
-    int   duration;     
-    bool  is_image;    
-    char * img_format; 
-    unsigned char md5sum[16]; 
+typedef struct _GlyrMemCache {
 
-    /* Linkage */
-    struct GlyrMemCache * next; 
-    struct GlyrMemCache * prev; 
+  /*< public >*/
+  char  *data;        
+  size_t size;        
+  char  *dsrc;        
+  char  *prov;        
+  GLYR_DATA_TYPE type;
+  int   duration;     
+  bool  is_image;    
+  char * img_format; 
+  unsigned char md5sum[16]; 
+
+  struct _GlyrMemCache * next; 
+  struct _GlyrMemCache * prev; 
 } GlyrMemCache;
-
 
 /**
 * GlyrQuery:
+* @type: The type of metadata to get.
+* @number: The maximum number of items to get; 0 -> inf
+* @plugmax: Max number of items per provider.
+* @verbosity: How verbose this query should be treated.
+* @fuzzyness: Max. treshold for levenshtein.
+* @img_min_size: Min. size in pixels an image may have.
+* @img_max_size: Min. size in pixels an image may have.
+* @parallel: Max. number of parallel queried providers.
+* @timeout: Max. timeout in seconds to wait before cancelling a download.
+* @redirects: Max number of redirects. You shouldn't set this.
+* @force_utf8: Should be UTF8 forced on text items?
+* @download: should be images downloaded?
+* @qsratio: 0.0 = maxspeed, 1.0 = max quality, 0.85 -> default.
+* @lang: Language code ISO-639-1, like 'de','en' or 'auto'
+* @proxy: The proxy to use.
+* @artist: Artist to use.
+* @album: Album to use.
+* @title: Title to use.
+* @from: Define what providers are queried.
+* @allowed_formats: Allowed imageformats.
+* @useragent: Useragent to use during http-requests
 *
 * This structure holds all settings used to influence libglyr.
-* You should set all fields glyr_opt_*(), refer to the documentation there
-* to find out their exact meaning.
+* You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
 *
 * You can safely read from all fields and should free the query with glyr_destroy_query() after use.
-*
 */
-typedef struct GlyrQuery
-{
+typedef struct _GlyrQuery {
     /*< public >*/
     GLYR_GET_TYPE type; 
 
@@ -230,20 +247,24 @@ typedef struct GlyrQuery
     int img_min_size; 
     int img_max_size; 
 
-    long parallel; 
-    long timeout;  
-    long redirects;
+    int parallel; 
+    int timeout;  
+    int redirects;
 
     bool force_utf8; 
     bool download; 
     float qsratio; 
 
 
-#ifdef COMING_FROM_SWIG
-    /* Make this fields immutable for languages supporting it */
-    %immutable
-    {
+/* This is confusing gtk-doc */
+#ifndef __GTK_DOC_IGNORE__
+	#ifdef COMING_FROM_SWIG
+	    /* Make this fields immutable for languages supporting it */
+	    %immutable
+	    {
+	#endif
 #endif
+
     /* Dynamic allocated */
     const char * lang; 
     const char * proxy; 
@@ -254,20 +275,25 @@ typedef struct GlyrQuery
     char * allowed_formats; 
     char * useragent; 
 
+#ifndef __GTK_DOC_IGNORE__
+    struct {
+         GLYR_ERROR (* download)(GlyrMemCache * dl, struct _GlyrQuery * s);
+         void  * user_pointer;
+    } callback;
+#endif 
+
     /*< private >*/
     int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
-        struct {
-            GLYR_ERROR (* download)(GlyrMemCache * dl, struct GlyrQuery * s);
-            void  * user_pointer;
-        } callback;
+#ifndef __GTK_DOC_IGNORE__
+	#ifdef COMING_FROM_SWIG
+		%
+	    }
+	#endif
+#endif 
 
-#ifdef COMING_FROM_SWIG
-        %
-    }
-#endif
 } GlyrQuery;
 
 /**
@@ -280,25 +306,24 @@ typedef struct GlyrQuery
  * @next: A pointer to the next provider.
  * @prev: A pointer to the previous provider.
  *
- * 
  * Represents a provider. 
- *
  * It's a simpler version of the internal version,
  * with statically allocated data only,
  * therefore you can modify and read to your liking.
- * 
+ *
  * It is freed when glyr_free_plugin_info() is called on it's GlyrFetcherInfo
  */
-typedef struct GlyrSourceInfo
-{
-    char * name;
-    char key;
-    GLYR_GET_TYPE type;
-    int quality;
-    int speed;
+typedef struct _GlyrSourceInfo {
 
-    struct GlyrSourceInfo * next;
-    struct GlyrSourceInfo * prev;
+  /*< public >*/
+  char * name;
+  char key;
+  GLYR_GET_TYPE type;
+  int quality;
+  int speed;
+
+  struct _GlyrSourceInfo * next;
+  struct _GlyrSourceInfo * prev;
 } GlyrSourceInfo;
 
 /**
@@ -308,7 +333,7 @@ typedef struct GlyrSourceInfo
  * @head: A doubly linked list of GlyrSourceInfo (the provider available for this getter)
  * @next: A pointer to the next provider.
  * @prev: A pointer to the previous provider.
- * 
+ *
  * Represents a getter.
  * 
  * It's a simpler version of the internal version,
@@ -317,71 +342,83 @@ typedef struct GlyrSourceInfo
  * You should pass it to glyr_free_plugin_info() once done.
  * 
  * @see_also: glyr_get_plugin_info()
- */ 
-typedef struct GlyrFetcherInfo
-{
-    char * name;
-    GLYR_GET_TYPE type;
-    GlyrSourceInfo * head;
+ */
+typedef struct _GlyrFetcherInfo {
 
-    struct GlyrFetcherInfo * next;
-    struct GlyrFetcherInfo * prev;
+  /*< public >*/
+  char * name;
+  GLYR_GET_TYPE type;
+  GlyrSourceInfo * head;
+
+  struct _GlyrFetcherInfo * next;
+  struct _GlyrFetcherInfo * prev;
 } GlyrFetcherInfo;
+
 
 /**
  * DL_callback:
- * @dl: The current item you can investigate. Not NULL.
+ * @dl: The current item you can investigate. Guaranteed to be not #NULL.
  * @s: The GlyrQuery you initially passed to glyr_get()
  * 
  * Typedef'd version of the callback option used by glyr_opt_download()
  *
  * Returns: a GLYR_ERROR
 */
-typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct GlyrQuery * s);
+typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 
-#ifdef COMING_FROM_SWIG
-%extend GlyrQuery
-{
-    GlyrQuery()
-    {
-        GlyrQuery my_query;
-        glyr_init_query(&my_query);
-        GlyrQuery * copy = malloc(sizeof(GlyrQuery));
-        memcpy(copy,&my_query,sizeof(GlyrQuery));
-        return copy;
-    }
-    ~GlyrQuery()
-    {
-        glyr_destroy_query($self);
-        if($self != NULL)
-            free($self);
-    }
-}
 
-%extend GlyrMemCache
-{
-    GlyrMemCache()
-    {
-        return glyr_new_cache();
-    }
-    ~GlyrMemCache()
-    {
-        glyr_free_cache($self);
-    }
-}
+/* This is confusing gtk-doc */
+#ifndef __GTK_DOC_IGNORE__
 
-%extend GlyrFetcherInfo
-{
-    GlyrFetcherInfo()
-    {
-        return glyr_get_plugin_info();
-    }
+/*
+ * SWIG STUFF
+ * Usually not worth viewing.
+ */
 
-    ~GlyrFetcherInfo()
-    {
-        glyr_free_plugin_info($self);
-    }
-}
+	#ifdef COMING_FROM_SWIG
+	%extend GlyrQuery
+	{
+	    GlyrQuery()
+	    {
+		GlyrQuery my_query;
+		glyr_init_query(&my_query);
+		GlyrQuery * copy = malloc(sizeof(GlyrQuery));
+		memcpy(copy,&my_query,sizeof(GlyrQuery));
+		return copy;
+	    }
+	    ~GlyrQuery()
+	    {
+		glyr_destroy_query($self);
+		if($self != NULL)
+		    free($self);
+	    }
+	}
+
+	%extend GlyrMemCache
+	{
+	    GlyrMemCache()
+	    {
+		return glyr_new_cache();
+	    }
+	    ~GlyrMemCache()
+	    {
+		glyr_free_cache($self);
+	    }
+	}
+
+	%extend GlyrFetcherInfo
+	{
+	    GlyrFetcherInfo()
+	    {
+		return glyr_get_plugin_info();
+	    }
+
+	    ~GlyrFetcherInfo()
+	    {
+		glyr_free_plugin_info($self);
+	    }
+	}
+	#endif
 #endif
 
 

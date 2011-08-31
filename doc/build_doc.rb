@@ -5,6 +5,7 @@
 # It's a pain in the ass.
 
 MODULE="libglyr"
+
 DIR =File.expand_path("../lib")
 BUILD_HEADERS = 
 [
@@ -12,24 +13,40 @@ BUILD_HEADERS =
   "#{DIR}/types.h",
 ]
 
-DOC_DIR ="#{Dir.getwd}/doc"
+DOC_DIR = "#{File.expand_path(Dir.getwd)}/doc"
+BLD_DIR = "#{File.expand_path(Dir.getwd)}/build"
+INC_DIR = "#{File.expand_path(Dir.getwd)}/include"
+
 if Dir.exists? DOC_DIR
 	puts "-- Cleaning up.."
    system("rm -rf DOC_DIR")
+   system("rm -rf BLD_DIR")
 end
 
-puts "-- Processing file #{DIR}"
 
-def build_ignore_files
-	ignored = ""
-	`find #{DIR} -name '*\.h'`.each_line do |line|
-		line.chomp!
-		unless BUILD_HEADERS.include? line
-			ignored << ',' unless ignored.empty?
-			ignored << line
+def copy_doc_files
+   begin
+		Dir.mkdir "build"
+	rescue;end
+	
+	BUILD_HEADERS.each do |file|
+		unless system("cp #{file} build/") then
+			puts "Unable to copy #{file}!"
+			exit -1
 		end
 	end
-	ignored
+end 
+
+def copy_includes
+	if Dir.exists? INC_DIR
+		Dir.open(INC_DIR).each do |filename|
+			inc_filename = File.expand_path("include/%s" % filename)
+			if File.file? inc_filename then
+				system("cp #{inc_filename} doc/html")
+				puts " - copy: #{inc_filename}"
+			end
+		end
+	end
 end
 
 def create_dir_and_cd dirname
@@ -44,23 +61,32 @@ def do_or_die is_cool
 	exit unless system is_cool	
 end
 
-create_dir_and_cd "doc"
+############################
 
+copy_doc_files()
+
+puts "-- Processing file #{BLD_DIR}"
+
+create_dir_and_cd "doc"
 puts "-- Scanning directory"
-do_or_die("gtkdoc-scan --module='#{MODULE}' --source-dir '#{DIR}' --ignore-headers '#{build_ignore_files}'")
+do_or_die("gtkdoc-scan --module='#{MODULE}' --source-dir '../build'")
 puts " - done"
 
 puts "-- Setting up DB"
-do_or_die("gtkdoc-mkdb --module=#{MODULE} --main-sgml-file=#{MODULE}.sgml --source-dir=#{DIR} --xml-mode --output-format=xml --ignore-files '#{build_ignore_files}'")
+do_or_die("gtkdoc-mkdb --module=#{MODULE} --main-sgml-file=#{MODULE}.sgml --source-dir='../build' --xml-mode --output-format=xml")
 puts " - done"
 
 create_dir_and_cd "html"
 
 puts "-- Generating HTML"
-do_or_die("gtkdoc-mkhtml --path=#{DIR} libglyr ../#{MODULE}.sgml");
+do_or_die("gtkdoc-mkhtml --path='../../build' libglyr ../#{MODULE}.sgml 2> /dev/null");
 puts " - done"
 
 puts "-- Fixing crosslinks"
 Dir.chdir("..")
 do_or_die("gtkdoc-fixxref --module=#{MODULE} --module-dir=html --html-dir=html")
 puts " - done"
+
+Dir.chdir("..")
+puts "-- Copying include files."
+copy_includes()
