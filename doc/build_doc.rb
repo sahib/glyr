@@ -90,3 +90,8 @@ puts " - done"
 Dir.chdir("..")
 puts "-- Copying include files."
 copy_includes()
+
+if Dir.exists? "../child/glyr/doc"
+	puts "-- Copying to repo"
+	system("cp -r doc/html ../child/glyr/doc")
+end
