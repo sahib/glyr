@@ -3,48 +3,13 @@
 <book xmlns="http://www.devhelp.net/book" title="libglyr Reference Manual" link="index.html" author="" name="libglyr">
   <chapters>
     <sub name="[Insert title here]" link="ch01.html">
-      <sub name="core" link="libglyr-core.html"/>
-      <sub name="config" link="libglyr-config.html"/>
-      <sub name="blacklist" link="libglyr-blacklist.html"/>
       <sub name="glyr" link="libglyr-glyr.html"/>
       <sub name="types" link="libglyr-types.html"/>
-      <sub name="apikeys" link="libglyr-apikeys.html"/>
-      <sub name="stringlib" link="libglyr-stringlib.html"/>
-      <sub name="register_plugins" link="libglyr-register-plugins.html"/>
-      <sub name="md5" link="libglyr-md5.html"/>
-      <sub name="generic" link="libglyr-generic.html"/>
-      <sub name="common" link="libglyr-common.html"/>
     </sub>
     <sub name="API Index" link="api-index-full.html"/>
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
   </chapters>
   <functions>
-    <function name="CALC_MD5SUMS" link="libglyr-core.html#CALC-MD5SUMS:CAPS"/>
-    <function name="panic ()" link="libglyr-core.html#panic"/>
-    <function name="glyr_message ()" link="libglyr-core.html#glyr-message"/>
-    <function name="validate ()" link="libglyr-core.html#validate"/>
-    <function name="init ()" link="libglyr-core.html#init"/>
-    <function name="destroy ()" link="libglyr-core.html#destroy"/>
-    <function name="finalize ()" link="libglyr-core.html#finalize"/>
-    <function name="parser ()" link="libglyr-core.html#parser"/>
-    <function name="get_url ()" link="libglyr-core.html#get-url"/>
-    <function name="AsyncDLCB ()" link="libglyr-core.html#AsyncDLCB"/>
-    <function name="start_engine ()" link="libglyr-core.html#start-engine"/>
-    <function name="async_download ()" link="libglyr-core.html#async-download"/>
-    <function name="download_single ()" link="libglyr-core.html#download-single"/>
-    <function name="DL_init ()" link="libglyr-core.html#DL-init"/>
-    <function name="DL_free ()" link="libglyr-core.html#DL-free"/>
-    <function name="update_md5sum ()" link="libglyr-core.html#update-md5sum"/>
-    <function name="glist_free_full ()" link="libglyr-core.html#glist-free-full"/>
-    <function name="continue_search ()" link="libglyr-core.html#continue-search"/>
-    <function name="glyr_VERSION_MAJOR" link="libglyr-config.html#glyr-VERSION-MAJOR"/>
-    <function name="glyr_VERSION_MINOR" link="libglyr-config.html#glyr-VERSION-MINOR"/>
-    <function name="glyr_VERSION_NAME" link="libglyr-config.html#glyr-VERSION-NAME"/>
-    <function name="glyr_USE_COLOR" link="libglyr-config.html#glyr-USE-COLOR"/>
-    <function name="glyr_DEBUG" link="libglyr-config.html#glyr-DEBUG"/>
-    <function name="is_blacklisted ()" link="libglyr-blacklist.html#is-blacklisted"/>
-    <function name="blacklist_build ()" link="libglyr-blacklist.html#blacklist-build"/>
-    <function name="blacklist_destroy ()" link="libglyr-blacklist.html#blacklist-destroy"/>
     <function name="glyr_init ()" link="libglyr-glyr.html#glyr-init"/>
     <function name="glyr_cleanup ()" link="libglyr-glyr.html#glyr-cleanup"/>
     <function name="glyr_get ()" link="libglyr-glyr.html#glyr-get"/>
@@ -104,52 +69,10 @@
     <function name="enum GLYR_ERROR" link="libglyr-types.html#GLYR-ERROR:CAPS"/>
     <function name="enum GLYR_GET_TYPE" link="libglyr-types.html#GLYR-GET-TYPE:CAPS"/>
     <function name="enum GLYR_DATA_TYPE" link="libglyr-types.html#GLYR-DATA-TYPE:CAPS"/>
-    <function name="download ()" link="libglyr-types.html#download"/>
+    <function name="GlyrMemCache" link="libglyr-types.html#GlyrMemCache"/>
+    <function name="GlyrQuery" link="libglyr-types.html#GlyrQuery"/>
+    <function name="GlyrSourceInfo" link="libglyr-types.html#GlyrSourceInfo"/>
+    <function name="GlyrFetcherInfo" link="libglyr-types.html#GlyrFetcherInfo"/>
     <function name="DL_callback ()" link="libglyr-types.html#DL-callback"/>
-    <function name="glyr_new_cache ()" link="libglyr-types.html#glyr-new-cache"/>
-    <function name="glyr_get_plugin_info ()" link="libglyr-types.html#glyr-get-plugin-info"/>
-    <function name="API_KEY_DISCOGS" link="libglyr-apikeys.html#API-KEY-DISCOGS:CAPS"/>
-    <function name="API_KEY_AMAZON" link="libglyr-apikeys.html#API-KEY-AMAZON:CAPS"/>
-    <function name="API_KEY_LASTFM" link="libglyr-apikeys.html#API-KEY-LASTFM:CAPS"/>
-    <function name="API_KEY_FLICKR" link="libglyr-apikeys.html#API-KEY-FLICKR:CAPS"/>
-    <function name="API_KEY_GTRANS" link="libglyr-apikeys.html#API-KEY-GTRANS:CAPS"/>
-    <function name="nextTag()" link="libglyr-stringlib.html#nextTag"/>
-    <function name="levenshtein_strcmp ()" link="libglyr-stringlib.html#levenshtein-strcmp"/>
-    <function name="levenshtein_strcasecmp ()" link="libglyr-stringlib.html#levenshtein-strcasecmp"/>
-    <function name="levenshtein_strnormcmp ()" link="libglyr-stringlib.html#levenshtein-strnormcmp"/>
-    <function name="strreplace ()" link="libglyr-stringlib.html#strreplace"/>
-    <function name="convert_charset ()" link="libglyr-stringlib.html#convert-charset"/>
-    <function name="strip_html_unicode ()" link="libglyr-stringlib.html#strip-html-unicode"/>
-    <function name="chomp_breakline ()" link="libglyr-stringlib.html#chomp-breakline"/>
-    <function name="trim_copy ()" link="libglyr-stringlib.html#trim-copy"/>
-    <function name="trim_inplace ()" link="libglyr-stringlib.html#trim-inplace"/>
-    <function name="trim_nocopy ()" link="libglyr-stringlib.html#trim-nocopy"/>
-    <function name="copy_value ()" link="libglyr-stringlib.html#copy-value"/>
-    <function name="get_next_word ()" link="libglyr-stringlib.html#get-next-word"/>
-    <function name="remove_tags_from_string ()" link="libglyr-stringlib.html#remove-tags-from-string"/>
-    <function name="unescape_html_UTF8 ()" link="libglyr-stringlib.html#unescape-html-UTF8"/>
-    <function name="prepare_url ()" link="libglyr-stringlib.html#prepare-url"/>
-    <function name="beautify_string ()" link="libglyr-stringlib.html#beautify-string"/>
-    <function name="prepare_string ()" link="libglyr-stringlib.html#prepare-string"/>
-    <function name="get_search_value ()" link="libglyr-stringlib.html#get-search-value"/>
-    <function name="register_fetcher_plugins ()" link="libglyr-register-plugins.html#register-fetcher-plugins"/>
-    <function name="unregister_fetcher_plugins ()" link="libglyr-register-plugins.html#unregister-fetcher-plugins"/>
-    <function name="r_getFList ()" link="libglyr-register-plugins.html#r-getFList"/>
-    <function name="r_getSList ()" link="libglyr-register-plugins.html#r-getSList"/>
-    <function name="get_plugin_info ()" link="libglyr-register-plugins.html#get-plugin-info"/>
-    <function name="free_plugin_info ()" link="libglyr-register-plugins.html#free-plugin-info"/>
-    <function name="MDPrintArr ()" link="libglyr-md5.html#MDPrintArr"/>
-    <function name="MD5Init ()" link="libglyr-md5.html#MD5Init"/>
-    <function name="MD5Final ()" link="libglyr-md5.html#MD5Final"/>
-    <function name="MD5Update ()" link="libglyr-md5.html#MD5Update"/>
-    <function name="generic_txt_finalizer ()" link="libglyr-generic.html#generic-txt-finalizer"/>
-    <function name="generic_img_finalizer ()" link="libglyr-generic.html#generic-img-finalizer"/>
-    <function name="generic_amazon_url ()" link="libglyr-common.html#generic-amazon-url"/>
-    <function name="generic_google_url ()" link="libglyr-common.html#generic-google-url"/>
-    <function name="generic_google_parse ()" link="libglyr-common.html#generic-google-parse"/>
-    <function name="size_is_okay ()" link="libglyr-common.html#size-is-okay"/>
-    <function name="generic_musicbrainz_parse ()" link="libglyr-common.html#generic-musicbrainz-parse"/>
-    <function name="generic_musicbrainz_url ()" link="libglyr-common.html#generic-musicbrainz-url"/>
-    <function name="please_what_type ()" link="libglyr-common.html#please-what-type"/>
   </functions>
 </book>

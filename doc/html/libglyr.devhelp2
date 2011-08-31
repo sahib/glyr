@@ -3,48 +3,13 @@
 <book xmlns="http://www.devhelp.net/book" title="libglyr Reference Manual" link="index.html" author="" name="libglyr" version="2" language="c">
   <chapters>
     <sub name="[Insert title here]" link="ch01.html">
-      <sub name="core" link="libglyr-core.html"/>
-      <sub name="config" link="libglyr-config.html"/>
-      <sub name="blacklist" link="libglyr-blacklist.html"/>
       <sub name="glyr" link="libglyr-glyr.html"/>
       <sub name="types" link="libglyr-types.html"/>
-      <sub name="apikeys" link="libglyr-apikeys.html"/>
-      <sub name="stringlib" link="libglyr-stringlib.html"/>
-      <sub name="register_plugins" link="libglyr-register-plugins.html"/>
-      <sub name="md5" link="libglyr-md5.html"/>
-      <sub name="generic" link="libglyr-generic.html"/>
-      <sub name="common" link="libglyr-common.html"/>
     </sub>
     <sub name="API Index" link="api-index-full.html"/>
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
   </chapters>
   <functions>
-    <keyword type="macro" name="CALC_MD5SUMS" link="libglyr-core.html#CALC-MD5SUMS:CAPS"/>
-    <keyword type="function" name="panic ()" link="libglyr-core.html#panic"/>
-    <keyword type="function" name="glyr_message ()" link="libglyr-core.html#glyr-message"/>
-    <keyword type="function" name="validate ()" link="libglyr-core.html#validate"/>
-    <keyword type="function" name="init ()" link="libglyr-core.html#init"/>
-    <keyword type="function" name="destroy ()" link="libglyr-core.html#destroy"/>
-    <keyword type="function" name="finalize ()" link="libglyr-core.html#finalize"/>
-    <keyword type="function" name="parser ()" link="libglyr-core.html#parser"/>
-    <keyword type="function" name="get_url ()" link="libglyr-core.html#get-url"/>
-    <keyword type="function" name="AsyncDLCB ()" link="libglyr-core.html#AsyncDLCB"/>
-    <keyword type="function" name="start_engine ()" link="libglyr-core.html#start-engine"/>
-    <keyword type="function" name="async_download ()" link="libglyr-core.html#async-download"/>
-    <keyword type="function" name="download_single ()" link="libglyr-core.html#download-single"/>
-    <keyword type="function" name="DL_init ()" link="libglyr-core.html#DL-init"/>
-    <keyword type="function" name="DL_free ()" link="libglyr-core.html#DL-free"/>
-    <keyword type="function" name="update_md5sum ()" link="libglyr-core.html#update-md5sum"/>
-    <keyword type="function" name="glist_free_full ()" link="libglyr-core.html#glist-free-full"/>
-    <keyword type="function" name="continue_search ()" link="libglyr-core.html#continue-search"/>
-    <keyword type="macro" name="glyr_VERSION_MAJOR" link="libglyr-config.html#glyr-VERSION-MAJOR"/>
-    <keyword type="macro" name="glyr_VERSION_MINOR" link="libglyr-config.html#glyr-VERSION-MINOR"/>
-    <keyword type="macro" name="glyr_VERSION_NAME" link="libglyr-config.html#glyr-VERSION-NAME"/>
-    <keyword type="macro" name="glyr_USE_COLOR" link="libglyr-config.html#glyr-USE-COLOR"/>
-    <keyword type="macro" name="glyr_DEBUG" link="libglyr-config.html#glyr-DEBUG"/>
-    <keyword type="function" name="is_blacklisted ()" link="libglyr-blacklist.html#is-blacklisted"/>
-    <keyword type="function" name="blacklist_build ()" link="libglyr-blacklist.html#blacklist-build"/>
-    <keyword type="function" name="blacklist_destroy ()" link="libglyr-blacklist.html#blacklist-destroy"/>
     <keyword type="function" name="glyr_init ()" link="libglyr-glyr.html#glyr-init"/>
     <keyword type="function" name="glyr_cleanup ()" link="libglyr-glyr.html#glyr-cleanup"/>
     <keyword type="function" name="glyr_get ()" link="libglyr-glyr.html#glyr-get"/>
@@ -104,53 +69,11 @@
     <keyword type="enum" name="enum GLYR_ERROR" link="libglyr-types.html#GLYR-ERROR:CAPS"/>
     <keyword type="enum" name="enum GLYR_GET_TYPE" link="libglyr-types.html#GLYR-GET-TYPE:CAPS"/>
     <keyword type="enum" name="enum GLYR_DATA_TYPE" link="libglyr-types.html#GLYR-DATA-TYPE:CAPS"/>
-    <keyword type="function" name="download ()" link="libglyr-types.html#download"/>
+    <keyword type="struct" name="GlyrMemCache" link="libglyr-types.html#GlyrMemCache"/>
+    <keyword type="struct" name="GlyrQuery" link="libglyr-types.html#GlyrQuery"/>
+    <keyword type="struct" name="GlyrSourceInfo" link="libglyr-types.html#GlyrSourceInfo"/>
+    <keyword type="struct" name="GlyrFetcherInfo" link="libglyr-types.html#GlyrFetcherInfo"/>
     <keyword type="function" name="DL_callback ()" link="libglyr-types.html#DL-callback"/>
-    <keyword type="function" name="glyr_new_cache ()" link="libglyr-types.html#glyr-new-cache"/>
-    <keyword type="function" name="glyr_get_plugin_info ()" link="libglyr-types.html#glyr-get-plugin-info"/>
-    <keyword type="macro" name="API_KEY_DISCOGS" link="libglyr-apikeys.html#API-KEY-DISCOGS:CAPS"/>
-    <keyword type="macro" name="API_KEY_AMAZON" link="libglyr-apikeys.html#API-KEY-AMAZON:CAPS"/>
-    <keyword type="macro" name="API_KEY_LASTFM" link="libglyr-apikeys.html#API-KEY-LASTFM:CAPS"/>
-    <keyword type="macro" name="API_KEY_FLICKR" link="libglyr-apikeys.html#API-KEY-FLICKR:CAPS"/>
-    <keyword type="macro" name="API_KEY_GTRANS" link="libglyr-apikeys.html#API-KEY-GTRANS:CAPS"/>
-    <keyword type="macro" name="nextTag()" link="libglyr-stringlib.html#nextTag"/>
-    <keyword type="function" name="levenshtein_strcmp ()" link="libglyr-stringlib.html#levenshtein-strcmp"/>
-    <keyword type="function" name="levenshtein_strcasecmp ()" link="libglyr-stringlib.html#levenshtein-strcasecmp"/>
-    <keyword type="function" name="levenshtein_strnormcmp ()" link="libglyr-stringlib.html#levenshtein-strnormcmp"/>
-    <keyword type="function" name="strreplace ()" link="libglyr-stringlib.html#strreplace"/>
-    <keyword type="function" name="convert_charset ()" link="libglyr-stringlib.html#convert-charset"/>
-    <keyword type="function" name="strip_html_unicode ()" link="libglyr-stringlib.html#strip-html-unicode"/>
-    <keyword type="function" name="chomp_breakline ()" link="libglyr-stringlib.html#chomp-breakline"/>
-    <keyword type="function" name="trim_copy ()" link="libglyr-stringlib.html#trim-copy"/>
-    <keyword type="function" name="trim_inplace ()" link="libglyr-stringlib.html#trim-inplace"/>
-    <keyword type="function" name="trim_nocopy ()" link="libglyr-stringlib.html#trim-nocopy"/>
-    <keyword type="function" name="copy_value ()" link="libglyr-stringlib.html#copy-value"/>
-    <keyword type="function" name="get_next_word ()" link="libglyr-stringlib.html#get-next-word"/>
-    <keyword type="function" name="remove_tags_from_string ()" link="libglyr-stringlib.html#remove-tags-from-string"/>
-    <keyword type="function" name="unescape_html_UTF8 ()" link="libglyr-stringlib.html#unescape-html-UTF8"/>
-    <keyword type="function" name="prepare_url ()" link="libglyr-stringlib.html#prepare-url"/>
-    <keyword type="function" name="beautify_string ()" link="libglyr-stringlib.html#beautify-string"/>
-    <keyword type="function" name="prepare_string ()" link="libglyr-stringlib.html#prepare-string"/>
-    <keyword type="function" name="get_search_value ()" link="libglyr-stringlib.html#get-search-value"/>
-    <keyword type="function" name="register_fetcher_plugins ()" link="libglyr-register-plugins.html#register-fetcher-plugins"/>
-    <keyword type="function" name="unregister_fetcher_plugins ()" link="libglyr-register-plugins.html#unregister-fetcher-plugins"/>
-    <keyword type="function" name="r_getFList ()" link="libglyr-register-plugins.html#r-getFList"/>
-    <keyword type="function" name="r_getSList ()" link="libglyr-register-plugins.html#r-getSList"/>
-    <keyword type="function" name="get_plugin_info ()" link="libglyr-register-plugins.html#get-plugin-info"/>
-    <keyword type="function" name="free_plugin_info ()" link="libglyr-register-plugins.html#free-plugin-info"/>
-    <keyword type="function" name="MDPrintArr ()" link="libglyr-md5.html#MDPrintArr"/>
-    <keyword type="function" name="MD5Init ()" link="libglyr-md5.html#MD5Init"/>
-    <keyword type="function" name="MD5Final ()" link="libglyr-md5.html#MD5Final"/>
-    <keyword type="function" name="MD5Update ()" link="libglyr-md5.html#MD5Update"/>
-    <keyword type="function" name="generic_txt_finalizer ()" link="libglyr-generic.html#generic-txt-finalizer"/>
-    <keyword type="function" name="generic_img_finalizer ()" link="libglyr-generic.html#generic-img-finalizer"/>
-    <keyword type="function" name="generic_amazon_url ()" link="libglyr-common.html#generic-amazon-url"/>
-    <keyword type="function" name="generic_google_url ()" link="libglyr-common.html#generic-google-url"/>
-    <keyword type="function" name="generic_google_parse ()" link="libglyr-common.html#generic-google-parse"/>
-    <keyword type="function" name="size_is_okay ()" link="libglyr-common.html#size-is-okay"/>
-    <keyword type="function" name="generic_musicbrainz_parse ()" link="libglyr-common.html#generic-musicbrainz-parse"/>
-    <keyword type="function" name="generic_musicbrainz_url ()" link="libglyr-common.html#generic-musicbrainz-url"/>
-    <keyword type="function" name="please_what_type ()" link="libglyr-common.html#please-what-type"/>
     <keyword type="constant" name="GLYRE_UNKNOWN" link="libglyr-types.html#GLYRE-UNKNOWN:CAPS"/>
     <keyword type="constant" name="GLYRE_OK" link="libglyr-types.html#GLYRE-OK:CAPS"/>
     <keyword type="constant" name="GLYRE_BAD_OPTION" link="libglyr-types.html#GLYRE-BAD-OPTION:CAPS"/>

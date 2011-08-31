@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-glyr.html" title="glyr">
-<link rel="next" href="libglyr-apikeys.html" title="apikeys">
+<link rel="next" href="api-index-full.html" title="API Index">
 <meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -18,7 +18,7 @@
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libglyr Reference Manual</th>
-<td><a accesskey="n" href="libglyr-apikeys.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libglyr-types.synopsis" class="shortcut">Top</a>
@@ -57,12 +57,12 @@
 enum                <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR">GLYR_ERROR</a>;
 enum                <a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE">GLYR_GET_TYPE</a>;
 enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE">GLYR_DATA_TYPE</a>;
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (<a class="link" href="libglyr-types.html#download" title="download ()">*download</a>)                         (<em class="parameter"><code><span class="type">GlyrMemCache</span> *dl</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct GlyrQuery</span> *s</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (<a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()">*DL_callback</a>)                      (<em class="parameter"><code><span class="type">GlyrMemCache</span> *dl</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct GlyrQuery</span> *s</code></em>);
-<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-glyr.html#glyr-new-cache" title="glyr_new_cache ()">glyr_new_cache</a>                      (<em class="parameter"><code><span class="type">void</span></code></em>);
-<span class="returnvalue">GlyrFetcherInfo</span> *   <a class="link" href="libglyr-glyr.html#glyr-get-plugin-info" title="glyr_get_plugin_info ()">glyr_get_plugin_info</a>                (<em class="parameter"><code><span class="type">void</span></code></em>);
+                    <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache">GlyrMemCache</a>;
+                    <a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery">GlyrQuery</a>;
+                    <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo">GlyrSourceInfo</a>;
+                    <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo">GlyrFetcherInfo</a>;
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (<a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()">*DL_callback</a>)                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct _GlyrQuery</span> *s</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -208,17 +208,17 @@ Enum values used for the thing, to specify the thing.
 </tr>
 <tr>
 <td><p><a name="GLYRE-BAD-OPTION:CAPS"></a><span class="term"><code class="literal">GLYRE_BAD_OPTION</code></span></p></td>
-<td>you passed a bad option to glyr_opt_*()
+<td>you passed a bad option to glyr_opt_*
 </td>
 </tr>
 <tr>
 <td><p><a name="GLYRE-BAD-VALUE:CAPS"></a><span class="term"><code class="literal">GLYRE_BAD_VALUE</code></span></p></td>
-<td>Invalid value in glyr_opt_*()
+<td>Invalid value in glyr_opt_*
 </td>
 </tr>
 <tr>
 <td><p><a name="GLYRE-EMPTY-STRUCT:CAPS"></a><span class="term"><code class="literal">GLYRE_EMPTY_STRUCT</code></span></p></td>
-<td>you passed an empty struct to <code class="function">glyr_opt_()</code> 
+<td>you passed an empty struct to glyr_opt_ 
 </td>
 </tr>
 <tr>
@@ -481,15 +481,326 @@ It describes what kind of data the cache holds.
 </div>
 <hr>
 <div class="refsect2">
-<a name="download"></a><h3>download ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (*download)                         (<em class="parameter"><code><span class="type">GlyrMemCache</span> *dl</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct GlyrQuery</span> *s</code></em>);</pre>
+<a name="GlyrMemCache"></a><h3>GlyrMemCache</h3>
+<pre class="programlisting">typedef struct {
+  char  *data;        
+  size_t size;        
+  char  *dsrc;        
+  char  *prov;        
+  GLYR_DATA_TYPE type;
+  int   duration;     
+  bool  is_image;    
+  char * img_format; 
+  unsigned char md5sum[16]; 
+
+  struct _GlyrMemCache * next; 
+  struct _GlyrMemCache * prev; 
+} GlyrMemCache;
+</pre>
+<p>
+GlyrMemCache represents a single item received by libglyr. 
+You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is meant to be read-only.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrMemCache.data"></a>data</code></em>;</span></p></td>
+<td>contains the data, string when is_image is false, raw data otherwise</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="GlyrMemCache.size"></a>size</code></em>;</span></p></td>
+<td>Size of this item in bytes</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrMemCache.dsrc"></a>dsrc</code></em>;</span></p></td>
+<td>URL pointing to the origin of this item.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrMemCache.prov"></a>prov</code></em>;</span></p></td>
+<td>name of the provider that delivered this item.</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> <em class="structfield"><code><a name="GlyrMemCache.type"></a>type</code></em>;</span></p></td>
+<td>The GLYR_DATA_TYPE of this item.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrMemCache.duration"></a>duration</code></em>;</span></p></td>
+<td>For tracklist, only. Contains the tracklength in seconds.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrMemCache.is-image"></a>is_image</code></em>;</span></p></td>
+<td>Is this item an image?</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrMemCache.img-format"></a>img_format</code></em>;</span></p></td>
+<td>Format of the image (png,jpeg), NULL if text item.</td>
+</tr>
+<tr>
+<td><p><span class="term">unsigned <span class="type">char</span> <em class="structfield"><code><a name="GlyrMemCache.md5sum"></a>md5sum</code></em>[16];</span></p></td>
+<td>A md5sum of the data field.</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.next"></a>next</code></em>;</span></p></td>
+<td>A pointer to the next item in the list, or NULL</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.prev"></a>prev</code></em>;</span></p></td>
+<td>A pointer to the previous item in the list, or NULL</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GlyrQuery"></a><h3>GlyrQuery</h3>
+<pre class="programlisting">typedef struct {
+    GLYR_GET_TYPE type; 
+
+    int number; 
+    int plugmax; 
+    int verbosity; 
+    size_t fuzzyness; 
+
+    int img_min_size; 
+    int img_max_size; 
+
+    int parallel; 
+    int timeout;  
+    int redirects;
+
+    bool force_utf8; 
+    bool download; 
+    float qsratio; 
+
+
+/* This is confusing gtk-doc */
+#endif
+
+    /* Dynamic allocated */
+    const char * lang; 
+    const char * proxy; 
+    char * artist; 
+    char * album;  
+    char * title;  
+    char * from;   
+    char * allowed_formats; 
+    char * useragent; 
+
+#endif 
+} GlyrQuery;
+</pre>
+<p>
+This structure holds all settings used to influence libglyr.
+You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
+</p>
+<p>
+You can safely read from all fields and should free the query with <a class="link" href="libglyr-glyr.html#glyr-destroy-query" title="glyr_destroy_query ()"><code class="function">glyr_destroy_query()</code></a> after use.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrQuery.type"></a>type</code></em>;</span></p></td>
+<td>The type of metadata to get.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.number"></a>number</code></em>;</span></p></td>
+<td>The maximum number of items to get; 0 -&gt; inf</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.plugmax"></a>plugmax</code></em>;</span></p></td>
+<td>Max number of items per provider.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.verbosity"></a>verbosity</code></em>;</span></p></td>
+<td>How verbose this query should be treated.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="GlyrQuery.fuzzyness"></a>fuzzyness</code></em>;</span></p></td>
+<td>Max. treshold for levenshtein.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.img-min-size"></a>img_min_size</code></em>;</span></p></td>
+<td>Min. size in pixels an image may have.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.img-max-size"></a>img_max_size</code></em>;</span></p></td>
+<td>Min. size in pixels an image may have.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.parallel"></a>parallel</code></em>;</span></p></td>
+<td>Max. number of parallel queried providers.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.timeout"></a>timeout</code></em>;</span></p></td>
+<td>Max. timeout in seconds to wait before cancelling a download.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.redirects"></a>redirects</code></em>;</span></p></td>
+<td>Max number of redirects. You shouldn't set this.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.force-utf8"></a>force_utf8</code></em>;</span></p></td>
+<td>Should be UTF8 forced on text items?</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.download"></a>download</code></em>;</span></p></td>
+<td>should be images downloaded?</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">float</span> <em class="structfield"><code><a name="GlyrQuery.qsratio"></a>qsratio</code></em>;</span></p></td>
+<td>0.0 = maxspeed, 1.0 = max quality, 0.85 -&gt; default.</td>
+</tr>
+<tr>
+<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.lang"></a>lang</code></em>;</span></p></td>
+<td>Language code ISO-639-1, like 'de','en' or 'auto'</td>
+</tr>
+<tr>
+<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.proxy"></a>proxy</code></em>;</span></p></td>
+<td>The proxy to use.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.artist"></a>artist</code></em>;</span></p></td>
+<td>Artist to use.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.album"></a>album</code></em>;</span></p></td>
+<td>Album to use.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.title"></a>title</code></em>;</span></p></td>
+<td>Title to use.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.from"></a>from</code></em>;</span></p></td>
+<td>Define what providers are queried.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.allowed-formats"></a>allowed_formats</code></em>;</span></p></td>
+<td>Allowed imageformats.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.useragent"></a>useragent</code></em>;</span></p></td>
+<td>Useragent to use during http-requests</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GlyrSourceInfo"></a><h3>GlyrSourceInfo</h3>
+<pre class="programlisting">typedef struct {
+  char * name;
+  char key;
+  GLYR_GET_TYPE type;
+  int quality;
+  int speed;
+
+  struct _GlyrSourceInfo * next;
+  struct _GlyrSourceInfo * prev;
+} GlyrSourceInfo;
+</pre>
+<p>
+Represents a provider. 
+It's a simpler version of the internal version,
+with statically allocated data only,
+therefore you can modify and read to your liking.
+</p>
+<p>
+It is freed when <a class="link" href="libglyr-glyr.html#glyr-free-plugin-info" title="glyr_free_plugin_info ()"><code class="function">glyr_free_plugin_info()</code></a> is called on it's GlyrFetcherInfo
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrSourceInfo.name"></a>name</code></em>;</span></p></td>
+<td>The name of the provider.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> <em class="structfield"><code><a name="GlyrSourceInfo.key"></a>key</code></em>;</span></p></td>
+<td>A one-letter shorter-form of <em class="parameter"><code>name</code></em>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrSourceInfo.type"></a>type</code></em>;</span></p></td>
+<td>Tells what type of data this provider delivers</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrSourceInfo.quality"></a>quality</code></em>;</span></p></td>
+<td>A quality rating from 0-100</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrSourceInfo.speed"></a>speed</code></em>;</span></p></td>
+<td>A speed rating form 0</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.next"></a>next</code></em>;</span></p></td>
+<td>A pointer to the next provider.</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.prev"></a>prev</code></em>;</span></p></td>
+<td>A pointer to the previous provider.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GlyrFetcherInfo"></a><h3>GlyrFetcherInfo</h3>
+<pre class="programlisting">typedef struct {
+  char * name;
+  GLYR_GET_TYPE type;
+  GlyrSourceInfo * head;
+
+  struct _GlyrFetcherInfo * next;
+  struct _GlyrFetcherInfo * prev;
+} GlyrFetcherInfo;
+</pre>
+<p>
+Represents a getter.
+</p>
+<p>
+It's a simpler version of the internal version,
+therefore you can modify and read to your liking.
+</p>
+<p>
+You should pass it to <a class="link" href="libglyr-glyr.html#glyr-free-plugin-info" title="glyr_free_plugin_info ()"><code class="function">glyr_free_plugin_info()</code></a> once done.
+</p>
+<p>
+<em class="parameter"><code>see_also</code></em>: <a class="link" href="libglyr-glyr.html#glyr-get-plugin-info" title="glyr_get_plugin_info ()"><code class="function">glyr_get_plugin_info()</code></a>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrFetcherInfo.name"></a>name</code></em>;</span></p></td>
+<td>The name of the provider.</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.type"></a>type</code></em>;</span></p></td>
+<td>Tells what type of data this getter delivers.</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.head"></a>head</code></em>;</span></p></td>
+<td>A doubly linked list of GlyrSourceInfo (the provider available for this getter)</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.next"></a>next</code></em>;</span></p></td>
+<td>A pointer to the next provider.</td>
+</tr>
+<tr>
+<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.prev"></a>prev</code></em>;</span></p></td>
+<td>A pointer to the previous provider.</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
 <a name="DL-callback"></a><h3>DL_callback ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (*DL_callback)                      (<em class="parameter"><code><span class="type">GlyrMemCache</span> *dl</code></em>,
-                                                         <em class="parameter"><code><span class="type">struct GlyrQuery</span> *s</code></em>);</pre>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (*DL_callback)                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
+                                                         <em class="parameter"><code><span class="type">struct _GlyrQuery</span> *s</code></em>);</pre>
 <p>
 Typedef'd version of the callback option used by <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a>
 </p>
@@ -498,7 +809,7 @@ Typedef'd version of the callback option used by <a class="link" href="libglyr-g
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>dl</code></em> :</span></p></td>
-<td>The current item you can investigate. Not NULL.</td>
+<td>The current item you can investigate. Guaranteed to be not <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><span class="type">NULL</span></a>.</td>
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
@@ -510,71 +821,6 @@ Typedef'd version of the callback option used by <a class="link" href="libglyr-g
 <td>a GLYR_ERROR</td>
 </tr>
 </tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-new-cache"></a><h3>glyr_new_cache ()</h3>
-<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_new_cache                      (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Initializes a new memcache.
-</p>
-<p>
-Normally you never need to do this.
-</p>
-<p>
-Don't forget to free the cache with <a class="link" href="libglyr-glyr.html#glyr-free-cache" title="glyr_free_cache ()"><code class="function">glyr_free_cache()</code></a>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>: A newly allocated and initialized memcache with no data.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-get-plugin-info"></a><h3>glyr_get_plugin_info ()</h3>
-<pre class="programlisting"><span class="returnvalue">GlyrFetcherInfo</span> *   glyr_get_plugin_info                (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-get information about existing Fetcher and Source
-A Doubly linked list of Fetcher is returned, each having a field 'head',
-being a pointer to a doubly linked list of GlyrSourceInfos
-</p>
-<p>
-It is best understood by an example:
-</p>
-<div class="example">
-<a name="id423736"></a><p class="title"><b>Example 2. Using GlyrFetcherInfo:</b></p>
-<div class="example-contents"><pre class="programlisting">
-static void visualize_from_options(void)
-{
-    GlyrFetcherInfo * info = glyr_get_plugin_info();
-    if(info != NULL)
-    {
-        for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0-&gt;next)
-        {
-            printf("%s\n",elem0-&gt;name);
-            for(GlyrSourceInfo * elem1 = elem0-&gt;head; elem1; elem1 = elem1-&gt;next)
-            {
-                printf("  [%c] %s\n",elem1-&gt;key,elem1-&gt;name);
-            }
-            printf("\n");
-        }
-   }
-   glyr_free_plugin_info(info);
-}
-</pre></div>
-</div>
-<p><br class="example-break">
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>A newly allocated GlyrFetcherInfo structure, you can iterate over.</td>
-</tr></tbody>
 </table></div>
 </div>
 </div>
