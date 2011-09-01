@@ -1,7 +1,7 @@
 # Maintainer: Christopher Pahl <sahib@online.de>
 # glyr PKGBUILD for glyr 
 pkgname=glyr-git
-pkgver=20110830
+pkgver=20110901
 pkgrel=1
 pkgdesc="A metadata searchengine utility and library written in C"
 arch=('i686' 'x86_64')
