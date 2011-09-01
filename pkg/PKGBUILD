@@ -3,7 +3,7 @@
 pkgname=glyr-git
 pkgver=20110901
 pkgrel=1
-pkgdesc="A metadata searchengine utility and library written in C"
+pkgdesc="A music metadata searchengine utility and library written in C"
 arch=('i686' 'x86_64')
 depends=(glib2 curl)
 provides=('glyr')
