@@ -48,7 +48,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr"
+#define GLYR_DEFAULT_USERAGENT "libglyr/0.85 (https://github.com/sahib/glyr)"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -61,7 +61,7 @@
  * @GLYRE_BAD_OPTION: you passed a bad option to glyr_opt_*
  * @GLYRE_BAD_VALUE: Invalid value in glyr_opt_*
  * @GLYRE_EMPTY_STRUCT: you passed an empty struct to glyr_opt_ 
- * @GLYRE_NO_PROVIDER: setttings->provider == NULL
+ * @GLYRE_NO_PROVIDER: No valid provider specified in glyr_opt_from()
  * @GLYRE_UNKNOWN_GET: settings->type is not valid
  * @GLYRE_INSUFF_DATA: Insufficient data supplied; (artist/album/title) missing
  * @GLYRE_SKIP: If returned by callback, cache wont be added to results
@@ -69,7 +69,9 @@
  * @GLYRE_STOP_PRE: Will stop searching, but won't add the current item
  * @GLYRE_NO_INIT: Library has not been initialized with glyr_init() yet
  *
- * Enum values used for the thing, to specify the thing.
+ * All errors you can get, via glyr_get() and the glyr_opt_* calls.
+ * 
+ * Use glyr_strerror() to convert them to meaningful strings.
  *
  **/
 typedef enum
@@ -178,7 +180,7 @@ typedef enum
  * @size: Size of this item in bytes
  * @dsrc: URL pointing to the origin of this item.
  * @prov: name of the provider that delivered this item.
- * @type: The GLYR_DATA_TYPE of this item.
+ * @type: The #GLYR_DATA_TYPE of this item.
  * @duration: For tracklist, only. Contains the tracklength in seconds.
  * @is_image: Is this item an image?
  * @img_format: Format of the image (png,jpeg), NULL if text item.
@@ -287,10 +289,10 @@ typedef struct _GlyrQuery {
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
 
+/* This is confusing gtk-doc */
 #ifndef __GTK_DOC_IGNORE__
 	#ifdef COMING_FROM_SWIG
-		%
-	    }
+		%}
 	#endif
 #endif 
 
@@ -362,7 +364,7 @@ typedef struct _GlyrFetcherInfo {
  * 
  * Typedef'd version of the callback option used by glyr_opt_download()
  *
- * Returns: a GLYR_ERROR
+ * Returns: a #GLYR_ERROR
 */
 typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 

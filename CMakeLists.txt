@@ -111,6 +111,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/allmusic_com.c"
 	"${DIR_COVER}/discogs.c"
 	"${DIR_COVER}/amazon.c"
+	"${DIR_COVER}/rhapsody.c"
 	"${DIR_LYRICS}/lyrdb.c"
 	"${DIR_LYRICS}/metallum.c"
 	"${DIR_LYRICS}/magistrix.c"
@@ -127,9 +128,10 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/google.c"
 	"${DIR_PHOTOS}/discogs.c"
 	"${DIR_PHOTOS}/singerpictures.c"
-#	        "${DIR_LYRICS}/songlyrics.c"
-#	        "${DIR_LYRICS}/directlyrics.c"
-#	        "${DIR_LYRICS}/darklyrics.c"
+	"${DIR_PHOTOS}/rhapsody.c"
+#        "${DIR_LYRICS}/songlyrics.c"
+#        "${DIR_LYRICS}/directlyrics.c"
+#        "${DIR_LYRICS}/darklyrics.c"
 )
 
 # Pretty high warnlevel

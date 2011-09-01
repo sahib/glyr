@@ -143,7 +143,7 @@ void glyr_free_cache(GlyrMemCache * cache);
 * </programlisting>
 * </informalexample>
 * 
-* Note that you can return certaing members of GLYR_ERROR in the callback:
+* Note that you can return certaing members of %GLYR_ERROR in the callback:
 
 * %GLYRE_SKIP: To not add this item to the results.
 
@@ -280,17 +280,6 @@ GLYR_ERROR glyr_opt_album(GlyrQuery * s,  char * album);
 * Returns: an error ID
 */
 GLYR_ERROR glyr_opt_title(GlyrQuery * s,  char * title);
-
-/**
-* glyr_opt_:
-* @s: The GlyrQuery settings struct to store this option in.
-* @ype: 
-*
-* 
-*
-* Returns: an error ID
-*/
-
 
 /**
 * glyr_opt_img_minsize:
@@ -486,7 +475,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 * Restricts providers to retrieve at max. @plugmax items, you might use this to get results
 * over several providers when glyr_opt_number() is set to something higher than 1.
 *
-* For the getters GLYR_GET_COVERART and GLYR_GET_ARTIST_PHOTOS only.
+* For the getters %GLYR_GET_COVERART and %GLYR_GET_ARTIST_PHOTOS only.
 * The allowed formats for images, in a comma separated list.
 * Examples:
 * <itemizedlist>
@@ -606,7 +595,7 @@ GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio);
 * </listitem>
 * <listitem>
 * <para>
-* http://hman:rootroot@godserve.com:666
+* http://hman:rootroot @ godserve.com:666
 * </para>
 * </listitem>
 * </itemizedlist>
@@ -646,7 +635,7 @@ GlyrMemCache * glyr_download(const char * url, GlyrQuery * s);
 
 /**
 * glyr_strerror:
-* @ID: a member of the GLYR_ERROR enum. 
+* @ID: a member of the %GLYR_ERROR enum. 
 *
 * Gets a descriptive message from an error ID.
 *
@@ -760,7 +749,7 @@ void glyr_free_plugin_info(GlyrFetcherInfo * info);
 
 /**
 * glyr_type_to_string:
-* @type: a member of the GLYR_DATA_TYPE enum, GLYR_TYPE_COVER_PRI for example
+* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVER_PRI for example
 *
 * Converts a type to a string.
 *

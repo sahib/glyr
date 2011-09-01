@@ -21,7 +21,7 @@ describe 'artistbio' do
 			list.should be_an_instance_of Array
 			list.size.should equal 1
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.first.size.should be < (lsde.first.size - 20000)
+			list.first.size.should be < (lsde.first.size - 15000)
 			lsde.first.size.should be > 35000 # wow, that was surprisingly long
 		end
 

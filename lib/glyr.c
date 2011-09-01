@@ -66,7 +66,9 @@ static gchar * auto_choose_lang(GlyrQuery * query)
         for(gint i = 0; possible_locales[i]; i++)
         {
             gsize loc_len = strlen(possible_locales[i]);
-            if(loc_len < min_length && g_ascii_strncasecmp("C",possible_locales[i],1) != 0)
+            if(loc_len < min_length && 
+	       g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
+	       g_ascii_strncasecmp("C", possible_locales[i],1) != 0)
             {
                 wanted = (gchar*)possible_locales[i];
                 min_length = loc_len;
@@ -763,7 +765,7 @@ const char * glyr_type_to_string(GLYR_DATA_TYPE type)
     case GLYR_TYPE_LYRICS:
         return "songtext";
     case GLYR_TYPE_PHOTOS:
-        return "band photo";
+        return "artistphoto";
     case GLYR_TYPE_REVIEW:
         return "albumreview";
     case GLYR_TYPE_AINFO:

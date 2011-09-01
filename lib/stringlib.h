@@ -80,6 +80,13 @@ gchar * beautify_string(const gchar * lyrics);
 /* "Normalizes" a string, suitable for URls afterwards */
 gchar * prepare_string(const gchar * input, gboolean delinitfy);
 
+/* Search for name in ref, ending with end_string and return it */
 gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string);
+
+/* Sed. */
+gchar * regex_replace_by_table(const gchar * string, const gchar * regex_table[][2], gsize table_size);
+
+/* Translates umlauts like 'ä' to an approx. 'a' */
+gchar * translate_umlauts(gchar * string);
 
 #endif

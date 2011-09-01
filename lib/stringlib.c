@@ -115,7 +115,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
  *
  * @return a newly allocated string
  */
-gchar * delete_string[][2] = {
+const gchar * regex_table[][2] = {
 	{"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
 	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
 	{"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
@@ -123,13 +123,14 @@ gchar * delete_string[][2] = {
 	{"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
 };	
 
-gchar * strip_lint_from_names(const gchar * string)
+const gsize regex_table_size = sizeof(regex_table) / (2 * sizeof(gchar*));
+
+gchar * regex_replace_by_table(const gchar * string, const gchar * delete_string[][2], gsize string_size)
 {
 	gchar * result_string = (gchar*)string;
-	gint string_size = sizeof(delete_string)/ (2*sizeof(gchar*));
 
 	/* Match strings to delete */
-	for(gint it = 0; it < string_size; it++)
+	for(gsize it = 0; it < string_size; it++)
 	{
 		GError * match_error = NULL;
 		GRegex * regex = g_regex_new(delete_string[it][0],G_REGEX_CASELESS,0,&match_error);
@@ -216,8 +217,8 @@ gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const g
 	gsize diff = 100;
 	if(string != NULL && other != NULL)
 	{
-		gchar * norm_string = strip_lint_from_names(string);
-		gchar * norm_other  = strip_lint_from_names(other);
+		gchar * norm_string = regex_replace_by_table(string,regex_table,regex_table_size);
+		gchar * norm_other  = regex_replace_by_table(other, regex_table,regex_table_size);
 		if(norm_string && norm_other)
 		{
 			gchar * pretty_string = beautify_string(norm_string);
@@ -286,7 +287,7 @@ gchar * prepare_string(const gchar * input, gboolean delintify)
             gchar * normalized = g_utf8_normalize(downed,-1,G_NORMALIZE_NFKC);
             if(normalized != NULL)
             {
-		gchar * no_lint = strip_lint_from_names(normalized);
+		gchar * no_lint = regex_replace_by_table(normalized,regex_table,regex_table_size);
 		if(no_lint != NULL)
 		{
                 	result = curl_easy_escape(NULL,no_lint,0);
@@ -1049,3 +1050,28 @@ gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string)
 	}	
 	return result;
 }
+
+/* ------------------------------------------------------------- */
+
+/* Note: Not case-sens: Ä -> a! */
+const gchar * umlaut_table[][2] = {
+	{"ä",  "a"},
+	{"ü",  "u"},
+	{"ö",  "o"},
+	{"ß", "ss"},
+	{"\\s","-"}
+};
+
+const gsize umlaut_table_size = sizeof(umlaut_table) / (2 * sizeof(gchar*));
+
+/* Replaces umlauts like ä with an approx. like a */
+gchar * translate_umlauts(gchar * string)
+{
+	gchar * result = NULL;
+	if(string != NULL)
+	{
+		result = regex_replace_by_table(string,umlaut_table,umlaut_table_size);
+	}
+	return result;
+}
+

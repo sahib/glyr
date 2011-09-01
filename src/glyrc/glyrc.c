@@ -740,7 +740,7 @@ int main(int argc, char * argv[])
      */
     atexit(glyr_cleanup);
 
-    if(argc >= 3)
+    if(argc >= 2)
     {
         /* The struct that control this beast */
         GlyrQuery my_query;
@@ -760,7 +760,7 @@ int main(int argc, char * argv[])
 				exit(-1);
         }
 		
-		  /* Set the type */
+	/* Set the type */
         my_query.type = type;
 
         parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
@@ -809,8 +809,7 @@ int main(int argc, char * argv[])
             }
 				else if(get_error == GLYRE_NO_PROVIDER)
 				{
-					g_print("--------------------\n");
-					g_print("glyr: \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
+					g_print("glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
 					suggest_other_provider(&my_query,(gchar*)from_string);
 				}
             else if(get_error != GLYRE_OK)

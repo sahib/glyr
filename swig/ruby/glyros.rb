@@ -2,8 +2,9 @@
 require 'rubygems'
 
 begin
-  # Load C library 
-  require_relative "../../bin/ruby/glyros"
+  # Load C library, You __have__ to append the '.so',
+  # Will be confused with the wrapper (this file) otherwise
+  require_relative "./glyros.so"
 rescue LoadError => e
   puts "-- Error while loading Glyr's ruby module"
   puts "-- It is supposed to be in the bin/ruby directory."
@@ -11,7 +12,6 @@ rescue LoadError => e
   exit(-1)
 end
 
-# Mixin free/
 class Glyros::GlyrMemCache
 	# You don't need to do this yourself
 	def register_free

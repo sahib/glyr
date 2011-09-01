@@ -1,10 +1,11 @@
-.h1 Testsuit for libglyr
+h1. Testsuit for libglyr
+
 *Note:* This actually tests glyros, the ruby wrapper for libglyr,
 but indirectly ofcourse the functionality (whitebox) of libglyr.
 
 It depends on RSpec.
 
-h6. 
+h2. 
 
 Run with the following command:
 @rspec --color --format doc spec/@
