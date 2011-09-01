@@ -736,7 +736,6 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
             s->useragent = (gchar*)s->info[at];
             break;
         case 7:
-puts("----Set Lang");
             s->lang = (gchar*)s->info[at];
             break;
         default:

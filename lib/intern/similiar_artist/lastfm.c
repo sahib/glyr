@@ -44,35 +44,21 @@ const char * similiar_lastfm_url(GlyrQuery * sets)
 #define IMAGE_X_BEGIN "<image size=\"mega\">"
 #define IMAGE_ENDIN   "</image>"
 
-static gchar * in_tag(const gchar * string, const gchar * begin, const gchar * endin)
-{
-    gchar * bp = strstr(string,begin);
-    if(bp != NULL)
-    {
-        gchar * ep = strstr(bp,endin);
-        if(ep != NULL && ep > bp)
-        {
-            return copy_value(bp+strlen(begin),ep);
-        }
-    }
-    return NULL;
-}
-
 GList * similiar_lastfm_parse(cb_object * capo)
 {
     GList * results = NULL;
     gchar * find = capo->cache->data;
     while(continue_search(g_list_length(results),capo->s) && (find = strstr(find+1, "<artist>")) != NULL)
     {
-        gchar * name  = in_tag(find,NAME_BEGIN,NAME_ENDIN);
-        gchar * match = in_tag(find,MATCH_BEGIN,MATCH_ENDIN);
-        gchar * url   = in_tag(find,URL_BEGIN,URL_ENDIN);
+        gchar * name  = get_search_value(find,NAME_BEGIN,NAME_ENDIN);
+        gchar * match = get_search_value(find,MATCH_BEGIN,MATCH_ENDIN);
+        gchar * url   = get_search_value(find,URL_BEGIN,URL_ENDIN);
 
-        gchar * img_s = in_tag(find,IMAGE_S_BEGIN,IMAGE_ENDIN);
-        gchar * img_m = in_tag(find,IMAGE_M_BEGIN,IMAGE_ENDIN);
-        gchar * img_l = in_tag(find,IMAGE_L_BEGIN,IMAGE_ENDIN);
-        gchar * img_e = in_tag(find,IMAGE_E_BEGIN,IMAGE_ENDIN);
-        gchar * img_x = in_tag(find,IMAGE_X_BEGIN,IMAGE_ENDIN);
+        gchar * img_s = get_search_value(find,IMAGE_S_BEGIN,IMAGE_ENDIN);
+        gchar * img_m = get_search_value(find,IMAGE_M_BEGIN,IMAGE_ENDIN);
+        gchar * img_l = get_search_value(find,IMAGE_L_BEGIN,IMAGE_ENDIN);
+        gchar * img_e = get_search_value(find,IMAGE_E_BEGIN,IMAGE_ENDIN);
+        gchar * img_x = get_search_value(find,IMAGE_X_BEGIN,IMAGE_ENDIN);
         gchar * composed = g_strdup_printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",name,match,url,img_s,img_m,img_l,img_e,img_x);
 
         if(composed != NULL)
@@ -80,33 +66,32 @@ GList * similiar_lastfm_parse(cb_object * capo)
             GlyrMemCache * result = DL_init();
             result->data = composed;
             result->size = strlen(composed);
-            result->dsrc = strdup(capo->url);
             results = g_list_prepend(results, result);
-        }
-
-		g_free(name);
-		g_free(match);
-		g_free(url);
-		g_free(img_s);
-		g_free(img_m);
-		g_free(img_l);
-		g_free(img_e);
-		g_free(img_x);
 	}
-	return results;
+
+	g_free(name);
+	g_free(match);
+	g_free(url);
+	g_free(img_s);
+	g_free(img_m);
+	g_free(img_l);
+	g_free(img_e);
+	g_free(img_x);
+    }
+    return results;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource similar_artist_lastfm_src =
 {
-		.name = "lastfm",
-		.key  = 'l',
-		.parser    = similiar_lastfm_parse,
-		.get_url   = similiar_lastfm_url,
-		.quality   = 90,
-		.speed     = 90,
-		.endmarker = NULL,
-		.free_url  = false,
-		.type      = GLYR_GET_SIMILIAR_ARTISTS
+	.name = "lastfm",
+	.key  = 'l',
+	.parser    = similiar_lastfm_parse,
+	.get_url   = similiar_lastfm_url,
+	.quality   = 90,
+	.speed     = 90,
+	.endmarker = NULL,
+	.free_url  = false,
+	.type      = GLYR_GET_SIMILIAR_ARTISTS
 };

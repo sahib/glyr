@@ -26,9 +26,9 @@
 
 bool vdt_review(GlyrQuery * settings)
 {
-    if(settings && settings->artist && settings->album && settings->album[0] && settings->artist[0])
-    {
-        return true;
+	if(settings && settings->artist && settings->album && settings->album[0] && settings->artist[0])
+	{
+		return true;
 	}
 	glyr_message(2,settings,"Artist and album is needed to retrieve reviews (o rly?).\n");
 	return false;
@@ -38,21 +38,21 @@ bool vdt_review(GlyrQuery * settings)
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-		/* Fix up messy text, escape chars etc.  */
-		for(GList * elem = list; elem; elem = elem->next)
+	/* Fix up messy text, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyrMemCache * item = elem->data;
+		if(item != NULL)
 		{
-				GlyrMemCache * item = elem->data;
-				if(item != NULL)
-				{
 
-						gchar * temp = beautify_string(item->data);
-						g_free(item->data);
-						item->data = temp;
-						item->size = (item->data) ? strlen(item->data) : 0;
-				}
+			gchar * temp = beautify_string(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
 		}
+	}
 
-		return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_REVIEW);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_REVIEW);
 }
 
 /*----------------------------------------------------------------*/
@@ -60,12 +60,12 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_review =
 {
-		.name = "albumreview",
-		.type = GLYR_GET_ALBUM_REVIEW,
-		.validate  = vdt_review,
-		.full_data = TRUE,
-		.init    = NULL,
-		.destroy = NULL,
-		.finalize = factory,
-		.default_parallel = 2
+	.name = "albumreview",
+	.type = GLYR_GET_ALBUM_REVIEW,
+	.validate  = vdt_review,
+	.full_data = TRUE,
+	.init    = NULL,
+	.destroy = NULL,
+	.finalize = factory,
+	.default_parallel = 2
 };

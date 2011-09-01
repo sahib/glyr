@@ -36,31 +36,31 @@ const char * lyrics_lyricstime_url(GlyrQuery * settings)
 
 static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
 {
-    GlyrMemCache * result = NULL;
-    if(dl != NULL)
-    {
-        gchar * begin = strstr(dl->data,LYR_BEGIN);
-        if(begin != NULL)
-        {
-            begin += (sizeof LYR_BEGIN) - 1;
+	GlyrMemCache * result = NULL;
+	if(dl != NULL)
+	{
+		gchar * begin = strstr(dl->data,LYR_BEGIN);
+		if(begin != NULL)
+		{
+			begin += (sizeof LYR_BEGIN) - 1;
 			gchar * end = strstr(begin,LYR_ENDIN);
-            if(end != NULL)
-            {
+			if(end != NULL)
+			{
 				*(end) = 0;
-                gchar * no_br_tags = strreplace(begin,"<br />",NULL);
-                if(no_br_tags != NULL)
-                {
-                    result = DL_init();
-                    result->data = beautify_string(no_br_tags);
-                    result->size = (result->data) ? strlen(result->data) : 0;
-                    result->dsrc = strdup(capo->url);
+				gchar * no_br_tags = strreplace(begin,"<br />",NULL);
+				if(no_br_tags != NULL)
+				{
+					result = DL_init();
+					result->data = beautify_string(no_br_tags);
+					result->size = (result->data) ? strlen(result->data) : 0;
+					result->dsrc = strdup(capo->url);
 
-                    g_free(no_br_tags);
-                }
-            }
-        }
-    }
-    return result;
+					g_free(no_br_tags);
+				}
+			}
+		}
+	}
+	return result;
 }
 
 /*--------------------------------------------------------*/

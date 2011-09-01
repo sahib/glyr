@@ -1,7 +1,7 @@
 # configure
 set(GLYR_VERSION_MAJOR "0")
-set(GLYR_VERSION_MINOR "8.4")
-set(GLYR_VERSION_NAME  "Horny Hornet [dev]")
+set(GLYR_VERSION_MINOR "8.5")
+set(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 set(GLYR_COLORED_OUTPUT true)
 
 # Configuration for Version /versionnam

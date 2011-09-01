@@ -30,45 +30,45 @@ const char * lyrics_lyricsreg_url(GlyrQuery * s)
 
 GList * lyrics_lyricsreg_parse(cb_object * capo)
 {
-		GList * result_list = NULL;
-		gchar * start = strstr(capo->cache->data, INFO_BEGIN);
+	GList * result_list = NULL;
+	gchar * start = strstr(capo->cache->data, INFO_BEGIN);
 
-		if(start != NULL)
+	if(start != NULL)
+	{
+		start += (sizeof INFO_BEGIN) - 1;
+		gchar * end = strstr(start,INFO_ENDIN);
+		if(end != NULL)
 		{
-				start += (sizeof INFO_BEGIN) - 1;
-				gchar * end = strstr(start,INFO_ENDIN);
-				if(end != NULL)
-				{
-						*(end) = 0;
-						gchar * no_br_tags = strreplace(start,"<br />",NULL);
-						if(no_br_tags != NULL)
-						{
-								GlyrMemCache * tmp = DL_init();
-								tmp->data = beautify_string(no_br_tags);
-								tmp->size = tmp->data ? strlen(tmp->data) : 0;
-								g_free(no_br_tags);
+			*(end) = 0;
+			gchar * no_br_tags = strreplace(start,"<br />",NULL);
+			if(no_br_tags != NULL)
+			{
+				GlyrMemCache * tmp = DL_init();
+				tmp->data = beautify_string(no_br_tags);
+				tmp->size = tmp->data ? strlen(tmp->data) : 0;
+				g_free(no_br_tags);
 
-								if(tmp->data != NULL)
-								{
-									result_list = g_list_prepend(result_list,tmp);
-								}
-						}
+				if(tmp->data != NULL)
+				{
+					result_list = g_list_prepend(result_list,tmp);
 				}
+			}
 		}
-		return result_list;
+	}
+	return result_list;
 }
 
 /*---------------------------------------------------*/
 
 MetaDataSource lyrics_lyricsreg_src =
 {
-		.name = "lyricsreg",
-		.key  = 'r',
-		.parser    = lyrics_lyricsreg_parse,
-		.get_url   = lyrics_lyricsreg_url,
-		.type      = GLYR_GET_LYRICS,
-		.quality   = 42,
-		.speed     = 90,
-		.endmarker = NULL,
-		.free_url  = false
+	.name = "lyricsreg",
+	.key  = 'r',
+	.parser    = lyrics_lyricsreg_parse,
+	.get_url   = lyrics_lyricsreg_url,
+	.type      = GLYR_GET_LYRICS,
+	.quality   = 42,
+	.speed     = 90,
+	.endmarker = NULL,
+	.free_url  = false
 };

@@ -17,8 +17,8 @@ describe "albumlist" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-		    list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 6
+		        list.first.should be_an_instance_of Glyros::GlyrMemCache
+			list.size.should == 6
 		end
 
 		it "should find nothing at all" do

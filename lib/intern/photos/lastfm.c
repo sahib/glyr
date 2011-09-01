@@ -34,28 +34,6 @@ const gchar * photos_lastfm_url(GlyrQuery * settings)
 
 /* -------------------------------------------- */
 
-#define MAX_NUM_SIZE 16
-static gint get_value(gchar * ref, gchar * name)
-{
-    gchar * field = strstr(ref,name);
-    if(field != NULL)
-    {
-        field += strlen(name);
-        gchar num[MAX_NUM_SIZE] = {};
-        gint offset = 0;
-
-        while(field[0] && field[0] != '"' && offset < MAX_NUM_SIZE)
-        {
-            num[offset++] = field[0];
-            field++;
-        }
-        return strtol(num,NULL,10);
-    }
-    return 0;
-}
-
-/* -------------------------------------------- */
-
 static gboolean size_fits(GlyrQuery * s, gchar ** ref)
 {
     gboolean result = FALSE;
@@ -66,9 +44,15 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
         {
             search_ptr = strchr(search_ptr,'"');
 
-            gint width  = get_value(search_ptr,"width=\"");
-            gint height = get_value(search_ptr,"height=\"");
-            gint ratio  = (width+height)/2;
+	    gint ratio = 0;
+            gchar * width_string  = get_search_value(search_ptr,"width=\"","\"");
+            gchar * height_string = get_search_value(search_ptr,"height=\"","\"");
+	    if(width_string && height_string)
+	    {
+            	ratio  = (strtol(width_string,NULL,10) + strtol(height_string,NULL,10))/2;
+	    }
+	    g_free(width_string);
+	    g_free(height_string);
 
             gboolean original_size_allowed = TRUE;
             if(g_strstr_len(ref[0],100,"original") != NULL)
@@ -132,7 +116,7 @@ MetaDataSource photos_lastfm_src =
     .get_url   = photos_lastfm_url,
     .type      = GLYR_GET_ARTIST_PHOTOS,
     .quality   = 90,
-    .speed     = 80,
+    .speed     = 80, 
     .endmarker = NULL,
     .free_url  = false
 };

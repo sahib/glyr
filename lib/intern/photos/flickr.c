@@ -25,7 +25,7 @@
 
 /*------------------------------------*/
 
-const char * photos_flickr_url(GlyrQuery * settings)
+const gchar * photos_flickr_url(GlyrQuery * settings)
 {
     if(settings->img_max_size <= 175 && settings->img_max_size != -1)
     {
@@ -47,30 +47,6 @@ const char * photos_flickr_url(GlyrQuery * settings)
     return url;
 }
 
-/*------------------------------------*/
-
-static char * get_field_by_name(const char * string, const char * name)
-{
-    if(string)
-    {
-        char * find = strstr(string,name);
-        if(find)
-        {
-            find += strlen(name);
-
-            if(*find == '"')
-                find ++;
-
-            char * end = strstr(find,"\"");
-            if(end)
-            {
-                return copy_value(find,end);
-            }
-        }
-    }
-    return NULL;
-}
-
 /*--------------------------------------------------------*/
 
 GList * photos_flickr_parse(cb_object * capo)
@@ -86,12 +62,10 @@ GList * photos_flickr_parse(cb_object * capo)
             gchar * linebf = copy_value(ph_begin,ph_end);
             if(linebf != NULL)
             {
-                gchar * ID = get_field_by_name(linebf, "id=");
-                gchar * SC = get_field_by_name(linebf, "secret=");
-                gchar * SV = get_field_by_name(linebf, "server=");
-                gchar * FR = get_field_by_name(linebf, "farm=");
-                g_free(linebf);
-                linebf = NULL;
+                gchar * ID = get_search_value(linebf, "id=\"","\"");
+                gchar * SC = get_search_value(linebf, "secret=\"","\"");
+                gchar * SV = get_search_value(linebf, "server=\"","\"");
+                gchar * FR = get_search_value(linebf, "farm=\"","\"");
 
                 GlyrMemCache * cache = DL_init();
                 cache->data = g_strdup_printf("http://farm%s.static.flickr.com/%s/%s_%s.jpg",FR,SV,ID,SC);
@@ -102,6 +76,8 @@ GList * photos_flickr_parse(cb_object * capo)
 		g_free(SC);
 		g_free(SV);
 		g_free(FR);
+
+                g_free(linebf);
 	    }
 	}
     }

@@ -35,8 +35,6 @@ const gchar * cover_google_url(GlyrQuery * s)
     return result;
 }
 
-
-
 /* ------------------------- */
 
 GList * cover_google_parse(cb_object * capo)

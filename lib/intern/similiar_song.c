@@ -26,19 +26,19 @@
 
 bool vdt_similar_song(GlyrQuery * settings)
 {
-    if(settings && settings->artist && settings->title && settings->artist[0] && settings->title[0])
-    {
-        return true;
-    }
-    glyr_message(2,settings,"Artist and Title is needed to retrieve similarsongs.\n");
-    return false;
+	if(settings && settings->artist && settings->title && settings->artist[0] && settings->title[0])
+	{
+		return true;
+	}
+	glyr_message(2,settings,"Artist and Title is needed to retrieve similarsongs.\n");
+	return false;
 }
 
 /*----------------------------------------------------------------*/
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG);
 }
 
 /*----------------------------------------------------------------*/
@@ -46,11 +46,11 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_similar_song =
 {
-    .name = "similarsongs",
-    .type = GLYR_GET_SIMILIAR_SONGS,
-    .validate = vdt_similar_song,
-    .full_data = TRUE,
-    .init    = NULL,
-    .destroy = NULL,
-    .finalize = factory
+	.name = "similarsongs",
+	.type = GLYR_GET_SIMILIAR_SONGS,
+	.validate = vdt_similar_song,
+	.full_data = TRUE,
+	.init    = NULL,
+	.destroy = NULL,
+	.finalize = factory
 };

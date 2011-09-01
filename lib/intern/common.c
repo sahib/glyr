@@ -102,7 +102,7 @@ const gchar * generic_google_url(GlyrQuery * sets, const gchar * searchterm)
 #define HEIGHT_START  "&amp;h="
 #define MAX_NUM_BUF   16
 
-static gint get_value(gchar * ref, gchar * name)
+static gint google_get_size_value(gchar * ref, gchar * name)
 {
     gint number = 0;
     gchar * start = g_strstr_len(ref,256,name);
@@ -123,14 +123,14 @@ static gint get_value(gchar * ref, gchar * name)
 
 /*--------------------------------------------------------*/
 
-static gboolean check_image_size(GlyrQuery * s, gchar * ref)
+static gboolean google_check_image_size(GlyrQuery * s, gchar * ref)
 {
     gboolean result = FALSE;
     gchar * img_src_after = strstr(ref,IMG_SRC_START);
     if(img_src_after != NULL)
     {
-        gint width  = get_value(img_src_after,WIDTH_START);
-        gint height = get_value(img_src_after,HEIGHT_START);
+        gint width  = google_get_size_value(img_src_after,WIDTH_START);
+        gint height = google_get_size_value(img_src_after,HEIGHT_START);
         gint ratio  = (width+height)/2;
 
         result = size_is_okay(ratio,s->img_min_size,s->img_max_size);
@@ -153,7 +153,7 @@ GList * generic_google_parse(cb_object * capo)
         find += strlen(FIRST_RESULT);
         if((end_of_url = strstr(find, END_OF_URL)) != NULL)
         {
-            if(check_image_size(capo->s,find) == TRUE)
+            if(google_check_image_size(capo->s,find) == TRUE)
             {
                 gchar * url = copy_value(find,end_of_url);
                 if(url != NULL)
@@ -264,20 +264,20 @@ const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
                 continue;
 
 	    search_check += clen;
-            gchar * to_compare = copy_value(search_check,strstr(search_check,"</"));
-            if(to_compare != NULL)
-            {
-				if(levenshtein_strnormcmp(s,to_compare,comparestr) <= s->fuzzyness)
-				{
-					mbid = (gchar*)copy_value(node+nlen,strchr(node+nlen,'"'));
-				}
-				g_free(to_compare);
-			}
-			node += (sizeof ID_BEGIN) - 1;
-		}
-		*offset = node - c->data;
+	    gchar * to_compare = copy_value(search_check,strstr(search_check,"</"));
+	    if(to_compare != NULL)
+	    {
+		    if(levenshtein_strnormcmp(s,to_compare,comparestr) <= s->fuzzyness)
+		    {
+			    mbid = (gchar*)copy_value(node+nlen,strchr(node+nlen,'"'));
+		    }
+		    g_free(to_compare);
+	    }
+	    node += (sizeof ID_BEGIN) - 1;
 	}
-	return mbid;
+	*offset = node - c->data;
+    }
+    return mbid;
 }
 
 /*--------------------------------------------------------*/
@@ -285,38 +285,38 @@ const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
 /* Returns only a parseable memcache */
 GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include)
 {
-		gsize offset = 0;
-		const gchar * mbid = NULL;
-		GlyrMemCache * info = NULL;
+	gsize offset = 0;
+	const gchar * mbid = NULL;
+	GlyrMemCache * info = NULL;
 
-		while(offset < capo->cache->size && info==NULL && (mbid = get_mbid_from_xml(capo->s,capo->cache,last_mbid)))
+	while(offset < capo->cache->size && info==NULL && (mbid = get_mbid_from_xml(capo->s,capo->cache,last_mbid)))
+	{
+		if(mbid != NULL)
 		{
-				if(mbid != NULL)
-				{
-						const gchar * type = NULL;
-						switch(please_what_type(capo->s))
-						{
-								case GLYR_TYPE_TAG_TITLE:
-										type = "track";
-										break;
-								case GLYR_TYPE_TAG_ALBUM:
-										type = "release";
-										break;
-								case GLYR_TYPE_TAG_ARTIST:
-										type = "artist";
-										break;
-						}
+			const gchar * type = NULL;
+			switch(please_what_type(capo->s))
+			{
+				case GLYR_TYPE_TAG_TITLE:
+					type = "track";
+					break;
+				case GLYR_TYPE_TAG_ALBUM:
+					type = "release";
+					break;
+				case GLYR_TYPE_TAG_ARTIST:
+					type = "artist";
+					break;
+			}
 
-						gchar * info_page_url = g_strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
-						if(info_page_url)
-						{
-								info = download_single(info_page_url,capo->s,NULL);
-								g_free(info_page_url);
-						}
-						g_free((gchar*)mbid);
-				}
+			gchar * info_page_url = g_strdup_printf("http://musicbrainz.org/ws/1/%s/%s?type=xml&inc=%s",type,mbid,include);
+			if(info_page_url)
+			{
+				info = download_single(info_page_url,capo->s,NULL);
+				g_free(info_page_url);
+			}
+			g_free((gchar*)mbid);
 		}
-		return info;
+	}
+	return info;
 }
 
 /*--------------------------------------------------------*/
@@ -325,29 +325,29 @@ GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, con
 #define rg_markup "__RESPONSE_GROUP__"
 const gchar * generic_amazon_url(GlyrQuery * sets, const gchar * response_group)
 {
-    const char * lang_link = NULL;
-    if(sets->img_min_size <= 500 || sets->img_min_size)
-    {
-        if(!strcmp(sets->lang,"us"))
-            lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else if(!strcmp(sets->lang,"ca"))
-            lang_link = "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else if(!strcmp(sets->lang,"uk"))
-            lang_link = "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else if(!strcmp(sets->lang,"fr"))
-            lang_link = "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else if(!strcmp(sets->lang,"de"))
-            lang_link = "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else if(!strcmp(sets->lang,"jp"))
-            lang_link = "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-        else
-            lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
-    }
-    if(lang_link != NULL)
-    {
-        return strreplace(lang_link,rg_markup,response_group);
-    }
-    return NULL;
+	const char * lang_link = NULL;
+	if(sets->img_min_size <= 500 || sets->img_min_size)
+	{
+		if(!strcmp(sets->lang,"us"))
+			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else if(!strcmp(sets->lang,"ca"))
+			lang_link = "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else if(!strcmp(sets->lang,"uk"))
+			lang_link = "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else if(!strcmp(sets->lang,"fr"))
+			lang_link = "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else if(!strcmp(sets->lang,"de"))
+			lang_link = "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else if(!strcmp(sets->lang,"jp"))
+			lang_link = "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+		else
+			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+	}
+	if(lang_link != NULL)
+	{
+		return strreplace(lang_link,rg_markup,response_group);
+	}
+	return NULL;
 }
 
 /* ------------------------------------------------------------- */

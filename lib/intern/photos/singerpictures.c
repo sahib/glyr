@@ -25,7 +25,6 @@
 const gchar * photos_singerlyrics_url(GlyrQuery * settings)
 {
     gchar * result_url = NULL;
-
     gchar * space_to_min_artist = strreplace(settings->artist," ","-");
     if(space_to_min_artist != NULL)
     {
@@ -101,15 +100,12 @@ GList * photos_singerlyrics_parse(cb_object * capo)
     GList * result_list = NULL;
     gsize len = (sizeof URL_ID_START) - 1;
     gchar * url_id_start = capo->cache->data;
-    while( (url_id_start = strstr(url_id_start+len,URL_ID_START) ) != NULL &&
-            (continue_search(g_list_length(result_list),capo->s ) )
-         )
+
+    while((continue_search(g_list_length(result_list),capo->s) && (url_id_start = strstr(url_id_start + len,URL_ID_START) ) != NULL))
     {
-        url_id_start += len;
-        gchar * url_id_end = strstr(url_id_start, URL_ID_END);
-        if(url_id_end != NULL && check_image_size(capo->s,url_id_start))
+        if(check_image_size(capo->s, url_id_start))
         {
-            gchar * ID = copy_value(url_id_start,url_id_end);
+	    gchar * ID = get_search_value(url_id_start,URL_ID_START,URL_ID_END);
             if(ID != NULL)
             {
                 GlyrMemCache * item = DL_init();
@@ -134,7 +130,7 @@ MetaDataSource photos_singerpictures_src =
     .get_url   = photos_singerlyrics_url,
     .type      = GLYR_GET_ARTIST_PHOTOS,
     .quality   = 85,
-    .speed     = 70,
+    .speed     = 60,
     .endmarker = NULL,
     .free_url  = true
 };

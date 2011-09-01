@@ -26,11 +26,11 @@
 
 bool vdt_lyrics(GlyrQuery * settings)
 {
-    if(settings && settings->artist && settings->title)
-    {
+	if(settings && settings->artist && settings->title)
+	{
 		if(settings->artist[0] && settings->title[0])
 		{
-        	return true;
+			return true;
 		}
 	}
 	glyr_message(2,settings,"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
@@ -41,21 +41,21 @@ bool vdt_lyrics(GlyrQuery * settings)
 
 GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
-		/* Fix up lyrics, escape chars etc.  */
-		for(GList * elem = list; elem; elem = elem->next)
+	/* Fix up lyrics, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyrMemCache * item = elem->data;
+		if(item != NULL)
 		{
-				GlyrMemCache * item = elem->data;
-				if(item != NULL)
-				{
-						gchar * temp = beautify_string(item->data);
-						g_free(item->data);
-						item->data = temp;
-						item->size = (item->data) ? strlen(item->data) : 0;
-				}
+			gchar * temp = beautify_string(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
 		}
+	}
 
-		/* Let the rest do by the norma generic finalizer */
-		return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS);
+	/* Let the rest do by the norma generic finalizer */
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS);
 }
 
 /* ------------------------------------- */
@@ -63,14 +63,14 @@ GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_lyrics =
 {
-		.name = "lyrics",
-		.type = GLYR_GET_LYRICS,
-		.validate  = vdt_lyrics,
-		.full_data = TRUE,
-		.init    = NULL,
-		.destroy = NULL,
-		.finalize = factory,
-		.default_parallel = 2
+	.name = "lyrics",
+	.type = GLYR_GET_LYRICS,
+	.validate  = vdt_lyrics,
+	.full_data = TRUE,
+	.init    = NULL,
+	.destroy = NULL,
+	.finalize = factory,
+	.default_parallel = 2
 };
 
 /* ------------------------------------- */

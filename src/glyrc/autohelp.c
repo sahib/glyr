@@ -59,7 +59,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
                 c = d[im1][jm1] + (t[jm1] != cats);
 
             /* Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j] */
- 				d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
+ 	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
         }
     }
 
@@ -71,107 +71,107 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
 
 gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 {
-    gsize diff = 100;
-    if(string != NULL && other != NULL)
-	 {
-				/* Lowercase UTF8 string might have more or less bytes! */
-				gchar * lower_string = g_ascii_strdown(string,-1);
-				gchar * lower_other  = g_ascii_strdown(other, -1);
+	gsize diff = 100;
+	if(string != NULL && other != NULL)
+	{
+		/* Lowercase UTF8 string might have more or less bytes! */
+		gchar * lower_string = g_ascii_strdown(string,-1);
+		gchar * lower_other  = g_ascii_strdown(other, -1);
 
-				if(lower_string && lower_other)
-				{
-						  diff = levenshtein_strcmp(lower_string, lower_other);
-				}
+		if(lower_string && lower_other)
+		{
+			diff = levenshtein_strcmp(lower_string, lower_other);
+		}
 
-				/* Free 'em */
-				g_free(lower_string);
-				g_free(lower_other);
-	 }
-	 return diff;
+		/* Free 'em */
+		g_free(lower_string);
+		g_free(lower_other);
+	}
+	return diff;
 }
 
 /* ------------------------------------------------------------- */
 
 void suggest_other_getter(GlyrQuery * query, gchar * wrong_input)
 {
-		  if(query->verbosity <= 0)
-		  {
-					 return;
-		  }
+	if(query->verbosity <= 0)
+	{
+		return;
+	}
 
-		  GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
-		  if(fetcher != NULL)
-		  {
-					 gboolean did_you_mean_printed = FALSE;
-					 GlyrFetcherInfo * it = fetcher;
-					 while(it != NULL)
-					 {
-						if(levenshtein_strcasecmp(wrong_input,it->name) < 5)
-						{
-							if(did_you_mean_printed == FALSE)
-							{
-								g_print("\nDid you mean this?\n");
-								did_you_mean_printed = TRUE;
-							}
-							g_print(" - %s\n",it->name);
-						}		
-						it = it->next;
-					 }
-					 glyr_free_plugin_info(fetcher);
-		  }
+	GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
+	if(fetcher != NULL)
+	{
+		gboolean did_you_mean_printed = FALSE;
+		GlyrFetcherInfo * it = fetcher;
+		while(it != NULL)
+		{
+			if(levenshtein_strcasecmp(wrong_input,it->name) < 7)
+			{
+				if(did_you_mean_printed == FALSE)
+				{
+					g_print("\nDid you mean this?\n");
+					did_you_mean_printed = TRUE;
+				}
+				g_print(" - %s\n",it->name);
+			}		
+			it = it->next;
+		}
+		glyr_free_plugin_info(fetcher);
+	}
 }
 
 /*-----------------------------------------*/
 
 void suggest_other_provider(GlyrQuery * query, gchar * wrong_input)
 {
-		  if(query->verbosity <= 0)
-		  {
-					 return;
-		  }
+	if(query->verbosity <= 0)
+	{
+		return;
+	}
 
-		  GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
-		  GlyrFetcherInfo * it = fetcher;
-		  while(it != NULL)
-		  {
-				  if(it->type == query->type)
-				  {
-						  break;
-				  }
+	GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
+	GlyrFetcherInfo * it = fetcher;
+	while(it != NULL)
+	{
+		if(it->type == query->type)
+		{
+			break;
+		}
 
-				  it = it->next;
-		  }
+		it = it->next;
+	}
 
-		  if(it != NULL && wrong_input)
-		  {
-				gboolean did_you_mean_printed = FALSE;
-				GlyrSourceInfo * head = it->head;
-				GHashTable * key_table = g_hash_table_new(g_direct_hash,g_direct_equal);
-				while(head != NULL)
+	if(it != NULL && wrong_input)
+	{
+		gboolean did_you_mean_printed = FALSE;
+		GlyrSourceInfo * head = it->head;
+		GHashTable * key_table = g_hash_table_new(g_direct_hash,g_direct_equal);
+		while(head != NULL)
+		{
+			gsize offset = 0;
+			gsize length = strlen(wrong_input);
+			gchar *token = NULL;
+			while((token = get_next_word(wrong_input,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,length)) != NULL)
+			{	
+				if(levenshtein_strcasecmp(token,head->name) < 5 &&
+						g_hash_table_lookup(key_table,head->name) == NULL)
 				{
-					gsize offset = 0;
-					gsize length = strlen(wrong_input);
-					gchar *token = NULL;
-					while((token = get_next_word(wrong_input,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,length)) != NULL)
-					{	
-						if(levenshtein_strcasecmp(token,head->name) < 5 &&
-						   g_hash_table_lookup(key_table,head->name) == NULL)
-						{
-							if(did_you_mean_printed == FALSE)
-							{
-								g_print("\nDid you mean this?\n");
-								did_you_mean_printed = TRUE;
-							}
-							g_print(" - %s\n",head->name);
-							g_hash_table_insert(key_table,head->name,head);
-						}
-						g_free(token);
+					if(did_you_mean_printed == FALSE)
+					{
+						g_print("\nDid you mean this?\n");
+						did_you_mean_printed = TRUE;
 					}
-					head = head->next;	
+					g_print(" - %s\n",head->name);
+					g_hash_table_insert(key_table,head->name,head);
 				}
-				g_hash_table_destroy(key_table);
-		  }		
-		  glyr_free_plugin_info(fetcher);
+				g_free(token);
+			}
+			head = head->next;	
+		}
+		g_hash_table_destroy(key_table);
+	}		
+	glyr_free_plugin_info(fetcher);
 }
 
 /*-----------------------------------------*/

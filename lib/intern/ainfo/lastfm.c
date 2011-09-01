@@ -27,53 +27,53 @@
 const gchar * ainfo_lastfm_url(GlyrQuery * s)
 {
 	gchar * url = NULL;
-    	gchar * right_artist = strreplace(s->artist," ","+");
+	gchar * right_artist = strreplace(s->artist," ","+");
 	if(right_artist != NULL)
 	{
-    	url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,s->lang);
-        g_free(right_artist);
+		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,s->lang);
+		g_free(right_artist);
 	}
-    return url;
+	return url;
 }
 
 /*-------------------------------------*/
 
 GList * ainfo_lastfm_parse(cb_object * capo)
 {
-		GList * result_list = NULL;
-		gchar * content_begin = strstr(capo->cache->data,CONTENT_BEGIN);
-		gchar * content_endin = strstr(capo->cache->data,CONTENT_ENDIN);
-		if(content_endin == NULL)
-		{
-			content_endin = strstr(capo->cache->data,OTHER_ENDIN);
-		}
+	GList * result_list = NULL;
+	gchar * content_begin = strstr(capo->cache->data,CONTENT_BEGIN);
+	gchar * content_endin = strstr(capo->cache->data,CONTENT_ENDIN);
+	if(content_endin == NULL)
+	{
+		content_endin = strstr(capo->cache->data,OTHER_ENDIN);
+	}
 
-		if(content_begin && content_endin)
+	if(content_begin && content_endin)
+	{
+		content_begin += (sizeof CONTENT_BEGIN) - 1;
+		gchar * content = copy_value(content_begin,content_endin);
+		if(content != NULL)
 		{
-				content_begin += (sizeof CONTENT_BEGIN) - 1;
-				gchar * content = copy_value(content_begin,content_endin);
-				if(content != NULL)
-				{
-						GlyrMemCache * result = DL_init();
-						result->data = content;
-						result->size = strlen(result->data);
-						result_list = g_list_prepend(result_list,result);
-				}
+			GlyrMemCache * result = DL_init();
+			result->data = content;
+			result->size = strlen(result->data);
+			result_list = g_list_prepend(result_list,result);
 		}
-		return result_list;
+	}
+	return result_list;
 }
 
 /*-------------------------------------*/
 
 MetaDataSource ainfo_lastfm_src =
 {
-		.name      = "lastfm",
-		.key       = 'l',
-		.free_url  = true,
-		.type      = GLYR_GET_ARTISTBIO,
-		.parser    = ainfo_lastfm_parse,
-		.get_url   = ainfo_lastfm_url,
-		.quality   = 95,
-		.speed     = 85,
-		.endmarker = NULL
+	.name      = "lastfm",
+	.key       = 'l',
+	.free_url  = true,
+	.type      = GLYR_GET_ARTISTBIO,
+	.parser    = ainfo_lastfm_parse,
+	.get_url   = ainfo_lastfm_url,
+	.quality   = 95,
+	.speed     = 85,
+	.endmarker = NULL
 };

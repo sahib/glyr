@@ -40,36 +40,34 @@ const gchar * tracklist_musicbrainz_url(GlyrQuery * sets)
 
 static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * capo)
 {
-    gchar * beg = (gchar*)data;
-    GList * collection = NULL;
-    gint item_ctr = 0;
-    
-    /* Hop over album title */
-    beg = strstr(beg,TIT_BEGIN);
+	gchar * beg = (gchar*)data;
+	GList * collection = NULL;
+	gint item_ctr = 0;
 
-    while(continue_search(item_ctr,capo->s) && (beg = strstr(beg + (sizeof TIT_BEGIN) - 1,TIT_BEGIN)) != NULL)
-    {
-        gchar * dy;
-        gchar * value = copy_value(beg+(sizeof TIT_BEGIN) - 1,strstr(beg,TIT_ENDIN));
-        gchar * durat = copy_value(strstr(beg,DUR_BEGIN) + (sizeof DUR_BEGIN) - 1,(dy = strstr(beg,DUR_ENDIN)));
-        if(value != NULL && durat != NULL)
-        {
-            GlyrMemCache * cont = DL_init();
-            cont->data = beautify_string(value);
-            cont->size = strlen(cont->data);
-            cont->duration = strtol(durat,NULL,10) / 1e3;
-            cont->dsrc = g_strdup(url);
-            collection = g_list_prepend(collection,cont);
+	/* Hop over album title */
+	beg = strstr(beg,TIT_BEGIN);
 
-            item_ctr++;
+	while(continue_search(item_ctr,capo->s) && (beg = strstr(beg + (sizeof TIT_BEGIN) - 1,TIT_BEGIN)) != NULL)
+	{
+		gchar * dy;
+		gchar * value = copy_value(beg+(sizeof TIT_BEGIN) - 1,strstr(beg,TIT_ENDIN));
+		gchar * durat = copy_value(strstr(beg,DUR_BEGIN) + (sizeof DUR_BEGIN) - 1,(dy = strstr(beg,DUR_ENDIN)));
+		if(value != NULL && durat != NULL)
+		{
+			GlyrMemCache * cont = DL_init();
+			cont->data = value;
+			cont->size = strlen(cont->data);
+			cont->duration = strtol(durat,NULL,10) / 1e3;
+			cont->dsrc = g_strdup(url);
+			collection = g_list_prepend(collection,cont);
 
-            /* free & jump to next */
-            g_free(value);
-            g_free(durat);
-            beg = dy;
-        }
-    }
-    return collection;
+			/* free & jump to next */
+			item_ctr++;
+			g_free(durat);
+			beg = dy;
+		}
+	}
+	return collection;
 }
 
 /* ----------------------------------------- */
@@ -77,45 +75,44 @@ static GList * traverse_xml(const gchar * data, const gchar * url, cb_object * c
 /* Use simple text parsing, xml parsing has no advantage here */
 GList * tracklist_musicbrainz_parse(cb_object * capo)
 {
-    GList * ls = NULL;
-    gchar * release_ID = NULL;
+	GList * result_list = NULL;
 
-    gchar * rel_id_begin = strstr(capo->cache->data,REL_ID_BEGIN);
+	gchar * rel_id_begin = strstr(capo->cache->data,REL_ID_BEGIN);
 	if(rel_id_begin != NULL)
 	{
-		    rel_id_begin += (sizeof REL_ID_BEGIN) - 1;
-			if((release_ID = copy_value(rel_id_begin, strstr(rel_id_begin,REL_ID_ENDIN))) != NULL)
+		gchar * release_ID = get_search_value(rel_id_begin,REL_ID_BEGIN,REL_ID_ENDIN);
+		if(release_ID != NULL)
+		{
+			gchar * release_page_info_url = g_strdup_printf(REL_ID_FORM, release_ID);
+			GlyrMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
+			if(dlData != NULL)
 			{
-					gchar * release_page_info_url = g_strdup_printf(REL_ID_FORM,release_ID);
-					GlyrMemCache * dlData = download_single(release_page_info_url,capo->s,NULL);
-					if(dlData != NULL)
-					{
-							ls = traverse_xml(dlData->data,capo->url,capo);
-							if(ls != NULL)
-							{
-								ls = g_list_reverse(ls);
-							}
-							DL_free(dlData);
-					}
-					g_free(release_page_info_url);
-					g_free(release_ID);
+				result_list = traverse_xml(dlData->data,capo->url,capo);
+				if(result_list != NULL)
+				{
+					result_list = g_list_reverse(result_list);
+				}
+				DL_free(dlData);
 			}
+			g_free(release_page_info_url);
+			g_free(release_ID);
+		}
 	}
-	return ls;
+	return result_list;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource tracklist_musicbrainz_src =
 {
-		.name = "musicbrainz",
-		.key  = 'm',
-		.parser    = tracklist_musicbrainz_parse,
-		.get_url   = tracklist_musicbrainz_url,
-		.quality   = 90,
-		.speed     = 90,
-		.endmarker = NULL,
-		.free_url  = false,
-		.type      = GLYR_GET_TRACKLIST
+	.name = "musicbrainz",
+	.key  = 'm',
+	.parser    = tracklist_musicbrainz_parse,
+	.get_url   = tracklist_musicbrainz_url,
+	.quality   = 90,
+	.speed     = 90,
+	.endmarker = NULL,
+	.free_url  = false,
+	.type      = GLYR_GET_TRACKLIST
 };
 

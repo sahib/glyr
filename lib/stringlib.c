@@ -43,14 +43,8 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
     int m = (t) ? strlen(t)+1 : 0;
 
     // Nothing to compute really..
-    if (n==0)
-    {
-        return m;
-    }
-    if (m==0)
-    {
-        return n;
-    }
+    if (n==0) return m;
+    if (m==0) return n;
 
     // String matrix
     int d[n][m];
@@ -77,28 +71,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
                 c = d[im1][jm1] + (t[jm1] != cats);
 
             // Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j]
-            if (a < b)
-            {
-                if (a < c)
-                {
-                    d[i][j]=a;
-                }
-                else
-                {
-                    d[i][j]=c;
-                }
-            }
-            else
-            {
-                if (b < c)
-                {
-                    d[i][j]=b;
-                }
-                else
-                {
-                    d[i][j]=c;
-                }
-            }
+ 	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
         }
     }
 
@@ -820,31 +793,21 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 
 /* ------------------------------------------------------------- */
 
-static gchar * trim_after_newline(gchar * string, gsize Len, gint * less)
+const gchar * trim_regex_table[][2] = {
+	{"[[:space:]]{2,}", " "}  /* 'a  b'  -> 'a b' */
+};	
+
+const gsize trim_table_size = sizeof(trim_regex_table) / (2 * sizeof(gchar*));
+
+static gchar * trim_after_newline(gchar * string)
 {
-    gint buf_ctr = 0;
-    gchar * buffer = g_malloc0(Len + 1);
-    for(gsize it = 0; it < Len ; it++)
-    {
-        if(string[it] == '\n')
-        {
-            while(string[it] && (string[it] == '\r' || string[it] == '\n'))
-            {
-                buffer[buf_ctr++] = string[it++];
-            }
-
-            while(string[it] && isspace(string[it]))
-            {
-                if(less != NULL) *less += 1;
-                it++;
-            }
-        }
-        buffer[buf_ctr++] = string[it];
-    }
-    return buffer;
+	gchar * result = NULL;
+	if(string != NULL)
+	{
+		result = regex_replace_by_table(string,trim_regex_table,trim_table_size);
+	}
+	return result;
 }
-
-
 
 /* ------------------------------------------------------------- */
 
@@ -883,9 +846,8 @@ gchar * beautify_string(const gchar * lyrics)
                 i = j + 1;
             }
 
-            gint less = 0;
-            Len -= remove_tags_from_string(unicode,Len,'<','>');
-            gchar * trimmed = trim_after_newline(unicode,Len,&less);
+            remove_tags_from_string(unicode,Len,'<','>');
+            gchar * trimmed = trim_after_newline(unicode);
             g_free(unicode);
 
 	    if(trimmed && g_utf8_validate(trimmed,-1,NULL) == TRUE)

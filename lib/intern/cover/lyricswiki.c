@@ -100,20 +100,13 @@ GList * cover_lyricswiki_parse(cb_object * capo)
 			{
 				if(check_file_format(capo->s,name) && levenshtein_strnormcmp(capo->s,escaped_album_name,name) <= capo->s->fuzzyness)
 				{
-					gchar * url_start = strstr(endTag,URL_MARKER);
-					if(url_start != NULL)
+					gchar * url = get_search_value(endTag, URL_MARKER, URL_END);
+					if(url != NULL)
 					{
-						gchar * url_end = NULL;
-						url_start += (sizeof URL_MARKER) - 1;
-						gchar * url = copy_value(url_start, (url_end = strstr(url_start,URL_END)));
-
-						if(url != NULL)
-						{
-							GlyrMemCache * result = DL_init();
-							result->data = url;
-							result->size = url_end - url_start;
-							result_list = g_list_prepend(result_list,result);
-						}
+						GlyrMemCache * result = DL_init();
+						result->data = url;
+						result->size = strlen(url);
+						result_list = g_list_prepend(result_list,result);
 					}
 				}
 

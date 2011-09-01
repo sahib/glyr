@@ -32,27 +32,25 @@ GList * review_amazon_parse(cb_object * capo)
 {
     gchar * node = capo->cache->data;
     gsize conlen = (sizeof TheContent) - 1;
-    GList * cList = NULL;
-    while(continue_search(g_list_length(cList),capo->s) && (node = strstr(node+conlen,TheContent)) != NULL)
+    GList * result_list = NULL;
+    while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+conlen,TheContent)) != NULL)
     {
         gchar * endOfText = strstr(node+conlen,TheEndofCt);
         gchar * text = copy_value(node+conlen,endOfText);
-        if(text)
+        if(text != NULL)
         {
             /* Ignore reviews with 350 chars
              * as mostly just advertisement */
             if((endOfText - (node+conlen)) > 350)
             {
-                GlyrMemCache * tmp = DL_init();
-                tmp->data = beautify_string(text);
-                tmp->size = tmp->data ? strlen(tmp->data) : 0;
-                tmp->dsrc = strdup(capo->url);
-                cList = g_list_prepend(cList,tmp);
+                GlyrMemCache * result = DL_init();
+                result->data = text;
+                result->size = result->data ? strlen(result->data) : 0;
+                result_list = g_list_prepend(result_list,result);
             }
-            g_free(text);
         }
     }
-    return cList;
+    return result_list;
 }
 
 /*--------------------------------------------------------*/

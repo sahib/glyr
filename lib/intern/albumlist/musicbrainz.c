@@ -34,42 +34,34 @@ const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 
 GList * albumlist_musicbrainz_parse(cb_object * capo)
 {
-    GList * collection = NULL;
-    gchar * node = capo->cache->data;
+	GList * result_list = NULL;
+	gchar * node = capo->cache->data;
 
-    while(continue_search(g_list_length(collection),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
-    {
-		gchar * title_begin = strstr(node,TITLE_BEGIN);
-		gchar * title_endin = strstr(node,TITLE_ENDIN);
-		if(title_begin != NULL && title_endin != NULL)
+	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
+	{
+		gchar * name = get_search_value(node,TITLE_BEGIN,TITLE_ENDIN);
+		if(name != NULL)
 		{
-			gsize title_beg_len = (sizeof TITLE_BEGIN) - 1;
-			gsize title_end_len = (sizeof TITLE_ENDIN) - 1;
-        	gchar * name = copy_value(title_begin + title_beg_len, title_endin + title_end_len);
-        	if(name != NULL)
-        	{
-            	GlyrMemCache * c = DL_init();
-            	c->data = beautify_string(name);
-            	c->size = (c->data) ? strlen(c->data) : 0;
-            	collection = g_list_prepend(collection,c);
-            	g_free(name);
-			}
-        }
-    }
-    return collection;
+			GlyrMemCache * result = DL_init();
+			result->data = name;
+			result->size = (result->data) ? strlen(result->data) : 0;
+			result_list = g_list_prepend(result_list,result);
+		}
+	}
+	return result_list;
 }
 
 /*-----------------------------*/
 
 MetaDataSource albumlist_musicbrainz_src =
 {
-    .name = "musicbrainz",
-    .key = 'm',
-    .free_url = false,
-    .parser  = albumlist_musicbrainz_parse,
-    .get_url = albumlist_musicbrainz_url,
-    .type    = GLYR_GET_ALBUMLIST,
-    .quality = 95,
-    .speed   = 95,
-    .endmarker = NULL
+	.name = "musicbrainz",
+	.key = 'm',
+	.free_url = false,
+	.parser  = albumlist_musicbrainz_parse,
+	.get_url = albumlist_musicbrainz_url,
+	.type    = GLYR_GET_ALBUMLIST,
+	.quality = 95,
+	.speed   = 95,
+	.endmarker = NULL
 };

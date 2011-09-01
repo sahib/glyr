@@ -26,13 +26,11 @@ const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 }
 
 #define TRACK_BEGIN "<track>"
-#define TRACK_ENDIN "</track>"
 
 #define NAME_BEGIN "<name>"
 #define NAME_ENDIN "</name>"
 
 #define ARTIST_BEGIN "<artist>"
-#define ARTIST_ENDIN "</artist>"
 
 #define MATCH_BEGIN "<match>"
 #define MATCH_ENDIN "</match>"
@@ -40,80 +38,47 @@ const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 #define URL_BEGIN "<url>"
 #define URL_ENDIN "</url>"
 
-static gchar * in_tag(const gchar * string, const gchar * begin, const gchar * endin)
-{
-    gchar * bp = strstr(string,begin);
-    if(bp != NULL)
-    {
-        gchar * ep = strstr(bp,endin);
-        if(ep != NULL && ep > bp)
-        {
-            return copy_value(bp+strlen(begin),ep);
-        }
-    }
-    return NULL;
-}
-
 GList * similiar_song_lastfm_parse(cb_object * capo)
 {
     GList * results = NULL;
     gchar * begin = capo->cache->data;
-    gchar * endin = NULL;
 
-    while((begin = strstr(begin, TRACK_BEGIN)) != NULL &&
-          (endin = strstr(begin, TRACK_ENDIN)) != NULL &&
-          continue_search(g_list_length(results),capo->s))
+    while(continue_search(g_list_length(results),capo->s) && (begin = strstr(begin, TRACK_BEGIN)) != NULL)
     {
-        endin += strlen(TRACK_ENDIN);
-        *(endin-1) = '\0';
+	    gchar * track  = get_search_value(begin,NAME_BEGIN,NAME_ENDIN);
+	    gchar * match  = get_search_value(begin,MATCH_BEGIN,MATCH_ENDIN);
+	    gchar * url    = get_search_value(begin,URL_BEGIN,URL_ENDIN);
+	    gchar * artist = get_search_value(strstr(begin,ARTIST_BEGIN),NAME_BEGIN,NAME_ENDIN);
 
-        gchar * track   = in_tag(begin,NAME_BEGIN,NAME_ENDIN);
-        gchar * match   = in_tag(begin,MATCH_BEGIN,MATCH_ENDIN);
-        gchar * url     = in_tag(begin,URL_BEGIN,URL_ENDIN);
+	    if(artist && track)
+	    {
+		    GlyrMemCache * result = DL_init();
+		    result->data = g_strdup_printf("%s\n%s\n%s\n%s\n",track,artist,match,url);
+		    result->size = strlen(result->data);
+		    results = g_list_prepend(results, result);
+	    }
 
-        gchar * artist = NULL;
-        gchar * begin_artist = begin;
-        gchar * endin_artist = NULL;
-        if((begin_artist = strstr(begin_artist, ARTIST_BEGIN)) != NULL &&
-           (endin_artist = strstr(begin_artist, ARTIST_ENDIN)) != NULL)
-        {
-            endin_artist += (sizeof ARTIST_ENDIN) - 1;
-            *(endin_artist-1) = '\0';
-            artist  = in_tag(begin_artist,NAME_BEGIN,NAME_ENDIN);
-        }
+	    g_free(track);
+	    g_free(artist);
+	    g_free(match);
+	    g_free(url);
 
-        gchar * composed = g_strdup_printf("%s\n%s\n%s\n%s\n",track,artist,match,url);
-        if(composed != NULL)
-        {
-            GlyrMemCache * result = DL_init();
-            result->data = composed;
-            result->size = strlen(composed);
-            result->dsrc = strdup(capo->url);
-
-            results = g_list_prepend(results, result);
-        }
-
-		g_free(track);
-		g_free(artist);
-		g_free(match);
-		g_free(url);
-
-		begin=endin;
-	}
-	return results;
+	    begin += sizeof (TRACK_BEGIN) - 1;
+    }
+    return results;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource similar_song_lastfm_src =
 {
-		.name = "lastfm",
-		.key  = 'l',
-		.parser    = similiar_song_lastfm_parse,
-		.get_url   = similiar_song_lastfm_url,
-		.quality   = 90,
-		.speed     = 90,
-		.endmarker = NULL,
-		.free_url  = false,
-		.type      = GLYR_GET_SIMILIAR_SONGS
+	.name = "lastfm",
+	.key  = 'l',
+	.parser    = similiar_song_lastfm_parse,
+	.get_url   = similiar_song_lastfm_url,
+	.quality   = 90,
+	.speed     = 90,
+	.endmarker = NULL,
+	.free_url  = false,
+	.type      = GLYR_GET_SIMILIAR_SONGS
 };

@@ -31,13 +31,13 @@ const char * cover_lastfm_url(GlyrQuery * sets)
 
 /* ----------------------------------------------- */
 
-#define BAD_GLYR_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
+#define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
 GList * cover_lastfm_parse(cb_object *capo)
 {
     /* Handle size requirements (Default to large) */
-    const char *tag_ssize = NULL ;
-    const char *tag_esize = "</image>";
+    const gchar * tag_ssize = NULL ;
+    const gchar * tag_esize = "</image>";
 
     /* find desired size */
     if( size_is_okay(300,capo->s->img_min_size,capo->s->img_max_size) )
@@ -52,33 +52,27 @@ GList * cover_lastfm_parse(cb_object *capo)
         tag_ssize = "<image size=\"extralarge\">";
 
     /* The result (perhaps) */
-    GlyrMemCache * result = NULL;
     GList * result_list = NULL;
     gchar * find  = capo->cache->data;
-	gsize tag_len = strlen(tag_ssize);
+    gsize tag_len = strlen(tag_ssize);
 
-    while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find+1, tag_ssize)) != NULL)
+    while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find + tag_len, tag_ssize)) != NULL)
     {
-        gchar * end_tag;
-        if((end_tag = strstr(find,tag_esize)) != NULL)
-        {
-            gchar * url;
-			find += tag_len;
-            if((url = copy_value(find,end_tag)) != NULL)
-            {
-                if(strcmp(url,BAD_GLYR_DEFAULT_IMAGE) != 0)
-                {
-                    result = DL_init();
-                    result->data = url;
-                    result->size = end_tag - find;
-                    result_list = g_list_prepend(result_list,result);
-                }
-                else
-                {
-                    g_free(url);
-                }
-            }
-        }
+	    gchar * url = get_search_value(find, (gchar*)tag_ssize, (gchar*)tag_esize);
+	    if(url != NULL)
+	    {
+		    if(strcmp(url,BAD_DEFAULT_IMAGE) != 0)
+		    {
+    			    GlyrMemCache * result = DL_init();
+			    result->data = url;
+			    result->size = strlen(url);
+			    result_list = g_list_prepend(result_list,result);
+		    }
+		    else
+		    {
+			    g_free(url);
+		    }
+	    }
     }
     return result_list;
 }
@@ -87,13 +81,13 @@ GList * cover_lastfm_parse(cb_object *capo)
 
 MetaDataSource cover_lastfm_src =
 {
-    .name      = "lastfm",
-    .key       = 'l',
-    .parser    = cover_lastfm_parse,
-    .get_url   = cover_lastfm_url,
-    .type      = GLYR_GET_COVERART,
-    .quality   = 90,
-    .speed     = 75,
-    .endmarker = NULL,
-    .free_url  = false
+	.name      = "lastfm",
+	.key       = 'l',
+	.parser    = cover_lastfm_parse,
+	.get_url   = cover_lastfm_url,
+	.type      = GLYR_GET_COVERART,
+	.quality   = 90,
+	.speed     = 75,
+	.endmarker = NULL,
+	.free_url  = false
 };
