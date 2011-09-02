@@ -106,7 +106,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * delete_string
 	for(gsize it = 0; it < string_size; it++)
 	{
 		GError * match_error = NULL;
-		GRegex * regex = g_regex_new(delete_string[it][0],G_REGEX_CASELESS,0,&match_error);
+		GRegex * regex = g_regex_new(delete_string[it][0],G_REGEX_CASELESS /*| G_REGEX_MULTILINE*/,0,&match_error);
 
 		if(regex != NULL)
 		{
@@ -793,20 +793,31 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 
 /* ------------------------------------------------------------- */
 
-const gchar * trim_regex_table[][2] = {
-	{"[[:space:]]{2,}", " "}  /* 'a  b'  -> 'a b' */
-};	
-
-const gsize trim_table_size = sizeof(trim_regex_table) / (2 * sizeof(gchar*));
-
-static gchar * trim_after_newline(gchar * string)
+static gchar * trim_in_text(gchar * string)
 {
-	gchar * result = NULL;
+	gchar * buffer = NULL;
 	if(string != NULL)
 	{
-		result = regex_replace_by_table(string,trim_regex_table,trim_table_size);
+		gsize str_len = strlen(string), buf_pos = 0;
+		buffer = g_malloc0(str_len + 1);
+	
+		gsize space_ctr= 0;
+		gsize lfeed_ctr = 0;
+		for(gsize it = 0; it < str_len; it++)
+		{
+			gboolean is_space = isspace(string[it]);
+			gboolean is_lfeed = !isblank(string[it]) && is_space;
+			
+			lfeed_ctr = (is_lfeed) ? lfeed_ctr + 1 : 0;
+			space_ctr = (is_space) ? space_ctr + 1 : 0;
+
+			if(space_ctr < 2 || lfeed_ctr)		
+			{	
+				buffer[buf_pos++] = string[it];
+			}
+		}
 	}
-	return result;
+	return buffer;
 }
 
 /* ------------------------------------------------------------- */
@@ -847,7 +858,8 @@ gchar * beautify_string(const gchar * lyrics)
             }
 
             remove_tags_from_string(unicode,Len,'<','>');
-            gchar * trimmed = trim_after_newline(unicode);
+           // gchar * trimmed = trim_after_newline(unicode);
+            gchar * trimmed = trim_in_text(unicode);
             g_free(unicode);
 
 	    if(trimmed && g_utf8_validate(trimmed,-1,NULL) == TRUE)

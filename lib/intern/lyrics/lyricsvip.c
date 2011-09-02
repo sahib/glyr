@@ -64,7 +64,8 @@ GList * lyrics_lyricsvip_parse(cb_object *capo)
 			if(ABS(end-start) > 0)
 			{
 				*(end) = 0;
-				content = strreplace(start,"<br />",NULL);
+
+				content = strreplace(start,"<br />","");
 				if(content)
 				{
 					GlyrMemCache * result = DL_init();
