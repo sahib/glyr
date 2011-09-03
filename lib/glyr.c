@@ -378,10 +378,10 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->artist = NULL;
     glyrs->album  = NULL;
     glyrs->title  = NULL;
-    glyrs->from   = NULL;
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
 
+    glyrs->from   = GLYR_DEFAULT_FROM;
     glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
     glyrs->img_max_size = GLYR_DEFAULT_CMAXSIZE;
     glyrs->number = GLYR_DEFAULT_NUMBER;
