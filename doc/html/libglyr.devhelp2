@@ -59,6 +59,7 @@
     <keyword type="macro" name="GLYR_DEFAULT_PLUGMAX" link="libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_LANG" link="libglyr-types.html#GLYR-DEFAULT-LANG:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_DOWNLOAD" link="libglyr-types.html#GLYR-DEFAULT-DOWNLOAD:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_FROM" link="libglyr-types.html#GLYR-DEFAULT-FROM:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_FROM_ARGUMENT_DELIM" link="libglyr-types.html#GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_FUZZYNESS" link="libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_PROXY" link="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS"/>

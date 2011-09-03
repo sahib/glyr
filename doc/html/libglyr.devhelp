@@ -59,6 +59,7 @@
     <function name="GLYR_DEFAULT_PLUGMAX" link="libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS"/>
     <function name="GLYR_DEFAULT_LANG" link="libglyr-types.html#GLYR-DEFAULT-LANG:CAPS"/>
     <function name="GLYR_DEFAULT_DOWNLOAD" link="libglyr-types.html#GLYR-DEFAULT-DOWNLOAD:CAPS"/>
+    <function name="GLYR_DEFAULT_FROM" link="libglyr-types.html#GLYR-DEFAULT-FROM:CAPS"/>
     <function name="GLYR_DEFAULT_FROM_ARGUMENT_DELIM" link="libglyr-types.html#GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS"/>
     <function name="GLYR_DEFAULT_FUZZYNESS" link="libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS"/>
     <function name="GLYR_DEFAULT_PROXY" link="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS"/>
