@@ -135,4 +135,6 @@ void update_md5sum(GlyrMemCache * c);
 void glist_free_full(GList * List, void (* free_func)(void * ptr));
 gboolean continue_search(gint current, GlyrQuery * s);
 
+int glyr_puts(int verbosity, GlyrQuery * s, const char * string);
+
 #endif

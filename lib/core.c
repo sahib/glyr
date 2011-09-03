@@ -85,6 +85,21 @@ int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 
 /*--------------------------------------------------------*/
 
+int glyr_puts(int verbosity, GlyrQuery * s, const char * string)
+{
+	gint written = 0;
+	if(s != NULL || verbosity == -1)
+	{
+		if(string && (verbosity == -1 || verbosity <= s->verbosity))
+		{
+			puts(string);
+		}
+	}
+	return written;
+}
+
+/*--------------------------------------------------------*/
+
 /* cache incoming data in a GlyrMemCache */
 static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {

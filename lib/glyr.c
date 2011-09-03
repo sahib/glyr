@@ -570,15 +570,18 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
         /* Print some user info, always useful */
         if(settings->artist != NULL)
         {
-            glyr_message(2,settings,"- Artist   : %s\n",settings->artist);
+            glyr_message(2,settings,"- Artist   : ");
+	    glyr_puts(2,settings,settings->artist);
         }
         if(settings->album != NULL)
         {
-            glyr_message(2,settings,"- Album    : %s\n",settings->album);
+            glyr_message(2,settings,"- Album    : ");
+	    glyr_puts(2,settings,settings->album);
         }
         if(settings->title != NULL)
         {
-            glyr_message(2,settings,"- Title    : %s\n",settings->title);
+            glyr_message(2,settings,"- Title    : ");
+	    glyr_puts(2,settings,settings->title);
         }
 
         GList * result = NULL;
