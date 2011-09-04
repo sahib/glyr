@@ -17,27 +17,23 @@ if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
 else()
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
-	#SET(CFLAGS "${COPT} ${CWARN} ${CSTANDARD}")
 	SET(CMAKE_EXE_LINKER_FLAGS "-s")
 endif()
 
 SET(CMAKE_C_FLAGS ${CFLAGS})
 
-# ---------- Setup output Directories -------------------------
 SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
 	${PROJECT_BINARY_DIR}/bin
 	CACHE PATH
 	"Single Directory for all Libraries"
 	)
 
-# --------- Setup the Executable output Directory -------------
 SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
 	${PROJECT_BINARY_DIR}/bin
 	CACHE PATH
 	"Single Directory for all Executables."
 	)
 
-# --------- Setup the Executable output Directory -------------
 SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 	${PROJECT_BINARY_DIR}/bin
 	CACHE PATH
@@ -49,9 +45,20 @@ SET(SUBDIR_LIB lib)
 SET(SUBDIR_SRC src)
 SET(SUBDIR_SWIG swig)
 
+# configure
+set(GLYR_VERSION_MAJOR "0")
+set(GLYR_VERSION_MINOR "8.5")
+set(GLYR_VERSION_NAME  "Horny Hornet [beta]")
+
+configure_file (
+  "libglyr.pc.in"
+  "libglyr.pc"
+)
+INSTALL(FILES libglyr.pc DESTINATION lib/pkgconfig) 
+
 # Find deps
 FIND_PACKAGE(CURL REQUIRED)
-pkg_check_modules(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
+PKG_CHECK_MODULES(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
@@ -129,9 +136,9 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/discogs.c"
 	"${DIR_PHOTOS}/singerpictures.c"
 	"${DIR_PHOTOS}/rhapsody.c"
-#        "${DIR_LYRICS}/songlyrics.c"
-#        "${DIR_LYRICS}/directlyrics.c"
-#        "${DIR_LYRICS}/darklyrics.c"
+#       "${DIR_LYRICS}/songlyrics.c"
+#       "${DIR_LYRICS}/directlyrics.c"
+#       "${DIR_LYRICS}/darklyrics.c"
 )
 
 # Pretty high warnlevel
@@ -145,7 +152,8 @@ ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
-    IMMEDIATE @ONLY)
+    IMMEDIATE @ONLY
+    )
 
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)

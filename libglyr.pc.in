@@ -1,0 +1,6 @@
+Name: libglyr
+Description: A music metadata search engine library
+Requires: glib-2.0 libcurl
+Version: @GLYR_VERSION_MAJOR@.@GLYR_VERSION_MINOR@ [@GLYR_VERSION_NAME@]
+Libs: -L@CMAKE_INSTALL_PREFIX@/lib -lglyr
+Cflags: -I@CMAKE_INSTALL_PREFIX@/include

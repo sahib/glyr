@@ -1,9 +1,3 @@
-# configure
-set(GLYR_VERSION_MAJOR "0")
-set(GLYR_VERSION_MINOR "8.5")
-set(GLYR_VERSION_NAME  "Horny Hornet [beta]")
-set(GLYR_COLORED_OUTPUT true)
-
 # Configuration for Version /versionnam
 configure_file (
   "${DIR_ROOT}/config.h.in"

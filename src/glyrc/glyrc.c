@@ -740,100 +740,100 @@ int main(int argc, char * argv[])
      */
     atexit(glyr_cleanup);
 
-    if(argc >= 2)
+    if(argc >= 2 && argv[1][0] != '-')
     {
         /* The struct that control this beast */
-        GlyrQuery my_query;
+	    GlyrQuery my_query;
 
-        /* set it on default values */
-        glyr_init_query(&my_query);
+	    /* set it on default values */
+	    glyr_init_query(&my_query);
 
-        /* Default to a bit more verbose mode */
-        glyr_opt_verbosity(&my_query,2);
+	    /* Default to a bit more verbose mode */
+	    glyr_opt_verbosity(&my_query,2);
 
-		  GLYR_GET_TYPE type = get_type_from_string(argv[1]);
-		  if(type == GLYR_GET_UNSURE)
-		  {
-				g_print("glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argv[1]);
-				suggest_other_getter(&my_query,argv[1]);
-				g_print("\n");
-				exit(-1);
-        }
-		
-	/* Set the type */
-        my_query.type = type;
+	    GLYR_GET_TYPE type = get_type_from_string(argv[1]);
+	    if(type == GLYR_GET_UNSURE)
+	    {
+		    g_print("glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argv[1]);
+		    suggest_other_getter(&my_query,argv[1]);
+		    g_print("\n");
+		    exit(-1);
+	    }
 
-        parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
+	    /* Set the type */
+	    my_query.type = type;
 
-        if(write_to == NULL)
-        {
-            write_to = ".";
-        }
+	    parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
 
-        // Set the callback - it will do all the actual work
-        int item_counter = 0;
-        glyr_opt_dlcallback(&my_query, callback, &item_counter);
+	    if(write_to == NULL)
+	    {
+		    write_to = ".";
+	    }
 
-        if(my_query.type != GLYR_GET_UNSURE)
-        {
-            // Now start searching!
-            int length = -1;
-            GLYR_ERROR get_error = GLYRE_OK;
-            GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
+	    // Set the callback - it will do all the actual work
+	    int item_counter = 0;
+	    glyr_opt_dlcallback(&my_query, callback, &item_counter);
 
-            if(my_list)
-            {
-                if(get_error == GLYRE_OK)
-                {
+	    if(my_query.type != GLYR_GET_UNSURE)
+	    {
+		    // Now start searching!
+		    int length = -1;
+		    GLYR_ERROR get_error = GLYRE_OK;
+		    GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
+
+		    if(my_list)
+		    {
+			    if(get_error == GLYRE_OK)
+			    {
 #if 0
-                    /* This is the place where you would work with the cachelist *
-                       As the callback is used in glyrc this is just plain empty *
-                       Useful if you need to cache the data (e.g. for batch jobs *
-                       Left only for the reader's informatiom, no functions here *
-                     */
+				    /* This is the place where you would work with the cachelist *
+				       As the callback is used in glyrc this is just plain empty *
+				       Useful if you need to cache the data (e.g. for batch jobs *
+				       Left only for the reader's informatiom, no functions here *
+				     */
 
-                    GlyrMemCache * elem = my_list;
-                    while(elem != NULL)
-                    {
-                    		g_print("%s\n",elem->dsrc);
-                    		elem = elem->next;
-                    }
+				    GlyrMemCache * elem = my_list;
+				    while(elem != NULL)
+				    {
+					    g_print("%s\n",elem->dsrc);
+					    elem = elem->next;
+				    }
 #endif 
 
-                    message(2,&my_query,stderr,"- In total %d item(s) found.\n",length);
-                }
+				    message(2,&my_query,stderr,"- In total %d item(s) found.\n",length);
+			    }
 
-                // Free all downloaded buffers
-                glyr_free_list(my_list);
+			    // Free all downloaded buffers
+			    glyr_free_list(my_list);
 
-            }
-				else if(get_error == GLYRE_NO_PROVIDER)
-				{
-					g_print("glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
-					suggest_other_provider(&my_query,(gchar*)from_string);
-				}
-            else if(get_error != GLYRE_OK)
-            {
-                message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
-            }
+		    }
+		    else if(get_error == GLYRE_NO_PROVIDER)
+		    {
+			    g_print("glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
+			    suggest_other_provider(&my_query,(gchar*)from_string);
+		    }
+		    else if(get_error != GLYRE_OK)
+		    {
+			    message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
+		    }
 
 
-        }
-        // Clean memory alloc'd by settings
-        glyr_destroy_query( &my_query);
+	    }
 
+	    /* Clean memory alloc'd by settings */
+	    glyr_destroy_query( &my_query);
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
     {
-        print_version(NULL);
+	    print_version(NULL);
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-L") || !strcmp(argv[1],"--list")))
     {
-        visualize_from_options();
+	    visualize_from_options();
     }
     else
     {
-        help_short(NULL);
+	    help_short(NULL);
     }
 
     // byebye
