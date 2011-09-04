@@ -794,6 +794,8 @@ const char * glyr_type_to_string(GLYR_DATA_TYPE type)
         return "Image URL";
     case GLYR_TYPE_TXT_URL:
         return "HTML URL";
+    case GLYR_TYPE_GUITARTABS:
+	return "guitartabs";
     case GLYR_TYPE_NOIDEA:
     default:
         return "Unknown";

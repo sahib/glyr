@@ -26,6 +26,7 @@ extern MetaDataFetcher glyrFetcher_albumlist;
 extern MetaDataFetcher glyrFetcher_tags;
 extern MetaDataFetcher glyrFetcher_relations;
 extern MetaDataFetcher glyrFetcher_tracklist;
+extern MetaDataFetcher glyrFetcher_guitartabs;
 
 
 /* Externalized sourceprovider vars, add yours here */
@@ -67,6 +68,7 @@ extern MetaDataSource similar_artist_lastfm_src;
 extern MetaDataSource similar_song_lastfm_src;
 extern MetaDataSource tags_musicbrainz_src;
 extern MetaDataSource tracklist_musicbrainz_src;
+extern MetaDataSource guitartabs_guitaretab_src;
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -143,6 +145,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_song_lastfm_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tags_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tracklist_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
 }
 
 /* --------------------------------------- */
@@ -203,6 +206,7 @@ void register_fetcher_plugins(void)
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_tags);
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_relations);
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_tracklist);
+    plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_guitartabs);
 
     /* call init() */
     for(GList * elem = glyrMetaDataPluginList; elem; elem = elem->next)

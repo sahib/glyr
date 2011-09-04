@@ -1,7 +1,7 @@
 # Configuration for Version /versionnam
 configure_file (
-  "${DIR_ROOT}/config.h.in"
-  "${DIR_ROOT}/config.h"
+  "${DIR_TOP}/lib/config.h.in"
+  "${DIR_TOP}/lib/config.h"
 )
 
 ADD_DEFINITIONS( -ggdb3 -Wall )

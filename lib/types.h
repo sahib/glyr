@@ -104,6 +104,7 @@ typedef enum
 * @GLYR_GET_TAGS: get tags for a certain item
 * @GLYR_GET_RELATIONS: get relations for a certain item
 * @GLYR_GET_ALBUMLIST: get a list of albums from a certain artist
+* @GLYR_GET_GUITARTABS: get guitar tabs for a specified artist/title
 * @GLYR_GET_UNSURE: The default value after initializing a query.
 * 
 * You tell libglyr what metadata you want by choosing one of the below
@@ -123,6 +124,7 @@ typedef enum
     GLYR_GET_TAGS, 
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
+    GLYR_GET_GUITARTABS,
     GLYR_GET_UNSURE 
 }   GLYR_GET_TYPE;
 
@@ -147,6 +149,7 @@ typedef enum
 * @GLYR_TYPE_IMG_URL: URL pointing to an image 
 * @GLYR_TYPE_TXT_URL: URL pointing to some text content 
 * @GLYR_TYPE_TRACK: List of tracknames: each cache containing one name 
+* @GLYR_TYPE_GUITARTABS: Guitartabs
 * 
 * Mainly used in the 'type' field of GlyrMemCache.
 * It describes what kind of data the cache holds.
@@ -172,7 +175,8 @@ typedef enum
     GLYR_TYPE_RELATION,  
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
-    GLYR_TYPE_TRACK	
+    GLYR_TYPE_TRACK,	
+    GLYR_TYPE_GUITARTABS,
 }   GLYR_DATA_TYPE;
 
 /**

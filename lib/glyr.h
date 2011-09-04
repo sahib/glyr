@@ -613,9 +613,9 @@ GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 * @force_utf8: To force, or not to force.
 *
 * For textitems only.
-* Some _providers_ (like_metrolyrics_) might return text with strange encodings,
+* Some providers (like metrolyrics) might return text with strange encodings,
 * that can not be converted to regular UTF8, but might return a subset of UTF8.
-* This options forces @libglyr@ to prohibit those.
+* This options forces libglyr to prohibit those.
 *
 * Returns: an error ID
 */

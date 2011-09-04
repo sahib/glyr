@@ -61,6 +61,7 @@ FIND_PACKAGE(CURL REQUIRED)
 PKG_CHECK_MODULES(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
+set (DIR_TOP ${PROJECT_BINARY_DIR})
 set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
 set (DIR_INTERN ${DIR_ROOT}/intern )
 set (DIR_COVER ${DIR_INTERN}/cover )
@@ -74,6 +75,7 @@ set (DIR_TRACKLIST ${DIR_INTERN}/tracklist )
 set (DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
 set (DIR_TAGS ${DIR_INTERN}/tags )
 set (DIR_RELATIONS ${DIR_INTERN}/relations )
+set (DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
 
 SET(LIB_SOURCE_LOCATIONS
 	# core
@@ -97,6 +99,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/tags.c"
 	"${DIR_INTERN}/relations.c"
 	"${DIR_INTERN}/albumlist.c"
+	"${DIR_INTERN}/guitartabs.c"
 	# extensions
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
@@ -136,6 +139,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/discogs.c"
 	"${DIR_PHOTOS}/singerpictures.c"
 	"${DIR_PHOTOS}/rhapsody.c"
+	"${DIR_GUITARTABS}/guitaretab.c"
 #       "${DIR_LYRICS}/songlyrics.c"
 #       "${DIR_LYRICS}/directlyrics.c"
 #       "${DIR_LYRICS}/darklyrics.c"
@@ -158,11 +162,8 @@ configure_file(
 add_custom_target(uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
-#
-#
 # Ruby bindings
 # You gonna need swig && ruby 1.9.1 (+headers)
-#
 IF(SWIG_RUBY)
 	SET(INTERFACE_FILE "swig/glyros.i")
 	FIND_PACKAGE(SWIG REQUIRED)

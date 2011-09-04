@@ -112,7 +112,7 @@ static void sig_handler(int signal)
         message(-1,NULL,stderr,"       This is entirely the fault of the libglyr developers. Yes, we failed. Sorry. Now what to do:\n");
         message(-1,NULL,stderr,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
         message(-1,NULL,stderr,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
-        message(-1,NULL,stderr,"       The libglyr developers will try to fix it as soon as possible so you stop pulling their hair.\n");
+        message(-1,NULL,stderr,"       The libglyr developers will try to fix it as soon as possible so please stop pulling their hair.\n");
 #ifndef WIN32
         message(-1,NULL,stderr,"\nA list of the last called functions follows, please add this to your report:\n");
         print_trace();
@@ -562,6 +562,23 @@ static char * path_relations(GlyrQuery *s, const char * save_dir, int i)
 // --------------------------------------------------------- //
 /* --------------------------------------------------------- */
 
+static char * path_guitartabs(GlyrQuery * s, const char * save_dir, int i)
+{
+    char * good_artist = correct_path(s->artist);
+    char * good_title  = correct_path(s->title );
+    char * good_path   =  g_strdup_printf("%s/%s_%s_guitartabs_%d.txt",save_dir,good_artist,good_title,i);
+
+    if(good_title)
+        free(good_title);
+    if(good_artist)
+        free(good_artist);
+
+    return good_path;
+}
+/* --------------------------------------------------------- */
+// --------------------------------------------------------- //
+/* --------------------------------------------------------- */
+
 char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
 {
     char * m_path = NULL;
@@ -599,6 +616,9 @@ char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
         break;
     case GLYR_GET_RELATIONS:
         m_path = path_relations(s,sd,iter);
+        break;
+    case GLYR_GET_GUITARTABS:
+        m_path = path_guitartabs(s,sd,iter);
         break;
     case GLYR_GET_UNSURE:
         message(-1,NULL,stderr,"glyrc: getPath(): Unknown type, Problem?\n");
@@ -800,7 +820,7 @@ int main(int argc, char * argv[])
 				    }
 #endif 
 
-				    message(2,&my_query,stderr,"- In total %d item(s) found.\n",length);
+				    message(2,&my_query,stderr,"\n- In total %d item(s) found.\n",length);
 			    }
 
 			    // Free all downloaded buffers
