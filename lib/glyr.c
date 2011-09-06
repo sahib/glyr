@@ -52,32 +52,47 @@ const char * err_strings[] =
 
 /*--------------------------------------------------------*/
 
-static gchar * auto_choose_lang(GlyrQuery * query)
-{
-    gchar * result_lang = NULL;
-    const gchar * const * possible_locales = g_get_language_names();
-    if(possible_locales != NULL)
-    {
-	/* Default to english anyway */
-        gchar * wanted = "en";
-        gsize min_length = INT_MAX;
+const gchar * disallowed_languages[] = {"C","en"};
 
-	/* This is weird. */
-        for(gint i = 0; possible_locales[i]; i++)
-        {
-            gsize loc_len = strlen(possible_locales[i]);
-            if(loc_len < min_length && 
-	       g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
-	       g_ascii_strncasecmp("C", possible_locales[i],1) != 0)
-            {
-                wanted = (gchar*)possible_locales[i];
-                min_length = loc_len;
-            }
-        }
-        result_lang = wanted;
-        glyr_message(2,query,"- Language : %s\n",result_lang);
-    }
-    return result_lang;
+/**
+* @brief Guesses the users language (in ISO639-1 codes like 'de') by the system locale
+*
+* @return a newly allocated language code. Free.
+*/
+gchar * guess_language(void)
+{
+	/* Default to 'en' in any case */
+	gchar * result_lang = g_strdup("en");
+	gboolean break_out = FALSE;
+
+	/* Please never ever free this */
+	const gchar * const * languages = g_get_language_names();
+
+	for (gint i = 0; languages[i] && !break_out; i++) 
+	{
+		gchar ** variants = g_get_locale_variants(languages[i]);
+		for(gint j = 0; variants[j] && !break_out; j++)
+		{
+			gboolean allowed_lang = TRUE;
+			gint lang_size = (sizeof(disallowed_languages)/sizeof(gchar*));
+			for (gint dis = 0; dis < lang_size; dis++)
+			{
+				if(g_ascii_strncasecmp(disallowed_languages[dis],variants[j],strlen(variants[j])) == 0)
+				{
+					allowed_lang = FALSE;
+				}
+			}
+
+			if(allowed_lang && !strchr(variants[j],'@') && !strchr(variants[j],'_'))
+			{
+				g_free(result_lang);
+				result_lang = g_strdup(variants[j]);
+				break_out = TRUE;
+			}
+		}
+		g_strfreev(variants);
+	}
+	return result_lang;
 }
 
 /*--------------------------------------------------------*/
@@ -249,8 +264,9 @@ GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
     {
         if(strcasecmp("auto",langcode) == 0)
         {
-            gchar * auto_lang = auto_choose_lang(s);
-	    s->lang = auto_lang;
+            gchar * auto_lang = guess_language();
+            glyr_set_info(s,7,auto_lang);
+	    g_free(auto_lang);
         }
         else
         {
@@ -397,7 +413,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
     glyrs->useragent = GLYR_DEFAULT_USERAGENT;
     glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
-    glyrs->lang = auto_choose_lang(glyrs);
+    glyrs->lang = GLYR_DEFAULT_LANG;
     glyrs->itemctr = 0;
 }
 
@@ -567,6 +583,11 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
     if(e) *e = GLYRE_OK;
     if(settings != NULL)
     {
+	if(g_ascii_strncasecmp(settings->lang,"auto",4) == 0)
+	{
+		glyr_opt_lang(settings,"auto");
+	}
+
         /* Print some user info, always useful */
         if(settings->artist != NULL)
         {
@@ -582,6 +603,11 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
         {
             glyr_message(2,settings,"- Title    : ");
 	    glyr_puts(2,settings,settings->title);
+        }
+        if(settings->lang != NULL)
+        {
+            glyr_message(2,settings,"- Language : ");
+	    glyr_puts(2,settings,settings->lang);
         }
 
         GList * result = NULL;

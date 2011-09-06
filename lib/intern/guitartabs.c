@@ -39,10 +39,23 @@ bool vdt_guitartabs(GlyrQuery * settings)
 
 /* ------------------------------------- */
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+GList * gt_factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
+	/* Fix up tabs, escape chars etc.  */
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyrMemCache * item = elem->data;
+		if(item != NULL)
+		{
+			gchar * temp = beautify_string(item->data);
+			g_free(item->data);
+			item->data = temp;
+			item->size = (item->data) ? strlen(item->data) : 0;
+		}
+	}
+
 	/* Let the rest do by the norma generic finalizer */
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_GUITARTABS);
 }
 
 /* ------------------------------------- */
@@ -56,7 +69,7 @@ MetaDataFetcher glyrFetcher_guitartabs =
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = factory,
+	.finalize = gt_factory,
 };
 
 /* ------------------------------------- */

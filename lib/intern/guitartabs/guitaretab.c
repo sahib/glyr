@@ -44,6 +44,7 @@ GlyrMemCache * parse_single_page(GlyrQuery * s, const gchar * url)
 			result = DL_init();
 			result->data = content;
 			result->size = strlen(content);
+			result->dsrc = g_strdup(url);
 		}
 		DL_free(tab_cache);
 	}
@@ -60,7 +61,8 @@ GlyrMemCache * parse_single_page(GlyrQuery * s, const gchar * url)
 #define ARTIST_END "</a>"
 #define URL_END "\" "
 
-#define TITLE_END "</a></li>"
+#define TITLE_BEGIN "\">"
+#define TITLE_ENDIN "</a></li>"
 
 GList * gt_guitaretabs_parse(cb_object * capo)
 {
@@ -68,9 +70,11 @@ GList * gt_guitaretabs_parse(cb_object * capo)
 	gchar * begin_search = strstr(capo->cache->data,SEARCH_RESULTS_BEGIN);
 	if(begin_search != NULL)
 	{
+		/* End need to assure we don't get over the search results */
 		gchar * endin_search = strstr(begin_search,SEARCH_RESULTS_ENDIN);
 		if(endin_search != NULL)
 		{
+			/* Go through all search results */
 			gchar * node  = begin_search;
 			gsize nodelen = (sizeof SEARCH_NODE) - 1;
 			while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node + nodelen, SEARCH_NODE)) != NULL && node <= endin_search)
@@ -80,7 +84,7 @@ GList * gt_guitaretabs_parse(cb_object * capo)
 				if(node != NULL)
 				{
 					gchar * url = get_search_value(node,SEARCH_NODE,URL_END);
-					gchar * title = get_search_value(node,"\">",TITLE_END);
+					gchar * title = get_search_value(node,TITLE_BEGIN,TITLE_ENDIN);
 
 					if(title != NULL)
 					{
@@ -96,10 +100,14 @@ GList * gt_guitaretabs_parse(cb_object * capo)
 						}
 					}
 
+					/* Check if this is the item we actually search */
 					if(levenshtein_strnormcmp(capo->s,title, capo->s->title ) <= capo->s->fuzzyness &&
-					   levenshtein_strnormcmp(capo->s,artist,capo->s->artist) <= capo->s->fuzzyness)
+				 	   levenshtein_strnormcmp(capo->s,artist,capo->s->artist) <= capo->s->fuzzyness)
 					{
+						/* Build resulting url */
 						gchar * result_url = g_strdup_printf("%s%s",GT_BASE,url);
+
+						/* Go and parse it */
 						GlyrMemCache * result = parse_single_page(capo->s,result_url);
 						if(result != NULL)
 						{

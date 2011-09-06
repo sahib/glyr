@@ -69,6 +69,7 @@ extern MetaDataSource similar_song_lastfm_src;
 extern MetaDataSource tags_musicbrainz_src;
 extern MetaDataSource tracklist_musicbrainz_src;
 extern MetaDataSource guitartabs_guitaretab_src;
+extern MetaDataSource guitartabs_chordie_src;
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -146,6 +147,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&tags_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tracklist_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_chordie_src);
 }
 
 /* --------------------------------------- */

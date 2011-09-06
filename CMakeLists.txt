@@ -140,6 +140,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/singerpictures.c"
 	"${DIR_PHOTOS}/rhapsody.c"
 	"${DIR_GUITARTABS}/guitaretab.c"
+	"${DIR_GUITARTABS}/chordie_com.c"
 #       "${DIR_LYRICS}/songlyrics.c"
 #       "${DIR_LYRICS}/directlyrics.c"
 #       "${DIR_LYRICS}/darklyrics.c"
