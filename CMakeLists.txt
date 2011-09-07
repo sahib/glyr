@@ -3,15 +3,11 @@ PROJECT(glyr C)
 
 include(FindPkgConfig)
 
-SET(CMAKE_INSTALL_PREFIX "/usr")
-
 SET(GLYR_DEBUG true)
 SET(CSTANDARD "-std=gnu99")
 SET(CDEBUG "-ggdb3")
 SET(CWARN "-Wall -Wstrict-prototypes")
 SET(COPT "-Os -march=native -fomit-frame-pointer")
-
-SET(CMAKE_INSTALL_PREFIX "/usr")
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
