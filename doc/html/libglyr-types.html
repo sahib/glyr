@@ -285,6 +285,7 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
     GLYR_GET_TAGS, 
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
+    GLYR_GET_GUITARTABS,
     GLYR_GET_UNSURE 
 }   GLYR_GET_TYPE;
 </pre>
@@ -351,6 +352,11 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
 </td>
 </tr>
 <tr>
+<td><p><a name="GLYR-GET-GUITARTABS:CAPS"></a><span class="term"><code class="literal">GLYR_GET_GUITARTABS</code></span></p></td>
+<td>get guitar tabs for a specified artist/title
+</td>
+</tr>
+<tr>
 <td><p><a name="GLYR-GET-UNSURE:CAPS"></a><span class="term"><code class="literal">GLYR_GET_UNSURE</code></span></p></td>
 <td>The default value after initializing a query.
 </td>
@@ -381,7 +387,8 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
     GLYR_TYPE_RELATION,  
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
-    GLYR_TYPE_TRACK	
+    GLYR_TYPE_TRACK,	
+    GLYR_TYPE_GUITARTABS,
 }   GLYR_DATA_TYPE;
 </pre>
 <p>
@@ -484,6 +491,11 @@ It describes what kind of data the cache holds.
 <tr>
 <td><p><a name="GLYR-TYPE-TRACK:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_TRACK</code></span></p></td>
 <td>List of tracknames: each cache containing one name 
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-TYPE-GUITARTABS:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_GUITARTABS</code></span></p></td>
+<td>Guitartabs
 </td>
 </tr>
 </tbody>

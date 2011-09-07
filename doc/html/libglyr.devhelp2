@@ -98,6 +98,7 @@
     <keyword type="constant" name="GLYR_GET_TAGS" link="libglyr-types.html#GLYR-GET-TAGS:CAPS"/>
     <keyword type="constant" name="GLYR_GET_RELATIONS" link="libglyr-types.html#GLYR-GET-RELATIONS:CAPS"/>
     <keyword type="constant" name="GLYR_GET_ALBUMLIST" link="libglyr-types.html#GLYR-GET-ALBUMLIST:CAPS"/>
+    <keyword type="constant" name="GLYR_GET_GUITARTABS" link="libglyr-types.html#GLYR-GET-GUITARTABS:CAPS"/>
     <keyword type="constant" name="GLYR_GET_UNSURE" link="libglyr-types.html#GLYR-GET-UNSURE:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_NOIDEA" link="libglyr-types.html#GLYR-TYPE-NOIDEA:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_LYRICS" link="libglyr-types.html#GLYR-TYPE-LYRICS:CAPS"/>
@@ -118,5 +119,6 @@
     <keyword type="constant" name="GLYR_TYPE_IMG_URL" link="libglyr-types.html#GLYR-TYPE-IMG-URL:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TXT_URL" link="libglyr-types.html#GLYR-TYPE-TXT-URL:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TRACK" link="libglyr-types.html#GLYR-TYPE-TRACK:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_GUITARTABS" link="libglyr-types.html#GLYR-TYPE-GUITARTABS:CAPS"/>
   </functions>
 </book>

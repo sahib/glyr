@@ -89,6 +89,7 @@
 <ANCHOR id="GLYR-GET-TAGS:CAPS" href="libglyr/libglyr-types.html#GLYR-GET-TAGS:CAPS">
 <ANCHOR id="GLYR-GET-RELATIONS:CAPS" href="libglyr/libglyr-types.html#GLYR-GET-RELATIONS:CAPS">
 <ANCHOR id="GLYR-GET-ALBUMLIST:CAPS" href="libglyr/libglyr-types.html#GLYR-GET-ALBUMLIST:CAPS">
+<ANCHOR id="GLYR-GET-GUITARTABS:CAPS" href="libglyr/libglyr-types.html#GLYR-GET-GUITARTABS:CAPS">
 <ANCHOR id="GLYR-GET-UNSURE:CAPS" href="libglyr/libglyr-types.html#GLYR-GET-UNSURE:CAPS">
 <ANCHOR id="GLYR-DATA-TYPE:CAPS" href="libglyr/libglyr-types.html#GLYR-DATA-TYPE:CAPS">
 <ANCHOR id="GLYR-TYPE-NOIDEA:CAPS" href="libglyr/libglyr-types.html#GLYR-TYPE-NOIDEA:CAPS">
@@ -110,6 +111,7 @@
 <ANCHOR id="GLYR-TYPE-IMG-URL:CAPS" href="libglyr/libglyr-types.html#GLYR-TYPE-IMG-URL:CAPS">
 <ANCHOR id="GLYR-TYPE-TXT-URL:CAPS" href="libglyr/libglyr-types.html#GLYR-TYPE-TXT-URL:CAPS">
 <ANCHOR id="GLYR-TYPE-TRACK:CAPS" href="libglyr/libglyr-types.html#GLYR-TYPE-TRACK:CAPS">
+<ANCHOR id="GLYR-TYPE-GUITARTABS:CAPS" href="libglyr/libglyr-types.html#GLYR-TYPE-GUITARTABS:CAPS">
 <ANCHOR id="GlyrMemCache" href="libglyr/libglyr-types.html#GlyrMemCache">
 <ANCHOR id="GlyrQuery" href="libglyr/libglyr-types.html#GlyrQuery">
 <ANCHOR id="GlyrSourceInfo" href="libglyr/libglyr-types.html#GlyrSourceInfo">
