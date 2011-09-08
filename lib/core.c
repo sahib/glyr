@@ -743,7 +743,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 					/* Get the callback object associated with the curl handle
 					 * for some odd reason curl requires a char * pointer */
 					cb_object * capo = NULL;
-					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, (const char*)&capo);
+					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, ((char*)&capo));
 
 					/* It's useless if it's empty  */
 					if(capo && capo->cache && capo->cache->data == NULL)

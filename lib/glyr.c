@@ -125,7 +125,7 @@ void glyr_update_md5sum(GlyrMemCache * cache)
 
 const char * glyr_version(void)
 {
-    return "Version "glyr_VERSION_MAJOR"."glyr_VERSION_MINOR" ("glyr_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+    return "Version "glyr_VERSION_MAJOR"."glyr_VERSION_MINOR"."glyr_VERSION_MICRO" ("glyr_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
 }
 
 /*-----------------------------------------------*/

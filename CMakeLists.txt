@@ -1,81 +1,91 @@
-cmake_minimum_required(VERSION 2.6)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
+
+# Write in C, write in Ceeee... :-)
 PROJECT(glyr C)
 
-include(FindPkgConfig)
+# Include pkg-config
+INCLUDE(FindPkgConfig)
 
-SET(GLYR_DEBUG true)
-SET(CSTANDARD "-std=gnu99")
-SET(CDEBUG "-ggdb3")
-SET(CWARN "-Wall -Wstrict-prototypes")
-SET(COPT "-Os -march=native")
+# ------------------------------------------------
+# You can configure the next few params on the cmd:
+# -DLIB_SUFFIX="64" for example
+# ------------------------------------------------
+IF(NOT DEFINED INSTALL_BIN_DIR)
+ SET(INSTALL_BIN_DIR bin)
+ELSE()
+  MESSAGE("-- Install binaries to: \"${INSTALL_BIN_DIR}\"")
+ENDIF()
 
-if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
-	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
-else()
-	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
-	SET(CMAKE_EXE_LINKER_FLAGS "-s")
-endif()
+IF(NOT DEFINED INSTALL_LIB_DIR)
+  SET(INSTALL_LIB_DIR lib${LIB_SUFFIX})
+ELSE()
+  MESSAGE("-- Install library to: \"${INSTALL_LIB_DIR}\"")
+ENDIF()
 
+IF(NOT DEFINED INSTALL_INC_DIR)
+  SET(INSTALL_INC_DIR include)
+ELSE()
+  MESSAGE("-- Install headers to: \"${INSTALL_INC_DIR}\"")
+ENDIF()
+
+IF(DEFINED LIB_SUFFIX)
+  MESSAGE("-- Library suffix is: \"${LIB_SUFFIX}\"")
+ENDIF()
+# ------------------------------------------------
+
+# ------------------------------------------------
+# Versioning 
+# ------------------------------------------------
+SET(GLYR_VERSION_MAJOR "0")
+SET(GLYR_VERSION_MINOR "8")
+SET(GLYR_VERSION_MICRO "5")
+SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
+# ------------------------------------------------
+
+
+# ------------------------------------------------
+# CFlags and warnlevel / build config 
+# ------------------------------------------------
+SET(CMAKE_BUILD_TYPE "debug")
+SET(COMMON_FLAGS "-Wall -Wstrict-prototypes -std=gnu99 -W -Wno-unused-parameter -Wno-strict-prototypes")
+SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} -Os -march=native -s")
+SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} -ggdb3")
 SET(CMAKE_C_FLAGS ${CFLAGS})
+# ------------------------------------------------
 
-SET (CMAKE_LIBRARY_OUTPUT_DIRECTORY
-	${PROJECT_BINARY_DIR}/bin
-	CACHE PATH
-	"Single Directory for all Libraries"
-	)
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Libraries")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Executables.")
 
-SET (CMAKE_RUNTIME_OUTPUT_DIRECTORY
-	${PROJECT_BINARY_DIR}/bin
-	CACHE PATH
-	"Single Directory for all Executables."
-	)
-
-SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
-	${PROJECT_BINARY_DIR}/bin
-	CACHE PATH
-	"Single Directory for all static libraries."
-	)
-
-# set directories
-SET(SUBDIR_LIB lib)
-SET(SUBDIR_SRC src)
-SET(SUBDIR_SWIG swig)
-
-set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
-set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
-set(INSTALL_INC_DIR include CACHE PATH "Installation directory for headers")
-
-# configure
-set(GLYR_VERSION_MAJOR "0")
-set(GLYR_VERSION_MINOR "8.5")
-set(GLYR_VERSION_NAME  "Horny Hornet [beta]")
-
-configure_file (
+CONFIGURE_FILE(
   "libglyr.pc.in"
   "libglyr.pc"
 )
-INSTALL(FILES libglyr.pc DESTINATION lib/pkgconfig) 
+INSTALL(FILES libglyr.pc DESTINATION ${INSTALL_LIB_DIR}/pkgconfig) 
 
 # Find deps
 FIND_PACKAGE(CURL REQUIRED)
 PKG_CHECK_MODULES(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
-set (DIR_TOP ${PROJECT_BINARY_DIR})
-set (DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
-set (DIR_INTERN ${DIR_ROOT}/intern )
-set (DIR_COVER ${DIR_INTERN}/cover )
-set (DIR_LYRICS ${DIR_INTERN}/lyrics )
-set (DIR_PHOTOS ${DIR_INTERN}/photos )
-set (DIR_AINFO ${DIR_INTERN}/ainfo )
-set (DIR_SIMILIAR ${DIR_INTERN}/similiar_artist )
-set (DIR_SIMILISO ${DIR_INTERN}/similiar_song )
-set (DIR_REVIEW ${DIR_INTERN}/review )
-set (DIR_TRACKLIST ${DIR_INTERN}/tracklist )
-set (DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
-set (DIR_TAGS ${DIR_INTERN}/tags )
-set (DIR_RELATIONS ${DIR_INTERN}/relations )
-set (DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
+# set directories
+SET(SUBDIR_LIB lib)
+SET(SUBDIR_SRC src)
+SET(SUBDIR_SWIG swig)
+SET(DIR_TOP ${PROJECT_BINARY_DIR})
+SET(DIR_ROOT ${PROJECT_BINARY_DIR}/${SUBDIR_LIB} )
+SET(DIR_INTERN ${DIR_ROOT}/intern )
+SET(DIR_COVER ${DIR_INTERN}/cover )
+SET(DIR_LYRICS ${DIR_INTERN}/lyrics )
+SET(DIR_PHOTOS ${DIR_INTERN}/photos )
+SET(DIR_AINFO ${DIR_INTERN}/ainfo )
+SET(DIR_SIMILIAR ${DIR_INTERN}/similiar_artist )
+SET(DIR_SIMILISO ${DIR_INTERN}/similiar_song )
+SET(DIR_REVIEW ${DIR_INTERN}/review )
+SET(DIR_TRACKLIST ${DIR_INTERN}/tracklist )
+SET(DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
+SET(DIR_TAGS ${DIR_INTERN}/tags )
+SET(DIR_RELATIONS ${DIR_INTERN}/relations )
+SET(DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
 
 SET(LIB_SOURCE_LOCATIONS
 	# core
@@ -148,8 +158,6 @@ SET(LIB_SOURCE_LOCATIONS
 #       "${DIR_LYRICS}/darklyrics.c"
 )
 
-# Pretty high warnlevel
-ADD_DEFINITIONS(-Wall -W -Wno-unused-parameter -Wno-strict-prototypes)
 
 # go on with subdirs
 ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
@@ -173,17 +181,14 @@ IF(SWIG_RUBY)
 
 	FIND_PACKAGE(Ruby)
 	INCLUDE_DIRECTORIES(${RUBY_INCLUDE_PATH})
-
 	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 	SET(CMAKE_SWIG_FLAGS "")
 
 	SWIG_ADD_MODULE(glyros ruby ${INTERFACE_FILE} ${LIB_SOURCE_LOCATIONS})
 	SWIG_LINK_LIBRARIES(glyros ${RUBY_LIBRARY} ${CURL_LIBRARY} ${GLIBPKG_LIBRARIES})
 
 	ADD_DEFINITIONS(-Wno-unused-but-set-variable -Wno-unused-variable)
-
-	ADD_CUSTOM_COMMAND (
+	ADD_CUSTOM_COMMAND(
 		TARGET glyros
 		POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E rename bin/libglyros.so swig/ruby/glyros.so

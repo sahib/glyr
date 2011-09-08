@@ -6,7 +6,7 @@ ADD_EXECUTABLE(ping_url utils/ping_url.c)
 ADD_EXECUTABLE(guess_lang utils/guess_lang.c)
 
 #install
-install(TARGETS glyrc RUNTIME DESTINATION bin)
+INSTALL(TARGETS glyrc RUNTIME DESTINATION ${INSTALL_BIN_DIR})
 
 # link with
 TARGET_LINK_LIBRARIES(glyrc    glyr)
