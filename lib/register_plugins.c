@@ -54,6 +54,7 @@ extern MetaDataSource lyrics_magistrix_src;
 extern MetaDataSource lyrics_metrolyrics_src;
 extern MetaDataSource lyrics_metallum_src;
 extern MetaDataSource lyrics_elyrics_src;
+extern MetaDataSource lyrics_chartlyrics_src;
 extern MetaDataSource photos_flickr_src;
 extern MetaDataSource photos_google_src;
 extern MetaDataSource photos_lastfm_src;
@@ -133,6 +134,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_elyrics_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);

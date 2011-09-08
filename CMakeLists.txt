@@ -144,6 +144,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_LYRICS}/lyricsreg.c"
 	"${DIR_LYRICS}/lipwalk.c"
 	"${DIR_LYRICS}/elyrics.c"
+	"${DIR_LYRICS}/chartlyrics.c"
 	"${DIR_PHOTOS}/flickr.c"
 	"${DIR_PHOTOS}/lastfm.c"
 	"${DIR_PHOTOS}/google.c"
