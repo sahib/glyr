@@ -22,7 +22,7 @@
 
 const gchar * tracklist_musicbrainz_url(GlyrQuery * sets)
 {
-    return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=Official&limit=10&title=%album%&limit=1";
+    return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=Official&limit=10&title=${album}&limit=1";
 }
 
 /* ----------------------------------------- */

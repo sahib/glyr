@@ -26,7 +26,7 @@
 
 const char * cover_lastfm_url(GlyrQuery * sets)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=%artist%+%album%&api_key="API_KEY_LASTFM;
+    return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=${artist}+${album}&api_key="API_KEY_LASTFM;
 }
 
 /* ----------------------------------------------- */

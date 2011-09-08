@@ -197,9 +197,9 @@ gint please_what_type(GlyrQuery * s)
 
 const gchar * generic_musicbrainz_url(GlyrQuery * sets)
 {
-    const gchar * wrap_a = sets->artist ? "%artist%" : "";
-    const gchar * wrap_b = sets->album  ? "%album%"  : "";
-    const gchar * wrap_t = sets->title  ? "%title%"  : "";
+    const gchar * wrap_a = sets->artist ? "${artist}" : "";
+    const gchar * wrap_b = sets->album  ? "${album}"  : "";
+    const gchar * wrap_t = sets->title  ? "${title}"  : "";
 
     switch(please_what_type(sets))
     {
@@ -329,19 +329,19 @@ const gchar * generic_amazon_url(GlyrQuery * sets, const gchar * response_group)
 	if(sets->img_min_size <= 500 || sets->img_min_size)
 	{
 		if(!strcmp(sets->lang,"us"))
-			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else if(!strcmp(sets->lang,"ca"))
-			lang_link = "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://ca.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else if(!strcmp(sets->lang,"uk"))
-			lang_link = "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://co.uk.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else if(!strcmp(sets->lang,"fr"))
-			lang_link = "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://fr.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else if(!strcmp(sets->lang,"de"))
-			lang_link = "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://de.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else if(!strcmp(sets->lang,"jp"))
-			lang_link = "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://co.jp.free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 		else
-			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=%artist%+%album%\0";
+			lang_link = "http://free.apisigning.com/onca/xml?Service=AWSECommerceService&AWSAccessKeyId="ACCESS_KEY"&Operation=ItemSearch&SearchIndex=Music&ResponseGroup="rg_markup"&Keywords=${artist}+${album}\0";
 	}
 	if(lang_link != NULL)
 	{

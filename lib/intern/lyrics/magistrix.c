@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define MG_URL "http://www.magistrix.de/lyrics/search?q=%artist%+%title%"
+#define MG_URL "http://www.magistrix.de/lyrics/search?q=${artist}+${title}"
 
 const char * lyrics_magistrix_url(GlyrQuery * settings)
 {

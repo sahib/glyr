@@ -29,7 +29,7 @@ const gchar * cover_coverhunt_url(GlyrQuery * sets)
 {
     if(sets->img_min_size <= 500 || sets->img_min_size == -1)
 	{
-        return "http://www.coverhunt.com/index.php?query=%artist%+%album%&action=Find+my+CD+Covers";
+        return "http://www.coverhunt.com/index.php?query=${artist}+${album}&action=Find+my+CD+Covers";
 	}
     return NULL;
 }

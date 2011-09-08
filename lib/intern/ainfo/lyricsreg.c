@@ -28,7 +28,7 @@
 
 const gchar * ainfo_lyricsreg_url(GlyrQuery * s)
 {
-	return "http://www.lyricsreg.com/biography/%artist%/";
+	return "http://www.lyricsreg.com/biography/${artist}/";
 }
 
 /*-------------------------------------*/

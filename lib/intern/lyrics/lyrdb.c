@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=%artist%|%title%&for=match&agent=libglyr"
+#define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=${artist}|${title}&for=match&agent=libglyr"
 
 /*---------------------------------------------------*/
 

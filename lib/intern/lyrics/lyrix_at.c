@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define AT_URL "http://lyrix.at/lyrics-search/s-%artist%,,%title%,,any,1321,0.html"
+#define AT_URL "http://lyrix.at/lyrics-search/s-${artist},,${title},,any,1321,0.html"
 
 const char * lyrics_lyrixat_url(GlyrQuery * settings)
 {

@@ -29,7 +29,7 @@
 
 const gchar * photos_lastfm_url(GlyrQuery * settings)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=%artist%&api_key="API_KEY_LASTFM;
+    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=${artist}&api_key="API_KEY_LASTFM;
 }
 
 /* -------------------------------------------- */

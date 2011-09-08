@@ -25,7 +25,7 @@
 
 const char * lyrics_lyricsreg_url(GlyrQuery * s)
 {
-		return "http://www.lyricsreg.com/lyrics/%artist%/%title%/";
+		return "http://www.lyricsreg.com/lyrics/${artist}/${title}/";
 }
 
 GList * lyrics_lyricsreg_parse(cb_object * capo)

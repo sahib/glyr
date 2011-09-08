@@ -25,7 +25,7 @@
 
 const char * similiar_lastfm_url(GlyrQuery * sets)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=%artist%&api_key="API_KEY;
+    return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=${artist}&api_key="API_KEY;
 }
 
 #define NAME_BEGIN "<name>"
@@ -67,6 +67,11 @@ GList * similiar_lastfm_parse(cb_object * capo)
             result->data = composed;
             result->size = strlen(composed);
             results = g_list_prepend(results, result);
+	}
+
+	if(results != NULL)
+	{
+		results = g_list_reverse(results);
 	}
 
 	g_free(name);

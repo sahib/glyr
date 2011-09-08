@@ -28,7 +28,7 @@ const gchar * cover_albumart_url(GlyrQuery * sets)
 
 	if((e >= 50 || e==-1) && (i == -1 || i < 450))
 	{
-		return "http://www.albumart.org/index.php?srchkey=%artist%+%album%&itempage=1&newsearch=1&searchindex=Music";
+		return "http://www.albumart.org/index.php?srchkey=${artist}+${album}&itempage=1&newsearch=1&searchindex=Music";
 	}
 	return NULL;
 }

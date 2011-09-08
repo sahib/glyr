@@ -2,7 +2,7 @@
 #include "../../stringlib.h"
 
 #define AJAX_URL "http://www.metal-archives.com/search/ajax-advanced/searching/songs/" \
-		         "?songTitle=%title%&bandName=%artist%"                                \
+		         "?songTitle=${title}&bandName=${artist}"                                \
 		         "&_=1313668588182&sEcho=1&iColumns=5&sColumns=&iDisplayStart=0"       \
 		         "&iDisplayLength=100&sNames=%%2C%%2C%%2C%%2C"
 

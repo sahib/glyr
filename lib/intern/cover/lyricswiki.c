@@ -26,7 +26,7 @@ const gchar * cover_lyricswiki_url(GlyrQuery * sets)
 	const gchar * url = NULL;
 	if(sets->img_min_size < 650)
 	{
-		url = "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=%artist%";
+		url = "http://lyrics.wikia.com/api.php?format=xml&action=query&list=allimages&aiprefix=${artist}";
 	}
 	return url;
 }

@@ -35,7 +35,7 @@
 
 const gchar * review_allmusic_url(GlyrQuery * s)
 {
-    return "http://www.allmusic.com/search/album/%album%";
+    return "http://www.allmusic.com/search/album/${album}";
 }
 
 #define TEXT_BEGIN "<p class=\"text\">"

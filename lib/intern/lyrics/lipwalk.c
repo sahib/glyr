@@ -25,7 +25,7 @@
 #define TRACK_DESCR "</a>"
 
 #define LIPWALK_DOMAIN "http://www.lipwalklyrics.com"
-#define LIPWALK_URL LIPWALK_DOMAIN"/component/lyrics/search/index.php?search=%artist%%20%title%"
+#define LIPWALK_URL LIPWALK_DOMAIN"/component/lyrics/search/index.php?search=${artist}%20${title}"
 #define START "<div id=\"lyric\">"
 #define END "</div>"
 

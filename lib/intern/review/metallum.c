@@ -3,7 +3,7 @@
 
 /* Monstress of URL - thanks Wireshark.. */
 #define AJAX_URL "http://www.metal-archives.com/search/ajax-advanced/searching/albums/" \
- 	         "?bandName=%artist%&exactBandMatch=1&releaseTitle=%album%"             \
+ 	         "?bandName=${artist}&exactBandMatch=1&releaseTitle=${album}"             \
 	         "&exactReleaseMatch=0&releaseType=&_=1313619222250&sEcho=1"            \
 		 "&iColumns=3&sColumns=&iDisplayStart=0"                                \
 		 "&iDisplayLength=100&sNames=%%2C%%2C"

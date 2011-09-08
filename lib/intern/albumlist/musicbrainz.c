@@ -23,7 +23,7 @@
 
 const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 {
-    return "http://musicbrainz.org/ws/1/release/?type=xml&artist=%artist%&releasetypes=\"Official\"";
+    return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=\"Official\"";
 }
 
 #define ALBUM_BEGIN "<release type=\"Album Official\""

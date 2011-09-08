@@ -31,7 +31,7 @@ const gchar * photos_discogs_url(GlyrQuery * sets)
 {
     if(sets->img_max_size >= 250 || sets->img_max_size == -1)
     {
-        return "http://www.discogs.com/artist/%artist%?f=xml&api_key="API_KEY_DISCOGS;
+        return "http://www.discogs.com/artist/${artist}?f=xml&api_key="API_KEY_DISCOGS;
     }
     return NULL;
 }

@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define GLYR_GET_URL "http://www.lyricstime.com/search/?q=%artist%+%title%&t=default"
+#define GLYR_GET_URL "http://www.lyricstime.com/search/?q=${artist}+${title}&t=default"
 
 /*--------------------------------------------------------*/
 

@@ -26,7 +26,7 @@
 const gchar * cover_google_url(GlyrQuery * s)
 {
     const gchar * result = NULL;
-    gchar * searchterm = g_strdup("%artist%+%album%+album");
+    gchar * searchterm = g_strdup("${artist}+${album}+album");
     if(searchterm != NULL)
     {
         result = generic_google_url(s,searchterm);

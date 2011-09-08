@@ -22,7 +22,7 @@
 
 const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 {
-    return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=%artist%&track=%title%&api_key="API_KEY_LASTFM;
+    return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${artist}&track=${title}&api_key="API_KEY_LASTFM;
 }
 
 #define TRACK_BEGIN "<track>"

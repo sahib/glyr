@@ -71,8 +71,8 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 /* Unescapes HTML numeric unicode entities to normal UTF8 strings */
 gchar * unescape_html_UTF8(const gchar *data);
 
-/* Puts artist, album title in the string URL where it is %artist%,%album%,%title% */
-gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album, const gchar * title);
+/* Puts artist, album title in the string URL where it is ${artist},${album},${title} */
+gchar * prepare_url(const gchar * URL, GlyrQuery * s); 
 
 /* Runs many of the above funtions to make lyrics beautier */
 gchar * beautify_string(const gchar * lyrics);

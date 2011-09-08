@@ -287,20 +287,20 @@ static void swap_string(char ** tmp, const char * subs, const char * with)
 }
 
 // Prepares the url for you to get downloaded. You don't have to call this.
-gchar * prepare_url(const gchar * URL, const gchar * artist, const gchar * album, const gchar * title)
+gchar * prepare_url(const gchar * URL, GlyrQuery * s)
 {
     gchar * tmp = NULL;
-    if(URL != NULL)
+    if(URL != NULL && s != NULL)
     {
         tmp = g_strdup(URL);
 
-        gchar * p_artist = prepare_string(artist,FALSE);
-        gchar * p_album  = prepare_string(album,TRUE);
-        gchar * p_title  = prepare_string(title,TRUE);
+        gchar * p_artist = prepare_string(s->artist,FALSE);
+        gchar * p_album  = prepare_string(s->album,TRUE);
+        gchar * p_title  = prepare_string(s->title,TRUE);
 
-        swap_string(&tmp,"%artist%",p_artist);
-        swap_string(&tmp,"%album%", p_album);
-        swap_string(&tmp,"%title%", p_title);
+        swap_string(&tmp,"${artist}",p_artist);
+        swap_string(&tmp,"${album}", p_album);
+        swap_string(&tmp,"${title}", p_title);
 
         if(p_artist)
             g_free(p_artist);

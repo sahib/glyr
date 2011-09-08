@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 
 // Search URL
-#define ML_URL "http://www.metrolyrics.com/search.php?search=%artist%+%title%&category=artisttitle"
+#define ML_URL "http://www.metrolyrics.com/search.php?search=${artist}+${title}&category=artisttitle"
 #define MAX_TRIES 5
 
 // Just return URL

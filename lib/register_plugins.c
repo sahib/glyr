@@ -61,6 +61,7 @@ extern MetaDataSource photos_singerpictures_src;
 extern MetaDataSource photos_discogs_src;
 extern MetaDataSource photos_rhapsody_src;
 extern MetaDataSource relations_musicbrainz_src;
+extern MetaDataSource relations_generated_src;
 extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
 extern MetaDataSource review_metallum_src;
@@ -114,7 +115,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
     //FIXME: Coverhunt seems to be down. Add again when up and running
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
+    // plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
 
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
@@ -139,6 +140,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_singerpictures_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);

@@ -22,7 +22,7 @@
 
 #define BAD_STRING "Special:Random" /* This has been a running gag during developement: "I want to edit metadata!" */
 #define EXTERNAL_LINKS "<span class=\"plainlinks\""
-#define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=%artist%&song=%title%"
+#define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=${artist}&song=${title}"
 
 /*--------------------------------------------------------*/
 

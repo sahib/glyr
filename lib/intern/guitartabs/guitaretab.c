@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 
 #define GT_BASE "http://www.guitaretab.com"
-#define GT_URL GT_BASE"/fetch/?type=tab&query=%title%"
+#define GT_URL GT_BASE"/fetch/?type=tab&query=${title}"
 
 /*--------------------------------------------------------*/
 

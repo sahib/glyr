@@ -23,7 +23,7 @@
 
 const char * ainfo_allmusic_url(GlyrQuery * s)
 {
-	return "http://www.allmusic.com/search/artist/%artist%";
+	return "http://www.allmusic.com/search/artist/${artist}";
 }
 
 /*-------------------------------------*/
@@ -110,7 +110,10 @@ GList * ainfo_allmusic_parse(cb_object * capo)
 	if(strstr(capo->cache->data, "<!--Begin Biography -->"))
 	{
 		GlyrMemCache * info_long = find_long_version(capo->s,capo->cache);
-		result_list = g_list_prepend(result_list,info_long);
+		if(info_long != NULL)
+		{
+			result_list = g_list_prepend(result_list,info_long);
+		}
 		return result_list;
 	}
 

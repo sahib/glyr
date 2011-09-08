@@ -7,7 +7,7 @@ SET(GLYR_DEBUG true)
 SET(CSTANDARD "-std=gnu99")
 SET(CDEBUG "-ggdb3")
 SET(CWARN "-Wall -Wstrict-prototypes")
-SET(COPT "-Os -march=native -fomit-frame-pointer")
+SET(COPT "-Os -march=native")
 
 if("${CMAKE_BUILD_TYPE}" STREQUAL "debug")
 	SET(CFLAGS "${CDEBUG} ${CWARN} ${CSTANDARD}")
@@ -40,6 +40,10 @@ SET (CMAKE_ARCHIVE_OUTPUT_DIRECTORY
 SET(SUBDIR_LIB lib)
 SET(SUBDIR_SRC src)
 SET(SUBDIR_SWIG swig)
+
+set(INSTALL_BIN_DIR bin CACHE PATH "Installation directory for executables")
+set(INSTALL_LIB_DIR lib CACHE PATH "Installation directory for libraries")
+set(INSTALL_INC_DIR include CACHE PATH "Installation directory for headers")
 
 # configure
 set(GLYR_VERSION_MAJOR "0")
@@ -108,6 +112,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_REVIEW}/metallum.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"
+	"${DIR_RELATIONS}/generated.c"
 	"${DIR_TAGS}/musicbrainz.c"
 	"${DIR_COVER}/lastfm.c"
 	"${DIR_COVER}/google.c"
@@ -137,6 +142,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/rhapsody.c"
 	"${DIR_GUITARTABS}/guitaretab.c"
 	"${DIR_GUITARTABS}/chordie_com.c"
+# 	Old plugins, removed due to bad quality
 #       "${DIR_LYRICS}/songlyrics.c"
 #       "${DIR_LYRICS}/directlyrics.c"
 #       "${DIR_LYRICS}/darklyrics.c"
@@ -156,8 +162,7 @@ configure_file(
     IMMEDIATE @ONLY
     )
 
-add_custom_target(uninstall
-    COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
 # Ruby bindings
 # You gonna need swig && ruby 1.9.1 (+headers)

@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 
 #define BASE_URL "http://www.chordie.com"
-#define SEARCH_URL BASE_URL"/?q=%artist%%20%title%&np=0&ps=10&wf=2221&s=RPD&wf=2221&wm=wrd&type=&sp=1&sy=1&cat=&ul=&np=0"
+#define SEARCH_URL BASE_URL"/?q=${artist}%20${title}&np=0&ps=10&wf=2221&s=RPD&wf=2221&wm=wrd&type=&sp=1&sy=1&cat=&ul=&np=0"
 
 #define RESULTS_BEGIN "<!--results start-->"
 #define RESULTS_ENDIN "<!--results end-->"
