@@ -40,6 +40,7 @@
 #define GLYR_DEFAULT_PROXY NULL
 #define GLYR_DEFAULT_QSRATIO 0.85
 #define GLYR_DEFAULT_FORCE_UTF8 false
+#define GLYR_DEFAULT_SUPPORTED_LANGS "en|de|fr|es|it|jp|pl|pt|ru|sv|tr|zh"
 
 /* Disallow *.gif, mostly bad quality
  * jpeg and jpg, because some not standardaware

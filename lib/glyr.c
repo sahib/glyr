@@ -52,7 +52,13 @@ const char * err_strings[] =
 
 /*--------------------------------------------------------*/
 
-const gchar * disallowed_languages[] = {"C","en"};
+const gchar * map_language[][2] = {
+	{"en_US","us"},
+	{"en_CA","ca"},
+	{"en_UK","uk"}
+};
+
+#define END_STRING(STR,CHAR) {gchar * term = strchr(STR,CHAR); if(term) *term = 0;}
 
 /**
 * @brief Guesses the users language (in ISO639-1 codes like 'de') by the system locale
@@ -61,69 +67,69 @@ const gchar * disallowed_languages[] = {"C","en"};
 */
 gchar * guess_language(void)
 {
-
 	/* Default to 'en' in any case */
 	gchar * result_lang = g_strdup("en");
 
 #if GLIB_CHECK_VERSION(2,28,0)
-
 	gboolean break_out = FALSE;
 
 	/* Please never ever free this */
 	const gchar * const * languages = g_get_language_names();
 
-	for (gint i = 0; languages[i] && !break_out; i++) 
+	for (gint i = 0; languages[i] && break_out == FALSE; i++) 
 	{
 		gchar ** variants = g_get_locale_variants(languages[i]);
 		for(gint j = 0; variants[j] && !break_out; j++)
 		{
-			gboolean allowed_lang = TRUE;
-			gint lang_size = (sizeof(disallowed_languages)/sizeof(gchar*));
-			for (gint dis = 0; dis < lang_size; dis++)
+			/* Look up if we need to map a language */
+			gchar * to_investigate = variants[j];
+			gint map_size = (sizeof(map_language)/(2 * sizeof(char*)));
+			for(gint map = 0; map < map_size; map++)
 			{
-				if(g_ascii_strncasecmp(disallowed_languages[dis],variants[j],strlen(variants[j])) == 0)
+				const gchar * to_map = map_language[map][0];
+				gsize map_len  = strlen(to_map);
+				if(g_ascii_strncasecmp(to_map,to_investigate,map_len) == 0)
 				{
-					allowed_lang = FALSE;
+					to_investigate = (gchar*)map_language[map][1];
+					g_print("Mapping language to %s\n",to_investigate);
+					break;
 				}
 			}
 
-			if(allowed_lang && !strchr(variants[j],'@') && !strchr(variants[j],'_'))
+			gboolean allowed_lang = TRUE;
+
+			if(allowed_lang &&
+		  	  g_ascii_strncasecmp("en",to_investigate,2) != 0 &&
+			  g_ascii_strncasecmp("C", to_investigate,1) != 0 &&
+			  !strchr(to_investigate,'@') && !strchr(to_investigate,'.'))
 			{
 				g_free(result_lang);
-				result_lang = g_strdup(variants[j]);
+				result_lang = g_strdup(to_investigate);
 				break_out = TRUE;
 			}
 		}
 		g_strfreev(variants);
 	}
-	return result_lang;
 
 #elif GLIB_CHECK_VERSION(2,26,0)
-	
+
 	/* Fallback to simpler version of the above, 
          * g_get_locale_variants is not there in this version
          */
 	const gchar * const * possible_locales = g_get_language_names();
 	if(possible_locales != NULL)
 	{
-		/* Default to english anyway */
-		gchar * wanted = "en";
-		gsize min_length = INT_MAX;
-
-		/* This is weird. */
+		/* might be a bit weird */
 		for(gint i = 0; possible_locales[i]; i++)
 		{
-			gsize loc_len = strlen(possible_locales[i]);
-			if(loc_len < min_length &&
-		  	   g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
+		  	if(g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
 			   g_ascii_strncasecmp("C", possible_locales[i],1) != 0)
 			{
-				wanted = (gchar*)possible_locales[i];
-				min_length = loc_len;
+				g_free(result_lang);
+				result_lang = g_strdup(possible_locales[i]);
+				break;
 			}
 		}
-		g_free(result_lang);
-		result_lang = g_strdup(wanted);
 	}
 #else 
 	/* Fallback for version prior GLib 2.26:
@@ -131,6 +137,15 @@ gchar * guess_language(void)
 	 * Gaaah... shame on you if this happens to you ;-)
 	 */
 #endif
+
+	/* Properly terminate string */
+	END_STRING(result_lang,'_');
+	END_STRING(result_lang,'@');
+	END_STRING(result_lang,'.');
+
+/* We don't need it anymore */
+#undef END_STRING
+
 	return result_lang;
 }
 

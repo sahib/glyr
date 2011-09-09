@@ -202,15 +202,22 @@ void help_short(GlyrQuery * s)
 
 static void visualize_from_options(void)
 {
+	 g_print("First line is the name of the fetcher you can use,\n"
+            "Second is the providername with the shortkey in []\n"
+				"Some unimportant information follows intented by '-'\n\n");
+ 
     GlyrFetcherInfo * info = glyr_get_plugin_info();
     if(info != NULL)
     {
         for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
         {
-            g_print("%s\n",elem0->name);
+            g_print(" %s => %d\n",elem0->name,elem0->type);
             for(GlyrSourceInfo * elem1 = elem0->head; elem1; elem1 = elem1->next)
             {
-                g_print("  [%c] %s\n",elem1->key,elem1->name);
+                g_print("   # %s [%c] \n",elem1->name,elem1->key);
+                g_print("     - Quality: %d\n",elem1->quality);
+                g_print("     - Speed:   %d\n",elem1->speed);
+                g_print("     - Type:    %d\n",elem1->type);
             }
             g_print("\n");
         }
@@ -229,7 +236,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"parallel",      required_argument, 0, 'p'},
         {"redirects",     required_argument, 0, 'r'},
         {"timeout",       required_argument, 0, 'm'},
-        {"proxy",	  required_argument, 0, 'k'},
+        {"proxy",	        required_argument, 0, 'k'},
         {"plugmax",       required_argument, 0, 'x'},
         {"useragent",     required_argument, 0, 'u'},
         {"verbosity",     required_argument, 0, 'v'},

@@ -214,6 +214,8 @@ void register_fetcher_plugins(void)
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_tracklist);
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_guitartabs);
 
+    glyrMetaDataPluginList = g_list_reverse(glyrMetaDataPluginList);
+
     /* call init() */
     for(GList * elem = glyrMetaDataPluginList; elem; elem = elem->next)
     {

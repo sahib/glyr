@@ -282,6 +282,14 @@ class GlyrosSpit
 		Glyros::glyr_opt_force_utf8(@query,will_force)
 	end
 
+	def useragent=(useragent)
+		Glyros::glyr_opt_useragent(@query,useragent)
+	end
+
+	def useragent
+		@query.useragent
+	end
+
 	def self.type_to_s(mytype)
 		Glyros::glyr_type_to_string(mytype)
 	end	

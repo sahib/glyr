@@ -24,13 +24,30 @@
 #define CONTENT_ENDIN "User-contributed text"
 #define OTHER_ENDIN "]]></content>"
 
+/* Locales that are just mapped to 'en' */
+const char * locale_map_to_en = "ca|uk|us";
+
 const gchar * ainfo_lastfm_url(GlyrQuery * s)
 {
 	gchar * url = NULL;
 	gchar * right_artist = strreplace(s->artist," ","+");
 	if(right_artist != NULL)
 	{
-		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,s->lang);
+		gchar * lang = "en";
+
+		/* Check if this is an allowed language */
+		if(strstr(GLYR_DEFAULT_SUPPORTED_LANGS,s->lang) != NULL)
+		{
+			lang = (gchar*)s->lang;
+		}
+
+		/* Do we need to map a language to 'en'? */
+		if(strstr(locale_map_to_en,s->lang) != NULL)
+		{
+			lang = "en";
+		}
+
+		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
 		g_free(right_artist);
 	}
 	return url;
