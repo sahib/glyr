@@ -14,6 +14,7 @@ gchar * guess_lang(void)
 {
 	/* Default to 'en' in any case */
 	gchar * result_lang = g_strdup("en");
+#if GLIB_CHECK_VERSION(2,28,0)
 	gboolean break_out = FALSE;
 
 	/* Please never ever free this */
@@ -43,6 +44,9 @@ gchar * guess_lang(void)
 		}
 		g_strfreev(variants);
 	}
+#else
+	puts("GLib version 2.28 is needed to execute this properly.");
+#endif
 	return result_lang;
 }
 
