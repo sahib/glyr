@@ -391,7 +391,7 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
 	curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
 
 	// last.fm and discogs require an useragent (wokrs without too)
-	curl_easy_setopt(eh, CURLOPT_USERAGENT, "liblyr ("glyr_VERSION_NAME")");
+	curl_easy_setopt(eh, CURLOPT_USERAGENT, GLYR_DEFAULT_USERAGENT);
 	curl_easy_setopt(eh, CURLOPT_HEADER, 0L);
 
 	// Pass vars to curl

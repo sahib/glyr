@@ -49,7 +49,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/0.85 (https://github.com/sahib/glyr)"
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO""
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */

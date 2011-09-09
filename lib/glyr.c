@@ -100,7 +100,9 @@ gchar * guess_language(void)
 
 #elif GLIB_CHECK_VERSION(2,26,0)
 	
-	/* Fallback to simpler version of the above */
+	/* Fallback to simpler version of the above, 
+         * g_get_locale_variants is not there in this version
+         */
 	const gchar * const * possible_locales = g_get_language_names();
 	if(possible_locales != NULL)
 	{
@@ -162,7 +164,7 @@ void glyr_update_md5sum(GlyrMemCache * cache)
 
 const char * glyr_version(void)
 {
-	return "Version "glyr_VERSION_MAJOR"."glyr_VERSION_MINOR"."glyr_VERSION_MICRO" ("glyr_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+	return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
 }
 
 /*-----------------------------------------------*/
@@ -536,8 +538,6 @@ void glyr_init(void)
 	/* Protect agains double initialization */
 	if(is_initalized == FALSE)
 	{
-
-
 		/* Init for threads */
 		g_thread_init(NULL);
 

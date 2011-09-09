@@ -47,27 +47,41 @@ SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 # CFlags and warnlevel / build config 
 # ------------------------------------------------
 SET(CMAKE_BUILD_TYPE "debug")
+
+# Tell config.h.in
+IF(CMAKE_BUILD_TYPE STREQUAL "debug")
+    SET(GLYR_DEBUG TRUE)
+ENDIF()
+
 SET(COMMON_FLAGS "-Wall -Wstrict-prototypes -std=gnu99 -W -Wno-unused-parameter -Wno-strict-prototypes")
 SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} -Os -march=native -s")
 SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} -ggdb3")
 SET(CMAKE_C_FLAGS ${CFLAGS})
 # ------------------------------------------------
 
-SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Libraries")
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Executables.")
-
+# ------------------------------------------------
+# Configuration & pkg-config
+# ------------------------------------------------
 CONFIGURE_FILE(
   "libglyr.pc.in"
   "libglyr.pc"
 )
 INSTALL(FILES libglyr.pc DESTINATION ${INSTALL_LIB_DIR}/pkgconfig) 
 
+# ----------------------
 # Find deps
+# ----------------------
 FIND_PACKAGE(CURL REQUIRED)
 PKG_CHECK_MODULES(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
+# --------------------------
 # set directories
+# --------------------------
+
+SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Libraries")
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single Directory for all Executables.")
+
 SET(SUBDIR_LIB lib)
 SET(SUBDIR_SRC src)
 SET(SUBDIR_SWIG swig)
@@ -87,6 +101,9 @@ SET(DIR_TAGS ${DIR_INTERN}/tags )
 SET(DIR_RELATIONS ${DIR_INTERN}/relations )
 SET(DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
 
+# ------------------------------------------------
+# Set source locations
+# ------------------------------------------------
 SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
@@ -160,11 +177,15 @@ SET(LIB_SOURCE_LOCATIONS
 )
 
 
+# ------------------------------------------------
 # go on with subdirs
+# ------------------------------------------------
 ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
 ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 
+# ------------------------------------------------
 # uninstall target
+# ------------------------------------------------
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in"
     "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake"
@@ -173,8 +194,10 @@ configure_file(
 
 add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
 
+# ------------------------------------------------
 # Ruby bindings
 # You gonna need swig && ruby 1.9.1 (+headers)
+# ------------------------------------------------
 IF(SWIG_RUBY)
 	SET(INTERFACE_FILE "swig/glyros.i")
 	FIND_PACKAGE(SWIG REQUIRED)

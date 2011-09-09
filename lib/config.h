@@ -1,6 +1,5 @@
-#define glyr_VERSION_MAJOR "0"
-#define glyr_VERSION_MINOR "8"
-#define glyr_VERSION_MICRO "5"
-#define glyr_VERSION_NAME  "Horny Hornet [beta]"
-#define glyr_USE_COLOR     
-#define glyr_DEBUG         
+#define GLYR_VERSION_MAJOR "0"
+#define GLYR_VERSION_MINOR "8"
+#define GLYR_VERSION_MICRO "5"
+#define GLYR_VERSION_NAME  "Horny Hornet [beta]"
+#define GLYR_DEBUG         TRUE

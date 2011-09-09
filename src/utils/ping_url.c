@@ -1,7 +1,10 @@
 #include <curl/curl.h>
-#include <glib.h>
-#include "../../lib/config.h"
 #include <string.h>
+#include <glib.h>
+
+/* Don't do this. Use <glyr/glyr.h> */
+#include "../../lib/config.h"
+#include "../../lib/types.h"
 
 /* Simple testprogram to check the content-type header of any website given on the cmd. */
 
@@ -26,7 +29,7 @@ gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
         /* We're only interested in the content type */
         gchar * cttp  = "Content-Type: ";
         gsize ctt_len = strlen(cttp);
-        if(ctt_len < bytes && g_strncasecmp(cttp,nulbuf,ctt_len) == 0)
+        if(ctt_len < bytes && g_ascii_strncasecmp(cttp,nulbuf,ctt_len) == 0)
         {
             gchar ** content_type = g_strsplit_set(nulbuf + ctt_len," /;",0);
             if(content_type != NULL)
@@ -101,13 +104,11 @@ static struct header_data * url_is_gettable(gchar * url)
 
         curl_easy_setopt(eh, CURLOPT_TIMEOUT, 3);
         curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
-        curl_easy_setopt(eh, CURLOPT_USERAGENT, "libglyr ("glyr_VERSION_NAME")/linkvalidator");
+        curl_easy_setopt(eh, CURLOPT_USERAGENT, GLYR_DEFAULT_USERAGENT"/linkvalidator");
         curl_easy_setopt(eh, CURLOPT_URL,url);
         curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, TRUE);
-//        curl_easy_setopt(eh, CURLOPT_MAXREDIRS, 5L);
         curl_easy_setopt(eh, CURLOPT_HEADER,TRUE);
         curl_easy_setopt(eh, CURLOPT_NOBODY,TRUE);
-        //curl_easy_setopt(eh, CURLOPT_FAILONERROR,TRUE);
         curl_easy_setopt(eh, CURLOPT_HEADERFUNCTION, header_cb);
         curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, empty_cb);
         curl_easy_setopt(eh, CURLOPT_WRITEHEADER, info);

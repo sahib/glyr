@@ -290,6 +290,31 @@ describe "lyrics" do
 		end
 	end
 
+	describe "chartlyrics" do
+		before :each do 
+			@spit.from = "chartlyrics"
+		end
+			
+		it "should test page hit" do 
+			@spit.artist = "Die Apokalyptischen Reiter"
+			@spit.title  = "Friede sei mit dir"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.first.should be_an_instance_of Glyros::GlyrMemCache
+			list.size.should == 1
+		end
+
+		it "should find nothing at all" do
+			@spit.artist = "Some band"
+			@spit.title  = "Some album"	
+
+			list = @spit.get
+			list.should be_an_instance_of Array
+			list.size.should == 0
+		end
+	end
+
 	describe "metrolyrics" do
 		before :each do 
 			@spit.from = "metrolyrics"
