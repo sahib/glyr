@@ -1236,11 +1236,11 @@ static gboolean provider_is_enabled(GlyrQuery * s, MetaDataSource * f)
 
 /*--------------------------------------------------------*/
 
-/* GnuPlot: plot3d(1/X*Y - (100-Y)*1/(1-X) + 1000,[X,0.1,0.9],[Y,0,100]); */
+/* GnuPlot: plot3d(1/X*Y + (100-Y)*1/(1-X) + 1000,[X,0.1,0.9],[Y,0,100]); */
 static gfloat calc_rating(gfloat qsratio, gint quality, gint speed)
 {
 	gfloat cratio = CLAMP(qsratio,0.1,0.9);
-	return 1000.0f + ((1/(1-cratio)*quality) - (1/cratio*speed));
+	return 1000.0f + ((1.0/(1-cratio)*quality) + (1.0/cratio*speed));
 }
 
 /*--------------------------------------------------------*/
