@@ -58,6 +58,7 @@ const gchar * map_language[][2] = {
 	{"en_UK","uk"}
 };
 
+/* Local scopes are cool. */
 #define END_STRING(STR,CHAR) {gchar * term = strchr(STR,CHAR); if(term) *term = 0;}
 
 /**
