@@ -203,8 +203,8 @@ void help_short(GlyrQuery * s)
 static void visualize_from_options(void)
 {
 	 g_print("First line is the name of the fetcher you can use,\n"
-            "Second is the providername with the shortkey in []\n"
-				"Some unimportant information follows intented by '-'\n\n");
+                 "Second is the providername with the shortkey in []\n"
+		 "Some unimportant information follows intented by '-'\n\n");
  
     GlyrFetcherInfo * info = glyr_get_plugin_info();
     if(info != NULL)
@@ -767,6 +767,14 @@ int main(int argc, char * argv[])
      */
     atexit(glyr_cleanup);
 
+    #include "../../lib/cache/cache.h"
+    GlyrDatabase * db = glyr_init_database("/tmp");
+    if(db == NULL)
+    {
+	fprintf(stderr,"ogh.");
+	exit(EXIT_FAILURE);
+    } 
+
     if(argc >= 2 && argv[1][0] != '-')
     {
         /* The struct that control this beast */
@@ -828,6 +836,8 @@ int main(int argc, char * argv[])
 #endif 
 
 				    message(2,&my_query,stderr,"\n- In total %d item(s) found.\n",length);
+
+				    insert_data(db, &my_query, my_list); 
 			    }
 
 			    // Free all downloaded buffers
@@ -863,6 +873,8 @@ int main(int argc, char * argv[])
 	    help_short(NULL);
     }
 
+    // database
+    glyr_destroy_database(db);
     // byebye
     return result;
 }

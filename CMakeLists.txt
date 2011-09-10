@@ -73,6 +73,7 @@ INSTALL(FILES libglyr.pc DESTINATION ${INSTALL_LIB_DIR}/pkgconfig)
 # ----------------------
 FIND_PACKAGE(CURL REQUIRED)
 PKG_CHECK_MODULES(GLIBPKG glib-2.0>=2.10 gthread-2.0 REQUIRED)
+PKG_CHECK_MODULES(SQLITE3 sqlite3 REQUIRED)
 INCLUDE_DIRECTORIES(${GLIBPKG_INCLUDE_DIRS})
 
 # --------------------------
@@ -108,6 +109,7 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
+	"${DIR_ROOT}/cache/cache.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"

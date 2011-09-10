@@ -205,7 +205,7 @@ GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
 {
 
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(type < GLYR_GET_UNSURE)
+	if(type != GLYR_GET_UNSURE)
 	{
 		s->type = type;
 		return GLYRE_OK;
