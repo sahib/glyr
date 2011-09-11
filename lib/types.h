@@ -50,7 +50,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO""
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_NAME" "
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -114,7 +114,8 @@ typedef enum
 */
 typedef enum
 {
-    GLYR_GET_COVERART = 1, 
+    GLYR_GET_UNSURE, 
+    GLYR_GET_COVERART, 
     GLYR_GET_LYRICS, 
     GLYR_GET_ARTIST_PHOTOS, 
     GLYR_GET_ARTISTBIO, 
@@ -125,8 +126,7 @@ typedef enum
     GLYR_GET_TAGS, 
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
-    GLYR_GET_GUITARTABS,
-    GLYR_GET_UNSURE 
+    GLYR_GET_GUITARTABS
 }   GLYR_GET_TYPE;
 
 /**
