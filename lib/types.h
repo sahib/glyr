@@ -50,7 +50,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_NAME" "
+#define GLYR_DEFAULT_USERAGENT "libglyr/0.85"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
