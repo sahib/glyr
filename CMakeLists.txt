@@ -66,7 +66,7 @@ CONFIGURE_FILE(
   "libglyr.pc.in"
   "libglyr.pc"
 )
-INSTALL(FILES libglyr.pc DESTINATION ${INSTALL_LIB_DIR}/pkgconfig) 
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libglyr.pc DESTINATION ${INSTALL_LIB_DIR}/pkgconfig) 
 
 # ----------------------
 # Find deps
@@ -85,7 +85,7 @@ SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin CACHE PATH "Single 
 SET(SUBDIR_LIB lib)
 SET(SUBDIR_SRC src)
 SET(SUBDIR_SWIG swig)
-SET(DIR_ROOT "./")
+SET(DIR_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/${SUBDIR_LIB}) 
 SET(DIR_INTERN ${DIR_ROOT}/intern )
 SET(DIR_COVER ${DIR_INTERN}/cover )
 SET(DIR_LYRICS ${DIR_INTERN}/lyrics )
@@ -198,7 +198,7 @@ add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_D
 # You gonna need swig && ruby 1.9.1 (+headers)
 # ------------------------------------------------
 IF(SWIG_RUBY)
-	SET(INTERFACE_FILE "swig/glyros.i")
+	SET(INTERFACE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/swig/glyros.i")
 	FIND_PACKAGE(SWIG REQUIRED)
 	INCLUDE(${SWIG_USE_FILE})
 
@@ -214,7 +214,7 @@ IF(SWIG_RUBY)
 	ADD_CUSTOM_COMMAND(
 		TARGET glyros
 		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E rename bin/libglyros.so swig/ruby/glyros.so
+		COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/bin/libglyros.so ${CMAKE_CURRENT_BINARY_DIR}/swig/ruby/glyros.so
 		)
 ENDIF(SWIG_RUBY)
 
