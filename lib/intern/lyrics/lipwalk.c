@@ -56,6 +56,7 @@ static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 					result_cache = DL_init();
 					result_cache->data = content;
 					result_cache->size = strlen(content);
+					result_cache->dsrc = g_strdup(cache->dsrc);
 				}
 			}
 		}

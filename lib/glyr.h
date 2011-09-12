@@ -622,6 +622,30 @@ GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
 
 /**
+* glyr_opt_lookup_db:
+* @s: The GlyrQuery settings struct to store this option in.
+* @db: a GlyrDatabase object.
+*
+* TODO 
+*
+* Returns: an error ID
+*/
+GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db);
+
+/**
+* glyr_opt_save_to_db:
+* @s: The GlyrQuery settings struct to store this option in.
+* @write_to_db: true, to write this to the database automatically 
+*
+* If a database is specified via glyr_opt_lookup_db you can choose
+* to automatically save newly found items to the database.
+* They will be looked up from there if you search for it again.
+* 
+* Returns: an error ID
+*/
+GLYR_ERROR glyr_opt_save_to_db(GlyrQuery * s, bool write_to_db);
+
+/**
 * glyr_download:
 * @url: A valid url, for example returned by libglyr
 * @s: A settings struct managing timeout, useragent and redirects. 

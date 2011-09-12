@@ -51,8 +51,8 @@ MetaDataSource cover_google_src =
     .parser    = cover_google_parse,
     .get_url   = cover_google_url,
     .type      = GLYR_GET_COVERART,
-    .quality   = 35,
-    .speed     = 99,
+    .quality   = 25,
+    .speed     = 90,
     .endmarker = NULL,
     .free_url  = true
 };

@@ -110,6 +110,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/cache/cache.c"
+	"${DIR_ROOT}/cache/db_provider.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"

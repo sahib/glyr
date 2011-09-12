@@ -30,6 +30,9 @@
 /* Get user agent string */
 #include "config.h"
 
+/* Get access to the db */
+#include "cache/cache.h"
+
 /* Mini blacklist */
 #include "blacklist.h"
 
@@ -166,6 +169,7 @@ GlyrMemCache* DL_init(void)
 	memset(cache,0,sizeof(GlyrMemCache));
 	cache->duration = 0;
 	cache->type = GLYR_TYPE_NOIDEA;
+	cache->cached = FALSE;
 	return cache;
 }
 
@@ -432,8 +436,9 @@ gboolean continue_search(gint current, GlyrQuery * s)
 		 * as we check this later, it's good to have some more ULRs waiting for us,     *
 		 * alternatively we might hit the maximum for one plugin (off by one!) 	        */
 		gint buffering = (s->imagejob) ? s->number / 3 : 0;
-		decision = (current + s->itemctr) < (s->number + buffering) &&
-			(current < s->plugmax || (s->plugmax == -1));
+		gint pre_cache = (s->local_db) ? s->number : 0;
+		decision = (current + s->itemctr) < (s->number + buffering + pre_cache) &&
+			   (current < s->plugmax || (s->plugmax == -1));
 
 	}
 	return decision;
@@ -494,6 +499,9 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
 					GList * to_free = jnode;
 					jnode = jnode->next;
 					result = g_list_delete_link(result,to_free);
+
+					if(s->itemctr > 0)
+					s->itemctr--;
 
 					/* Remember him.. */
 					double_items++;
@@ -1093,6 +1101,36 @@ static void normalize_utf8(GList * text_list)
 
 /*--------------------------------------------------------*/
 
+static gint delete_already_cached_items(cb_object * capo, GList ** list)
+{
+	gint deleted = 0;
+	if(capo && capo->s->local_db)
+	{
+		GList * elem = *list;
+		while(elem != NULL)
+		{
+			GlyrMemCache * item = elem->data;
+			if(item != NULL && item->dsrc == NULL && capo->s->imagejob)
+			{
+				item->dsrc = g_strdup(item->data);
+			}
+	
+			if(glyr_db_contains(capo->s->local_db,elem->data))
+			{
+				GList * to_delete = elem;
+				elem = elem->next;
+				*list= g_list_delete_link(*list,to_delete);
+				deleted++;
+				continue;
+			}
+			elem = elem->next;
+		}
+	}	
+	return deleted;
+}
+
+/*--------------------------------------------------------*/
+
 /* The actual call to the metadata provider here, coming from the downloader, triggered by start_engine() */
 static GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, gint * to_add)
 {
@@ -1108,12 +1146,20 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 		{
 			GList * raw_parsed_data = plugin->parser(capo);
 
+
 			/* Also do some duplicate check already */
 			gsize less = delete_dupes(raw_parsed_data,capo->s);
 			if(less > 0)
 			{
 				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
 				glyr_message(2,capo->s,"#[%02d/%02d] Inner check found %ld dupes\n",items_now,capo->s->number,less);
+			}
+
+			less = delete_already_cached_items(capo,&raw_parsed_data);
+			if(less > 0)
+			{
+				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
+				glyr_message(2,capo->s,"#[%02d/%02d] DB lookup found %ld dupes\n",items_now,capo->s->number,less);
 			}
 
 			if(g_list_length(raw_parsed_data) != 0)
@@ -1143,6 +1189,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 						{
 							if(capo->s->itemctr < capo->s->number)
 							{
+g_print("Item counter: %d\n",capo->s->itemctr);
 								/* Only reference to the plugin -> copy providername */
 								item->prov = g_strdup(plugin->name);
 								parsed = g_list_prepend(parsed,item);
@@ -1336,22 +1383,17 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 		}
 	}
 
-	GList * ready_caches = NULL;
-	if(g_list_length(url_list) != 0 || g_list_length(offline_provider) != 0)
+	GList * result_list = NULL;
+	gsize url_list_length = g_list_length(url_list);
+	if(url_list_length != 0 || g_list_length(offline_provider) != 0)
 	{
-		/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
-		gsize list_length = g_list_length(url_list);
-		GList * raw_parsed = async_download(url_list,
-				endmarks,
-				query,
-				list_length / query->timeout  + 1,
-				list_length / query->parallel + 4,
-				call_provider_callback,    /* Callback           */
-				url_table,                 /* Userpointer        */
-				TRUE);                     /* Free caches itself */
+		gboolean proceed = TRUE;
+		GList * cached_items = NULL;
+		GList * raw_parsed = NULL;
+		GList * ready_caches = NULL;
 
 		/* Handle offline provider, that don't need to download something */
-		for(GList * off_source = offline_provider; off_source && continue_search(g_list_length(raw_parsed), query); off_source = off_source->next)
+		for(GList * off_source = offline_provider; proceed && off_source && continue_search(g_list_length(raw_parsed), query); off_source = off_source->next)
 		{
 			MetaDataSource * source = off_source->data;
 			if(source != NULL && source->parser != NULL)
@@ -1360,12 +1402,42 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 				memset(&pseudo_capo,0,sizeof pseudo_capo);
 				pseudo_capo.s = query;
 
-				GList * result_list = source->parser(&pseudo_capo);
-				if(result_list != NULL)
+				GList * offline_list = source->parser(&pseudo_capo);
+				for(GList * off_elem = offline_list; off_elem; off_elem = off_elem->next)
 				{
-					raw_parsed = g_list_concat(raw_parsed,result_list);
+					GLYR_ERROR result = GLYRE_OK;
+					if(query->callback.download != NULL)
+					{
+						result = query->callback.download(off_elem->data,query);
+					}
+
+					if(result != GLYRE_STOP_PRE && result != GLYRE_SKIP)
+					{
+						cached_items = g_list_prepend(cached_items,off_elem->data);
+						query->itemctr++;
+					}
+
+					if(result == GLYRE_STOP_PRE || result == GLYRE_STOP_POST)
+					{
+						proceed = FALSE;
+						break;
+					}
 				}
+				g_list_free(offline_list);
 			}
+		}
+
+		/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
+		if(proceed == TRUE && url_list_length != 0 && g_list_length(cached_items) < (gsize)query->number)
+		{
+		 	raw_parsed = async_download(url_list,
+				endmarks,
+				query,
+				url_list_length / query->timeout  + 1,
+				url_list_length / query->parallel + 4,
+				call_provider_callback,    /* Callback           */
+				url_table,                 /* Userpointer        */
+				TRUE);                     /* Free caches itself */
 		}
 
 		/* Now finalize our retrieved items */
@@ -1390,6 +1462,15 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 				raw_parsed = NULL;
 			}
 		}
+
+		if(cached_items && ready_caches)
+		{
+			result_list = g_list_concat(cached_items, ready_caches);
+		}
+		else
+		{
+			result_list = (cached_items) ? cached_items : ready_caches;
+		}
 	}
 
 	/* Free ressources */
@@ -1397,7 +1478,7 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 	g_list_free(endmarks);
 	g_list_free(offline_provider);
 	g_hash_table_destroy(url_table);
-	return ready_caches;
+	return result_list;
 }
 
 /*--------------------------------------------------------*/
@@ -1425,9 +1506,9 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
 	gboolean stop_now = FALSE;
 
 	GList * src_list = NULL, * result_list = NULL;
-	while((stop_now == FALSE)                                   &&
-			(g_list_length(result_list) < (gsize)query->number)   &&
-			(src_list = get_queued(query, fetcher, fired)) != NULL)
+	while((stop_now == FALSE) &&
+	      (g_list_length(result_list) < (gsize)query->number) &&
+	      (src_list = get_queued(query, fetcher, fired)) != NULL)
 	{
 		/* Print what provider were triggered */
 		print_trigger(query,src_list);

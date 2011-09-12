@@ -53,7 +53,7 @@ static GlyrMemCache * parse_page(GlyrMemCache * dl, cb_object * capo)
 					result = DL_init();
 					result->data = beautify_string(no_br_tags);
 					result->size = (result->data) ? strlen(result->data) : 0;
-					result->dsrc = strdup(capo->url);
+					result->dsrc = g_strdup(dl->dsrc);
 
 					g_free(no_br_tags);
 				}

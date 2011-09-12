@@ -69,6 +69,7 @@ GList * tags_musicbrainz_parse(cb_object * capo)
 					tmp->data = value;
 					tmp->size = tag_endin - tag_begin;
 					tmp->type = type_num;
+					tmp->dsrc = g_strdup(info->dsrc);
 
 					results = g_list_prepend(results,tmp);
 				}

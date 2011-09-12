@@ -22,7 +22,6 @@
 
 /*--------------------------------------------------------*/
 
-/* Wrap around the (a bit more) generic versions */
 GList * relations_generated_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
@@ -65,7 +64,6 @@ GList * relations_generated_parse(cb_object * capo)
 const gchar * relations_generated_url(GlyrQuery * sets)
 {
 	return OFFLINE_PROVIDER;
-//	return "www.google.de"; // FIXME: Introduce offline providers
 }
 
 /*--------------------------------------------------------*/

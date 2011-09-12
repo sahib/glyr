@@ -39,7 +39,7 @@ bool vdt_lyrics(GlyrQuery * settings)
 
 /* ------------------------------------- */
 
-GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 {
 	/* Fix up lyrics, escape chars etc.  */
 	for(GList * elem = list; elem; elem = elem->next)

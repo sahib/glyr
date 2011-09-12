@@ -124,29 +124,29 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
                                     GlyrMemCache * result = parse_lyrics_page(dl_cache->data);
                                     if(result)
                                     {
-                                        result->dsrc = strdup(dl_url);
-                                        result_list = g_list_prepend(result_list,result);
-									}
-                                	DL_free(dl_cache);
-                                }
+					    result->dsrc = g_strdup(dl_url);
+					    result_list = g_list_prepend(result_list,result);
+				    }
+				    DL_free(dl_cache);
+				}
 
-                                g_free(dl_url);
-                                g_free(url);
-                            }
-                        }
-                        g_free(title);
-                    }
-                }
-            }
-            /* check if we accidentally reached end of results */
-            gchar * dist = strstr(node,PAGES);
+				g_free(dl_url);
+				g_free(url);
+			    }
+			}
+			g_free(title);
+		    }
+		}
+	    }
+	    /* check if we accidentally reached end of results */
+	    gchar * dist = strstr(node,PAGES);
 
-            /* hop to next node */
-            node = strstr(title_beg,NEXT_NODE);
+	    /* hop to next node */
+	    node = strstr(title_beg,NEXT_NODE);
 
-			/* Only advertisment behind dist */
-            if(node > dist) break;
-        }
+	    /* Only advertisment behind dist */
+	    if(node > dist) break;
+	}
     }
     return result_list;
 }
@@ -155,13 +155,13 @@ GList * lyrics_metrolyrics_parse(cb_object * capo)
 
 MetaDataSource lyrics_metrolyrics_src =
 {
-    .name = "metrolyrics",
-    .key  = 'm',
-    .parser    = lyrics_metrolyrics_parse,
-    .get_url   = lyrics_metrolyrics_url,
-    .type      = GLYR_GET_LYRICS,
-    .quality   = 35,
-    .speed     = 40,
-    .endmarker = NULL,
-    .free_url  = false
+	.name = "metrolyrics",
+	.key  = 'm',
+	.parser    = lyrics_metrolyrics_parse,
+	.get_url   = lyrics_metrolyrics_url,
+	.type      = GLYR_GET_LYRICS,
+	.quality   = 35,
+	.speed     = 40,
+	.endmarker = NULL,
+	.free_url  = false
 };

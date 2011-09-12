@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <sqlite3.h>
 
 /* Default values */
 #define GLYR_DEFAULT_REDIRECTS 3L
@@ -40,7 +41,8 @@
 #define GLYR_DEFAULT_PROXY NULL
 #define GLYR_DEFAULT_QSRATIO 0.85
 #define GLYR_DEFAULT_FORCE_UTF8 false
-#define GLYR_DEFAULT_SUPPORTED_LANGS "en|de|fr|es|it|jp|pl|pt|ru|sv|tr|zh"
+#define GLYR_DEFAULT_SAVE_TO_DB false
+#define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
 
 /* Disallow *.gif, mostly bad quality
  * jpeg and jpg, because some not standardaware
@@ -50,7 +52,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO""
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_NAME" "
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -107,6 +109,7 @@ typedef enum
 * @GLYR_GET_ALBUMLIST: get a list of albums from a certain artist
 * @GLYR_GET_GUITARTABS: get guitar tabs for a specified artist/title
 * @GLYR_GET_UNSURE: The default value after initializing a query.
+* @GLYR_GET_ANY: Delievers everything (like the 'locale' provider), do not use this.
 * 
 * You tell libglyr what metadata you want by choosing one of the below
 * and set it via glyr_opt_type()
@@ -126,7 +129,8 @@ typedef enum
     GLYR_GET_TAGS, 
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
-    GLYR_GET_GUITARTABS
+    GLYR_GET_GUITARTABS,
+    GLYR_GET_ANY
 }   GLYR_GET_TYPE;
 
 /**
@@ -191,6 +195,7 @@ typedef enum
  * @is_image: Is this item an image?
  * @img_format: Format of the image (png,jpeg), NULL if text item.
  * @md5sum: A md5sum of the data field.
+ * @cached: If this cache was locally cached.
  * @next: A pointer to the next item in the list, or NULL
  * @prev: A pointer to the previous item in the list, or NULL
  *
@@ -209,10 +214,26 @@ typedef struct _GlyrMemCache {
   bool  is_image;    
   char * img_format; 
   unsigned char md5sum[16]; 
+  bool cached;
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 
 } GlyrMemCache;
+
+/**
+ * GlyrDatabase:
+ * @root_path: The directory where the database will be stored.
+ * 
+ * Represents a database where caches may be fetched from.
+ */
+typedef struct _GlyrDatabase {
+        /*< public >*/
+	const char * root_path;
+	
+        /*< private >*/
+	sqlite3 * db_handle;
+
+} GlyrDatabase;
 
 /**
 * GlyrQuery:
@@ -229,6 +250,8 @@ typedef struct _GlyrMemCache {
 * @force_utf8: Should be UTF8 forced on text items?
 * @download: should be images downloaded?
 * @qsratio: 0.0 = maxspeed, 1.0 = max quality, 0.85 -> default.
+* @write_to_cache: Write found items automagically to the cache, if any specified by glyr_opt_lookup_cache()
+* @local_cache: The cache to search in first.
 * @lang: Language code ISO-639-1, like 'de','en' or 'auto'
 * @proxy: The proxy to use.
 * @artist: Artist to use.
@@ -263,6 +286,8 @@ typedef struct _GlyrQuery {
     bool download; 
     float qsratio; 
 
+    bool save_to_db;
+    GlyrDatabase * local_db;
 
 /* This is confusing gtk-doc */
 #ifndef __GTK_DOC_IGNORE__

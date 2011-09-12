@@ -53,6 +53,7 @@ GlyrMemCache * parse_text(GlyrMemCache * to_parse)
 	    return_cache = DL_init();
 	    return_cache->data = text;
 	    return_cache->size = strlen(text);
+	    return_cache->dsrc = g_strdup(to_parse->dsrc);
     }
     return return_cache;
 }

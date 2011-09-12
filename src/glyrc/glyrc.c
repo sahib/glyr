@@ -31,8 +31,11 @@
 /* Somehow needed for g_vasprintf */
 #include <glib/gprintf.h>
 
-/* All you need from libglyr */
+/* All you need from libglyr normally */
 #include "../../lib/glyr.h"
+
+/* Support for caching */
+#include "../../lib/cache/cache.h"
 
 /* Compile information, you do not have this header */
 #include "../../lib/config.h"
@@ -236,12 +239,13 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"parallel",      required_argument, 0, 'p'},
         {"redirects",     required_argument, 0, 'r'},
         {"timeout",       required_argument, 0, 'm'},
-        {"proxy",	        required_argument, 0, 'k'},
+        {"proxy",         required_argument, 0, 'k'},
         {"plugmax",       required_argument, 0, 'x'},
         {"useragent",     required_argument, 0, 'u'},
         {"verbosity",     required_argument, 0, 'v'},
         {"qsratio",       required_argument, 0, 'q'},
         {"formats",       required_argument, 0, 'F'},
+	{"cache",         required_argument, 0, 'c'},
         {"help",          no_argument,       0, 'h'},
         {"version",       no_argument,       0, 'V'},
         {"download",      no_argument,       0, 'd'},
@@ -266,7 +270,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:F:hVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:F:hVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -342,6 +346,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         case 'D':
             glyr_opt_download(glyrs,false);
             break;
+	case 'c':
+            // TODO
+	    break;
         case 'l':
             glyr_opt_lang(glyrs,optarg);
             break;
@@ -627,6 +634,9 @@ char * get_path_by_type(GlyrQuery * s, const char * sd, int iter)
     case GLYR_GET_GUITARTABS:
         m_path = path_guitartabs(s,sd,iter);
         break;
+    case GLYR_GET_ANY:
+	m_path = NULL;
+	break;
     case GLYR_GET_UNSURE:
         message(-1,NULL,stderr,"glyrc: getPath(): Unknown type, Problem?\n");
     }
@@ -767,17 +777,16 @@ int main(int argc, char * argv[])
      */
     atexit(glyr_cleanup);
 
-    #include "../../lib/cache/cache.h"
-    GlyrDatabase * db = glyr_init_database("/tmp");
+    GlyrDatabase * db = glyr_init_db("/tmp");
     if(db == NULL)
     {
-	fprintf(stderr,"ogh.");
+	g_printerr("Unable to open or create a database at specified path.\n");
 	exit(EXIT_FAILURE);
     } 
 
     if(argc >= 2 && argv[1][0] != '-')
     {
-        /* The struct that control this beast */
+            /* The struct that control this beast */
 	    GlyrQuery my_query;
 
 	    /* set it on default values */
@@ -798,6 +807,9 @@ int main(int argc, char * argv[])
 	    /* Set the type */
 	    my_query.type = type;
 
+	    glyr_opt_lookup_db(&my_query,db);
+	    glyr_opt_save_to_db(&my_query,TRUE);
+
 	    parse_commandline_general(argc-1, argv+1, &my_query,&write_to);
 
 	    if(write_to == NULL)
@@ -805,8 +817,8 @@ int main(int argc, char * argv[])
 		    write_to = ".";
 	    }
 
-	    // Set the callback - it will do all the actual work
-	    int item_counter = 0;
+	    /* Set the callback - it will do all the actual work */
+	    gint item_counter = 0;
 	    glyr_opt_dlcallback(&my_query, callback, &item_counter);
 
 	    if(my_query.type != GLYR_GET_UNSURE)
@@ -820,27 +832,34 @@ int main(int argc, char * argv[])
 		    {
 			    if(get_error == GLYRE_OK)
 			    {
-#if 0
 				    /* This is the place where you would work with the cachelist *
 				       As the callback is used in glyrc this is just plain empty *
 				       Useful if you need to cache the data (e.g. for batch jobs *
 				       Left only for the reader's informatiom, no functions here *
 				     */
-
+/*
 				    GlyrMemCache * elem = my_list;
 				    while(elem != NULL)
 				    {
+				    	    insert_data(db, &my_query, elem); 
 					    g_print("%s\n",elem->dsrc);
 					    elem = elem->next;
 				    }
-#endif 
 
 				    message(2,&my_query,stderr,"\n- In total %d item(s) found.\n",length);
 
-				    insert_data(db, &my_query, my_list); 
+
+				    GlyrMemCache * hello = select_data(db, &my_query);
+				    while(hello != NULL)
+				    {
+					glyr_printitem(hello);
+					hello = hello->next;
+				    }
+				    glyr_free_list(hello);
+*/
 			    }
 
-			    // Free all downloaded buffers
+			    /* Free all downloaded buffers */
 			    glyr_free_list(my_list);
 
 		    }
@@ -873,9 +892,9 @@ int main(int argc, char * argv[])
 	    help_short(NULL);
     }
 
-    // database
-    glyr_destroy_database(db);
-    // byebye
+    /* database */
+    glyr_destroy_db(db);
+
     return result;
 }
 

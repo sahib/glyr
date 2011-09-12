@@ -26,6 +26,7 @@
 #include "register_plugins.h"
 #include "blacklist.h"
 #include "md5.h"
+#include "cache/cache.h"
 
 //* ------------------------------------------------------- */
 
@@ -432,6 +433,28 @@ GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
 }
 
 /*-----------------------------------------------*/
+
+GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	if(db != NULL)
+	{
+		s->local_db = db;
+		return GLYRE_OK;
+	}
+	return GLYRE_BAD_VALUE;
+}
+
+/*-----------------------------------------------*/
+
+GLYR_ERROR glyr_opt_save_to_db(GlyrQuery * s, bool save_to_db)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	s->save_to_db = save_to_db;
+	return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
 /*-----------------------------------------------*/
 /*-----------------------------------------------*/
 
@@ -451,6 +474,9 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->title  = NULL;
 	glyrs->callback.download = NULL;
 	glyrs->callback.user_pointer = NULL;
+
+	glyrs->local_db = NULL;
+	glyrs->save_to_db = GLYR_DEFAULT_SAVE_TO_DB;	
 
 	glyrs->from   = GLYR_DEFAULT_FROM;
 	glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
@@ -723,6 +749,12 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 				GlyrMemCache * item = elem->data;
 				item->next = (elem->next) ? elem->next->data : NULL;
 				item->prev = (elem->prev) ? elem->prev->data : NULL;
+
+				if(settings->save_to_db && settings->local_db && item->cached == FALSE)
+				{
+					puts("Inserting data into db..");
+					glyr_db_insert(settings->local_db,settings,item);
+				}
 			}
 
 			/* Finish. */
@@ -912,8 +944,13 @@ void glyr_printitem(GlyrMemCache * cacheditem)
 	}
 	else
 	{
-		g_printerr("\nDATA: <not printable>");
 		g_printerr("\nFRMT: %s",cacheditem->img_format);
+		g_printerr("\nDATA: <not printable>");
+	}
+
+	if(cacheditem->cached)
+	{
+		g_printerr("\nItem was found in DB.\n");
 	}
 }
 

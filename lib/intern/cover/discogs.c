@@ -90,6 +90,7 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 					result->data = final_url;
 					result->size = strlen(result->data);
 					result->type = img_type;
+					result->dsrc = g_strdup(tmp_cache->dsrc);
 					*result_list = g_list_prepend(*result_list,result);
 				}
 			}

@@ -52,11 +52,11 @@ GList * generic_txt_finalizer(GlyrQuery * settings, GList * input_list, gboolean
 				item->type = type;
 			}
 
-			// call user defined callback
+			/* call user defined callback */
 			GLYR_ERROR response = GLYRE_OK;
 			if(settings->callback.download)
 			{
-				// Call the usercallback
+				/* Call the usercallback */
 				response = settings->callback.download(item,settings);
 			}
 
@@ -110,7 +110,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 				{
 					capo->cache->type = saver->type;
 				}
-
+				
 				if(capo->s->callback.download != NULL)
 				{
 					response = capo->s->callback.download(capo->cache,capo->s);

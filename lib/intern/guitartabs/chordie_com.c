@@ -52,7 +52,7 @@ gboolean check_title_value(GlyrQuery * s, const gchar * to_check)
 			}
 
 			result = (levenshtein_strnormcmp(s,artist,s->artist)  <= s->fuzzyness &&
-					  levenshtein_strnormcmp(s,to_check,s->title) <= s->fuzzyness);
+				  levenshtein_strnormcmp(s,to_check,s->title) <= s->fuzzyness);
 		}
 	}
 	return result;

@@ -21,21 +21,24 @@
 #ifndef GLYR_CACHE_H
 #define GLYR_CACHE_H
 
-#include <sqlite3.h>
+#include "../types.h"
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-typedef struct _GlyrDatabase {
-	const char * root_path;
-	sqlite3 * db_handle;
-} GlyrDatabase;
 
-GlyrDatabase * glyr_init_database(char * root_path);
-void insert_data(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
-void glyr_destroy_database(GlyrDatabase * db_object);
+/* The Name of the SQL File */
+#define GLYR_DB_FILENAME "metadata.db"
+
+GlyrDatabase * glyr_init_db(char * root_path);
+void glyr_destroy_db(GlyrDatabase * db_object);
+
+void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
+GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query);
+bool glyr_db_contains(GlyrDatabase * db, GlyrMemCache * cache);
+bool glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 
 #ifdef __cplusplus
 }

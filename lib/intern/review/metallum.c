@@ -33,6 +33,7 @@ static void parse_review_site(GlyrQuery * s, GlyrMemCache * cache, GList ** resu
 				gchar * kill_br = strreplace(data,"  <br />\n","");
 				item->data = strreplace(kill_br,".  ",".\n");
 				item->size = strlen(item->data);
+				item->dsrc = g_strdup(cache->dsrc);
 				*result_items = g_list_prepend(*result_items, item);
 
 				g_free(kill_br);

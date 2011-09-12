@@ -31,7 +31,7 @@ const char * ainfo_allmusic_url(GlyrQuery * s)
 #define IMG_BEGIN "<p class=\"text\">"
 #define IMG_ENDIN "</p>"
 
-GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse)
+GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse, gchar * url)
 {
 	GlyrMemCache * result = NULL;
 	gchar * text = get_search_value(to_parse->data,IMG_BEGIN,IMG_ENDIN);
@@ -40,6 +40,7 @@ GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse)
 		result = DL_init();
 		result->data = text;
 		result->size = strlen(result->data);
+		result->dsrc = g_strdup(url);
 	}
 	return result;
 }
@@ -65,7 +66,7 @@ GlyrMemCache * find_long_version(GlyrQuery * s, GlyrMemCache * to_parse)
 				GlyrMemCache * dl = download_single(url,s,NULL);
 				if(dl != NULL)
 				{
-					result = parse_bio_page(dl);
+					result = parse_bio_page(dl,url);
 					DL_free(dl);
 				}
 				g_free(url);
@@ -139,7 +140,7 @@ GList * ainfo_allmusic_parse(cb_object * capo)
 				GlyrMemCache * dl_cache = download_single(biography_url,capo->s,NULL);
 				if(dl_cache != NULL)
 				{
-					GlyrMemCache * content = parse_bio_page(dl_cache);
+					GlyrMemCache * content = parse_bio_page(dl_cache,biography_url);
 					if(content != NULL)
 					{
 						result_list = g_list_prepend(result_list,content);
