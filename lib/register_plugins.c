@@ -317,6 +317,7 @@ GlyrFetcherInfo * get_plugin_info(void)
 
         finfo->name = g_strdup(fetch->name);
         finfo->type = fetch->type;
+	finfo->reqs = fetch->reqs;
     }
     return head;
 }

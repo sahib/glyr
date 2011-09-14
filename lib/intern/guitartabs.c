@@ -24,22 +24,7 @@
 
 /* ------------------------------------- */
 
-bool vdt_guitartabs(GlyrQuery * settings)
-{
-	if(settings && settings->artist && settings->title)
-	{
-		if(settings->artist[0] && settings->title[0])
-		{
-			return true;
-		}
-	}
-	glyr_message(2,settings,"%s is needed to download lyrics.\n",settings->artist ? "Title" : "Artist");
-	return false;
-}
-
-/* ------------------------------------- */
-
-GList * gt_factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
 	/* Fix up tabs, escape chars etc.  */
 	for(GList * elem = list; elem; elem = elem->next)
@@ -55,7 +40,7 @@ GList * gt_factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 	}
 
 	/* Let the rest do by the norma generic finalizer */
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_GUITARTABS);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_GUITARTABS,result_list);
 }
 
 /* ------------------------------------- */
@@ -65,11 +50,11 @@ MetaDataFetcher glyrFetcher_guitartabs =
 {
 	.name = "guitartabs",
 	.type = GLYR_GET_GUITARTABS,
-	.validate  = vdt_guitartabs,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,
-	.finalize = gt_factory,
+	.finalize = factory,
 };
 
 /* ------------------------------------- */

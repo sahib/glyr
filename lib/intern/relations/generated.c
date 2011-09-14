@@ -51,6 +51,9 @@ GList * relations_generated_parse(cb_object * capo)
 			result->data = result_url;
 			result->size = strlen(result_url);
 			result->dsrc = g_strdup(OFFLINE_PROVIDER);
+			result->prov = g_strdup("generated");
+			result->type = GLYR_TYPE_RELATION;
+			update_md5sum(result);
 			result_list = g_list_prepend(result_list, result);
 		}
 	}

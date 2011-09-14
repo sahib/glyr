@@ -18,7 +18,7 @@
 static void print_item(GlyrMemCache * cacheditem, int num)
 {
     fprintf(stderr,"\n------- ITEM #%d --------\n",num);
-    glyr_printitem(cacheditem);
+    glyr_print_item(cacheditem);
     fprintf(stderr,"\n------------------------\n");
 }
 

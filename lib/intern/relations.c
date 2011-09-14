@@ -22,21 +22,9 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-//-------------------------------------
-
-bool vdt_relations(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if(settings && settings->artist && settings->artist[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"At least the artist is needed to get relations.\n");
-	return false;
-}
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_RELATION);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_RELATION,result_list);
 }
 
 //-------------------------------------
@@ -46,7 +34,7 @@ MetaDataFetcher glyrFetcher_relations =
 {
 	.name = "relations",
 	.type = GLYR_GET_RELATIONS,
-	.validate  = vdt_relations,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

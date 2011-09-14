@@ -24,21 +24,9 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_similiar(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if(settings && settings->artist && settings->artist[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"Artist is needed to retrieve similar artists.\n");
-	return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -48,7 +36,7 @@ MetaDataFetcher glyrFetcher_similiar_artists =
 {
 	.name = "similarartists",
 	.type = GLYR_GET_SIMILIAR_ARTISTS,
-	.validate  = vdt_similiar,
+	.reqs = GLYR_REQUIRES_ARTIST,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

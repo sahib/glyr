@@ -24,21 +24,9 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_tracklist(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if(settings && settings->artist && settings->album && settings->album[0] && settings->artist[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"At least the artist and album is needed for a tracklist.\n");
-	return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TRACK);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TRACK,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -48,7 +36,7 @@ MetaDataFetcher glyrFetcher_tracklist =
 {
 	.name = "tracklist",
 	.type = GLYR_GET_TRACKLIST,
-	.validate  = vdt_tracklist,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

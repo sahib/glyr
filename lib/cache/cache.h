@@ -32,13 +32,23 @@ extern "C"
 /* The Name of the SQL File */
 #define GLYR_DB_FILENAME "metadata.db"
 
-GlyrDatabase * glyr_init_db(char * root_path);
-void glyr_destroy_db(GlyrDatabase * db_object);
+/* FIXME */
+GlyrDatabase * glyr_db_init(char * root_path);
 
-void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
+/* */
+void glyr_db_destroy(GlyrDatabase * db_object);
+
+/* */
 GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query);
+
+/* */
+void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
+
+/* */
 bool glyr_db_contains(GlyrDatabase * db, GlyrMemCache * cache);
-bool glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
+
+/* */
+int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 
 #ifdef __cplusplus
 }

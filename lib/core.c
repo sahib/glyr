@@ -436,6 +436,10 @@ gboolean continue_search(gint current, GlyrQuery * s)
 		 * as we check this later, it's good to have some more ULRs waiting for us,     *
 		 * alternatively we might hit the maximum for one plugin (off by one!) 	        */
 		gint buffering = (s->imagejob) ? s->number / 3 : 0;
+
+		/* If we use caching we should consider getting a lot more items,
+                 * since many of the *may* be already in the Database
+                 */
 		gint pre_cache = (s->local_db) ? s->number : 0;
 		decision = (current + s->itemctr) < (s->number + buffering + pre_cache) &&
 			   (current < s->plugmax || (s->plugmax == -1));
@@ -454,7 +458,7 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
 	if(!result || g_list_length(result) < 1)
 		return 0;
 
-	/* Build new hashes, the data might have changed */
+	/* Build new hashes, the data might have changed (TODO - make more efficient) */
 	for(GList * elem = result; elem; elem = elem->next)
 	{
 		update_md5sum(elem->data);
@@ -499,9 +503,6 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
 					GList * to_free = jnode;
 					jnode = jnode->next;
 					result = g_list_delete_link(result,to_free);
-
-					if(s->itemctr > 0)
-					s->itemctr--;
 
 					/* Remember him.. */
 					double_items++;
@@ -1115,11 +1116,13 @@ static gint delete_already_cached_items(cb_object * capo, GList ** list)
 				item->dsrc = g_strdup(item->data);
 			}
 	
-			if(glyr_db_contains(capo->s->local_db,elem->data))
+			if(item && glyr_db_contains(capo->s->local_db,item))
 			{
 				GList * to_delete = elem;
 				elem = elem->next;
 				*list= g_list_delete_link(*list,to_delete);
+
+				DL_free(item);
 				deleted++;
 				continue;
 			}
@@ -1144,71 +1147,71 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 		/* Cross fingers... */
 		if(plugin != NULL)
 		{
-			GList * raw_parsed_data = plugin->parser(capo);
-
-
-			/* Also do some duplicate check already */
-			gsize less = delete_dupes(raw_parsed_data,capo->s);
-			if(less > 0)
+			if(capo->s->itemctr < capo->s->number)
 			{
-				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
-				glyr_message(2,capo->s,"#[%02d/%02d] Inner check found %ld dupes\n",items_now,capo->s->number,less);
-			}
+				GList * raw_parsed_data = plugin->parser(capo);
 
-			less = delete_already_cached_items(capo,&raw_parsed_data);
-			if(less > 0)
-			{
-				gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
-				glyr_message(2,capo->s,"#[%02d/%02d] DB lookup found %ld dupes\n",items_now,capo->s->number,less);
-			}
-
-			if(g_list_length(raw_parsed_data) != 0)
-			{
-				/* We shouldn't check (e.g) lyrics if they are a valid URL ;-) */
-				if(capo->s->imagejob == TRUE)
+				/* Also do some duplicate check already */
+				gsize less = delete_dupes(raw_parsed_data,capo->s);
+				if(less > 0)
 				{
-					raw_parsed_data = kick_out_wrong_formats(raw_parsed_data,capo->s);
+					gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
+					glyr_message(2,capo->s,"#[%02d/%02d] Inner check found %ld dupes\n",items_now,capo->s->number,less);
 				}
-				else /* We should look if charset conversion is requested */
+
+				less = delete_already_cached_items(capo,&raw_parsed_data);
+				if(less > 0)
 				{
-					normalize_utf8(raw_parsed_data);
-					if(plugin->encoding != NULL)
-					{
-						glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets\n",g_list_length(raw_parsed_data),capo->s->number);
-						do_charset_conversion(plugin, raw_parsed_data);
-					}
-					raw_parsed_data = check_for_forced_utf8(capo->s,raw_parsed_data);
+					gsize items_now = g_list_length(raw_parsed_data) + capo->s->itemctr - less;
+					glyr_message(2,capo->s,"#[%02d/%02d] DB lookup found %ld dupes\n",items_now,capo->s->number,less);
 				}
 
 				if(g_list_length(raw_parsed_data) != 0)
 				{
-					for(GList * elem = raw_parsed_data; elem; elem = elem->next)
+					/* We shouldn't check (e.g) lyrics if they are a valid URL ;-) */
+					if(capo->s->imagejob == TRUE)
 					{
-						GlyrMemCache * item = elem->data;
-						if(item != NULL)
+						raw_parsed_data = kick_out_wrong_formats(raw_parsed_data,capo->s);
+					}
+					else /* We should look if charset conversion is requested */
+					{
+						normalize_utf8(raw_parsed_data);
+						if(plugin->encoding != NULL)
 						{
-							if(capo->s->itemctr < capo->s->number)
-							{
-g_print("Item counter: %d\n",capo->s->itemctr);
-								/* Only reference to the plugin -> copy providername */
-								item->prov = g_strdup(plugin->name);
-								parsed = g_list_prepend(parsed,item);
-								capo->s->itemctr++;
-
-							}
-							else /* Not needed anymore. Forget this item */
-							{
-								DL_free(item);
-								item = NULL;
-
-								/* Also skip other downloads */
-								*stop_download = TRUE;
-							}
+							glyr_message(2,capo->s,"#[%02d/%02d] Attempting to convert charsets\n",g_list_length(raw_parsed_data),capo->s->number);
+							do_charset_conversion(plugin, raw_parsed_data);
 						}
+						raw_parsed_data = check_for_forced_utf8(capo->s,raw_parsed_data);
 					}
 
-					/* Forget those pointers */
-					g_list_free(raw_parsed_data);
+					if(g_list_length(raw_parsed_data) != 0)
+					{
+						for(GList * elem = raw_parsed_data; elem; elem = elem->next)
+						{
+							GlyrMemCache * item = elem->data;
+							if(item != NULL)
+							{
+								if(capo->s->itemctr < capo->s->number)
+								{
+									/* Only reference to the plugin -> copy providername */
+									item->prov = g_strdup(plugin->name);
+									parsed = g_list_prepend(parsed,item);
+									capo->s->itemctr++;
+								}
+								else /* Not needed anymore. Forget this item */
+								{
+									DL_free(item);
+									item = NULL;
+
+									/* Also skip other downloads */
+									*stop_download = TRUE;
+								}
+							}
+						}
+
+						/* Forget those pointers */
+						g_list_free(raw_parsed_data);
+					}
 				}
 			}
 		}
@@ -1236,10 +1239,10 @@ g_print("Item counter: %d\n",capo->s->itemctr);
 
 /*--------------------------------------------------------*/
 
-static gboolean provider_is_enabled(GlyrQuery * s, MetaDataSource * f)
+gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f)
 {
 	/* Assume 'all we have' */
-	if(s->from == NULL)
+	if(from_arg == NULL)
 	{
 		return TRUE;
 	}
@@ -1252,11 +1255,11 @@ static gboolean provider_is_enabled(GlyrQuery * s, MetaDataSource * f)
 	/* split string */
 	if(f->name != NULL)
 	{
-		gsize len = strlen(s->from);
+		gsize len = strlen(from_arg);
 		gsize offset = 0;
 
 		gchar * token = NULL;
-		while((token = get_next_word(s->from,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
+		while((token = get_next_word(from_arg,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
 		{
 			if(token != NULL)
 			{
@@ -1304,7 +1307,7 @@ static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired
 		for(GList * elem = fetcher->provider; elem; elem = elem->next, ++pos)
 		{
 			MetaDataSource * src = elem->data;
-			if(provider_is_enabled(s,src) == TRUE)
+			if(provider_is_enabled(s->from,src) == TRUE)
 			{
 				if(fired[pos] == 0)
 				{
@@ -1339,7 +1342,28 @@ static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired
 
 /*--------------------------------------------------------*/
 
-static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList * source_list, gboolean * stop_me)
+gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list)
+{
+	gboolean result = FALSE;
+	if(cache != NULL)
+	{
+		update_md5sum(cache);
+
+		for(GList * elem = result_list; elem; elem = elem->next)
+		{
+			GlyrMemCache * item = elem->data;
+			if(memcmp(cache->md5sum, item->md5sum, 16) == 0)
+			{
+				result = TRUE;
+			}
+		}
+	}
+	return result;
+}
+
+/*--------------------------------------------------------*/
+
+static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * source_list, gboolean * stop_me, GList ** result_list)
 {
 	GList * url_list = NULL;
 	GList * endmarks = NULL;
@@ -1383,7 +1407,7 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 		}
 	}
 
-	GList * result_list = NULL;
+	GList * sub_result_list = NULL;
 	gsize url_list_length = g_list_length(url_list);
 	if(url_list_length != 0 || g_list_length(offline_provider) != 0)
 	{
@@ -1393,17 +1417,17 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 		GList * ready_caches = NULL;
 
 		/* Handle offline provider, that don't need to download something */
-		for(GList * off_source = offline_provider; proceed && off_source && continue_search(g_list_length(raw_parsed), query); off_source = off_source->next)
+		for(GList * off_source = offline_provider; proceed && off_source && query->itemctr < query->number; off_source = off_source->next)
 		{
 			MetaDataSource * source = off_source->data;
 			if(source != NULL && source->parser != NULL)
 			{
 				cb_object pseudo_capo;
-				memset(&pseudo_capo,0,sizeof pseudo_capo);
+				memset(&pseudo_capo, 0, sizeof pseudo_capo);
 				pseudo_capo.s = query;
 
 				GList * offline_list = source->parser(&pseudo_capo);
-				for(GList * off_elem = offline_list; off_elem; off_elem = off_elem->next)
+				for(GList * off_elem = offline_list; off_elem && query->itemctr < query->number; off_elem = off_elem->next)
 				{
 					GLYR_ERROR result = GLYRE_OK;
 					if(query->callback.download != NULL)
@@ -1428,16 +1452,16 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 		}
 
 		/* Now start the downloadmanager - and call the specified callback with the URL table when an item is ready */
-		if(proceed == TRUE && url_list_length != 0 && g_list_length(cached_items) < (gsize)query->number)
+		if(proceed == TRUE && url_list_length != 0 && query->itemctr < query->number)
 		{
-		 	raw_parsed = async_download(url_list,
-				endmarks,
-				query,
-				url_list_length / query->timeout  + 1,
-				url_list_length / query->parallel + 4,
-				call_provider_callback,    /* Callback           */
-				url_table,                 /* Userpointer        */
-				TRUE);                     /* Free caches itself */
+			raw_parsed = async_download(url_list,
+					endmarks,
+					query,
+					url_list_length / query->timeout  + 1,
+					url_list_length / query->parallel + 4,
+					call_provider_callback,    /* Callback           */
+					url_table,                 /* Userpointer        */
+					TRUE);                     /* Free caches itself */
 		}
 
 		/* Now finalize our retrieved items */
@@ -1449,13 +1473,14 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 			if(pre_less > 0)
 			{
 				glyr_message(2,query,"- Prefiltering double data: (-%d item(s) less)\n",pre_less);
+				query->itemctr -= pre_less;
 			}
 
 			glyr_message(2,query,"---- \n");
 			if(g_list_length(raw_parsed) != 0)
 			{
 				/* Call finalize to sanitize data, or download given URLs */
-				ready_caches = fetcher->finalize(query, raw_parsed,stop_me);
+				ready_caches = fetcher->finalize(query, raw_parsed,stop_me, result_list);
 
 				/* Raw data not needed anymore */
 				g_list_free(raw_parsed);
@@ -1465,11 +1490,11 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 
 		if(cached_items && ready_caches)
 		{
-			result_list = g_list_concat(cached_items, ready_caches);
+			sub_result_list = g_list_concat(cached_items, ready_caches);
 		}
 		else
 		{
-			result_list = (cached_items) ? cached_items : ready_caches;
+			sub_result_list = (cached_items) ? cached_items : ready_caches;
 		}
 	}
 
@@ -1478,9 +1503,17 @@ static GList * prepare_run(GlyrQuery * query, MetaDataFetcher * fetcher, GList *
 	g_list_free(endmarks);
 	g_list_free(offline_provider);
 	g_hash_table_destroy(url_table);
-	return result_list;
-}
 
+
+	for(GList * result = sub_result_list; result; result = result->next)
+	{
+		if(result->data != NULL)
+		{
+			*result_list = g_list_prepend(*result_list,result->data);
+		}
+	}
+	g_list_free(sub_result_list);
+}
 /*--------------------------------------------------------*/
 
 static void print_trigger(GlyrQuery * query, GList * src_list)
@@ -1507,28 +1540,20 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
 
 	GList * src_list = NULL, * result_list = NULL;
 	while((stop_now == FALSE) &&
-	      (g_list_length(result_list) < (gsize)query->number) &&
-	      (src_list = get_queued(query, fetcher, fired)) != NULL)
+			(g_list_length(result_list) < (gsize)query->number) &&
+			(src_list = get_queued(query, fetcher, fired)) != NULL)
 	{
 		/* Print what provider were triggered */
 		print_trigger(query,src_list);
 
-		/* Sen this list of sources to the download manager */
-		GList * sub_list = prepare_run(query,fetcher,src_list, &stop_now);
-		if(sub_list != NULL)
-		{
-			result_list = g_list_concat(result_list,sub_list);
-			gint post_less = delete_dupes(result_list,query);
+		/* Send this list of sources to the download manager */
+		execute_query(query,fetcher,src_list, &stop_now, &result_list);
 
-			if(post_less > 0)
-			{
-				glyr_message(2,query,"- Postfiltering double data: (-%d item(s) less)\n",post_less);
-			}
-		}
-
+		/* Do not report errors */
 		something_was_searched = TRUE;
+
+		/* Next list please */
 		g_list_free(src_list);
-		src_list = NULL;
 	}
 
 	if(something_was_searched == FALSE)

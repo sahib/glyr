@@ -720,13 +720,13 @@ void glyr_update_md5sum(GlyrMemCache * cache);
 
 
 /**
-* glyr_printitem:
+* glyr_print_item:
 * @cache: The GlyrMemCache to be printed.
 *
 * A debug method to print all fields of @cache. 
 *
 */
-void glyr_printitem(GlyrMemCache * cache);
+void glyr_print_item(GlyrMemCache * cache);
 
 /**
 * glyr_get_plugin_info: 
@@ -772,14 +772,17 @@ GlyrFetcherInfo * glyr_get_plugin_info(void);
 void glyr_free_plugin_info(GlyrFetcherInfo * info);
 
 /**
-* glyr_type_to_string:
+* glyr_data_type_to_string:
 * @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVER_PRI for example
 *
 * Converts a type to a string.
 *
 * Returns: a statically allocated string, do not free
 */
-const char * glyr_type_to_string(GLYR_DATA_TYPE type);
+const char * glyr_data_type_to_string(GLYR_DATA_TYPE type);
+
+
+const char * glyr_get_type_to_string(GLYR_GET_TYPE type);
 
 #ifdef _cplusplus
 }

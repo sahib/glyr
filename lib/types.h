@@ -184,6 +184,17 @@ typedef enum
     GLYR_TYPE_GUITARTABS,
 }   GLYR_DATA_TYPE;
 
+
+typedef enum
+{
+    GLYR_REQUIRES_ARTIST = 1 << 0,
+    GLYR_REQUIRES_ALBUM  = 1 << 1,
+    GLYR_REQUIRES_TITLE  = 1 << 2,
+    GLYR_OPTIONAL_ARTIST = 1 << 3,
+    GLYR_OPTIONAL_ALBUM  = 1 << 4,
+    GLYR_OPTIONAL_TITLE  = 1 << 5
+}   GLYR_FIELD_REQUIREMENT;
+
 /**
  * GlyrMemCache:
  * @data: contains the data, string when is_image is false, raw data otherwise
@@ -381,6 +392,7 @@ typedef struct _GlyrFetcherInfo {
   /*< public >*/
   char * name;
   GLYR_GET_TYPE type;
+  GLYR_FIELD_REQUIREMENT reqs;
   GlyrSourceInfo * head;
 
   struct _GlyrFetcherInfo * next;

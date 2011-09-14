@@ -86,13 +86,15 @@ typedef struct MetaDataFetcher
     GLYR_GET_TYPE type;
 
     /* callbacks */
-    bool (*validate)(GlyrQuery *);
     void (*init)(void);
     void (*destroy)(void);
-    GList* (*finalize)(GlyrQuery*,GList*,gboolean*);
+    GList* (*finalize)(GlyrQuery*,GList*,gboolean*,GList**);
 
     /* Default value for ->parallel, if set to auto */
     long default_parallel;
+
+    /* Optionaly and required fields for this getter */
+    GLYR_FIELD_REQUIREMENT reqs;  
 
     /* Wether this Fetcher delievers the full data (lyrics),
        or just URLs of the data. */
@@ -102,20 +104,19 @@ typedef struct MetaDataFetcher
 
 /*------------------------------------------------------*/
 
-// Internal representation of one provider
-// PLEASE FILL _ALL_ FIELDS!
+/* Internal representation of one provider   */
 typedef struct MetaDataSource
 {
     gchar * name;  /* Name of this provider              */
     gchar key;     /* A key that may be used in --from   */
-    gchar * encoding;/* Encoding, NULL defaults to UTF-8, this will only take place for textparser */
 
-    GList * (* parser) (struct cb_object *);    /* called when parsing is needed                  */
-    const char  * (* get_url)(GlyrQuery *); 	/* called when the url of this provider is needed */
-    gchar  * endmarker;              	        /* Download stops if this mark is found           */
+    GList * (* parser) (struct cb_object *); /* called when parsing is needed                  */
+    const char  * (* get_url)(GlyrQuery *);  /* called when the url of this provider is needed */
 
-    GLYR_GET_TYPE type; /* For what fetcher this provider is working.. */
-    gboolean free_url; /* URL is dyn. allocated - set this always! */
+    GLYR_GET_TYPE type; /* For what fetcher this provider is working..   */
+    gboolean free_url;  /* URL is dyn. allocated - set this always!      */
+    gchar * encoding;   /* Encoding, NULL defaults to UTF-8, this will only take place for textparser */
+    gchar  * endmarker; /* Download stops if this mark is found           */
 
     gint quality;  /* Measurement of how good the content  usually is [0-100] */
     gint speed;    /* Measurement of how fast the provider usually is [0-100] */
@@ -138,5 +139,9 @@ void glist_free_full(GList * List, void (* free_func)(void * ptr));
 gboolean continue_search(gint current, GlyrQuery * s);
 
 int glyr_puts(int verbosity, GlyrQuery * s, const char * string);
+
+
+gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list);
+gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f);
 
 #endif
