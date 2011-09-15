@@ -34,6 +34,7 @@ MetaDataFetcher glyrFetcher_relations =
 {
 	.name = "relations",
 	.type = GLYR_GET_RELATIONS,
+    	.default_data_type = GLYR_TYPE_RELATION,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,

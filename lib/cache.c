@@ -17,16 +17,18 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
-#include "../core.h"
-#include "../glyr.h"
-#include "../register_plugins.h"
-
+#include "core.h"
+#include "glyr.h"
+#include "register_plugins.h"
 #include "cache.h"
+
 #include <glib.h>
+
 
 /* ------------------------------------------------------------------ */
 static void create_table_defs(GlyrDatabase * db);
 static void execute(GlyrDatabase * db, const gchar * sql_statement);
+static GLYR_FIELD_REQUIREMENT get_req(GlyrQuery * q);
 /* ------------------------------------------------------------------ */
 
 
@@ -207,10 +209,18 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
 {
 	if(db && q && cache)
 	{
+		GLYR_FIELD_REQUIREMENT reqs = get_req(q);
 		execute(db,"BEGIN;");
-		INSERT_STRING("INSERT OR IGNORE INTO artists VALUES('%q');",q->artist);
-		INSERT_STRING("INSERT OR IGNORE INTO albums  VALUES('%q');",q->album);
-		INSERT_STRING("INSERT OR IGNORE INTO titles  VALUES('%q');",q->title);
+		if((reqs & GLYR_REQUIRES_ARTIST) || (reqs & GLYR_OPTIONAL_ARTIST)) {
+		  INSERT_STRING("INSERT OR IGNORE INTO artists VALUES('%q');",q->artist); 
+		}
+		if((reqs & GLYR_REQUIRES_ALBUM) || (reqs & GLYR_OPTIONAL_ALBUM)) {
+		  INSERT_STRING("INSERT OR IGNORE INTO albums  VALUES('%q');",q->album);
+		}
+		if((reqs & GLYR_REQUIRES_TITLE) || (reqs & GLYR_OPTIONAL_TITLE)) {
+	 	  INSERT_STRING("INSERT OR IGNORE INTO titles  VALUES('%q');",q->title);
+		}
+
 		INSERT_STRING("INSERT OR IGNORE INTO providers VALUES('%q');",cache->prov);
 		insert_cache_data(db,q,cache);
 		execute(db,"COMMIT;");
@@ -290,45 +300,6 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-bool glyr_db_contains(GlyrDatabase * db, GlyrMemCache * cache)
-{
-	gboolean result = FALSE;
-	if(db && cache)
-	{
-		gchar * sql = sqlite3_mprintf(
-				"SELECT source_url,data_checksum,data_size,data_type FROM metadata AS m "
-				"WHERE (m.data_type = %d AND m.data_size = %d AND m.data_checksum = '?') OR (m.source_url LIKE '%q' AND m.source_url is not null);",
-				cache->type,
-				cache->size,
-				cache->dsrc);
-
-		if(sql != NULL)
-		{
-			sqlite3_stmt * stmt = NULL;
-			sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
-			sqlite3_bind_blob(stmt, 1, cache->md5sum, sizeof cache->md5sum, SQLITE_TRANSIENT);
-
-			int err = sqlite3_step(stmt);	
-			if(err == SQLITE_ROW)
-			{
-				result = TRUE;
-			}
-			else if(err != SQLITE_DONE) 
-			{
-				fprintf(stderr,"glyr_db_contains: error message: %s\n", sqlite3_errmsg(db->db_handle));
-			}
-	
-			sqlite3_finalize(stmt);
-			sqlite3_free(sql);
-		}
-	}
-	return result;
-}
-
-/*--------------------------------------------------------------*/
-/*--------------------------------------------------------------*/
-/*--------------------------------------------------------------*/
-
 static gchar * convert_from_option_to_sql(GlyrQuery * q)
 {
 	gchar * result = g_strdup("");
@@ -355,7 +326,7 @@ static gchar * convert_from_option_to_sql(GlyrQuery * q)
 
 static GLYR_FIELD_REQUIREMENT get_req(GlyrQuery * q)
 {
-	GLYR_FIELD_REQUIREMENT result;
+	GLYR_FIELD_REQUIREMENT result = 0;
 	GlyrFetcherInfo * info = glyr_get_plugin_info();
 	GlyrFetcherInfo * head = info;
 	while(head != NULL)
@@ -388,6 +359,19 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 
 		gchar * from_argument_list = convert_from_option_to_sql(query);
 
+		gchar * img_url_constr = "";
+		if(TYPE_IS_IMAGE(query->type))
+		{
+			if(query->download == FALSE)
+			{
+				img_url_constr = sqlite3_mprintf("AND data_type = %d ", GLYR_TYPE_IMG_URL);
+			}
+			else
+			{
+				img_url_constr = sqlite3_mprintf("AND NOT data_type = %d ", GLYR_TYPE_IMG_URL);
+			}
+		}
+
 		gchar * sql = sqlite3_mprintf(
 			"SELECT artist_name,album_name,title_name,provider_name,source_url, "
 			"image_type_name,track_duration,get_type,data_type,data_size,data_checksum,data "
@@ -397,11 +381,12 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 			"LEFT JOIN titles as t on m.title_id = t.rowid "
 			"INNER JOIN providers as p on m.provider_id = p.rowid "
 			"LEFT JOIN image_types as i on m.image_type_id = i.rowid "
-			"WHERE m.get_type = %d AND provider_name IN(%s) "
+			"WHERE m.get_type = %d AND provider_name IN(%s) %s"
 			"AND (artist_name = '%q' %s) "
 			"AND (album_name = '%q'  %s) "
 			"AND (title_name = '%q'  %s);",
 			query->type, from_argument_list, 
+			img_url_constr,
 			query->artist, artist_constr,
 			query->album,  album_constr,
 			query->title,  title_constr);
@@ -418,6 +403,11 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 			sqlite3_free(sql);
 		}
 		g_free(from_argument_list);
+
+		if(*img_url_constr != '\0')
+		{
+			sqlite3_free(img_url_constr);
+		}
 	}
 	return result;
 }
@@ -430,6 +420,7 @@ typedef struct
 {
     GlyrDatabase * con;
     gint deleted;
+    gint max_delete;
 } delete_callback_data;
 
 /*--------------------------------------------------------------*/
@@ -438,7 +429,8 @@ typedef struct
 
 static int delete_callback(void * result, int argc, char ** argv, char ** azColName)
 {
-	if(argc >= 4 && result)
+	delete_callback_data * data = result;
+	if(argc >= 4 && result && data->max_delete > data->deleted)
 	{
 		/* God, this is so silly.. SQL, why you don't like " = null"
 		 * I can't think of any easier way to do this, tell me if you found one
@@ -458,7 +450,6 @@ static int delete_callback(void * result, int argc, char ** argv, char ** azColN
 
 		if(sql_delete != NULL)
 		{
-			delete_callback_data * data = result;
 			execute(data->con,sql_delete);
 			sqlite3_free(sql_delete);
 			data->deleted++;
@@ -482,19 +473,33 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 		gchar * title_constr  = ((reqs & GLYR_REQUIRES_TITLE ) == 0) ? "OR title_name  is null" : "";
 		gchar * from_argument_list = convert_from_option_to_sql(query);
 
+		gchar * img_url_constr = "";
+		if(TYPE_IS_IMAGE(query->type))
+		{
+			if(query->download == FALSE)
+			{
+				img_url_constr = sqlite3_mprintf("AND data_type = %d ", GLYR_TYPE_IMG_URL);
+			}
+			else
+			{
+				img_url_constr = sqlite3_mprintf("AND NOT data_type = %d ", GLYR_TYPE_IMG_URL);
+			}
+		}
+
+
 		gchar * sql = sqlite3_mprintf(
 			"SELECT DISTINCT get_type,artist_id,album_id,title_id,provider_id FROM metadata AS m \n"
 			"LEFT JOIN (SELECT rowid FROM artists AS a WHERE artist_name = '%q' %s)  \n"
 			"LEFT JOIN (SELECT rowid FROM albums  AS b WHERE album_name  = '%q' %s)  \n"
 			"LEFT JOIN (SELECT rowid FROM titles  AS t WHERE title_name  = '%q' %s)  \n"
 			"INNER JOIN (SELECT rowid FROM providers AS p WHERE provider_name IN(%s))\n"
-			"WHERE get_type = %d \n"
+			"WHERE get_type = %d %s\n"
 			";\n",
 			query->artist, artist_constr,
 			query->album, album_constr,
 			query->title, title_constr,
 			from_argument_list,
-			query->type
+			query->type, img_url_constr
 		       );
 
 		if(sql != NULL)
@@ -502,6 +507,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			delete_callback_data cb_data;
 			cb_data.con = db;
 			cb_data.deleted = 0;
+			cb_data.max_delete = query->number;
 
 			gchar * err_msg = NULL;
 			sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
@@ -514,6 +520,11 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			result = cb_data.deleted;
 		}
 		g_free(from_argument_list);
+
+		if(*img_url_constr)
+		{
+			sqlite3_free(img_url_constr);
+		}
 	}
 	return result;
 }

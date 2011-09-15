@@ -50,6 +50,7 @@ MetaDataFetcher glyrFetcher_guitartabs =
 {
 	.name = "guitartabs",
 	.type = GLYR_GET_GUITARTABS,
+    	.default_data_type = GLYR_TYPE_GUITARTABS,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,

@@ -31,7 +31,7 @@
 #include "config.h"
 
 /* Get access to the db */
-#include "cache/cache.h"
+#include "cache_intern.h"
 
 /* Mini blacklist */
 #include "blacklist.h"
@@ -125,6 +125,50 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 		glyr_message(-1,NULL,"Did you perhaps try to load a 4,7GB iso into your RAM?\n");
 	}
 	return realsize;
+}
+
+/*--------------------------------------------------------*/
+
+void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len)
+{
+	if(cache != NULL)
+	{
+		g_free(cache->data);
+
+		cache->data = (gchar*)data;
+		if(data != NULL)
+		{
+			cache->size = (len >= 0) ? (gsize)len : strlen(data);
+			update_md5sum(cache);
+		}
+		else
+		{
+			cache->size = 0;
+			memset(cache->md5sum,0,16);
+		}
+	}
+}
+
+/*--------------------------------------------------------*/
+
+GlyrMemCache * DL_copy(GlyrMemCache * cache)
+{
+	GlyrMemCache * result = NULL;
+	if(cache != NULL)
+	{
+		result = g_malloc0(sizeof(GlyrMemCache));
+		memcpy(result,cache,sizeof(GlyrMemCache));
+		if(cache->size > 0)
+		{
+			/* Remember NUL for strings */
+			result->data = g_malloc(cache->size + 1);
+			memcpy(result->data,cache->data,cache->size);
+		}
+		result->dsrc = g_strdup(cache->dsrc);
+		result->prov = g_strdup(cache->prov);
+		memcpy(result->md5sum,cache->md5sum,16);
+	}
+	return result;
 }
 
 /*--------------------------------------------------------*/
@@ -710,7 +754,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 				FD_ZERO(&ErrorFDS);
 
 				if (curl_multi_fdset(cmHandle, &ReadFDS, &WriteFDS, &ErrorFDS, &max_fd) ||
-						curl_multi_timeout(cmHandle, &wait_time))
+				    curl_multi_timeout(cmHandle, &wait_time))
 				{
 					panic("glyr: error while selecting stream. Might be a bug.\n");
 					return NULL;
@@ -752,7 +796,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 					/* Get the callback object associated with the curl handle
 					 * for some odd reason curl requires a char * pointer */
 					cb_object * capo = NULL;
-					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE, ((char*)&capo));
+					curl_easy_getinfo(msg->easy_handle, CURLINFO_PRIVATE,(((char**)&capo)));
 
 					/* It's useless if it's empty  */
 					if(capo && capo->cache && capo->cache->data == NULL)
@@ -1104,6 +1148,11 @@ static void normalize_utf8(GList * text_list)
 
 static gint delete_already_cached_items(cb_object * capo, GList ** list)
 {
+	if(capo->s->db_autoread == FALSE)
+	{
+		return 0;
+	}
+
 	gint deleted = 0;
 	if(capo && capo->s->local_db)
 	{
@@ -1115,8 +1164,8 @@ static gint delete_already_cached_items(cb_object * capo, GList ** list)
 			{
 				item->dsrc = g_strdup(item->data);
 			}
-	
-			if(item && glyr_db_contains(capo->s->local_db,item))
+
+			if(item && db_contains(capo->s->local_db,item))
 			{
 				GList * to_delete = elem;
 				elem = elem->next;
@@ -1134,6 +1183,28 @@ static gint delete_already_cached_items(cb_object * capo, GList ** list)
 
 /*--------------------------------------------------------*/
 
+static void fix_data_types(GList * list, MetaDataSource * src, GlyrQuery * query)
+{
+	for(GList * elem = list; elem; elem = elem->next)
+	{
+		GlyrMemCache * item = elem->data;
+		if(item != NULL && item->type == GLYR_TYPE_NOIDEA)
+		{
+			if(TYPE_IS_IMAGE(query->type) && query->download == FALSE)
+			{
+				item->type = GLYR_TYPE_IMG_URL;
+			}
+			else
+			{
+				item->type = src->data_type;
+			}
+		}
+	}
+}
+
+
+/*--------------------------------------------------------*/
+
 /* The actual call to the metadata provider here, coming from the downloader, triggered by start_engine() */
 static GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, gint * to_add)
 {
@@ -1144,12 +1215,15 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 		GHashTable * assoc = (GHashTable*)userptr;
 		MetaDataSource * plugin = g_hash_table_lookup(assoc,capo->url);
 
-		/* Cross fingers... */
 		if(plugin != NULL)
 		{
 			if(capo->s->itemctr < capo->s->number)
 			{
+				/* Call the provider's parser */
 				GList * raw_parsed_data = plugin->parser(capo);
+
+				/* Set the default type if not known otherwise */
+				fix_data_types(raw_parsed_data,plugin,capo->s);
 
 				/* Also do some duplicate check already */
 				gsize less = delete_dupes(raw_parsed_data,capo->s);
@@ -1159,6 +1233,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 					glyr_message(2,capo->s,"#[%02d/%02d] Inner check found %ld dupes\n",items_now,capo->s->number,less);
 				}
 
+				/* Look up if items already in cache */
 				less = delete_already_cached_items(capo,&raw_parsed_data);
 				if(less > 0)
 				{
@@ -1166,6 +1241,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 					glyr_message(2,capo->s,"#[%02d/%02d] DB lookup found %ld dupes\n",items_now,capo->s->number,less);
 				}
 
+				/* Any items left to kill? */
 				if(g_list_length(raw_parsed_data) != 0)
 				{
 					/* We shouldn't check (e.g) lyrics if they are a valid URL ;-) */
@@ -1427,6 +1503,15 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 				pseudo_capo.s = query;
 
 				GList * offline_list = source->parser(&pseudo_capo);
+				if(query->imagejob)
+				{
+					offline_list = kick_out_wrong_formats(offline_list,query);
+				}
+				else
+				{
+					offline_list = check_for_forced_utf8(query,offline_list);
+				}
+
 				for(GList * off_elem = offline_list; off_elem && query->itemctr < query->number; off_elem = off_elem->next)
 				{
 					GLYR_ERROR result = GLYRE_OK;

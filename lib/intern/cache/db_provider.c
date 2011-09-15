@@ -17,8 +17,8 @@
  * You should have received a copy of the GNU General Public License
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
-#include "../core.h"
-#include "../cache/cache.h"
+#include "../../core.h"
+#include "../../cache.h"
 
 /*--------------------------------------------------------*/
 
@@ -61,7 +61,7 @@ const gchar * local_provider_url(GlyrQuery * sets)
 MetaDataSource local_provider_src =
 {
 	.name = "local",
-	.key  = 'g',
+	.key  = 'l',
 	.parser    = local_provider_parse,
 	.get_url   = local_provider_url,
 	.type      = GLYR_GET_ANY,

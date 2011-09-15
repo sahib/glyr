@@ -50,6 +50,7 @@ MetaDataFetcher glyrFetcher_lyrics =
 {
 	.name = "lyrics",
 	.type = GLYR_GET_LYRICS,
+    	.default_data_type = GLYR_TYPE_LYRICS,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,

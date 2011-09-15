@@ -46,7 +46,6 @@ SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 # ------------------------------------------------
 # CFlags and warnlevel / build config 
 # ------------------------------------------------
-SET(CMAKE_BUILD_TYPE "debug")
 
 # Tell config.h.in
 IF(CMAKE_BUILD_TYPE STREQUAL "debug")
@@ -93,8 +92,8 @@ SET(DIR_COVER ${DIR_INTERN}/cover )
 SET(DIR_LYRICS ${DIR_INTERN}/lyrics )
 SET(DIR_PHOTOS ${DIR_INTERN}/photos )
 SET(DIR_AINFO ${DIR_INTERN}/ainfo )
-SET(DIR_SIMILIAR ${DIR_INTERN}/similiar_artist )
-SET(DIR_SIMILISO ${DIR_INTERN}/similiar_song )
+SET(DIR_SIMILAR ${DIR_INTERN}/similar_artist )
+SET(DIR_SIMILSO ${DIR_INTERN}/similar_song )
 SET(DIR_REVIEW ${DIR_INTERN}/review )
 SET(DIR_TRACKLIST ${DIR_INTERN}/tracklist )
 SET(DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
@@ -109,8 +108,9 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
-	"${DIR_ROOT}/cache/cache.c"
-	"${DIR_ROOT}/cache/db_provider.c"
+	"${DIR_ROOT}/cache.c"
+	"${DIR_ROOT}/cache_intern.c"
+	"${DIR_INTERN}/cache/db_provider.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
@@ -120,8 +120,8 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/common.c"
 	"${DIR_INTERN}/ainfo.c"
 	"${DIR_INTERN}/cover.c"
-	"${DIR_INTERN}/similiar_artist.c"
-	"${DIR_INTERN}/similiar_song.c"
+	"${DIR_INTERN}/similar_artist.c"
+	"${DIR_INTERN}/similar_song.c"
 	"${DIR_INTERN}/lyrics.c"
 	"${DIR_INTERN}/photos.c"
 	"${DIR_INTERN}/review.c"
@@ -134,8 +134,8 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_AINFO}/lyricsreg.c"
-	"${DIR_SIMILIAR}/lastfm.c"
-	"${DIR_SIMILISO}/lastfm.c"
+	"${DIR_SIMILAR}/lastfm.c"
+	"${DIR_SIMILSO}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/allmusic_com.c"
 	"${DIR_REVIEW}/amazon.c"

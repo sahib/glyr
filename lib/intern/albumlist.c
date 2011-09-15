@@ -36,6 +36,7 @@ MetaDataFetcher glyrFetcher_albumlist =
 {
     .name = "albumlist",
     .type = GLYR_GET_ALBUMLIST,
+    .default_data_type = GLYR_TYPE_ALBUMLIST,
     .reqs = GLYR_REQUIRES_ARTIST,
     .full_data = TRUE,
     .init    = NULL,

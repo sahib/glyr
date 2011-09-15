@@ -36,6 +36,7 @@ MetaDataFetcher glyrFetcher_tracklist =
 {
 	.name = "tracklist",
 	.type = GLYR_GET_TRACKLIST,
+    	.default_data_type = GLYR_TYPE_TRACK,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
 	.full_data = TRUE,
 	.init    = NULL,

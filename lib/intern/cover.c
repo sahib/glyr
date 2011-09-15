@@ -26,7 +26,7 @@
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-    return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_COVER,result_list);
+    return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_COVERART,result_list);
 }
 
 /* ------------------------------------- */
@@ -36,6 +36,7 @@ MetaDataFetcher glyrFetcher_cover =
 {
     .name = "cover",
     .type = GLYR_GET_COVERART,
+    .default_data_type = GLYR_TYPE_COVERART,
     .reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
     .full_data = FALSE,
     .init    = NULL,

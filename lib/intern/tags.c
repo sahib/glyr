@@ -26,7 +26,7 @@
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TAGS,result_list);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TAG,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -36,6 +36,7 @@ MetaDataFetcher glyrFetcher_tags =
 {
 	.name = "tags",
 	.type = GLYR_GET_TAGS,
+    	.default_data_type = GLYR_TYPE_TAG,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,

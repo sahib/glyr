@@ -41,7 +41,8 @@
 #define GLYR_DEFAULT_PROXY NULL
 #define GLYR_DEFAULT_QSRATIO 0.85
 #define GLYR_DEFAULT_FORCE_UTF8 false
-#define GLYR_DEFAULT_SAVE_TO_DB false
+#define GLYR_DEFAULT_DB_AUTOWRITE true 
+#define GLYR_DEFAULT_DB_AUTOREAD  true
 #define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
 
 /* Disallow *.gif, mostly bad quality
@@ -137,16 +138,16 @@ typedef enum
 * GLYR_DATA_TYPE:
 * @GLYR_TYPE_NOIDEA: You shouldn't get this 
 * @GLYR_TYPE_LYRICS: Songtext
-* @GLYR_TYPE_REVIEW: Albumreview
-* @GLYR_TYPE_PHOTOS: Pictures showing a certain band
-* @GLYR_TYPE_COVER: coverart
-* @GLYR_TYPE_COVER_PRI:  A cover known to be the front side of the album 
-* @GLYR_TYPE_COVER_SEC:  A cover known to be the backside: inlet etc. 
-* @GLYR_TYPE_AINFO: Artist bio 
-* @GLYR_TYPE_SIMILIAR: Similiar artists 
-* @GLYR_TYPE_SIMILIAR_SONG: Similar songs 
+* @GLYR_TYPE_ALBUM_REVIEW: Albumreview
+* @GLYR_TYPE_ARTIST_PHOTO: Pictures showing a certain band
+* @GLYR_TYPE_COVERART: coverart
+* @GLYR_TYPE_COVERART_PRI:  A cover known to be the front side of the album 
+* @GLYR_TYPE_COVERART_SEC:  A cover known to be the backside: inlet etc. 
+* @GLYR_TYPE_ARTISTBIO: Artist bio 
+* @GLYR_TYPE_SIMILAR_ARTIST Similiar artists 
+* @GLYR_TYPE_SIMILAR_SONG: Similar songs 
 * @GLYR_TYPE_ALBUMLIST: List of albums: each cache containing one name 
-* @GLYR_TYPE_TAGS: List of (random) tags: each cache containing one name 
+* @GLYR_TYPE_TAG: List of (random) tags: each cache containing one name 
 * @GLYR_TYPE_TAG_ARTIST: Tag associated with the artist 
 * @GLYR_TYPE_TAG_ALBUM: Tag associated with the album 
 * @GLYR_TYPE_TAG_TITLE: Tag associated with the album 
@@ -164,16 +165,16 @@ typedef enum
 {
     GLYR_TYPE_NOIDEA, 
     GLYR_TYPE_LYRICS, 
-    GLYR_TYPE_REVIEW, 
-    GLYR_TYPE_PHOTOS, 
-    GLYR_TYPE_COVER,  
-    GLYR_TYPE_COVER_PRI, 
-    GLYR_TYPE_COVER_SEC, 
-    GLYR_TYPE_AINFO,  
-    GLYR_TYPE_SIMILIAR, 
-    GLYR_TYPE_SIMILIAR_SONG, 
+    GLYR_TYPE_ALBUM_REVIEW, 
+    GLYR_TYPE_ARTIST_PHOTO, 
+    GLYR_TYPE_COVERART,  
+    GLYR_TYPE_COVERART_PRI, 
+    GLYR_TYPE_COVERART_SEC, 
+    GLYR_TYPE_ARTISTBIO,  
+    GLYR_TYPE_SIMILAR_ARTIST,
+    GLYR_TYPE_SIMILAR_SONG, 
     GLYR_TYPE_ALBUMLIST, 
-    GLYR_TYPE_TAGS,	
+    GLYR_TYPE_TAG,	
     GLYR_TYPE_TAG_ARTIST,
     GLYR_TYPE_TAG_ALBUM, 
     GLYR_TYPE_TAG_TITLE, 
@@ -185,6 +186,18 @@ typedef enum
 }   GLYR_DATA_TYPE;
 
 
+/**
+* GLYR_FIELD_REQUIREMENT:
+* @GLYR_REQUIRES_ARTIST: This getter needs the artist field
+* @GLYR_REQUIRES_ALBUM:  This getter needs the album field
+* @GLYR_REQUIRES_TITLE:  This getter needs the title field
+* @GLYR_OPTIONAL_ARTIST: Artist is optional for this getter
+* @GLYR_OPTIONAL_ALBUM:  Album is optional for this getter
+* @GLYR_OPTIONAL_TITLE:  Title is optional for this getter
+*
+* Bitmasks you can use to determine what fields a certain getter needs.
+* You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via glyr_get_plugin_info())
+*/
 typedef enum
 {
     GLYR_REQUIRES_ARTIST = 1 << 0,
@@ -216,10 +229,10 @@ typedef enum
 typedef struct _GlyrMemCache {
 
   /*< public >*/
-  char  *data;        
-  size_t size;        
-  char  *dsrc;        
-  char  *prov;        
+  char  *data;
+  size_t size;
+  char  *dsrc;
+  char  *prov;
   GLYR_DATA_TYPE type;
   int   duration;     
   bool  is_image;    
@@ -261,8 +274,9 @@ typedef struct _GlyrDatabase {
 * @force_utf8: Should be UTF8 forced on text items?
 * @download: should be images downloaded?
 * @qsratio: 0.0 = maxspeed, 1.0 = max quality, 0.85 -> default.
-* @write_to_cache: Write found items automagically to the cache, if any specified by glyr_opt_lookup_cache()
-* @local_cache: The cache to search in first.
+* @db_autoread: Check if the found item is already cached.
+* @db_autowrite: Write found items automagically to the cache, if any specified by glyr_opt_lookup_db()
+* @local_db: The database to write and search in.
 * @lang: Language code ISO-639-1, like 'de','en' or 'auto'
 * @proxy: The proxy to use.
 * @artist: Artist to use.
@@ -297,7 +311,8 @@ typedef struct _GlyrQuery {
     bool download; 
     float qsratio; 
 
-    bool save_to_db;
+    bool db_autoread;
+    bool db_autowrite;
     GlyrDatabase * local_db;
 
 /* This is confusing gtk-doc */
@@ -374,6 +389,7 @@ typedef struct _GlyrSourceInfo {
  * GlyrFetcherInfo:
  * @name: The name of the provider.
  * @type: Tells what type of data this getter delivers.
+ * @reqs: A bitmask. You can test if this getter requires a filled artist: (reqs & GLYR_REQUIRES_ARTIST)
  * @head: A doubly linked list of GlyrSourceInfo (the provider available for this getter)
  * @next: A pointer to the next provider.
  * @prev: A pointer to the previous provider.

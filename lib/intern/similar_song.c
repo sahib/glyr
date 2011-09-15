@@ -18,40 +18,28 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#ifndef GLYR_CACHE_H
-#define GLYR_CACHE_H
+#include "../core.h"
+#include "../stringlib.h"
+#include "generic.h"
 
-#include "../types.h"
+/*----------------------------------------------------------------*/
 
-#ifdef __cplusplus
-extern "C"
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-#endif
-
-
-/* The Name of the SQL File */
-#define GLYR_DB_FILENAME "metadata.db"
-
-/* FIXME */
-GlyrDatabase * glyr_db_init(char * root_path);
-
-/* */
-void glyr_db_destroy(GlyrDatabase * db_object);
-
-/* */
-GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query);
-
-/* */
-void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
-
-/* */
-bool glyr_db_contains(GlyrDatabase * db, GlyrMemCache * cache);
-
-/* */
-int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
-
-#ifdef __cplusplus
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILAR_SONG,result_list);
 }
-#endif
 
-#endif 
+/*----------------------------------------------------------------*/
+
+/* PlugStruct */
+MetaDataFetcher glyrFetcher_similar_song =
+{
+	.name = "similarsongs",
+	.type = GLYR_GET_SIMILIAR_SONGS,
+    	.default_data_type = GLYR_TYPE_SIMILAR_SONG,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
+	.full_data = TRUE,
+	.init    = NULL,
+	.destroy = NULL,
+	.finalize = factory
+};

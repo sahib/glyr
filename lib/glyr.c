@@ -26,7 +26,7 @@
 #include "register_plugins.h"
 #include "blacklist.h"
 #include "md5.h"
-#include "cache/cache.h"
+#include "cache.h"
 
 //* ------------------------------------------------------- */
 
@@ -175,6 +175,20 @@ const char * glyr_strerror(GLYR_ERROR ID)
 void glyr_update_md5sum(GlyrMemCache * cache)
 {
 	update_md5sum(cache);
+}
+
+/*-----------------------------------------------*/
+
+void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len)
+{
+	DL_set_data(cache,data,len);
+}
+
+/*-----------------------------------------------*/
+
+GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache)
+{
+	return DL_copy(cache);
 }
 
 /*-----------------------------------------------*/
@@ -447,10 +461,19 @@ GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db)
 
 /*-----------------------------------------------*/
 
-GLYR_ERROR glyr_opt_save_to_db(GlyrQuery * s, bool save_to_db)
+GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool db_autowrite)
 {
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->save_to_db = save_to_db;
+	s->db_autowrite = db_autowrite;
+	return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
+GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool db_autoread)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	s->db_autoread = db_autoread;
 	return GLYRE_OK;
 }
 
@@ -472,12 +495,12 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->artist = NULL;
 	glyrs->album  = NULL;
 	glyrs->title  = NULL;
+	glyrs->local_db = NULL;
 	glyrs->callback.download = NULL;
 	glyrs->callback.user_pointer = NULL;
 
-	glyrs->local_db = NULL;
-	glyrs->save_to_db = GLYR_DEFAULT_SAVE_TO_DB;	
-
+	glyrs->db_autoread = GLYR_DEFAULT_DB_AUTOREAD;
+	glyrs->db_autowrite = GLYR_DEFAULT_DB_AUTOWRITE;	
 	glyrs->from   = GLYR_DEFAULT_FROM;
 	glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
 	glyrs->img_max_size = GLYR_DEFAULT_CMAXSIZE;
@@ -767,6 +790,9 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 				*length = g_list_length(result);
 			}
 
+			/* Count inserstions */
+			gint db_inserts = 0;
+
 			/* link caches to each other */
 			for(GList * elem = result; elem; elem = elem->next)
 			{
@@ -774,11 +800,16 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 				item->next = (elem->next) ? elem->next->data : NULL;
 				item->prev = (elem->prev) ? elem->prev->data : NULL;
 
-				if(settings->save_to_db && settings->local_db && item->cached == FALSE)
+				if(settings->db_autowrite && settings->local_db && item->cached == FALSE)
 				{
-					puts("Inserting data into db..");
+					db_inserts++;
 					glyr_db_insert(settings->local_db,settings,item);
 				}
+			}
+
+			if(db_inserts > 0)
+			{
+				glyr_message(2,settings,"--- Inserted %d item%s into db.\n",db_inserts,(db_inserts == 1) ? "" : "s");
 			}
 
 			/* Finish. */
@@ -932,29 +963,29 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
 {
 	switch(type)
 	{
-		case GLYR_TYPE_COVER:
+		case GLYR_TYPE_COVERART:
 			return "cover";
-		case GLYR_TYPE_COVER_PRI:
+		case GLYR_TYPE_COVERART_PRI:
 			return "cover_front";
-		case GLYR_TYPE_COVER_SEC:
+		case GLYR_TYPE_COVERART_SEC:
 			return "cover_back";
 		case GLYR_TYPE_LYRICS:
 			return "songtext";
-		case GLYR_TYPE_PHOTOS:
+		case GLYR_TYPE_ARTIST_PHOTO:
 			return "artistphoto";
-		case GLYR_TYPE_REVIEW:
+		case GLYR_TYPE_ALBUM_REVIEW:
 			return "albumreview";
-		case GLYR_TYPE_AINFO:
+		case GLYR_TYPE_ARTISTBIO:
 			return "artistbio";
-		case GLYR_TYPE_SIMILIAR:
+		case GLYR_TYPE_SIMILAR_ARTIST:
 			return "similiar_artist";
-		case GLYR_TYPE_SIMILIAR_SONG:
+		case GLYR_TYPE_SIMILAR_SONG:
 			return "similiar_song";
 		case GLYR_TYPE_TRACK:
 			return "trackname";
 		case GLYR_TYPE_ALBUMLIST:
 			return "albumname";
-		case GLYR_TYPE_TAGS:
+		case GLYR_TYPE_TAG:
 			return "tag";
 		case GLYR_TYPE_TAG_ARTIST:
 			return "artisttag";

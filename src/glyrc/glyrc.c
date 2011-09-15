@@ -35,7 +35,7 @@
 #include "../../lib/glyr.h"
 
 /* Support for caching */
-#include "../../lib/cache/cache.h"
+#include "../../lib/cache.h"
 
 /* Compile information, you do not have this header */
 #include "../../lib/config.h"
@@ -371,7 +371,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
 			exit(EXIT_FAILURE);
 		    }
 		    *db = new_db;
-		    glyr_opt_save_to_db(glyrs,TRUE);
+		    glyr_opt_db_autowrite(glyrs,TRUE);
 		    glyr_opt_lookup_db(glyrs,new_db); 
 	    }
 	    break;
@@ -402,6 +402,8 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
             break;
         case '?':
             break;
+	default:
+	    exit(0);
         }
     }
 }
@@ -626,9 +628,6 @@ int main(int argc, char * argv[])
 
 		/* Set the type */
 		my_query.type = type;
-
-		glyr_opt_lookup_db(&my_query,db);
-		glyr_opt_save_to_db(&my_query,TRUE);
 
 		/* Yes, user? */
 		parse_commandline_general(argc-1, argv+1, &my_query,&write_to,&db, &delete_from_db);

@@ -633,7 +633,7 @@ GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
 GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db);
 
 /**
-* glyr_opt_save_to_db:
+* glyr_opt_db_autowrite:
 * @s: The GlyrQuery settings struct to store this option in.
 * @write_to_db: true, to write this to the database automatically 
 *
@@ -643,7 +643,13 @@ GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db);
 * 
 * Returns: an error ID
 */
-GLYR_ERROR glyr_opt_save_to_db(GlyrQuery * s, bool write_to_db);
+GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool write_to_db);
+
+
+/**
+* FIXME
+**/
+GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool write_to_db);
 
 /**
 * glyr_download:
@@ -773,7 +779,7 @@ void glyr_free_plugin_info(GlyrFetcherInfo * info);
 
 /**
 * glyr_data_type_to_string:
-* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVER_PRI for example
+* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVERART_PRI for example
 *
 * Converts a type to a string.
 *
@@ -781,8 +787,40 @@ void glyr_free_plugin_info(GlyrFetcherInfo * info);
 */
 const char * glyr_data_type_to_string(GLYR_DATA_TYPE type);
 
-
+/**
+* glyr_get_type_to_string:
+* @type: a member of the %GLYR_GET_TYPE enum, %GLYR_GET_COVERART for example
+* 
+* Converts a get type to a string (GLYR_GET_COVERART => "cover")
+*
+* Returns: a statically allocated string, do not free
+*/
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type);
+
+/** 
+* glyr_cache_copy:
+* @cache: The cache to copy
+* 
+* Allocate a new cache and 
+* copy all contents (= deep copy) from the original @cache,
+* The pointers next and prev are set to NULL.
+* 
+* Returns: A newly allocated cache.
+*/
+GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
+
+/**
+* glyr_cache_set_data:
+* @cache: The cache where to set the data.
+* @data: The data
+* @len: Length of data
+*
+* Safely sets the data of the cache. It frees the old data first, updates 
+* the checksum and adjusts the size fields accordingly to len.
+* If len is a negative number strlen() is used to determine the size.
+*
+*/
+void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len);
 
 #ifdef _cplusplus
 }

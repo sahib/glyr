@@ -40,7 +40,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 		}
 	}
 
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_REVIEW,result_list);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUM_REVIEW,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -50,6 +50,7 @@ MetaDataFetcher glyrFetcher_review =
 {
 	.name = "albumreview",
 	.type = GLYR_GET_ALBUM_REVIEW,
+    	.default_data_type = GLYR_TYPE_ALBUM_REVIEW,
 	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
 	.full_data = TRUE,
 	.init    = NULL,
