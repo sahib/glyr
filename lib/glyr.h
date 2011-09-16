@@ -81,50 +81,125 @@ void glyr_cleanup(void);
 GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * error, int * length);
 
 /**
- * glyr_init_query:
+ * glyr_query_init:
  * @query: The GlyrQuery to initialize to defaultsettings.
  *
- * This functions may allocate dynamic memory. It should be freed with glyr_init_query() after use.
+ * This functions may allocate dynamic memory. It should be freed with glyr_query_init() after use.
  * 
  */
-void glyr_init_query(GlyrQuery * query);
+void glyr_query_init(GlyrQuery * query);
 
 /**
- * glyr_destroy_query:
+ * glyr_query_destroy:
  * @query: The GlyrQuery to destroy.
  *
- * Deletes all modifications and frees dynamic memory. It can be reused, as fresh from glyr_init_query()
+ * Deletes all modifications and frees dynamic memory. It can be reused, as fresh from glyr_query_init()
  * 
  */
-void glyr_destroy_query(GlyrQuery * query);
+void glyr_query_destroy(GlyrQuery * query);
 
 /**
  * glyr_free_list:
  * @head: The head of the doubly linked list that should be freed.
  *
- * Deletes all dynamic memory by calling glyr_free_cache() on each cache.
+ * Deletes all dynamic memory by calling glyr_cache_free() on each cache.
  * 
  */
 void glyr_free_list(GlyrMemCache * head);
 
 /**
- * glyr_new_cache:
+ * glyr_cache_new:
  *
  * Initializes a new memcache.
  *
  * Normally you never need to do this.
  *
- * Don't forget to free the cache with glyr_free_cache()
+ * Don't forget to free the cache with glyr_cache_free()
  *
  * Returns:: A newly allocated and initialized memcache with no data. 
  */
-GlyrMemCache * glyr_new_cache(void);
+GlyrMemCache * glyr_cache_new(void);
 
 /**
- * glyr_free_cache:
+ * glyr_cache_free:
  * @cache: Frees the (valid allocated) cache pointed to by @cache
  */
-void glyr_free_cache(GlyrMemCache * cache);
+void glyr_cache_free(GlyrMemCache * cache);
+
+/** 
+* glyr_cache_copy:
+* @cache: The cache to copy
+* 
+* Allocate a new cache and 
+* copy all contents (= deep copy) from the original @cache,
+* The pointers next and prev are set to NULL.
+* 
+* Returns: A newly allocated cache.
+*/
+GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
+
+/**
+* glyr_cache_set_data:
+* @cache: The cache where to set the data.
+* @data: The data
+* @len: Length of data
+*
+* Safely sets the data of the cache. It frees the old data first, updates 
+* the checksum and adjusts the size fields accordingly to len.
+* If len is a negative number strlen() is used to determine the size.
+*
+*/
+void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len);
+
+/**
+* glyr_cache_write:
+* @cache: The data to write.
+* @path: The path to write data at.
+*
+* Write @cache to the path specified by @path.
+*
+* There are three special files:
+* <itemizedlist>
+* <listitem>
+* <para>
+* "stdout" -> Outputs file to stdout
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* "stderr" -> Outputs file to stderr
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* "null"   -> Outputs item nowhere
+* </para>
+* </listitem>
+* </itemizedlist>
+*
+* Returns: the number of written bytes.
+*/
+int glyr_cache_write(GlyrMemCache * cache, const char * path);
+
+
+/**
+* glyr_cache_update_md5sum:
+* @cache: a valid memcahe
+*
+* Updates the md5sum field of @cache. 
+*
+*/
+void glyr_cache_update_md5sum(GlyrMemCache * cache);
+
+
+/**
+* glyr_cache_print:
+* @cache: The GlyrMemCache to be printed.
+*
+* A debug method to print all fields of @cache. 
+*
+*/
+void glyr_cache_print(GlyrMemCache * cache);
 
 /********************************************************
 * GlyOpt methods ahead - use them to control glyr_get() *
@@ -447,7 +522,7 @@ GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level);
 * 
 * All providers except "lastfm" (therefore the '-') are used, a '+' is also allowed, which does plain nothing.
 * By default all built-in providers are used.
-* You can access the providernames by calling glyr_get_plugin_info()
+* You can access the providernames by calling glyr_info_get()
 *
 * Returns: an error ID
 */
@@ -622,12 +697,42 @@ GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring);
 GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
 
 /**
+* glyr_opt_lookup_db:
+* @s: The GlyrQuery settings struct to store this option in.
+* @db: a GlyrDatabase object.
+*
+* TODO 
+*
+* Returns: an error ID
+*/
+GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db);
+
+/**
+* glyr_opt_db_autowrite:
+* @s: The GlyrQuery settings struct to store this option in.
+* @write_to_db: true, to write this to the database automatically 
+*
+* If a database is specified via glyr_opt_lookup_db you can choose
+* to automatically save newly found items to the database.
+* They will be looked up from there if you search for it again.
+* 
+* Returns: an error ID
+*/
+GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool write_to_db);
+
+
+/**
+* FIXME
+**/
+GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool write_to_db);
+
+/**
 * glyr_download:
 * @url: A valid url, for example returned by libglyr
 * @s: A settings struct managing timeout, useragent and redirects. 
 *
 * Downloads the data pointed to by @url and caches in it a GlyrMemCache, which is returned to you. 
-* Use glyr_free_cache() to free it after use.
+* Use glyr_cache_free() to free it after use.
 *
 * Returns: A GlyrMemCache containing the data, or %NULL on failure, use verbose output to find out why.
 */
@@ -654,58 +759,9 @@ const char * glyr_strerror(GLYR_ERROR ID);
 */
 const char * glyr_version(void);
 
-/**
-* glyr_write:
-* @cache: The data to write.
-* @path: The path to write data at.
-*
-* Write @cache to the path specified by @path.
-*
-* There are three special files:
-* <itemizedlist>
-* <listitem>
-* <para>
-* "stdout" -> Outputs file to stdout
-* </para>
-* </listitem>
-* <listitem>
-* <para>
-* "stderr" -> Outputs file to stderr
-* </para>
-* </listitem>
-* <listitem>
-* <para>
-* "null"   -> Outputs item nowhere
-* </para>
-* </listitem>
-* </itemizedlist>
-*
-* Returns: the number of written bytes.
-*/
-int glyr_write(GlyrMemCache * cache, const char * path);
-
 
 /**
-* glyr_update_md5sum:
-* @cache: a valid memcahe
-*
-* Updates the md5sum field of @cache. 
-*
-*/
-void glyr_update_md5sum(GlyrMemCache * cache);
-
-
-/**
-* glyr_printitem:
-* @cache: The GlyrMemCache to be printed.
-*
-* A debug method to print all fields of @cache. 
-*
-*/
-void glyr_printitem(GlyrMemCache * cache);
-
-/**
-* glyr_get_plugin_info: 
+* glyr_info_get: 
 *
 * get information about existing Fetcher and Source
 * A Doubly linked list of Fetcher is returned, each having a field 'head',
@@ -717,7 +773,7 @@ void glyr_printitem(GlyrMemCache * cache);
 * <programlisting>
 * static void visualize_from_options(void)
 * {
-*     GlyrFetcherInfo * info = glyr_get_plugin_info();
+*     GlyrFetcherInfo * info = glyr_info_get();
 *     if(info != NULL)
 *     {
 *         for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
@@ -730,32 +786,42 @@ void glyr_printitem(GlyrMemCache * cache);
 *             printf("\n");
 *         }
 *    }
-*    glyr_free_plugin_info(info);
+*    glyr_info_free(info);
 * }
 * </programlisting>
 * </example>
 *
 * Returns: A newly allocated GlyrFetcherInfo structure, you can iterate over.
 */
-GlyrFetcherInfo * glyr_get_plugin_info(void);
+GlyrFetcherInfo * glyr_info_get(void);
 
 /**
-* glyr_free_plugin_info:
-* @info: The return value of glyr_get_plugin_info()
+* glyr_info_free:
+* @info: The return value of glyr_info_get()
 *
-* Free the return value of glyr_get_plugin_info() pointed to by @info
+* Free the return value of glyr_info_get() pointed to by @info
 */
-void glyr_free_plugin_info(GlyrFetcherInfo * info);
+void glyr_info_free(GlyrFetcherInfo * info);
 
 /**
-* glyr_type_to_string:
-* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVER_PRI for example
+* glyr_data_type_to_string:
+* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVERART_PRI for example
 *
 * Converts a type to a string.
 *
 * Returns: a statically allocated string, do not free
 */
-const char * glyr_type_to_string(GLYR_DATA_TYPE type);
+const char * glyr_data_type_to_string(GLYR_DATA_TYPE type);
+
+/**
+* glyr_get_type_to_string:
+* @type: a member of the %GLYR_GET_TYPE enum, %GLYR_GET_COVERART for example
+* 
+* Converts a get type to a string (GLYR_GET_COVERART => "cover")
+*
+* Returns: a statically allocated string, do not free
+*/
+const char * glyr_get_type_to_string(GLYR_GET_TYPE type);
 
 #ifdef _cplusplus
 }

@@ -53,7 +53,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
 					GlyrMemCache * tmp = DL_init();
 					tmp->data = g_strdup_printf("%s:%s",type,target);
 					tmp->size = strlen(tmp->data);
-					tmp->dsrc = infobuf->dsrc ? strdup(infobuf->dsrc) : NULL;
+					tmp->dsrc = g_strdup(infobuf->dsrc);
 					results = g_list_prepend(results,tmp);
 					ctr++;
 

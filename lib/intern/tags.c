@@ -24,26 +24,9 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_tags(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if(settings && settings->artist  &&
-			!(settings && settings->artist && /* Impossible to get tags of a title without album */
-				settings->album == NULL      &&
-				settings->title != NULL
-			 )
-	  )
-	{
-		return true;
-	}
-	glyr_message(2,settings,"At least the artist is needed to get tags.\n");
-	return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TAGS);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TAG,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -53,7 +36,8 @@ MetaDataFetcher glyrFetcher_tags =
 {
 	.name = "tags",
 	.type = GLYR_GET_TAGS,
-	.validate = vdt_tags,
+    	.default_data_type = GLYR_TYPE_TAG,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

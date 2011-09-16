@@ -11,6 +11,7 @@ BUILD_HEADERS =
 [
   "#{DIR}/glyr.h",
   "#{DIR}/types.h",
+  "#{DIR}/cache.h",
 ]
 
 DOC_DIR = "#{File.expand_path(Dir.getwd)}/doc"

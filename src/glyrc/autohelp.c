@@ -99,7 +99,7 @@ void suggest_other_getter(GlyrQuery * query, gchar * wrong_input)
 		return;
 	}
 
-	GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
+	GlyrFetcherInfo * fetcher = glyr_info_get();
 	if(fetcher != NULL)
 	{
 		gboolean did_you_mean_printed = FALSE;
@@ -117,7 +117,7 @@ void suggest_other_getter(GlyrQuery * query, gchar * wrong_input)
 			}		
 			it = it->next;
 		}
-		glyr_free_plugin_info(fetcher);
+		glyr_info_free(fetcher);
 	}
 }
 
@@ -130,7 +130,7 @@ void suggest_other_provider(GlyrQuery * query, gchar * wrong_input)
 		return;
 	}
 
-	GlyrFetcherInfo * fetcher = glyr_get_plugin_info();
+	GlyrFetcherInfo * fetcher = glyr_info_get();
 	GlyrFetcherInfo * it = fetcher;
 	while(it != NULL)
 	{
@@ -171,7 +171,7 @@ void suggest_other_provider(GlyrQuery * query, gchar * wrong_input)
 		}
 		g_hash_table_destroy(key_table);
 	}		
-	glyr_free_plugin_info(fetcher);
+	glyr_info_free(fetcher);
 }
 
 /*-----------------------------------------*/

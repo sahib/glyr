@@ -24,24 +24,9 @@
 
 //-------------------------------------
 
-bool get_albumlist(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-    if(settings && settings->artist && settings->artist[0])
-    {
-        return true;
-    }
-    else
-    {
-        glyr_message(2,settings,"Artist is needed to retrieve a albumlist.\n");
-        return false;
-    }
-}
-
-//-------------------------------------
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUMLIST);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUMLIST,result_list);
 }
 
 //-------------------------------------
@@ -51,7 +36,8 @@ MetaDataFetcher glyrFetcher_albumlist =
 {
     .name = "albumlist",
     .type = GLYR_GET_ALBUMLIST,
-    .validate  = get_albumlist,
+    .default_data_type = GLYR_TYPE_ALBUMLIST,
+    .reqs = GLYR_REQUIRES_ARTIST,
     .full_data = TRUE,
     .init    = NULL,
     .destroy = NULL,

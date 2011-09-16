@@ -115,8 +115,8 @@ MetaDataSource lyrics_chartlyrics_src =
 	.parser    = lyrics_chartlyrics_parse,
 	.get_url   = lyrics_chartlyrics_url,
 	.type      = GLYR_GET_LYRICS,
-	.quality   = 85,
-	.speed     = 45,
+	.quality   = 75,
+	.speed     = 25,
 	.endmarker = NULL,
 	.free_url  = false
 };

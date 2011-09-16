@@ -24,21 +24,9 @@
 
 /*--------------------------------*/
 
-bool vdt_photos(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if (settings && settings->artist && settings->artist[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"Artist is needed to download artistrelated photos!\n");
-	return false;
-}
-
-/*--------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_PHOTOS);
+	return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_ARTIST_PHOTO,result_list);
 }
 
 /*--------------------------------*/
@@ -48,7 +36,8 @@ MetaDataFetcher glyrFetcher_artistphotos =
 {
 	.name = "artistphoto",
 	.type = GLYR_GET_ARTIST_PHOTOS,
-	.validate  = vdt_photos,
+    	.default_data_type = GLYR_TYPE_ARTIST_PHOTO,
+	.reqs = GLYR_REQUIRES_ARTIST,
 	.full_data = FALSE,
 	.init    = NULL,
 	.destroy = NULL,

@@ -24,31 +24,20 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_similar_song(GlyrQuery * settings)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	if(settings && settings->artist && settings->title && settings->artist[0] && settings->title[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"Artist and Title is needed to retrieve similarsongs.\n");
-	return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILIAR_SONG);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_SIMILAR_SONG,result_list);
 }
 
 /*----------------------------------------------------------------*/
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_similar_song =
+MetaDataFetcher glyrFetcher_similiar_artists =
 {
-	.name = "similarsongs",
-	.type = GLYR_GET_SIMILIAR_SONGS,
-	.validate = vdt_similar_song,
+	.name = "similarartists",
+	.type = GLYR_GET_SIMILIAR_ARTISTS,
+    	.default_data_type = GLYR_TYPE_SIMILAR_ARTIST,
+	.reqs = GLYR_REQUIRES_ARTIST,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

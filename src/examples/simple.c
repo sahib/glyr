@@ -19,7 +19,7 @@ int main(void)
     /* This struct is used to store all settings you do via glyr_opt_* */
     GlyrQuery q;
     /* We also should set it to standard values */
-    glyr_init_query(&q);
+    glyr_query_init(&q);
 
     /* We want lyrics, well, I want. */
     glyr_opt_type(&q,GLYR_GET_LYRICS);
@@ -47,7 +47,7 @@ int main(void)
         glyr_free_list(head);
     }
 
-    /* glyr_init_query  may allocate memory - free it. */
-    glyr_destroy_query(&q);
+    /* glyr_query_init  may allocate memory - free it. */
+    glyr_query_destroy(&q);
     return err;
 }

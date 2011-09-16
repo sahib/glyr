@@ -24,17 +24,7 @@
 
 /*-------------------------------------*/
 
-bool vdt_ainfo(GlyrQuery * settings)
-{
-    if(settings && settings->artist && settings->artist[0])
-    {
-        return true;
-    }
-    glyr_message(2,settings,"Artist is needed to retrieve a artistbio.\n");
-    return false;
-}
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
     /* Fix up messy text, escape chars etc.  */
     for(GList * elem = list; elem; elem = elem->next)
@@ -50,7 +40,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
         }
     }
 
-    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_AINFO);
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ARTISTBIO,result_list);
 }
 
 /*-------------------------------------*/
@@ -60,7 +50,8 @@ MetaDataFetcher glyrFetcher_artistbio =
 {
     .name = "artistbio",
     .type = GLYR_GET_ARTISTBIO,
-    .validate  = vdt_ainfo,
+    .default_data_type = GLYR_TYPE_ARTISTBIO,
+    .reqs = GLYR_REQUIRES_ARTIST,
     .full_data = TRUE,
     .init      = NULL,
     .destroy   = NULL,

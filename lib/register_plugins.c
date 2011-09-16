@@ -27,6 +27,7 @@ extern MetaDataFetcher glyrFetcher_tags;
 extern MetaDataFetcher glyrFetcher_relations;
 extern MetaDataFetcher glyrFetcher_tracklist;
 extern MetaDataFetcher glyrFetcher_guitartabs;
+extern MetaDataFetcher glyrFetcher_database;
 
 
 /* Externalized sourceprovider vars, add yours here */
@@ -72,6 +73,7 @@ extern MetaDataSource tags_musicbrainz_src;
 extern MetaDataSource tracklist_musicbrainz_src;
 extern MetaDataSource guitartabs_guitaretab_src;
 extern MetaDataSource guitartabs_chordie_src;
+extern MetaDataSource local_provider_src;
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -151,7 +153,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&tags_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tracklist_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_chordie_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&local_provider_src);
 }
 
 /* --------------------------------------- */
@@ -178,10 +180,15 @@ static void get_list_from_type(MetaDataFetcher * fetch)
     for(src = glyrMetaDataSourceList; src; src = src->next)
     {
         MetaDataSource * item = src->data;
-        if(item && fetch->type == item->type)
+        if(item && (fetch->type == item->type || item->type == GLYR_GET_ANY))
         {
             fetch->provider = g_list_prepend(fetch->provider,item);
+            if(item->data_type == GLYR_TYPE_NOIDEA)
+	    {
+		item->data_type = fetch->default_data_type;
+            }
         }
+
     }
     fetch->provider = g_list_sort(fetch->provider,compare_by_priority);
 
@@ -200,7 +207,7 @@ static void init_provider_list(void)
 /* Register fetchers */
 void register_fetcher_plugins(void)
 {
-    /* add ypurs here */
+    /* add yours here */
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_cover);
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_lyrics);
     plugin_add_to_list(&glyrMetaDataPluginList,&glyrFetcher_artistphotos);
@@ -315,6 +322,7 @@ GlyrFetcherInfo * get_plugin_info(void)
 
         finfo->name = g_strdup(fetch->name);
         finfo->type = fetch->type;
+	finfo->reqs = fetch->reqs;
     }
     return head;
 }

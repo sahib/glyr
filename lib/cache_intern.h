@@ -16,28 +16,16 @@
 *
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
-**************************************************************/
+******************************************************/
 
-#include "../core.h"
-#include "../stringlib.h"
-#include "generic.h"
+#ifndef GLYR_CACHE_H
+#define GLYR_CACHE_H
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
-{
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_RELATION,result_list);
-}
+#include "cache.h"
 
-//-------------------------------------
+/* Functions related to caching that are not member of the public API go here,
+ * if they are needed elsewhere.
+ */
+bool db_contains(GlyrDatabase * db, GlyrMemCache * cache);
 
-/* PlugStruct */
-MetaDataFetcher glyrFetcher_relations =
-{
-	.name = "relations",
-	.type = GLYR_GET_RELATIONS,
-    	.default_data_type = GLYR_TYPE_RELATION,
-	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
-};
+#endif

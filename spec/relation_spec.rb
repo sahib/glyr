@@ -4,6 +4,7 @@ describe "relations" do
 	before :each do
 		@spit = GlyrosSpit.new
 		@spit.type = Glyros::GLYR_GET_RELATIONS
+		@spit.from = "musicbrainz"
 	end
 		
 	describe "Not found case" do 

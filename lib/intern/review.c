@@ -24,19 +24,7 @@
 
 /*----------------------------------------------------------------*/
 
-bool vdt_review(GlyrQuery * settings)
-{
-	if(settings && settings->artist && settings->album && settings->album[0] && settings->artist[0])
-	{
-		return true;
-	}
-	glyr_message(2,settings,"Artist and album is needed to retrieve reviews.\n");
-	return false;
-}
-
-/*----------------------------------------------------------------*/
-
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
 	/* Fix up messy text, escape chars etc.  */
 	for(GList * elem = list; elem; elem = elem->next)
@@ -52,7 +40,7 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
 		}
 	}
 
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_REVIEW);
+	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUM_REVIEW,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -62,7 +50,8 @@ MetaDataFetcher glyrFetcher_review =
 {
 	.name = "albumreview",
 	.type = GLYR_GET_ALBUM_REVIEW,
-	.validate  = vdt_review,
+    	.default_data_type = GLYR_TYPE_ALBUM_REVIEW,
+	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
 	.full_data = TRUE,
 	.init    = NULL,
 	.destroy = NULL,

@@ -24,31 +24,9 @@
 
 /* ------------------------------------- */
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me)
+static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-    return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_COVER);
-}
-
-/* ------------------------------------- */
-
-bool vdt_cover(GlyrQuery * settings)
-{
-    if(settings && settings->artist && settings->album)
-    {
-		if(settings->artist[0] && settings->album[0])
-		{
-				/* validate size */
-				if(settings->img_min_size <= 0)
-					settings->img_min_size = -1;
-
-				if(settings->img_max_size <= 0)
-					settings->img_max_size = -1;
-
-				return TRUE;
-		}
-    }
-    glyr_message(2,settings,"Artist and Album is needed to retrieve coverart.\n");
-    return FALSE;
+    return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_COVERART,result_list);
 }
 
 /* ------------------------------------- */
@@ -58,7 +36,8 @@ MetaDataFetcher glyrFetcher_cover =
 {
     .name = "cover",
     .type = GLYR_GET_COVERART,
-    .validate  = vdt_cover,
+    .default_data_type = GLYR_TYPE_COVERART,
+    .reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
     .full_data = FALSE,
     .init    = NULL,
     .destroy = NULL,

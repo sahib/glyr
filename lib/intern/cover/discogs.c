@@ -76,9 +76,9 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 				continue;
 
 			if(is_primary != NULL)
-				img_type = GLYR_TYPE_COVER_PRI;
+				img_type = GLYR_TYPE_COVERART_PRI;
 			else
-				img_type = GLYR_TYPE_COVER_SEC;
+				img_type = GLYR_TYPE_COVERART_SEC;
 
 
 			if(check_image_size(query,imgurl_begin) == TRUE)
@@ -90,6 +90,7 @@ static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList
 					result->data = final_url;
 					result->size = strlen(result->data);
 					result->type = img_type;
+					result->dsrc = g_strdup(tmp_cache->dsrc);
 					*result_list = g_list_prepend(*result_list,result);
 				}
 			}
@@ -126,7 +127,7 @@ static void sort_primary_before_secondary(GList ** result_list)
 			for(elem = last_element; elem; elem = elem->next)
 			{
 				GlyrMemCache * item = elem->data;
-				if(item->type == GLYR_TYPE_COVER_PRI)
+				if(item->type == GLYR_TYPE_COVERART_PRI)
 				{
 					last_element = elem->next;
 					*result_list = g_list_delete_link(*result_list,elem);

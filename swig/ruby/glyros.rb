@@ -35,17 +35,17 @@ class Glyros::GlyrMemCache
 	end
 
 	def write_to_file(path) 
-		return Glyros::glyr_write(self,path)
+		return Glyros::glyr_cache_write(self,path)
 	end
 
 	def update_md5sum
-		Glyros::glyr_update_md5sum(self)
+		Glyros::glyr_cache_update_md5sum(self)
 	end
 
 	def print
 		q = Glyros::GlyrQuery.instance
 		Glyros::glyr_opt_verbosity(q,2)
-		Glyros::glyr_printitem(q,self)
+		Glyros::glyr_cache_print(q,self)
 	end
 
 	# disable ctor
@@ -68,7 +68,7 @@ class Glyros::GlyrQuery
 
 	def self.instance
 	    new_query = Glyros::GlyrQuery.new
-	    Glyros::glyr_init_query(new_query)
+	    Glyros::glyr_query_init(new_query)
 	    return new_query.register_free
 	end
 
@@ -78,7 +78,7 @@ class Glyros::GlyrQuery
 
 	private
 	def finalize
-	    Glyros::glyr_destroy_query(self)
+	    Glyros::glyr_query_destroy(self)
 	end
 end
 
