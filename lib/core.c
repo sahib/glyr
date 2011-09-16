@@ -231,7 +231,7 @@ static gboolean proxy_to_curl(gchar * proxystring, char ** userpwd, char ** serv
 
 			if(ddot == NULL || asgn < ddot)
 			{
-				*server  = strdup(proxystring);
+				*server  = g_strdup(proxystring);
 				*userpwd = NULL;
 				return TRUE;
 			}
@@ -579,7 +579,7 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 		 * I save it in->dsrc */
 		if(end != NULL)
 		{
-			dldata->dsrc = strdup(end);
+			dldata->dsrc = g_strdup(end);
 		}
 
 		if(curl != NULL)
@@ -1331,6 +1331,7 @@ gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f)
 	/* split string */
 	if(f->name != NULL)
 	{
+		gsize name_len = strlen(f->name);
 		gsize len = strlen(from_arg);
 		gsize offset = 0;
 
@@ -1345,10 +1346,10 @@ gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f)
 				if((minus = token[0] == '-') || token[0] == '+')
 					token++;
 
-				if(!strcasecmp(token,"all"))
+				if(!g_ascii_strncasecmp(token,"all",3))
 					all_occured = TRUE;
 
-				if((token[0] == f->key && strlen(token) == 1) || !strcasecmp(token,f->name))
+				if((token[0] == f->key && strlen(token) == 1) || !g_ascii_strncasecmp(token,f->name,name_len))
 				{
 					is_excluded =  minus;
 					is_found    = !minus;
@@ -1543,7 +1544,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 					endmarks,
 					query,
 					url_list_length / query->timeout  + 1,
-					url_list_length / query->parallel + 4,
+					MIN((gint)(url_list_length / query->parallel + 3), query->number),
 					call_provider_callback,    /* Callback           */
 					url_table,                 /* Userpointer        */
 					TRUE);                     /* Free caches itself */

@@ -47,17 +47,17 @@ gboolean size_is_okay(int sZ, int min, int max)
 const gchar * generic_google_url(GlyrQuery * sets, const gchar * searchterm)
 {
     const gchar * lang = NULL;
-    if(!strcasecmp(sets->lang,"us"))
+    if(!g_ascii_strncasecmp(sets->lang,"us",2))
         lang = "com"  ;
-    else if(!strcasecmp(sets->lang,"ca"))
+    else if(!g_ascii_strncasecmp(sets->lang,"ca",2))
         lang = "ca"   ;
-    else if(!strcasecmp(sets->lang,"uk"))
+    else if(!g_ascii_strncasecmp(sets->lang,"uk",2))
         lang = "co.uk";
-    else if(!strcasecmp(sets->lang,"fr"))
+    else if(!g_ascii_strncasecmp(sets->lang,"fr",2))
         lang = "fr"   ;
-    else if(!strcasecmp(sets->lang,"de"))
+    else if(!g_ascii_strncasecmp(sets->lang,"de",2))
         lang = "de"   ;
-    else if(!strcasecmp(sets->lang,"jp"))
+    else if(!g_ascii_strncasecmp(sets->lang,"jp",2))
         lang = "co.jp";
     else
         lang = "com";

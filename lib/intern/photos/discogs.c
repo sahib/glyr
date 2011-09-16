@@ -96,7 +96,7 @@ GList * photos_discogs_parse(cb_object * capo)
 		{
 			GlyrMemCache * item = elem->data;
 			gchar * type_descr = g_hash_table_lookup(type_table,item);
-			if(type_descr && strcasecmp(type_descr,"primary") == 0)
+			if(type_descr && g_ascii_strcasecmp(type_descr,"primary") == 0)
 			{
 				result_list = g_list_delete_link(result_list,elem);
 				result_list = g_list_prepend(result_list,item);

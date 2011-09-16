@@ -332,7 +332,7 @@ GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
 	if(langcode != NULL)
 	{
-		if(strcasecmp("auto",langcode) == 0)
+		if(g_ascii_strncasecmp("auto",langcode,4) == 0)
 		{
 			gchar * auto_lang = guess_language();
 			glyr_set_info(s,7,auto_lang);
@@ -834,16 +834,16 @@ int glyr_cache_write(GlyrMemCache * data, const char * path)
 	int bytes = -1;
 	if(path)
 	{
-		if(!strcasecmp(path,"null"))
+		if(!g_ascii_strcasecmp(path,"null"))
 		{
 			bytes = 0;
 		}
-		else if(!strcasecmp(path,"stdout"))
+		else if(!g_ascii_strcasecmp(path,"stdout"))
 		{
 			bytes=fwrite(data->data,1,data->size,stdout);
 			fputc('\n',stdout);
 		}
-		else if(!strcasecmp(path,"stderr"))
+		else if(!g_ascii_strcasecmp(path,"stderr"))
 		{
 			bytes=fwrite(data->data,1,data->size,stderr);
 			fputc('\n',stderr);

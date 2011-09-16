@@ -722,9 +722,23 @@ GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool write_to_db);
 
 
 /**
-* FIXME
+* glyr_opt_db_autoread:
+* @s: The GlyrQuery settings struct to store this option in.
+* @read_from_db: Boolean, true for DB lookup while searching
+*
+* If set to true libglyr will lookup the database previously given by glyr_opt_lookup_db()
+* during searching in the web. If there's item that already seems to be in the DB it gets not 
+* mixed into the results. 
+ * <note>
+ * <para>
+ * This does not influence the usage of the DB as local provider!
+ * Use glyr_opt_from() with "all;-local" to disable it.
+ * </para>
+ * </note>
+*
+* Returns: an error ID
 **/
-GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool write_to_db);
+GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool read_from_db);
 
 /**
 * glyr_download:

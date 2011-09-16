@@ -52,10 +52,9 @@ IF(CMAKE_BUILD_TYPE STREQUAL "debug")
     SET(GLYR_DEBUG TRUE)
 ENDIF()
 
-SET(COMMON_FLAGS "-Wall -Wstrict-prototypes -std=gnu99 -W -Wno-unused-parameter -Wno-strict-prototypes")
-SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} -Os -march=native -s")
-SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} -ggdb3")
-SET(CMAKE_C_FLAGS ${CFLAGS})
+SET(COMMON_FLAGS "-Wall -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
+SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -march=native -s")
+SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
 # ------------------------------------------------
 
 # ------------------------------------------------
@@ -209,9 +208,6 @@ IF(SWIG_RUBY)
 	INCLUDE_DIRECTORIES(${RUBY_INCLUDE_PATH})
 	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 	SET(CMAKE_SWIG_FLAGS "")
-
-
-message(${RUBY_LIBRARY})
 
 	SWIG_ADD_MODULE(glyros ruby ${INTERFACE_FILE} ${LIB_SOURCE_LOCATIONS})
 	SWIG_LINK_LIBRARIES(glyros ${RUBY_LIBRARY} ${CURL_LIBRARY} ${GLIBPKG_LIBRARIES})
