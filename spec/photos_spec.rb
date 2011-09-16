@@ -10,7 +10,7 @@ def show_in_sxiv(cache)
 	end
 end
 
-describe "cover" do
+describe "artistphotos" do
 	before :each do
 		@spit = GlyrosSpit.new
 		@spit.type = Glyros::GLYR_GET_ARTIST_PHOTOS
@@ -29,7 +29,6 @@ describe "cover" do
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
 			list.size.should equal 1
-			list.first.data.should == "http://s.dsimg.com/image/A-262898-1106221539.jpg"
 		end
 
 		it "Don't know this band" do

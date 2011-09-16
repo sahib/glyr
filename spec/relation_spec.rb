@@ -13,7 +13,7 @@ describe "relations" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end
 
@@ -24,7 +24,7 @@ describe "relations" do
 			list = @spit.get
 
 			list.should be_an_instance_of Array
-			list.size.should_not equal 0
+			list.size.should_not == 0
 			
 			list.each do |url|
 				puts url.data
