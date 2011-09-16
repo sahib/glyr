@@ -149,14 +149,14 @@ static void print_version(GlyrQuery * s)
 void help_short(GlyrQuery * s)
 {
     message(-1,s,stderr,"Usage: glyrc [GETTER] (options)\n\nwhere [GETTER] must be one of:\n");
-    GlyrFetcherInfo * info  = glyr_get_plugin_info();
+    GlyrFetcherInfo * info  = glyr_info_get();
     GlyrFetcherInfo * track = info;
     while(info != NULL)
     {
         g_print(" - %s\n", info->name);
         info = info->next;
     }
-    glyr_free_plugin_info(track);
+    glyr_info_free(track);
 
 #define IN "    "
     message(-1,s,stderr,"\nGENERAL OPTIONS:\n"
@@ -184,6 +184,9 @@ void help_short(GlyrQuery * s)
             IN"-i --minsize          Integer: (images only) The minimum size a cover may have.\n"
             IN"-F --formats          String: A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n"
             IN"-8 --force-utf8       Forces utf8 encoding for text items, invalid encodings get sorted out\n"
+	    "\nDATABASE OPTIONS\n"
+	    IN"-c --cache <folder>   Creates or opens an existing cache at <folder> and lookups data from there.\n"
+	    IN"-y --drop             Instead of searching for this element, the element is deleted from the database. Needs --cache.\n"
 	    "\nMISC OPTIONS\n"
             IN"-L --list             List all fetchers and source providers for each and exit.\n"
             IN"-h --help             This text you unlucky wanderer are viewing.\n"
@@ -209,7 +212,7 @@ static void visualize_from_options(void)
                  "# Second is the providername with the shortkey in []\n"
 		 "# Some unimportant information follows intented by '-'\n\n");
  
-    GlyrFetcherInfo * info = glyr_get_plugin_info();
+    GlyrFetcherInfo * info = glyr_info_get();
     if(info != NULL)
     {
         for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0->next)
@@ -237,7 +240,7 @@ static void visualize_from_options(void)
             g_print("\n///////////////////////////////\n");
         }
     }
-    glyr_free_plugin_info(info);
+    glyr_info_free(info);
 }
 
 /* --------------------------------------------------------- */
@@ -258,7 +261,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"qsratio",       required_argument, 0, 'q'},
         {"formats",       required_argument, 0, 'F'},
 	{"cache",         required_argument, 0, 'c'},
-	{"cache-drop",    no_argument,       0, 'y'},
+	{"drop",          no_argument,       0, 'y'},
         {"help",          no_argument,       0, 'h'},
         {"version",       no_argument,       0, 'V'},
         {"download",      no_argument,       0, 'd'},
@@ -353,7 +356,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         case 'n':
             glyr_opt_number(glyrs,atoi(optarg));
             break;
-        case 'd':
+        case 'd':	
             glyr_opt_download(glyrs,true);
             break;
         case 'D':
@@ -495,7 +498,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 	  	   g_ascii_strncasecmp(write_to,"stderr",write_len) == 0 ||
 		   g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
 		{
-			glyr_write(c,write_to);
+			glyr_cache_write(c,write_to);
 		}
 		else
 		{
@@ -506,7 +509,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 				{
 				}
 
-				if(glyr_write(c,write_to_path) == -1)
+				if(glyr_cache_write(c,write_to_path) == -1)
 				{
 					message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
 				}
@@ -540,7 +543,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 			message(1,s,stderr,"WRITE to '%s'\n",write_to_path);
 			g_free(write_to_path);
 		}
-		glyr_print_item(c);
+		glyr_cache_print(c);
 		message(1,s,stderr,"\n////////////////////\n");
 	}
 
@@ -562,7 +565,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
 	GLYR_GET_TYPE result = GLYR_GET_UNSURE;
-	GlyrFetcherInfo * info = glyr_get_plugin_info();
+	GlyrFetcherInfo * info = glyr_info_get();
 	if(info != NULL)
 	{
 		for(GlyrFetcherInfo * elem = info; elem; elem = elem->next)
@@ -578,7 +581,7 @@ GLYR_GET_TYPE get_type_from_string(gchar * string)
 	{
 		g_printerr("Warning: Can't get type information. Probably a bug.\n");
 	}
-	glyr_free_plugin_info(info);
+	glyr_info_free(info);
 	return result;
 }
 
@@ -612,7 +615,7 @@ int main(int argc, char * argv[])
 		GlyrQuery my_query;
 
 		/* set it on default values */
-		glyr_init_query(&my_query);
+		glyr_query_init(&my_query);
 
 		/* Default to a bit more verbose mode */
 		glyr_opt_verbosity(&my_query,2);
@@ -677,7 +680,7 @@ int main(int argc, char * argv[])
 		glyr_db_destroy(db);
 
 		/* Clean memory alloc'd by settings */
-		glyr_destroy_query( &my_query);
+		glyr_query_destroy( &my_query);
 	}
 	else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
 	{

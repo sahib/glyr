@@ -84,16 +84,16 @@ describe GlyrosSpit do
 		end
 
 		it "Get me the a default query" do
-			Glyros::glyr_init_query @q
+			Glyros::glyr_query_init @q
 		end
 
 		it "Should destroy the query" do
-			Glyros::glyr_destroy_query @q
+			Glyros::glyr_query_destroy @q
 		end
 
 		it "Should destroy the query" do
-			Glyros::glyr_destroy_query @q
-			Glyros::glyr_init_query @q
+			Glyros::glyr_query_destroy @q
+			Glyros::glyr_query_init @q
 		end
 	end	
 

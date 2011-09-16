@@ -18,7 +18,7 @@ static void * call_get(void * p)
 
 static void configure(GlyrQuery * s, GLYR_GET_TYPE type)
 {
-    glyr_init_query(s);
+    glyr_query_init(s);
     glyr_opt_artist(s,"Die Apokalyptischen Reiter");
     glyr_opt_album (s,"Moral & Wahnsinn");
     glyr_opt_title (s,"Die Boten");
@@ -32,7 +32,7 @@ static void printme(GlyrMemCache * start)
     GlyrMemCache * i = start;
     while(i != NULL)
     {
-        glyr_write(i,"stdout");
+        glyr_cache_write(i,"stdout");
         i = i->next;
     }
     glyr_free_list(start);
@@ -70,7 +70,7 @@ int main(void)
         printme(b);
     }
 
-    glyr_destroy_query(&query_long);
-    glyr_destroy_query(&query_longer);
+    glyr_query_destroy(&query_long);
+    glyr_query_destroy(&query_longer);
     return EXIT_SUCCESS;
 }

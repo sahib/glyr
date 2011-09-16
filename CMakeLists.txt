@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "0")
 SET(GLYR_VERSION_MINOR "8")
-SET(GLYR_VERSION_MICRO "5")
+SET(GLYR_VERSION_MICRO "7")
 SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 # ------------------------------------------------
 

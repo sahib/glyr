@@ -523,14 +523,14 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 
 /*-----------------------------------------------*/
 
-void glyr_init_query(GlyrQuery * glyrs)
+void glyr_query_init(GlyrQuery * glyrs)
 {
 	set_query_on_defaults(glyrs);
 }
 
 /*-----------------------------------------------*/
 
-void glyr_destroy_query(GlyrQuery * sets)
+void glyr_query_destroy(GlyrQuery * sets)
 {
 	if(sets != NULL)
 	{
@@ -829,7 +829,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 
 /*-----------------------------------------------*/
 
-int glyr_write(GlyrMemCache * data, const char * path)
+int glyr_cache_write(GlyrMemCache * data, const char * path)
 {
 	int bytes = -1;
 	if(path)
@@ -861,7 +861,7 @@ int glyr_write(GlyrMemCache * data, const char * path)
 			}
 			else
 			{
-				glyr_message(-1,NULL,"glyr_write: Unable to write to '%s'!\n",path);
+				glyr_message(-1,NULL,"glyr_cache_write: Unable to write to '%s'!\n",path);
 			}
 		}
 	}
@@ -1009,7 +1009,7 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
 }
 /*-----------------------------------------------*/
 
-void glyr_print_item(GlyrMemCache * cacheditem)
+void glyr_cache_print(GlyrMemCache * cacheditem)
 {
 	if(cacheditem != NULL)
 	{
@@ -1046,14 +1046,14 @@ void glyr_print_item(GlyrMemCache * cacheditem)
 
 /* --------------------------------------------------------- */
 
-GlyrFetcherInfo * glyr_get_plugin_info(void)
+GlyrFetcherInfo * glyr_info_get(void)
 {
 	return get_plugin_info();
 }
 
 /* --------------------------------------------------------- */
 
-void glyr_free_plugin_info(GlyrFetcherInfo * info)
+void glyr_info_free(GlyrFetcherInfo * info)
 {
 	free_plugin_info(info);
 }

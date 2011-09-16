@@ -144,7 +144,7 @@ typedef enum
 * @GLYR_TYPE_COVERART_PRI:  A cover known to be the front side of the album 
 * @GLYR_TYPE_COVERART_SEC:  A cover known to be the backside: inlet etc. 
 * @GLYR_TYPE_ARTISTBIO: Artist bio 
-* @GLYR_TYPE_SIMILAR_ARTIST Similiar artists 
+* @GLYR_TYPE_SIMILAR_ARTIST: Similiar artists 
 * @GLYR_TYPE_SIMILAR_SONG: Similar songs 
 * @GLYR_TYPE_ALBUMLIST: List of albums: each cache containing one name 
 * @GLYR_TYPE_TAG: List of (random) tags: each cache containing one name 
@@ -196,7 +196,7 @@ typedef enum
 * @GLYR_OPTIONAL_TITLE:  Title is optional for this getter
 *
 * Bitmasks you can use to determine what fields a certain getter needs.
-* You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via glyr_get_plugin_info())
+* You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via glyr_info_get())
 */
 typedef enum
 {
@@ -289,7 +289,7 @@ typedef struct _GlyrDatabase {
 * This structure holds all settings used to influence libglyr.
 * You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
 *
-* You can safely read from all fields and should free the query with glyr_destroy_query() after use.
+* You can safely read from all fields and should free the query with glyr_query_destroy() after use.
 */
 typedef struct _GlyrQuery {
     /*< public >*/
@@ -370,7 +370,7 @@ typedef struct _GlyrQuery {
  * with statically allocated data only,
  * therefore you can modify and read to your liking.
  *
- * It is freed when glyr_free_plugin_info() is called on it's GlyrFetcherInfo
+ * It is freed when glyr_info_free() is called on it's GlyrFetcherInfo
  */
 typedef struct _GlyrSourceInfo {
 
@@ -399,9 +399,9 @@ typedef struct _GlyrSourceInfo {
  * It's a simpler version of the internal version,
  * therefore you can modify and read to your liking.
  * 
- * You should pass it to glyr_free_plugin_info() once done.
+ * You should pass it to glyr_info_free() once done.
  * 
- * @see_also: glyr_get_plugin_info()
+ * @see_also: glyr_info_get()
  */
 typedef struct _GlyrFetcherInfo {
 
@@ -442,14 +442,14 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	    GlyrQuery()
 	    {
 		GlyrQuery my_query;
-		glyr_init_query(&my_query);
+		glyr_query_init(&my_query);
 		GlyrQuery * copy = malloc(sizeof(GlyrQuery));
 		memcpy(copy,&my_query,sizeof(GlyrQuery));
 		return copy;
 	    }
 	    ~GlyrQuery()
 	    {
-		glyr_destroy_query($self);
+		glyr_query_destroy($self);
 		if($self != NULL)
 		    free($self);
 	    }
@@ -459,11 +459,11 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	{
 	    GlyrMemCache()
 	    {
-		return glyr_new_cache();
+		return glyr_cache_new();
 	    }
 	    ~GlyrMemCache()
 	    {
-		glyr_free_cache($self);
+		glyr_cache_free($self);
 	    }
 	}
 
@@ -471,12 +471,12 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	{
 	    GlyrFetcherInfo()
 	    {
-		return glyr_get_plugin_info();
+		return glyr_info_get();
 	    }
 
 	    ~GlyrFetcherInfo()
 	    {
-		glyr_free_plugin_info($self);
+		glyr_info_free($self);
 	    }
 	}
 	#endif

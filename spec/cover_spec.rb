@@ -6,7 +6,7 @@ def show_in_sxiv(cache)
 	if cache.respond_to? :write_to_file and SHOW_COVER then
 		path = "/tmp/rspec_cover.jpg"
 		cache.write_to_file path
-		system("sxiv #{path}")
+		system("sxiv #{path} &")
 	end
 end
 

@@ -327,7 +327,7 @@ static gchar * convert_from_option_to_sql(GlyrQuery * q)
 static GLYR_FIELD_REQUIREMENT get_req(GlyrQuery * q)
 {
 	GLYR_FIELD_REQUIREMENT result = 0;
-	GlyrFetcherInfo * info = glyr_get_plugin_info();
+	GlyrFetcherInfo * info = glyr_info_get();
 	GlyrFetcherInfo * head = info;
 	while(head != NULL)
 	{
@@ -337,7 +337,7 @@ static GLYR_FIELD_REQUIREMENT get_req(GlyrQuery * q)
 		}
 		head = head->next;
 	}
-	glyr_free_plugin_info(info);
+	glyr_info_free(info);
 	return result;
 }
 

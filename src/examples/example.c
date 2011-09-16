@@ -18,7 +18,7 @@
 static void print_item(GlyrMemCache * cacheditem, int num)
 {
     fprintf(stderr,"\n------- ITEM #%d --------\n",num);
-    glyr_print_item(cacheditem);
+    glyr_cache_print(cacheditem);
     fprintf(stderr,"\n------------------------\n");
 }
 
@@ -59,7 +59,7 @@ int main(int argc, char * argv[])
 
     /* Initialize a new query (this may allocate memory) */
     GlyrQuery q;
-    glyr_init_query(&q);
+    glyr_query_init(&q);
 
     /* Say we want a Songtext */
     GLYR_GET_TYPE type = GLYR_GET_LYRICS;
@@ -118,6 +118,6 @@ int main(int argc, char * argv[])
     }
     // Destroy query (reset to default values and free dyn memory)
     // You could start right off to use this query in another glyr_get
-    glyr_destroy_query(&q);
+    glyr_query_destroy(&q);
     return EXIT_SUCCESS;
 }
