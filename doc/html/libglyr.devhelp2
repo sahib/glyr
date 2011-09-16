@@ -5,6 +5,7 @@
     <sub name="[Insert title here]" link="ch01.html">
       <sub name="glyr" link="libglyr-glyr.html"/>
       <sub name="types" link="libglyr-types.html"/>
+      <sub name="cache" link="libglyr-cache.html"/>
     </sub>
     <sub name="API Index" link="api-index-full.html"/>
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
@@ -13,11 +14,16 @@
     <keyword type="function" name="glyr_init ()" link="libglyr-glyr.html#glyr-init"/>
     <keyword type="function" name="glyr_cleanup ()" link="libglyr-glyr.html#glyr-cleanup"/>
     <keyword type="function" name="glyr_get ()" link="libglyr-glyr.html#glyr-get"/>
-    <keyword type="function" name="glyr_init_query ()" link="libglyr-glyr.html#glyr-init-query"/>
-    <keyword type="function" name="glyr_destroy_query ()" link="libglyr-glyr.html#glyr-destroy-query"/>
+    <keyword type="function" name="glyr_query_init ()" link="libglyr-glyr.html#glyr-query-init"/>
+    <keyword type="function" name="glyr_query_destroy ()" link="libglyr-glyr.html#glyr-query-destroy"/>
     <keyword type="function" name="glyr_free_list ()" link="libglyr-glyr.html#glyr-free-list"/>
-    <keyword type="function" name="glyr_new_cache ()" link="libglyr-glyr.html#glyr-new-cache"/>
-    <keyword type="function" name="glyr_free_cache ()" link="libglyr-glyr.html#glyr-free-cache"/>
+    <keyword type="function" name="glyr_cache_new ()" link="libglyr-glyr.html#glyr-cache-new"/>
+    <keyword type="function" name="glyr_cache_free ()" link="libglyr-glyr.html#glyr-cache-free"/>
+    <keyword type="function" name="glyr_cache_copy ()" link="libglyr-glyr.html#glyr-cache-copy"/>
+    <keyword type="function" name="glyr_cache_set_data ()" link="libglyr-glyr.html#glyr-cache-set-data"/>
+    <keyword type="function" name="glyr_cache_write ()" link="libglyr-glyr.html#glyr-cache-write"/>
+    <keyword type="function" name="glyr_cache_update_md5sum ()" link="libglyr-glyr.html#glyr-cache-update-md5sum"/>
+    <keyword type="function" name="glyr_cache_print ()" link="libglyr-glyr.html#glyr-cache-print"/>
     <keyword type="function" name="glyr_opt_dlcallback ()" link="libglyr-glyr.html#glyr-opt-dlcallback"/>
     <keyword type="function" name="glyr_opt_type ()" link="libglyr-glyr.html#glyr-opt-type"/>
     <keyword type="function" name="glyr_opt_artist ()" link="libglyr-glyr.html#glyr-opt-artist"/>
@@ -40,15 +46,16 @@
     <keyword type="function" name="glyr_opt_qsratio ()" link="libglyr-glyr.html#glyr-opt-qsratio"/>
     <keyword type="function" name="glyr_opt_proxy ()" link="libglyr-glyr.html#glyr-opt-proxy"/>
     <keyword type="function" name="glyr_opt_force_utf8 ()" link="libglyr-glyr.html#glyr-opt-force-utf8"/>
+    <keyword type="function" name="glyr_opt_lookup_db ()" link="libglyr-glyr.html#glyr-opt-lookup-db"/>
+    <keyword type="function" name="glyr_opt_db_autowrite ()" link="libglyr-glyr.html#glyr-opt-db-autowrite"/>
+    <keyword type="function" name="glyr_opt_db_autoread ()" link="libglyr-glyr.html#glyr-opt-db-autoread"/>
     <keyword type="function" name="glyr_download ()" link="libglyr-glyr.html#glyr-download"/>
     <keyword type="function" name="glyr_strerror ()" link="libglyr-glyr.html#glyr-strerror"/>
     <keyword type="function" name="glyr_version ()" link="libglyr-glyr.html#glyr-version"/>
-    <keyword type="function" name="glyr_write ()" link="libglyr-glyr.html#glyr-write"/>
-    <keyword type="function" name="glyr_update_md5sum ()" link="libglyr-glyr.html#glyr-update-md5sum"/>
-    <keyword type="function" name="glyr_printitem ()" link="libglyr-glyr.html#glyr-printitem"/>
-    <keyword type="function" name="glyr_get_plugin_info ()" link="libglyr-glyr.html#glyr-get-plugin-info"/>
-    <keyword type="function" name="glyr_free_plugin_info ()" link="libglyr-glyr.html#glyr-free-plugin-info"/>
-    <keyword type="function" name="glyr_type_to_string ()" link="libglyr-glyr.html#glyr-type-to-string"/>
+    <keyword type="function" name="glyr_info_get ()" link="libglyr-glyr.html#glyr-info-get"/>
+    <keyword type="function" name="glyr_info_free ()" link="libglyr-glyr.html#glyr-info-free"/>
+    <keyword type="function" name="glyr_data_type_to_string ()" link="libglyr-glyr.html#glyr-data-type-to-string"/>
+    <keyword type="function" name="glyr_get_type_to_string ()" link="libglyr-glyr.html#glyr-get-type-to-string"/>
     <keyword type="macro" name="GLYR_DEFAULT_REDIRECTS" link="libglyr-types.html#GLYR-DEFAULT-REDIRECTS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_TIMEOUT" link="libglyr-types.html#GLYR-DEFAULT-TIMEOUT:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_PARALLEL" link="libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS"/>
@@ -65,16 +72,27 @@
     <keyword type="macro" name="GLYR_DEFAULT_PROXY" link="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_QSRATIO" link="libglyr-types.html#GLYR-DEFAULT-QSRATIO:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_FORCE_UTF8" link="libglyr-types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_DB_AUTOWRITE" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_DB_AUTOREAD" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_SUPPORTED_LANGS" link="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_ALLOWED_FORMATS" link="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_USERAGENT" link="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS"/>
     <keyword type="enum" name="enum GLYR_ERROR" link="libglyr-types.html#GLYR-ERROR:CAPS"/>
     <keyword type="enum" name="enum GLYR_GET_TYPE" link="libglyr-types.html#GLYR-GET-TYPE:CAPS"/>
     <keyword type="enum" name="enum GLYR_DATA_TYPE" link="libglyr-types.html#GLYR-DATA-TYPE:CAPS"/>
+    <keyword type="enum" name="enum GLYR_FIELD_REQUIREMENT" link="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS"/>
     <keyword type="struct" name="GlyrMemCache" link="libglyr-types.html#GlyrMemCache"/>
+    <keyword type="struct" name="GlyrDatabase" link="libglyr-types.html#GlyrDatabase"/>
     <keyword type="struct" name="GlyrQuery" link="libglyr-types.html#GlyrQuery"/>
     <keyword type="struct" name="GlyrSourceInfo" link="libglyr-types.html#GlyrSourceInfo"/>
     <keyword type="struct" name="GlyrFetcherInfo" link="libglyr-types.html#GlyrFetcherInfo"/>
     <keyword type="function" name="DL_callback ()" link="libglyr-types.html#DL-callback"/>
+    <keyword type="macro" name="GLYR_DB_FILENAME" link="libglyr-cache.html#GLYR-DB-FILENAME:CAPS"/>
+    <keyword type="function" name="glyr_db_init ()" link="libglyr-cache.html#glyr-db-init"/>
+    <keyword type="function" name="glyr_db_destroy ()" link="libglyr-cache.html#glyr-db-destroy"/>
+    <keyword type="function" name="glyr_db_lookup ()" link="libglyr-cache.html#glyr-db-lookup"/>
+    <keyword type="function" name="glyr_db_insert ()" link="libglyr-cache.html#glyr-db-insert"/>
+    <keyword type="function" name="glyr_db_delete ()" link="libglyr-cache.html#glyr-db-delete"/>
     <keyword type="constant" name="GLYRE_UNKNOWN" link="libglyr-types.html#GLYRE-UNKNOWN:CAPS"/>
     <keyword type="constant" name="GLYRE_OK" link="libglyr-types.html#GLYRE-OK:CAPS"/>
     <keyword type="constant" name="GLYRE_BAD_OPTION" link="libglyr-types.html#GLYRE-BAD-OPTION:CAPS"/>
@@ -87,6 +105,7 @@
     <keyword type="constant" name="GLYRE_STOP_POST" link="libglyr-types.html#GLYRE-STOP-POST:CAPS"/>
     <keyword type="constant" name="GLYRE_STOP_PRE" link="libglyr-types.html#GLYRE-STOP-PRE:CAPS"/>
     <keyword type="constant" name="GLYRE_NO_INIT" link="libglyr-types.html#GLYRE-NO-INIT:CAPS"/>
+    <keyword type="constant" name="GLYR_GET_UNSURE" link="libglyr-types.html#GLYR-GET-UNSURE:CAPS"/>
     <keyword type="constant" name="GLYR_GET_COVERART" link="libglyr-types.html#GLYR-GET-COVERART:CAPS"/>
     <keyword type="constant" name="GLYR_GET_LYRICS" link="libglyr-types.html#GLYR-GET-LYRICS:CAPS"/>
     <keyword type="constant" name="GLYR_GET_ARTIST_PHOTOS" link="libglyr-types.html#GLYR-GET-ARTIST-PHOTOS:CAPS"/>
@@ -99,19 +118,19 @@
     <keyword type="constant" name="GLYR_GET_RELATIONS" link="libglyr-types.html#GLYR-GET-RELATIONS:CAPS"/>
     <keyword type="constant" name="GLYR_GET_ALBUMLIST" link="libglyr-types.html#GLYR-GET-ALBUMLIST:CAPS"/>
     <keyword type="constant" name="GLYR_GET_GUITARTABS" link="libglyr-types.html#GLYR-GET-GUITARTABS:CAPS"/>
-    <keyword type="constant" name="GLYR_GET_UNSURE" link="libglyr-types.html#GLYR-GET-UNSURE:CAPS"/>
+    <keyword type="constant" name="GLYR_GET_ANY" link="libglyr-types.html#GLYR-GET-ANY:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_NOIDEA" link="libglyr-types.html#GLYR-TYPE-NOIDEA:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_LYRICS" link="libglyr-types.html#GLYR-TYPE-LYRICS:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_REVIEW" link="libglyr-types.html#GLYR-TYPE-REVIEW:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_PHOTOS" link="libglyr-types.html#GLYR-TYPE-PHOTOS:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_COVER" link="libglyr-types.html#GLYR-TYPE-COVER:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_COVER_PRI" link="libglyr-types.html#GLYR-TYPE-COVER-PRI:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_COVER_SEC" link="libglyr-types.html#GLYR-TYPE-COVER-SEC:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_AINFO" link="libglyr-types.html#GLYR-TYPE-AINFO:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_SIMILIAR" link="libglyr-types.html#GLYR-TYPE-SIMILIAR:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_SIMILIAR_SONG" link="libglyr-types.html#GLYR-TYPE-SIMILIAR-SONG:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_ALBUM_REVIEW" link="libglyr-types.html#GLYR-TYPE-ALBUM-REVIEW:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_ARTIST_PHOTO" link="libglyr-types.html#GLYR-TYPE-ARTIST-PHOTO:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_COVERART" link="libglyr-types.html#GLYR-TYPE-COVERART:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_COVERART_PRI" link="libglyr-types.html#GLYR-TYPE-COVERART-PRI:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_COVERART_SEC" link="libglyr-types.html#GLYR-TYPE-COVERART-SEC:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_ARTISTBIO" link="libglyr-types.html#GLYR-TYPE-ARTISTBIO:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_SIMILAR_ARTIST" link="libglyr-types.html#GLYR-TYPE-SIMILAR-ARTIST:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_SIMILAR_SONG" link="libglyr-types.html#GLYR-TYPE-SIMILAR-SONG:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_ALBUMLIST" link="libglyr-types.html#GLYR-TYPE-ALBUMLIST:CAPS"/>
-    <keyword type="constant" name="GLYR_TYPE_TAGS" link="libglyr-types.html#GLYR-TYPE-TAGS:CAPS"/>
+    <keyword type="constant" name="GLYR_TYPE_TAG" link="libglyr-types.html#GLYR-TYPE-TAG:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TAG_ARTIST" link="libglyr-types.html#GLYR-TYPE-TAG-ARTIST:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TAG_ALBUM" link="libglyr-types.html#GLYR-TYPE-TAG-ALBUM:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TAG_TITLE" link="libglyr-types.html#GLYR-TYPE-TAG-TITLE:CAPS"/>
@@ -120,5 +139,11 @@
     <keyword type="constant" name="GLYR_TYPE_TXT_URL" link="libglyr-types.html#GLYR-TYPE-TXT-URL:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_TRACK" link="libglyr-types.html#GLYR-TYPE-TRACK:CAPS"/>
     <keyword type="constant" name="GLYR_TYPE_GUITARTABS" link="libglyr-types.html#GLYR-TYPE-GUITARTABS:CAPS"/>
+    <keyword type="constant" name="GLYR_REQUIRES_ARTIST" link="libglyr-types.html#GLYR-REQUIRES-ARTIST:CAPS"/>
+    <keyword type="constant" name="GLYR_REQUIRES_ALBUM" link="libglyr-types.html#GLYR-REQUIRES-ALBUM:CAPS"/>
+    <keyword type="constant" name="GLYR_REQUIRES_TITLE" link="libglyr-types.html#GLYR-REQUIRES-TITLE:CAPS"/>
+    <keyword type="constant" name="GLYR_OPTIONAL_ARTIST" link="libglyr-types.html#GLYR-OPTIONAL-ARTIST:CAPS"/>
+    <keyword type="constant" name="GLYR_OPTIONAL_ALBUM" link="libglyr-types.html#GLYR-OPTIONAL-ALBUM:CAPS"/>
+    <keyword type="constant" name="GLYR_OPTIONAL_TITLE" link="libglyr-types.html#GLYR-OPTIONAL-TITLE:CAPS"/>
   </functions>
 </book>

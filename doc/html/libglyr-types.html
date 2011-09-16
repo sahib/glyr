@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-glyr.html" title="glyr">
-<link rel="next" href="api-index-full.html" title="API Index">
+<link rel="next" href="libglyr-cache.html" title="cache">
 <meta name="generator" content="GTK-Doc V1.17 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -18,7 +18,7 @@
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libglyr Reference Manual</th>
-<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="libglyr-cache.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libglyr-types.synopsis" class="shortcut">Top</a>
@@ -53,12 +53,17 @@
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS" title="GLYR_DEFAULT_PROXY">GLYR_DEFAULT_PROXY</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-QSRATIO:CAPS" title="GLYR_DEFAULT_QSRATIO">GLYR_DEFAULT_QSRATIO</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS" title="GLYR_DEFAULT_FORCE_UTF8">GLYR_DEFAULT_FORCE_UTF8</a>
+#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS" title="GLYR_DEFAULT_DB_AUTOWRITE">GLYR_DEFAULT_DB_AUTOWRITE</a>
+#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS" title="GLYR_DEFAULT_DB_AUTOREAD">GLYR_DEFAULT_DB_AUTOREAD</a>
+#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS" title="GLYR_DEFAULT_SUPPORTED_LANGS">GLYR_DEFAULT_SUPPORTED_LANGS</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" title="GLYR_DEFAULT_ALLOWED_FORMATS">GLYR_DEFAULT_ALLOWED_FORMATS</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS" title="GLYR_DEFAULT_USERAGENT">GLYR_DEFAULT_USERAGENT</a>
 enum                <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR">GLYR_ERROR</a>;
 enum                <a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE">GLYR_GET_TYPE</a>;
 enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE">GLYR_DATA_TYPE</a>;
+enum                <a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT">GLYR_FIELD_REQUIREMENT</a>;
                     <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache">GlyrMemCache</a>;
+                    <a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase">GlyrDatabase</a>;
                     <a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery">GlyrQuery</a>;
                     <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo">GlyrSourceInfo</a>;
                     <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo">GlyrFetcherInfo</a>;
@@ -168,6 +173,24 @@ enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS
 </div>
 <hr>
 <div class="refsect2">
+<a name="GLYR-DEFAULT-DB-AUTOWRITE:CAPS"></a><h3>GLYR_DEFAULT_DB_AUTOWRITE</h3>
+<pre class="programlisting">#define GLYR_DEFAULT_DB_AUTOWRITE true 
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-DEFAULT-DB-AUTOREAD:CAPS"></a><h3>GLYR_DEFAULT_DB_AUTOREAD</h3>
+<pre class="programlisting">#define GLYR_DEFAULT_DB_AUTOREAD  true
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-DEFAULT-SUPPORTED-LANGS:CAPS"></a><h3>GLYR_DEFAULT_SUPPORTED_LANGS</h3>
+<pre class="programlisting">#define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
 <a name="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"></a><h3>GLYR_DEFAULT_ALLOWED_FORMATS</h3>
 <pre class="programlisting">#define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 </pre>
@@ -175,7 +198,7 @@ enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS
 <hr>
 <div class="refsect2">
 <a name="GLYR-DEFAULT-USERAGENT:CAPS"></a><h3>GLYR_DEFAULT_USERAGENT</h3>
-<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/0.85 (https://github.com/sahib/glyr)"
+<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_NAME" "
 </pre>
 </div>
 <hr>
@@ -274,7 +297,8 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
 <a name="GLYR-GET-TYPE:CAPS"></a><h3>enum GLYR_GET_TYPE</h3>
 <pre class="programlisting">typedef enum
 {
-    GLYR_GET_COVERART = 1, 
+    GLYR_GET_UNSURE, 
+    GLYR_GET_COVERART, 
     GLYR_GET_LYRICS, 
     GLYR_GET_ARTIST_PHOTOS, 
     GLYR_GET_ARTISTBIO, 
@@ -286,7 +310,7 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
     GLYR_GET_GUITARTABS,
-    GLYR_GET_UNSURE 
+    GLYR_GET_ANY
 }   GLYR_GET_TYPE;
 </pre>
 <p>
@@ -296,6 +320,11 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
+<tr>
+<td><p><a name="GLYR-GET-UNSURE:CAPS"></a><span class="term"><code class="literal">GLYR_GET_UNSURE</code></span></p></td>
+<td>The default value after initializing a query.
+</td>
+</tr>
 <tr>
 <td><p><a name="GLYR-GET-COVERART:CAPS"></a><span class="term"><code class="literal">GLYR_GET_COVERART</code></span></p></td>
 <td>Get Coverart.
@@ -357,8 +386,8 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-GET-UNSURE:CAPS"></a><span class="term"><code class="literal">GLYR_GET_UNSURE</code></span></p></td>
-<td>The default value after initializing a query.
+<td><p><a name="GLYR-GET-ANY:CAPS"></a><span class="term"><code class="literal">GLYR_GET_ANY</code></span></p></td>
+<td>Delievers everything (like the 'locale' provider), do not use this.
 </td>
 </tr>
 </tbody>
@@ -371,16 +400,16 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
 {
     GLYR_TYPE_NOIDEA, 
     GLYR_TYPE_LYRICS, 
-    GLYR_TYPE_REVIEW, 
-    GLYR_TYPE_PHOTOS, 
-    GLYR_TYPE_COVER,  
-    GLYR_TYPE_COVER_PRI, 
-    GLYR_TYPE_COVER_SEC, 
-    GLYR_TYPE_AINFO,  
-    GLYR_TYPE_SIMILIAR, 
-    GLYR_TYPE_SIMILIAR_SONG, 
+    GLYR_TYPE_ALBUM_REVIEW, 
+    GLYR_TYPE_ARTIST_PHOTO, 
+    GLYR_TYPE_COVERART,  
+    GLYR_TYPE_COVERART_PRI, 
+    GLYR_TYPE_COVERART_SEC, 
+    GLYR_TYPE_ARTISTBIO,  
+    GLYR_TYPE_SIMILAR_ARTIST,
+    GLYR_TYPE_SIMILAR_SONG, 
     GLYR_TYPE_ALBUMLIST, 
-    GLYR_TYPE_TAGS,	
+    GLYR_TYPE_TAG,	
     GLYR_TYPE_TAG_ARTIST,
     GLYR_TYPE_TAG_ALBUM, 
     GLYR_TYPE_TAG_TITLE, 
@@ -409,42 +438,42 @@ It describes what kind of data the cache holds.
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-REVIEW:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_REVIEW</code></span></p></td>
+<td><p><a name="GLYR-TYPE-ALBUM-REVIEW:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_ALBUM_REVIEW</code></span></p></td>
 <td>Albumreview
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-PHOTOS:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_PHOTOS</code></span></p></td>
+<td><p><a name="GLYR-TYPE-ARTIST-PHOTO:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_ARTIST_PHOTO</code></span></p></td>
 <td>Pictures showing a certain band
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-COVER:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVER</code></span></p></td>
+<td><p><a name="GLYR-TYPE-COVERART:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART</code></span></p></td>
 <td>coverart
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-COVER-PRI:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVER_PRI</code></span></p></td>
+<td><p><a name="GLYR-TYPE-COVERART-PRI:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART_PRI</code></span></p></td>
 <td>A cover known to be the front side of the album 
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-COVER-SEC:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVER_SEC</code></span></p></td>
+<td><p><a name="GLYR-TYPE-COVERART-SEC:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART_SEC</code></span></p></td>
 <td>A cover known to be the backside: inlet etc. 
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-AINFO:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_AINFO</code></span></p></td>
+<td><p><a name="GLYR-TYPE-ARTISTBIO:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_ARTISTBIO</code></span></p></td>
 <td>Artist bio 
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-SIMILIAR:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_SIMILIAR</code></span></p></td>
+<td><p><a name="GLYR-TYPE-SIMILAR-ARTIST:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_SIMILAR_ARTIST</code></span></p></td>
 <td>Similiar artists 
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-SIMILIAR-SONG:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_SIMILIAR_SONG</code></span></p></td>
+<td><p><a name="GLYR-TYPE-SIMILAR-SONG:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_SIMILAR_SONG</code></span></p></td>
 <td>Similar songs 
 </td>
 </tr>
@@ -454,7 +483,7 @@ It describes what kind of data the cache holds.
 </td>
 </tr>
 <tr>
-<td><p><a name="GLYR-TYPE-TAGS:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_TAGS</code></span></p></td>
+<td><p><a name="GLYR-TYPE-TAG:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_TAG</code></span></p></td>
 <td>List of (random) tags: each cache containing one name 
 </td>
 </tr>
@@ -503,17 +532,71 @@ It describes what kind of data the cache holds.
 </div>
 <hr>
 <div class="refsect2">
+<a name="GLYR-FIELD-REQUIREMENT:CAPS"></a><h3>enum GLYR_FIELD_REQUIREMENT</h3>
+<pre class="programlisting">typedef enum
+{
+    GLYR_REQUIRES_ARTIST = 1 &lt;&lt; 0,
+    GLYR_REQUIRES_ALBUM  = 1 &lt;&lt; 1,
+    GLYR_REQUIRES_TITLE  = 1 &lt;&lt; 2,
+    GLYR_OPTIONAL_ARTIST = 1 &lt;&lt; 3,
+    GLYR_OPTIONAL_ALBUM  = 1 &lt;&lt; 4,
+    GLYR_OPTIONAL_TITLE  = 1 &lt;&lt; 5
+}   GLYR_FIELD_REQUIREMENT;
+</pre>
+<p>
+Bitmasks you can use to determine what fields a certain getter needs.
+You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>)
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><a name="GLYR-REQUIRES-ARTIST:CAPS"></a><span class="term"><code class="literal">GLYR_REQUIRES_ARTIST</code></span></p></td>
+<td>This getter needs the artist field
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-REQUIRES-ALBUM:CAPS"></a><span class="term"><code class="literal">GLYR_REQUIRES_ALBUM</code></span></p></td>
+<td>This getter needs the album field
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-REQUIRES-TITLE:CAPS"></a><span class="term"><code class="literal">GLYR_REQUIRES_TITLE</code></span></p></td>
+<td>This getter needs the title field
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-OPTIONAL-ARTIST:CAPS"></a><span class="term"><code class="literal">GLYR_OPTIONAL_ARTIST</code></span></p></td>
+<td>Artist is optional for this getter
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-OPTIONAL-ALBUM:CAPS"></a><span class="term"><code class="literal">GLYR_OPTIONAL_ALBUM</code></span></p></td>
+<td>Album is optional for this getter
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYR-OPTIONAL-TITLE:CAPS"></a><span class="term"><code class="literal">GLYR_OPTIONAL_TITLE</code></span></p></td>
+<td>Title is optional for this getter
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="GlyrMemCache"></a><h3>GlyrMemCache</h3>
 <pre class="programlisting">typedef struct {
-  char  *data;        
-  size_t size;        
-  char  *dsrc;        
-  char  *prov;        
+  char  *data;
+  size_t size;
+  char  *dsrc;
+  char  *prov;
   GLYR_DATA_TYPE type;
   int   duration;     
   bool  is_image;    
   char * img_format; 
   unsigned char md5sum[16]; 
+  bool cached;
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 
@@ -563,6 +646,10 @@ You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is m
 <td>A md5sum of the data field.</td>
 </tr>
 <tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrMemCache.cached"></a>cached</code></em>;</span></p></td>
+<td>If this cache was locally cached.</td>
+</tr>
+<tr>
 <td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.next"></a>next</code></em>;</span></p></td>
 <td>A pointer to the next item in the list, or NULL</td>
 </tr>
@@ -571,6 +658,24 @@ You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is m
 <td>A pointer to the previous item in the list, or NULL</td>
 </tr>
 </tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GlyrDatabase"></a><h3>GlyrDatabase</h3>
+<pre class="programlisting">typedef struct {
+	const char * root_path;
+} GlyrDatabase;
+</pre>
+<p>
+Represents a database where caches may be fetched from.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrDatabase.root-path"></a>root_path</code></em>;</span></p></td>
+<td>The directory where the database will be stored.</td>
+</tr></tbody>
 </table></div>
 </div>
 <hr>
@@ -595,8 +700,13 @@ You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is m
     bool download; 
     float qsratio; 
 
+    bool db_autoread;
+    bool db_autowrite;
+    GlyrDatabase * local_db;
 
 /* This is confusing gtk-doc */
+#ifdef COMING_FROM_SWIG
+	#endif
 #endif
 
     /* Dynamic allocated */
@@ -617,7 +727,7 @@ This structure holds all settings used to influence libglyr.
 You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
 </p>
 <p>
-You can safely read from all fields and should free the query with <a class="link" href="libglyr-glyr.html#glyr-destroy-query" title="glyr_destroy_query ()"><code class="function">glyr_destroy_query()</code></a> after use.
+You can safely read from all fields and should free the query with <a class="link" href="libglyr-glyr.html#glyr-query-destroy" title="glyr_query_destroy ()"><code class="function">glyr_query_destroy()</code></a> after use.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -675,6 +785,19 @@ You can safely read from all fields and should free the query with <a class="lin
 <td>0.0 = maxspeed, 1.0 = max quality, 0.85 -&gt; default.</td>
 </tr>
 <tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.db-autoread"></a>db_autoread</code></em>;</span></p></td>
+<td>Check if the found item is already cached.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.db-autowrite"></a>db_autowrite</code></em>;</span></p></td>
+<td>Write found items automagically to the cache, if any specified by <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *<em class="structfield"><code><a name="GlyrQuery.local-db"></a>local_db</code></em>;</span></p></td>
+<td>The database to write and search in.</td>
+</tr>
+<tr>
 <td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.lang"></a>lang</code></em>;</span></p></td>
 <td>Language code ISO-639-1, like 'de','en' or 'auto'</td>
 </tr>
@@ -730,7 +853,7 @@ with statically allocated data only,
 therefore you can modify and read to your liking.
 </p>
 <p>
-It is freed when <a class="link" href="libglyr-glyr.html#glyr-free-plugin-info" title="glyr_free_plugin_info ()"><code class="function">glyr_free_plugin_info()</code></a> is called on it's GlyrFetcherInfo
+It is freed when <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> is called on it's GlyrFetcherInfo
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -773,6 +896,7 @@ It is freed when <a class="link" href="libglyr-glyr.html#glyr-free-plugin-info" 
 <pre class="programlisting">typedef struct {
   char * name;
   GLYR_GET_TYPE type;
+  GLYR_FIELD_REQUIREMENT reqs;
   GlyrSourceInfo * head;
 
   struct _GlyrFetcherInfo * next;
@@ -787,10 +911,10 @@ It's a simpler version of the internal version,
 therefore you can modify and read to your liking.
 </p>
 <p>
-You should pass it to <a class="link" href="libglyr-glyr.html#glyr-free-plugin-info" title="glyr_free_plugin_info ()"><code class="function">glyr_free_plugin_info()</code></a> once done.
+You should pass it to <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> once done.
 </p>
 <p>
-<em class="parameter"><code>see_also</code></em>: <a class="link" href="libglyr-glyr.html#glyr-get-plugin-info" title="glyr_get_plugin_info ()"><code class="function">glyr_get_plugin_info()</code></a>
+<em class="parameter"><code>see_also</code></em>: <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -802,6 +926,10 @@ You should pass it to <a class="link" href="libglyr-glyr.html#glyr-free-plugin-i
 <tr>
 <td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.type"></a>type</code></em>;</span></p></td>
 <td>Tells what type of data this getter delivers.</td>
+</tr>
+<tr>
+<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT"><span class="type">GLYR_FIELD_REQUIREMENT</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.reqs"></a>reqs</code></em>;</span></p></td>
+<td>A bitmask. You can test if this getter requires a filled artist: (reqs &amp; GLYR_REQUIRES_ARTIST)</td>
 </tr>
 <tr>
 <td><p><span class="term"><a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.head"></a>head</code></em>;</span></p></td>

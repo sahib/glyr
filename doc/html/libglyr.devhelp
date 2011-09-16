@@ -5,6 +5,7 @@
     <sub name="[Insert title here]" link="ch01.html">
       <sub name="glyr" link="libglyr-glyr.html"/>
       <sub name="types" link="libglyr-types.html"/>
+      <sub name="cache" link="libglyr-cache.html"/>
     </sub>
     <sub name="API Index" link="api-index-full.html"/>
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
@@ -13,11 +14,16 @@
     <function name="glyr_init ()" link="libglyr-glyr.html#glyr-init"/>
     <function name="glyr_cleanup ()" link="libglyr-glyr.html#glyr-cleanup"/>
     <function name="glyr_get ()" link="libglyr-glyr.html#glyr-get"/>
-    <function name="glyr_init_query ()" link="libglyr-glyr.html#glyr-init-query"/>
-    <function name="glyr_destroy_query ()" link="libglyr-glyr.html#glyr-destroy-query"/>
+    <function name="glyr_query_init ()" link="libglyr-glyr.html#glyr-query-init"/>
+    <function name="glyr_query_destroy ()" link="libglyr-glyr.html#glyr-query-destroy"/>
     <function name="glyr_free_list ()" link="libglyr-glyr.html#glyr-free-list"/>
-    <function name="glyr_new_cache ()" link="libglyr-glyr.html#glyr-new-cache"/>
-    <function name="glyr_free_cache ()" link="libglyr-glyr.html#glyr-free-cache"/>
+    <function name="glyr_cache_new ()" link="libglyr-glyr.html#glyr-cache-new"/>
+    <function name="glyr_cache_free ()" link="libglyr-glyr.html#glyr-cache-free"/>
+    <function name="glyr_cache_copy ()" link="libglyr-glyr.html#glyr-cache-copy"/>
+    <function name="glyr_cache_set_data ()" link="libglyr-glyr.html#glyr-cache-set-data"/>
+    <function name="glyr_cache_write ()" link="libglyr-glyr.html#glyr-cache-write"/>
+    <function name="glyr_cache_update_md5sum ()" link="libglyr-glyr.html#glyr-cache-update-md5sum"/>
+    <function name="glyr_cache_print ()" link="libglyr-glyr.html#glyr-cache-print"/>
     <function name="glyr_opt_dlcallback ()" link="libglyr-glyr.html#glyr-opt-dlcallback"/>
     <function name="glyr_opt_type ()" link="libglyr-glyr.html#glyr-opt-type"/>
     <function name="glyr_opt_artist ()" link="libglyr-glyr.html#glyr-opt-artist"/>
@@ -40,15 +46,16 @@
     <function name="glyr_opt_qsratio ()" link="libglyr-glyr.html#glyr-opt-qsratio"/>
     <function name="glyr_opt_proxy ()" link="libglyr-glyr.html#glyr-opt-proxy"/>
     <function name="glyr_opt_force_utf8 ()" link="libglyr-glyr.html#glyr-opt-force-utf8"/>
+    <function name="glyr_opt_lookup_db ()" link="libglyr-glyr.html#glyr-opt-lookup-db"/>
+    <function name="glyr_opt_db_autowrite ()" link="libglyr-glyr.html#glyr-opt-db-autowrite"/>
+    <function name="glyr_opt_db_autoread ()" link="libglyr-glyr.html#glyr-opt-db-autoread"/>
     <function name="glyr_download ()" link="libglyr-glyr.html#glyr-download"/>
     <function name="glyr_strerror ()" link="libglyr-glyr.html#glyr-strerror"/>
     <function name="glyr_version ()" link="libglyr-glyr.html#glyr-version"/>
-    <function name="glyr_write ()" link="libglyr-glyr.html#glyr-write"/>
-    <function name="glyr_update_md5sum ()" link="libglyr-glyr.html#glyr-update-md5sum"/>
-    <function name="glyr_printitem ()" link="libglyr-glyr.html#glyr-printitem"/>
-    <function name="glyr_get_plugin_info ()" link="libglyr-glyr.html#glyr-get-plugin-info"/>
-    <function name="glyr_free_plugin_info ()" link="libglyr-glyr.html#glyr-free-plugin-info"/>
-    <function name="glyr_type_to_string ()" link="libglyr-glyr.html#glyr-type-to-string"/>
+    <function name="glyr_info_get ()" link="libglyr-glyr.html#glyr-info-get"/>
+    <function name="glyr_info_free ()" link="libglyr-glyr.html#glyr-info-free"/>
+    <function name="glyr_data_type_to_string ()" link="libglyr-glyr.html#glyr-data-type-to-string"/>
+    <function name="glyr_get_type_to_string ()" link="libglyr-glyr.html#glyr-get-type-to-string"/>
     <function name="GLYR_DEFAULT_REDIRECTS" link="libglyr-types.html#GLYR-DEFAULT-REDIRECTS:CAPS"/>
     <function name="GLYR_DEFAULT_TIMEOUT" link="libglyr-types.html#GLYR-DEFAULT-TIMEOUT:CAPS"/>
     <function name="GLYR_DEFAULT_PARALLEL" link="libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS"/>
@@ -65,15 +72,26 @@
     <function name="GLYR_DEFAULT_PROXY" link="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS"/>
     <function name="GLYR_DEFAULT_QSRATIO" link="libglyr-types.html#GLYR-DEFAULT-QSRATIO:CAPS"/>
     <function name="GLYR_DEFAULT_FORCE_UTF8" link="libglyr-types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS"/>
+    <function name="GLYR_DEFAULT_DB_AUTOWRITE" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS"/>
+    <function name="GLYR_DEFAULT_DB_AUTOREAD" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS"/>
+    <function name="GLYR_DEFAULT_SUPPORTED_LANGS" link="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS"/>
     <function name="GLYR_DEFAULT_ALLOWED_FORMATS" link="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"/>
     <function name="GLYR_DEFAULT_USERAGENT" link="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS"/>
     <function name="enum GLYR_ERROR" link="libglyr-types.html#GLYR-ERROR:CAPS"/>
     <function name="enum GLYR_GET_TYPE" link="libglyr-types.html#GLYR-GET-TYPE:CAPS"/>
     <function name="enum GLYR_DATA_TYPE" link="libglyr-types.html#GLYR-DATA-TYPE:CAPS"/>
+    <function name="enum GLYR_FIELD_REQUIREMENT" link="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS"/>
     <function name="GlyrMemCache" link="libglyr-types.html#GlyrMemCache"/>
+    <function name="GlyrDatabase" link="libglyr-types.html#GlyrDatabase"/>
     <function name="GlyrQuery" link="libglyr-types.html#GlyrQuery"/>
     <function name="GlyrSourceInfo" link="libglyr-types.html#GlyrSourceInfo"/>
     <function name="GlyrFetcherInfo" link="libglyr-types.html#GlyrFetcherInfo"/>
     <function name="DL_callback ()" link="libglyr-types.html#DL-callback"/>
+    <function name="GLYR_DB_FILENAME" link="libglyr-cache.html#GLYR-DB-FILENAME:CAPS"/>
+    <function name="glyr_db_init ()" link="libglyr-cache.html#glyr-db-init"/>
+    <function name="glyr_db_destroy ()" link="libglyr-cache.html#glyr-db-destroy"/>
+    <function name="glyr_db_lookup ()" link="libglyr-cache.html#glyr-db-lookup"/>
+    <function name="glyr_db_insert ()" link="libglyr-cache.html#glyr-db-insert"/>
+    <function name="glyr_db_delete ()" link="libglyr-cache.html#glyr-db-delete"/>
   </functions>
 </book>
