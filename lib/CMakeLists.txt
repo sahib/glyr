@@ -1,7 +1,7 @@
-# Configuration for Version /versionnam
+# Configuration for Version / versionname
 configure_file (
-  "${DIR_TOP}/lib/config.h.in"
-  "${DIR_TOP}/lib/config.h"
+  "config.h.in"
+  "config.h"
 )
 
 SET(GENERIC_LIB_VERSION ${GLYR_VERSION_MAJOR}.${GLYR_VERSION_MINOR})
