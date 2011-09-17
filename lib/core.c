@@ -211,9 +211,11 @@ GlyrMemCache* DL_init(void)
 {
 	GlyrMemCache *cache = g_malloc0(sizeof(GlyrMemCache));
 	memset(cache,0,sizeof(GlyrMemCache));
-	cache->duration = 0;
 	cache->type = GLYR_TYPE_NOIDEA;
+
 	cache->cached = FALSE;
+	cache->duration = 0;
+	cache->rating = 0;
 	return cache;
 }
 
@@ -1012,12 +1014,12 @@ static gboolean format_is_allowed(gchar * format, gchar * allowed)
 
 /*--------------------------------------------------------*/
 
-static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
+static gint delete_wrong_formats(GList ** list, GlyrQuery * s)
 {
-	GList * new_head = data_list;
-
-	/* Parallely check if the format is what we wanted */
-	check_all_types_in_url_list(new_head,s);
+	/* Now compare it agains the format. */
+	gsize invalid_format_counter = 0;
+	GList * new_head = *list;
+	GList * elem = new_head;
 
 	gchar * allowed_formats = s->allowed_formats;
 	if(allowed_formats == NULL)
@@ -1025,9 +1027,6 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
 		allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
 	}
 
-	/* Now compare it agains the format. */
-	gsize invalid_format_counter = 0;
-	GList * elem = new_head;
 	while(elem != NULL)
 	{
 		GlyrMemCache * item = elem->data;
@@ -1047,6 +1046,22 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
 		}
 		elem = elem->next;
 	}
+
+	*list = new_head;
+	return invalid_format_counter;
+}
+
+/*--------------------------------------------------------*/
+
+static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
+{
+	GList * new_head = data_list;
+
+	/* Parallely check if the format is what we wanted */
+	check_all_types_in_url_list(new_head,s);
+
+	/* Kick the wrong ones */
+	gint invalid_format_counter = delete_wrong_formats(&new_head,s);
 
 	glyr_message(2,s," (-%d item(s) less)\n",invalid_format_counter);
 	return new_head;
@@ -1506,7 +1521,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 				GList * offline_list = source->parser(&pseudo_capo);
 				if(query->imagejob)
 				{
-					offline_list = kick_out_wrong_formats(offline_list,query);
+					delete_wrong_formats(&offline_list,query);
 				}
 				else
 				{
@@ -1544,7 +1559,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 					endmarks,
 					query,
 					url_list_length / query->timeout  + 1,
-					MIN((gint)(url_list_length / query->parallel + 3), query->number),
+					MIN((gint)(url_list_length / query->parallel + 3), query->number + 2),
 					call_provider_callback,    /* Callback           */
 					url_table,                 /* Userpointer        */
 					TRUE);                     /* Free caches itself */

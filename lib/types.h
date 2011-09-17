@@ -24,6 +24,7 @@
 #include <stdbool.h>
 #include <sqlite3.h>
 
+/* Versioninfo */
 #include "config.h"
 
 /* Default values */
@@ -55,7 +56,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/0.85"
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME")"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -118,6 +119,11 @@ typedef enum
 * and set it via glyr_opt_type()
 *
 */
+
+/* DO NOT CHANGE THE ORDER HERE 
+ * The number there is saved in the cache to save it's type.
+ * You can safely append elements though. 
+ */
 typedef enum
 {
     GLYR_GET_UNSURE, 
@@ -163,6 +169,11 @@ typedef enum
 * It describes what kind of data the cache holds.
 * 
 */
+
+/* DO NOT CHANGE THE ORDER HERE 
+ * The number there is saved in the cache to save it's type.
+ * You can safely append elements though. 
+ */
 typedef enum
 {
     GLYR_TYPE_NOIDEA, 
@@ -184,7 +195,7 @@ typedef enum
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
     GLYR_TYPE_TRACK,	
-    GLYR_TYPE_GUITARTABS,
+    GLYR_TYPE_GUITARTABS
 }   GLYR_DATA_TYPE;
 
 
@@ -218,6 +229,7 @@ typedef enum
  * @prov: name of the provider that delivered this item.
  * @type: The #GLYR_DATA_TYPE of this item.
  * @duration: For tracklist, only. Contains the tracklength in seconds.
+ * @rating: Always set to 0, you can set this to rate this item. For use in the Database.
  * @is_image: Is this item an image?
  * @img_format: Format of the image (png,jpeg), NULL if text item.
  * @md5sum: A md5sum of the data field.
@@ -226,18 +238,19 @@ typedef enum
  * @prev: A pointer to the previous item in the list, or NULL
  *
  * GlyrMemCache represents a single item received by libglyr. 
- * You should <emphasis>NOT</emphasis> any of the fields, it is meant to be read-only.
+ * You should <emphasis>NOT</emphasis> modify any of the fields (with the sole excepetion of @rating), it is meant to be read-only.
  */
 typedef struct _GlyrMemCache {
 
   /*< public >*/
-  char  *data;
+  char  * data;
   size_t size;
-  char  *dsrc;
-  char  *prov;
+  char  * dsrc;
+  char * prov;
   GLYR_DATA_TYPE type;
-  int   duration;     
-  bool  is_image;    
+  int  duration;     
+  int  rating;
+  bool is_image;    
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;

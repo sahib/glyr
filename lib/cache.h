@@ -38,7 +38,7 @@ extern "C"
 * 
 * Allocates a new database object, and create a SQLite database 
 * at the given path. The filename is in #GLYR_DB_FILENAME 
-* You can use insert,delete and lookup on it.
+* You can now use insert,delete, edit and lookup on it.
 *
 * Returns: A newly allocated GlyrDatabase, free with glyr_db_destroy
 */
@@ -65,7 +65,7 @@ void glyr_db_destroy(GlyrDatabase * db_object);
 * You may use glyr_get() as an alternative for this method.
 * If your specify "local" in glyr_opt_from() only the DB is searched.
 *
-* Other query-fields honored by glyr_db_lookup:
+* Other query-fields honored by glyr_db_lookup():
 * <itemizedlist>
 * <listitem>
 * <para>
@@ -75,6 +75,11 @@ void glyr_db_destroy(GlyrDatabase * db_object);
 * <listitem>
 * <para>
 * glyr_opt_from() - What provider the item came from.
+* </para>
+* </listitem>
+* <listitem>
+* <para>
+* glyr_opt_number() - How many items to delete at a max.
 * </para>
 * </listitem>
 * </itemizedlist>
@@ -101,7 +106,7 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
 * The database is searched for the artist, album, title and type specified in @query.
 * If items in the DB match they will deleted.
 * 
-* Other query-fields honored by glyr_db_delete:
+* Other query-fields honored by glyr_db_delete():
 * <itemizedlist>
 * <listitem>
 * <para>
@@ -122,6 +127,41 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache);
 * Returns: The number of deleted items.
 */
 int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
+
+/**
+* glyr_db_edit:
+* @db: The Database
+* @md5sum: The md5sum of the cache you want to edit.
+* @query: The query with set artist,album, type etc.
+* @data: The edited cache.
+*
+* Simple convenience function to edit caches in the Database.
+* Best understood by example:
+* <informalexample>
+* <programlisting>
+* // If you have a cache called 'c', that's already
+* // In the Database: 
+* // Save the old checksum, edit it, update the database.
+* unsigned char old_md5sum[16] = {0};
+* memcpy(old_md5sum,c->md5sum,16);
+* glyr_cache_set_data(c,g_strdup("Changed the data - muahahah"),-1);
+* c->rating = 4200;
+* glyr_db_edit(s->local_db, old_md5sum, s, c);
+* </programlisting>
+* </informalexample>
+*
+* Some caveats:
+* <itemizedlist>
+* <listitem>
+* <para>
+* You may insert a cache several times, if the source url (cache->dsrc) is different,
+* but with the same checksum. If you call glyr_db_edit() once more, the caches
+* with the double md5sum get deleted and replaced by the new one.
+* </para>
+* </listitem>
+* </itemizedlist>
+*/
+void glyr_db_edit(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data);
 
 #ifdef __cplusplus
 }

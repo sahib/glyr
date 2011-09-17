@@ -52,7 +52,7 @@ GList * ainfo_lyricsreg_parse(cb_object * capo)
 		if(end != NULL)
 		{
 			gsize info_len = end - point_to_start;
-			if(info_len > 150)
+			if(info_len > 200)
 			{
 				gchar * info = copy_value(point_to_start, end);
 				if(info != NULL)

@@ -19,7 +19,7 @@ BLD_DIR = "#{File.expand_path(Dir.getwd)}/build"
 INC_DIR = "#{File.expand_path(Dir.getwd)}/include"
 
 if Dir.exists? DOC_DIR
-	puts "-- Cleaning up.."
+   puts "-- Cleaning up.."
    system("rm -rf DOC_DIR")
    system("rm -rf BLD_DIR")
 end

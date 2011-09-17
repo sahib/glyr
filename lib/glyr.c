@@ -93,7 +93,6 @@ gchar * guess_language(void)
 				if(g_ascii_strncasecmp(to_map,to_investigate,map_len) == 0)
 				{
 					to_investigate = (gchar*)map_language[map][1];
-					g_print("Mapping language to %s\n",to_investigate);
 					break;
 				}
 			}
@@ -1028,6 +1027,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
 		g_printerr("%s",glyr_data_type_to_string(cacheditem->type));
 
 		g_printerr("\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
+		g_printerr("\nRATE: %d",cacheditem->rating);
 
 		/* Print the actual data.
 		 * This might have funny results if using cover/photos

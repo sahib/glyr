@@ -147,6 +147,7 @@ GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
 * Safely sets the data of the cache. It frees the old data first, updates 
 * the checksum and adjusts the size fields accordingly to len.
 * If len is a negative number strlen() is used to determine the size.
+* Note: @data is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
 *
 */
 void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len);
@@ -701,7 +702,26 @@ GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8);
 * @s: The GlyrQuery settings struct to store this option in.
 * @db: a GlyrDatabase object.
 *
-* TODO 
+* Bind the previosly created @db to the query @s.
+* By doing this you add a new 'local' provider, 
+* that is queried before everything else and may speed up
+* things heavily.
+*
+* You can either query it exclusively or disable it completely:
+*
+* Enable exclusiv:
+* <informalexample>
+* <programlisting>
+* glyr_opt_from(s,"local");
+* </programlisting>
+* Disable:
+* </informalexample>
+* <informalexample>
+* glyr_opt_from(s,"all;-local");
+* <programlisting>
+* </programlisting>
+* </informalexample>
+*
 *
 * Returns: an error ID
 */
