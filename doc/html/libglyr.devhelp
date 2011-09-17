@@ -93,5 +93,6 @@
     <function name="glyr_db_lookup ()" link="libglyr-cache.html#glyr-db-lookup"/>
     <function name="glyr_db_insert ()" link="libglyr-cache.html#glyr-db-insert"/>
     <function name="glyr_db_delete ()" link="libglyr-cache.html#glyr-db-delete"/>
+    <function name="glyr_db_edit ()" link="libglyr-cache.html#glyr-db-edit"/>
   </functions>
 </book>

@@ -105,7 +105,7 @@
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autowrite" title="glyr_opt_db_autowrite ()">glyr_opt_db_autowrite</a>               (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autoread" title="glyr_opt_db_autoread ()">glyr_opt_db_autoread</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);
+                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);
 <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-download" title="glyr_download ()">glyr_download</a>                       (<em class="parameter"><code>const <span class="type">char</span> *url</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>);
 const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror ()">glyr_strerror</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> ID</code></em>);
@@ -314,6 +314,7 @@ The pointers next and prev are set to NULL.
 Safely sets the data of the cache. It frees the old data first, updates 
 the checksum and adjusts the size fields accordingly to len.
 If len is a negative number <code class="function">strlen()</code> is used to determine the size.
+Note: <em class="parameter"><code>data</code></em> is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1248,7 +1249,31 @@ This options forces libglyr to prohibit those.
 <pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lookup_db                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>);</pre>
 <p>
-TODO
+Bind the previosly created <em class="parameter"><code>db</code></em> to the query <em class="parameter"><code>s</code></em>.
+By doing this you add a new 'local' provider, 
+that is queried before everything else and may speed up
+things heavily.
+</p>
+<p>
+You can either query it exclusively or disable it completely:
+</p>
+<p>
+Enable exclusiv:
+</p>
+<div class="informalexample">
+<pre class="programlisting">
+glyr_opt_from(s,"local");
+</pre>
+Disable:
+</div>
+<p>
+</p>
+<div class="informalexample">
+glyr_opt_from(s,"all;-local");
+<pre class="programlisting">
+</pre>
+</div>
+<p>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1300,7 +1325,38 @@ They will be looked up from there if you search for it again.
 <div class="refsect2">
 <a name="glyr-opt-db-autoread"></a><h3>glyr_opt_db_autoread ()</h3>
 <pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_db_autoread                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);</pre>
+<p>
+If set to true libglyr will lookup the database previously given by <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
+during searching in the web. If there's item that already seems to be in the DB it gets not 
+mixed into the results. 
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+This does not influence the usage of the DB as local provider!
+Use <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a> with "all;-local" to disable it.
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>read_from_db</code></em> :</span></p></td>
+<td>Boolean, true for DB lookup while searching</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
 </div>
 <hr>
 <div class="refsect2">
@@ -1377,7 +1433,7 @@ being a pointer to a doubly linked list of GlyrSourceInfos
 It is best understood by an example:
 </p>
 <div class="example">
-<a name="id496726"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
+<a name="id520610"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
 <div class="example-contents"><pre class="programlisting">
 static void visualize_from_options(void)
 {

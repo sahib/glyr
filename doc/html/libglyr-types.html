@@ -198,7 +198,7 @@ enum                <a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREM
 <hr>
 <div class="refsect2">
 <a name="GLYR-DEFAULT-USERAGENT:CAPS"></a><h3>GLYR_DEFAULT_USERAGENT</h3>
-<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_NAME" "
+<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME")"
 </pre>
 </div>
 <hr>
@@ -417,7 +417,7 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
     GLYR_TYPE_TRACK,	
-    GLYR_TYPE_GUITARTABS,
+    GLYR_TYPE_GUITARTABS
 }   GLYR_DATA_TYPE;
 </pre>
 <p>
@@ -587,13 +587,14 @@ You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class
 <div class="refsect2">
 <a name="GlyrMemCache"></a><h3>GlyrMemCache</h3>
 <pre class="programlisting">typedef struct {
-  char  *data;
+  char  * data;
   size_t size;
-  char  *dsrc;
-  char  *prov;
+  char  * dsrc;
+  char * prov;
   GLYR_DATA_TYPE type;
-  int   duration;     
-  bool  is_image;    
+  int  duration;     
+  int  rating;
+  bool is_image;    
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;
@@ -604,7 +605,7 @@ You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class
 </pre>
 <p>
 GlyrMemCache represents a single item received by libglyr. 
-You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is meant to be read-only.
+You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (with the sole excepetion of <em class="parameter"><code>rating</code></em>), it is meant to be read-only.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -632,6 +633,10 @@ You should <span class="emphasis"><em>NOT</em></span> any of the fields, it is m
 <tr>
 <td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrMemCache.duration"></a>duration</code></em>;</span></p></td>
 <td>For tracklist, only. Contains the tracklength in seconds.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrMemCache.rating"></a>rating</code></em>;</span></p></td>
+<td>Always set to 0, you can set this to rate this item. For use in the Database.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrMemCache.is-image"></a>is_image</code></em>;</span></p></td>
@@ -705,8 +710,6 @@ Represents a database where caches may be fetched from.
     GlyrDatabase * local_db;
 
 /* This is confusing gtk-doc */
-#ifdef COMING_FROM_SWIG
-	#endif
 #endif
 
     /* Dynamic allocated */
