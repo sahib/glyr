@@ -20,7 +20,6 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
 
 #define PARSE_START "<artist><images>"
 #define PARSE_END   "</images>"

@@ -20,7 +20,6 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
 
 #define RELEASE_ID  "<release id=\""
 #define RELEASE_END "\" "

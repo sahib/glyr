@@ -145,8 +145,8 @@ MetaDataSource lyrics_lipwalk_src =
 	.parser    = lyrics_lipwalk_parse,
 	.get_url   = lyrics_lipwalk_url,
 	.type      = GLYR_GET_LYRICS,
-	.quality   = 85,
-	.speed     = 60,
+	.quality   = 70,
+	.speed     = 50,
 	.endmarker = NULL,
 	.free_url  = false
 };

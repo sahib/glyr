@@ -20,7 +20,6 @@
 
 #include "../../stringlib.h"
 #include "../../core.h"
-#include "../common.h"
 
 /* ----------------------------------------------- */
 

@@ -72,8 +72,8 @@ GlyrDatabase * glyr_db_init(char * root_path)
 	{
 		sqlite3 * db_connection = NULL;
 
-		gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI, NULL);
+		gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
+		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
 		if(db_err == SQLITE_OK)
 		{
 			to_return = g_malloc0(sizeof(GlyrDatabase));

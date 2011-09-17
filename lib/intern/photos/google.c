@@ -18,9 +18,8 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
+#include "../common/google.h"
 
 /*--------------------------------------------------------*/
 
@@ -52,7 +51,7 @@ MetaDataSource photos_google_src =
     .parser    = photos_google_parse,
     .get_url   = photos_google_url,
     .type      = GLYR_GET_ARTIST_PHOTOS,
-    .quality   = 40,
+    .quality   = 10,
     .speed     = 90,
     .endmarker = NULL,
     .free_url  = true

@@ -20,9 +20,8 @@
 
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
+#include "../common/amazon.h"
 
-//FIXME: Compare if results fit
 // Example snippet of what we parse:
 /***
 

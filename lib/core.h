@@ -150,6 +150,7 @@ gboolean continue_search(gint current, GlyrQuery * s);
 int glyr_puts(int verbosity, GlyrQuery * s, const char * string);
 
 
+gboolean size_is_okay(int sZ, int min, int max);
 gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list);
 gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f);
 

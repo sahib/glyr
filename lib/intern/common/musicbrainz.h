@@ -18,41 +18,14 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include "../../stringlib.h"
-#include "../common/google.h"
+#ifndef GLYR_COMMON_MUSICBRAINZ_H
+#define GLYR_COMMON_MUSICBRAINZ_H
 
-/* ------------------------- */
+#include "../../core.h"
 
-const gchar * cover_google_url(GlyrQuery * s)
-{
-    const gchar * result = NULL;
-    gchar * searchterm = g_strdup("${artist}+${album}+album");
-    if(searchterm != NULL)
-    {
-        result = generic_google_url(s,searchterm);
-        g_free(searchterm);
-    }
-    return result;
-}
+gint please_what_type(GlyrQuery * s);
+const gchar * generic_musicbrainz_url(GlyrQuery * sets);
+const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset);
+GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include);
 
-/* ------------------------- */
-
-GList * cover_google_parse(cb_object * capo)
-{
-    return generic_google_parse(capo);
-}
-
-/* ------------------------- */
-
-MetaDataSource cover_google_src =
-{
-    .name      = "google",
-    .key       = 'g',
-    .parser    = cover_google_parse,
-    .get_url   = cover_google_url,
-    .type      = GLYR_GET_COVERART,
-    .quality   = 10,
-    .speed     = 80,
-    .endmarker = NULL,
-    .free_url  = true
-};
+#endif

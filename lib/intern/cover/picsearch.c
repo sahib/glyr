@@ -17,42 +17,34 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
-
+#include "../../core.h"
 #include "../../stringlib.h"
-#include "../common/google.h"
+#include "../common/picsearch.h"
 
 /* ------------------------- */
 
-const gchar * cover_google_url(GlyrQuery * s)
+const gchar * cover_picsearch_url(GlyrQuery * s)
 {
-    const gchar * result = NULL;
-    gchar * searchterm = g_strdup("${artist}+${album}+album");
-    if(searchterm != NULL)
-    {
-        result = generic_google_url(s,searchterm);
-        g_free(searchterm);
-    }
-    return result;
+	return generic_picsearch_url(s,"${artist}+${album}+coverart");
+}
+
+/* ------------------------- */
+GList * cover_picsearch_parse(cb_object * capo)
+{
+	return generic_picsearch_parse(capo);
 }
 
 /* ------------------------- */
 
-GList * cover_google_parse(cb_object * capo)
+MetaDataSource cover_picsearch_src =
 {
-    return generic_google_parse(capo);
-}
-
-/* ------------------------- */
-
-MetaDataSource cover_google_src =
-{
-    .name      = "google",
-    .key       = 'g',
-    .parser    = cover_google_parse,
-    .get_url   = cover_google_url,
+    .name      = "picsearch",
+    .key       = 'p',
+    .parser    = cover_picsearch_parse,
+    .get_url   = cover_picsearch_url,
     .type      = GLYR_GET_COVERART,
-    .quality   = 10,
-    .speed     = 80,
+    .quality   = 50,
+    .speed     = 60,
     .endmarker = NULL,
     .free_url  = true
 };

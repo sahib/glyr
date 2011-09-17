@@ -18,21 +18,11 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#ifndef GLYR_COMMON_H
-#define GLYR_COMMON_H
+#ifndef GLYR_COMMON_AMAZON_H
+#define GLYR_COMMON_AMAZON_H
 
-#include "../core.h"
-#include "../stringlib.h"
+#include "../../core.h"
 
-/* Cover, photos */
 const gchar * generic_amazon_url(GlyrQuery * sets, const gchar * response_group);
-const gchar * generic_google_url(GlyrQuery * sets, const gchar * searchterm);
-GList * generic_google_parse(cb_object * capo);
-gboolean size_is_okay(int sZ, int min, int max);
 
-/* Tags, relations */
-GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include);
-const gchar * generic_musicbrainz_url(GlyrQuery * sets);
-gint please_what_type(GlyrQuery * s);
-
-#endif
+#endif 

@@ -116,7 +116,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/blacklist.c"
 	# fetcher
 	"${DIR_INTERN}/generic.c"
-	"${DIR_INTERN}/common.c"
 	"${DIR_INTERN}/ainfo.c"
 	"${DIR_INTERN}/cover.c"
 	"${DIR_INTERN}/similar_artist.c"
@@ -130,6 +129,10 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/albumlist.c"
 	"${DIR_INTERN}/guitartabs.c"
 	# extensions
+	"${DIR_INTERN}/common/google.c"
+	"${DIR_INTERN}/common/amazon.c"
+	"${DIR_INTERN}/common/picsearch.c"
+	"${DIR_INTERN}/common/musicbrainz.c"
 	"${DIR_AINFO}/lastfm.c"
 	"${DIR_AINFO}/allmusic_com.c"
 	"${DIR_AINFO}/lyricsreg.c"
@@ -152,6 +155,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/discogs.c"
 	"${DIR_COVER}/amazon.c"
 	"${DIR_COVER}/rhapsody.c"
+	"${DIR_COVER}/picsearch.c"
 	"${DIR_LYRICS}/lyrdb.c"
 	"${DIR_LYRICS}/metallum.c"
 	"${DIR_LYRICS}/magistrix.c"

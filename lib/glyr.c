@@ -1041,6 +1041,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
 			g_printerr("\nFRMT: %s",cacheditem->img_format);
 			g_printerr("\nDATA: <not printable>");
 		}
+		g_printerr("\n");
 	}
 }
 

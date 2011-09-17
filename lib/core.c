@@ -103,6 +103,22 @@ int glyr_puts(int verbosity, GlyrQuery * s, const char * string)
 
 /*--------------------------------------------------------*/
 
+/**
+* Check if the size of a cover fits the specs
+*/
+gboolean size_is_okay(int sZ, int min, int max)
+{
+    if((min == -1 && max == -1) ||
+       (min == -1 && max >= sZ) ||
+       (min <= sZ && max == -1) ||
+       (min <= sZ && max >= sZ)  )
+        return TRUE;
+
+    return FALSE;
+}
+
+/*--------------------------------------------------------*/
+
 /* cache incoming data in a GlyrMemCache */
 static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
 {

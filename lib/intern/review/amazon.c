@@ -19,7 +19,7 @@
 **************************************************************/
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
+#include "../common/amazon.h"
 
 const gchar * review_amazon_url(GlyrQuery * settings)
 {

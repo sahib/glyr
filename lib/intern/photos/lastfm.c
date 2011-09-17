@@ -19,7 +19,6 @@
 **************************************************************/
 #include "../../core.h"
 #include "../../stringlib.h"
-#include "../common.h"
 
 #define SIZE_FO "<size name=\""
 #define URL_BEGIN "\">"

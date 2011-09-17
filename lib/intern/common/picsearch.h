@@ -18,41 +18,13 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#include "../../stringlib.h"
-#include "../common/google.h"
+#ifndef GLYR_COMMON_PICSEARCH_H
+#define GLYR_COMMON_PICSEARCH_H
 
-/* ------------------------- */
 
-const gchar * cover_google_url(GlyrQuery * s)
-{
-    const gchar * result = NULL;
-    gchar * searchterm = g_strdup("${artist}+${album}+album");
-    if(searchterm != NULL)
-    {
-        result = generic_google_url(s,searchterm);
-        g_free(searchterm);
-    }
-    return result;
-}
+#include "../../core.h"
 
-/* ------------------------- */
+const gchar * generic_picsearch_url(GlyrQuery * s, const char * fmt);
+GList * generic_picsearch_parse(cb_object * capo);
 
-GList * cover_google_parse(cb_object * capo)
-{
-    return generic_google_parse(capo);
-}
-
-/* ------------------------- */
-
-MetaDataSource cover_google_src =
-{
-    .name      = "google",
-    .key       = 'g',
-    .parser    = cover_google_parse,
-    .get_url   = cover_google_url,
-    .type      = GLYR_GET_COVERART,
-    .quality   = 10,
-    .speed     = 80,
-    .endmarker = NULL,
-    .free_url  = true
-};
+#endif
