@@ -582,7 +582,7 @@ void glyr_free_list(GlyrMemCache * head)
 
 /*-----------------------------------------------*/
 
-void glyr_free_cache(GlyrMemCache * c)
+void glyr_cache_free(GlyrMemCache * c)
 {
 	DL_free(c);
 }
