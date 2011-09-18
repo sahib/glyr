@@ -104,6 +104,7 @@
     <keyword type="function" name="glyr_db_insert ()" link="libglyr-cache.html#glyr-db-insert"/>
     <keyword type="function" name="glyr_db_delete ()" link="libglyr-cache.html#glyr-db-delete"/>
     <keyword type="function" name="glyr_db_edit ()" link="libglyr-cache.html#glyr-db-edit"/>
+    <keyword type="function" name="glyr_db_replace ()" link="libglyr-cache.html#glyr-db-replace"/>
     <keyword type="constant" name="GLYRE_UNKNOWN" link="libglyr-types.html#GLYRE-UNKNOWN:CAPS"/>
     <keyword type="constant" name="GLYRE_OK" link="libglyr-types.html#GLYRE-OK:CAPS"/>
     <keyword type="constant" name="GLYRE_BAD_OPTION" link="libglyr-types.html#GLYRE-BAD-OPTION:CAPS"/>
