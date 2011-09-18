@@ -3,6 +3,7 @@
 <book xmlns="http://www.devhelp.net/book" title="libglyr Reference Manual" link="index.html" author="" name="libglyr">
   <chapters>
     <sub name="[Insert title here]" link="ch01.html">
+      <sub name="config" link="libglyr-config.html"/>
       <sub name="glyr" link="libglyr-glyr.html"/>
       <sub name="types" link="libglyr-types.html"/>
       <sub name="cache" link="libglyr-cache.html"/>
@@ -11,6 +12,15 @@
     <sub name="Index of deprecated API" link="deprecated-api-index.html"/>
   </chapters>
   <functions>
+    <function name="GLYR_VERSION_MAJOR" link="libglyr-config.html#GLYR-VERSION-MAJOR:CAPS"/>
+    <function name="GLYR_VERSION_MINOR" link="libglyr-config.html#GLYR-VERSION-MINOR:CAPS"/>
+    <function name="GLYR_VERSION_MICRO" link="libglyr-config.html#GLYR-VERSION-MICRO:CAPS"/>
+    <function name="GLYR_VERSION_MAJOR_INT" link="libglyr-config.html#GLYR-VERSION-MAJOR-INT:CAPS"/>
+    <function name="GLYR_VERSION_MINOR_INT" link="libglyr-config.html#GLYR-VERSION-MINOR-INT:CAPS"/>
+    <function name="GLYR_VERSION_MICRO_INT" link="libglyr-config.html#GLYR-VERSION-MICRO-INT:CAPS"/>
+    <function name="GLYR_CHECK_VERSION()" link="libglyr-config.html#GLYR-CHECK-VERSION:CAPS"/>
+    <function name="GLYR_VERSION_NAME" link="libglyr-config.html#GLYR-VERSION-NAME:CAPS"/>
+    <function name="GLYR_DEBUG" link="libglyr-config.html#GLYR-DEBUG:CAPS"/>
     <function name="glyr_init ()" link="libglyr-glyr.html#glyr-init"/>
     <function name="glyr_cleanup ()" link="libglyr-glyr.html#glyr-cleanup"/>
     <function name="glyr_get ()" link="libglyr-glyr.html#glyr-get"/>

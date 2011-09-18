@@ -1,4 +1,17 @@
 <ONLINE href="http://[SERVER]/libglyr/index.html">
+<ANCHOR id="libglyr-config" href="libglyr/libglyr-config.html">
+<ANCHOR id="libglyr-config.synopsis" href="libglyr/libglyr-config.html#libglyr-config.synopsis">
+<ANCHOR id="libglyr-config.description" href="libglyr/libglyr-config.html#libglyr-config.description">
+<ANCHOR id="libglyr-config.details" href="libglyr/libglyr-config.html#libglyr-config.details">
+<ANCHOR id="GLYR-VERSION-MAJOR:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MAJOR:CAPS">
+<ANCHOR id="GLYR-VERSION-MINOR:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MINOR:CAPS">
+<ANCHOR id="GLYR-VERSION-MICRO:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MICRO:CAPS">
+<ANCHOR id="GLYR-VERSION-MAJOR-INT:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MAJOR-INT:CAPS">
+<ANCHOR id="GLYR-VERSION-MINOR-INT:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MINOR-INT:CAPS">
+<ANCHOR id="GLYR-VERSION-MICRO-INT:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-MICRO-INT:CAPS">
+<ANCHOR id="GLYR-CHECK-VERSION:CAPS" href="libglyr/libglyr-config.html#GLYR-CHECK-VERSION:CAPS">
+<ANCHOR id="GLYR-VERSION-NAME:CAPS" href="libglyr/libglyr-config.html#GLYR-VERSION-NAME:CAPS">
+<ANCHOR id="GLYR-DEBUG:CAPS" href="libglyr/libglyr-config.html#GLYR-DEBUG:CAPS">
 <ANCHOR id="libglyr-glyr" href="libglyr/libglyr-glyr.html">
 <ANCHOR id="libglyr-glyr.synopsis" href="libglyr/libglyr-glyr.html#libglyr-glyr.synopsis">
 <ANCHOR id="libglyr-glyr.description" href="libglyr/libglyr-glyr.html#libglyr-glyr.description">

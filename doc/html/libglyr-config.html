@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>config</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="libglyr Reference Manual">
+<link rel="up" href="ch01.html" title="[Insert title here]">
+<link rel="prev" href="ch01.html" title="[Insert title here]">
+<link rel="next" href="libglyr-glyr.html" title="glyr">
+<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="ch01.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libglyr Reference Manual</th>
+<td><a accesskey="n" href="libglyr-glyr.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libglyr-config.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libglyr-config.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="libglyr-config"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libglyr-config.top_of_page"></a>config</span></h2>
+<p>config</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsynopsisdiv">
+<a name="libglyr-config.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MAJOR:CAPS" title="GLYR_VERSION_MAJOR">GLYR_VERSION_MAJOR</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MINOR:CAPS" title="GLYR_VERSION_MINOR">GLYR_VERSION_MINOR</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MICRO:CAPS" title="GLYR_VERSION_MICRO">GLYR_VERSION_MICRO</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MAJOR-INT:CAPS" title="GLYR_VERSION_MAJOR_INT">GLYR_VERSION_MAJOR_INT</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MINOR-INT:CAPS" title="GLYR_VERSION_MINOR_INT">GLYR_VERSION_MINOR_INT</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MICRO-INT:CAPS" title="GLYR_VERSION_MICRO_INT">GLYR_VERSION_MICRO_INT</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-CHECK-VERSION:CAPS" title="GLYR_CHECK_VERSION()">GLYR_CHECK_VERSION</a>                  (X,
+                                                         Y,
+                                                         Z)
+#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-NAME:CAPS" title="GLYR_VERSION_NAME">GLYR_VERSION_NAME</a>
+#define             <a class="link" href="libglyr-config.html#GLYR-DEBUG:CAPS" title="GLYR_DEBUG">GLYR_DEBUG</a>
+</pre>
+</div>
+<div class="refsect1">
+<a name="libglyr-config.description"></a><h2>Description</h2>
+</div>
+<div class="refsect1">
+<a name="libglyr-config.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="GLYR-VERSION-MAJOR:CAPS"></a><h3>GLYR_VERSION_MAJOR</h3>
+<pre class="programlisting">#define GLYR_VERSION_MAJOR "0"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-MINOR:CAPS"></a><h3>GLYR_VERSION_MINOR</h3>
+<pre class="programlisting">#define GLYR_VERSION_MINOR "8"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-MICRO:CAPS"></a><h3>GLYR_VERSION_MICRO</h3>
+<pre class="programlisting">#define GLYR_VERSION_MICRO "7"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-MAJOR-INT:CAPS"></a><h3>GLYR_VERSION_MAJOR_INT</h3>
+<pre class="programlisting">#define GLYR_VERSION_MAJOR_INT 0
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-MINOR-INT:CAPS"></a><h3>GLYR_VERSION_MINOR_INT</h3>
+<pre class="programlisting">#define GLYR_VERSION_MINOR_INT 8
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-MICRO-INT:CAPS"></a><h3>GLYR_VERSION_MICRO_INT</h3>
+<pre class="programlisting">#define GLYR_VERSION_MICRO_INT 7
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-CHECK-VERSION:CAPS"></a><h3>GLYR_CHECK_VERSION()</h3>
+<pre class="programlisting">#define GLYR_CHECK_VERSION(X,Y,Z) (X &lt;= GLYR_VERSION_MAJOR_INT &amp;&amp; Y &lt;= GLYR_VERSION_MINOR_INT &amp;&amp; Z &lt;= GLYR_VERSION_MICRO_INT)
+</pre>
+<p>
+Version to check glyr's version.
+Example:
+</p>
+<div class="informalexample"><pre class="programlisting">
+#if GLYR_CHECK_VERSION(0,8,7)
+     puts("Version is above 0.87!");
+#endif
+</pre></div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>X</code></em> :</span></p></td>
+<td>Macro version.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Y</code></em> :</span></p></td>
+<td>Mino version.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>Z</code></em> :</span></p></td>
+<td>Micro version,</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-VERSION-NAME:CAPS"></a><h3>GLYR_VERSION_NAME</h3>
+<pre class="programlisting">#define GLYR_VERSION_NAME  "Horny Hornet [beta]"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-DEBUG:CAPS"></a><h3>GLYR_DEBUG</h3>
+<pre class="programlisting">#define GLYR_DEBUG         FALSE
+</pre>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.17</div>
+</body>
+</html>
