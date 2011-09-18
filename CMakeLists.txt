@@ -174,6 +174,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/discogs.c"
 	"${DIR_PHOTOS}/singerpictures.c"
 	"${DIR_PHOTOS}/rhapsody.c"
+	"${DIR_PHOTOS}/picsearch.c"
 	"${DIR_GUITARTABS}/guitaretab.c"
 	"${DIR_GUITARTABS}/chordie_com.c"
 # 	Old plugins, removed due to bad quality

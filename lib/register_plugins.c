@@ -63,6 +63,7 @@ extern MetaDataSource photos_lastfm_src;
 extern MetaDataSource photos_singerpictures_src;
 extern MetaDataSource photos_discogs_src;
 extern MetaDataSource photos_rhapsody_src;
+extern MetaDataSource photos_picsearch_src;
 extern MetaDataSource relations_musicbrainz_src;
 extern MetaDataSource relations_generated_src;
 extern MetaDataSource review_allmusic_src;
@@ -145,6 +146,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_singerpictures_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_rhapsody_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
