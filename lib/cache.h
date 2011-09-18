@@ -131,6 +131,43 @@ int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 /**
 * glyr_db_edit:
 * @db: The Database
+* @query: The query with set artist,album, type etc.
+* @edited: The edited cache.
+* 
+* A simple convenience function to delete caches according to the settings specified in @query,
+* (Same rules as in glyr_db_delete() apply here).
+* After deleting the cache @edited in inserted. If @edited is a doubly linked list (next pointer is not NULL),
+* then all items in the list are inserted.
+* 
+* You could have written yourself like this:
+* <informalexample>
+* <programlisting>
+* int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
+* {
+*	int result = 0;
+*	if(db && query)
+*	{
+*		result = glyr_db_delete(db,query);
+*		if(result != 0)
+*		{
+*			for(GlyrMemCache * elem = edited; elem; elem = elem->next)
+*			{
+*				glyr_db_insert(db,query,edited);
+*			}
+*		}
+*	}
+*	return result;
+* }
+* </programlisting>
+* </informalexample>
+* 
+* Returns: The number of replaced caches
+*/
+gboolean glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited);
+
+/**
+* glyr_db_replace:
+* @db: The Database
 * @md5sum: The md5sum of the cache you want to edit.
 * @query: The query with set artist,album, type etc.
 * @data: The edited cache.
@@ -146,7 +183,7 @@ int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 * memcpy(old_md5sum,c->md5sum,16);
 * glyr_cache_set_data(c,g_strdup("Changed the data - muahahah"),-1);
 * c->rating = 4200;
-* glyr_db_edit(s->local_db, old_md5sum, s, c);
+* glyr_db_replace(s->local_db, old_md5sum, s, c);
 * </programlisting>
 * </informalexample>
 *
@@ -155,13 +192,13 @@ int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 * <listitem>
 * <para>
 * You may insert a cache several times, if the source url (cache->dsrc) is different,
-* but with the same checksum. If you call glyr_db_edit() once more, the caches
+* but with the same checksum. If you call glyr_db_replace() once more, the caches
 * with the double md5sum get deleted and replaced by the new one.
 * </para>
 * </listitem>
 * </itemizedlist>
 */
-void glyr_db_edit(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data);
+void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data);
 
 #ifdef __cplusplus
 }
