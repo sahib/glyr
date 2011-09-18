@@ -26,7 +26,7 @@
 
 /*--------------------------------------------------------*/
 
-const gchar * lyrics_lyricswiki_url(GlyrQuery * settings)
+static const gchar * lyrics_lyricswiki_url(GlyrQuery * settings)
 {
     return LW_URL;
 }
@@ -34,7 +34,7 @@ const gchar * lyrics_lyricswiki_url(GlyrQuery * settings)
 /*--------------------------------------------------------*/
 
 // Compare response, so lyricswiki's search did not fool us
-gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_object * capo)
+static gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_object * capo)
 {
     gboolean res = false;
     if(to_artist && to_title && capo)
@@ -65,7 +65,7 @@ gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, cb_obje
 #define LYR_BEGIN "'17'/></a></div>"
 #define LYR_ENDIN "<!--"
 
-GList * lyrics_lyricswiki_parse(cb_object * capo)
+static GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GList * result_list = NULL;
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))

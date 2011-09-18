@@ -22,7 +22,7 @@
 
 #define SPICS_BASE_URL "http://www.singerpictures.com/%s-pictures.html"
 
-const gchar * photos_singerlyrics_url(GlyrQuery * settings)
+static const gchar * photos_singerlyrics_url(GlyrQuery * settings)
 {
     gchar * result_url = NULL;
     gchar * space_to_min_artist = strreplace(settings->artist," ","-");
@@ -95,7 +95,7 @@ static gboolean check_image_size(GlyrQuery * s, gchar * ref_to_img_start)
 #define URL_ID_START "rel=\"nofollow\"><img src='/images/pic/"
 #define URL_ID_END   "_th."
 
-GList * photos_singerlyrics_parse(cb_object * capo)
+static GList * photos_singerlyrics_parse(cb_object * capo)
 {
     GList * result_list = NULL;
     gsize len = (sizeof URL_ID_START) - 1;

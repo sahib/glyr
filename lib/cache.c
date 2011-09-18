@@ -124,7 +124,7 @@ void glyr_db_edit(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, 
 		gchar * sql = "DELETE FROM metadata WHERE data_checksum = ? ;\n";
 		sqlite3_stmt *stmt = NULL;
 		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
-		sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_TRANSIENT);
+		sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_STATIC);
 
 		if(sqlite3_step(stmt) != SQLITE_DONE) 
 		{
@@ -247,7 +247,6 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 	GlyrMemCache * result = NULL;
 	if(db != NULL && query != NULL)
 	{
-
 		GLYR_FIELD_REQUIREMENT reqs = get_req(query);
 		gchar * artist_constr = "";
 		if((reqs & GLYR_REQUIRES_ARTIST) != 0)
@@ -476,13 +475,13 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 	sqlite3_stmt *stmt = NULL;
 	sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 
-	sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_TRANSIENT);
+	sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
 	sqlite3_bind_int (stmt, 2, cache->duration);
 	sqlite3_bind_int (stmt, 3, query->type);
 	sqlite3_bind_int( stmt, 4, cache->type);
 	sqlite3_bind_int( stmt, 5, cache->size);
-	sqlite3_bind_blob(stmt, 6, cache->md5sum, sizeof cache->md5sum, SQLITE_TRANSIENT);
-	sqlite3_bind_blob(stmt, 7, cache->data, cache->size, SQLITE_TRANSIENT);
+	sqlite3_bind_blob(stmt, 6, cache->md5sum, sizeof cache->md5sum, SQLITE_STATIC);
+	sqlite3_bind_blob(stmt, 7, cache->data, cache->size, SQLITE_STATIC);
 	sqlite3_bind_int( stmt, 8, cache->rating);
 	sqlite3_bind_double( stmt, 9, get_current_time());
 

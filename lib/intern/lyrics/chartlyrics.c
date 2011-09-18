@@ -25,7 +25,7 @@
 
 /*--------------------------------------------------------*/
 
-const gchar * lyrics_chartlyrics_url(GlyrQuery * s)
+static const gchar * lyrics_chartlyrics_url(GlyrQuery * s)
 {
 	return CL_API_URL;
 }
@@ -35,7 +35,7 @@ const gchar * lyrics_chartlyrics_url(GlyrQuery * s)
 #define LYRIC_TEXT_BEG "<Lyric>"
 #define LYRIC_TEXT_END "</Lyric>"
 
-GlyrMemCache * get_lyrics_from_results(GlyrQuery * s, const gchar * url)
+static GlyrMemCache * get_lyrics_from_results(GlyrQuery * s, const gchar * url)
 {
 	GlyrMemCache * result = NULL;
 	GlyrMemCache * dl_cache = download_single(url,s,NULL);
@@ -70,7 +70,7 @@ GlyrMemCache * get_lyrics_from_results(GlyrQuery * s, const gchar * url)
 #define LYRIC_ID_BEG "<LyricId>"
 #define LYRIC_ID_END "</LyricId>"
 
-GList * lyrics_chartlyrics_parse(cb_object * capo)
+static GList * lyrics_chartlyrics_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * node = capo->cache->data;

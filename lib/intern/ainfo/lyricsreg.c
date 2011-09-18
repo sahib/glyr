@@ -26,14 +26,14 @@
 #define INFO_ENDIN "</div>"
 /*-------------------------------------*/
 
-const gchar * ainfo_lyricsreg_url(GlyrQuery * s)
+static const gchar * ainfo_lyricsreg_url(GlyrQuery * s)
 {
 	return "http://www.lyricsreg.com/biography/${artist}/";
 }
 
 /*-------------------------------------*/
 
-GList * ainfo_lyricsreg_parse(cb_object * capo)
+static GList * ainfo_lyricsreg_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * point_to_start = strstr(capo->cache->data,INFO_BEGIN);

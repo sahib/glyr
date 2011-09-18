@@ -35,7 +35,7 @@ artist && album          -> album
 /*--------------------------------------------------------*/
 
 /* Wrap around the (a bit more) generic versions */
-GList * tags_musicbrainz_parse(cb_object * capo)
+static GList * tags_musicbrainz_parse(cb_object * capo)
 {
 	GList * results = NULL;
 	gint mbid_marker = 0;
@@ -82,7 +82,7 @@ GList * tags_musicbrainz_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const gchar * tags_musicbrainz_url(GlyrQuery * sets)
+static const gchar * tags_musicbrainz_url(GlyrQuery * sets)
 {
 	return generic_musicbrainz_url(sets);
 }

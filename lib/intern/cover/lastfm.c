@@ -23,7 +23,7 @@
 
 /* ----------------------------------------------- */
 
-const char * cover_lastfm_url(GlyrQuery * sets)
+static const char * cover_lastfm_url(GlyrQuery * sets)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=album.search&album=${artist}+${album}&api_key="API_KEY_LASTFM;
 }
@@ -32,7 +32,7 @@ const char * cover_lastfm_url(GlyrQuery * sets)
 
 #define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
-GList * cover_lastfm_parse(cb_object *capo)
+static GList * cover_lastfm_parse(cb_object *capo)
 {
     /* Handle size requirements (Default to large) */
     const gchar * tag_ssize = NULL ;

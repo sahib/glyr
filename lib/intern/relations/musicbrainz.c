@@ -27,7 +27,7 @@
 #define RELATION_BEGIN_TYPE  "<relation"
 
 /* Wrap around the (a bit more) generic versions */
-GList * relations_musicbrainz_parse(cb_object * capo)
+static GList * relations_musicbrainz_parse(cb_object * capo)
 {
 	GList * results = NULL;
 	gint mbid_marker = 0;
@@ -70,7 +70,7 @@ GList * relations_musicbrainz_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const gchar * relations_musicbrainz_url(GlyrQuery * sets)
+static const gchar * relations_musicbrainz_url(GlyrQuery * sets)
 {
 	return generic_musicbrainz_url(sets);
 }

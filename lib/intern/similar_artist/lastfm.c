@@ -22,7 +22,7 @@
 
 #define API_KEY API_KEY_LASTFM
 
-const char * similiar_lastfm_url(GlyrQuery * sets)
+static const char * similiar_lastfm_url(GlyrQuery * sets)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=${artist}&api_key="API_KEY;
 }
@@ -43,7 +43,7 @@ const char * similiar_lastfm_url(GlyrQuery * sets)
 #define IMAGE_X_BEGIN "<image size=\"mega\">"
 #define IMAGE_ENDIN   "</image>"
 
-GList * similiar_lastfm_parse(cb_object * capo)
+static GList * similiar_lastfm_parse(cb_object * capo)
 {
     GList * results = NULL;
     gchar * find = capo->cache->data;

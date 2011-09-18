@@ -23,12 +23,12 @@
 #define INFO_BEGIN "</div><div style=\"text-align:center;\">"
 #define INFO_ENDIN " <a href=\""
 
-const char * lyrics_lyricsreg_url(GlyrQuery * s)
+static const char * lyrics_lyricsreg_url(GlyrQuery * s)
 {
 		return "http://www.lyricsreg.com/lyrics/${artist}/${title}/";
 }
 
-GList * lyrics_lyricsreg_parse(cb_object * capo)
+static GList * lyrics_lyricsreg_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * start = strstr(capo->cache->data, INFO_BEGIN);

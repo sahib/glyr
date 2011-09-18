@@ -22,7 +22,7 @@
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=${artist}+${title}"
 
-const char * lyrics_magistrix_url(GlyrQuery * settings)
+static const char * lyrics_magistrix_url(GlyrQuery * settings)
 {
     return MG_URL;
 }
@@ -187,38 +187,38 @@ static void query_search_page_results(cb_object * capo, GList ** result_list)
 
 /*--------------------------------------------------------*/
 
-GList * lyrics_magistrix_parse (cb_object * capo)
+static GList * lyrics_magistrix_parse (cb_object * capo)
 {
-    GList * result_list = NULL;
-    if(strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   /* "No songtext" page? */
-    {
-        if(strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   /* Are we not on the search result page? */
-        {
-            GlyrMemCache * result = parse_lyric_page(capo->cache->data);
-            if(result != NULL)
-            {
-                result_list = g_list_prepend(result_list,result);
-            }
-        }
-        else
-        {
+	GList * result_list = NULL;
+	if(strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   /* "No songtext" page? */
+	{
+		if(strstr(capo->cache->data,"<title>Songtext-Suche</title>") == NULL)   /* Are we not on the search result page? */
+		{
+			GlyrMemCache * result = parse_lyric_page(capo->cache->data);
+			if(result != NULL)
+			{
+				result_list = g_list_prepend(result_list,result);
+			}
+		}
+		else
+		{
 			query_search_page_results(capo,&result_list);
-        }
-    }
-    return result_list;
+		}
+	}
+	return result_list;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource lyrics_magistrix_src =
 {
-    .name = "magistrix",
-    .key  = 'x',
-    .parser    = lyrics_magistrix_parse,
-    .get_url   = lyrics_magistrix_url,
-    .type      = GLYR_GET_LYRICS,
-    .quality   = 60,
-    .speed     = 70,
-    .endmarker = NULL,
-    .free_url  = false
+	.name = "magistrix",
+	.key  = 'x',
+	.parser    = lyrics_magistrix_parse,
+	.get_url   = lyrics_magistrix_url,
+	.type      = GLYR_GET_LYRICS,
+	.quality   = 60,
+	.speed     = 70,
+	.endmarker = NULL,
+	.free_url  = false
 };

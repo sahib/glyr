@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
+static const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=\"Official\"";
 }
@@ -32,7 +32,7 @@ const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 #define TITLE_BEGIN "<title>"
 #define TITLE_ENDIN "</title>"
 
-GList * albumlist_musicbrainz_parse(cb_object * capo)
+static GList * albumlist_musicbrainz_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * node = capo->cache->data;

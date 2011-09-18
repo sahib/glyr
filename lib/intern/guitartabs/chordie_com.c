@@ -27,14 +27,14 @@
 #define RESULTS_ENDIN "<!--results end-->"
 #define NODE "<a class=\"darkblue\" href=\""
 
-const gchar * guitartabs_chordie_url(GlyrQuery * s)
+static const gchar * guitartabs_chordie_url(GlyrQuery * s)
 {
 	return SEARCH_URL;
 }
 
 /*--------------------------------------------------------*/
 
-gboolean check_title_value(GlyrQuery * s, const gchar * to_check)
+static gboolean check_title_value(GlyrQuery * s, const gchar * to_check)
 {
 	gboolean result = FALSE;
 	if(to_check != NULL)
@@ -60,7 +60,7 @@ gboolean check_title_value(GlyrQuery * s, const gchar * to_check)
 
 /*--------------------------------------------------------*/
 
-GlyrMemCache * parse_result_page(GlyrQuery * s, gchar * content_url)
+static GlyrMemCache * parse_result_page(GlyrQuery * s, gchar * content_url)
 {
 	GlyrMemCache * result = NULL;
 	if(content_url != NULL)
@@ -85,7 +85,7 @@ GlyrMemCache * parse_result_page(GlyrQuery * s, gchar * content_url)
 
 /*--------------------------------------------------------*/
 
-GList * guitartabs_chordie_parse(cb_object * capo)
+static GList * guitartabs_chordie_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * search_begin = strstr(capo->cache->data,RESULTS_BEGIN);

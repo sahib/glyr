@@ -25,7 +25,7 @@
 #define MAX_TRIES 5
 
 // Just return URL
-const gchar * lyrics_metrolyrics_url(GlyrQuery * settings)
+static const gchar * lyrics_metrolyrics_url(GlyrQuery * settings)
 {
     return ML_URL;
 }
@@ -91,7 +91,7 @@ static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
 #define NEXT_NODE "<li>"
 #define PAGES "<ul id=\"pages\">"
 
-GList * lyrics_metrolyrics_parse(cb_object * capo)
+static GList * lyrics_metrolyrics_parse(cb_object * capo)
 {
     GList * result_list = NULL;
     gchar * root = strstr(capo->cache->data,ROOT_NODE);

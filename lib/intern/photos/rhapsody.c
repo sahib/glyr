@@ -45,7 +45,7 @@ static gchar * translate_string(gchar * string)
 
 /*--------------------------------------*/
 
-const gchar * photos_rhapsody_url(GlyrQuery * query)
+static const gchar * photos_rhapsody_url(GlyrQuery * query)
 {
 	gchar * result = NULL;
 	if(query->img_min_size <= 135)
@@ -88,7 +88,7 @@ static gboolean check_size(GlyrQuery * s, gchar * ref)
 #define DELIM_END "</art>"
 #define NODE "<img "
 
-GList * photos_rhapsody_parse(cb_object * capo)
+static GList * photos_rhapsody_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * delim_beg = strstr(capo->cache->data,DELIM_BEG);

@@ -30,7 +30,7 @@
 #define IMG_TYPE "primary"
 #define NODE_END "\" "
 
-const gchar * cover_discogs_url(GlyrQuery * sets)
+static const gchar * cover_discogs_url(GlyrQuery * sets)
 {
 	if(sets->img_max_size >= 300 || sets->img_max_size == -1)
 	{
@@ -143,7 +143,7 @@ static void sort_primary_before_secondary(GList ** result_list)
 /*------------------------------------------------*/
 
 /* The discogs.com parser is a little more complicated... */
-GList * cover_discogs_parse(cb_object * capo)
+static GList * cover_discogs_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 

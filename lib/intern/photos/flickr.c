@@ -25,7 +25,7 @@
 
 /*------------------------------------*/
 
-const gchar * photos_flickr_url(GlyrQuery * settings)
+static const gchar * photos_flickr_url(GlyrQuery * settings)
 {
     if(settings->img_max_size <= 175 && settings->img_max_size != -1)
     {
@@ -49,7 +49,7 @@ const gchar * photos_flickr_url(GlyrQuery * settings)
 
 /*--------------------------------------------------------*/
 
-GList * photos_flickr_parse(cb_object * capo)
+static GList * photos_flickr_parse(cb_object * capo)
 {
     gchar * ph_begin = capo->cache->data;
     GList * result_list = NULL;

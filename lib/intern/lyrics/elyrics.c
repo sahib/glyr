@@ -23,7 +23,7 @@
 /* Simple URL replace scheme - works pretty good here */
 #define ELYRICS_BASE_URL "http://www.elyrics.net/read/%c/%s-lyrics/%s-lyrics.html"
 
-const gchar * lyrics_elyrics_url(GlyrQuery * settings)
+static const gchar * lyrics_elyrics_url(GlyrQuery * settings)
 {
     gchar * result_url = NULL;
 

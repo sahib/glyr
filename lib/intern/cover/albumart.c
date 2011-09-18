@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-const gchar * cover_albumart_url(GlyrQuery * sets)
+static const gchar * cover_albumart_url(GlyrQuery * sets)
 {
 	gint i = sets->img_min_size;
 	gint e = sets->img_max_size;
@@ -40,7 +40,7 @@ const gchar * cover_albumart_url(GlyrQuery * sets)
 #define AMZ "http://ecx.images-amazon.com/images/"
 #define IMG_FORMAT ".jpg"
 
-GList * cover_albumart_parse(cb_object * capo)
+static GList * cover_albumart_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * node = strstr(capo->cache->data,NODE_START);

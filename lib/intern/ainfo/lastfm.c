@@ -27,7 +27,7 @@
 /* Locales that are just mapped to 'en' */
 const char * locale_map_to_en = "ca|uk|us";
 
-const gchar * ainfo_lastfm_url(GlyrQuery * s)
+static const gchar * ainfo_lastfm_url(GlyrQuery * s)
 {
 	gchar * url = NULL;
 	gchar * right_artist = strreplace(s->artist," ","+");
@@ -55,7 +55,7 @@ const gchar * ainfo_lastfm_url(GlyrQuery * s)
 
 /*-------------------------------------*/
 
-GList * ainfo_lastfm_parse(cb_object * capo)
+static GList * ainfo_lastfm_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * content_begin = strstr(capo->cache->data,CONTENT_BEGIN);

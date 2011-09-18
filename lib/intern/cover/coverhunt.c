@@ -25,7 +25,7 @@
  * Coverhunt seems to have some load problems at time of writing...
  */
 
-const gchar * cover_coverhunt_url(GlyrQuery * sets)
+static const gchar * cover_coverhunt_url(GlyrQuery * sets)
 {
 	if(sets->img_min_size <= 500 || sets->img_min_size == -1)
 	{
@@ -62,7 +62,7 @@ static gboolean check_size(const char * art_root, const char *hw, cb_object * ca
  * coverhunt sadly offers  no way to check if the
  * image is really related to the query we're searching for
  */
-GList * cover_coverhunt_parse(cb_object *capo)
+static GList * cover_coverhunt_parse(cb_object *capo)
 {
 	GList * result_list = NULL;
 

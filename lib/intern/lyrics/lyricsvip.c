@@ -24,7 +24,7 @@
 
 /*--------------------------------------------------------*/
 
-const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
+static const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
 {
 	gchar * result = NULL;
 	gchar * artist_clean = strreplace(settings->artist, " ", "-");
@@ -50,7 +50,7 @@ const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
 #define BEG "<table class=\"tbl0\">"
 #define END "</table>"
 
-GList * lyrics_lyricsvip_parse(cb_object *capo)
+static GList * lyrics_lyricsvip_parse(cb_object *capo)
 {
 	gchar * start = NULL;
 	gchar * end = NULL;

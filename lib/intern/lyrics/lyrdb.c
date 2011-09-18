@@ -24,14 +24,14 @@
 
 /*---------------------------------------------------*/
 
-const char * lyrics_lyrdb_url(GlyrQuery * settings)
+static const char * lyrics_lyrdb_url(GlyrQuery * settings)
 {
     return LYRDB_URL;
 }
 
 /*---------------------------------------------------*/
 
-GList * lyrics_lyrdb_parse(cb_object * capo)
+static GList * lyrics_lyrdb_parse(cb_object * capo)
 {
 	gchar *slash = NULL;
 	GList * result_list = NULL;

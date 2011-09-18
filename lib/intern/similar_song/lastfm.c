@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
+static const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 {
     return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${artist}&track=${title}&api_key="API_KEY_LASTFM;
 }
@@ -38,7 +38,7 @@ const gchar * similiar_song_lastfm_url(GlyrQuery * sets)
 #define URL_BEGIN "<url>"
 #define URL_ENDIN "</url>"
 
-GList * similiar_song_lastfm_parse(cb_object * capo)
+static GList * similiar_song_lastfm_parse(cb_object * capo)
 {
     GList * results = NULL;
     gchar * begin = capo->cache->data;

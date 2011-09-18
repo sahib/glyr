@@ -25,14 +25,14 @@
 
 /*--------------------------------------------------------*/
 
-const gchar * gt_guitaretabs_url(GlyrQuery * settings)
+static const gchar * gt_guitaretabs_url(GlyrQuery * settings)
 {
     return GT_URL;
 }
 
 /*--------------------------------------------------------*/
 
-GlyrMemCache * parse_single_page(GlyrQuery * s, const gchar * url)
+static GlyrMemCache * parse_single_page(GlyrQuery * s, const gchar * url)
 {
 	GlyrMemCache * result = NULL;
 	GlyrMemCache * tab_cache = download_single(url,s,NULL);
@@ -64,7 +64,7 @@ GlyrMemCache * parse_single_page(GlyrQuery * s, const gchar * url)
 #define TITLE_BEGIN "\">"
 #define TITLE_ENDIN "</a></li>"
 
-GList * gt_guitaretabs_parse(cb_object * capo)
+static GList * gt_guitaretabs_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * begin_search = strstr(capo->cache->data,SEARCH_RESULTS_BEGIN);

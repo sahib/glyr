@@ -22,7 +22,7 @@
 #include "../../stringlib.h"
 #include "../../glyr.h"
 
-const char * cover_allmusic_url(GlyrQuery * s)
+static const char * cover_allmusic_url(GlyrQuery * s)
 {
 	if(s->img_min_size < 200)
 	{
@@ -46,7 +46,7 @@ const char * cover_allmusic_url(GlyrQuery * s)
 
 #define BAD_URL "/img/pages/site/icons/no_cover_200.gif"
 
-GlyrMemCache * parse_cover_page(GlyrMemCache * dl_cache)
+static GlyrMemCache * parse_cover_page(GlyrMemCache * dl_cache)
 {
 	GlyrMemCache * result = NULL;
 	if(dl_cache != NULL)
@@ -72,7 +72,7 @@ GlyrMemCache * parse_cover_page(GlyrMemCache * dl_cache)
 /*--------------------------------------*/
 
 #define TITLE_TAG "<a href=\"\">Title</a></th>"
-GList * cover_allmusic_parse(cb_object * capo)
+static GList * cover_allmusic_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	if(strstr(capo->cache->data,TITLE_TAG) != NULL)

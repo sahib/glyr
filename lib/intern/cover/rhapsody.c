@@ -45,7 +45,7 @@ static gchar * translate_string(gchar * string)
 
 /*--------------------------------------*/
 
-const gchar * cover_rhapsody_url(GlyrQuery * query)
+static const gchar * cover_rhapsody_url(GlyrQuery * query)
 {
 	gchar * result = NULL;
 	gchar * corrected_artist = translate_string(query->artist);
@@ -88,7 +88,7 @@ static gboolean check_size(GlyrQuery * s, gchar * ref)
 #define HACK_SIZE "170x170"
 #define HIGH_SIZE "500x500"
 
-GList * cover_rhapsody_parse(cb_object * capo)
+static GList * cover_rhapsody_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	gchar * delim_beg = strstr(capo->cache->data,DELIM_BEG);

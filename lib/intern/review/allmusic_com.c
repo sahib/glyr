@@ -33,7 +33,7 @@
 
 /*---------------------------------*/
 
-const gchar * review_allmusic_url(GlyrQuery * s)
+static const gchar * review_allmusic_url(GlyrQuery * s)
 {
     return "http://www.allmusic.com/search/album/${album}";
 }
@@ -43,7 +43,7 @@ const gchar * review_allmusic_url(GlyrQuery * s)
 
 /*---------------------------------*/
 
-GlyrMemCache * parse_text(GlyrMemCache * to_parse)
+static GlyrMemCache * parse_text(GlyrMemCache * to_parse)
 {
     GlyrMemCache * return_cache = NULL;
     gchar * text = get_search_value(to_parse->data,TEXT_BEGIN,TEXT_ENDIN);
@@ -63,7 +63,7 @@ GlyrMemCache * parse_text(GlyrMemCache * to_parse)
 #define TITLE_BEGIN  "<a href=\"\">Title</a></th>"
 #define SINGLE_ENDMARK "<div id=\"tracks\">"
 
-GList * review_allmusic_parse(cb_object * capo)
+static GList * review_allmusic_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	if(strstr(capo->cache->data,TITLE_BEGIN) != NULL)

@@ -29,7 +29,7 @@
 #define START "<div id=\"lyric\">"
 #define END "</div>"
 
-const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
+static const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
 {
 	return LIPWALK_URL;
 }
@@ -74,9 +74,10 @@ static gboolean validate_track_description(GlyrQuery * query, gchar * descriptio
 		gchar ** splitv = g_strsplit(description," - ",0);
 		if(splitv != NULL)
 		{
-			if(splitv[1] != NULL)
+			if(splitv[0] && splitv[1] != NULL)
 			{
-				if(levenshtein_strnormcmp(query,query->title,splitv[1]) <= query->fuzzyness)
+				if(levenshtein_strnormcmp(query,query->artist,splitv[0]) <= query->fuzzyness
+				&& levenshtein_strnormcmp(query,query->title, splitv[1]) <= query->fuzzyness)
 				{
 					result = TRUE;
 				}
@@ -89,7 +90,7 @@ static gboolean validate_track_description(GlyrQuery * query, gchar * descriptio
 
 /*---------------------------------------------------*/
 
-GList * lyrics_lipwalk_parse(cb_object *capo)
+static GList * lyrics_lipwalk_parse(cb_object *capo)
 {
 	GList * result_list  = NULL;
 	if(strstr(capo->cache->data,START) != NULL)

@@ -22,7 +22,7 @@
 
 /*--------------------------------------------------------*/
 
-GList * relations_generated_parse(cb_object * capo)
+static GList * relations_generated_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 	GList * temple_list = NULL;
@@ -64,7 +64,7 @@ GList * relations_generated_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const gchar * relations_generated_url(GlyrQuery * sets)
+static const gchar * relations_generated_url(GlyrQuery * sets)
 {
 	return OFFLINE_PROVIDER;
 }

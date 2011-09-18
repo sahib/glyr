@@ -59,7 +59,7 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 // as an fallback there is the albumart and coverhunt plugin which implement a search on amazon (on serverside)
 /*-------------------------------------------------*/
 
-const gchar * cover_amazon_url(GlyrQuery * sets)
+static const gchar * cover_amazon_url(GlyrQuery * sets)
 {
     return generic_amazon_url(sets,"Images");
 }
@@ -70,7 +70,7 @@ const gchar * cover_amazon_url(GlyrQuery * sets)
 #define C_MAX(X) (capo->s->img_max_size <  X && capo->s->img_max_size != -1)
 #define C_MIN(X) (capo->s->img_min_size >= X && capo->s->img_min_size != -1)
 
-GList * cover_amazon_parse(cb_object *capo)
+static GList * cover_amazon_parse(cb_object *capo)
 {
     const gchar *tag_ssize = (capo->s->img_max_size == -1 && capo->s->img_min_size == -1) ? "<LargeImage>"  :
                              (C_MAX( 30) && C_MIN(-1)) ? "<SwatchImage>" :

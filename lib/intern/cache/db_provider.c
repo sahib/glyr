@@ -22,7 +22,7 @@
 
 /*--------------------------------------------------------*/
 
-GList * local_provider_parse(cb_object * capo)
+static GList * local_provider_parse(cb_object * capo)
 {
 	GList * converter_list = NULL;
 	if(capo->s && capo->s->local_db != NULL)
@@ -51,7 +51,7 @@ GList * local_provider_parse(cb_object * capo)
 
 /*--------------------------------------------------------*/
 
-const gchar * local_provider_url(GlyrQuery * sets)
+static const gchar * local_provider_url(GlyrQuery * sets)
 {
 	return OFFLINE_PROVIDER;
 }

@@ -21,14 +21,14 @@
 #include "../../stringlib.h"
 #include "../common/amazon.h"
 
-const gchar * review_amazon_url(GlyrQuery * settings)
+static const gchar * review_amazon_url(GlyrQuery * settings)
 {
     return generic_amazon_url(settings,"EditorialReview");
 }
 
 #define TheContent "<Content>"
 #define TheEndofCt "</Content>"
-GList * review_amazon_parse(cb_object * capo)
+static GList * review_amazon_parse(cb_object * capo)
 {
     gchar * node = capo->cache->data;
     gsize conlen = (sizeof TheContent) - 1;
@@ -62,7 +62,7 @@ MetaDataSource review_amazon_src =
     .parser    = review_amazon_parse,
     .get_url   = review_amazon_url,
     .type      = GLYR_GET_ALBUM_REVIEW,
-    .quality   = 45,
+    .quality   = 25,
     .speed     = 70,
     .endmarker = NULL,
     .free_url  = true

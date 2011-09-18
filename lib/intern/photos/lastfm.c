@@ -26,7 +26,7 @@
 
 /* -------------------------------------------- */
 
-const gchar * photos_lastfm_url(GlyrQuery * settings)
+static const gchar * photos_lastfm_url(GlyrQuery * settings)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=${artist}&api_key="API_KEY_LASTFM;
 }
@@ -77,7 +77,7 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
 
 /* -------------------------------------------- */
 
-GList * photos_lastfm_parse(cb_object * capo)
+static GList * photos_lastfm_parse(cb_object * capo)
 {
     gchar * root = capo->cache->data;
     GList * result_list = NULL;

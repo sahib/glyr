@@ -26,7 +26,7 @@
 #define NODE_START  "<image "
 #define NODE_END    "\" "
 
-const gchar * photos_discogs_url(GlyrQuery * sets)
+static const gchar * photos_discogs_url(GlyrQuery * sets)
 {
     if(sets->img_max_size >= 250 || sets->img_max_size == -1)
     {
@@ -58,65 +58,65 @@ static gboolean check_size(GlyrQuery * s, gchar * ref)
 
 /*------------------------------------------------*/
 
-GList * photos_discogs_parse(cb_object * capo)
+static GList * photos_discogs_parse(cb_object * capo)
 {
-		gchar * parse_start = strstr(capo->cache->data,PARSE_START);
-		gchar * parse_end   = strstr(capo->cache->data,PARSE_END);
+	gchar * parse_start = strstr(capo->cache->data,PARSE_START);
+	gchar * parse_end   = strstr(capo->cache->data,PARSE_END);
 
-		GList * result_list = NULL;
-		GHashTable * type_table = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,g_free);
+	GList * result_list = NULL;
+	GHashTable * type_table = g_hash_table_new_full(g_direct_hash,g_direct_equal,NULL,g_free);
 
-		if(parse_start != NULL && parse_end != NULL)
+	if(parse_start != NULL && parse_end != NULL)
+	{
+		gchar * node = parse_start;
+		gsize node_next_len = (sizeof NODE_START) - 1;
+		while((node = strstr(node + node_next_len,NODE_START)) != NULL)
 		{
-				gchar * node = parse_start;
-				gsize node_next_len = (sizeof NODE_START) - 1;
-				while((node = strstr(node + node_next_len,NODE_START)) != NULL)
-				{
-						node += node_next_len;
-						if(check_size(capo->s,node) == TRUE)
-						{
-								gchar * type = get_search_value(node,"type=\"",NODE_END);
-								gchar * url  = get_search_value(node,"uri=\"",NODE_END);
-								if(url != NULL)
-								{
-										GlyrMemCache * result = DL_init();
-										result->data = url;
-										result->size = strlen(url);
-
-										result_list = g_list_prepend(result_list,result);
-										g_hash_table_insert(type_table,result,type);
-								}
-						}
-				}
-		}
-
-		/* Make 'primary' the first in the list */	
-		for(GList * elem = result_list; elem; elem = elem->next)
-		{
-			GlyrMemCache * item = elem->data;
-			gchar * type_descr = g_hash_table_lookup(type_table,item);
-			if(type_descr && g_ascii_strcasecmp(type_descr,"primary") == 0)
+			node += node_next_len;
+			if(check_size(capo->s,node) == TRUE)
 			{
-				result_list = g_list_delete_link(result_list,elem);
-				result_list = g_list_prepend(result_list,item);
-				break;
+				gchar * type = get_search_value(node,"type=\"",NODE_END);
+				gchar * url  = get_search_value(node,"uri=\"",NODE_END);
+				if(url != NULL)
+				{
+					GlyrMemCache * result = DL_init();
+					result->data = url;
+					result->size = strlen(url);
+
+					result_list = g_list_prepend(result_list,result);
+					g_hash_table_insert(type_table,result,type);
+				}
 			}
 		}
-		g_hash_table_destroy(type_table);
-		return result_list;
+	}
+
+	/* Make 'primary' the first in the list */	
+	for(GList * elem = result_list; elem; elem = elem->next)
+	{
+		GlyrMemCache * item = elem->data;
+		gchar * type_descr = g_hash_table_lookup(type_table,item);
+		if(type_descr && g_ascii_strcasecmp(type_descr,"primary") == 0)
+		{
+			result_list = g_list_delete_link(result_list,elem);
+			result_list = g_list_prepend(result_list,item);
+			break;
+		}
+	}
+	g_hash_table_destroy(type_table);
+	return result_list;
 }
 
 /*------------------------------------------------*/
 
 MetaDataSource photos_discogs_src =
 {
-		.name      = "discogs",
-		.key       = 'd',
-		.parser    = photos_discogs_parse,
-		.get_url   = photos_discogs_url,
-		.type      = GLYR_GET_ARTIST_PHOTOS,
-		.quality   = 70,
-		.speed     = 65,
-		.endmarker = NULL,
-		.free_url  = false
+	.name      = "discogs",
+	.key       = 'd',
+	.parser    = photos_discogs_parse,
+	.get_url   = photos_discogs_url,
+	.type      = GLYR_GET_ARTIST_PHOTOS,
+	.quality   = 70,
+	.speed     = 65,
+	.endmarker = NULL,
+	.free_url  = false
 };

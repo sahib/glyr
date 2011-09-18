@@ -23,15 +23,15 @@
 
 /* ------------------------- */
 
-const gchar * cover_picsearch_url(GlyrQuery * s)
+static const gchar * cover_picsearch_url(GlyrQuery * s)
 {
-return generic_picsearch_url(s,"${artist}+${album}+coverart");
+	return generic_picsearch_url(s,"${artist}+${album}+coverart");
 }
 
 /* ------------------------- */
-GList * cover_picsearch_parse(cb_object * capo)
+static GList * cover_picsearch_parse(cb_object * capo)
 {
-return generic_picsearch_parse(capo);
+	return generic_picsearch_parse(capo);
 }
 
 /* ------------------------- */

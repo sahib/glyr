@@ -24,7 +24,7 @@
 
 /*--------------------------------------------------------*/
 
-const char * lyrics_lyricstime_url(GlyrQuery * settings)
+static const char * lyrics_lyricstime_url(GlyrQuery * settings)
 {
     return GLYR_GET_URL;
 }
@@ -106,7 +106,7 @@ static gboolean validate_artist(cb_object * capo, gchar * backpointer)
 
 /*--------------------------------------------------------*/
 
-GList * lyrics_lyricstime_parse(cb_object * capo)
+static GList * lyrics_lyricstime_parse(cb_object * capo)
 {
 	GList * rList = NULL;
 	char * start = capo->cache->data;

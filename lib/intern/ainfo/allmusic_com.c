@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../glyr.h"
 
-const char * ainfo_allmusic_url(GlyrQuery * s)
+static const char * ainfo_allmusic_url(GlyrQuery * s)
 {
 	return "http://www.allmusic.com/search/artist/${artist}";
 }
@@ -31,7 +31,7 @@ const char * ainfo_allmusic_url(GlyrQuery * s)
 #define IMG_BEGIN "<p class=\"text\">"
 #define IMG_ENDIN "</p>"
 
-GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse, gchar * url)
+static GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse, gchar * url)
 {
 	GlyrMemCache * result = NULL;
 	gchar * text = get_search_value(to_parse->data,IMG_BEGIN,IMG_ENDIN);
@@ -51,7 +51,7 @@ GlyrMemCache * parse_bio_page(GlyrMemCache * to_parse, gchar * url)
 #define ROOT_URL "http://www.allmusic.com/artist/"
 #define END_OF_ROOT "\">"
 
-GlyrMemCache * find_long_version(GlyrQuery * s, GlyrMemCache * to_parse)
+static GlyrMemCache * find_long_version(GlyrQuery * s, GlyrMemCache * to_parse)
 {
 	GlyrMemCache * result = NULL;
 	gchar * root = strstr(to_parse->data,ROOT);
@@ -103,7 +103,7 @@ static gboolean approve_content(GlyrQuery * query, gchar * ref)
 
 /*-------------------------------------*/
 
-GList * ainfo_allmusic_parse(cb_object * capo)
+static GList * ainfo_allmusic_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 
