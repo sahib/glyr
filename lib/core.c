@@ -625,7 +625,7 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 
 				dldata->dsrc = g_strdup(url);
 			}
-			/* Handle without any use - clean up */
+
 			curl_easy_cleanup(curl);
 			update_md5sum(dldata);
 			return dldata;
