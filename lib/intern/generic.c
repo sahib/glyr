@@ -95,10 +95,10 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 		if(prov_url_table != NULL)
 		{
 			GlyrMemCache * old_cache = g_hash_table_lookup(prov_url_table,capo->cache->dsrc);
-
 			GLYR_ERROR response = GLYRE_OK;
 			if(old_cache != NULL)
 			{
+				update_md5sum(capo->cache);
 				if(is_in_result_list(capo->cache,saver->results) == FALSE)
 				{
 					capo->cache->prov       = (old_cache->prov!=NULL) ? g_strdup(old_cache->prov) : NULL;

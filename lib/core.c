@@ -520,7 +520,7 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
 	if(!result || g_list_length(result) < 1)
 		return 0;
 
-	/* Build new hashes, the data might have changed (TODO - make more efficient) */
+	/* Build new hashes, the data might have changed */
 	for(GList * elem = result; elem; elem = elem->next)
 	{
 		update_md5sum(elem->data);
@@ -630,8 +630,6 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 			update_md5sum(dldata);
 			return dldata;
 		}
-
-		// Free mem
 		DL_free(dldata);
 	}
 	return NULL;
@@ -840,9 +838,6 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 							g_free(capo->cache->dsrc);
 						}
 						capo->cache->dsrc = g_strdup(capo->url);
-
-						/* Always update in case the callback needs it */
-						update_md5sum(capo->cache);
 
 						/* Call it if present */
 						if(asdl_callback != NULL)
@@ -1455,8 +1450,6 @@ gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list)
 	gboolean result = FALSE;
 	if(cache != NULL)
 	{
-		update_md5sum(cache);
-
 		for(GList * elem = result_list; elem; elem = elem->next)
 		{
 			GlyrMemCache * item = elem->data;

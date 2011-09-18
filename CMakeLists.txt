@@ -50,6 +50,8 @@ SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 # Tell config.h.in
 IF(CMAKE_BUILD_TYPE STREQUAL "debug")
     SET(GLYR_DEBUG TRUE)
+ELSE()
+    SET(GLYR_DEBUG FALSE)
 ENDIF()
 
 SET(COMMON_FLAGS "-Wall -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes")
