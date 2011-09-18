@@ -171,7 +171,7 @@ const char * glyr_strerror(GLYR_ERROR ID)
 
 /*-----------------------------------------------*/
 
-void glyr_update_md5sum(GlyrMemCache * cache)
+void glyr_cache_update_md5sum(GlyrMemCache * cache)
 {
 	update_md5sum(cache);
 }
@@ -589,7 +589,7 @@ void glyr_cache_free(GlyrMemCache * c)
 
 /*-----------------------------------------------*/
 
-GlyrMemCache * glyr_new_cache(void)
+GlyrMemCache * glyr_cache_new(void)
 {
 	return DL_init();
 }
