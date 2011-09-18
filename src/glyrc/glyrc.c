@@ -161,7 +161,7 @@ void help_short(GlyrQuery * s)
 #define IN "    "
     message(-1,s,stderr,"\nGENERAL OPTIONS:\n"
             IN"-f --from             String: Providers from where to get metadata. Refer to glyrc --list for a full list\n"
-            IN"-w --write            Path: Write metadata to dir <d>, special values stdout, stderr and null are supported\n"
+            IN"-w --write            Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
             IN"-n --number           Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
             IN"-t --lang             String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
             IN"-f --fuzzyness        Integer: Set treshold for level of Levenshtein algorithm.\n"
@@ -295,16 +295,19 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {
         case 'w':
         {
+	    gchar * dirname = g_path_get_dirname(optarg);
             gsize opt_len = strlen(optarg);
             if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 ||
                g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
                g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
-               g_file_test(optarg,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+	       g_file_test(dirname,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
             {
                 *write_to = optarg;
+		g_free(dirname);
             }
             else
             {
+		g_free(dirname);
                 g_printerr("'%s' does not seem to be an valid directory!\n",optarg);
                 exit(-1);
             }
@@ -502,13 +505,17 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 		}
 		else
 		{
-			write_to_path = get_path_by_type(s,c,write_to,*current);
+			if(g_file_test(write_to,G_FILE_TEST_IS_DIR) == TRUE)
+			{
+				write_to_path = get_path_by_type(s,c,write_to,*current);
+			}
+			else
+			{
+				write_to_path = g_strdup(write_to);
+			}
+
 			if(write_to_path != NULL)
 			{
-				if(s->verbosity > 1)
-				{
-				}
-
 				if(glyr_cache_write(c,write_to_path) == -1)
 				{
 					message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
@@ -534,7 +541,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 		}
 	}
 
-	// Text Represantation of this item
+	/* Text Represantation of this item */
 	if(s->verbosity >= 1)
 	{
 		message(1,s,stderr,"\n///// ITEM #%d /////\n",(current) ? *current : -1);
