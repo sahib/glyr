@@ -310,7 +310,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 
 		gchar * sql = sqlite3_mprintf(
 				"SELECT artist_name,album_name,title_name,provider_name,source_url,image_type_name, \n"
-				"track_duration,get_type,data_type,data_size,data_checksum,data,rating \n"
+				"track_duration,get_type,data_type,data_size,data_is_image,data_checksum,data,rating \n"
 				"FROM metadata as m \n"
 				"LEFT JOIN artists as a on m.artist_id = a.rowid \n"
 				"LEFT JOIN albums as b on m.album_id = b.rowid \n"
@@ -404,7 +404,6 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 {
 	if(db && sql_statement)
 	{
-		//puts(sql_statement);
 		char * err_msg = NULL;
 		sqlite3_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
 		if(err_msg != NULL)
@@ -444,14 +443,15 @@ static void create_table_defs(GlyrDatabase * db)
 			"			          provider_id INTEGER,\n"
 			"			          source_url  VARCHAR(512),\n"
 			"			          image_type_id INTEGER,\n"
-			"                                 track_duration INTEGER,\n"
+			"                     track_duration INTEGER,\n"
 			"			          get_type INTEGER,\n"
 			"			          data_type INTEGER,\n"
 			"			          data_size INTEGER,\n"
+            "                     data_is_image INTEGER,\n"
 			"			          data_checksum BLOB,\n"
 			"			          data BLOB,\n"
-			"                                 rating INTEGER,\n"
-			"                                 timestamp FLOAT\n"
+			"                     rating INTEGER,\n"
+			"                     timestamp FLOAT\n"
 			");\n"
 			"CREATE INDEX IF NOT EXISTS index_artist_id   ON metadata(artist_id);\n"
 			"CREATE INDEX IF NOT EXISTS index_album_id    ON metadata(album_id);\n"
@@ -494,7 +494,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 				"(select rowid from providers where provider_name = '%q'),\n"
 				"?,"
 				"(select rowid from image_types where image_type_name = '%q'),"
-				"?,?,?,?,?,?,?,?);\n",
+				"?,?,?,?,?,?,?,?,?);\n",
 				query->artist,
 				query->album,
 				query->title,
@@ -510,10 +510,11 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 		sqlite3_bind_int (stmt, 3, query->type);
 		sqlite3_bind_int( stmt, 4, cache->type);
 		sqlite3_bind_int( stmt, 5, cache->size);
-		sqlite3_bind_blob(stmt, 6, cache->md5sum, sizeof cache->md5sum, SQLITE_STATIC);
-		sqlite3_bind_blob(stmt, 7, cache->data, cache->size, SQLITE_STATIC);
-		sqlite3_bind_int( stmt, 8, cache->rating);
-		sqlite3_bind_double( stmt, 9, get_current_time());
+		sqlite3_bind_int( stmt, 6, cache->is_image);
+		sqlite3_bind_blob(stmt, 7, cache->md5sum, sizeof cache->md5sum, SQLITE_STATIC);
+		sqlite3_bind_blob(stmt, 8, cache->data, cache->size, SQLITE_STATIC);
+		sqlite3_bind_int( stmt, 9, cache->rating);
+		sqlite3_bind_double( stmt,10, get_current_time());
 
 		if(sqlite3_step(stmt) != SQLITE_DONE) 
 		{
@@ -555,7 +556,7 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 	select_callback_data * data = result;
 	GlyrMemCache ** list = data->result;
 
-	if(list != NULL && argc >= 13 && data->counter < data->query->number)
+	if(list != NULL && argc >= 14 && data->counter < data->query->number)
 	{
 		GlyrMemCache * head  = *list;
 		GlyrMemCache * cache = DL_init();
@@ -565,25 +566,24 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 			cache->dsrc = g_strdup(argv[4]);
 			cache->img_format = g_strdup(argv[5]);
 
-			cache->duration = (argv[6] ? strtol(argv[6],NULL,10) : 0);
-			cache->type =     (argv[8] ? strtol(argv[8],NULL,10) : 0);
-			cache->size =     (argv[9] ? strtol(argv[9],NULL,10) : 0);
+			cache->duration = (argv[6] ? strtol(argv[6],NULL,10)   : 0);
+			cache->type =     (argv[8] ? strtol(argv[8],NULL,10)   : 0);
+			cache->size =     (argv[9] ? strtol(argv[9],NULL,10)   : 0);
+			cache->is_image = (argv[10] ? strtol(argv[10],NULL,10) : 0);
 
-			if(argv[10] != NULL)
+			if(argv[11] != NULL)
 			{
-				memcpy(cache->md5sum,argv[10],16);
+				memcpy(cache->md5sum,argv[11],16);
 			}
 
-			cache->is_image = !(cache->img_format == NULL);
-
-			if(argv[11] != NULL && cache->size > 0)
+			if(argv[12] != NULL && cache->size > 0)
 			{
 				cache->data = g_malloc0(cache->size + 1);
-				memcpy(cache->data,argv[11],cache->size);
+				memcpy(cache->data,argv[12],cache->size);
 				cache->data[cache->size] = 0;
 			}
 
-			cache->rating = (argv[12] ? strtol(argv[12],NULL,10) : 0);
+			cache->rating = (argv[13] ? strtol(argv[13],NULL,10) : 0);
 
 			if(head == NULL)
 			{

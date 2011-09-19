@@ -254,6 +254,7 @@ typedef struct _GlyrMemCache {
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;
+  double timestamp;  
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 

@@ -765,7 +765,6 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 					/* Now start your engines, gentlemen */
 					result = start_engine(settings,item,e);
 					break;
-
 				}
 				else
 				{

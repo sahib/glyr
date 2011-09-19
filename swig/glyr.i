@@ -17,7 +17,7 @@
 /* parse headers */
 %include "../lib/glyr.h"
 %include "../lib/cache.h"
-%include "../lib/glyr.h"
+%include "../lib/types.h"
 %include "../lib/config.h"
 
 /* make sure libglyr wakes  up */
