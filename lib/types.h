@@ -267,7 +267,7 @@ typedef struct _GlyrMemCache {
  */
 typedef struct _GlyrDatabase {
         /*< public >*/
-	const char * root_path;
+	char * root_path;
 	
         /*< private >*/
 	sqlite3 * db_handle;

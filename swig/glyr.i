@@ -1,12 +1,7 @@
 /*
  * This is the config file for SWIG, the binding generator for a plethora of languages
- * Language bindings have some drawbacks:
- * - GlyPlug_get_name_by_id is not yet supported, but will come
- * - The callback option does not work. This would make this language specific,
- *   I already tried with ruby, but my C->Ruby is probably not good enough, Patches welcome.
- * Plus points:
- * + By using SWIG you just can use the compile.sh by replacing 'ruby' with <your_lang>
- * + Ruby bindings e.g. are so incredible easy to use after writing a wrapper class 
+ * Only thing not working right now:
+ * glyr_opt_dlcallback() - as it requires some C-ruby magic to get it to work.
 */
  
 /* module name */
@@ -17,14 +12,17 @@
 
 /* let wrapper file compile */
 %{ #include "../lib/glyr.h" %}
+%{ #include "../lib/cache.h" %}
 
 /* parse headers */
 %include "../lib/glyr.h"
-%include "../lib/types.h"
+%include "../lib/cache.h"
+%include "../lib/glyr.h"
+%include "../lib/config.h"
 
 /* make sure libglyr wakes  up */
 %init 
 %{
-  Gly_init();
-  atexit(Gly_cleanup);
+  glyr_init();
+  atexit(glyr_cleanup);
 %}

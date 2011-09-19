@@ -163,7 +163,7 @@ int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 * 
 * Returns: The number of replaced caches
 */
-gboolean glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited);
+int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited);
 
 /**
 * glyr_db_replace:
