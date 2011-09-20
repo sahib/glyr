@@ -46,6 +46,7 @@
     <keyword type="function" name="glyr_opt_redirects ()" link="libglyr-glyr.html#glyr-opt-redirects"/>
     <keyword type="function" name="glyr_opt_useragent ()" link="libglyr-glyr.html#glyr-opt-useragent"/>
     <keyword type="function" name="glyr_opt_lang ()" link="libglyr-glyr.html#glyr-opt-lang"/>
+    <keyword type="function" name="glyr_opt_lang_aware_only ()" link="libglyr-glyr.html#glyr-opt-lang-aware-only"/>
     <keyword type="function" name="glyr_opt_number ()" link="libglyr-glyr.html#glyr-opt-number"/>
     <keyword type="function" name="glyr_opt_verbosity ()" link="libglyr-glyr.html#glyr-opt-verbosity"/>
     <keyword type="function" name="glyr_opt_from ()" link="libglyr-glyr.html#glyr-opt-from"/>
@@ -85,6 +86,7 @@
     <keyword type="macro" name="GLYR_DEFAULT_DB_AUTOWRITE" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_DB_AUTOREAD" link="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_SUPPORTED_LANGS" link="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_LANG_AWARE_ONLY" link="libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_ALLOWED_FORMATS" link="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_USERAGENT" link="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS"/>
     <keyword type="enum" name="enum GLYR_ERROR" link="libglyr-types.html#GLYR-ERROR:CAPS"/>

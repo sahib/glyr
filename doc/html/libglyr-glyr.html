@@ -80,6 +80,8 @@
                                                          <em class="parameter"><code>const <span class="type">char</span> *useragent</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-lang" title="glyr_opt_lang ()">glyr_opt_lang</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><span class="type">char</span> *langcode</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-lang-aware-only" title="glyr_opt_lang_aware_only ()">glyr_opt_lang_aware_only</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> lang_aware_only</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()">glyr_opt_number</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-verbosity" title="glyr_opt_verbosity ()">glyr_opt_verbosity</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
@@ -850,6 +852,33 @@ Alternatively you can set it to 'auto', which will cause libglyr to guess your l
 </div>
 <hr>
 <div class="refsect2">
+<a name="glyr-opt-lang-aware-only"></a><h3>glyr_opt_lang_aware_only ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lang_aware_only            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> lang_aware_only</code></em>);</pre>
+<p>
+Note: Not for all types of metadata there may be localized content, and only fetchers, that provide text items are affected by this setting.
+The special provider 'local' is an exception here, it is queried, but delievers only language specific content too.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>lang_aware_only</code></em> :</span></p></td>
+<td>Boolean, set to true if you want language specific providers only.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="glyr-opt-number"></a><h3>glyr_opt_number ()</h3>
 <pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_number                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);</pre>
@@ -1433,7 +1462,7 @@ being a pointer to a doubly linked list of GlyrSourceInfos
 It is best understood by an example:
 </p>
 <div class="example">
-<a name="id535262"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
+<a name="id560937"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
 <div class="example-contents"><pre class="programlisting">
 static void visualize_from_options(void)
 {

@@ -41,6 +41,7 @@
 <ANCHOR id="glyr-opt-redirects" href="libglyr/libglyr-glyr.html#glyr-opt-redirects">
 <ANCHOR id="glyr-opt-useragent" href="libglyr/libglyr-glyr.html#glyr-opt-useragent">
 <ANCHOR id="glyr-opt-lang" href="libglyr/libglyr-glyr.html#glyr-opt-lang">
+<ANCHOR id="glyr-opt-lang-aware-only" href="libglyr/libglyr-glyr.html#glyr-opt-lang-aware-only">
 <ANCHOR id="glyr-opt-number" href="libglyr/libglyr-glyr.html#glyr-opt-number">
 <ANCHOR id="glyr-opt-verbosity" href="libglyr/libglyr-glyr.html#glyr-opt-verbosity">
 <ANCHOR id="glyr-opt-from" href="libglyr/libglyr-glyr.html#glyr-opt-from">
@@ -84,6 +85,7 @@
 <ANCHOR id="GLYR-DEFAULT-DB-AUTOWRITE:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS">
 <ANCHOR id="GLYR-DEFAULT-DB-AUTOREAD:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS">
 <ANCHOR id="GLYR-DEFAULT-SUPPORTED-LANGS:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS">
+<ANCHOR id="GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS">
 <ANCHOR id="GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS">
 <ANCHOR id="GLYR-DEFAULT-USERAGENT:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS">
 <ANCHOR id="GLYR-ERROR:CAPS" href="libglyr/libglyr-types.html#GLYR-ERROR:CAPS">

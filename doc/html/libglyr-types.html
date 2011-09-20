@@ -56,6 +56,7 @@
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS" title="GLYR_DEFAULT_DB_AUTOWRITE">GLYR_DEFAULT_DB_AUTOWRITE</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS" title="GLYR_DEFAULT_DB_AUTOREAD">GLYR_DEFAULT_DB_AUTOREAD</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS" title="GLYR_DEFAULT_SUPPORTED_LANGS">GLYR_DEFAULT_SUPPORTED_LANGS</a>
+#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" title="GLYR_DEFAULT_LANG_AWARE_ONLY">GLYR_DEFAULT_LANG_AWARE_ONLY</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" title="GLYR_DEFAULT_ALLOWED_FORMATS">GLYR_DEFAULT_ALLOWED_FORMATS</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS" title="GLYR_DEFAULT_USERAGENT">GLYR_DEFAULT_USERAGENT</a>
 enum                <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR">GLYR_ERROR</a>;
@@ -187,6 +188,12 @@ enum                <a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREM
 <div class="refsect2">
 <a name="GLYR-DEFAULT-SUPPORTED-LANGS:CAPS"></a><h3>GLYR_DEFAULT_SUPPORTED_LANGS</h3>
 <pre class="programlisting">#define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS"></a><h3>GLYR_DEFAULT_LANG_AWARE_ONLY</h3>
+<pre class="programlisting">#define GLYR_DEFAULT_LANG_AWARE_ONLY false
 </pre>
 </div>
 <hr>
@@ -669,7 +676,7 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
 <div class="refsect2">
 <a name="GlyrDatabase"></a><h3>GlyrDatabase</h3>
 <pre class="programlisting">typedef struct {
-	const char * root_path;
+	char * root_path;
 } GlyrDatabase;
 </pre>
 <p>
@@ -678,7 +685,7 @@ Represents a database where caches may be fetched from.
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
-<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrDatabase.root-path"></a>root_path</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrDatabase.root-path"></a>root_path</code></em>;</span></p></td>
 <td>The directory where the database will be stored.</td>
 </tr></tbody>
 </table></div>
@@ -709,12 +716,11 @@ Represents a database where caches may be fetched from.
     bool db_autowrite;
     GlyrDatabase * local_db;
 
-/* This is confusing gtk-doc */
-#endif
+    bool lang_aware_only;
 
     /* Dynamic allocated */
-    const char * lang; 
-    const char * proxy; 
+    char * lang; 
+    char * proxy; 
     char * artist; 
     char * album;  
     char * title;  
@@ -801,11 +807,15 @@ You can safely read from all fields and should free the query with <a class="lin
 <td>The database to write and search in.</td>
 </tr>
 <tr>
-<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.lang"></a>lang</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.lang-aware-only"></a>lang_aware_only</code></em>;</span></p></td>
+<td>Use only providers that deliver language specific content.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.lang"></a>lang</code></em>;</span></p></td>
 <td>Language code ISO-639-1, like 'de','en' or 'auto'</td>
 </tr>
 <tr>
-<td><p><span class="term">const <span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.proxy"></a>proxy</code></em>;</span></p></td>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.proxy"></a>proxy</code></em>;</span></p></td>
 <td>The proxy to use.</td>
 </tr>
 <tr>
@@ -844,6 +854,7 @@ You can safely read from all fields and should free the query with <a class="lin
   GLYR_GET_TYPE type;
   int quality;
   int speed;
+  bool lang_aware;
 
   struct _GlyrSourceInfo * next;
   struct _GlyrSourceInfo * prev;
@@ -881,6 +892,10 @@ It is freed when <a class="link" href="libglyr-glyr.html#glyr-info-free" title="
 <tr>
 <td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrSourceInfo.speed"></a>speed</code></em>;</span></p></td>
 <td>A speed rating form 0</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrSourceInfo.lang-aware"></a>lang_aware</code></em>;</span></p></td>
+<td>Does this provider offer language specific content?</td>
 </tr>
 <tr>
 <td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.next"></a>next</code></em>;</span></p></td>
