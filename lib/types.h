@@ -331,18 +331,9 @@ typedef struct _GlyrQuery {
     bool db_autowrite;
     GlyrDatabase * local_db;
 
-/* This is confusing gtk-doc */
-#ifndef __GTK_DOC_IGNORE__
-	#ifdef COMING_FROM_SWIG
-	    /* Make this fields immutable for languages supporting it */
-	    %immutable
-	    {
-	#endif
-#endif
-
     /* Dynamic allocated */
-    const char * lang; 
-    const char * proxy; 
+    char * lang; 
+    char * proxy; 
     char * artist; 
     char * album;  
     char * title;  
@@ -361,13 +352,6 @@ typedef struct _GlyrQuery {
     int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
-
-/* This is confusing gtk-doc */
-#ifndef __GTK_DOC_IGNORE__
-	#ifdef COMING_FROM_SWIG
-		%}
-	#endif
-#endif 
 
 } GlyrQuery;
 
@@ -457,29 +441,30 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	{
 	    GlyrQuery()
 	    {
-		GlyrQuery my_query;
-		glyr_query_init(&my_query);
-		GlyrQuery * copy = malloc(sizeof(GlyrQuery));
-		memcpy(copy,&my_query,sizeof(GlyrQuery));
-		return copy;
+            GlyrQuery my_query;
+            glyr_query_init(&my_query);
+            GlyrQuery * copy = malloc(sizeof(GlyrQuery));
+            memcpy(copy,&my_query,sizeof(GlyrQuery));
+            return copy;
 	    }
+
 	    ~GlyrQuery()
 	    {
-		glyr_query_destroy($self);
-		if($self != NULL)
-		    free($self);
-	    }
+            glyr_query_destroy($self);
+            if($self != NULL)
+                free($self);
+        }
 	}
 
 	%extend GlyrMemCache
 	{
 	    GlyrMemCache()
 	    {
-		return glyr_cache_new();
+		    return glyr_cache_new();
 	    }
 	    ~GlyrMemCache()
 	    {
-		glyr_cache_free($self);
+		    glyr_cache_free($self);
 	    }
 	}
 
@@ -487,12 +472,12 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	{
 	    GlyrFetcherInfo()
 	    {
-		return glyr_info_get();
+	    	return glyr_info_get();
 	    }
 
 	    ~GlyrFetcherInfo()
 	    {
-		glyr_info_free($self);
+    		glyr_info_free($self);
 	    }
 	}
 	#endif

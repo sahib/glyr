@@ -484,11 +484,12 @@ gchar * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir
 
 static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 {
-	// This is just to demonstrate the callback option.
-	// Put anything in here that you want to be executed when
-	// a cache is 'ready' (i.e. ready for return)
-	// See the glyr_set_dl_callback for more info
-	// a custom pointer is in s->callback.user_pointer
+	/* This is just to demonstrate the callback option.
+	 * Put anything in here that you want to be executed when
+	 * a cache is 'ready' (i.e. ready for return)
+	 * See the glyr_set_dl_callback for more info
+	 * a custom pointer is in s->callback.user_pointer
+     */
 	int * current = s->callback.user_pointer;
 
 	gchar * write_to_path = NULL;
