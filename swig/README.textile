@@ -4,32 +4,29 @@ Glyr provides a interface file (glyr.i) to provide bindings for languages other 
 To generate the wrapping code you should install SWIG and the devel headers of your scripting language.
 (+ all dependecies of glyr..)
 
-h4. Using cmake
-
-Now that cmake is used for the buildprocess, building the ruby bindings is as easy as:
-@cmake . -DSWIG_RUBY=true && make@
-
-h4. Old fashioned way:
+h4. Self compiling:
 
 You don't need this, except if you want write bindings to other languages. 
 
 # let SWIG generate the wrapper code
 # This will create a file called glyr_wrap.c
-# @swig -ruby glyr.i@
+# @swig -ruby ruby_glyr.i@
 
 # Compile the wrapper code, -I is the includedir of the Ruby headers, -fpic is needed
-> gcc -c glyr_wrap.c -I /usr/include/ruby-1.9.1 -I/usr/include/ruby-1.9.1/x86_64-linux -I. -fpic
+> @gcc -c ruby_glyr_wrap.c -I/usr/include/ruby-1.9.1/ -o glyr_wrap.o $(pkg-config --cflags libglyr) -fPIC -Wall -W -Wno-unused-parameter@
 
-# Create the library by adding all other objects
-> gcc -shared $(find ../lib/CMakeFiles -name "*.o") glyr_wrap.o -o glyr.so -lcurl
+# Create the library by linking the .o against all needed libs:
+> @gcc -shared -Wl,-soname,glyros -o glyros.so glyr_wrap.o $(pkg-config --libs libglyr) -lruby@
 
 If everything went fine you should have a 'glubyr.so' in this directory.
-No you can load it in Ruby:
+Now you can load it in Ruby:
 
 > irb -r rubygems
->>> require './glubyr'
+>>> require './glyros.so'
 >>> Glubyr::version() 
-=> "Version 0.2 (Kleptomaniacal Magpie) of [Feb 27 2011] compiled at [23:47:29]"
+=> "Version 0.8.7 (Horny Hornet [beta]) of [Sep 19 2011] compiled at [12:04:08]"
 >>> exit
+
+h6. There will be proper ruby bindings (thanks to gregf) soon.
 
 h6. The subdir 'ruby' contains a wrapper class you can easily use to start right off.

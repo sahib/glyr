@@ -201,31 +201,4 @@ configure_file(
     IMMEDIATE @ONLY
     )
 
-add_custom_target(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-
-# ------------------------------------------------
-# Ruby bindings
-# You gonna need swig && ruby 1.9.1 (+headers)
-# ------------------------------------------------
-IF(SWIG_RUBY)
-	SET(INTERFACE_FILE "${CMAKE_CURRENT_SOURCE_DIR}/swig/glyros.i")
-	FIND_PACKAGE(SWIG REQUIRED)
-	INCLUDE(${SWIG_USE_FILE})
-
-	FIND_PACKAGE(Ruby)
-	INCLUDE_DIRECTORIES(${RUBY_INCLUDE_PATH})
-	INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-	SET(CMAKE_SWIG_FLAGS "")
-
-	SWIG_ADD_MODULE(glyros ruby ${INTERFACE_FILE} ${LIB_SOURCE_LOCATIONS})
-	SWIG_LINK_LIBRARIES(glyros ${RUBY_LIBRARY} ${CURL_LIBRARY} ${GLIBPKG_LIBRARIES})
-
-	ADD_DEFINITIONS(-Wno-unused-but-set-variable -Wno-unused-variable)
-	ADD_CUSTOM_COMMAND(
-		TARGET glyros
-		POST_BUILD
-		COMMAND ${CMAKE_COMMAND} -E rename ${CMAKE_CURRENT_BINARY_DIR}/bin/libglyros.so ${CMAKE_CURRENT_BINARY_DIR}/swig/ruby/glyros.so
-		)
-ENDIF(SWIG_RUBY)
-
-
+ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
