@@ -260,8 +260,8 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"verbosity",     required_argument, 0, 'v'},
         {"qsratio",       required_argument, 0, 'q'},
         {"formats",       required_argument, 0, 'F'},
-	{"cache",         required_argument, 0, 'c'},
-	{"drop",          no_argument,       0, 'y'},
+        {"cache",         required_argument, 0, 'c'},
+        {"drop",          no_argument,       0, 'y'},
         {"help",          no_argument,       0, 'h'},
         {"version",       no_argument,       0, 'V'},
         {"download",      no_argument,       0, 'd'},
@@ -269,6 +269,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"list",          no_argument,       0, 'L'},
         {"force-utf8",    no_argument,       0, '8'},
         // ---------- plugin specific ------------ //
+        {"only-lang",     no_argument,       0, 'o'},
         {"artist",        required_argument, 0, 'a'},
         {"album",         required_argument, 0, 'b'},
         {"title",         required_argument, 0, 't'},
@@ -277,7 +278,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"number",        required_argument, 0, 'n'},
         {"lang",          required_argument, 0, 'l'},
         {"fuzzyness",     required_argument, 0, 'z'},
-        {"prefer",        required_argument, 0, 'o'},
         {"callback",	  required_argument, 0, 'j'},
         {0,               0,                 0, '0'}
     };
@@ -286,130 +286,133 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVdDLa:b:t:i:e:n:l:z:o:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVodDLa:b:t:i:e:n:l:z:j:k:8",long_options, &option_index)) == -1)
         {
             break;
         }
 
         switch (c)
         {
-        case 'w':
-        {
-	    gchar * dirname = g_path_get_dirname(optarg);
-            gsize opt_len = strlen(optarg);
-            if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 ||
-               g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
-               g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
-	       g_file_test(dirname,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
-            {
-                *write_to = optarg;
-		g_free(dirname);
-            }
-            else
-            {
-		g_free(dirname);
-                g_printerr("'%s' does not seem to be an valid directory!\n",optarg);
-                exit(-1);
-            }
-            break;
-        }
-        case 'f':
-            glyr_opt_from(glyrs,optarg);
-				from_string = optarg;
-            break;
-        case 'v':
-            glyr_opt_verbosity(glyrs,atoi(optarg));
-            break;
-        case 'p':
-            glyr_opt_parallel(glyrs,atoi(optarg));
-            break;
-        case 'r':
-            glyr_opt_redirects(glyrs,atoi(optarg));
-            break;
-        case 'm':
-            glyr_opt_timeout(glyrs,atoi(optarg));
-            break;
-        case 'u':
-            glyr_opt_useragent(glyrs,optarg);
-            break;
-        case 'x':
-            glyr_opt_plugmax(glyrs,atoi(optarg));
-            break;
-        case 'V':
-            print_version(glyrs);
-            break;
-        case 'h':
-            help_short(glyrs);
-            break;
-        case 'a':
-            glyr_opt_artist(glyrs,optarg);
-            break;
-        case 'b':
-            glyr_opt_album(glyrs,optarg);
-            break;
-        case 't':
-            glyr_opt_title(glyrs,optarg);
-            break;
-        case 'i':
-            glyr_opt_img_minsize(glyrs,atoi(optarg));
-            break;
-        case 'e':
-            glyr_opt_img_maxsize(glyrs,atoi(optarg));
-            break;
-        case 'n':
-            glyr_opt_number(glyrs,atoi(optarg));
-            break;
-        case 'd':	
-            glyr_opt_download(glyrs,true);
-            break;
-        case 'D':
-            glyr_opt_download(glyrs,false);
-            break;
-	case 'y':
-            *delete_from_db = TRUE;
-	    break;
-	case 'c':
-	    {
-		    GlyrDatabase * new_db = glyr_db_init(optarg);
-		    if(db == NULL)
-		    {  
-			g_printerr("Unable to open or create a database at specified path.\n");
-			exit(EXIT_FAILURE);
-		    }
-		    *db = new_db;
-		    glyr_opt_db_autowrite(glyrs,TRUE);
-		    glyr_opt_lookup_db(glyrs,new_db); 
-	    }
-	    break;
-        case 'l':
-            glyr_opt_lang(glyrs,optarg);
-            break;
-        case 'L':
-            visualize_from_options();
-            exit(0);
-            break;
-        case 'z':
-            glyr_opt_fuzzyness(glyrs,atoi(optarg));
-            break;
-        case 'j':
-            exec_on_call = optarg;
-            break;
-        case 'k':
-            glyr_opt_proxy(glyrs,optarg);
-            break;
-        case 'q':
-            glyr_opt_qsratio(glyrs,atof(optarg));
-            break;
-        case 'F':
-            glyr_opt_allowed_formats(glyrs,optarg);
-            break;
-        case '8':
-            glyr_opt_force_utf8(glyrs,true);
-            break;
-        case '?':
-            break;
-	default:
-	    exit(0);
+            case 'w':
+                {
+                    gchar * dirname = g_path_get_dirname(optarg);
+                    gsize opt_len = strlen(optarg);
+                    if(g_ascii_strncasecmp(optarg,"stdout",opt_len) == 0 ||
+                            g_ascii_strncasecmp(optarg,"stderr",opt_len) == 0 ||
+                            g_ascii_strncasecmp(optarg,"null",  opt_len) == 0 ||
+                            g_file_test(dirname,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+                    {
+                        *write_to = optarg;
+                        g_free(dirname);
+                    }
+                    else
+                    {
+                        g_free(dirname);
+                        g_printerr("'%s' does not seem to be an valid directory!\n",optarg);
+                        exit(-1);
+                    }
+                    break;
+                }
+            case 'f':
+                glyr_opt_from(glyrs,optarg);
+                from_string = optarg;
+                break;
+            case 'v':
+                glyr_opt_verbosity(glyrs,atoi(optarg));
+                break;
+            case 'p':
+                glyr_opt_parallel(glyrs,atoi(optarg));
+                break;
+            case 'r':
+                glyr_opt_redirects(glyrs,atoi(optarg));
+                break;
+            case 'm':
+                glyr_opt_timeout(glyrs,atoi(optarg));
+                break;
+            case 'u':
+                glyr_opt_useragent(glyrs,optarg);
+                break;
+            case 'x':
+                glyr_opt_plugmax(glyrs,atoi(optarg));
+                break;
+            case 'V':
+                print_version(glyrs);
+                break;
+            case 'h':
+                help_short(glyrs);
+                break;
+            case 'a':
+                glyr_opt_artist(glyrs,optarg);
+                break;
+            case 'b':
+                glyr_opt_album(glyrs,optarg);
+                break;
+            case 't':
+                glyr_opt_title(glyrs,optarg);
+                break;
+            case 'i':
+                glyr_opt_img_minsize(glyrs,atoi(optarg));
+                break;
+            case 'e':
+                glyr_opt_img_maxsize(glyrs,atoi(optarg));
+                break;
+            case 'n':
+                glyr_opt_number(glyrs,atoi(optarg));
+                break;
+            case 'o':
+                glyr_opt_lang_aware_only(glyrs,true);
+                break;
+            case 'd':	
+                glyr_opt_download(glyrs,true);
+                break;
+            case 'D':
+                glyr_opt_download(glyrs,false);
+                break;
+            case 'y':
+                *delete_from_db = TRUE;
+                break;
+            case 'c':
+                {
+                    GlyrDatabase * new_db = glyr_db_init(optarg);
+                    if(db == NULL)
+                    {  
+                        g_printerr("Unable to open or create a database at specified path.\n");
+                        exit(EXIT_FAILURE);
+                    }
+                    *db = new_db;
+                    glyr_opt_db_autowrite(glyrs,TRUE);
+                    glyr_opt_lookup_db(glyrs,new_db); 
+                }
+                break;
+            case 'l':
+                glyr_opt_lang(glyrs,optarg);
+                break;
+            case 'L':
+                visualize_from_options();
+                exit(0);
+                break;
+            case 'z':
+                glyr_opt_fuzzyness(glyrs,atoi(optarg));
+                break;
+            case 'j':
+                exec_on_call = optarg;
+                break;
+            case 'k':
+                glyr_opt_proxy(glyrs,optarg);
+                break;
+            case 'q':
+                glyr_opt_qsratio(glyrs,atof(optarg));
+                break;
+            case 'F':
+                glyr_opt_allowed_formats(glyrs,optarg);
+                break;
+            case '8':
+                glyr_opt_force_utf8(glyrs,true);
+                break;
+            case '?':
+                break;
+            default:
+                exit(0);
         }
     }
 }
@@ -455,27 +458,27 @@ gchar * correct_path(const char * path)
 
 gchar * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir, gint num)
 {
-	gchar * artist = correct_path(s->artist);
-	gchar * album  = correct_path(s->album);
-	gchar * title  = correct_path(s->title);
+    gchar * artist = correct_path(s->artist);
+    gchar * album  = correct_path(s->album);
+    gchar * title  = correct_path(s->title);
 
-	artist = (artist == NULL) ? "" : artist;
-	album  = (album  == NULL) ? "" : album;
-	title  = (title  == NULL) ? "" : title;
+    artist = (artist == NULL) ? "" : artist;
+    album  = (album  == NULL) ? "" : album;
+    title  = (title  == NULL) ? "" : title;
 
-	gchar * type_string = (gchar*)glyr_get_type_to_string(s->type);
-	gchar * specifier = g_strdup_printf("%s%s%s%s%s%s",
-					    artist,(*artist) ? "_" : "", 
-					    album ,(*album ) ? "_" : "", 
-					    title ,(*title ) ? "_" : "");
-					    
-	gchar * result = g_strdup_printf("%s/%s%s_%d.%s",save_dir,specifier,type_string,num,
-					(c->is_image) ? c->img_format : "txt");
-	if(*artist) g_free(artist); 
-	if(*album)  g_free(album);
-	if(*title)  g_free(title);
-	g_free(specifier);
-	return result;
+    gchar * type_string = (gchar*)glyr_get_type_to_string(s->type);
+    gchar * specifier = g_strdup_printf("%s%s%s%s%s%s",
+            artist,(*artist) ? "_" : "", 
+            album ,(*album ) ? "_" : "", 
+            title ,(*title ) ? "_" : "");
+
+    gchar * result = g_strdup_printf("%s/%s%s_%d.%s",save_dir,specifier,type_string,num,
+            (c->is_image) ? c->img_format : "txt");
+    if(*artist) g_free(artist); 
+    if(*album)  g_free(album);
+    if(*title)  g_free(title);
+    g_free(specifier);
+    return result;
 }
 
 /* --------------------------------------------------------- */
@@ -484,86 +487,85 @@ gchar * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir
 
 static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 {
-	/* This is just to demonstrate the callback option.
-	 * Put anything in here that you want to be executed when
-	 * a cache is 'ready' (i.e. ready for return)
-	 * See the glyr_set_dl_callback for more info
-	 * a custom pointer is in s->callback.user_pointer
-     */
-	int * current = s->callback.user_pointer;
+    /* This is just to demonstrate the callback option.
+     * Put anything in here that you want to be executed when
+     * a cache is 'ready' (i.e. ready for return)
+     * See the glyr_set_dl_callback for more info
+     * a custom pointer is in s->callback.user_pointeur */
+    int * current = s->callback.user_pointer;
 
-	gchar * write_to_path = NULL;
+    gchar * write_to_path = NULL;
 
-	/* write out 'live' */
-	if(write_to != NULL)
-	{
-		gsize write_len = strlen(write_to);
-		if(g_ascii_strncasecmp(write_to,"stdout",write_len) == 0 ||
-	  	   g_ascii_strncasecmp(write_to,"stderr",write_len) == 0 ||
-		   g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
-		{
-			glyr_cache_write(c,write_to);
-		}
-		else
-		{
-			if(g_file_test(write_to,G_FILE_TEST_IS_DIR) == TRUE)
-			{
-				write_to_path = get_path_by_type(s,c,write_to,*current);
-			}
-			else
-			{
-				write_to_path = g_strdup(write_to);
-			}
+    /* write out 'live' */
+    if(write_to != NULL)
+    {
+        gsize write_len = strlen(write_to);
+        if(g_ascii_strncasecmp(write_to,"stdout",write_len) == 0 ||
+                g_ascii_strncasecmp(write_to,"stderr",write_len) == 0 ||
+                g_ascii_strncasecmp(write_to,"null",  write_len) == 0)
+        {
+            glyr_cache_write(c,write_to);
+        }
+        else
+        {
+            if(g_file_test(write_to,G_FILE_TEST_IS_DIR) == TRUE)
+            {
+                write_to_path = get_path_by_type(s,c,write_to,*current);
+            }
+            else
+            {
+                write_to_path = g_strdup(write_to);
+            }
 
-			if(write_to_path != NULL)
-			{
-				if(glyr_cache_write(c,write_to_path) == -1)
-				{
-					message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
-				}
-			}
+            if(write_to_path != NULL)
+            {
+                if(glyr_cache_write(c,write_to_path) == -1)
+                {
+                    message(1,s,stderr,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
+                }
+            }
 
-			/* call the program if any specified */
-			if(exec_on_call != NULL)
-			{
-				char ** path_splitv = g_strsplit(exec_on_call,"<path>",0);
-				char * replace_path = g_strjoinv(write_to_path,path_splitv);
-				g_strfreev(path_splitv);
+            /* call the program if any specified */
+            if(exec_on_call != NULL)
+            {
+                char ** path_splitv = g_strsplit(exec_on_call,"<path>",0);
+                char * replace_path = g_strjoinv(write_to_path,path_splitv);
+                g_strfreev(path_splitv);
 
-				/* Call that command */
-				int exitVal = system(replace_path);
-				if(exitVal != EXIT_SUCCESS)
-				{
-					message(3,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
-				}
+                /* Call that command */
+                int exitVal = system(replace_path);
+                if(exitVal != EXIT_SUCCESS)
+                {
+                    message(3,s,stderr,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
+                }
 
-				g_free(replace_path);
-			}
-		}
-	}
+                g_free(replace_path);
+            }
+        }
+    }
 
-	/* Text Represantation of this item */
-	if(s->verbosity >= 1)
-	{
-		message(1,s,stderr,"\n///// ITEM #%d /////\n",(current) ? *current : -1);
-		if(write_to_path != NULL)
-		{
-			message(1,s,stderr,"WRITE to '%s'\n",write_to_path);
-			g_free(write_to_path);
-		}
-		glyr_cache_print(c);
-		message(1,s,stderr,"\n////////////////////\n");
-	}
+    /* Text Represantation of this item */
+    if(s->verbosity >= 1)
+    {
+        message(1,s,stderr,"\n///// ITEM #%d /////\n",(current) ? *current : -1);
+        if(write_to_path != NULL)
+        {
+            message(1,s,stderr,"WRITE to '%s'\n",write_to_path);
+            g_free(write_to_path);
+        }
+        glyr_cache_print(c);
+        message(1,s,stderr,"\n////////////////////\n");
+    }
 
-	if(current != NULL)
-	{
-		*current += 1;
-	}
-	else
-	{
-		message(-1,NULL,stderr,"warning: Empty counterpointer!\n");
-	}
-	return GLYRE_OK;
+    if(current != NULL)
+    {
+        *current += 1;
+    }
+    else
+    {
+        message(-1,NULL,stderr,"warning: Empty counterpointer!\n");
+    }
+    return GLYRE_OK;
 }
 
 /* --------------------------------------------------------- */
@@ -572,25 +574,25 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 
 GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
-	GLYR_GET_TYPE result = GLYR_GET_UNSURE;
-	GlyrFetcherInfo * info = glyr_info_get();
-	if(info != NULL)
-	{
-		for(GlyrFetcherInfo * elem = info; elem; elem = elem->next)
-		{
-			if(g_ascii_strncasecmp(elem->name,string,strlen(elem->name)) == 0)
-			{
-				result = elem->type;
-				break;
-			}
-		}
-	}
-	else
-	{
-		g_printerr("Warning: Can't get type information. Probably a bug.\n");
-	}
-	glyr_info_free(info);
-	return result;
+    GLYR_GET_TYPE result = GLYR_GET_UNSURE;
+    GlyrFetcherInfo * info = glyr_info_get();
+    if(info != NULL)
+    {
+        for(GlyrFetcherInfo * elem = info; elem; elem = elem->next)
+        {
+            if(g_ascii_strncasecmp(elem->name,string,strlen(elem->name)) == 0)
+            {
+                result = elem->type;
+                break;
+            }
+        }
+    }
+    else
+    {
+        g_printerr("Warning: Can't get type information. Probably a bug.\n");
+    }
+    glyr_info_free(info);
+    return result;
 }
 
 /* --------------------------------------------------------- */
@@ -599,111 +601,111 @@ GLYR_GET_TYPE get_type_from_string(gchar * string)
 
 int main(int argc, char * argv[])
 {
-	/* Try to print informative output */
-	signal(SIGSEGV, sig_handler);
+    /* Try to print informative output */
+    signal(SIGSEGV, sig_handler);
 
-	/* Assume success */
-	gint result = EXIT_SUCCESS;
+    /* Assume success */
+    gint result = EXIT_SUCCESS;
 
-	/* Init. You _have_ to call this before making any calls */
-	glyr_init();
+    /* Init. You _have_ to call this before making any calls */
+    glyr_init();
 
-	/* For every init, you should call glyr_cleanup,
-	 * Note: Both methods are NOT Threadsafe!
-	 */
-	atexit(glyr_cleanup);
+    /* For every init, you should call glyr_cleanup,
+     * Note: Both methods are NOT Threadsafe!
+     */
+    atexit(glyr_cleanup);
 
-	if(argc >= 2 && argv[1][0] != '-')
-	{
-		/* Delete this item instead of searching for it */
-		gboolean delete_from_db = FALSE;
-		GlyrDatabase * db = NULL;
+    if(argc >= 2 && argv[1][0] != '-')
+    {
+        /* Delete this item instead of searching for it */
+        gboolean delete_from_db = FALSE;
+        GlyrDatabase * db = NULL;
 
-		/* The struct that control this beast */
-		GlyrQuery my_query;
+        /* The struct that control this beast */
+        GlyrQuery my_query;
 
-		/* set it on default values */
-		glyr_query_init(&my_query);
+        /* set it on default values */
+        glyr_query_init(&my_query);
 
-		/* Default to a bit more verbose mode */
-		glyr_opt_verbosity(&my_query,2);
+        /* Default to a bit more verbose mode */
+        glyr_opt_verbosity(&my_query,2);
 
-		GLYR_GET_TYPE type = get_type_from_string(argv[1]);
-		if(type == GLYR_GET_UNSURE)
-		{
-			g_print("glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argv[1]);
-			suggest_other_getter(&my_query,argv[1]);
-			g_print("\n");
-			exit(-1);
-		}
+        GLYR_GET_TYPE type = get_type_from_string(argv[1]);
+        if(type == GLYR_GET_UNSURE)
+        {
+            g_print("glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argv[1]);
+            suggest_other_getter(&my_query,argv[1]);
+            g_print("\n");
+            exit(-1);
+        }
 
-		/* Set the type */
-		my_query.type = type;
+        /* Set the type */
+        my_query.type = type;
 
-		/* Yes, user? */
-		parse_commandline_general(argc-1, argv+1, &my_query,&write_to,&db, &delete_from_db);
+        /* Yes, user? */
+        parse_commandline_general(argc-1, argv+1, &my_query,&write_to,&db, &delete_from_db);
 
-		if(write_to == NULL)
-		{
-			write_to = ".";
-		}
+        if(write_to == NULL)
+        {
+            write_to = ".";
+        }
 
-		/* Set the callback - it will do all the actual work */
-		gint item_counter = 0;
-		glyr_opt_dlcallback(&my_query, callback, &item_counter);
+        /* Set the callback - it will do all the actual work */
+        gint item_counter = 0;
+        glyr_opt_dlcallback(&my_query, callback, &item_counter);
 
-		if(my_query.type != GLYR_GET_UNSURE)
-		{
-			if(delete_from_db == FALSE || db == NULL)
-			{
-				/* Now start searching! */
-				int length = -1;
-				GLYR_ERROR get_error = GLYRE_OK;
-				GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
+        if(my_query.type != GLYR_GET_UNSURE)
+        {
+            if(delete_from_db == FALSE || db == NULL)
+            {
+                /* Now start searching! */
+                int length = -1;
+                GLYR_ERROR get_error = GLYRE_OK;
+                GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
-				if(my_list)
-				{
-					/* Free all downloaded buffers */
-					glyr_free_list(my_list);
+                if(my_list)
+                {
+                    /* Free all downloaded buffers */
+                    glyr_free_list(my_list);
 
-				}
-				else if(get_error == GLYRE_NO_PROVIDER)
-				{
-					g_print("glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
-					suggest_other_provider(&my_query,(gchar*)from_string);
-				}
-				else if(get_error != GLYRE_OK)
-				{
-					message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
-				}
-			}
-			else
-			{
-				gint deleted = glyr_db_delete(db,&my_query);
-				g_printerr("Deleted %d item%s from cache.\n",deleted, (deleted == 1) ? "" : "s");
-			}
-		}
+                }
+                else if(get_error == GLYRE_NO_PROVIDER)
+                {
+                    g_print("glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",from_string);
+                    suggest_other_provider(&my_query,(gchar*)from_string);
+                }
+                else if(get_error != GLYRE_OK)
+                {
+                    message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
+                }
+            }
+            else
+            {
+                gint deleted = glyr_db_delete(db,&my_query);
+                g_printerr("Deleted %d item%s from cache.\n",deleted, (deleted == 1) ? "" : "s");
+            }
+        }
 
-		/* database */
-		glyr_db_destroy(db);
+        /* database */
+        glyr_db_destroy(db);
 
-		/* Clean memory alloc'd by settings */
-		glyr_query_destroy( &my_query);
-	}
-	else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
-	{
-		print_version(NULL);
-	}
-	else if(argc >= 2 && (!strcmp(argv[1],"-L") || !strcmp(argv[1],"--list")))
-	{
-		visualize_from_options();
-	}
-	else
-	{
-		help_short(NULL);
-	}
+        /* Clean memory alloc'd by settings */
+        glyr_query_destroy( &my_query);
+    }
+    else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
+    {
+        print_version(NULL);
+    }
+    else if(argc >= 2 && (!strcmp(argv[1],"-L") || !strcmp(argv[1],"--list")))
+    {
+        visualize_from_options();
+    }
+    else
+    {
+        help_short(NULL);
+    }
 
-	return result;
+    return result;
 }
 
 //* --------------------------------------------------------- */

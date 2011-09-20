@@ -23,6 +23,7 @@
 #define BAD_STRING "Special:Random" /* This has been a running gag during developement: "I want to edit metadata!" */
 #define EXTERNAL_LINKS "<span class=\"plainlinks\""
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=${artist}&song=${title}"
+#define NOT_FOUND "<lyrics>Not found</lyrics>"
 
 /*--------------------------------------------------------*/
 
@@ -101,7 +102,7 @@ GList * parse_result_page(GlyrQuery * query, GlyrMemCache * to_parse)
 static GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GList * result_list = NULL;
-    if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
+    if(strstr(capo->cache->data,NOT_FOUND) == NULL && lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
         gchar * wiki_page_url = get_search_value(capo->cache->data,"<url>","</url>");
         if(wiki_page_url != NULL)

@@ -65,5 +65,6 @@ MetaDataSource review_amazon_src =
     .quality   = 25,
     .speed     = 70,
     .endmarker = NULL,
-    .free_url  = true
+    .free_url  = true,
+    .lang_aware = true
 };

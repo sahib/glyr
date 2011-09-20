@@ -613,7 +613,7 @@ static gchar * convert_from_option_to_sql(GlyrQuery * q)
 		MetaDataSource * item = elem->data;
 		if(item && q->type == item->type)
 		{
-			if(provider_is_enabled(q->from,item) == TRUE)
+			if(provider_is_enabled(q,item) == TRUE)
 			{
 				gchar * old_mem = result;
 				result = g_strdup_printf("%s%s'%s'",result,(*result) ? "," : "",item->name);

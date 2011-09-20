@@ -448,6 +448,18 @@ GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent);
 GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode);
 
 /**
+* glyr_opt_lang_aware_only:
+* @s: The GlyrQuery settings struct to store this option in.
+* @lang_aware_only: Boolean, set to true if you want language specific providers only.
+*
+* Note: Not for all types of metadata there may be localized content, and only fetchers, that provide text items are affected by this setting.
+* The special provider 'local' is an exception here, it is queried, but delievers only language specific content too.
+*   
+* Returns: an error ID
+*/
+GLYR_ERROR glyr_opt_lang_aware_only(GlyrQuery * s, bool lang_aware_only);
+
+/**
 * glyr_opt_number:
 * @s: The GlyrQuery settings struct to store this option in.
 * @num: Maximum number of items to get or 0 

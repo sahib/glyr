@@ -54,5 +54,6 @@ MetaDataSource photos_google_src =
     .quality   = 10,
     .speed     = 90,
     .endmarker = NULL,
-    .free_url  = true
+    .free_url  = true,
+    .lang_aware = true
 };

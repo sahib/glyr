@@ -125,6 +125,8 @@ typedef struct MetaDataSource
     gint quality;  /* Measurement of how good the content  usually is [0-100] */
     gint speed;    /* Measurement of how fast the provider usually is [0-100] */
 
+    gboolean lang_aware; /* Has language specific content? */
+
     GLYR_DATA_TYPE data_type; /* Default datatype this provider delievers */
 
 } MetaDataSource;
@@ -152,6 +154,6 @@ int glyr_puts(int verbosity, GlyrQuery * s, const char * string);
 
 gboolean size_is_okay(int sZ, int min, int max);
 gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list);
-gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f);
+gboolean provider_is_enabled(GlyrQuery * q, MetaDataSource * f);
 
 #endif

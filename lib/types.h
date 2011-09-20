@@ -47,6 +47,7 @@
 #define GLYR_DEFAULT_DB_AUTOWRITE true 
 #define GLYR_DEFAULT_DB_AUTOREAD  true
 #define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
+#define GLYR_DEFAULT_LANG_AWARE_ONLY false
 
 /* Disallow *.gif, mostly bad quality
  * jpeg and jpg, because some not standardaware
@@ -293,6 +294,7 @@ typedef struct _GlyrDatabase {
 * @db_autoread: Check if the found item is already cached.
 * @db_autowrite: Write found items automagically to the cache, if any specified by glyr_opt_lookup_db()
 * @local_db: The database to write and search in.
+* @lang_aware_only: Use only providers that deliver language specific content.
 * @lang: Language code ISO-639-1, like 'de','en' or 'auto'
 * @proxy: The proxy to use.
 * @artist: Artist to use.
@@ -331,6 +333,8 @@ typedef struct _GlyrQuery {
     bool db_autowrite;
     GlyrDatabase * local_db;
 
+    bool lang_aware_only;
+
     /* Dynamic allocated */
     char * lang; 
     char * proxy; 
@@ -362,6 +366,7 @@ typedef struct _GlyrQuery {
  * @type: Tells what type of data this provider delivers
  * @quality: A quality rating from 0-100
  * @speed: A speed rating form 0
+ * @lang_aware: Does this provider offer language specific content?
  * @next: A pointer to the next provider.
  * @prev: A pointer to the previous provider.
  *
@@ -380,6 +385,7 @@ typedef struct _GlyrSourceInfo {
   GLYR_GET_TYPE type;
   int quality;
   int speed;
+  bool lang_aware;
 
   struct _GlyrSourceInfo * next;
   struct _GlyrSourceInfo * prev;

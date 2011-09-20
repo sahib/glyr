@@ -114,5 +114,6 @@ MetaDataSource cover_amazon_src =
     .quality   = 90,
     .speed     = 85,
     .endmarker = NULL,
-    .free_url  = true
+    .free_url  = true,
+    .lang_aware = true
 };

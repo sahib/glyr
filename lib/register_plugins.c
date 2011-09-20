@@ -298,6 +298,7 @@ GlyrFetcherInfo * get_plugin_info(void)
                 sinfos->speed   = source->speed;
                 sinfos->key     = source->key;
                 sinfos->type    = source->type;
+                sinfos->lang_aware = source->lang_aware;
                 sinfos->name    = g_strdup(source->name);
 
                 if(prev_source != NULL)

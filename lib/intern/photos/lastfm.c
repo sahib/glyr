@@ -28,7 +28,7 @@
 
 static const gchar * photos_lastfm_url(GlyrQuery * settings)
 {
-    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&artist=${artist}&api_key="API_KEY_LASTFM;
+    return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&autocorrect=1&artist=${artist}&api_key="API_KEY_LASTFM;
 }
 
 /* -------------------------------------------- */
@@ -43,15 +43,15 @@ static gboolean size_fits(GlyrQuery * s, gchar ** ref)
         {
             search_ptr = strchr(search_ptr,'"');
 
-	    gint ratio = 0;
+            gint ratio = 0;
             gchar * width_string  = get_search_value(search_ptr,"width=\"","\"");
             gchar * height_string = get_search_value(search_ptr,"height=\"","\"");
-	    if(width_string && height_string)
-	    {
-            	ratio  = (strtol(width_string,NULL,10) + strtol(height_string,NULL,10))/2;
-	    }
-	    g_free(width_string);
-	    g_free(height_string);
+            if(width_string && height_string)
+            {
+                ratio  = (strtol(width_string,NULL,10) + strtol(height_string,NULL,10))/2;
+            }
+            g_free(width_string);
+            g_free(height_string);
 
             gboolean original_size_allowed = TRUE;
             if(g_strstr_len(ref[0],100,"original") != NULL)

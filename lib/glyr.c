@@ -348,6 +348,15 @@ GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 
 /*-----------------------------------------------*/
 
+GLYR_ERROR glyr_opt_lang_aware_only(GlyrQuery * s, bool lang_aware_only)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	s->lang_aware_only = lang_aware_only;
+	return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
 {
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -517,6 +526,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->useragent = GLYR_DEFAULT_USERAGENT;
 	glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
 	glyrs->lang = GLYR_DEFAULT_LANG;
+    glyrs->lang_aware_only = GLYR_DEFAULT_LANG_AWARE_ONLY;
 	glyrs->itemctr = 0;
 }
 

@@ -54,5 +54,6 @@ MetaDataSource cover_google_src =
     .quality   = 10,
     .speed     = 80,
     .endmarker = NULL,
-    .free_url  = true
+    .free_url  = true,
+    .lang_aware = true
 };

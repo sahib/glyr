@@ -1341,10 +1341,18 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
 
 /*--------------------------------------------------------*/
 
-gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f)
+gboolean provider_is_enabled(GlyrQuery * q, MetaDataSource * f)
 {
+    if(q->lang_aware_only &&
+       f->lang_aware == false &&
+       q->imagejob == false   &&
+       g_strcmp0(f->name,"local") != 0)
+    {
+        return FALSE;
+    }
+
 	/* Assume 'all we have' */
-	if(from_arg == NULL)
+	if(q->from == NULL)
 	{
 		return TRUE;
 	}
@@ -1358,24 +1366,25 @@ gboolean provider_is_enabled(const gchar * from_arg, MetaDataSource * f)
 	if(f->name != NULL)
 	{
 		gsize name_len = strlen(f->name);
-		gsize len = strlen(from_arg);
+		gsize len = strlen(q->from);
 		gsize offset = 0;
 
 		gchar * token = NULL;
-		while((token = get_next_word(from_arg,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
+		while((token = get_next_word(q->from,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,len)))
 		{
 			if(token != NULL)
 			{
+                gsize token_len = strlen(token);
 				gchar * back = token;
 
 				gboolean minus;
 				if((minus = token[0] == '-') || token[0] == '+')
 					token++;
 
-				if(!g_ascii_strncasecmp(token,"all",3))
+				if(!g_ascii_strncasecmp(token,"all",token_len))
 					all_occured = TRUE;
 
-				if((token[0] == f->key && strlen(token) == 1) || !g_ascii_strncasecmp(token,f->name,name_len))
+				if((token[0] == f->key && token_len == 1) || !g_ascii_strncasecmp(token,f->name,name_len))
 				{
 					is_excluded =  minus;
 					is_found    = !minus;
@@ -1410,7 +1419,7 @@ static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired
 		for(GList * elem = fetcher->provider; elem; elem = elem->next, ++pos)
 		{
 			MetaDataSource * src = elem->data;
-			if(provider_is_enabled(s->from,src) == TRUE)
+			if(provider_is_enabled(s,src) == TRUE)
 			{
 				if(fired[pos] == 0)
 				{
