@@ -47,7 +47,7 @@ static const gchar * ainfo_lastfm_url(GlyrQuery * s)
 			lang = "en";
 		}
 
-		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&autocorrect=0&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
+		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
 		g_free(right_artist);
 	}
 	return url;

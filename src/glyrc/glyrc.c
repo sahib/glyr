@@ -164,17 +164,18 @@ void help_short(GlyrQuery * s)
             IN"-w --write            Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
             IN"-n --number           Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
             IN"-t --lang             String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
+            IN"-o --only-lang        Only use providers that offer language specific data, this only applies for text items.\n"
             IN"-f --fuzzyness        Integer: Set treshold for level of Levenshtein algorithm.\n"
             IN"-q --qsratio          Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
             IN"-x --plugmax          Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
             IN"-v --verbosity        Integer. Set verbosity from 0 to 4. See --usage for details.\n"
-	    "\nNETWORK OPTIONS\n"
+            "\nNETWORK OPTIONS\n"
             IN"-p --parallel         Integer: Define the number of downloads that may be performed in parallel.\n"
             IN"-u --useragent        String: The useragent to use during HTTP requests\n"
             IN"-r --redirects        Integer. Define the number of redirects that are allowed.\n"
             IN"-m --timeout          Integer. Define the maximum number in seconds after which a download is cancelled.\n"
             IN"-k --proxy            String: Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
-	    "\nPROVIDER SPECIFIC OPTIONS\n"
+            "\nPROVIDER SPECIFIC OPTIONS\n"
             IN"-d --download         Download Images.\n"
             IN"-D --skip-download    Don't download images, but return the URLs to them (act like a search engine)\n"
             IN"-a --artist           String: Artist name to search for\n"
@@ -184,20 +185,20 @@ void help_short(GlyrQuery * s)
             IN"-i --minsize          Integer: (images only) The minimum size a cover may have.\n"
             IN"-F --formats          String: A semicolon seperated list of imageformats that are allowed. e.g.: \"png;jpeg\"\n"
             IN"-8 --force-utf8       Forces utf8 encoding for text items, invalid encodings get sorted out\n"
-	    "\nDATABASE OPTIONS\n"
-	    IN"-c --cache <folder>   Creates or opens an existing cache at <folder> and lookups data from there.\n"
-	    IN"-y --drop             Instead of searching for this element, the element is deleted from the database. Needs --cache.\n"
-	    "\nMISC OPTIONS\n"
+            "\nDATABASE OPTIONS\n"
+            IN"-c --cache <folder>   Creates or opens an existing cache at <folder> and lookups data from there.\n"
+            IN"-y --drop             Instead of searching for this element, the element is deleted from the database. Needs --cache.\n"
+            "\nMISC OPTIONS\n"
             IN"-L --list             List all fetchers and source providers for each and exit.\n"
             IN"-h --help             This text you unlucky wanderer are viewing.\n"
             IN"-V --version          Print the version string.\n"
             IN"-j --callback         Command: Set a bash command to be executed when a item is finished downloading;\n"
             IN"                      The special string <path> is expanded with the actual path to the data.\n"
-	    IN"\n\n"
-	    "With each item received you get a link to the original source, please refer to the individual terms of use,\n"
-	    "copying and distributing of this data might be not allowed.\n"
-	    "A more detailed version of this help can be found online: https://github.com/sahib/glyr/wiki/Commandline-arguments\n"
-           );
+            IN"\n\n"
+            "With each item received you get a link to the original source, please refer to the individual terms of use,\n"
+            "copying and distributing of this data might be not allowed.\n"
+            "A more detailed version of this help can be found online: https://github.com/sahib/glyr/wiki/Commandline-arguments\n"
+            );
 
     message(-1,s,stdout,"\nAUTHOR: (C) Christopher Pahl - 2011, <sahib@online.de>\n%s\n\n",glyr_version());
     exit(EXIT_FAILURE);
@@ -208,10 +209,10 @@ void help_short(GlyrQuery * s)
 
 static void visualize_from_options(void)
 {
-	 g_print("# First line is the name of the fetcher you can use,\n"
-                 "# Second is the providername with the shortkey in []\n"
-		 "# Some unimportant information follows intented by '-'\n\n");
- 
+    g_print("# First line is the name of the fetcher you can use,\n"
+            "# Second is the providername with the shortkey in []\n"
+            "# Some unimportant information follows intented by '-'\n\n");
+
     GlyrFetcherInfo * info = glyr_info_get();
     if(info != NULL)
     {
@@ -227,15 +228,15 @@ static void visualize_from_options(void)
             }
 
             g_print(" + Requires: (%s%s%s)\n",
-		    elem0->reqs & GLYR_REQUIRES_ARTIST ? "Artist " : "",
-		    elem0->reqs & GLYR_REQUIRES_ALBUM  ? "Album "  : "",
-		    elem0->reqs & GLYR_REQUIRES_TITLE  ? "Title"   : ""
-		   );
+                    elem0->reqs & GLYR_REQUIRES_ARTIST ? "Artist " : "",
+                    elem0->reqs & GLYR_REQUIRES_ALBUM  ? "Album "  : "",
+                    elem0->reqs & GLYR_REQUIRES_TITLE  ? "Title"   : ""
+                   );
             g_print(" + Optional: (%s%s%s)\n",
-		    elem0->reqs & GLYR_OPTIONAL_ARTIST ? "Artist " : "",
-		    elem0->reqs & GLYR_OPTIONAL_ALBUM  ? "Album "  : "",
-		    elem0->reqs & GLYR_OPTIONAL_TITLE  ? "Title"   : ""
-		   );
+                    elem0->reqs & GLYR_OPTIONAL_ARTIST ? "Artist " : "",
+                    elem0->reqs & GLYR_OPTIONAL_ALBUM  ? "Album "  : "",
+                    elem0->reqs & GLYR_OPTIONAL_TITLE  ? "Title"   : ""
+                   );
 
             g_print("\n///////////////////////////////\n");
         }
