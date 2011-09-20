@@ -45,13 +45,13 @@ static gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, 
             gchar * tmp_title = copy_value(to_title, strstr(to_title ,"</song>" ));
             if(tmp_title != NULL)
             {
-		 /* levenshtein_strnormcmp takes care of those brackets */
-                 if((levenshtein_strnormcmp(capo->s,capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
-                     levenshtein_strnormcmp(capo->s,capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
-                 {
-                     res = true;
-                 }
-                 g_free(tmp_title);
+                /* levenshtein_strnormcmp takes care of those brackets */
+                if((levenshtein_strnormcmp(capo->s,capo->s->artist,tmp_artist) <= capo->s->fuzzyness &&
+                    levenshtein_strnormcmp(capo->s,capo->s->title, tmp_title)  <= capo->s->fuzzyness ))
+                {
+                    res = true;
+                }
+                g_free(tmp_title);
             }
             g_free(tmp_artist);
         }
@@ -62,33 +62,58 @@ static gboolean lv_cmp_content(const gchar * to_artist, const gchar * to_title, 
 
 /*--------------------------------------------------------*/
 
-#define LYR_BEGIN "'17'/></a></div>"
+#define LYR_NODE  "<div class='lyricbox'><div class='rtMatcher'><a href='http://www.ringtonematcher.com"
+#define LYR_BEGIN "</a></div>"
 #define LYR_ENDIN "<!--"
+
+GList * parse_result_page(GlyrQuery * query, GlyrMemCache * to_parse)
+{
+    GList * result_list = NULL;
+    gchar * node = to_parse->data;
+    while(continue_search(g_list_length(result_list),query) && (node = strstr(node,LYR_NODE)))
+    {
+        node += (sizeof LYR_NODE);
+
+        gchar * lyr = get_search_value(node,LYR_BEGIN,LYR_ENDIN);
+        gchar * beautiness_test = beautify_string(lyr);
+        if(beautiness_test != NULL && beautiness_test[0])
+        {
+            if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL && strstr(lyr,EXTERNAL_LINKS) == NULL)
+            {
+                GlyrMemCache * result = DL_init();
+                result->data = lyr;
+                result->size = strlen(result->data);
+                result->dsrc = g_strdup(to_parse->dsrc);
+                result_list  = g_list_prepend(result_list,result);
+            }
+        }
+        else
+        {
+            g_free(lyr);
+        }
+        g_free(beautiness_test);
+    }
+    return result_list;
+}
+
+/*--------------------------------------------------------*/
 
 static GList * lyrics_lyricswiki_parse(cb_object * capo)
 {
     GList * result_list = NULL;
     if(lv_cmp_content(strstr(capo->cache->data,"<artist>"),strstr(capo->cache->data,"<song>"),capo))
     {
-	    gchar * wiki_page_url = get_search_value(capo->cache->data,"<url>","</url>");
-	    if(wiki_page_url != NULL)
-	    {
-		    GlyrMemCache * new_cache = download_single(wiki_page_url,capo->s,NULL);
-		    if(new_cache != NULL)
-		    {
-			    gchar * lyr = get_search_value(new_cache->data,LYR_BEGIN,LYR_ENDIN);
-			    if(lyr != NULL && strstr(lyr,BAD_STRING) == NULL && strstr(lyr,EXTERNAL_LINKS) == NULL)
-			    {
-				    GlyrMemCache * result = DL_init();
-				    result->data = lyr;
-				    result->size = strlen(result->data);
-				    result->dsrc = g_strdup(wiki_page_url);
-				    result_list  = g_list_prepend(result_list,result);
-			    }
-			    DL_free(new_cache);
-		    }
-		    g_free(wiki_page_url);
-	    }
+        gchar * wiki_page_url = get_search_value(capo->cache->data,"<url>","</url>");
+        if(wiki_page_url != NULL)
+        {
+            GlyrMemCache * new_cache = download_single(wiki_page_url,capo->s,NULL);
+            if(new_cache != NULL)
+            {
+                result_list = parse_result_page(capo->s,new_cache);
+                DL_free(new_cache);
+            }
+            g_free(wiki_page_url);
+        }
     }
     return result_list;
 }
@@ -97,13 +122,13 @@ static GList * lyrics_lyricswiki_parse(cb_object * capo)
 
 MetaDataSource lyrics_lyricswiki_src =
 {
-	.name = "lyricswiki",
-	.key  = 'w',
-	.parser    = lyrics_lyricswiki_parse,
-	.get_url   = lyrics_lyricswiki_url,
-	.type      = GLYR_GET_LYRICS,
-	.quality   = 95,
-	.speed     = 75,
-	.endmarker = NULL,
-	.free_url  = false
+    .name = "lyricswiki",
+    .key  = 'w',
+    .parser    = lyrics_lyricswiki_parse,
+    .get_url   = lyrics_lyricswiki_url,
+    .type      = GLYR_GET_LYRICS,
+    .quality   = 95,
+    .speed     = 75,
+    .endmarker = NULL,
+    .free_url  = false
 };
