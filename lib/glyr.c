@@ -528,20 +528,27 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->lang = GLYR_DEFAULT_LANG;
     glyrs->lang_aware_only = GLYR_DEFAULT_LANG_AWARE_ONLY;
 	glyrs->itemctr = 0;
+
+    /* Set on a very specific value, so we can pretty sure,
+       we are not accessing bad memory - feels little hackish.. */
+    glyrs->is_initalized = QUERY_INITIALIZER;
 }
 
 /*-----------------------------------------------*/
 
 void glyr_query_init(GlyrQuery * glyrs)
 {
-	set_query_on_defaults(glyrs);
+    if(glyrs && QUERY_IS_INITALIZED(glyrs) == false)
+    {
+	    set_query_on_defaults(glyrs);
+    }
 }
 
 /*-----------------------------------------------*/
 
 void glyr_query_destroy(GlyrQuery * sets)
 {
-	if(sets != NULL)
+	if(sets != NULL && QUERY_IS_INITALIZED(sets))
 	{
 		for(gsize i = 0; i < 10; i++)
 		{
@@ -715,7 +722,7 @@ static gboolean check_if_valid(GlyrQuery * q, MetaDataFetcher * fetch)
 
 GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 {
-	if(is_initalized == FALSE)
+	if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
 	{
 		if(e != NULL)
 		{
@@ -789,283 +796,283 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 		/* Start of the returned list */
 		GlyrMemCache * head = NULL;
 
-		/* free if empty */
-		if(result != NULL)
-		{
-			/* Set the length */
-			if(length != NULL)
-			{
-				*length = g_list_length(result);
-			}
+        /* Set the length */
+        if(length != NULL)
+        {
+            *length = g_list_length(result);
+        }
 
-			/* Count inserstions */
-			gint db_inserts = 0;
+        /* free if empty */
+        if(result != NULL)
+        {
+            /* Count inserstions */
+            gint db_inserts = 0;
 
-			/* link caches to each other */
-			for(GList * elem = result; elem; elem = elem->next)
-			{
-				GlyrMemCache * item = elem->data;
-				item->next = (elem->next) ? elem->next->data : NULL;
-				item->prev = (elem->prev) ? elem->prev->data : NULL;
+            /* link caches to each other */
+            for(GList * elem = result; elem; elem = elem->next)
+            {
+                GlyrMemCache * item = elem->data;
+                item->next = (elem->next) ? elem->next->data : NULL;
+                item->prev = (elem->prev) ? elem->prev->data : NULL;
 
-				if(settings->db_autowrite && settings->local_db && item->cached == FALSE)
-				{
-					db_inserts++;
-					glyr_db_insert(settings->local_db,settings,item);
-				}
-			}
+                if(settings->db_autowrite && settings->local_db && item->cached == FALSE)
+                {
+                    db_inserts++;
+                    glyr_db_insert(settings->local_db,settings,item);
+                }
+            }
 
-			if(db_inserts > 0)
-			{
-				glyr_message(2,settings,"--- Inserted %d item%s into db.\n",db_inserts,(db_inserts == 1) ? "" : "s");
-			}
+            if(db_inserts > 0)
+            {
+                glyr_message(2,settings,"--- Inserted %d item%s into db.\n",db_inserts,(db_inserts == 1) ? "" : "s");
+            }
 
-			/* Finish. */
-			if(g_list_first(result))
-			{
-				head = g_list_first(result)->data;
-			}
+            /* Finish. */
+            if(g_list_first(result))
+            {
+                head = g_list_first(result)->data;
+            }
 
-			g_list_free(result);
-			result = NULL;
-		}
-		return head;
-	}
-	if(e) *e = GLYRE_EMPTY_STRUCT;
-	return NULL;
+            g_list_free(result);
+            result = NULL;
+        }
+        return head;
+    }
+    if(e) *e = GLYRE_EMPTY_STRUCT;
+    return NULL;
 }
 
 /*-----------------------------------------------*/
 
 int glyr_cache_write(GlyrMemCache * data, const char * path)
 {
-	int bytes = -1;
-	if(path)
-	{
-		if(!g_ascii_strcasecmp(path,"null"))
-		{
-			bytes = 0;
-		}
-		else if(!g_ascii_strcasecmp(path,"stdout"))
-		{
-			bytes=fwrite(data->data,1,data->size,stdout);
-			fputc('\n',stdout);
-		}
-		else if(!g_ascii_strcasecmp(path,"stderr"))
-		{
-			bytes=fwrite(data->data,1,data->size,stderr);
-			fputc('\n',stderr);
-		}
-		else
-		{
-			FILE * fp = fopen(path,"w");
-			if(fp)
-			{
-				if(data->data != NULL)
-				{
-					bytes=fwrite(data->data,1,data->size,fp);
-				}
-				fclose(fp);
-			}
-			else
-			{
-				glyr_message(-1,NULL,"glyr_cache_write: Unable to write to '%s'!\n",path);
-			}
-		}
-	}
-	return bytes;
+    int bytes = -1;
+    if(path)
+    {
+        if(!g_ascii_strcasecmp(path,"null"))
+        {
+            bytes = 0;
+        }
+        else if(!g_ascii_strcasecmp(path,"stdout"))
+        {
+            bytes=fwrite(data->data,1,data->size,stdout);
+            fputc('\n',stdout);
+        }
+        else if(!g_ascii_strcasecmp(path,"stderr"))
+        {
+            bytes=fwrite(data->data,1,data->size,stderr);
+            fputc('\n',stderr);
+        }
+        else
+        {
+            FILE * fp = fopen(path,"w");
+            if(fp)
+            {
+                if(data->data != NULL)
+                {
+                    bytes=fwrite(data->data,1,data->size,fp);
+                }
+                fclose(fp);
+            }
+            else
+            {
+                glyr_message(-1,NULL,"glyr_cache_write: Unable to write to '%s'!\n",path);
+            }
+        }
+    }
+    return bytes;
 }
 
 /*-----------------------------------------------*/
 
 static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
 {
-	gint result = GLYRE_OK;
-	if(s && arg && at >= 0 && at < 10)
-	{
-		if(s->info[at] != NULL)
-		{
-			g_free((char*)s->info[at]);
-		}
+    gint result = GLYRE_OK;
+    if(s && arg && at >= 0 && at < 10)
+    {
+        if(s->info[at] != NULL)
+        {
+            g_free((char*)s->info[at]);
+        }
 
-		s->info[at] = g_strdup(arg);
-		switch(at)
-		{
-			case 0:
-				s->artist = (gchar*)s->info[at];
-				break;
-			case 1:
-				s->album = (gchar*)s->info[at];
-				break;
-			case 2:
-				s->title = (gchar*)s->info[at];
-				break;
-			case 3:
-				s->proxy = s->info[at];
-				break;
-			case 4:
-				s->from = (gchar*)s->info[at];
-				break;
-			case 5:
-				s->allowed_formats = (gchar*)s->info[at];
-				break;
-			case 6:
-				s->useragent = (gchar*)s->info[at];
-				break;
-			case 7:
-				s->lang = (gchar*)s->info[at];
-				break;
-			default:
-				glyr_message(2,s,"Warning: wrong <at> for glyr_info_at!\n");
-		}
-	}
-	else
-	{
-		result = GLYRE_BAD_VALUE;
-	}
-	return result;
+        s->info[at] = g_strdup(arg);
+        switch(at)
+        {
+            case 0:
+                s->artist = (gchar*)s->info[at];
+                break;
+            case 1:
+                s->album = (gchar*)s->info[at];
+                break;
+            case 2:
+                s->title = (gchar*)s->info[at];
+                break;
+            case 3:
+                s->proxy = s->info[at];
+                break;
+            case 4:
+                s->from = (gchar*)s->info[at];
+                break;
+            case 5:
+                s->allowed_formats = (gchar*)s->info[at];
+                break;
+            case 6:
+                s->useragent = (gchar*)s->info[at];
+                break;
+            case 7:
+                s->lang = (gchar*)s->info[at];
+                break;
+            default:
+                glyr_message(2,s,"Warning: wrong <at> for glyr_info_at!\n");
+        }
+    }
+    else
+    {
+        result = GLYRE_BAD_VALUE;
+    }
+    return result;
 }
 
 /*-----------------------------------------------*/
 
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
 {
-	switch(type)
-	{
-		case GLYR_GET_ANY:
-		
-		case GLYR_GET_COVERART:
-			return "cover";
-		case GLYR_GET_LYRICS:
-			return "songtext";
-		case GLYR_GET_ARTIST_PHOTOS:
-			return "artistphoto";
-		case GLYR_GET_ARTISTBIO:
-			return "artistbio";
-		case GLYR_GET_SIMILIAR_ARTISTS:
-			return "similiar_artist";
-		case GLYR_GET_SIMILIAR_SONGS:
-			return "similiar_song";
-		case GLYR_GET_ALBUM_REVIEW:
-			return "albumreview";
-		case GLYR_GET_TRACKLIST:
-			return "trackname";
-		case GLYR_GET_TAGS:
-			return "tag";
-		case GLYR_GET_RELATIONS:
-			return "relation";
-		case GLYR_GET_ALBUMLIST:
-			return "albumname";
-		case GLYR_GET_GUITARTABS:
-			return "guitartabs";
-		case GLYR_GET_UNSURE:
-		default:
-			return "unknown";
-	}
-	return NULL;
+    switch(type)
+    {
+        case GLYR_GET_ANY:
+
+        case GLYR_GET_COVERART:
+            return "cover";
+        case GLYR_GET_LYRICS:
+            return "songtext";
+        case GLYR_GET_ARTIST_PHOTOS:
+            return "artistphoto";
+        case GLYR_GET_ARTISTBIO:
+            return "artistbio";
+        case GLYR_GET_SIMILIAR_ARTISTS:
+            return "similiar_artist";
+        case GLYR_GET_SIMILIAR_SONGS:
+            return "similiar_song";
+        case GLYR_GET_ALBUM_REVIEW:
+            return "albumreview";
+        case GLYR_GET_TRACKLIST:
+            return "trackname";
+        case GLYR_GET_TAGS:
+            return "tag";
+        case GLYR_GET_RELATIONS:
+            return "relation";
+        case GLYR_GET_ALBUMLIST:
+            return "albumname";
+        case GLYR_GET_GUITARTABS:
+            return "guitartabs";
+        case GLYR_GET_UNSURE:
+        default:
+            return "unknown";
+    }
+    return NULL;
 }
 
 /*-----------------------------------------------*/
 
 const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
 {
-	switch(type)
-	{
-		case GLYR_TYPE_COVERART:
-			return "cover";
-		case GLYR_TYPE_COVERART_PRI:
-			return "cover_front";
-		case GLYR_TYPE_COVERART_SEC:
-			return "cover_back";
-		case GLYR_TYPE_LYRICS:
-			return "songtext";
-		case GLYR_TYPE_ARTIST_PHOTO:
-			return "artistphoto";
-		case GLYR_TYPE_ALBUM_REVIEW:
-			return "albumreview";
-		case GLYR_TYPE_ARTISTBIO:
-			return "artistbio";
-		case GLYR_TYPE_SIMILAR_ARTIST:
-			return "similiar_artist";
-		case GLYR_TYPE_SIMILAR_SONG:
-			return "similiar_song";
-		case GLYR_TYPE_TRACK:
-			return "trackname";
-		case GLYR_TYPE_ALBUMLIST:
-			return "albumname";
-		case GLYR_TYPE_TAG:
-			return "tag";
-		case GLYR_TYPE_TAG_ARTIST:
-			return "artisttag";
-		case GLYR_TYPE_TAG_ALBUM:
-			return "albumtag";
-		case GLYR_TYPE_TAG_TITLE:
-			return "titletag";
-		case GLYR_TYPE_RELATION:
-			return "relation";
-		case GLYR_TYPE_IMG_URL:
-			return "ImageURL";
-		case GLYR_TYPE_TXT_URL:
-			return "HTMLURL";
-		case GLYR_TYPE_GUITARTABS:
-			return "guitartabs";
-		case GLYR_TYPE_NOIDEA:
-		default:
-			return "unknown";
-	}
-	return NULL;
+    switch(type)
+    {
+        case GLYR_TYPE_COVERART:
+            return "cover";
+        case GLYR_TYPE_COVERART_PRI:
+            return "cover_front";
+        case GLYR_TYPE_COVERART_SEC:
+            return "cover_back";
+        case GLYR_TYPE_LYRICS:
+            return "songtext";
+        case GLYR_TYPE_ARTIST_PHOTO:
+            return "artistphoto";
+        case GLYR_TYPE_ALBUM_REVIEW:
+            return "albumreview";
+        case GLYR_TYPE_ARTISTBIO:
+            return "artistbio";
+        case GLYR_TYPE_SIMILAR_ARTIST:
+            return "similiar_artist";
+        case GLYR_TYPE_SIMILAR_SONG:
+            return "similiar_song";
+        case GLYR_TYPE_TRACK:
+            return "trackname";
+        case GLYR_TYPE_ALBUMLIST:
+            return "albumname";
+        case GLYR_TYPE_TAG:
+            return "tag";
+        case GLYR_TYPE_TAG_ARTIST:
+            return "artisttag";
+        case GLYR_TYPE_TAG_ALBUM:
+            return "albumtag";
+        case GLYR_TYPE_TAG_TITLE:
+            return "titletag";
+        case GLYR_TYPE_RELATION:
+            return "relation";
+        case GLYR_TYPE_IMG_URL:
+            return "ImageURL";
+        case GLYR_TYPE_TXT_URL:
+            return "HTMLURL";
+        case GLYR_TYPE_GUITARTABS:
+            return "guitartabs";
+        case GLYR_TYPE_NOIDEA:
+        default:
+            return "unknown";
+    }
+    return NULL;
 }
 /*-----------------------------------------------*/
 
 void glyr_cache_print(GlyrMemCache * cacheditem)
 {
-	if(cacheditem != NULL)
-	{
-		g_printerr("FROM: <%s>\n",cacheditem->dsrc);
-		g_printerr("PROV: %s\n",cacheditem->prov);
-		g_printerr("SIZE: %d Bytes\n",(int)cacheditem->size);
-		g_printerr("MSUM: ");
-		MDPrintArr(cacheditem->md5sum);
+    if(cacheditem != NULL)
+    {
+        g_printerr("FROM: <%s>\n",cacheditem->dsrc);
+        g_printerr("PROV: %s\n",cacheditem->prov);
+        g_printerr("SIZE: %d Bytes\n",(int)cacheditem->size);
+        g_printerr("MSUM: ");
+        MDPrintArr(cacheditem->md5sum);
 
-		// Each cache identified it's data by a constant
-		g_printerr("\nTYPE: ");
-		if(cacheditem->type == GLYR_TYPE_TRACK)
-		{
-			panic("[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
-		}
-		g_printerr("%s",glyr_data_type_to_string(cacheditem->type));
+        // Each cache identified it's data by a constant
+        g_printerr("\nTYPE: ");
+        if(cacheditem->type == GLYR_TYPE_TRACK)
+        {
+            panic("[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
+        }
+        g_printerr("%s",glyr_data_type_to_string(cacheditem->type));
 
-		g_printerr("\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
-		g_printerr("\nRATE: %d",cacheditem->rating);
+        g_printerr("\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
+        g_printerr("\nRATE: %d",cacheditem->rating);
 
-		/* Print the actual data.
-		 * This might have funny results if using cover/photos
-		 */
-		if(cacheditem->is_image == FALSE)
-		{
-			g_printerr("\nDATA: \n%s",cacheditem->data);
-		}
-		else
-		{
-			g_printerr("\nFRMT: %s",cacheditem->img_format);
-			g_printerr("\nDATA: <not printable>");
-		}
-		g_printerr("\n");
-	}
+        /* Print the actual data.
+         * This might have funny results if using cover/photos
+         */
+        if(cacheditem->is_image == FALSE)
+        {
+            g_printerr("\nDATA: \n%s",cacheditem->data);
+        }
+        else
+        {
+            g_printerr("\nFRMT: %s",cacheditem->img_format);
+            g_printerr("\nDATA: <not printable>");
+        }
+        g_printerr("\n");
+    }
 }
 
 /* --------------------------------------------------------- */
 
 GlyrFetcherInfo * glyr_info_get(void)
 {
-	return get_plugin_info();
+    return get_plugin_info();
 }
 
 /* --------------------------------------------------------- */
 
 void glyr_info_free(GlyrFetcherInfo * info)
 {
-	free_plugin_info(info);
+    free_plugin_info(info);
 }
 
 /* --------------------------------------------------------- */

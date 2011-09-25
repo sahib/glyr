@@ -183,6 +183,9 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
 		result->dsrc = g_strdup(cache->dsrc);
 		result->prov = g_strdup(cache->prov);
 		memcpy(result->md5sum,cache->md5sum,16);
+
+        result->next = NULL;
+        result->prev = NULL;
 	}
 	return result;
 }
@@ -450,8 +453,6 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 // Init an easyhandler with all relevant options
 static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuery * s, void * magic_private_ptr, long timeout)
 {
-	if(!s) return;
-
 	// Set options (see 'man curl_easy_setopt')
 	curl_easy_setopt(eh, CURLOPT_TIMEOUT, timeout);
 	curl_easy_setopt(eh, CURLOPT_NOSIGNAL, 1L);
@@ -463,19 +464,19 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
 	// Pass vars to curl
 	curl_easy_setopt(eh, CURLOPT_URL, url);
 	curl_easy_setopt(eh, CURLOPT_PRIVATE, magic_private_ptr);
-	curl_easy_setopt(eh, CURLOPT_VERBOSE, (s->verbosity >= 4));
+	curl_easy_setopt(eh, CURLOPT_VERBOSE, (s && s->verbosity >= 4));
 	curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, DL_buffer);
 	curl_easy_setopt(eh, CURLOPT_WRITEDATA, (void *)cache);
 
 	// amazon plugin requires redirects
 	curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, 1L);
-	curl_easy_setopt(eh, CURLOPT_MAXREDIRS, s->redirects);
+	curl_easy_setopt(eh, CURLOPT_MAXREDIRS, (s) ? s->redirects : 2);
 
 	// Do not download 404 pages
 	curl_easy_setopt(eh, CURLOPT_FAILONERROR, 1L);
 
 	// Set proxy to use
-	DL_setproxy(eh,(gchar*)s->proxy);
+	DL_setproxy(eh,(gchar*) (s) ? s->proxy : NULL);
 
 	// Discogs requires gzip compression
 	curl_easy_setopt(eh, CURLOPT_ENCODING,"gzip");
@@ -583,7 +584,7 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
 // Download a singe file NOT in parallel
 GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 {
-	if(url != NULL && is_blacklisted((gchar*)url) == false)
+	if(url != NULL && is_blacklisted((gchar*)url) == false) 
 	{
 		CURL *curl = NULL;
 		CURLcode res = 0;
@@ -603,7 +604,7 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
 		if(curl != NULL)
 		{
 			/* Configure curl */
-			DL_setopt(curl,dldata,url,s,NULL,s->timeout);
+			DL_setopt(curl,dldata,url,s,NULL,(s) ? s->timeout : 5);
 
 			/* Perform transaction */
 			res = curl_easy_perform(curl);
@@ -1578,9 +1579,9 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 					query,
 					url_list_length / query->timeout  + 1,
 					MIN((gint)(url_list_length / query->parallel + 3), query->number + 2),
-					call_provider_callback,    /* Callback           */
-					url_table,                 /* Userpointer        */
-					TRUE);                     /* Free caches itself */
+					call_provider_callback,    
+					url_table,                 
+					TRUE);                    
 		}
 
 		/* Now finalize our retrieved items */

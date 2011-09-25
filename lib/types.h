@@ -355,6 +355,7 @@ typedef struct _GlyrQuery {
     int itemctr; /*!< Do not use! - Counter of already received items - you shouldn't need this */
     char * info[10]; /*!< Do not use! - A register where porinters to all dynamic alloc. fields are saved. Do not use. */
     bool imagejob; /*! Do not use! - Wether this query will get images or urls to them */
+    long is_initalized; /* Do not use! - Wether this query was initialized correctly */
 
 } GlyrQuery;
 

@@ -18,14 +18,19 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 ******************************************************/
 
-#ifndef GLYR_CACHE_H
-#define GLYR_CACHE_H
+#ifndef GLYR_CACHE_INTERN_H
+#define GLYR_CACHE_INTERN_H
 
-#include "cache.h"
+#include "types.h"
+#include "core.h"
+#include <glib.h>
 
-/* Functions related to caching that are not member of the public API go here,
- * if they are needed elsewhere.
- */
-bool db_contains(GlyrDatabase * db, GlyrMemCache * cache);
+/* Check if a file is contained in the db */
+gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache);
+
+/* Locksafe wrappers for sql functions */
+gint sqlite3_blocking_step(sqlite3_stmt *pStmt);
+gint sqlite3_blocking_prepare_v2(sqlite3 *db, const gchar *zSql, gint nSql, sqlite3_stmt **ppStmt, const char **pz);
+gint sqlite3_blocking_exec(sqlite3 *, const gchar *, int (*callback)(void*,int,char**,char**), void *, gchar ** );
 
 #endif

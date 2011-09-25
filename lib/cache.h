@@ -79,7 +79,7 @@ void glyr_db_destroy(GlyrDatabase * db_object);
 * </listitem>
 * <listitem>
 * <para>
-* glyr_opt_number() - How many items to delete at a max.
+* glyr_opt_number() - How many items to return at max.
 * </para>
 * </listitem>
 * </itemizedlist>

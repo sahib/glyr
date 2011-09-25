@@ -566,6 +566,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     {
         message(-1,NULL,stderr,"warning: Empty counterpointer!\n");
     }
+    
     return GLYRE_OK;
 }
 
@@ -663,6 +664,11 @@ int main(int argc, char * argv[])
                 int length = -1;
                 GLYR_ERROR get_error = GLYRE_OK;
                 GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
+
+                if(my_query.verbosity >= 2)
+                {
+                    g_print("# => %d item(s) in total.\n",length);
+                }
 
                 if(my_list)
                 {

@@ -1,0 +1,3 @@
+h1. C Testframework
+
+You need 'check' installed.

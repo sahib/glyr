@@ -20,6 +20,7 @@
 #include "core.h"
 #include "glyr.h"
 #include "cache.h"
+#include "cache_intern.h"
 #include <glib.h>
 
 /*--------------------------------------------------------------*/
@@ -27,15 +28,16 @@
 /*--------------------------------------------------------------*/
 
 /* Check if a cache is already in the db, by cheskum or source_url  */
-bool db_contains(GlyrDatabase * db, GlyrMemCache * cache)
+gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache)
 {
 	gboolean result = FALSE;
 	if(db && cache)
 	{
 		gchar * sql = sqlite3_mprintf(
-				"SELECT source_url,data_checksum,data_size,data_type FROM metadata AS m  "
-				"WHERE (m.data_type = %d AND m.data_size = %d AND m.data_checksum = '?') "
-				"OR (m.source_url LIKE '%q' AND m.source_url is not null AND data_type = %d);",
+				"SELECT source_url,data_checksum,data_size,data_type FROM metadata AS m      "
+				"WHERE (m.data_type = %d AND m.data_size = %d AND m.data_checksum = '?')     "
+				"OR (m.source_url LIKE '%q' AND m.source_url IS NOT NULL AND data_type = %d) "
+                "LIMIT 1;                                                                    ",
 				cache->type,
 				cache->size,
 				cache->dsrc,
@@ -54,7 +56,7 @@ bool db_contains(GlyrDatabase * db, GlyrMemCache * cache)
 			}
 			else if(err != SQLITE_DONE) 
 			{
-				fprintf(stderr,"glyr_db_contains: error message: %s\n", sqlite3_errmsg(db->db_handle));
+				fprintf(stderr,"db_contains: error message: %s\n", sqlite3_errmsg(db->db_handle));
 			}
 	
 			sqlite3_finalize(stmt);
@@ -68,4 +70,155 @@ bool db_contains(GlyrDatabase * db, GlyrMemCache * cache)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+/* This has been shameless ripped of from 
+ * http://www.sqlite.org/unlock_notify.html
+ * and converted to GLib's threading system.
+ */
 
+/*
+ ** A pointer to an instance of this structure is passed as the user-context
+ ** pointer when registering for an unlock-notify callback.
+ */
+typedef struct _UnlockNotification 
+{
+    gboolean fired;           /* True after unlock event has occurred */
+    GCond  * cond;            /* Condition variable to wait on */
+    GMutex * mutex;           /* Mutex to protect structure */
+} UnlockNotification;
+
+/*-----------------------------------------------------------------------*/
+
+/*
+ ** This function is an unlock-notify callback registered with SQLite.
+ */
+static void unlock_notify_cb(void ** apArg, int nArg)
+{
+    for(gint i = 0; i < nArg; i++)
+    {
+        UnlockNotification * p = (UnlockNotification *)apArg[i];
+        g_mutex_lock(p->mutex);
+        p->fired = TRUE;
+        g_cond_signal(p->cond);
+        g_mutex_unlock(p->mutex);
+    }
+}
+
+/*-----------------------------------------------------------------------*/
+
+/*
+ ** This function assumes that an SQLite API call (either sqlite3_prepare_v2() 
+ ** or sqlite3_step()) has just returned SQLITE_LOCKED. The argument is the
+ ** associated database connection.
+ **
+ ** This function calls sqlite3_unlock_notify() to register for an 
+ ** unlock-notify callback, then blocks until that callback is delivered 
+ ** and returns SQLITE_OK. The caller should then retry the failed operation.
+ **
+ ** Or, if sqlite3_unlock_notify() indicates that to block would deadlock 
+ ** the system, then this function returns SQLITE_LOCKED immediately. In 
+ ** this case the caller should not retry the operation and should roll 
+ ** back the current transaction (if any).
+ */
+static gint wait_for_unlock_notify(sqlite3 *db)
+{
+    gint rc;
+    UnlockNotification un;
+
+    un.mutex = NULL;
+    un.cond  = NULL;
+
+    /* Initialize the UnlockNotification structure. */
+    un.fired = FALSE;
+    un.mutex = g_mutex_new();
+    un.cond  = g_cond_new();
+
+    /* Register for an unlock-notify callback. */
+    rc = sqlite3_unlock_notify(db, unlock_notify_cb,(void *)&un);
+    g_assert(rc == SQLITE_LOCKED || rc == SQLITE_OK);
+
+    /* The call to sqlite3_unlock_notify() always returns either SQLITE_LOCKED 
+     ** or SQLITE_OK. 
+     **
+     ** If SQLITE_LOCKED was returned, then the system is deadlocked. In this
+     ** case this function needs to return SQLITE_LOCKED to the caller so 
+     ** that the current transaction can be rolled back. Otherwise, block
+     ** until the unlock-notify callback is invoked, then return SQLITE_OK.
+     */
+    if(rc == SQLITE_OK)
+    {
+        g_mutex_lock(un.mutex);
+        if(un.fired == FALSE)
+        {
+            g_cond_wait(un.cond, un.mutex);
+        }
+        g_mutex_unlock(un.mutex);
+    }
+
+    /* Destroy the mutex and condition variables. */
+    g_cond_free(un.cond);
+    g_mutex_free(un.mutex);
+    return rc;
+}
+
+/*-----------------------------------------------------------------------*/
+
+/*
+ ** This function is a wrapper around the SQLite function sqlite3_step().
+ ** It functions in the same way as step(), except that if a required
+ ** shared-cache lock cannot be obtained, this function may block waiting for
+ ** the lock to become available. In this scenario the normal API step()
+ ** function always returns SQLITE_LOCKED.
+ **
+ ** If this function returns SQLITE_LOCKED, the caller should rollback
+ ** the current transaction (if any) and try again later. Otherwise, the
+ ** system may become deadlocked.
+ */
+gint sqlite3_blocking_step(sqlite3_stmt *pStmt)
+{
+    gint rc;
+    while(SQLITE_LOCKED == (rc = sqlite3_step(pStmt)))
+    {
+        rc = wait_for_unlock_notify(sqlite3_db_handle(pStmt));
+        if(rc != SQLITE_OK)
+        {
+            break;
+        }
+        sqlite3_reset(pStmt);
+    }
+    return rc;
+}
+
+/*-----------------------------------------------------------------------*/
+
+gint sqlite3_blocking_prepare_v2(sqlite3 *db, const gchar *zSql, gint nSql, sqlite3_stmt **ppStmt, const char **pz)
+{
+    gint rc;
+    while(SQLITE_LOCKED == (rc = sqlite3_prepare_v2(db, zSql, nSql, ppStmt, pz)))
+    {
+        rc = wait_for_unlock_notify(db);
+        if(rc != SQLITE_OK)
+        {
+            break;
+        }
+    }
+    return rc;
+}
+
+/*-----------------------------------------------------------------------*/
+
+
+gint sqlite3_blocking_exec(sqlite3 * db, const gchar * sql_code, 
+                     int (*callback)(void*,int,char**,char**), 
+                     void * user_ptr, gchar ** err_msg)
+{
+    gint rc;
+    while(SQLITE_LOCKED == (rc = sqlite3_exec(db, sql_code, callback, user_ptr, err_msg)))
+    {
+        rc = wait_for_unlock_notify(db);
+        if(rc != SQLITE_OK)
+        {
+            break;
+        }
+    }
+    return rc;
+}

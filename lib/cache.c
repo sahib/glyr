@@ -17,13 +17,15 @@
 * You should have received a copy of the GNU General Public License
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
+
+#include "cache_intern.h"
+#include "cache.h"
 #include "core.h"
 #include "glyr.h"
 #include "register_plugins.h"
-#include "cache.h"
 
-#include <glib.h>
-
+/* How long to wait till returning SQLITE_BUSY */
+#define DB_BUSY_WAIT 2500
 
 /* ------------------------------------------------------------------ */
 static void create_table_defs(GlyrDatabase * db);
@@ -67,6 +69,13 @@ GlyrDatabase * glyr_db_init(char * root_path)
 		g_printerr("WARNING: Your SQLite version seems not to be threadsafe!\n");
 	}
 
+    gint rc = sqlite3_enable_shared_cache(TRUE);
+    if(rc != SQLITE_OK)
+    {
+        g_printerr("ERR: %d\n",rc);
+    }
+
+
 	GlyrDatabase * to_return = NULL;
 	if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
 	{
@@ -75,10 +84,10 @@ GlyrDatabase * glyr_db_init(char * root_path)
 
 #if SQLITE_VERSION_NUMBER >= 3007007
 		gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI, NULL);
+		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX, NULL);
 #else
 		gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL);
+		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 #endif
 
 		if(db_err == SQLITE_OK)
@@ -86,6 +95,7 @@ GlyrDatabase * glyr_db_init(char * root_path)
 			to_return = g_malloc0(sizeof(GlyrDatabase));
 			to_return->root_path = g_strdup(root_path);
 			to_return->db_handle = db_connection;
+            sqlite3_busy_timeout(db_connection,DB_BUSY_WAIT);
 			create_table_defs(to_return);
 		}
 		else
@@ -151,10 +161,10 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 	{
 		gchar * sql = "DELETE FROM metadata WHERE data_checksum = ? ;\n";
 		sqlite3_stmt *stmt = NULL;
-		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
+		sqlite3_blocking_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 		sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_STATIC);
 
-		if(sqlite3_step(stmt) != SQLITE_DONE) 
+		if(sqlite3_blocking_step(stmt) != SQLITE_DONE) 
 		{
 			fprintf(stderr,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
 		}
@@ -234,7 +244,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			cb_data.max_delete = query->number;
 
 			gchar * err_msg = NULL;
-			sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
+			sqlite3_blocking_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
 			if(err_msg != NULL)
 			{
 				g_printerr("SQL Delete error: %s\n",err_msg);
@@ -324,7 +334,8 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 				img_url_constr,
 				artist_constr,
 				album_constr,
-				title_constr);
+				title_constr
+                );
 
 		if(sql != NULL)
 		{
@@ -334,10 +345,10 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 			data.counter = 0;
 
 			gchar * err_msg = NULL;
-			sqlite3_exec(db->db_handle,sql,select_callback,&data,&err_msg);
+			sqlite3_blocking_exec(db->db_handle,sql,select_callback,&data,&err_msg);
 			if(err_msg != NULL)
 			{
-				g_printerr("SQL Select error: %s\n",err_msg);
+				g_printerr("glyr_db_lookup: %s\n",err_msg);
 				sqlite3_free(err_msg);
 			}
 			sqlite3_free(sql);
@@ -377,7 +388,7 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
 	if(db && q && cache)
 	{
 		GLYR_FIELD_REQUIREMENT reqs = get_req(q);
-		execute(db,"BEGIN;");
+		execute(db,"BEGIN IMMEDIATE;");
 		if((reqs & GLYR_REQUIRES_ARTIST) || (reqs & GLYR_OPTIONAL_ARTIST)) {
 			INSERT_STRING("INSERT OR IGNORE INTO artists VALUES('%q');",q->artist); 
 		}
@@ -405,10 +416,10 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 	if(db && sql_statement)
 	{
 		char * err_msg = NULL;
-		sqlite3_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
+		sqlite3_blocking_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
 		if(err_msg != NULL)
 		{
-			fprintf(stderr, "SQL error: %s\n", err_msg);
+			fprintf(stderr, "glyr_db_execute: SQL error: %s\n", err_msg);
 			sqlite3_free(err_msg);
 		}
 	}
@@ -422,7 +433,7 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 static void create_table_defs(GlyrDatabase * db)
 {
 	execute(db,
-			"BEGIN;\n"
+			"BEGIN IMMEDIATE;\n"
 			"-- Provider\n"
 			"CREATE TABLE IF NOT EXISTS providers (provider_name VARCHAR(20) UNIQUE);\n"
 			"\n"
@@ -466,6 +477,7 @@ static void create_table_defs(GlyrDatabase * db)
 			"INSERT OR IGNORE INTO image_types VALUES('tiff');\n"
 			"INSERT OR IGNORE INTO db_version VALUES(0);\n"
 			"COMMIT;\n"
+            "VACUUM;\n"
 			);
 }
 
@@ -488,12 +500,12 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 	if(db && query && cache)
 	{
 		char * sql= sqlite3_mprintf("INSERT OR IGNORE INTO metadata VALUES(\n"
-				"(select rowid from artists where artist_name = '%q'),\n"
-				"(select rowid from albums  where album_name = '%q'),\n"
-				"(select rowid from titles  where title_name = '%q'),\n"
-				"(select rowid from providers where provider_name = '%q'),\n"
+				"(SELECT rowid FROM artists WHERE artist_name = '%q'),\n"
+				"(SELECT rowid FROM albums  WHERE album_name = '%q'),\n"
+				"(SELECT rowid FROM titles  WHERE title_name = '%q'),\n"
+				"(SELECT rowid FROM providers WHERE provider_name = '%q'),\n"
 				"?,"
-				"(select rowid from image_types where image_type_name = '%q'),"
+				"(SELECT rowid FROM image_types WHERE image_type_name = '%q'),"
 				"?,?,?,?,?,?,?,?,?);\n",
 				query->artist,
 				query->album,
@@ -503,7 +515,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 				);
 
 		sqlite3_stmt *stmt = NULL;
-		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
+		sqlite3_blocking_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 
 		sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
 		sqlite3_bind_int (stmt, 2, cache->duration);
@@ -516,9 +528,9 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 		sqlite3_bind_int( stmt, 9, cache->rating);
 		sqlite3_bind_double( stmt,10, get_current_time());
 
-		if(sqlite3_step(stmt) != SQLITE_DONE) 
+		if(sqlite3_blocking_step(stmt) != SQLITE_DONE) 
 		{
-			fprintf(stderr,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
+			fprintf(stderr,"glyr_db_insert: SQL failure: %s\n", sqlite3_errmsg(db->db_handle));
 		}
 		sqlite3_finalize(stmt);
 

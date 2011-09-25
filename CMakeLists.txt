@@ -109,8 +109,8 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
-	"${DIR_ROOT}/cache.c"
 	"${DIR_ROOT}/cache_intern.c"
+	"${DIR_ROOT}/cache.c"
 	"${DIR_INTERN}/cache/db_provider.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
@@ -180,9 +180,9 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_GUITARTABS}/guitaretab.c"
 	"${DIR_GUITARTABS}/chordie_com.c"
 # 	Old plugins, removed due to bad quality
-#       "${DIR_LYRICS}/songlyrics.c"
-#       "${DIR_LYRICS}/directlyrics.c"
-#       "${DIR_LYRICS}/darklyrics.c"
+#   "${DIR_LYRICS}/songlyrics.c"
+#   "${DIR_LYRICS}/directlyrics.c"
+#   "${DIR_LYRICS}/darklyrics.c"
 )
 
 
@@ -191,6 +191,12 @@ SET(LIB_SOURCE_LOCATIONS
 # ------------------------------------------------
 ADD_SUBDIRECTORY( ${SUBDIR_LIB} )
 ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
+
+IF(DEFINED TEST)
+    MESSAGE("-- Building with tests (${TEST})")
+    ADD_SUBDIRECTORY( spec/C )
+    ADD_CUSTOM_TARGET(test COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/spec/run.rb" DEPENDS check_api)
+ENDIF()
 
 # ------------------------------------------------
 # uninstall target
@@ -202,3 +208,4 @@ configure_file(
     )
 
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
+

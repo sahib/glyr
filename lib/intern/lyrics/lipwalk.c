@@ -26,8 +26,11 @@
 
 #define LIPWALK_DOMAIN "http://www.lipwalklyrics.com"
 #define LIPWALK_URL LIPWALK_DOMAIN"/component/lyrics/search/index.php?search=${artist}%20${title}"
-#define START "<div id=\"lyric\">"
+
+#define START "</script><div class=\"clearboth\"></div>"
 #define END "</div>"
+
+#define IS_ON_SEARCH_PAGE "<title>Search results for"
 
 static const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
 {
@@ -45,9 +48,9 @@ static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 	GlyrMemCache * result_cache = NULL;
 	if (cache && (start = strstr(cache->data,START)) != NULL)
 	{
-		if ((end = strstr(start,END)) != NULL)
+		if ((end = strstr(start + (sizeof START) ,END)) != NULL)
 		{
-			if (ABS(end-start) > 0)
+			if (ABS(end-start) > 35)
 			{
 				*(end) = 0;
 				content = strreplace(start,"<br />",NULL);
@@ -93,7 +96,7 @@ static gboolean validate_track_description(GlyrQuery * query, gchar * descriptio
 static GList * lyrics_lipwalk_parse(cb_object *capo)
 {
 	GList * result_list  = NULL;
-	if(strstr(capo->cache->data,START) != NULL)
+	if(strstr(capo->cache->data,IS_ON_SEARCH_PAGE) == NULL)
 	{
 		GlyrMemCache * result_cache = parse_lyrics_page(capo->cache);
 		result_list = g_list_prepend(result_list,result_cache);

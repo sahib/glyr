@@ -113,6 +113,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 					{
 						response = capo->s->callback.download(capo->cache,capo->s);
 					}
+
 					*add_item = (response != GLYRE_SKIP && response != GLYRE_STOP_PRE);
 				}
 				else
