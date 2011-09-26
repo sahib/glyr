@@ -70,6 +70,10 @@ gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+#define UNLOCK_NOTIFY_MINVERSION 3007000
+
+#if SQLITE_VERSION_NUMBER >= UNLOCK_NOTIFY_MINVERSION
+
 /* This has been shameless ripped of from 
  * http://www.sqlite.org/unlock_notify.html
  * and converted to GLib's threading system.
@@ -102,6 +106,7 @@ static void unlock_notify_cb(void ** apArg, int nArg)
         g_mutex_unlock(p->mutex);
     }
 }
+
 
 /*-----------------------------------------------------------------------*/
 
@@ -160,6 +165,8 @@ static gint wait_for_unlock_notify(sqlite3 *db)
     return rc;
 }
 
+#endif
+
 /*-----------------------------------------------------------------------*/
 
 /*
@@ -176,6 +183,9 @@ static gint wait_for_unlock_notify(sqlite3 *db)
 gint sqlite3_blocking_step(sqlite3_stmt *pStmt)
 {
     gint rc;
+
+#if SQLITE_VERSION_NUMBER >= UNLOCK_NOTIFY_MINVERSION 
+
     while(SQLITE_LOCKED == (rc = sqlite3_step(pStmt)))
     {
         rc = wait_for_unlock_notify(sqlite3_db_handle(pStmt));
@@ -185,6 +195,13 @@ gint sqlite3_blocking_step(sqlite3_stmt *pStmt)
         }
         sqlite3_reset(pStmt);
     }
+
+#else 
+
+    rc = sqlite3_step(pStmt);    
+
+#endif
+
     return rc;
 }
 
@@ -193,6 +210,9 @@ gint sqlite3_blocking_step(sqlite3_stmt *pStmt)
 gint sqlite3_blocking_prepare_v2(sqlite3 *db, const gchar *zSql, gint nSql, sqlite3_stmt **ppStmt, const char **pz)
 {
     gint rc;
+
+#if SQLITE_VERSION_NUMBER >= UNLOCK_NOTIFY_MINVERSION 
+
     while(SQLITE_LOCKED == (rc = sqlite3_prepare_v2(db, zSql, nSql, ppStmt, pz)))
     {
         rc = wait_for_unlock_notify(db);
@@ -201,6 +221,13 @@ gint sqlite3_blocking_prepare_v2(sqlite3 *db, const gchar *zSql, gint nSql, sqli
             break;
         }
     }
+
+#else
+
+    rc = sqlite3_prepare_v2(db,zSql,nSql,ppStmt,pz);
+
+#endif
+
     return rc;
 }
 
@@ -212,6 +239,9 @@ gint sqlite3_blocking_exec(sqlite3 * db, const gchar * sql_code,
                      void * user_ptr, gchar ** err_msg)
 {
     gint rc;
+
+#if SQLITE_VERSION_NUMBER >= UNLOCK_NOTIFY_MINVERSION 
+
     while(SQLITE_LOCKED == (rc = sqlite3_exec(db, sql_code, callback, user_ptr, err_msg)))
     {
         rc = wait_for_unlock_notify(db);
@@ -220,5 +250,12 @@ gint sqlite3_blocking_exec(sqlite3 * db, const gchar * sql_code,
             break;
         }
     }
+
+#else
+
+    rc = sqlite3_exec(db,sql_code,callback,user_ptr,err_msg);
+    
+#endif
+
     return rc;
 }

@@ -64,23 +64,16 @@ typedef struct
 
 GlyrDatabase * glyr_db_init(char * root_path)
 {
-	if(sqlite3_threadsafe() == 0)
+	if(sqlite3_threadsafe() == FALSE)
 	{
-		g_printerr("WARNING: Your SQLite version seems not to be threadsafe!\n");
+		g_printerr("WARNING: Your SQLite version seems not to be threadsafe? \n"
+                   "         Expect corrupted data and other weird behaviour!\n");
 	}
-
-    gint rc = sqlite3_enable_shared_cache(TRUE);
-    if(rc != SQLITE_OK)
-    {
-        g_printerr("ERR: %d\n",rc);
-    }
-
 
 	GlyrDatabase * to_return = NULL;
 	if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
 	{
 		sqlite3 * db_connection = NULL;
-
 
 #if SQLITE_VERSION_NUMBER >= 3007007
 		gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
