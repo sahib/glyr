@@ -154,10 +154,10 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 	{
 		gchar * sql = "DELETE FROM metadata WHERE data_checksum = ? ;\n";
 		sqlite3_stmt *stmt = NULL;
-		sqlite3_blocking_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
+		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 		sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_STATIC);
 
-		if(sqlite3_blocking_step(stmt) != SQLITE_DONE) 
+		if(sqlite3_step(stmt) != SQLITE_DONE) 
 		{
 			fprintf(stderr,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
 		}
@@ -237,7 +237,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			cb_data.max_delete = query->number;
 
 			gchar * err_msg = NULL;
-			sqlite3_blocking_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
+			sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
 			if(err_msg != NULL)
 			{
 				g_printerr("SQL Delete error: %s\n",err_msg);
@@ -338,7 +338,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 			data.counter = 0;
 
 			gchar * err_msg = NULL;
-			sqlite3_blocking_exec(db->db_handle,sql,select_callback,&data,&err_msg);
+			sqlite3_exec(db->db_handle,sql,select_callback,&data,&err_msg);
 			if(err_msg != NULL)
 			{
 				g_printerr("glyr_db_lookup: %s\n",err_msg);
@@ -409,7 +409,7 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 	if(db && sql_statement)
 	{
 		char * err_msg = NULL;
-		sqlite3_blocking_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
+		sqlite3_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
 		if(err_msg != NULL)
 		{
 			fprintf(stderr, "glyr_db_execute: SQL error: %s\n", err_msg);
@@ -508,7 +508,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 				);
 
 		sqlite3_stmt *stmt = NULL;
-		sqlite3_blocking_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
+		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 
 		sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
 		sqlite3_bind_int (stmt, 2, cache->duration);
@@ -521,7 +521,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 		sqlite3_bind_int( stmt, 9, cache->rating);
 		sqlite3_bind_double( stmt,10, get_current_time());
 
-		if(sqlite3_blocking_step(stmt) != SQLITE_DONE) 
+		if(sqlite3_step(stmt) != SQLITE_DONE) 
 		{
 			fprintf(stderr,"glyr_db_insert: SQL failure: %s\n", sqlite3_errmsg(db->db_handle));
 		}

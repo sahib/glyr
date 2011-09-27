@@ -28,9 +28,4 @@
 /* Check if a file is contained in the db */
 gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache);
 
-/* Locksafe wrappers for sql functions */
-gint sqlite3_blocking_step(sqlite3_stmt *pStmt);
-gint sqlite3_blocking_prepare_v2(sqlite3 *db, const gchar *zSql, gint nSql, sqlite3_stmt **ppStmt, const char **pz);
-gint sqlite3_blocking_exec(sqlite3 *, const gchar *, int (*callback)(void*,int,char**,char**), void *, gchar ** );
-
 #endif
