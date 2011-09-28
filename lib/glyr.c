@@ -538,7 +538,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 
 void glyr_query_init(GlyrQuery * glyrs)
 {
-    if(glyrs && QUERY_IS_INITALIZED(glyrs) == false)
+    if(glyrs != NULL)
     {
 	    set_query_on_defaults(glyrs);
     }
@@ -724,6 +724,7 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 {
 	if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
 	{
+        glyr_message(-1,NULL,"Warning: Either query or library is not initialized.\n");
 		if(e != NULL)
 		{
 			*e = GLYRE_NO_INIT;
@@ -1073,6 +1074,41 @@ GlyrFetcherInfo * glyr_info_get(void)
 void glyr_info_free(GlyrFetcherInfo * info)
 {
     free_plugin_info(info);
+}
+
+/* --------------------------------------------------------- */
+
+char * glyr_md5sum_to_string(unsigned char * md5sum)
+{
+    gchar * md5str = NULL;
+    if(md5sum != NULL)
+    {
+        const gchar * hex = "0123456789abcdef";
+        md5str = g_malloc0(33);
+        for(int i = 0; i < 16; i++)
+        {
+            gint index = i * 2;
+            md5str[index + 0] = hex[MIN(md5sum[i] / 16,15)]; 
+            md5str[index + 1] = hex[MIN(md5sum[i] % 16,15)]; 
+        }
+    }
+    return md5str;
+}
+
+/* --------------------------------------------------------- */
+
+void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
+{
+    #define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
+    if(string != NULL && strlen(string) >= 32 && md5sum)
+    {
+        for(gint i = 0; i < 16; i++)
+        {
+            gint index = i * 2;
+            md5sum[i] = (CHAR_TO_NUM(string[index]) << 4) + CHAR_TO_NUM(string[index+1]);
+        }
+    } 
+    #undef CHAR_TO_NUM
 }
 
 /* --------------------------------------------------------- */

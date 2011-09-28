@@ -869,6 +869,29 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type);
 */
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type);
 
+/**
+* glyr_md5sum_to_string:
+* @md5sum: a md5sum (from a cache)
+* 
+* Convert a md5sum (raw data) to a human readable representation.
+* String consists only of [0-9] and [a-f].
+*
+* Returns: a newly allocated string, 32 chars long.
+*/
+char * glyr_md5sum_to_string(unsigned char * md5sum);
+
+/** 
+* glyr_string_to_md5sum:
+* @string:
+* @md5sum:
+*
+* Convert a string to a raw-data md5sum.
+* Must be a 32 char long string only containing [0-9] and [a-f]
+* The new checksum is written to m5sum, which must be a buffer with 
+* a size >= 16 bytes.
+*/
+void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
+
 #ifdef _cplusplus
 }
 #endif

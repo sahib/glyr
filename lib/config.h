@@ -25,4 +25,4 @@
 #define GLYR_CHECK_VERSION(X,Y,Z) (X <= GLYR_VERSION_MAJOR_INT && Y <= GLYR_VERSION_MINOR_INT && Z <= GLYR_VERSION_MICRO_INT)
 
 #define GLYR_VERSION_NAME  "Horny Hornet [beta]"
-#define GLYR_DEBUG         TRUE
+#define GLYR_DEBUG         FALSE
