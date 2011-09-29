@@ -21,6 +21,7 @@
 /* Test functions to help making test cases. You should not use these */
 
 #include "core.h"
+#include "stringlib.h"
 #include "register_plugins.h"
 
 /*-----------------------------------*/
@@ -34,7 +35,7 @@ static MetaDataSource * get_metadata_struct(const char * provider_name, GLYR_GET
         GList * source_list = r_getSList();
         for(GList * elem = source_list; elem; elem = elem->next)
         {
-            MetaDataSource * src = elem->data;
+           MetaDataSource * src = elem->data;
             if(src != NULL)
             {
                 if(g_ascii_strncasecmp(provider_name,src->name,name_len) == 0 && src->type == type)
@@ -59,7 +60,15 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
         if(src != NULL)
         {
             const char * url = src->get_url(query);
-            result = (src->free_url ? url : g_strdup(url));
+            if(url != NULL)
+            {
+                result = prepare_url(url,query);
+
+                if(src->free_url)
+                {
+                    g_free((gchar*)url);
+                }
+            }
         }
     }
     return result;
@@ -90,6 +99,9 @@ GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYP
                 GlyrMemCache * item = elem->data;
                 if(item != NULL)
                 {
+                    update_md5sum(item);
+                    item->prov = g_strdup(provider_name);
+                    item->type = src->data_type;
                     item->prev = (elem->prev) ? (elem->prev->data) : NULL;
                     item->next = (elem->next) ? (elem->next->data) : NULL;
                 } 
