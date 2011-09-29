@@ -601,6 +601,12 @@ GLYR_GET_TYPE get_type_from_string(gchar * string)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
+int db_cb(GlyrMemCache * c, void * p)
+{
+    glyr_cache_print(c);
+    return 1;
+}
+
 int main(int argc, char * argv[])
 {
     /* Try to print informative output */

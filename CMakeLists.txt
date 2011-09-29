@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "0")
 SET(GLYR_VERSION_MINOR "8")
-SET(GLYR_VERSION_MICRO "7")
+SET(GLYR_VERSION_MICRO "9")
 SET(GLYR_VERSION_NAME  "Horny Hornet [beta]")
 # ------------------------------------------------
 
@@ -116,6 +116,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/blacklist.c"
+    "${DIR_ROOT}/testing.c"
 	# fetcher
 	"${DIR_INTERN}/generic.c"
 	"${DIR_INTERN}/ainfo.c"

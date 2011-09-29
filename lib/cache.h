@@ -28,6 +28,7 @@ extern "C"
 {
 #endif
 
+typedef int (*glyr_foreach_callback)(GlyrMemCache * item, void * userptr);
 
 /* The Name of the SQL File */
 #define GLYR_DB_FILENAME "metadata.db"
@@ -200,6 +201,19 @@ int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited);
 */
 void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data);
 
+
+/**
+* glyr_db_foreach:
+* @db: A database connection
+* @cb: The callback to call on each item.
+* @userptr: A pointer to pass as second argument to the callback.
+*
+* Iterate over all items in the database.
+* Callback may not be null. If callback returns a number != 0, 
+* iteration aborts.
+*
+*/
+void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr);
 #ifdef __cplusplus
 }
 #endif
