@@ -188,6 +188,7 @@ void help_short(GlyrQuery * s)
             "\nDATABASE OPTIONS\n"
             IN"-c --cache <folder>   Creates or opens an existing cache at <folder> and lookups data from there.\n"
             IN"-y --drop             Instead of searching for this element, the element is deleted from the database. Needs --cache.\n"
+            IN"-g --list-db          List all items in the database (including the artist / album / title / type) - Needs --cache.\n"
             "\nMISC OPTIONS\n"
             IN"-L --list             List all fetchers and source providers for each and exit.\n"
             IN"-h --help             This text you unlucky wanderer are viewing.\n"
@@ -246,7 +247,9 @@ static void visualize_from_options(void)
 
 /* --------------------------------------------------------- */
 
-static void parse_commandline_general(int argc, char * const * argv, GlyrQuery * glyrs, gchar ** write_to, GlyrDatabase ** db, gboolean * delete_from_db)
+static void parse_commandline_general(int argc, char * const * argv, GlyrQuery * glyrs,
+                                      gchar ** write_to, GlyrDatabase ** db,
+                                      gboolean * delete_from_db, gboolean * iterate_over_db)
 {
     static struct option long_options[] =
     {
@@ -268,6 +271,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"download",      no_argument,       0, 'd'},
         {"no-download",   no_argument,       0, 'D'},
         {"list",          no_argument,       0, 'L'},
+        {"list-db",       no_argument,       0, 'g'},
         {"force-utf8",    no_argument,       0, '8'},
         // ---------- plugin specific ------------ //
         {"only-lang",     no_argument,       0, 'o'},
@@ -287,7 +291,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVodDLa:b:t:i:e:n:l:z:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVogdDLa:b:t:i:e:n:l:z:j:k:8",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -365,6 +369,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 break;
             case 'd':	
                 glyr_opt_download(glyrs,true);
+                break;
+            case 'g':
+                *iterate_over_db = TRUE;
                 break;
             case 'D':
                 glyr_opt_download(glyrs,false);
@@ -577,6 +584,9 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 GLYR_GET_TYPE get_type_from_string(gchar * string)
 {
     GLYR_GET_TYPE result = GLYR_GET_UNSURE;
+    if(g_ascii_strncasecmp(string,"none",4) == 0)
+        return GLYR_GET_ANY;
+
     GlyrFetcherInfo * info = glyr_info_get();
     if(info != NULL)
     {
@@ -601,11 +611,30 @@ GLYR_GET_TYPE get_type_from_string(gchar * string)
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
 
-int db_cb(GlyrMemCache * c, void * p)
+static gint db_foreach_callback(GlyrQuery * q, GlyrMemCache * c, void * p)
 {
+    puts("\n////////////////////////////////////\n");
+    g_print("%s :: %s :: %s :: %s\n",q->artist,q->album,q->title,glyr_get_type_to_string(q->type));
     glyr_cache_print(c);
-    return 1;
+
+    int * i = p;
+    *i += 1;
+    return 0;
 }
+
+/*----------------------*/
+
+static void do_iterate_over_db(GlyrDatabase * db)
+{
+    gint db_item_counter = 0;
+    glyr_db_foreach(db,db_foreach_callback,&db_item_counter);
+    g_print("\n-----------------------------------\n");
+    g_print("=> In total %d items in database.",db_item_counter);    
+    g_print("\n-----------------------------------\n");
+    g_print("\n");
+}
+
+/*----------------------*/
 
 int main(int argc, char * argv[])
 {
@@ -627,6 +656,10 @@ int main(int argc, char * argv[])
     {
         /* Delete this item instead of searching for it */
         gboolean delete_from_db = FALSE;
+    
+        /* Shall we iterate over it? */
+        gboolean iterate_over_db = FALSE;
+
         GlyrDatabase * db = NULL;
 
         /* The struct that control this beast */
@@ -651,11 +684,16 @@ int main(int argc, char * argv[])
         my_query.type = type;
 
         /* Yes, user? */
-        parse_commandline_general(argc-1, argv+1, &my_query,&write_to,&db, &delete_from_db);
+        parse_commandline_general(argc-1, argv+1, &my_query,&write_to,&db, &delete_from_db, &iterate_over_db);
 
         if(write_to == NULL)
         {
             write_to = ".";
+        }
+
+        if(iterate_over_db)
+        {
+            do_iterate_over_db(db);
         }
 
         /* Set the callback - it will do all the actual work */
@@ -664,7 +702,7 @@ int main(int argc, char * argv[])
 
         if(my_query.type != GLYR_GET_UNSURE)
         {
-            if(delete_from_db == FALSE || db == NULL)
+            if((iterate_over_db == FALSE && delete_from_db == FALSE) || db == NULL)
             {
                 /* Now start searching! */
                 int length = -1;
@@ -692,7 +730,7 @@ int main(int argc, char * argv[])
                     message(1,&my_query,stderr,"E: %s\n",glyr_strerror(get_error));
                 }
             }
-            else
+            else if(iterate_over_db == FALSE)
             {
                 gint deleted = glyr_db_delete(db,&my_query);
                 g_printerr("Deleted %d item%s from cache.\n",deleted, (deleted == 1) ? "" : "s");

@@ -279,7 +279,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
     
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr)
 {
-    if(db != NULL)
+    if(db != NULL && cb != NULL)
     {
         const gchar * select_all = 
             "SELECT artist_name,album_name,title_name,provider_name,source_url,image_type_name, \n"
@@ -606,7 +606,6 @@ static void add_to_cache_list(GlyrMemCache * head, GlyrMemCache * to_add)
 
 static int select_callback(void * result, int argc, char ** argv, char ** azColName)
 {
-puts("Whooo!");
     int rc = 0;
     select_callback_data * data = result;
     GlyrMemCache ** list = data->result;
@@ -638,6 +637,7 @@ puts("Whooo!");
             }
 
             cache->rating = (argv[13] ? strtol(argv[13],NULL,10) : 0);
+            cache->cached = TRUE;
 
             if(list != NULL)
             {
@@ -651,9 +651,24 @@ puts("Whooo!");
                     add_to_cache_list(head,cache);
                 }
             }
-            else if(data->cb != NULL)
+            else if(data->cb != NULL && cache)
             {
-                rc = data->cb(cache,data->userptr);
+                GlyrQuery q;
+                glyr_query_init(&q);
+
+                if(argv[7] != NULL)
+                {
+                    GLYR_GET_TYPE type = strtol(argv[7],NULL,10);
+                    glyr_opt_type(&q,type);
+                }
+
+                glyr_opt_artist(&q,argv[0]);
+                glyr_opt_album(&q, argv[1]);
+                glyr_opt_title(&q, argv[2]);
+                
+                rc = data->cb(&q,cache,data->userptr);
+
+                glyr_query_destroy(&q);
                 DL_free(cache);
             }
         }

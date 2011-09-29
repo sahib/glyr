@@ -28,7 +28,7 @@ extern "C"
 {
 #endif
 
-typedef int (*glyr_foreach_callback)(GlyrMemCache * item, void * userptr);
+typedef int (*glyr_foreach_callback)(GlyrQuery * q, GlyrMemCache * item, void * userptr);
 
 /* The Name of the SQL File */
 #define GLYR_DB_FILENAME "metadata.db"
@@ -211,6 +211,16 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 * Iterate over all items in the database.
 * Callback may not be null. If callback returns a number != 0, 
 * iteration aborts.
+*
+* Callback parameters:
+*
+* 1) The artist / album / title / type that was used to get this cache is stored in 'query', other fields are not filled.
+*    
+* 2) The actual cache completely filled.
+*
+* 3) The userpointer you passed as 3rd argument to glyr_db_foreach()
+*
+* This is useful if you want to have statistics or such.
 *
 */
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr);

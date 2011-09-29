@@ -13,12 +13,14 @@
 /* let wrapper file compile */
 %{ #include "../lib/glyr.h"  %}
 %{ #include "../lib/cache.h" %}
+%{ #include "../lib/testing.h" %}
 
 /* parse headers */
 %include "../lib/glyr.h"
 %include "../lib/cache.h"
 %include "../lib/types.h"
 %include "../lib/config.h"
+%include "../lib/testing.h"
 
 %{
 
@@ -93,6 +95,47 @@
   }
 
   /*---------------------------------*/
+  /*---------------------------------*/
+  /*---------------------------------*/
+
+  static int db_foreach_proxy_callback(GlyrQuery * c_query, GlyrMemCache * c_cache, void * user_ptr)
+  {
+        VALUE proc = (VALUE)user_ptr;
+        VALUE RMemCache = SWIG_NewPointerObj(SWIG_as_voidptr(c_cache), SWIGTYPE_p__GlyrMemCache, 0 |  0 );
+        VALUE RQueryTYP = SWIG_NewPointerObj(SWIG_as_voidptr(c_query), SWIGTYPE_p__GlyrQuery,    0 |  0 );
+
+        /* Call the proc */
+        VALUE result = rb_funcall(proc, rb_intern("call"), 2,RQueryTYP, RMemCache);
+        if(result != Qnil)
+        {
+           return FIX2INT(result);
+        }
+        else return 0;
+  }
+
+  /*---------------------------------*/
+
+  static VALUE db_foreach_set_callback(VALUE self, VALUE db, VALUE proc)
+  {
+     /* Convert Ruby-GlyrDatabase to C-GlyrDatabase */
+     void * db_ptr;
+     int result = SWIG_ConvertPtr(db, &db_ptr,SWIGTYPE_p__GlyrDatabase, 0 |  0 );
+       
+     /* Typecheck */
+     if (!SWIG_IsOK(result)) 
+     {
+          SWIG_exception_fail(SWIG_ArgError(result), Ruby_Format_TypeError( "", "GlyrDatabase * ","glyr_db_foreach", 1, self )); 
+     }
+     else
+     {
+          glyr_db_foreach(db_ptr, db_foreach_proxy_callback, (void*)proc);
+     }
+
+     /* return nil */
+     fail:
+     return Qnil;
+  }
+    
 %}
 
 /* make sure libglyr wakes  up */
@@ -104,5 +147,8 @@
   /* Make callback work */
   rb_undef_method(mGlyros,"glyr_opt_dlcallback");
   rb_define_module_function(mGlyros, "glyr_opt_dlcallback",callee_set_callback,2);
+
+  rb_undef_method(mGlyros,"glyr_db_foreach");
+  rb_define_module_function(mGlyros, "glyr_db_foreach",db_foreach_set_callback,2);
 %}
 

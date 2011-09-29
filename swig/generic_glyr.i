@@ -11,14 +11,16 @@
 #define COMING_FROM_SWIG
 
 /* let wrapper file compile */
-%{ #include "../lib/glyr.h" %}
-%{ #include "../lib/cache.h" %}
+%{ #include "../lib/glyr.h"    %}
+%{ #include "../lib/cache.h"   %}
+%{ #include "../lib/testing.h" %}
 
 /* parse headers */
 %include "../lib/glyr.h"
 %include "../lib/cache.h"
 %include "../lib/types.h"
 %include "../lib/config.h"
+%include "../lib/testing.h"
 
 /* make sure libglyr wakes  up */
 %init 
