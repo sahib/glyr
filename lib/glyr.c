@@ -938,39 +938,22 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
 
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
 {
-    switch(type)
+    const gchar * result = "unknown";
+    GlyrFetcherInfo * info = glyr_info_get();
+    if(info != NULL)
     {
-        case GLYR_GET_ANY:
-
-        case GLYR_GET_COVERART:
-            return "cover";
-        case GLYR_GET_LYRICS:
-            return "songtext";
-        case GLYR_GET_ARTIST_PHOTOS:
-            return "artistphoto";
-        case GLYR_GET_ARTISTBIO:
-            return "artistbio";
-        case GLYR_GET_SIMILIAR_ARTISTS:
-            return "similiar_artist";
-        case GLYR_GET_SIMILIAR_SONGS:
-            return "similiar_song";
-        case GLYR_GET_ALBUM_REVIEW:
-            return "albumreview";
-        case GLYR_GET_TRACKLIST:
-            return "trackname";
-        case GLYR_GET_TAGS:
-            return "tag";
-        case GLYR_GET_RELATIONS:
-            return "relation";
-        case GLYR_GET_ALBUMLIST:
-            return "albumname";
-        case GLYR_GET_GUITARTABS:
-            return "guitartabs";
-        case GLYR_GET_UNSURE:
-        default:
-            return "unknown";
+        GlyrFetcherInfo * head = info;
+        while(head != NULL && result)
+        {
+            if(head->type == type)
+            {
+                result = head->name;
+            }
+            head = head->next;
+        }
+        glyr_info_free(info);
     }
-    return NULL;
+    return result;
 }
 
 /*-----------------------------------------------*/
@@ -1017,6 +1000,8 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
             return "HTMLURL";
         case GLYR_TYPE_GUITARTABS:
             return "guitartabs";
+        case GLYR_TYPE_BACKDROPS:
+            return "backrop";
         case GLYR_TYPE_NOIDEA:
         default:
             return "unknown";
@@ -1099,7 +1084,7 @@ char * glyr_md5sum_to_string(unsigned char * md5sum)
 
 void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
 {
-    #define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
+#define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
     if(string != NULL && strlen(string) >= 32 && md5sum)
     {
         for(gint i = 0; i < 16; i++)
@@ -1108,7 +1093,7 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
             md5sum[i] = (CHAR_TO_NUM(string[index]) << 4) + CHAR_TO_NUM(string[index+1]);
         }
     } 
-    #undef CHAR_TO_NUM
+#undef CHAR_TO_NUM
 }
 
 /* --------------------------------------------------------- */

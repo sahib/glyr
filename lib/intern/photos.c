@@ -19,7 +19,6 @@
 **************************************************************/
 
 #include "../core.h"
-#include "../stringlib.h"
 #include "generic.h"
 
 /*--------------------------------*/
@@ -36,7 +35,7 @@ MetaDataFetcher glyrFetcher_artistphotos =
 {
 	.name = "artistphoto",
 	.type = GLYR_GET_ARTIST_PHOTOS,
-    	.default_data_type = GLYR_TYPE_ARTIST_PHOTO,
+   	.default_data_type = GLYR_TYPE_ARTIST_PHOTO,
 	.reqs = GLYR_REQUIRES_ARTIST,
 	.full_data = FALSE,
 	.init    = NULL,

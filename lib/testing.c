@@ -35,7 +35,7 @@ static MetaDataSource * get_metadata_struct(const char * provider_name, GLYR_GET
         GList * source_list = r_getSList();
         for(GList * elem = source_list; elem; elem = elem->next)
         {
-           MetaDataSource * src = elem->data;
+            MetaDataSource * src = elem->data;
             if(src != NULL)
             {
                 if(g_ascii_strncasecmp(provider_name,src->name,name_len) == 0 && src->type == type)

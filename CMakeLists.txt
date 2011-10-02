@@ -101,6 +101,7 @@ SET(DIR_ALBUMLIST ${DIR_INTERN}/albumlist )
 SET(DIR_TAGS ${DIR_INTERN}/tags )
 SET(DIR_RELATIONS ${DIR_INTERN}/relations )
 SET(DIR_GUITARTABS ${DIR_INTERN}/guitartabs )
+SET(DIR_BACKDROPS ${DIR_INTERN}/backdrops )
 
 # ------------------------------------------------
 # Set source locations
@@ -131,6 +132,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_INTERN}/relations.c"
 	"${DIR_INTERN}/albumlist.c"
 	"${DIR_INTERN}/guitartabs.c"
+	"${DIR_INTERN}/backdrops.c"
 	# extensions
 	"${DIR_INTERN}/common/google.c"
 	"${DIR_INTERN}/common/amazon.c"
@@ -180,6 +182,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_PHOTOS}/picsearch.c"
 	"${DIR_GUITARTABS}/guitaretab.c"
 	"${DIR_GUITARTABS}/chordie_com.c"
+    "${DIR_BACKDROPS}/htbackdrops.c"
 # 	Old plugins, removed due to bad quality
 #   "${DIR_LYRICS}/songlyrics.c"
 #   "${DIR_LYRICS}/directlyrics.c"

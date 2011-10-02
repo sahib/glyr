@@ -51,7 +51,14 @@ gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
                             break;
                         case 1:
                             g_free(info->format);
-                            info->format = g_strdup(elem[0]);
+                            if(g_ascii_strncasecmp(elem[0],"octet-stream",12) == 0) 
+                            {
+                                info->format = g_strdup("jpeg");
+                            }
+                            else
+                            {
+                                info->format = g_strdup(elem[0]);
+                            }
                             break;
                         case 2:
                             g_free(info->extra);

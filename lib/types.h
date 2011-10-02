@@ -113,6 +113,7 @@ typedef enum
 * @GLYR_GET_RELATIONS: get relations for a certain item
 * @GLYR_GET_ALBUMLIST: get a list of albums from a certain artist
 * @GLYR_GET_GUITARTABS: get guitar tabs for a specified artist/title
+* @GLYR_GET_BACKDROPS: get large backdrops (backgrounds) from a certain artist.
 * @GLYR_GET_UNSURE: The default value after initializing a query.
 * @GLYR_GET_ANY: Delievers everything (like the 'locale' provider), do not use this.
 * 
@@ -123,7 +124,7 @@ typedef enum
 
 /* DO NOT CHANGE THE ORDER HERE 
  * The number there is saved in the cache to save it's type.
- * You can safely append elements though. 
+ * You can safely append elements though, before GLYR_GET_ANY.
  */
 typedef enum
 {
@@ -140,6 +141,7 @@ typedef enum
     GLYR_GET_RELATIONS, 
     GLYR_GET_ALBUMLIST, 
     GLYR_GET_GUITARTABS,
+    GLYR_GET_BACKDROPS,
     GLYR_GET_ANY
 }   GLYR_GET_TYPE;
 
@@ -165,6 +167,7 @@ typedef enum
 * @GLYR_TYPE_TXT_URL: URL pointing to some text content 
 * @GLYR_TYPE_TRACK: List of tracknames: each cache containing one name 
 * @GLYR_TYPE_GUITARTABS: Guitartabs
+* @GLYR_TYPE_BACKDROPS: Wallpaper-like artist images
 * 
 * Mainly used in the 'type' field of GlyrMemCache.
 * It describes what kind of data the cache holds.
@@ -196,7 +199,8 @@ typedef enum
     GLYR_TYPE_IMG_URL,   
     GLYR_TYPE_TXT_URL,   
     GLYR_TYPE_TRACK,	
-    GLYR_TYPE_GUITARTABS
+    GLYR_TYPE_GUITARTABS,
+    GLYR_TYPE_BACKDROPS
 }   GLYR_DATA_TYPE;
 
 
@@ -486,6 +490,19 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
     		glyr_info_free($self);
 	    }
 	}
+
+    %extend GlyrDatabase
+    {
+        GlyrDatabase()
+        {
+            return glyr_db_new();
+        }
+
+        ~GlyrDatabase()
+        {
+           glyr_db_destroy($self);
+        }
+    }
 	#endif
 #endif
 
