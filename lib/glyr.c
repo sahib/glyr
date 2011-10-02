@@ -1001,7 +1001,7 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
         case GLYR_TYPE_GUITARTABS:
             return "guitartabs";
         case GLYR_TYPE_BACKDROPS:
-            return "backrop";
+            return "backdrop";
         case GLYR_TYPE_NOIDEA:
         default:
             return "unknown";

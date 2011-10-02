@@ -328,6 +328,13 @@ gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
 								break;
 							case 1:
 								g_free(info->format);
+
+                                /* 
+                                 * Specialcase: 
+                                 * htbackdrops uses application/octet-stream as format
+                                 * for their images. This is annoying, but needs to be
+                                 * handled nevertheless. Shame on you, htbackdrops.
+                                 * */
                                 if(g_ascii_strncasecmp(elem[0],"octet-stream",12) == 0) 
                                 {
                                     g_free(info->type);
