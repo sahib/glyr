@@ -1,0 +1,1 @@
+-c -pthread -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include  -pthread -lsqlite3 -lcurl -lcheck -lgthread-2.0 -lrt -lglib-2.0
