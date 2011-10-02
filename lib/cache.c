@@ -25,7 +25,7 @@
 #include "register_plugins.h"
 
 /* How long to wait till returning SQLITE_BUSY */
-#define DB_BUSY_WAIT 2500
+#define DB_BUSY_WAIT 5000
 
 
 /* ------------------------------------------------------------------ */
