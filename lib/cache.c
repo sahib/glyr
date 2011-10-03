@@ -429,11 +429,11 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 }
 
 /* Ensure no invalid data comes in */
-#define ABORT_ON_FAILED_REQS(ARG) {  \
-    if(ARG == NULL) {                \
-         g_assert(ARG != NULL);      \
-         return;                     \
-    }                                \
+#define ABORT_ON_FAILED_REQS(ARG) {                          \
+    if(ARG == NULL) {                                        \
+         g_printerr("Warning: %s != NULL failed",#ARG);      \
+         return;                                             \
+    }                                                        \
 }
 
 void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
