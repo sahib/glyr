@@ -295,7 +295,7 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
             select_callback_data scb_data;
             scb_data.cb = cb;
             scb_data.userptr = userptr;
-            
+     
             GlyrQuery dummy;
             dummy.number = G_MAXINT;
             scb_data.query = &dummy;
@@ -422,7 +422,19 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-#define INSERT_STRING(SQL,ARG) { if(ARG) {gchar * sql = sqlite3_mprintf(SQL,ARG); execute(db,sql); sqlite3_free(sql);}}
+#define INSERT_STRING(SQL,ARG) {                                                    \
+    if(SQL && ARG) {                                                                \
+        gchar * sql = sqlite3_mprintf(SQL,ARG); execute(db,sql); sqlite3_free(sql); \
+    }                                                                               \
+}
+
+/* Ensure no invalid data comes in */
+#define ABORT_ON_FAILED_REQS(ARG) {  \
+    if(ARG == NULL) {                \
+         g_assert(ARG != NULL);      \
+         return;                     \
+    }                                \
+}
 
 void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
 {
@@ -431,16 +443,20 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
         GLYR_FIELD_REQUIREMENT reqs = get_req(q);
         execute(db,"BEGIN IMMEDIATE;");
         if((reqs & GLYR_REQUIRES_ARTIST) || (reqs & GLYR_OPTIONAL_ARTIST)) {
+            ABORT_ON_FAILED_REQS(q->artist); 
             INSERT_STRING("INSERT OR IGNORE INTO artists VALUES('%q');",q->artist); 
         }
         if((reqs & GLYR_REQUIRES_ALBUM) || (reqs & GLYR_OPTIONAL_ALBUM)) {
+            ABORT_ON_FAILED_REQS(q->album); 
             INSERT_STRING("INSERT OR IGNORE INTO albums  VALUES('%q');",q->album);
         }
         if((reqs & GLYR_REQUIRES_TITLE) || (reqs & GLYR_OPTIONAL_TITLE)) {
+            ABORT_ON_FAILED_REQS(q->title); 
             INSERT_STRING("INSERT OR IGNORE INTO titles  VALUES('%q');",q->title);
         }
 
-        INSERT_STRING("INSERT OR IGNORE INTO providers VALUES('%q');",cache->prov);
+        gchar * provider = (cache->prov) ? cache->prov : "none"; 
+        INSERT_STRING("INSERT OR IGNORE INTO providers VALUES('%q');",provider);
         insert_cache_data(db,q,cache);
         execute(db,"COMMIT;");
     }
@@ -551,21 +567,28 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
                 query->artist,
                 query->album,
                 query->title,
-                cache->prov,
+                (cache->prov) ? cache->prov : "none",
                 cache->img_format
                 );
 
         sqlite3_stmt *stmt = NULL;
         sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 
-        sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
+        if(cache->dsrc != NULL)
+            sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
+        else glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing source-url!\n");
+
         sqlite3_bind_int (stmt, 2, cache->duration);
         sqlite3_bind_int (stmt, 3, query->type);
         sqlite3_bind_int( stmt, 4, cache->type);
         sqlite3_bind_int( stmt, 5, cache->size);
         sqlite3_bind_int( stmt, 6, cache->is_image);
         sqlite3_bind_blob(stmt, 7, cache->md5sum, sizeof cache->md5sum, SQLITE_STATIC);
-        sqlite3_bind_blob(stmt, 8, cache->data, cache->size, SQLITE_STATIC);
+
+        if(cache->data != NULL)
+            sqlite3_bind_blob(stmt, 8, cache->data, cache->size, SQLITE_STATIC);
+        else glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing data!\n");
+
         sqlite3_bind_int( stmt, 9, cache->rating);
         sqlite3_bind_double( stmt,10, get_current_time());
 
@@ -684,7 +707,7 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 
 static gchar * convert_from_option_to_sql(GlyrQuery * q)
 {
-    gchar * result = g_strdup("");
+    gchar * result = g_strdup("'none'");
 
     for(GList * elem = r_getSList(); elem; elem = elem->next)
     {

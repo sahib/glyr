@@ -15,7 +15,16 @@ void setup(GlyrQuery * q, GLYR_GET_TYPE type, int num)
     glyr_opt_title(q, "Wurzelbert");
     glyr_opt_type(q, type);
     glyr_opt_number(q,num);
-    glyr_opt_verbosity(q,0);
+    glyr_opt_verbosity(q,4);
+}
+
+//--------------------
+
+GlyrQuery * setup_alloc(GLYR_GET_TYPE type, int num)
+{
+    GlyrQuery * new = g_malloc0(sizeof(GlyrQuery));
+    setup(new,type,num);
+    return new;
 }
 
 //--------------------
