@@ -140,7 +140,7 @@ int glyr_db_delete(GlyrDatabase * db, GlyrQuery * query);
 * After deleting the cache @edited in inserted. If @edited is a doubly linked list (next pointer is not NULL),
 * then all items in the list are inserted.
 * 
-* You could have written yourself like this:
+* You could have written it yourself like this:
 * <informalexample>
 * <programlisting>
 * int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
