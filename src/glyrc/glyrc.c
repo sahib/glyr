@@ -43,6 +43,9 @@
 /* Silly autohelp feature */
 #include "autohelp.h"
 
+/* Update mechanism */
+#include "update.h"
+
 /* Globals */
 const gchar * exec_on_call = NULL;
 const gchar * from_string  = NULL;
@@ -745,6 +748,10 @@ int main(int argc, char * argv[])
 
         /* Clean memory alloc'd by settings */
         glyr_query_destroy( &my_query);
+    }
+    else if(argc >= 2 && (!strcmp(argv[1],"-U") || !strcmp(argv[1],"--update")))
+    {
+        update();
     }
     else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
     {

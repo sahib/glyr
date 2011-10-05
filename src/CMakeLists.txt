@@ -1,4 +1,4 @@
-ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c)
+ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
 ADD_EXECUTABLE(example examples/example.c)
 ADD_EXECUTABLE(threads examples/threads.c)
 ADD_EXECUTABLE(simple  examples/simple.c)
