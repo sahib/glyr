@@ -241,6 +241,13 @@ static void visualize_from_options(void)
 
             g_print("\n///////////////////////////////\n");
         }
+
+        g_print("\nFollowing providers work with all types:\n");
+        g_print("  # local [l] (A local SQLite DB cache; see --cache)\n");
+        g_print("\nThe string 'all' in --from enables all providers.\n");
+        g_print("You can disable certain providers from this by prepending a '-':\n");
+        g_print("  \"all;-lastfm\"\n");
+        g_print("\n///////////////////////////////\n");
     }
     glyr_info_free(info);
 }
