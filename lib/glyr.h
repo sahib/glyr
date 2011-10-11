@@ -864,8 +864,9 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type);
 * @type: a member of the %GLYR_GET_TYPE enum, %GLYR_GET_COVERART for example
 * 
 * Converts a get type to a string (GLYR_GET_COVERART => "cover")
+* You must not modify the string or daemons will come to you at night!
 *
-* Returns: a statically allocated string, do not free
+* Returns: a statically allocated string, do not free nor modify
 */
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type);
 

@@ -487,11 +487,13 @@ gchar * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir
             album ,(*album ) ? "_" : "", 
             title ,(*title ) ? "_" : "");
 
-    gchar * result = g_strdup_printf("%s/%s%s_%d.%s",save_dir,
+    gchar * result = g_strdup_printf("%s/%s%s_%d.%s",
+            save_dir,
             specifier,
             type_string,
             num,
             (c->is_image) ? c->img_format : "txt");
+
     if(*artist) g_free(artist); 
     if(*album)  g_free(album);
     if(*title)  g_free(title);
