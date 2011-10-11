@@ -196,6 +196,7 @@ void help_short(GlyrQuery * s)
             IN"-L --list             List all fetchers and source providers for each and exit.\n"
             IN"-h --help             This text you unlucky wanderer are viewing.\n"
             IN"-V --version          Print the version string.\n"
+            IN"-u --update           Updates libglyr if new version is available.\n"
             IN"-j --callback         Command: Set a bash command to be executed when a item is finished downloading;\n"
             IN"                      The special string <path> is expanded with the actual path to the data.\n"
             IN"\n\n"
