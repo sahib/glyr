@@ -244,6 +244,13 @@ static void visualize_from_options(void)
 
             g_print("\n///////////////////////////////\n");
         }
+
+        g_print("\nFollowing providers work with all types:\n");
+        g_print("  # local [l] (A local SQLite DB cache; see --cache)\n");
+        g_print("\nThe string 'all' in --from enables all providers.\n");
+        g_print("You can disable certain providers from this by prepending a '-':\n");
+        g_print("  \"all;-lastfm\"\n");
+        g_print("\n///////////////////////////////\n");
     }
     glyr_info_free(info);
 }
@@ -483,11 +490,13 @@ gchar * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir
             album ,(*album ) ? "_" : "", 
             title ,(*title ) ? "_" : "");
 
-    gchar * result = g_strdup_printf("%s/%s%s_%d.%s",save_dir,
+    gchar * result = g_strdup_printf("%s/%s%s_%d.%s",
+            save_dir,
             specifier,
             type_string,
             num,
             (c->is_image) ? c->img_format : "txt");
+
     if(*artist) g_free(artist); 
     if(*album)  g_free(album);
     if(*title)  g_free(title);

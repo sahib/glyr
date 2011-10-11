@@ -939,20 +939,17 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
 const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
 {
     const gchar * result = "unknown";
-    GlyrFetcherInfo * info = glyr_info_get();
-    if(info != NULL)
+
+    GList * fetcher_list = r_getFList();
+    for(GList * elem = fetcher_list; elem != NULL; elem = elem->next)
     {
-        GlyrFetcherInfo * head = info;
-        while(head != NULL && result)
+        MetaDataFetcher * fetch = elem->data;
+        if(fetch->type == type)
         {
-            if(head->type == type)
-            {
-                result = head->name;
-            }
-            head = head->next;
+            result = fetch->name;
         }
-        glyr_info_free(info);
     }
+
     return result;
 }
 
