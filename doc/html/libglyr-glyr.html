@@ -8,7 +8,7 @@
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-config.html" title="config">
 <link rel="next" href="libglyr-types.html" title="types">
-<meta name="generator" content="GTK-Doc V1.17 (XML mode)">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -37,85 +37,88 @@
 </tr></table></div>
 <div class="refsynopsisdiv">
 <a name="libglyr-glyr.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis"><span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()">glyr_init</a>                           (<em class="parameter"><code><span class="type">void</span></code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cleanup" title="glyr_cleanup ()">glyr_cleanup</a>                        (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()">glyr_get</a>                            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> *error</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> *length</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()">glyr_query_init</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-query-destroy" title="glyr_query_destroy ()">glyr_query_destroy</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-free-list" title="glyr_free_list ()">glyr_free_list</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *head</code></em>);
-<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-cache-new" title="glyr_cache_new ()">glyr_cache_new</a>                      (<em class="parameter"><code><span class="type">void</span></code></em>);
+<pre class="synopsis"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-cache-copy" title="glyr_cache_copy ()">glyr_cache_copy</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-free" title="glyr_cache_free ()">glyr_cache_free</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
-<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-cache-copy" title="glyr_cache_copy ()">glyr_cache_copy</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
+<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-cache-new" title="glyr_cache_new ()">glyr_cache_new</a>                      (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-print" title="glyr_cache_print ()">glyr_cache_print</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-set-data" title="glyr_cache_set_data ()">glyr_cache_set_data</a>                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *data</code></em>,
                                                          <em class="parameter"><code><span class="type">int</span> len</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-update-md5sum" title="glyr_cache_update_md5sum ()">glyr_cache_update_md5sum</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
 <span class="returnvalue">int</span>                 <a class="link" href="libglyr-glyr.html#glyr-cache-write" title="glyr_cache_write ()">glyr_cache_write</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *path</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-update-md5sum" title="glyr_cache_update_md5sum ()">glyr_cache_update_md5sum</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cache-print" title="glyr_cache_print ()">glyr_cache_print</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-cleanup" title="glyr_cleanup ()">glyr_cleanup</a>                        (<em class="parameter"><code><span class="type">void</span></code></em>);
+const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-data-type-to-string" title="glyr_data_type_to_string ()">glyr_data_type_to_string</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> type</code></em>);
+<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-download" title="glyr_download ()">glyr_download</a>                       (<em class="parameter"><code>const <span class="type">char</span> *url</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-free-list" title="glyr_free_list ()">glyr_free_list</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *head</code></em>);
+<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()">glyr_get</a>                            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> *error</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> *length</code></em>);
+const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-get-type-to-string" title="glyr_get_type_to_string ()">glyr_get_type_to_string</a>             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()">glyr_info_free</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">GlyrFetcherInfo</span></a> *info</code></em>);
+<a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="returnvalue">GlyrFetcherInfo</span></a> *   <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()">glyr_info_get</a>                       (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()">glyr_init</a>                           (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">char</span> *              <a class="link" href="libglyr-glyr.html#glyr-md5sum-to-string" title="glyr_md5sum_to_string ()">glyr_md5sum_to_string</a>               (<em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-album" title="glyr_opt_album ()">glyr_opt_album</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">char</span> *album</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-allowed-formats" title="glyr_opt_allowed_formats ()">glyr_opt_allowed_formats</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *formats</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-artist" title="glyr_opt_artist ()">glyr_opt_artist</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">char</span> *artist</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autoread" title="glyr_opt_db_autoread ()">glyr_opt_db_autoread</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autowrite" title="glyr_opt_db_autowrite ()">glyr_opt_db_autowrite</a>               (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-dlcallback" title="glyr_opt_dlcallback ()">glyr_opt_dlcallback</a>                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()"><span class="type">DL_callback</span></a> dl_cb</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *userp</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="glyr_opt_type ()">glyr_opt_type</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-artist" title="glyr_opt_artist ()">glyr_opt_artist</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">char</span> *artist</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-album" title="glyr_opt_album ()">glyr_opt_album</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">char</span> *album</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-title" title="glyr_opt_title ()">glyr_opt_title</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">char</span> *title</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-img-minsize" title="glyr_opt_img_minsize ()">glyr_opt_img_minsize</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()">glyr_opt_download</a>                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> download</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-force-utf8" title="glyr_opt_force_utf8 ()">glyr_opt_force_utf8</a>                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> force_utf8</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()">glyr_opt_from</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *from</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-fuzzyness" title="glyr_opt_fuzzyness ()">glyr_opt_fuzzyness</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> fuzz</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-img-maxsize" title="glyr_opt_img_maxsize ()">glyr_opt_img_maxsize</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><span class="type">int</span> size</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-parallel" title="glyr_opt_parallel ()">glyr_opt_parallel</a>                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> parallel_jobs</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-timeout" title="glyr_opt_timeout ()">glyr_opt_timeout</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> timeout</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-redirects" title="glyr_opt_redirects ()">glyr_opt_redirects</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> redirects</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-useragent" title="glyr_opt_useragent ()">glyr_opt_useragent</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *useragent</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-img-minsize" title="glyr_opt_img_minsize ()">glyr_opt_img_minsize</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-lang" title="glyr_opt_lang ()">glyr_opt_lang</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><span class="type">char</span> *langcode</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-lang-aware-only" title="glyr_opt_lang_aware_only ()">glyr_opt_lang_aware_only</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><span class="type">bool</span> lang_aware_only</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()">glyr_opt_number</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-verbosity" title="glyr_opt_verbosity ()">glyr_opt_verbosity</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>unsigned <span class="type">int</span> level</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()">glyr_opt_from</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *from</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-plugmax" title="glyr_opt_plugmax ()">glyr_opt_plugmax</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> plugmax</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-allowed-formats" title="glyr_opt_allowed_formats ()">glyr_opt_allowed_formats</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *formats</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()">glyr_opt_download</a>                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> download</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-fuzzyness" title="glyr_opt_fuzzyness ()">glyr_opt_fuzzyness</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> fuzz</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-qsratio" title="glyr_opt_qsratio ()">glyr_opt_qsratio</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">float</span> ratio</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-proxy" title="glyr_opt_proxy ()">glyr_opt_proxy</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *proxystring</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-force-utf8" title="glyr_opt_force_utf8 ()">glyr_opt_force_utf8</a>                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> force_utf8</code></em>);
 <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()">glyr_opt_lookup_db</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autowrite" title="glyr_opt_db_autowrite ()">glyr_opt_db_autowrite</a>               (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);
-<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-db-autoread" title="glyr_opt_db_autoread ()">glyr_opt_db_autoread</a>                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);
-<a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-download" title="glyr_download ()">glyr_download</a>                       (<em class="parameter"><code>const <span class="type">char</span> *url</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()">glyr_opt_number</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-parallel" title="glyr_opt_parallel ()">glyr_opt_parallel</a>                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> parallel_jobs</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-plugmax" title="glyr_opt_plugmax ()">glyr_opt_plugmax</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> plugmax</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-proxy" title="glyr_opt_proxy ()">glyr_opt_proxy</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *proxystring</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-qsratio" title="glyr_opt_qsratio ()">glyr_opt_qsratio</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> ratio</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-redirects" title="glyr_opt_redirects ()">glyr_opt_redirects</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> redirects</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-timeout" title="glyr_opt_timeout ()">glyr_opt_timeout</a>                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> timeout</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-title" title="glyr_opt_title ()">glyr_opt_title</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">char</span> *title</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="glyr_opt_type ()">glyr_opt_type</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-useragent" title="glyr_opt_useragent ()">glyr_opt_useragent</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *useragent</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          <a class="link" href="libglyr-glyr.html#glyr-opt-verbosity" title="glyr_opt_verbosity ()">glyr_opt_verbosity</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> level</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-query-destroy" title="glyr_query_destroy ()">glyr_query_destroy</a>                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()">glyr_query_init</a>                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
 const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror ()">glyr_strerror</a>                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> ID</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-string-to-md5sum" title="glyr_string_to_md5sum ()">glyr_string_to_md5sum</a>               (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>);
 const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-version" title="glyr_version ()">glyr_version</a>                        (<em class="parameter"><code><span class="type">void</span></code></em>);
-<a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="returnvalue">GlyrFetcherInfo</span></a> *   <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()">glyr_info_get</a>                       (<em class="parameter"><code><span class="type">void</span></code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()">glyr_info_free</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">GlyrFetcherInfo</span></a> *info</code></em>);
-const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-data-type-to-string" title="glyr_data_type_to_string ()">glyr_data_type_to_string</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> type</code></em>);
-const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-get-type-to-string" title="glyr_get_type_to_string ()">glyr_get_type_to_string</a>             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -124,128 +127,37 @@ const <span class="returnvalue">char</span> *        <a class="link" href="libgl
 <div class="refsect1">
 <a name="libglyr-glyr.details"></a><h2>Details</h2>
 <div class="refsect2">
-<a name="glyr-init"></a><h3>glyr_init ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_init                           (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<a name="glyr-cache-copy"></a><h3>glyr_cache_copy ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_cache_copy                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
 <p>
-Init the library, this has to be called before any other calls from this library are made.
-</p>
-<p>
-You should call <a class="link" href="libglyr-glyr.html#glyr-cleanup" title="glyr_cleanup ()"><code class="function">glyr_cleanup()</code></a> once for every call of <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()"><code class="function">glyr_init()</code></a>
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-This function is not threadsafe.
-</p>
-</div>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-cleanup"></a><h3>glyr_cleanup ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cleanup                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-Cleanup all parts of the library, you can use <code class="function"><code class="function">atexit()</code></code>:
-</p>
-<p>
-</p>
-<div class="informalexample"><pre class="programlisting">
-glyr_init();
-atexit(glyr_destroy);
-</pre></div>
-<p>
-</p>
-<p>
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-This function is not threadsafe.
-</p>
-</div>
-<p>
-</p>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-get"></a><h3>glyr_get ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_get                            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> *error</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> *length</code></em>);</pre>
-<p>
-<em class="parameter"><code>settings</code></em> is pointer to a <a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> struct filled to your needs via the glyr_opt_* methods,
-</p>
-<p>
-Once an item is found the callback (set via <a class="link" href="libglyr-glyr.html#glyr-opt-dlcallback" title="glyr_opt_dlcallback ()"><code class="function">glyr_opt_dlcallback()</code></a>) is called anytime a item is ready
+Allocate a new cache and 
+copy all contents (= deep copy) from the original <em class="parameter"><code>cache</code></em>,
+The pointers next and prev are set to NULL.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>settings</code></em> :</span></p></td>
-<td>The setting struct controlling glyr. (See the glyr_opt_* methods)</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
-<td>An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>length</code></em> :</span></p></td>
-<td>length An optional pointer storing the length of the returned list, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
-</td>
+<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
+<td>The cache to copy</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>: a doubly linked list of <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a>, which should be freed by passing any element of the to <a class="link" href="libglyr-glyr.html#glyr-free-list" title="glyr_free_list ()"><code class="function">glyr_free_list()</code></a>
-</td>
+<td>A newly allocated cache.</td>
 </tr>
 </tbody>
 </table></div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-query-init"></a><h3>glyr_query_init ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_query_init                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
-<p>
-This functions may allocate dynamic memory. It should be freed with <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()"><code class="function">glyr_query_init()</code></a> after use.
-</p>
+<a name="glyr-cache-free"></a><h3>glyr_cache_free ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_free                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>query</code></em> :</span></p></td>
-<td>The GlyrQuery to initialize to defaultsettings.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-query-destroy"></a><h3>glyr_query_destroy ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_query_destroy                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
-<p>
-Deletes all modifications and frees dynamic memory. It can be reused, as fresh from <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()"><code class="function">glyr_query_init()</code></a>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>query</code></em> :</span></p></td>
-<td>The GlyrQuery to destroy.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-free-list"></a><h3>glyr_free_list ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_free_list                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *head</code></em>);</pre>
-<p>
-Deletes all dynamic memory by calling <a class="link" href="libglyr-glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> on each cache.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>head</code></em> :</span></p></td>
-<td>The head of the doubly linked list that should be freed.</td>
+<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
+<td>Frees the (valid allocated) cache pointed to by <em class="parameter"><code>cache</code></em>
+</td>
 </tr></tbody>
 </table></div>
 </div>
@@ -272,38 +184,17 @@ Don't forget to free the cache with <a class="link" href="libglyr-glyr.html#glyr
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-cache-free"></a><h3>glyr_cache_free ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_free                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<a name="glyr-cache-print"></a><h3>glyr_cache_print ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_print                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<p>
+A debug method to print all fields of <em class="parameter"><code>cache</code></em>.
+</p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
-<td>Frees the (valid allocated) cache pointed to by <em class="parameter"><code>cache</code></em>
-</td>
+<td>The GlyrMemCache to be printed.</td>
 </tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-cache-copy"></a><h3>glyr_cache_copy ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_cache_copy                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
-<p>
-Allocate a new cache and 
-copy all contents (= deep copy) from the original <em class="parameter"><code>cache</code></em>,
-The pointers next and prev are set to NULL.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
-<td>The cache to copy</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>A newly allocated cache.</td>
-</tr>
-</tbody>
 </table></div>
 </div>
 <hr>
@@ -334,6 +225,21 @@ Note: <em class="parameter"><code>data</code></em> is set directly! It get's fre
 <td>Length of data</td>
 </tr>
 </tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-cache-update-md5sum"></a><h3>glyr_cache_update_md5sum ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_update_md5sum            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<p>
+Updates the md5sum field of <em class="parameter"><code>cache</code></em>.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
+<td>a valid memcahe</td>
+</tr></tbody>
 </table></div>
 </div>
 <hr>
@@ -380,145 +286,249 @@ There are three special files:
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-cache-update-md5sum"></a><h3>glyr_cache_update_md5sum ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_update_md5sum            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<a name="glyr-cleanup"></a><h3>glyr_cleanup ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cleanup                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
-Updates the md5sum field of <em class="parameter"><code>cache</code></em>.
+Cleanup all parts of the library, you can use <code class="function"><code class="function">atexit()</code></code>:
 </p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
-<td>a valid memcahe</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-cache-print"></a><h3>glyr_cache_print ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_cache_print                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
 <p>
-A debug method to print all fields of <em class="parameter"><code>cache</code></em>.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>cache</code></em> :</span></p></td>
-<td>The GlyrMemCache to be printed.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-dlcallback"></a><h3>glyr_opt_dlcallback ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_dlcallback                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()"><span class="type">DL_callback</span></a> dl_cb</code></em>,
-                                                         <em class="parameter"><code><span class="type">void</span> *userp</code></em>);</pre>
-<p>
-The callback should have the following form:
 </p>
 <div class="informalexample"><pre class="programlisting">
-GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
+glyr_init();
+atexit(glyr_destroy);
 </pre></div>
 <p>
-</p>
-<p>
-Note that you can return certaing members of <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><code class="literal">GLYR_ERROR</code></a> in the callback:
-</p>
-<p>
-<a class="link" href="libglyr-types.html#GLYRE-SKIP:CAPS"><code class="literal">GLYRE_SKIP</code></a>: To not add this item to the results.
-</p>
-<p>
-<a class="link" href="libglyr-types.html#GLYRE-OK:CAPS"><code class="literal">GLYRE_OK</code></a>: To add this item to the results and continue happily.
-</p>
-<p>
-<a class="link" href="libglyr-types.html#GLYRE-STOP-POST:CAPS"><code class="literal">GLYRE_STOP_POST</code></a>: To stop right now and return the results. The current element will be added.
-</p>
-<p>
-<a class="link" href="libglyr-types.html#GLYRE-STOP-PRE:CAPS"><code class="literal">GLYRE_STOP_PRE</code></a>: To stop right now and return the results. The current element will NOT be added.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>settings</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>dl_cb</code></em> :</span></p></td>
-<td>The callback to register, must have a prototype like this.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>userp</code></em> :</span></p></td>
-<td>A pointer to a custom variable you can access inside the callback via <em class="structfield"><code>s-&gt;callback.user_pointer</code></em>
-</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-type"></a><h3>glyr_opt_type ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_type                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
-<p>
-Example: <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
-<td>The type of metadata you want to get.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-artist"></a><h3>glyr_opt_artist ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_artist                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">char</span> *artist</code></em>);</pre>
-<p>
-This is needed for all types of metadata.
-Libglyr keeps a copy of this string internally.  
 </p>
 <p>
 </p>
 <div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
 <h3 class="title">Note</h3>
 <p>
-libglyr applies some basic normalization, like " artistX feat. artistY" -&gt; "artistX"
+This function is not threadsafe.
 </p>
 </div>
 <p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-data-type-to-string"></a><h3>glyr_data_type_to_string ()</h3>
+<pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_data_type_to_string            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> type</code></em>);</pre>
+<p>
+Converts a type to a string.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>artist</code></em> :</span></p></td>
-<td>The artist you want to search for, <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> and "" is not valid.</td>
+<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
+<td>a member of the <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><code class="literal">GLYR_DATA_TYPE</code></a> enum, <a class="link" href="libglyr-types.html#GLYR-TYPE-COVERART-PRI:CAPS"><code class="literal">GLYR_TYPE_COVERART_PRI</code></a> for example</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
+<td>a statically allocated string, do not free</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-download"></a><h3>glyr_download ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_download                       (<em class="parameter"><code>const <span class="type">char</span> *url</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>);</pre>
+<p>
+Downloads the data pointed to by <em class="parameter"><code>url</code></em> and caches in it a GlyrMemCache, which is returned to you. 
+Use <a class="link" href="libglyr-glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> to free it after use.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>url</code></em> :</span></p></td>
+<td>A valid url, for example returned by libglyr</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>A settings struct managing timeout, useragent and redirects.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A GlyrMemCache containing the data, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> on failure, use verbose output to find out why.</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-free-list"></a><h3>glyr_free_list ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_free_list                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *head</code></em>);</pre>
+<p>
+Deletes all dynamic memory by calling <a class="link" href="libglyr-glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> on each cache.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>head</code></em> :</span></p></td>
+<td>The head of the doubly linked list that should be freed.</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-get"></a><h3>glyr_get ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_get                            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> *error</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> *length</code></em>);</pre>
+<p>
+<em class="parameter"><code>settings</code></em> is pointer to a <a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> struct filled to your needs via the glyr_opt_* methods,
+</p>
+<p>
+Once an item is found the callback (set via <a class="link" href="libglyr-glyr.html#glyr-opt-dlcallback" title="glyr_opt_dlcallback ()"><code class="function">glyr_opt_dlcallback()</code></a>) is called anytime a item is ready
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>settings</code></em> :</span></p></td>
+<td>The setting struct controlling glyr. (See the glyr_opt_* methods)</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>error</code></em> :</span></p></td>
+<td>An optional pointer to an int, which gets filled with an error message, or GLYRE_OK on success, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>length</code></em> :</span></p></td>
+<td>length An optional pointer storing the length of the returned list, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>: a doubly linked list of <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a>, which should be freed by passing any element of the to <a class="link" href="libglyr-glyr.html#glyr-free-list" title="glyr_free_list ()"><code class="function">glyr_free_list()</code></a>
+</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-get-type-to-string"></a><h3>glyr_get_type_to_string ()</h3>
+<pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_get_type_to_string             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
+<p>
+Converts a get type to a string (GLYR_GET_COVERART =&gt; "cover")
+You must not modify the string or daemons will come to you at night!
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
+<td>a member of the <a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><code class="literal">GLYR_GET_TYPE</code></a> enum, <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a> for example</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>a statically allocated string, do not free nor modify</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-info-free"></a><h3>glyr_info_free ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_info_free                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">GlyrFetcherInfo</span></a> *info</code></em>);</pre>
+<p>
+Free the return value of <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a> pointed to by <em class="parameter"><code>info</code></em>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
+<td>The return value of <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
+</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-info-get"></a><h3>glyr_info_get ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="returnvalue">GlyrFetcherInfo</span></a> *   glyr_info_get                       (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+get information about existing Fetcher and Source
+A Doubly linked list of Fetcher is returned, each having a field 'head',
+being a pointer to a doubly linked list of GlyrSourceInfos
+</p>
+<p>
+It is best understood by an example:
+</p>
+<div class="example">
+<a name="id535533"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
+<div class="example-contents"><pre class="programlisting">
+static void visualize_from_options(void)
+{
+    GlyrFetcherInfo * info = glyr_info_get();
+    if(info != NULL)
+    {
+        for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0-&gt;next)
+        {
+            printf("%s\n",elem0-&gt;name);
+            for(GlyrSourceInfo * elem1 = elem0-&gt;head; elem1; elem1 = elem1-&gt;next)
+            {
+                printf("  [%c] %s\n",elem1-&gt;key,elem1-&gt;name);
+            }
+            printf("\n");
+        }
+   }
+   glyr_info_free(info);
+}
+</pre></div>
+</div>
+<p><br class="example-break">
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody><tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A newly allocated GlyrFetcherInfo structure, you can iterate over.</td>
+</tr></tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-init"></a><h3>glyr_init ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_init                           (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<p>
+Init the library, this has to be called before any other calls from this library are made.
+</p>
+<p>
+You should call <a class="link" href="libglyr-glyr.html#glyr-cleanup" title="glyr_cleanup ()"><code class="function">glyr_cleanup()</code></a> once for every call of <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()"><code class="function">glyr_init()</code></a>
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+This function is not threadsafe.
+</p>
+</div>
+<p>
+</p>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-md5sum-to-string"></a><h3>glyr_md5sum_to_string ()</h3>
+<pre class="programlisting"><span class="returnvalue">char</span> *              glyr_md5sum_to_string               (<em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>);</pre>
+<p>
+Convert a md5sum (raw data) to a human readable representation.
+String consists only of [0-9] and [a-f].
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>md5sum</code></em> :</span></p></td>
+<td>a md5sum (from a cache)</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>a newly allocated string, 32 chars long.</td>
 </tr>
 </tbody>
 </table></div>
@@ -580,6 +590,761 @@ libglyr applies some basic normalization, like " CoOl_album CD01 (20.7)" -&gt; "
 <tr>
 <td><p><span class="term"><em class="parameter"><code>album</code></em> :</span></p></td>
 <td>The album you want to search for, <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> and "" is not valid.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-allowed-formats"></a><h3>glyr_opt_allowed_formats ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_allowed_formats            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *formats</code></em>);</pre>
+<p>
+Restricts providers to retrieve at max. <em class="parameter"><code>plugmax</code></em> items, you might use this to get results
+over several providers when <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()"><code class="function">glyr_opt_number()</code></a> is set to something higher than 1.
+</p>
+<p>
+For the getters <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a> and <a class="link" href="libglyr-types.html#GLYR-GET-ARTIST-PHOTOS:CAPS"><code class="literal">GLYR_GET_ARTIST_PHOTOS</code></a> only.
+The allowed formats for images, in a comma separated list.
+Examples:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+"png;jpeg"
+</p></li>
+<li class="listitem"><p>
+"png;jpeg;tiff;jpg;" (default) 
+</p></li>
+</ul></div>
+<p>
+</p>
+<p>
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+'jpeg' *and* 'jpg' because some websites return strange mimetypes (should be 'jpeg' only)
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>formats</code></em> :</span></p></td>
+<td>A commaseperated list of allowed formats.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-artist"></a><h3>glyr_opt_artist ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_artist                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">char</span> *artist</code></em>);</pre>
+<p>
+This is needed for all types of metadata.
+Libglyr keeps a copy of this string internally.  
+</p>
+<p>
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+libglyr applies some basic normalization, like " artistX feat. artistY" -&gt; "artistX"
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>artist</code></em> :</span></p></td>
+<td>The artist you want to search for, <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> and "" is not valid.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-db-autoread"></a><h3>glyr_opt_db_autoread ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_db_autoread                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);</pre>
+<p>
+If set to true libglyr will lookup the database previously given by <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
+during searching in the web. If there's item that already seems to be in the DB it gets not 
+mixed into the results. 
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+This does not influence the usage of the DB as local provider!
+Use <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a> with "all;-local" to disable it.
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>read_from_db</code></em> :</span></p></td>
+<td>Boolean, true for DB lookup while searching</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-db-autowrite"></a><h3>glyr_opt_db_autowrite ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_db_autowrite               (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);</pre>
+<p>
+If a database is specified via glyr_opt_lookup_db you can choose
+to automatically save newly found items to the database.
+They will be looked up from there if you search for it again.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>write_to_db</code></em> :</span></p></td>
+<td>true, to write this to the database automatically</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-dlcallback"></a><h3>glyr_opt_dlcallback ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_dlcallback                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()"><span class="type">DL_callback</span></a> dl_cb</code></em>,
+                                                         <em class="parameter"><code><span class="type">void</span> *userp</code></em>);</pre>
+<p>
+The callback should have the following form:
+</p>
+<div class="informalexample"><pre class="programlisting">
+GLYR_ERROR my_callback(GlyrMemCache * dl, struct GlyrQuery * s);
+</pre></div>
+<p>
+</p>
+<p>
+Note that you can return certaing members of <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><code class="literal">GLYR_ERROR</code></a> in the callback:
+</p>
+<p>
+<a class="link" href="libglyr-types.html#GLYRE-SKIP:CAPS"><code class="literal">GLYRE_SKIP</code></a>: To not add this item to the results.
+</p>
+<p>
+<a class="link" href="libglyr-types.html#GLYRE-OK:CAPS"><code class="literal">GLYRE_OK</code></a>: To add this item to the results and continue happily.
+</p>
+<p>
+<a class="link" href="libglyr-types.html#GLYRE-STOP-POST:CAPS"><code class="literal">GLYRE_STOP_POST</code></a>: To stop right now and return the results. The current element will be added.
+</p>
+<p>
+<a class="link" href="libglyr-types.html#GLYRE-STOP-PRE:CAPS"><code class="literal">GLYRE_STOP_PRE</code></a>: To stop right now and return the results. The current element will NOT be added.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>settings</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>dl_cb</code></em> :</span></p></td>
+<td>The callback to register, must have a prototype like this.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>userp</code></em> :</span></p></td>
+<td>A pointer to a custom variable you can access inside the callback via <em class="structfield"><code>s-&gt;callback.user_pointer</code></em>
+</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-download"></a><h3>glyr_opt_download ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_download                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> download</code></em>);</pre>
+<p>
+Imageproviders only return URLs, by default libglyr downloads these and
+gives you the cache. By settings <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a> to <a href="../glib/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> you tell
+libglyr that you want only the URLs (in a searchengine like fashion)
+</p>
+<p>
+An check for valid images is done however.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>download</code></em> :</span></p></td>
+<td>Wether to downlaod images or just to return the found URL.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-force-utf8"></a><h3>glyr_opt_force_utf8 ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_force_utf8                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> force_utf8</code></em>);</pre>
+<p>
+For textitems only.
+Some providers (like metrolyrics) might return text with strange encodings,
+that can not be converted to regular UTF8, but might return a subset of UTF8.
+This options forces libglyr to prohibit those.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>force_utf8</code></em> :</span></p></td>
+<td>To force, or not to force.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-from"></a><h3>glyr_opt_from ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_from                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *from</code></em>);</pre>
+<p>
+Tell libglyr where you want your metadata want from.
+You can get a full list of providers for each getter by running <em class="parameter"><code>glyrc</code></em> @-L
+The string you can pass here looks like this example for _cover_:
+</p>
+<div class="informalexample"><pre class="programlisting">
+"lastfm;google"
+</pre></div>
+<p>
+</p>
+<p>
+This would query to everybody's surprise"lastfm" and "google"
+Alternatively you may use the string "all" in it:
+</p>
+<div class="informalexample"><pre class="programlisting">
+"all;-lastfm;"
+</pre></div>
+<p>
+</p>
+<p>
+All providers except "lastfm" (therefore the '-') are used, a '+' is also allowed, which does plain nothing.
+By default all built-in providers are used.
+You can access the providernames by calling <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>from</code></em> :</span></p></td>
+<td>A comma separated list of provider names.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-fuzzyness"></a><h3>glyr_opt_fuzzyness ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_fuzzyness                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> fuzz</code></em>);</pre>
+<p>
+libglyr features fuzzy matching to enhance search results.
+Look at the string "Equilibrium" and the accidentally mistyped version "Aquillibriu":
+Those strings will be compares using the "Levenshtein distance" (http://en.wikipedia.org/wiki/Levenshtein_distance) which basically counts
+the number of insert, substitute and delete operations to transform Equilibrium"" into "Aquillibriu".
+The distance in this case is 3 since three edit-operations are needed (one insert, substitute and deletion)
+</p>
+<p>
+The fuzziness parameter is the maximum distance two strings may have to match.
+A high distance (like about 10) matches even badly mistyped strings, but also introduces bad results.
+Low settings however will omit some good results.
+</p>
+<p>
+The default values is currently 4.
+To be more secure some correction is applied:
+</p>
+<p>
+Examples:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+artist:Adele - album:19 
+</p></li>
+<li class="listitem"><p>
+artist:Adele - album:21 
+</p></li>
+<li class="listitem"><p>
+lv-distance = 2 which is &lt;= 4
+</p></li>
+<li class="listitem"><p>
+But since the lv-distance is the same as the length "21" it won't match.
+</p></li>
+</ul></div>
+<p>
+</p>
+<p>
+The easiest way to prevent this though, is to properly tag your music. (http://musicbrainz.org/doc/MusicBrainz_Picard).
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>fuzz</code></em> :</span></p></td>
+<td>Maximal Levenshtein-distance tolerance may have, see below.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-img-maxsize"></a><h3>glyr_opt_img_maxsize ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_img_maxsize                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);</pre>
+<p>
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+This is only taken as a hint, returned images are not necessarily below this size, but should be around it.
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>size</code></em> :</span></p></td>
+<td>The maxmimum size in pixels an image may have, assuming it to be quadratic</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-img-minsize"></a><h3>glyr_opt_img_minsize ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_img_minsize                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);</pre>
+<p>
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+This is only taken as a hint, returned images are not necessarily higher than this size, but should be around it.
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>size</code></em> :</span></p></td>
+<td>The minimum size in pixels an image may have, assuming it to be quadratic</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-lang"></a><h3>glyr_opt_lang ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lang                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">char</span> *langcode</code></em>);</pre>
+<p>
+Some providers offer localized content, or content only being available in certain countries.
+Examples are: last.fm, amazon and google.
+The language is given in ISO 639-1 codes like 'de' or 'en'.
+Alternatively you can set it to 'auto', which will cause libglyr to guess your language by your locale. 
+"auto" is the default behavior.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>langcode</code></em> :</span></p></td>
+<td>An ISO 639-1 language code.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-lang-aware-only"></a><h3>glyr_opt_lang_aware_only ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lang_aware_only            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">bool</span> lang_aware_only</code></em>);</pre>
+<p>
+Note: Not for all types of metadata there may be localized content, and only fetchers, that provide text items are affected by this setting.
+The special provider 'local' is an exception here, it is queried, but delievers only language specific content too.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>lang_aware_only</code></em> :</span></p></td>
+<td>Boolean, set to true if you want language specific providers only.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-lookup-db"></a><h3>glyr_opt_lookup_db ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lookup_db                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>);</pre>
+<p>
+Bind the previosly created <em class="parameter"><code>db</code></em> to the query <em class="parameter"><code>s</code></em>.
+By doing this you add a new 'local' provider, 
+that is queried before everything else and may speed up
+things heavily.
+</p>
+<p>
+You can either query it exclusively or disable it completely:
+</p>
+<p>
+Enable exclusiv:
+</p>
+<div class="informalexample">
+<pre class="programlisting">
+glyr_opt_from(s,"local");
+</pre>
+Disable:
+</div>
+<p>
+</p>
+<div class="informalexample">
+glyr_opt_from(s,"all;-local");
+<pre class="programlisting">
+</pre>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
+<td>a GlyrDatabase object.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-number"></a><h3>glyr_opt_number ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_number                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);</pre>
+<p>
+The maximum number of items to get in a <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a>, resulting number of items may be below <em class="parameter"><code>num</code></em> but not higher.
+A value of 0 causes libglyr to search till infinity.
+Default is 1.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>num</code></em> :</span></p></td>
+<td>Maximum number of items to get or 0</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-parallel"></a><h3>glyr_opt_parallel ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_parallel                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> parallel_jobs</code></em>);</pre>
+<p>
+A value of 0 lets libglyr chooses this value itself. This is the default.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>parallel_jobs</code></em> :</span></p></td>
+<td>The number of providers that are queried in parallel.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-plugmax"></a><h3>glyr_opt_plugmax ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_plugmax                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">int</span> plugmax</code></em>);</pre>
+<p>
+Restricts providers to retrieve at max. <em class="parameter"><code>plugmax</code></em> items, you might use this to get results
+over several providers when <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()"><code class="function">glyr_opt_number()</code></a> is set to something higher than 1.
+</p>
+<p>
+May be removed in future releases.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>plugmax</code></em> :</span></p></td>
+<td>Maximum number of items a single provider may retrieve.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-proxy"></a><h3>glyr_opt_proxy ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_proxy                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *proxystring</code></em>);</pre>
+<p>
+The proxy to use, if any.
+It is passed in the form: [protocol://][user:pass@]yourproxy.domain[:port]
+Example:
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<li class="listitem"><p>
+Proxy.fh-hof.de:3128
+</p></li>
+<li class="listitem"><p>
+http://hman:rootroot @ godserve.com:666
+</p></li>
+</ul></div>
+<p>
+</p>
+<p>
+The environment variables http_proxy, ftp_proxy, all_proxy are respected, but are overwritten by this.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>proxystring</code></em> :</span></p></td>
+<td>The proxy to use, see below for the notation.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-qsratio"></a><h3>glyr_opt_qsratio ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_qsratio                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">float</span> ratio</code></em>);</pre>
+<p>
+0.00 means highest speed, querying fast providers first.
+1.00 Takes possibly longer, but should deliver best results.
+0.85 is the current default value.
+</p>
+<p>
+All other values, smaller 0.0, greater 1.0 are clamped to [0.0..1.0]
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>ratio</code></em> :</span></p></td>
+<td>A float, in the range [0.0..1.0] specifying the ratio between quality and speed.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-redirects"></a><h3>glyr_opt_redirects ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_redirects                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> redirects</code></em>);</pre>
+<p>
+A value of 0 is allowed but may break some plugins.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>redirects</code></em> :</span></p></td>
+<td>Maximum number of redirects before canceling a download.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>an error ID</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-opt-timeout"></a><h3>glyr_opt_timeout ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_timeout                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><span class="type">unsigned long </span> timeout</code></em>);</pre>
+<p>
+Default is 20 seconds
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
+<td>The GlyrQuery settings struct to store this option in.</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>timeout</code></em> :</span></p></td>
+<td>Maximum number of seconds to wait before canceling a download.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
@@ -652,18 +1417,11 @@ libglyr applies some basic normalization, like "Songtitle (blahblah remix)" -&gt
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-opt-img-minsize"></a><h3>glyr_opt_img_minsize ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_img_minsize                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);</pre>
+<a name="glyr-opt-type"></a><h3>glyr_opt_type ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_type                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
+                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
 <p>
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-This is only taken as a hint, returned images are not necessarily higher than this size, but should be around it.
-</p>
-</div>
-<p>
+Example: <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -673,119 +1431,8 @@ This is only taken as a hint, returned images are not necessarily higher than th
 <td>The GlyrQuery settings struct to store this option in.</td>
 </tr>
 <tr>
-<td><p><span class="term"><em class="parameter"><code>size</code></em> :</span></p></td>
-<td>The minimum size in pixels an image may have, assuming it to be quadratic</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-img-maxsize"></a><h3>glyr_opt_img_maxsize ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_img_maxsize                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> size</code></em>);</pre>
-<p>
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-This is only taken as a hint, returned images are not necessarily below this size, but should be around it.
-</p>
-</div>
-<p>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>size</code></em> :</span></p></td>
-<td>The maxmimum size in pixels an image may have, assuming it to be quadratic</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-parallel"></a><h3>glyr_opt_parallel ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_parallel                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> parallel_jobs</code></em>);</pre>
-<p>
-A value of 0 lets libglyr chooses this value itself. This is the default.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>parallel_jobs</code></em> :</span></p></td>
-<td>The number of providers that are queried in parallel.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-timeout"></a><h3>glyr_opt_timeout ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_timeout                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> timeout</code></em>);</pre>
-<p>
-Default is 20 seconds
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>timeout</code></em> :</span></p></td>
-<td>Maximum number of seconds to wait before canceling a download.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-redirects"></a><h3>glyr_opt_redirects ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_redirects                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">unsigned long </span> redirects</code></em>);</pre>
-<p>
-A value of 0 is allowed but may break some plugins.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>redirects</code></em> :</span></p></td>
-<td>Maximum number of redirects before canceling a download.</td>
+<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
+<td>The type of metadata you want to get.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
@@ -812,91 +1459,6 @@ Some providers require an valid useragent, an empty string might break these the
 <tr>
 <td><p><span class="term"><em class="parameter"><code>useragent</code></em> :</span></p></td>
 <td>A string that is used as useragent in HTTP requests.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-lang"></a><h3>glyr_opt_lang ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lang                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">char</span> *langcode</code></em>);</pre>
-<p>
-Some providers offer localized content, or content only being available in certain countries.
-Examples are: last.fm, amazon and google.
-The language is given in ISO 639-1 codes like 'de' or 'en'.
-Alternatively you can set it to 'auto', which will cause libglyr to guess your language by your locale. 
-"auto" is the default behavior.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>langcode</code></em> :</span></p></td>
-<td>An ISO 639-1 language code.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-lang-aware-only"></a><h3>glyr_opt_lang_aware_only ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lang_aware_only            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> lang_aware_only</code></em>);</pre>
-<p>
-Note: Not for all types of metadata there may be localized content, and only fetchers, that provide text items are affected by this setting.
-The special provider 'local' is an exception here, it is queried, but delievers only language specific content too.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>lang_aware_only</code></em> :</span></p></td>
-<td>Boolean, set to true if you want language specific providers only.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-number"></a><h3>glyr_opt_number ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_number                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>unsigned <span class="type">int</span> num</code></em>);</pre>
-<p>
-The maximum number of items to get in a <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a>, resulting number of items may be below <em class="parameter"><code>num</code></em> but not higher.
-A value of 0 causes libglyr to search till infinity.
-Default is 1.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>num</code></em> :</span></p></td>
-<td>Maximum number of items to get or 0</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
@@ -952,466 +1514,32 @@ The verbosity level that is used by libglyr:
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-opt-from"></a><h3>glyr_opt_from ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_from                       (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *from</code></em>);</pre>
+<a name="glyr-query-destroy"></a><h3>glyr_query_destroy ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_query_destroy                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
 <p>
-Tell libglyr where you want your metadata want from.
-You can get a full list of providers for each getter by running <em class="parameter"><code>glyrc</code></em> @-L
-The string you can pass here looks like this example for _cover_:
-</p>
-<div class="informalexample"><pre class="programlisting">
-"lastfm;google"
-</pre></div>
-<p>
-</p>
-<p>
-This would query to everybody's surprise"lastfm" and "google"
-Alternatively you may use the string "all" in it:
-</p>
-<div class="informalexample"><pre class="programlisting">
-"all;-lastfm;"
-</pre></div>
-<p>
-</p>
-<p>
-All providers except "lastfm" (therefore the '-') are used, a '+' is also allowed, which does plain nothing.
-By default all built-in providers are used.
-You can access the providernames by calling <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
+Deletes all modifications and frees dynamic memory. It can be reused, as fresh from <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()"><code class="function">glyr_query_init()</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>from</code></em> :</span></p></td>
-<td>A comma separated list of provider names.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>query</code></em> :</span></p></td>
+<td>The GlyrQuery to destroy.</td>
+</tr></tbody>
 </table></div>
 </div>
 <hr>
 <div class="refsect2">
-<a name="glyr-opt-plugmax"></a><h3>glyr_opt_plugmax ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_plugmax                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> plugmax</code></em>);</pre>
+<a name="glyr-query-init"></a><h3>glyr_query_init ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_query_init                     (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
 <p>
-Restricts providers to retrieve at max. <em class="parameter"><code>plugmax</code></em> items, you might use this to get results
-over several providers when <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()"><code class="function">glyr_opt_number()</code></a> is set to something higher than 1.
-</p>
-<p>
-May be removed in future releases.
+This functions may allocate dynamic memory. It should be freed with <a class="link" href="libglyr-glyr.html#glyr-query-init" title="glyr_query_init ()"><code class="function">glyr_query_init()</code></a> after use.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>plugmax</code></em> :</span></p></td>
-<td>Maximum number of items a single provider may retrieve.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-allowed-formats"></a><h3>glyr_opt_allowed_formats ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_allowed_formats            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *formats</code></em>);</pre>
-<p>
-Restricts providers to retrieve at max. <em class="parameter"><code>plugmax</code></em> items, you might use this to get results
-over several providers when <a class="link" href="libglyr-glyr.html#glyr-opt-number" title="glyr_opt_number ()"><code class="function">glyr_opt_number()</code></a> is set to something higher than 1.
-</p>
-<p>
-For the getters <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a> and <a class="link" href="libglyr-types.html#GLYR-GET-ARTIST-PHOTOS:CAPS"><code class="literal">GLYR_GET_ARTIST_PHOTOS</code></a> only.
-The allowed formats for images, in a comma separated list.
-Examples:
-</p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><p>
-"png;jpeg"
-</p></li>
-<li class="listitem"><p>
-"png;jpeg;tiff;jpg;" (default) 
-</p></li>
-</ul></div>
-<p>
-</p>
-<p>
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-'jpeg' *and* 'jpg' because some websites return strange mimetypes (should be 'jpeg' only)
-</p>
-</div>
-<p>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>formats</code></em> :</span></p></td>
-<td>A commaseperated list of allowed formats.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-download"></a><h3>glyr_opt_download ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_download                   (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> download</code></em>);</pre>
-<p>
-Imageproviders only return URLs, by default libglyr downloads these and
-gives you the cache. By settings <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a> to <a href="../glib/glib-Standard-Macros.html#FALSE:CAPS"><span class="type">FALSE</span></a> you tell
-libglyr that you want only the URLs (in a searchengine like fashion)
-</p>
-<p>
-An check for valid images is done however.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>download</code></em> :</span></p></td>
-<td>Wether to downlaod images or just to return the found URL.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-fuzzyness"></a><h3>glyr_opt_fuzzyness ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_fuzzyness                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">int</span> fuzz</code></em>);</pre>
-<p>
-libglyr features fuzzy matching to enhance search results.
-Look at the string "Equilibrium" and the accidentally mistyped version "Aquillibriu":
-Those strings will be compares using the "Levenshtein distance" (http://en.wikipedia.org/wiki/Levenshtein_distance) which basically counts
-the number of insert, substitute and delete operations to transform Equilibrium"" into "Aquillibriu".
-The distance in this case is 3 since three edit-operations are needed (one insert, substitute and deletion)
-</p>
-<p>
-The fuzziness parameter is the maximum distance two strings may have to match.
-A high distance (like about 10) matches even badly mistyped strings, but also introduces bad results.
-Low settings however will omit some good results.
-</p>
-<p>
-The default values is currently 4.
-To be more secure some correction is applied:
-</p>
-<p>
-Examples:
-</p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><p>
-artist:Adele - album:19 
-</p></li>
-<li class="listitem"><p>
-artist:Adele - album:21 
-</p></li>
-<li class="listitem"><p>
-lv-distance = 2 which is &lt;= 4
-</p></li>
-<li class="listitem"><p>
-But since the lv-distance is the same as the length "21" it won't match.
-</p></li>
-</ul></div>
-<p>
-</p>
-<p>
-The easiest way to prevent this though, is to properly tag your music. (http://musicbrainz.org/doc/MusicBrainz_Picard).
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>fuzz</code></em> :</span></p></td>
-<td>Maximal Levenshtein-distance tolerance may have, see below.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-qsratio"></a><h3>glyr_opt_qsratio ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_qsratio                    (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">float</span> ratio</code></em>);</pre>
-<p>
-0.00 means highest speed, querying fast providers first.
-1.00 Takes possibly longer, but should deliver best results.
-0.85 is the current default value.
-</p>
-<p>
-All other values, smaller 0.0, greater 1.0 are clamped to [0.0..1.0]
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>ratio</code></em> :</span></p></td>
-<td>A float, in the range [0.0..1.0] specifying the ratio between quality and speed.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-proxy"></a><h3>glyr_opt_proxy ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_proxy                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code>const <span class="type">char</span> *proxystring</code></em>);</pre>
-<p>
-The proxy to use, if any.
-It is passed in the form: [protocol://][user:pass@]yourproxy.domain[:port]
-Example:
-</p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem"><p>
-Proxy.fh-hof.de:3128
-</p></li>
-<li class="listitem"><p>
-http://hman:rootroot @ godserve.com:666
-</p></li>
-</ul></div>
-<p>
-</p>
-<p>
-The environment variables http_proxy, ftp_proxy, all_proxy are respected, but are overwritten by this.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>proxystring</code></em> :</span></p></td>
-<td>The proxy to use, see below for the notation.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-force-utf8"></a><h3>glyr_opt_force_utf8 ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_force_utf8                 (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> force_utf8</code></em>);</pre>
-<p>
-For textitems only.
-Some providers (like metrolyrics) might return text with strange encodings,
-that can not be converted to regular UTF8, but might return a subset of UTF8.
-This options forces libglyr to prohibit those.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>force_utf8</code></em> :</span></p></td>
-<td>To force, or not to force.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-lookup-db"></a><h3>glyr_opt_lookup_db ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_lookup_db                  (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>);</pre>
-<p>
-Bind the previosly created <em class="parameter"><code>db</code></em> to the query <em class="parameter"><code>s</code></em>.
-By doing this you add a new 'local' provider, 
-that is queried before everything else and may speed up
-things heavily.
-</p>
-<p>
-You can either query it exclusively or disable it completely:
-</p>
-<p>
-Enable exclusiv:
-</p>
-<div class="informalexample">
-<pre class="programlisting">
-glyr_opt_from(s,"local");
-</pre>
-Disable:
-</div>
-<p>
-</p>
-<div class="informalexample">
-glyr_opt_from(s,"all;-local");
-<pre class="programlisting">
-</pre>
-</div>
-<p>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
-<td>a GlyrDatabase object.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-db-autowrite"></a><h3>glyr_opt_db_autowrite ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_db_autowrite               (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> write_to_db</code></em>);</pre>
-<p>
-If a database is specified via glyr_opt_lookup_db you can choose
-to automatically save newly found items to the database.
-They will be looked up from there if you search for it again.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>write_to_db</code></em> :</span></p></td>
-<td>true, to write this to the database automatically</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-opt-db-autoread"></a><h3>glyr_opt_db_autoread ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          glyr_opt_db_autoread                (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>,
-                                                         <em class="parameter"><code><span class="type">bool</span> read_from_db</code></em>);</pre>
-<p>
-If set to true libglyr will lookup the database previously given by <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
-during searching in the web. If there's item that already seems to be in the DB it gets not 
-mixed into the results. 
-</p>
-<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
-<h3 class="title">Note</h3>
-<p>
-This does not influence the usage of the DB as local provider!
-Use <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a> with "all;-local" to disable it.
-</p>
-</div>
-<p>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery settings struct to store this option in.</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>read_from_db</code></em> :</span></p></td>
-<td>Boolean, true for DB lookup while searching</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>an error ID</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-download"></a><h3>glyr_download ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_download                       (<em class="parameter"><code>const <span class="type">char</span> *url</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *s</code></em>);</pre>
-<p>
-Downloads the data pointed to by <em class="parameter"><code>url</code></em> and caches in it a GlyrMemCache, which is returned to you. 
-Use <a class="link" href="libglyr-glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> to free it after use.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>url</code></em> :</span></p></td>
-<td>A valid url, for example returned by libglyr</td>
-</tr>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>A settings struct managing timeout, useragent and redirects.</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>A GlyrMemCache containing the data, or <a href="../glib/glib-Standard-Macros.html#NULL:CAPS"><code class="literal">NULL</code></a> on failure, use verbose output to find out why.</td>
-</tr>
-</tbody>
+<tbody><tr>
+<td><p><span class="term"><em class="parameter"><code>query</code></em> :</span></p></td>
+<td>The GlyrQuery to initialize to defaultsettings.</td>
+</tr></tbody>
 </table></div>
 </div>
 <hr>
@@ -1437,6 +1565,31 @@ Gets a descriptive message from an error ID.
 </div>
 <hr>
 <div class="refsect2">
+<a name="glyr-string-to-md5sum"></a><h3>glyr_string_to_md5sum ()</h3>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_string_to_md5sum               (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>);</pre>
+<p>
+Convert a string to a raw-data md5sum.
+Must be a 32 char long string only containing [0-9] and [a-f]
+The new checksum is written to m5sum, which must be a buffer with 
+a size &gt;= 16 bytes.
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>string</code></em> :</span></p></td>
+<td>The string containing a human readable checksum (lowercase)</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>md5sum</code></em> :</span></p></td>
+<td>A at lease 16 byte sized buffer of unsigned chars</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="glyr-version"></a><h3>glyr_version ()</h3>
 <pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_version                        (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <div class="variablelist"><table border="0">
@@ -1449,112 +1602,10 @@ Retunrs a nullterminated string, do <span class="emphasis"><em>NOT</em></span> p
 </tr></tbody>
 </table></div>
 </div>
-<hr>
-<div class="refsect2">
-<a name="glyr-info-get"></a><h3>glyr_info_get ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="returnvalue">GlyrFetcherInfo</span></a> *   glyr_info_get                       (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
-<p>
-get information about existing Fetcher and Source
-A Doubly linked list of Fetcher is returned, each having a field 'head',
-being a pointer to a doubly linked list of GlyrSourceInfos
-</p>
-<p>
-It is best understood by an example:
-</p>
-<div class="example">
-<a name="id560937"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
-<div class="example-contents"><pre class="programlisting">
-static void visualize_from_options(void)
-{
-    GlyrFetcherInfo * info = glyr_info_get();
-    if(info != NULL)
-    {
-        for(GlyrFetcherInfo * elem0 = info; elem0; elem0 = elem0-&gt;next)
-        {
-            printf("%s\n",elem0-&gt;name);
-            for(GlyrSourceInfo * elem1 = elem0-&gt;head; elem1; elem1 = elem1-&gt;next)
-            {
-                printf("  [%c] %s\n",elem1-&gt;key,elem1-&gt;name);
-            }
-            printf("\n");
-        }
-   }
-   glyr_info_free(info);
-}
-</pre></div>
-</div>
-<p><br class="example-break">
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>A newly allocated GlyrFetcherInfo structure, you can iterate over.</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-info-free"></a><h3>glyr_info_free ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_info_free                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">GlyrFetcherInfo</span></a> *info</code></em>);</pre>
-<p>
-Free the return value of <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a> pointed to by <em class="parameter"><code>info</code></em>
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody><tr>
-<td><p><span class="term"><em class="parameter"><code>info</code></em> :</span></p></td>
-<td>The return value of <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
-</td>
-</tr></tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-data-type-to-string"></a><h3>glyr_data_type_to_string ()</h3>
-<pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_data_type_to_string            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> type</code></em>);</pre>
-<p>
-Converts a type to a string.
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
-<td>a member of the <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><code class="literal">GLYR_DATA_TYPE</code></a> enum, <a class="link" href="libglyr-types.html#GLYR-TYPE-COVERART-PRI:CAPS"><code class="literal">GLYR_TYPE_COVERART_PRI</code></a> for example</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a statically allocated string, do not free</td>
-</tr>
-</tbody>
-</table></div>
-</div>
-<hr>
-<div class="refsect2">
-<a name="glyr-get-type-to-string"></a><h3>glyr_get_type_to_string ()</h3>
-<pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_get_type_to_string             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
-<p>
-Converts a get type to a string (GLYR_GET_COVERART =&gt; "cover")
-</p>
-<div class="variablelist"><table border="0">
-<col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
-<td>a member of the <a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><code class="literal">GLYR_GET_TYPE</code></a> enum, <a class="link" href="libglyr-types.html#GLYR-GET-COVERART:CAPS"><code class="literal">GLYR_GET_COVERART</code></a> for example</td>
-</tr>
-<tr>
-<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a statically allocated string, do not free</td>
-</tr>
-</tbody>
-</table></div>
-</div>
 </div>
 </div>
 <div class="footer">
 <hr>
-          Generated by GTK-Doc V1.17</div>
+          Generated by GTK-Doc V1.18</div>
 </body>
 </html>
