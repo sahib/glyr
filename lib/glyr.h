@@ -883,8 +883,8 @@ char * glyr_md5sum_to_string(unsigned char * md5sum);
 
 /** 
 * glyr_string_to_md5sum:
-* @string:
-* @md5sum:
+* @string: The string containing a human readable checksum (lowercase)
+* @md5sum: A at lease 16 byte sized buffer of unsigned chars
 *
 * Convert a string to a raw-data md5sum.
 * Must be a 32 char long string only containing [0-9] and [a-f]
