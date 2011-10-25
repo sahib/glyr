@@ -84,7 +84,7 @@ gchar * prepare_string(const gchar * input, gboolean delinitfy);
 gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string);
 
 /* Sed. */
-gchar * regex_replace_by_table(const gchar * string, const gchar * regex_table[][2], gsize table_size);
+gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_string[][2], gsize string_size);
 
 /* Translates umlauts like 'ä' to an approx. 'a' */
 gchar * translate_umlauts(gchar * string);

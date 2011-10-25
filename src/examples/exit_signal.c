@@ -8,8 +8,9 @@
 void * killer_thread(void * arg)
 {
     GlyrQuery * q = arg;
-    g_usleep(1000 * 100);
     g_usleep(rand() % 10000000);
+
+    g_printerr("####### SENDING EXIT ######\n");
     glyr_signal_exit(q);
     return NULL;
 }
@@ -17,7 +18,6 @@ void * killer_thread(void * arg)
 int main(int argc, const char *argv[])
 {
     srand(time(NULL));
-    
     glyr_init();
     atexit(glyr_cleanup);
     
@@ -28,8 +28,7 @@ int main(int argc, const char *argv[])
     glyr_opt_artist(&q,"Equilibrium");
     glyr_opt_album(&q,"Sagas");
     glyr_opt_number(&q,42);
-    glyr_opt_proxy(&q,"Proxy.fh-hof.de:3128");
-    glyr_opt_verbosity(&q,4);
+    glyr_opt_verbosity(&q,3);
 
     g_printerr("-- Starting GET\n");
 

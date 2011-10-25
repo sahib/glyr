@@ -88,7 +88,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
  *
  * @return a newly allocated string
  */
-const gchar * regex_table[][2] = {
+const gchar * const regex_table[][2] = {
 	{"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
 	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
 	{"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
@@ -98,7 +98,7 @@ const gchar * regex_table[][2] = {
 
 const gsize regex_table_size = sizeof(regex_table) / (2 * sizeof(gchar*));
 
-gchar * regex_replace_by_table(const gchar * string, const gchar * delete_string[][2], gsize string_size)
+gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_string[][2], gsize string_size)
 {
 	gchar * result_string = (gchar*)string;
 
@@ -119,7 +119,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * delete_string
 			      result_string = strreplace(old_memory,word,delete_string[it][1]);
 			      if(old_memory != string)
 			      {
-				 g_free(old_memory);
+				    g_free(old_memory);
 			      }
 
 			      g_match_info_next(match_info, &match_error);
@@ -210,24 +210,24 @@ gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const g
 				gsize ratio = (oth_len + str_len) / 2;
 				gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
 
-				/* Useful for debugging */
-				//g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
+                /* Useful for debugging */
+                //g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
 
-				if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
-				{
-					/* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
-					//g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
-					diff += 100;
-				}
-			}
+                if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
+                {
+                    /* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
+                    //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
+                    diff += 100;
+                }
+            }
 
-			g_free(pretty_string);
-			g_free(pretty_other);
-		}
-		g_free(norm_string);
-		g_free(norm_other);
-	}
-	return diff;
+            g_free(pretty_string);
+            g_free(pretty_other);
+        }
+        g_free(norm_string);
+        g_free(norm_other);
+    }
+    return diff;
 }
 
 /* ------------------------------------------------------------- */
@@ -238,13 +238,54 @@ gchar * strreplace(const char * string, const char * subs, const char * with)
     if(string != NULL && string[0] != '\0')
     {
         gchar ** split = g_strsplit(string,subs,0);
-	if(split != NULL)
-	{
-        	result = g_strjoinv(with,split);
-	}
+        if(split != NULL)
+        {
+            result = g_strjoinv(with,split);
+        }
         g_strfreev(split);
     }
     return result;
+}
+
+/* ------------------------------------------------------------- */
+
+/* "Clapton, Eric" -> "Eric Clapton"
+ * Cheers Christoph for writing this.
+ */
+static gchar * unwind_artist_name(const gchar * artist)
+{
+    if(NULL == artist)
+    {
+        return NULL;
+    }
+
+    /*split string in two*/
+    gchar * separator = strchr(artist, ',');
+
+    if (separator)
+    {
+        gchar * result = NULL; 
+        gchar ** strsplit = g_strsplit(artist, ",", 2);
+        if((strsplit[0] != NULL) && (strsplit[1] != NULL))
+        {
+            char * tmp = NULL;
+
+            tmp = strsplit[0];
+            strsplit[0] = strsplit[1];
+            strsplit[1] = tmp;
+        }
+
+        result = g_strjoinv(" ",strsplit);
+
+        /*free g_strsplit memory*/
+        g_strfreev(strsplit);
+        return result;
+    }
+    else
+    {
+        /* nothing done, return just copy*/
+        return g_strdup(artist);
+    }
 }
 
 /* ------------------------------------------------------------- */
@@ -260,17 +301,17 @@ gchar * prepare_string(const gchar * input, gboolean delintify)
             gchar * normalized = g_utf8_normalize(downed,-1,G_NORMALIZE_NFKC);
             if(normalized != NULL)
             {
-		gchar * no_lint = regex_replace_by_table(normalized,regex_table,regex_table_size);
-		if(no_lint != NULL)
-		{
-                	result = curl_easy_escape(NULL,no_lint,0);
-   	                if(result != NULL && delintify == TRUE)
-           	        {
-                   		remove_tags_from_string(result,-1,'(',')');
+                gchar * no_lint = regex_replace_by_table(normalized,regex_table,regex_table_size);
+                if(no_lint != NULL)
+                {
+                    result = curl_easy_escape(NULL,no_lint,0);
+                    if(result != NULL && delintify == TRUE)
+                    {
+                        remove_tags_from_string(result,-1,'(',')');
 
-                	}
-			g_free(no_lint);
-		}
+                    }
+                    g_free(no_lint);
+                }
                 g_free(normalized);
             }
             g_free(downed);
@@ -286,7 +327,7 @@ static void swap_string(char ** tmp, const char * subs, const char * with)
     g_free(swap);
 }
 
-// Prepares the url for you to get downloaded. You don't have to call this.
+/* Prepares the url for you to get downloaded. You don't have to call this. */
 gchar * prepare_url(const gchar * URL, GlyrQuery * s)
 {
     gchar * tmp = NULL;
@@ -294,7 +335,9 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s)
     {
         tmp = g_strdup(URL);
 
-        gchar * p_artist = prepare_string(s->artist,FALSE);
+        gchar * unwinded_artist = unwind_artist_name(s->artist);
+        
+        gchar * p_artist = prepare_string(trim_nocopy(unwinded_artist),FALSE);
         gchar * p_album  = prepare_string(s->album,TRUE);
         gchar * p_title  = prepare_string(s->title,TRUE);
 
@@ -302,12 +345,10 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s)
         swap_string(&tmp,"${album}", p_album);
         swap_string(&tmp,"${title}", p_title);
 
-        if(p_artist)
-            g_free(p_artist);
-        if(p_album)
-            g_free(p_album);
-        if(p_title)
-            g_free(p_title);
+        g_free(p_artist);
+        g_free(p_album);
+        g_free(p_title);
+        g_free(unwinded_artist);
     }
     return tmp;
 }
@@ -795,29 +836,29 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 
 static gchar * trim_in_text(gchar * string)
 {
-	gchar * buffer = NULL;
-	if(string != NULL)
-	{
-		gsize str_len = strlen(string), buf_pos = 0;
-		buffer = g_malloc0(str_len + 1);
-	
-		gsize space_ctr= 0;
-		gsize lfeed_ctr = 0;
-		for(gsize it = 0; it < str_len; it++)
-		{
-			gboolean is_space = isspace(string[it]);
-			gboolean is_lfeed = !isblank(string[it]) && is_space;
-			
-			lfeed_ctr = (is_lfeed) ? lfeed_ctr + 1 : 0;
-			space_ctr = (is_space) ? space_ctr + 1 : 0;
+    gchar * buffer = NULL;
+    if(string != NULL)
+    {
+        gsize str_len = strlen(string), buf_pos = 0;
+        buffer = g_malloc0(str_len + 1);
 
-			if(space_ctr < 2 || lfeed_ctr)		
-			{	
-				buffer[buf_pos++] = string[it];
-			}
-		}
-	}
-	return buffer;
+        gsize space_ctr= 0;
+        gsize lfeed_ctr = 0;
+        for(gsize it = 0; it < str_len; it++)
+        {
+            gboolean is_space = isspace(string[it]);
+            gboolean is_lfeed = !isblank(string[it]) && is_space;
+
+            lfeed_ctr = (is_lfeed) ? lfeed_ctr + 1 : 0;
+            space_ctr = (is_space) ? space_ctr + 1 : 0;
+
+            if(space_ctr < 2 || lfeed_ctr)		
+            {	
+                buffer[buf_pos++] = string[it];
+            }
+        }
+    }
+    return buffer;
 }
 
 /* ------------------------------------------------------------- */
@@ -858,18 +899,18 @@ gchar * beautify_string(const gchar * lyrics)
             }
 
             remove_tags_from_string(unicode,Len,'<','>');
-           // gchar * trimmed = trim_after_newline(unicode);
+            // gchar * trimmed = trim_after_newline(unicode);
             gchar * trimmed = trim_in_text(unicode);
             g_free(unicode);
 
-	    if(trimmed && g_utf8_validate(trimmed,-1,NULL) == TRUE)
-	    {
-		    result = g_utf8_normalize(trimmed,-1,G_NORMALIZE_NFKC);
-		    g_free(trimmed);
-	    }
-	    else
+            if(trimmed && g_utf8_validate(trimmed,-1,NULL) == TRUE)
             {
-		    result = trimmed;
+                result = g_utf8_normalize(trimmed,-1,G_NORMALIZE_NFKC);
+                g_free(trimmed);
+            }
+            else
+            {
+                result = trimmed;
             }
         }
         g_free(strip);
@@ -1012,28 +1053,28 @@ gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * 
 
 gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string)
 {
-	gchar * result = NULL;
-	if(ref && name)
-	{
-		gchar * begin = strstr(ref,name);
-		if(begin != NULL)
-		{
-			begin += strlen(name);
-			result = copy_value(begin,strstr(begin,end_string));
-		}
-	}	
-	return result;
+    gchar * result = NULL;
+    if(ref && name)
+    {
+        gchar * begin = strstr(ref,name);
+        if(begin != NULL)
+        {
+            begin += strlen(name);
+            result = copy_value(begin,strstr(begin,end_string));
+        }
+    }	
+    return result;
 }
 
 /* ------------------------------------------------------------- */
 
 /* Note: Not case-sens: Ä -> a! */
-const gchar * umlaut_table[][2] = {
-	{"ä",  "a"},
-	{"ü",  "u"},
-	{"ö",  "o"},
-	{"ß", "ss"},
-	{"\\s","-"}
+const gchar * const umlaut_table[][2] = {
+    {"ä",  "a"},
+    {"ü",  "u"},
+    {"ö",  "o"},
+    {"ß", "ss"},
+    {"\\s","-"}
 };
 
 const gsize umlaut_table_size = sizeof(umlaut_table) / (2 * sizeof(gchar*));
@@ -1041,11 +1082,11 @@ const gsize umlaut_table_size = sizeof(umlaut_table) / (2 * sizeof(gchar*));
 /* Replaces umlauts like ä with an approx. like a */
 gchar * translate_umlauts(gchar * string)
 {
-	gchar * result = NULL;
-	if(string != NULL)
-	{
-		result = regex_replace_by_table(string,umlaut_table,umlaut_table_size);
-	}
-	return result;
+    gchar * result = NULL;
+    if(string != NULL)
+    {
+        result = regex_replace_by_table(string,umlaut_table,umlaut_table_size);
+    }
+    return result;
 }
 

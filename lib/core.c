@@ -139,7 +139,10 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void * buff_dat
 
             GlyrQuery * query = data->query;
             if(query && query->signal_exit)
+            {
+                g_printerr("#### RECEIVED #####\n");
                 return 0;
+            }
 
             /* Test if a endmarker is in this buffer */
             const gchar * endmarker = data->endmarker;
@@ -240,7 +243,7 @@ void DL_free(GlyrMemCache *cache)
 // Use this to init the internal buffer
 GlyrMemCache* DL_init(void)
 {
-    GlyrMemCache *cache = g_malloc0(sizeof(GlyrMemCache));
+    GlyrMemCache * cache = g_malloc0(sizeof(GlyrMemCache));
     memset(cache,0,sizeof(GlyrMemCache));
     cache->type = GLYR_TYPE_NOIDEA;
 
@@ -788,7 +791,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
         /* Now create cb_objects */
         GList * cb_list = init_async_download(url_list,endmark_list,cmHandle,s,abs_timeout);
 
-        while(running_handles != 0 && terminate == FALSE)
+        while(s->signal_exit == FALSE && running_handles != 0 && terminate == FALSE)
         {
             CURLMcode merr = CURLM_CALL_MULTI_PERFORM;
             while(merr == CURLM_CALL_MULTI_PERFORM)
@@ -925,6 +928,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                         glyr_message(3,capo->s,"- glyr: Downloaderror: %s [errno:%d]\n",
                                 errstring ? errstring : "Unknown Error",
                                 msg->data.result);
+
                         glyr_message(3,capo->s,"  On URL: ");
                         glyr_puts(3,capo->s,capo->url);
 
@@ -1083,7 +1087,6 @@ static gint delete_wrong_formats(GList ** list, GlyrQuery * s)
         {
             if(format_is_allowed(item->img_format,allowed_formats) == FALSE)
             {
-                g_print("Deleting: %s",item->img_format);
                 GList * to_delete = elem;
                 elem = elem->next;
                 invalid_format_counter++;
@@ -1712,6 +1715,9 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
 
         /* Next list please */
         g_list_free(src_list);
+
+        /* Check is exit was signaled */
+        stop_now = (query->signal_exit) ? TRUE : stop_now;
     }
 
     if(something_was_searched == FALSE)

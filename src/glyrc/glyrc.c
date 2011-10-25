@@ -23,7 +23,7 @@
 #include <getopt.h>
 #include <glib.h>
 
-#ifndef WIN32
+#ifndef G_OS_WIN32
   /* Backtrace*/
   #include <execinfo.h>
 #endif
@@ -82,7 +82,7 @@ static gint message(gint verbosity, GlyrQuery * s, FILE * stream, const gchar * 
 
 //* ------------------------------------------------------- */
 
-#ifndef WIN32
+#ifndef G_OS_WIN32
 #define STACK_FRAME_SIZE 20
 
 /* Obtain a backtrace and print it to stdout. */
@@ -119,7 +119,7 @@ static void sig_handler(int signal)
         message(-1,NULL,stderr,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
         message(-1,NULL,stderr,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
         message(-1,NULL,stderr,"       The libglyr developers will try to fix it as soon as possible so please stop pulling their hair.\n");
-#ifndef WIN32
+#ifndef G_OS_WIN32
         message(-1,NULL,stderr,"\nA list of the last called functions follows, please add this to your report:\n");
         print_trace();
 #endif

@@ -3,6 +3,7 @@
 
 #include <glib.h>
 #include "../../lib/glyr.h"
+#include "../../lib/cache.h"
 
 /*
  * Example program showing how to use libglyr with multiple threads.
@@ -48,6 +49,10 @@ int main(void)
     GlyrQuery query_long, query_longer;
     configure(&query_long,GLYR_GET_SIMILIAR_ARTISTS);
     configure(&query_longer,GLYR_GET_LYRICS);
+
+    GlyrDatabase * db = glyr_db_init("/tmp");
+    glyr_opt_lookup_db(&query_long,db);
+    glyr_opt_lookup_db(&query_longer,db);
 
     GlyrMemCache * a, * b;
 

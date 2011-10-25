@@ -104,6 +104,14 @@ void glyr_query_destroy(GlyrQuery * query);
  * 
  * Try to stop libglyr as soon as possible.
  * This is supposed to be called on another thread.
+ * Calling this function twice on the same query will do nothing.
+ * <note>
+ * <para>
+ * This function is threadsafe - but use with care anyway, 
+ * since it causes libglyr to do really a hard stop.
+ * The returned data is NOT guaranteed to yield best results.
+ * </para>
+ * </note>
  */
 void glyr_signal_exit(GlyrQuery * query);
 
