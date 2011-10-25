@@ -99,6 +99,15 @@ void glyr_query_init(GlyrQuery * query);
 void glyr_query_destroy(GlyrQuery * query);
 
 /**
+ * glyr_signal_exit:
+ * @query: The currently running query you want to stop.
+ * 
+ * Try to stop libglyr as soon as possible.
+ * This is supposed to be called on another thread.
+ */
+void glyr_signal_exit(GlyrQuery * query);
+
+/**
  * glyr_free_list:
  * @head: The head of the doubly linked list that should be freed.
  *

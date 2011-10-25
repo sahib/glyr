@@ -120,75 +120,86 @@ gboolean size_is_okay(int sZ, int min, int max)
 
 /*--------------------------------------------------------*/
 
-/* cache incoming data in a GlyrMemCache */
-static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void *cache)
+/* cache incoming data in a GlyrMemCache
+ * libglyr is spending quite some time here
+ */
+static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void * buff_data)
 {
 	size_t realsize = size * nmemb;
-	GlyrMemCache *mem = (GlyrMemCache *)cache;
+    DLBufferContainer * data = (DLBufferContainer *)buff_data;
+    if(data != NULL)
+    {
+        GlyrMemCache * mem = data->cache;
+        mem->data = realloc(mem->data, mem->size + realsize + 1);
+        if (mem->data)
+        {
+            memcpy(&(mem->data[mem->size]), puffer, realsize);
+            mem->size += realsize;
+            mem->data[mem->size] = 0;
 
-	mem->data = realloc(mem->data, mem->size + realsize + 1);
-	if (mem->data)
-	{
-		memcpy(&(mem->data[mem->size]), puffer, realsize);
-		mem->size += realsize;
-		mem->data[mem->size] = 0;
+            GlyrQuery * query = data->query;
+            if(query && query->signal_exit)
+                return 0;
 
-		if(mem->dsrc && strstr(mem->data,mem->dsrc))
-			return 0;
-	}
-	else
-	{
-		glyr_message(-1,NULL,"Caching failed: Out of memory.\n");
-		glyr_message(-1,NULL,"Did you perhaps try to load a 4,7GB iso into your RAM?\n");
-	}
-	return realsize;
+            /* Test if a endmarker is in this buffer */
+            const gchar * endmarker = data->endmarker;
+            if(endmarker && strstr(mem->data,endmarker))
+                return 0;
+        }
+        else
+        {
+            glyr_message(-1,NULL,"Caching failed: Out of memory.\n");
+            glyr_message(-1,NULL,"Did you perhaps try to load a 4,7GB .iso into your RAM?\n");
+        }
+    }
+    return realsize;
 }
 
 /*--------------------------------------------------------*/
 
 void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len)
 {
-	if(cache != NULL)
-	{
-		g_free(cache->data);
+    if(cache != NULL)
+    {
+        g_free(cache->data);
 
-		cache->data = (gchar*)data;
-		if(data != NULL)
-		{
-			cache->size = (len >= 0) ? (gsize)len : strlen(data);
-			update_md5sum(cache);
-		}
-		else
-		{
-			cache->size = 0;
-			memset(cache->md5sum,0,16);
-		}
-	}
+        cache->data = (gchar*)data;
+        if(data != NULL)
+        {
+            cache->size = (len >= 0) ? (gsize)len : strlen(data);
+            update_md5sum(cache);
+        }
+        else
+        {
+            cache->size = 0;
+            memset(cache->md5sum,0,16);
+        }
+    }
 }
 
 /*--------------------------------------------------------*/
 
 GlyrMemCache * DL_copy(GlyrMemCache * cache)
 {
-	GlyrMemCache * result = NULL;
-	if(cache != NULL)
-	{
-		result = g_malloc0(sizeof(GlyrMemCache));
-		memcpy(result,cache,sizeof(GlyrMemCache));
-		if(cache->size > 0)
-		{
-			/* Remember NUL for strings */
-			result->data = g_malloc(cache->size + 1);
-			memcpy(result->data,cache->data,cache->size);
-		}
-		result->dsrc = g_strdup(cache->dsrc);
-		result->prov = g_strdup(cache->prov);
-		memcpy(result->md5sum,cache->md5sum,16);
+    GlyrMemCache * result = NULL;
+    if(cache != NULL)
+    {
+        result = g_malloc0(sizeof(GlyrMemCache));
+        memcpy(result,cache,sizeof(GlyrMemCache));
+        if(cache->size > 0)
+        {
+            /* Remember NUL for strings */
+            result->data = g_malloc(cache->size + 1);
+            memcpy(result->data,cache->data,cache->size);
+        }
+        result->dsrc = g_strdup(cache->dsrc);
+        result->prov = g_strdup(cache->prov);
+        memcpy(result->md5sum,cache->md5sum,16);
 
         result->next = NULL;
         result->prev = NULL;
-	}
-	return result;
+    }
+    return result;
 }
 
 /*--------------------------------------------------------*/
@@ -196,32 +207,32 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
 // cleanup internal buffer if no longer used
 void DL_free(GlyrMemCache *cache)
 {
-	if(cache)
-	{
-		if(cache->size && cache->data)
-		{
-			g_free(cache->data);
-			cache->data = NULL;
-		}
-		if(cache->dsrc)
-		{
-			g_free(cache->dsrc);
-			cache->dsrc = NULL;
-		}
+    if(cache)
+    {
+        if(cache->size && cache->data)
+        {
+            g_free(cache->data);
+            cache->data = NULL;
+        }
+        if(cache->dsrc)
+        {
+            g_free(cache->dsrc);
+            cache->dsrc = NULL;
+        }
 
-		if(cache->prov)
-		{
-			g_free(cache->prov);
-			cache->prov = NULL;
-		}
+        if(cache->prov)
+        {
+            g_free(cache->prov);
+            cache->prov = NULL;
+        }
 
-		cache->size = 0;
-		cache->type = GLYR_TYPE_NOIDEA;
+        cache->size = 0;
+        cache->type = GLYR_TYPE_NOIDEA;
 
-		g_free(cache->img_format);
-		g_free(cache);
-		cache = NULL;
-	}
+        g_free(cache->img_format);
+        g_free(cache);
+        cache = NULL;
+    }
 }
 
 /*--------------------------------------------------------*/
@@ -229,14 +240,14 @@ void DL_free(GlyrMemCache *cache)
 // Use this to init the internal buffer
 GlyrMemCache* DL_init(void)
 {
-	GlyrMemCache *cache = g_malloc0(sizeof(GlyrMemCache));
-	memset(cache,0,sizeof(GlyrMemCache));
-	cache->type = GLYR_TYPE_NOIDEA;
+    GlyrMemCache *cache = g_malloc0(sizeof(GlyrMemCache));
+    memset(cache,0,sizeof(GlyrMemCache));
+    cache->type = GLYR_TYPE_NOIDEA;
 
-	cache->cached = FALSE;
-	cache->duration = 0;
-	cache->rating = 0;
-	return cache;
+    cache->cached = FALSE;
+    cache->duration = 0;
+    cache->rating = 0;
+    return cache;
 }
 
 /*--------------------------------------------------------*/
@@ -244,40 +255,40 @@ GlyrMemCache* DL_init(void)
 // Splits http_proxy to libcurl conform represantation
 static gboolean proxy_to_curl(gchar * proxystring, char ** userpwd, char ** server)
 {
-	if(proxystring && userpwd && server)
-	{
-		if(proxystring != NULL)
-		{
-			gchar * ddot = strchr(proxystring,':');
-			gchar * asgn = strchr(proxystring,'@');
+    if(proxystring && userpwd && server)
+    {
+        if(proxystring != NULL)
+        {
+            gchar * ddot = strchr(proxystring,':');
+            gchar * asgn = strchr(proxystring,'@');
 
-			if(ddot == NULL || asgn < ddot)
-			{
-				*server  = g_strdup(proxystring);
-				*userpwd = NULL;
-				return TRUE;
-			}
-			else
-			{
-				gsize len = strlen(proxystring);
-				char * protocol = strstr(proxystring,"://");
+            if(ddot == NULL || asgn < ddot)
+            {
+                *server  = g_strdup(proxystring);
+                *userpwd = NULL;
+                return TRUE;
+            }
+            else
+            {
+                gsize len = strlen(proxystring);
+                char * protocol = strstr(proxystring,"://");
 
-				if(protocol == NULL)
-				{
-					protocol = (gchar*)proxystring;
-				}
-				else
-				{
-					protocol += 3;
-				}
+                if(protocol == NULL)
+                {
+                    protocol = (gchar*)proxystring;
+                }
+                else
+                {
+                    protocol += 3;
+                }
 
-				*userpwd = g_strndup(protocol,asgn-protocol);
-				*server  = g_strndup(asgn+1,protocol+len-asgn);
-				return TRUE;
-			}
-		}
-	}
-	return FALSE;
+                *userpwd = g_strndup(protocol,asgn-protocol);
+                *server  = g_strndup(asgn+1,protocol+len-asgn);
+                return TRUE;
+            }
+        }
+    }
+    return FALSE;
 }
 
 
@@ -285,9 +296,9 @@ static gboolean proxy_to_curl(gchar * proxystring, char ** userpwd, char ** serv
 
 struct header_data
 {
-	gchar * type;
-	gchar * format;
-	gchar * extra;
+    gchar * type;
+    gchar * format;
+    gchar * extra;
 };
 
 /*--------------------------------------------------------*/
@@ -295,39 +306,39 @@ struct header_data
 /* Parse header file. Get Contenttype from it and save it in the header_data struct */
 gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
 {
-	gsize bytes = size * nmemb;
-	if(ptr != NULL && userdata != NULL)
-	{
-		/* Transform safely into string */
-		gchar nulbuf[bytes + 1];
-		memcpy(nulbuf,ptr,bytes);
-		nulbuf[bytes] = '\0';
+    gsize bytes = size * nmemb;
+    if(ptr != NULL && userdata != NULL)
+    {
+        /* Transform safely into string */
+        gchar nulbuf[bytes + 1];
+        memcpy(nulbuf,ptr,bytes);
+        nulbuf[bytes] = '\0';
 
-		/* We're only interested in the content type */
-		gchar * cttp  = "Content-Type: ";
-		gsize ctt_len = strlen(cttp);
-		if(ctt_len < bytes && g_ascii_strncasecmp(cttp,nulbuf,ctt_len) == 0)
-		{
-			gchar ** content_type = g_strsplit_set(nulbuf + ctt_len," /;",0);
-			if(content_type != NULL)
-			{
-				gsize set_at = 0;
-				gchar ** elem = content_type;
-				struct header_data * info = userdata;
+        /* We're only interested in the content type */
+        gchar * cttp  = "Content-Type: ";
+        gsize ctt_len = strlen(cttp);
+        if(ctt_len < bytes && g_ascii_strncasecmp(cttp,nulbuf,ctt_len) == 0)
+        {
+            gchar ** content_type = g_strsplit_set(nulbuf + ctt_len," /;",0);
+            if(content_type != NULL)
+            {
+                gsize set_at = 0;
+                gchar ** elem = content_type;
+                struct header_data * info = userdata;
 
-				/* Set fields..  */
-				while(elem[0] != NULL)
-				{
-					if(elem[0][0] != '\0')
-					{
-						switch(set_at)
-						{
-							case 0:
-								g_free(info->type);
-								info->type   = g_strdup(elem[0]);
-								break;
-							case 1:
-								g_free(info->format);
+                /* Set fields..  */
+                while(elem[0] != NULL)
+                {
+                    if(elem[0][0] != '\0')
+                    {
+                        switch(set_at)
+                        {
+                            case 0:
+                                g_free(info->type);
+                                info->type   = g_strdup(elem[0]);
+                                break;
+                            case 1:
+                                g_free(info->format);
 
                                 /* 
                                  * Specialcase: 
@@ -468,7 +479,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
 /*--------------------------------------------------------*/
 
 // Init an easyhandler with all relevant options
-static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuery * s, void * magic_private_ptr, long timeout)
+static DLBufferContainer * DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuery * s, void * magic_private_ptr, long timeout, gchar * endmarker)
 {
     // Set options (see 'man curl_easy_setopt')
     curl_easy_setopt(eh, CURLOPT_TIMEOUT, timeout);
@@ -483,7 +494,12 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
     curl_easy_setopt(eh, CURLOPT_PRIVATE, magic_private_ptr);
     curl_easy_setopt(eh, CURLOPT_VERBOSE, (s && s->verbosity >= 4));
     curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, DL_buffer);
-    curl_easy_setopt(eh, CURLOPT_WRITEDATA, (void *)cache);
+
+    DLBufferContainer * dlbuffer = g_malloc0(sizeof(DLBufferContainer));
+    curl_easy_setopt(eh, CURLOPT_WRITEDATA, (void *)dlbuffer);
+    dlbuffer->cache = cache;
+    dlbuffer->endmarker = endmarker;
+    dlbuffer->query = s;
 
     // amazon plugin requires redirects
     curl_easy_setopt(eh, CURLOPT_FOLLOWLOCATION, 1L);
@@ -503,6 +519,8 @@ static void DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuer
     // because I searched for the Bloodhoundgang album...
     // (because I have it already of course! ;-))
     curl_easy_setopt(eh, CURLOPT_COOKIEJAR ,"");
+
+    return dlbuffer;
 }
 
 /*--------------------------------------------------------*/
@@ -564,7 +582,6 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
                     {
                         is_duplicate = true;
                     }
-
                 }
                 else
                 {
@@ -621,10 +638,13 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
         if(curl != NULL)
         {
             /* Configure curl */
-            DL_setopt(curl,dldata,url,s,NULL,(s) ? s->timeout : 5);
+            DLBufferContainer * dlbuffer = DL_setopt(curl,dldata,url,s,NULL,(s) ? s->timeout : 5, NULL);
 
             /* Perform transaction */
             res = curl_easy_perform(curl);
+
+            /* Free the pointer buff */
+            g_free(dlbuffer);
 
             /* Better check again */
             if(res != CURLE_OK && res != CURLE_WRITE_ERROR)
@@ -667,17 +687,18 @@ static GlyrMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyrQuery *
         /* Init cache */
         dlcache = DL_init();
 
-        /* Little hack, pack it in dsrc, since it isn't used at this point */
-        dlcache->dsrc = g_strdup(endmark);
-
         /* Remind this handle */
         capo->handle = eh;
 
+        /* Make sure this is null at start */
+        capo->dlbuffer = NULL;
+
         /* Configure this handle */
-        DL_setopt(eh, dlcache, capo->url, s,(void*)capo,timeout);
+        capo->dlbuffer = DL_setopt(eh, dlcache, capo->url, s,(void*)capo,timeout, endmark);
 
         /* Add handle to multihandle */
         curl_multi_add_handle(cm, eh);
+
     }
     return dlcache;
 }
@@ -701,7 +722,6 @@ static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM
             gint endmark_pos = g_list_position(url_list,elem);
             GList * glist_m  = g_list_nth(endmark_list,endmark_pos);
             gchar * endmark  = (glist_m==NULL) ? NULL : glist_m->data;
-
             obj->cache = init_async_cache(cmHandle,obj,s,abs_timeout,endmark);
         }
     }
@@ -718,7 +738,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean f
     if(cb_list != NULL)
     {
         for (GList * elem = cb_list; elem; elem = elem->next)
-        {
+        { 
             cb_object * item = elem->data;
             if(item->handle != NULL)
             {
@@ -731,6 +751,7 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean f
                 item->cache = NULL;
             }
 
+            g_free(item->dlbuffer);
             g_free(item->url);
         }
         glist_free_full(cb_list,g_free);
@@ -819,7 +840,9 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
 
             /* select() returned. There might be some fresh flesh! - Check. */
             CURLMsg * msg;
-            while (terminate == FALSE && (msg = curl_multi_info_read(cmHandle, &queue_msg)))
+            while (s->signal_exit == FALSE &&
+                   terminate      == FALSE && 
+                   (msg = curl_multi_info_read(cmHandle, &queue_msg)))
             {
                 /* That download is ready to be viewed */
                 if(msg->msg == CURLMSG_DONE)

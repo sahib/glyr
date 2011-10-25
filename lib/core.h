@@ -51,6 +51,16 @@ int glyr_message(int v, GlyrQuery * s, const char * fmt, ...);
 
 /*------------------------------------------------------*/
 
+/* Used to pass arguments to DL_buffer() */
+typedef struct {
+    GlyrMemCache * cache;
+    GlyrQuery * query;
+    char * endmarker;
+
+} DLBufferContainer;
+
+/*------------------------------------------------------*/
+
 // Internal calback object, used for cover, lyrics and other
 // This is only used inside the core and the plugins
 // Other parts of the program shall not use this struct
@@ -72,6 +82,9 @@ typedef struct cb_object
 
     // has this struct been consumed?
     gboolean consumed;
+
+    // DLBuffer data
+    DLBufferContainer * dlbuffer;
 
 } cb_object;
 

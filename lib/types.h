@@ -298,6 +298,7 @@ typedef struct _GlyrDatabase {
 * @db_autowrite: Write found items automagically to the cache, if any specified by glyr_opt_lookup_db()
 * @local_db: The database to write and search in.
 * @lang_aware_only: Use only providers that deliver language specific content.
+* @signal_exit: By default false, but true when stopping searching is required.
 * @lang: Language code ISO-639-1, like 'de','en' or 'auto'
 * @proxy: The proxy to use.
 * @artist: Artist to use.
@@ -337,6 +338,9 @@ typedef struct _GlyrQuery {
     GlyrDatabase * local_db;
 
     bool lang_aware_only;
+
+    /* Signal conditions */
+    int signal_exit;
 
     /* Dynamic allocated */
     char * lang; 

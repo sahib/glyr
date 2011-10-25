@@ -171,6 +171,13 @@ const char * glyr_strerror(GLYR_ERROR ID)
 
 /*-----------------------------------------------*/
 
+void glyr_signal_exit(GlyrQuery * query)
+{
+    g_atomic_int_inc(&(query->signal_exit));
+}
+
+/*-----------------------------------------------*/
+
 void glyr_cache_update_md5sum(GlyrMemCache * cache)
 {
 	update_md5sum(cache);
@@ -527,6 +534,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
 	glyrs->lang = GLYR_DEFAULT_LANG;
     glyrs->lang_aware_only = GLYR_DEFAULT_LANG_AWARE_ONLY;
+    glyrs->signal_exit = FALSE;
 	glyrs->itemctr = 0;
 
     /* Set on a very specific value, so we can pretty sure,
