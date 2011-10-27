@@ -295,6 +295,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"lang",          required_argument, 0, 'l'},
         {"fuzzyness",     required_argument, 0, 'z'},
         {"callback",	  required_argument, 0, 'j'},
+        {"musictree",     required_argument, 0, 's'},
         {0,               0,                 0, '0'}
     };
 
@@ -302,7 +303,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVogdDLa:b:t:i:e:n:l:z:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:yF:hVogdDLa:b:t:i:e:s:n:l:z:j:k:8",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -404,6 +405,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 }
                 break;
             case 'l':
+                puts("Huh?!");
                 glyr_opt_lang(glyrs,optarg);
                 break;
             case 'L':
@@ -427,6 +429,9 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 break;
             case '8':
                 glyr_opt_force_utf8(glyrs,true);
+                break;
+            case 's':
+                glyr_opt_musictree_path(glyrs,optarg);
                 break;
             case '?':
                 break;

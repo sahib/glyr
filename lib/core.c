@@ -1537,7 +1537,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
                 if(g_ascii_strncasecmp(lookup_url,OFFLINE_PROVIDER,(sizeof OFFLINE_PROVIDER) - 1) != 0)
                 {
                     /* make a sane URL out of it */
-                    const gchar * prepared = prepare_url(lookup_url,query);
+                    const gchar * prepared = prepare_url(lookup_url,query,TRUE);
 
                     /* add it to the hash table and relate it to the MetaDataSource */
                     g_hash_table_insert(url_table,(gpointer)prepared,(gpointer)item);
@@ -1579,6 +1579,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
                 pseudo_capo.s = query;
 
                 GList * offline_list = source->parser(&pseudo_capo);
+
                 if(query->imagejob)
                 {
                     delete_wrong_formats(&offline_list,query);

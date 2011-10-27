@@ -27,7 +27,7 @@
 /* Glyr's internal unicode stringlib - You're free to use it. */
 
 /* Cheap, but well working macro */
-#define nextTag(PTR) while(PTR[0] && *PTR++ != '>')
+#define nextTag(PTR) while((PTR)[0] && *(PTR++) != '>')
 
 /* Compute levenshtein distance of 'string' to 'other' */
 gsize levenshtein_strcmp(const gchar * string, const gchar * other);
@@ -72,13 +72,13 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
 gchar * unescape_html_UTF8(const gchar *data);
 
 /* Puts artist, album title in the string URL where it is ${artist},${album},${title} */
-gchar * prepare_url(const gchar * URL, GlyrQuery * s); 
+gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape); 
 
 /* Runs many of the above funtions to make lyrics beautier */
 gchar * beautify_string(const gchar * lyrics);
 
 /* "Normalizes" a string, suitable for URls afterwards */
-gchar * prepare_string(const gchar * input, gboolean delinitfy);
+gchar * prepare_string(const gchar * input, gboolean delinitfy, gboolean do_curl_escape);
 
 /* Search for name in ref, ending with end_string and return it */
 gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string);
@@ -88,5 +88,8 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_
 
 /* Translates umlauts like 'ä' to an approx. 'a' */
 gchar * translate_umlauts(gchar * string);
+
+/* Match string against a GRegex -> true/false */
+gboolean regex_match_compiled(const gchar * string, const GRegex * cRegex);
 
 #endif

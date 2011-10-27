@@ -790,6 +790,18 @@ GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool write_to_db);
 GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool read_from_db);
 
 /**
+ * glyr_opt_musictree_path:
+* @s: The GlyrQuery settings struct to store this option in.
+* @musictree_path: 
+*
+* Set the path to a specific mediafile and glyr will try to fetch covers from directories around this,
+* since many people place things like 'folder.jpg' there. 
+*
+* Returns: an error ID
+*/  
+GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path);
+
+/**
 * glyr_download:
 * @url: A valid url, for example returned by libglyr
 * @s: A settings struct managing timeout, useragent and redirects. 

@@ -290,7 +290,7 @@ static gchar * unwind_artist_name(const gchar * artist)
 
 /* ------------------------------------------------------------- */
 
-gchar * prepare_string(const gchar * input, gboolean delintify)
+gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl_escape)
 {
     gchar * result = NULL;
     if(input != NULL)
@@ -304,13 +304,21 @@ gchar * prepare_string(const gchar * input, gboolean delintify)
                 gchar * no_lint = regex_replace_by_table(normalized,regex_table,regex_table_size);
                 if(no_lint != NULL)
                 {
-                    result = curl_easy_escape(NULL,no_lint,0);
+                    if(do_curl_escape)
+                    {
+                        result = curl_easy_escape(NULL,no_lint,0);
+                    }
+                    else
+                    {
+                        result = no_lint;
+                    }
+
                     if(result != NULL && delintify == TRUE)
                     {
                         remove_tags_from_string(result,-1,'(',')');
-
                     }
-                    g_free(no_lint);
+
+                    if(do_curl_escape == TRUE) g_free(no_lint);
                 }
                 g_free(normalized);
             }
@@ -328,7 +336,7 @@ static void swap_string(char ** tmp, const char * subs, const char * with)
 }
 
 /* Prepares the url for you to get downloaded. You don't have to call this. */
-gchar * prepare_url(const gchar * URL, GlyrQuery * s)
+gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
 {
     gchar * tmp = NULL;
     if(URL != NULL && s != NULL)
@@ -337,9 +345,9 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s)
 
         gchar * unwinded_artist = unwind_artist_name(s->artist);
         
-        gchar * p_artist = prepare_string(trim_nocopy(unwinded_artist),FALSE);
-        gchar * p_album  = prepare_string(s->album,TRUE);
-        gchar * p_title  = prepare_string(s->title,TRUE);
+        gchar * p_artist = prepare_string(trim_nocopy(unwinded_artist),FALSE,do_curl_escape);
+        gchar * p_album  = prepare_string(s->album,TRUE,do_curl_escape);
+        gchar * p_title  = prepare_string(s->title,TRUE,do_curl_escape);
 
         swap_string(&tmp,"${artist}",p_artist);
         swap_string(&tmp,"${album}", p_album);
@@ -1090,3 +1098,16 @@ gchar * translate_umlauts(gchar * string)
     return result;
 }
 
+/* Match string against a GRegex */
+gboolean regex_match_compiled(const gchar * string, const GRegex * cRegex)
+{
+    gboolean retv = FALSE;
+    if(string != NULL)
+    {
+        if(cRegex == NULL)
+            return TRUE;
+
+        retv = g_regex_match(cRegex, string, 0, NULL);
+    }
+    return retv;
+}

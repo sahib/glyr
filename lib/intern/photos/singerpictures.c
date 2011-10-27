@@ -28,7 +28,7 @@ static const gchar * photos_singerlyrics_url(GlyrQuery * settings)
     gchar * space_to_min_artist = strreplace(settings->artist," ","-");
     if(space_to_min_artist != NULL)
     {
-        gchar * prep_artist = prepare_string(space_to_min_artist,FALSE);
+        gchar * prep_artist = prepare_string(space_to_min_artist,FALSE,TRUE);
         if(prep_artist != NULL)
         {
             result_url = g_strdup_printf(SPICS_BASE_URL,prep_artist);

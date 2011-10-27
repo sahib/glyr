@@ -62,7 +62,7 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
             const char * url = src->get_url(query);
             if(url != NULL)
             {
-                result = prepare_url(url,query);
+                result = prepare_url(url,query,TRUE);
 
                 if(src->free_url)
                 {

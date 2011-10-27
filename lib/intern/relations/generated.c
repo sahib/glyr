@@ -44,7 +44,7 @@ static GList * relations_generated_parse(cb_object * capo)
 
 	for(GList * elem = temple_list; elem; elem = elem->next)
 	{
-		gchar * result_url = prepare_url(elem->data, capo->s);
+		gchar * result_url = prepare_url(elem->data, capo->s,TRUE);
 		if(result_url != NULL)
 		{
 			GlyrMemCache * result = DL_init();
