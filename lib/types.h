@@ -340,7 +340,7 @@ typedef struct _GlyrQuery {
     bool lang_aware_only;
 
     /* Signal conditions */
-    int signal_exit;
+    volatile int signal_exit;
 
     /* Dynamic allocated */
     char * lang; 

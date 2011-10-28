@@ -138,7 +138,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void * buff_dat
             mem->data[mem->size] = 0;
 
             GlyrQuery * query = data->query;
-            if(query && query->signal_exit)
+            if(query && GET_ATOMIC_SIGNAL_EXIT(query))
             {
                 g_printerr("#### RECEIVED #####\n");
                 return 0;
@@ -379,10 +379,11 @@ gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
 /*--------------------------------------------------------*/
 
 /* empty callback just prevent writing header to stdout */
-gsize empty_cb(void * p, gsize s, gsize n, void * u)
+gsize nearly_empty_callback(void * p, gsize size, gsize numb, void * pp_Query)
 {
-    return s*n;
-};
+    GlyrQuery * query = (GlyrQuery *)pp_Query;
+    return (query && GET_ATOMIC_SIGNAL_EXIT(query)) ? 0 : (size * numb);
+}
 
 /*--------------------------------------------------------*/
 
@@ -414,7 +415,7 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
 
 /*--------------------------------------------------------*/
 
-static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring, gchar * useragent)
+static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring, gchar * useragent, GlyrQuery * query)
 {
     struct header_data * info = NULL;
     if(url != NULL)
@@ -447,7 +448,8 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         }
 
         curl_easy_setopt(eh, CURLOPT_HEADERFUNCTION, header_cb);
-        curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, empty_cb);
+        curl_easy_setopt(eh, CURLOPT_WRITEFUNCTION, nearly_empty_callback);
+        curl_easy_setopt(eh, CURLOPT_WRITEDATA, query);
         curl_easy_setopt(eh, CURLOPT_WRITEHEADER, info);
 
         /* Set proxy, if any */
@@ -459,12 +461,14 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         rc = curl_easy_perform(eh);
         curl_easy_cleanup(eh);
 
-        if(rc != CURLE_OK)
+        if(rc != CURLE_OK) 
         {
-            panic("- g_ping: E: %s [%d]\n",curl_easy_strerror(rc),rc);
+            if(GET_ATOMIC_SIGNAL_EXIT(query) == FALSE)
+            {
+                panic("- g_ping: E: %s [%d]\n",curl_easy_strerror(rc),rc);
+            }
             g_free(info);
             info = NULL;
-
         }
         else
         {
@@ -531,7 +535,7 @@ static DLBufferContainer * DL_setopt(CURL *eh, GlyrMemCache * cache, const char 
 gboolean continue_search(gint current, GlyrQuery * s)
 {
     gboolean decision = FALSE;
-    if(s != NULL)
+    if(s != NULL && GET_ATOMIC_SIGNAL_EXIT(s) == FALSE)
     {
         /* Take an educated guess, let the provider get more, because URLs might be wrong,
          * as we check this later, it's good to have some more ULRs waiting for us,     *
@@ -791,7 +795,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
         /* Now create cb_objects */
         GList * cb_list = init_async_download(url_list,endmark_list,cmHandle,s,abs_timeout);
 
-        while(s->signal_exit == FALSE && running_handles != 0 && terminate == FALSE)
+        while(GET_ATOMIC_SIGNAL_EXIT(s) == FALSE && running_handles != 0 && terminate == FALSE)
         {
             CURLMcode merr = CURLM_CALL_MULTI_PERFORM;
             while(merr == CURLM_CALL_MULTI_PERFORM)
@@ -841,9 +845,10 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                 }
             }
 
+
             /* select() returned. There might be some fresh flesh! - Check. */
             CURLMsg * msg;
-            while (s->signal_exit == FALSE &&
+            while (GET_ATOMIC_SIGNAL_EXIT(s) == FALSE &&
                    terminate      == FALSE && 
                    (msg = curl_multi_info_read(cmHandle, &queue_msg)))
             {
@@ -969,7 +974,7 @@ static void * wrap_retrieve_content(gpointer data)
     {
         struct wrap_retrieve_pass_data * passed = data;
         GlyrQuery * query = passed->query;
-        head = retrieve_content_info(passed->url,(gchar*)query->proxy,(gchar*)query->useragent);
+        head = retrieve_content_info(passed->url,(gchar*)query->proxy,(gchar*)query->useragent,query);
         g_free(passed);
         passed = NULL;
     }
@@ -1717,7 +1722,7 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
         g_list_free(src_list);
 
         /* Check is exit was signaled */
-        stop_now = (query->signal_exit) ? TRUE : stop_now;
+        stop_now = (GET_ATOMIC_SIGNAL_EXIT(query)) ? TRUE : stop_now;
     }
 
     if(something_was_searched == FALSE)
