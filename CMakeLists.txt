@@ -112,12 +112,14 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/cache_intern.c"
 	"${DIR_ROOT}/cache.c"
-	"${DIR_INTERN}/cache/db_provider.c"
 	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/blacklist.c"
     "${DIR_ROOT}/testing.c"
+    # "Builtin" special providers
+	"${DIR_INTERN}/cache/db_provider.c"
+	"${DIR_INTERN}/musictree/musictree.c"
 	# fetcher
 	"${DIR_INTERN}/generic.c"
 	"${DIR_INTERN}/ainfo.c"

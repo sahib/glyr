@@ -45,7 +45,8 @@
 #define GLYR_DEFAULT_QSRATIO 0.85
 #define GLYR_DEFAULT_FORCE_UTF8 false
 #define GLYR_DEFAULT_DB_AUTOWRITE true 
-#define GLYR_DEFAULT_DB_AUTOREAD  true
+#define GLYR_DEFAULT_DB_AUTOREAD true
+#define GLYR_DEFAULT_MUISCTREE_PATH NULL
 #define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
 #define GLYR_DEFAULT_LANG_AWARE_ONLY false
 
@@ -268,13 +269,15 @@ typedef struct _GlyrMemCache {
  * GlyrDatabase:
  * @root_path: The directory where the database will be stored.
  * 
- * Represents a database where caches may be fetched from.
+ * Represents an opaque database structure where caches may be fetched from.
+ * It's members should not be accessed directly.
  */
+struct _GlyrDatabase;
 typedef struct _GlyrDatabase {
-        /*< public >*/
+    /*< public >*/
 	char * root_path;
 	
-        /*< private >*/
+    /*< private >*/
 	sqlite3 * db_handle;
 
 } GlyrDatabase;
@@ -351,6 +354,7 @@ typedef struct _GlyrQuery {
     char * from;   
     char * allowed_formats; 
     char * useragent; 
+    char * musictree_path;
 
 #ifndef __GTK_DOC_IGNORE__
     struct {

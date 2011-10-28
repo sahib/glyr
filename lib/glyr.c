@@ -404,6 +404,15 @@ GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
 
 /*-----------------------------------------------*/
 
+GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path)
+{
+	if(s == NULL) return GLYRE_EMPTY_STRUCT;
+	glyr_set_info(s,8,(musictree_path==NULL) ? GLYR_DEFAULT_MUISCTREE_PATH : musictree_path);
+	return GLYRE_OK;
+}
+
+/*-----------------------------------------------*/
+
 GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
 {
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
@@ -513,6 +522,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
 	glyrs->local_db = NULL;
 	glyrs->callback.download = NULL;
 	glyrs->callback.user_pointer = NULL;
+    glyrs->musictree_path = NULL;
 
 	glyrs->db_autoread = GLYR_DEFAULT_DB_AUTOREAD;
 	glyrs->db_autowrite = GLYR_DEFAULT_DB_AUTOWRITE;	
@@ -931,6 +941,9 @@ static int glyr_set_info(GlyrQuery * s, int at, const char * arg)
             case 7:
                 s->lang = (gchar*)s->info[at];
                 break;
+            case 8:
+                s->musictree_path = (gchar * )s->info[at];
+                break;
             default:
                 glyr_message(2,s,"Warning: wrong <at> for glyr_info_at!\n");
         }
@@ -963,6 +976,7 @@ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
 
 /*-----------------------------------------------*/
 
+/* This is silly. I don't see a easy way to remove this though */
 const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
 {
     switch(type)

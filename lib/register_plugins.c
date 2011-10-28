@@ -65,7 +65,6 @@ extern MetaDataSource photos_discogs_src;
 extern MetaDataSource photos_rhapsody_src;
 extern MetaDataSource photos_picsearch_src;
 extern MetaDataSource relations_musicbrainz_src;
-extern MetaDataSource relations_generated_src;
 extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
 extern MetaDataSource review_metallum_src;
@@ -76,7 +75,11 @@ extern MetaDataSource tracklist_musicbrainz_src;
 extern MetaDataSource guitartabs_guitaretab_src;
 extern MetaDataSource guitartabs_chordie_src;
 extern MetaDataSource backdrops_htbackdrops_src;
+
+/* Special offline providers */
 extern MetaDataSource local_provider_src;
+extern MetaDataSource relations_generated_src;
+extern MetaDataSource musictree_provider_src;
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -149,7 +152,6 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);
@@ -160,7 +162,11 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_chordie_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&backdrops_htbackdrops_src);
+
+    /* Special offline providers */
+    plugin_add_to_list(&glyrMetaDataSourceList,&relations_generated_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&local_provider_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&musictree_provider_src);
 }
 
 /* --------------------------------------- */
