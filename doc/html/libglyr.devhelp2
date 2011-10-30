@@ -63,6 +63,7 @@
     <keyword type="function" name="glyr_opt_lang ()" link="libglyr-glyr.html#glyr-opt-lang"/>
     <keyword type="function" name="glyr_opt_lang_aware_only ()" link="libglyr-glyr.html#glyr-opt-lang-aware-only"/>
     <keyword type="function" name="glyr_opt_lookup_db ()" link="libglyr-glyr.html#glyr-opt-lookup-db"/>
+    <keyword type="function" name="glyr_opt_musictree_path ()" link="libglyr-glyr.html#glyr-opt-musictree-path"/>
     <keyword type="function" name="glyr_opt_number ()" link="libglyr-glyr.html#glyr-opt-number"/>
     <keyword type="function" name="glyr_opt_parallel ()" link="libglyr-glyr.html#glyr-opt-parallel"/>
     <keyword type="function" name="glyr_opt_plugmax ()" link="libglyr-glyr.html#glyr-opt-plugmax"/>
@@ -76,6 +77,7 @@
     <keyword type="function" name="glyr_opt_verbosity ()" link="libglyr-glyr.html#glyr-opt-verbosity"/>
     <keyword type="function" name="glyr_query_destroy ()" link="libglyr-glyr.html#glyr-query-destroy"/>
     <keyword type="function" name="glyr_query_init ()" link="libglyr-glyr.html#glyr-query-init"/>
+    <keyword type="function" name="glyr_signal_exit ()" link="libglyr-glyr.html#glyr-signal-exit"/>
     <keyword type="function" name="glyr_strerror ()" link="libglyr-glyr.html#glyr-strerror"/>
     <keyword type="function" name="glyr_string_to_md5sum ()" link="libglyr-glyr.html#glyr-string-to-md5sum"/>
     <keyword type="function" name="glyr_version ()" link="libglyr-glyr.html#glyr-version"/>
@@ -93,6 +95,7 @@
     <keyword type="macro" name="GLYR_DEFAULT_FUZZYNESS" link="libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_LANG" link="libglyr-types.html#GLYR-DEFAULT-LANG:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_LANG_AWARE_ONLY" link="libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS"/>
+    <keyword type="macro" name="GLYR_DEFAULT_MUISCTREE_PATH" link="libglyr-types.html#GLYR-DEFAULT-MUISCTREE-PATH:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_NUMBER" link="libglyr-types.html#GLYR-DEFAULT-NUMBER:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_PARALLEL" link="libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS"/>
     <keyword type="macro" name="GLYR_DEFAULT_PLUGMAX" link="libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS"/>

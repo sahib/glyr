@@ -52,6 +52,7 @@ enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS" title="GLYR_DEFAULT_FUZZYNESS">GLYR_DEFAULT_FUZZYNESS</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-LANG:CAPS" title="GLYR_DEFAULT_LANG">GLYR_DEFAULT_LANG</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" title="GLYR_DEFAULT_LANG_AWARE_ONLY">GLYR_DEFAULT_LANG_AWARE_ONLY</a>
+#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-MUISCTREE-PATH:CAPS" title="GLYR_DEFAULT_MUISCTREE_PATH">GLYR_DEFAULT_MUISCTREE_PATH</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-NUMBER:CAPS" title="GLYR_DEFAULT_NUMBER">GLYR_DEFAULT_NUMBER</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS" title="GLYR_DEFAULT_PARALLEL">GLYR_DEFAULT_PARALLEL</a>
 #define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS" title="GLYR_DEFAULT_PLUGMAX">GLYR_DEFAULT_PLUGMAX</a>
@@ -267,7 +268,7 @@ It describes what kind of data the cache holds.
 <hr>
 <div class="refsect2">
 <a name="GLYR-DEFAULT-DB-AUTOREAD:CAPS"></a><h3>GLYR_DEFAULT_DB_AUTOREAD</h3>
-<pre class="programlisting">#define GLYR_DEFAULT_DB_AUTOREAD  true
+<pre class="programlisting">#define GLYR_DEFAULT_DB_AUTOREAD true
 </pre>
 </div>
 <hr>
@@ -316,6 +317,12 @@ It describes what kind of data the cache holds.
 <div class="refsect2">
 <a name="GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS"></a><h3>GLYR_DEFAULT_LANG_AWARE_ONLY</h3>
 <pre class="programlisting">#define GLYR_DEFAULT_LANG_AWARE_ONLY false
+</pre>
+</div>
+<hr>
+<div class="refsect2">
+<a name="GLYR-DEFAULT-MUISCTREE-PATH:CAPS"></a><h3>GLYR_DEFAULT_MUISCTREE_PATH</h3>
+<pre class="programlisting">#define GLYR_DEFAULT_MUISCTREE_PATH NULL
 </pre>
 </div>
 <hr>
@@ -634,7 +641,8 @@ and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="gly
 } GlyrDatabase;
 </pre>
 <p>
-Represents a database where caches may be fetched from.
+Represents an opaque database structure where caches may be fetched from.
+It's members should not be accessed directly.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -810,6 +818,9 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
 
     bool lang_aware_only;
 
+    /* Signal conditions */
+    volatile int signal_exit;
+
     /* Dynamic allocated */
     char * lang; 
     char * proxy; 
@@ -819,6 +830,7 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
     char * from;   
     char * allowed_formats; 
     char * useragent; 
+    char * musictree_path;
 
 #endif 
 } GlyrQuery;
@@ -903,6 +915,10 @@ You can safely read from all fields and should free the query with <a class="lin
 <td>Use only providers that deliver language specific content.</td>
 </tr>
 <tr>
+<td><p><span class="term">volatile <span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.signal-exit"></a>signal_exit</code></em>;</span></p></td>
+<td>By default false, but true when stopping searching is required.</td>
+</tr>
+<tr>
 <td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.lang"></a>lang</code></em>;</span></p></td>
 <td>Language code ISO-639-1, like 'de','en' or 'auto'</td>
 </tr>
@@ -933,6 +949,10 @@ You can safely read from all fields and should free the query with <a class="lin
 <tr>
 <td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.useragent"></a>useragent</code></em>;</span></p></td>
 <td>Useragent to use during http-requests</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">char</span> *<em class="structfield"><code><a name="GlyrQuery.musictree-path"></a>musictree_path</code></em>;</span></p></td>
+<td>Used for the musictree provider.</td>
 </tr>
 </tbody>
 </table></div>

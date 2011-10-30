@@ -62,6 +62,7 @@
 <ANCHOR id="glyr-opt-lang" href="libglyr/libglyr-glyr.html#glyr-opt-lang">
 <ANCHOR id="glyr-opt-lang-aware-only" href="libglyr/libglyr-glyr.html#glyr-opt-lang-aware-only">
 <ANCHOR id="glyr-opt-lookup-db" href="libglyr/libglyr-glyr.html#glyr-opt-lookup-db">
+<ANCHOR id="glyr-opt-musictree-path" href="libglyr/libglyr-glyr.html#glyr-opt-musictree-path">
 <ANCHOR id="glyr-opt-number" href="libglyr/libglyr-glyr.html#glyr-opt-number">
 <ANCHOR id="glyr-opt-parallel" href="libglyr/libglyr-glyr.html#glyr-opt-parallel">
 <ANCHOR id="glyr-opt-plugmax" href="libglyr/libglyr-glyr.html#glyr-opt-plugmax">
@@ -75,6 +76,7 @@
 <ANCHOR id="glyr-opt-verbosity" href="libglyr/libglyr-glyr.html#glyr-opt-verbosity">
 <ANCHOR id="glyr-query-destroy" href="libglyr/libglyr-glyr.html#glyr-query-destroy">
 <ANCHOR id="glyr-query-init" href="libglyr/libglyr-glyr.html#glyr-query-init">
+<ANCHOR id="glyr-signal-exit" href="libglyr/libglyr-glyr.html#glyr-signal-exit">
 <ANCHOR id="glyr-strerror" href="libglyr/libglyr-glyr.html#glyr-strerror">
 <ANCHOR id="glyr-string-to-md5sum" href="libglyr/libglyr-glyr.html#glyr-string-to-md5sum">
 <ANCHOR id="glyr-version" href="libglyr/libglyr-glyr.html#glyr-version">
@@ -117,6 +119,7 @@
 <ANCHOR id="GLYR-DEFAULT-FUZZYNESS:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS">
 <ANCHOR id="GLYR-DEFAULT-LANG:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-LANG:CAPS">
 <ANCHOR id="GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS">
+<ANCHOR id="GLYR-DEFAULT-MUISCTREE-PATH:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-MUISCTREE-PATH:CAPS">
 <ANCHOR id="GLYR-DEFAULT-NUMBER:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-NUMBER:CAPS">
 <ANCHOR id="GLYR-DEFAULT-PARALLEL:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS">
 <ANCHOR id="GLYR-DEFAULT-PLUGMAX:CAPS" href="libglyr/libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS">
