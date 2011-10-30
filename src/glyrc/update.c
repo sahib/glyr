@@ -87,7 +87,10 @@ void update(void)
     if(check_version(&error))
     {
         g_printerr("Updating:\n");
-        system(UPDATE_SCRIPT);
+        if(system(UPDATE_SCRIPT) == -1)
+        {
+            g_printerr("Warning: the script returned a bad exitstatus.\n");
+        }
     }
     else if(error)
     {
