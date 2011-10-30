@@ -247,7 +247,8 @@ static void visualize_from_options(void)
         }
 
         g_print("\nFollowing providers work with all types:\n");
-        g_print("  # local [l] (A local SQLite DB cache; see --cache)\n");
+        g_print("  # local     [l] (A local SQLite DB cache; see --cache)\n");
+        g_print("  # musictree [t] (Gets items from your music directory (folder.jpg etc) --musictree-path)\n");
         g_print("\nThe string 'all' in --from enables all providers.\n");
         g_print("You can disable certain providers from this by prepending a '-':\n");
         g_print("  \"all;-lastfm\"\n");

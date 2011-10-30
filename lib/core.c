@@ -706,6 +706,9 @@ static GlyrMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyrQuery *
         /* Add handle to multihandle */
         curl_multi_add_handle(cm, eh);
 
+        /* This is set to true once DL_buffer is reached */
+        capo->was_buffered = FALSE;
+
     }
     return dlcache;
 }
@@ -752,7 +755,11 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean f
                 curl_easy_cleanup(item->handle);
             }
 
-            if(free_caches == TRUE && item->consumed == FALSE)
+            /* Also free unbuffered items, that don't appear in the queue,
+             * even if free_caches was set to FALSE 
+             */
+            if((free_caches == TRUE || item->was_buffered == FALSE)
+               && item->consumed == FALSE)
             {
                 DL_free(item->cache);
                 item->cache = NULL;
@@ -849,7 +856,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
             /* select() returned. There might be some fresh flesh! - Check. */
             CURLMsg * msg;
             while (GET_ATOMIC_SIGNAL_EXIT(s) == FALSE &&
-                   terminate      == FALSE && 
+                   terminate == FALSE && 
                    (msg = curl_multi_info_read(cmHandle, &queue_msg)))
             {
                 /* That download is ready to be viewed */
@@ -870,6 +877,9 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                         DL_free(capo->cache);
                         capo->cache = NULL;
                     }
+
+                    /* Mark this cb_object as  */
+                    capo->was_buffered = TRUE;
 
                     /* capo contains now the downloaded cache, ready to parse */
                     if(msg->data.result == CURLE_OK && capo && capo->cache)

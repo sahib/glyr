@@ -87,6 +87,9 @@ typedef struct cb_object
     // has this struct been consumed?
     gboolean consumed;
 
+    // If this item reached DL_buff 
+    gboolean was_buffered;
+
     // DLBuffer data
     DLBufferContainer * dlbuffer;
 
