@@ -143,7 +143,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_elyrics_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
+
+// FIXME: Chartlyrics reacts very slowly, and often not at all
+// add again when running again ( :( - good api though)    
+//    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);

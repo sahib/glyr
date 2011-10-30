@@ -54,7 +54,7 @@ static void replace_from_message_inline(gchar * text)
 }
 
 /*--------------------------------------------------------*/
-#define LYRICS_DIV "<div id=\"lyrics\">"
+#define LYRICS_DIV "<div id=\"lyrics-body\">"
 #define LYRICS_END "</div>"
 
 static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
@@ -84,69 +84,73 @@ static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
 
 /*--------------------------------------------------------*/
 
-#define ROOT_NODE "<div id=\"listResults\">"
+//#define ROOT_NODE "<div id=\"listResults\">"
+#define ROOT_NODE "<ul id=\"search-results\""
 #define NODE_BEGIN "<a href=\""
-#define NODE_ENDIN "\" title=\""
-#define TITLE_END  " Lyrics"
-#define NEXT_NODE "<li>"
-#define PAGES "<ul id=\"pages\">"
+#define END_OF_SEARCH "<li id=\"view-more-bar\">"
+
+/*
+ *  A single node:
+	<a href="/friede-sei-mit-dir-lyrics-die-apokalyptischen-reiter.html">
+		<span class="img"><img src="http://netstorage.metrolyrics.com/artists/face/maf.jpg" alt="Die Apokalyptischen Reiter" /></span>
+		<span class="title">Die Apokalyptischen Reiter<br /><strong>Friede Sei Mit Dir Lyrics</strong></span>
+	</a>
+
+    artist = get_search_value("<span class=\"title\">","<br />");
+    title  = get_search_value("<strong>","</strong>");
+*/
 
 static GList * lyrics_metrolyrics_parse(cb_object * capo)
 {
     GList * result_list = NULL;
     gchar * root = strstr(capo->cache->data,ROOT_NODE);
+
     if(root != NULL)
     {
-        gsize tries = 0;
+        gchar * end_of_earch = strstr(root,END_OF_SEARCH);
         gchar * node = root;
-        while(continue_search(tries,capo->s) && (node = strstr(node+1,NODE_BEGIN)) && tries++ < MAX_TRIES)
+
+        gsize tries = 0;
+        gsize nodelen = (sizeof NODE_BEGIN);
+
+        while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node + nodelen,NODE_BEGIN)) && tries < MAX_TRIES)
         {
-            gchar * title_beg = strstr(node,NODE_ENDIN);
-            if(title_beg != NULL)
-            {
-                gchar * title_end = strstr(title_beg,TITLE_END);
-                if(title_end != NULL)
+                node += nodelen;
+
+                gchar * m_artist = get_search_value(node,"<span class=\"title\">","<br />");
+                gchar * m_title  = get_search_value(node,"<strong>"," Lyrics</strong>");
+
+                if(levenshtein_strnormcmp(capo->s,capo->s->title, m_title)  <= capo->s->fuzzyness &&
+                   levenshtein_strnormcmp(capo->s,capo->s->artist,m_artist) <= capo->s->fuzzyness)
                 {
-		    gsize node_begin_len = (sizeof NODE_BEGIN) - 1;
-                    gchar * title = copy_value(title_beg + node_begin_len,title_end);
-                    if(title != NULL)
+                    gchar * relative_url = copy_value(node, strstr(node,"\">"));
+                    if(relative_url != NULL)
                     {
-			if(levenshtein_strnormcmp(capo->s,capo->s->title,title) <= capo->s->fuzzyness)
+                        tries++;
+
+                        gchar * page_url = g_strdup_printf("www.metrolyrics.com/%s",relative_url);
+                        GlyrMemCache * page_cache = download_single(page_url,capo->s,NULL);
+                        if(page_cache != NULL)
                         {
-		  	    gsize node_endin_len = (sizeof NODE_ENDIN) - 1;
-                            gchar * url = copy_value(node + node_endin_len, title_beg);
-                            if(url != NULL)
+                            GlyrMemCache * result = parse_lyrics_page(page_cache->data);
+                            if(result != NULL)
                             {
-                                gchar * dl_url = g_strdup_printf("www.metrolyrics.com%s",url);
-                                GlyrMemCache * dl_cache = download_single(dl_url,capo->s,NULL);
-                                if(dl_cache)
-                                {
-                                    GlyrMemCache * result = parse_lyrics_page(dl_cache->data);
-                                    if(result)
-                                    {
-					    result->dsrc = g_strdup(dl_url);
-					    result_list = g_list_prepend(result_list,result);
-				    }
-				    DL_free(dl_cache);
-				}
+                                result->dsrc = g_strdup(page_url);
+                                result_list  = g_list_prepend(result_list,result);
+                            }
+                            DL_free(page_cache);
+                        }
+                        g_free(page_url);
+                        g_free(relative_url);
+                    }
+                }
+               
+                g_free(m_artist);
+                g_free(m_title); 
 
-				g_free(dl_url);
-				g_free(url);
-			    }
-			}
-			g_free(title);
-		    }
-		}
-	    }
-	    /* check if we accidentally reached end of results */
-	    gchar * dist = strstr(node,PAGES);
-
-	    /* hop to next node */
-	    node = strstr(title_beg,NEXT_NODE);
-
-	    /* Only advertisment behind dist */
-	    if(node > dist) break;
-	}
+                /* Only advertisment behind dist */
+                if(node >= end_of_earch) break;
+        }
     }
     return result_list;
 }
@@ -155,13 +159,13 @@ static GList * lyrics_metrolyrics_parse(cb_object * capo)
 
 MetaDataSource lyrics_metrolyrics_src =
 {
-	.name = "metrolyrics",
-	.key  = 'm',
-	.parser    = lyrics_metrolyrics_parse,
-	.get_url   = lyrics_metrolyrics_url,
-	.type      = GLYR_GET_LYRICS,
-	.quality   = 35,
-	.speed     = 40,
-	.endmarker = NULL,
-	.free_url  = false
+    .name = "metrolyrics",
+    .key  = 'm',
+    .parser    = lyrics_metrolyrics_parse,
+    .get_url   = lyrics_metrolyrics_url,
+    .type      = GLYR_GET_LYRICS,
+    .quality   = 35,
+    .speed     = 40,
+    .endmarker = NULL,
+    .free_url  = false
 };

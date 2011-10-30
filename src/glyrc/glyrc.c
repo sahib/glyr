@@ -406,7 +406,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 }
                 break;
             case 'l':
-                puts("Huh?!");
                 glyr_opt_lang(glyrs,optarg);
                 break;
             case 'L':

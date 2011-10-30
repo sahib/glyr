@@ -64,7 +64,7 @@ describe 'artistbio' do
 		end
 
 		it "should get me a pagehit" do
-			@spit.artist = "Die Ärzte"
+			@spit.artist = "Die Ãrzte"
 			list = @spit.get
 
 			list.should be_an_instance_of Array
@@ -84,7 +84,7 @@ describe 'artistbio' do
 		end
 
 		it "should get a pagehit but return nothing (empty bio)" do
-			@spit.artist = "Hämatom"
+			@spit.artist = "HÃ¤matom"
 			list = @spit.get
 
 			list.should be_an_instance_of Array

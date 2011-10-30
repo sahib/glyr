@@ -55,7 +55,7 @@ static GlyrMemCache * parse_lyric_page(const char * buffer)
                 gchar * end = strstr(begin+1,OPT_END);
                 if(end == NULL)
                 {
-                    end = strstr(begin+1,"</div>");
+                    end = strstr(begin+1,"<div class='fb-like'");
                 }
 
                 if(end != NULL)
