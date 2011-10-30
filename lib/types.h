@@ -310,6 +310,7 @@ typedef struct _GlyrDatabase {
 * @from: Define what providers are queried.
 * @allowed_formats: Allowed imageformats.
 * @useragent: Useragent to use during http-requests
+* @musictree_path: Used for the musictree provider.
 *
 * This structure holds all settings used to influence libglyr.
 * You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.

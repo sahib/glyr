@@ -126,10 +126,11 @@ static GList * lyrics_metrolyrics_parse(cb_object * capo)
                     gchar * relative_url = copy_value(node, strstr(node,"\">"));
                     if(relative_url != NULL)
                     {
-                        tries++;
-
                         gchar * page_url = g_strdup_printf("www.metrolyrics.com/%s",relative_url);
+
+                        tries++;
                         GlyrMemCache * page_cache = download_single(page_url,capo->s,NULL);
+
                         if(page_cache != NULL)
                         {
                             GlyrMemCache * result = parse_lyrics_page(page_cache->data);
@@ -164,8 +165,8 @@ MetaDataSource lyrics_metrolyrics_src =
     .parser    = lyrics_metrolyrics_parse,
     .get_url   = lyrics_metrolyrics_url,
     .type      = GLYR_GET_LYRICS,
-    .quality   = 35,
-    .speed     = 40,
+    .quality   = 30,
+    .speed     = 60,
     .endmarker = NULL,
     .free_url  = false
 };

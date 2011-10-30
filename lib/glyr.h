@@ -792,10 +792,43 @@ GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool read_from_db);
 /**
  * glyr_opt_musictree_path:
 * @s: The GlyrQuery settings struct to store this option in.
-* @musictree_path: 
+* @musictree_path: The concrete path (relative or absolute) where a mediafile reisdes (see below) 
 *
 * Set the path to a specific mediafile and glyr will try to fetch covers from directories around this,
-* since many people place things like 'folder.jpg' there. 
+* since many people place things like 'folder.jpg' there. Instead of the actual file you can also pass the 
+* containing directory (see the 'dirname' utility) - the path can be either absolute or relative.
+*
+* From there on it works by cascading upwards - i.e. checking all files in the dir (not recursing), go up, repeat.
+* This will be repeated $(recurse_depth) times or till no
+* How the file is checked depends on the metadata type to search, see below.
+*
+* For reference the actual code the actual C code is given:
+* <example>
+* <title>Used regexes and recurse_depth</title>
+* <programlisting>
+        case GLYR_GET_COVERART:
+            search_regex = "^(folder|front|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
+            recurse_depth = 2;
+            break;
+        case GLYR_GET_ARTIST_PHOTOS:
+            search_regex = "^(${artist}|artist)\\.(jpg|png|jpeg|gif)$";
+            recurse_depth = 3;
+            break;
+        case GLYR_GET_ALBUM_REVIEW:
+            search_regex = "^(${album})\\.(info|txt)$";
+            recurse_depth = 2;
+            break;
+        case GLYR_GET_ARTISTBIO:
+            search_regex = "^BIOGRAPHY(\\.txt)?$";
+            recurse_depth = 2;
+            break;
+        default: 
+            search_regex = NULL;
+            recurse_depth = 0;
+            break;
+* </programlisting>
+* </example>
+*            
 *
 * Returns: an error ID
 */  

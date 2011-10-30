@@ -215,6 +215,7 @@ static GList * musictree_provider_parse(cb_object * capo)
     gint recurse_depth;
     const gchar * search_regex = NULL;
 
+    /* The actual regexes are shamelessly ripped of GMPC */
     switch(capo->s->type)
     {
         case GLYR_GET_COVERART:
