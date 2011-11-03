@@ -799,10 +799,10 @@ GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool read_from_db);
 * containing directory (see the 'dirname' utility) - the path can be either absolute or relative.
 *
 * From there on it works by cascading upwards - i.e. checking all files in the dir (not recursing), go up, repeat.
-* This will be repeated $(recurse_depth) times or till no
+* This will be repeated $(recurse_depth) times or till it cannot go upwards.
 * How the file is checked depends on the metadata type to search, see below.
 *
-* For reference the actual code the actual C code is given:
+* For reference the actual C code is given (${artist} gets expanded):
 * <example>
 * <title>Used regexes and recurse_depth</title>
 * <programlisting>

@@ -92,4 +92,7 @@ gchar * translate_umlauts(gchar * string);
 /* Match string against a GRegex -> true/false */
 gboolean regex_match_compiled(const gchar * string, const GRegex * cRegex);
 
+/* "Clapton, Eric" -> "Eric Clapton" */
+gchar * unwind_artist_name(const gchar * artist);
+
 #endif
