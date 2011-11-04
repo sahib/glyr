@@ -54,8 +54,7 @@ typedef struct
 
 /* ------------------------------------------------------------- */
 
-/* Additional functions not in original md5.c */
-void MDPrintArr(unsigned char *digest);
+void MDPrintArr(FILE * stream, unsigned char *digest);
 void MD5Init(MD5_CTX   * context);
 void MD5Final(MD5_CTX  * context);
 void MD5Update(MD5_CTX * context, unsigned char * in, unsigned int size);

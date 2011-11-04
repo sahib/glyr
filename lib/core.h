@@ -41,7 +41,8 @@
 #define TYPE_IS_IMAGE(TYPE) (TYPE == GLYR_GET_COVERART || TYPE == GLYR_GET_ARTIST_PHOTOS || TYPE == GLYR_GET_BACKDROPS)
 
 /* Get signal_exit with atomic operations */
-#define GET_ATOMIC_SIGNAL_EXIT(QUERY) (g_atomic_int_get(&((QUERY)->signal_exit)))
+#define GET_ATOMIC_SIGNAL_EXIT(QUERY)   (g_atomic_int_get(&((QUERY)->signal_exit)))
+#define SET_ATOMIC_SIGNAL_EXIT(QUERY,V) (g_atomic_int_set(&((QUERY)->signal_exit),V))
 
 /* Feels a little hackish - but works with extremely high probability :-) */
 #define QUERY_INITIALIZER 0xDEADBEEF
@@ -50,7 +51,6 @@
 /* ----------------- Messages ------------------------- */
 /*------------------------------------------------------*/
 
-void panic(const char * fmt, ...);
 int glyr_message(int v, GlyrQuery * s, const char * fmt, ...);
 
 /*------------------------------------------------------*/

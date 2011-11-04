@@ -69,7 +69,7 @@ GlyrDatabase * glyr_db_init(char * root_path)
 {
 	if(sqlite3_threadsafe() == FALSE)
 	{
-		g_printerr("WARNING: Your SQLite version seems not to be threadsafe? \n"
+		glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
                    "         Expect corrupted data and other weird behaviour!\n");
 	}
 
@@ -162,7 +162,7 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 
 		if(sqlite3_step(stmt) != SQLITE_DONE) 
 		{
-			fprintf(stderr,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
+			glyr_message(1,query,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
 		}
 
 		sqlite3_finalize(stmt);
@@ -243,7 +243,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
 			if(err_msg != NULL)
 			{
-				g_printerr("SQL Delete error: %s\n",err_msg);
+				glyr_message(-1,NULL,"SQL Delete error: %s\n",err_msg);
 				sqlite3_free(err_msg);
 			}
 			sqlite3_free(sql);
@@ -308,7 +308,7 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
             {
                 if(rc != SQLITE_ABORT)
                 {
-                    fprintf(stderr,"SQL Foreach error: %s\n",err_msg);
+                    glyr_message(-1,NULL,"SQL Foreach error: %s\n",err_msg);
                 }
                 sqlite3_free(err_msg);
             }
@@ -389,7 +389,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
             sqlite3_exec(db->db_handle,sql,select_callback,&data,&err_msg);
             if(err_msg != NULL)
             {
-                g_printerr("glyr_db_lookup: %s\n",err_msg);
+                glyr_message(-1,NULL,"glyr_db_lookup: %s\n",err_msg);
                 sqlite3_free(err_msg);
             }
             sqlite3_free(sql);
@@ -431,7 +431,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 /* Ensure no invalid data comes in */
 #define ABORT_ON_FAILED_REQS(ARG) {                          \
     if(ARG == NULL) {                                        \
-         g_printerr("Warning: %s != NULL failed",#ARG);      \
+         glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);      \
          return;                                             \
     }                                                        \
 }
@@ -476,7 +476,7 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
         sqlite3_exec(db->db_handle,sql_statement,NULL,NULL,&err_msg);
         if(err_msg != NULL)
         {
-            fprintf(stderr, "glyr_db_execute: SQL error: %s\n", err_msg);
+            glyr_message(-1,NULL,"glyr_db_execute: SQL error: %s\n", err_msg);
             sqlite3_free(err_msg);
         }
     }
@@ -594,7 +594,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 
         if(sqlite3_step(stmt) != SQLITE_DONE) 
         {
-            fprintf(stderr,"glyr_db_insert: SQL failure: %s\n", sqlite3_errmsg(db->db_handle));
+            glyr_message(1,query,"glyr_db_insert: SQL failure: %s\n", sqlite3_errmsg(db->db_handle));
         }
         sqlite3_finalize(stmt);
 

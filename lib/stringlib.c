@@ -25,6 +25,7 @@
 #include <curl/curl.h>
 
 #include "stringlib.h"
+#include "core.h"
 #include "types.h"
 
 /* Implementation of the Levenshtein distance algorithm
@@ -131,7 +132,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_
 
 		if(match_error != NULL)
     		{
-      			g_printerr ("glyr: Error while matching: %s\n", match_error->message);
+      			glyr_message(-1,NULL,"glyr: Error while matching: %s\n", match_error->message);
       			g_error_free(match_error);
     		}
 	}

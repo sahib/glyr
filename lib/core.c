@@ -48,7 +48,7 @@ static int _msg(const char * fmt, va_list params)
 
 	if(written != -1 && tmp_buf != NULL)
 	{
-		g_printerr(tmp_buf);
+		fprintf(GLYR_OUTPUT,tmp_buf);
 		g_free(tmp_buf);
 		tmp_buf = NULL;
 	}
@@ -96,7 +96,8 @@ int glyr_puts(int verbosity, GlyrQuery * s, const char * string)
 	{
 		if(string && (verbosity == -1 || verbosity <= s->verbosity))
 		{
-			puts(string);
+			fputs(string,GLYR_OUTPUT);
+            fputs("\n",GLYR_OUTPUT);
 		}
 	}
 	return written;
@@ -140,7 +141,6 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void * buff_dat
             GlyrQuery * query = data->query;
             if(query && GET_ATOMIC_SIGNAL_EXIT(query))
             {
-                g_printerr("#### RECEIVED #####\n");
                 return 0;
             }
 

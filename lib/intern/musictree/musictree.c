@@ -27,7 +27,7 @@ static gchar * get_file_contents(const gchar * filename, gsize * len)
     {
         if(g_file_get_contents(filename,&content,len,&file_error) == FALSE)
         {
-            g_printerr("Error while reading file '%s': %s\n",filename,file_error->message);
+            glyr_message(-1,NULL,"Error while reading file '%s': %s\n",filename,file_error->message);
             g_error_free(file_error);
         }
     }
@@ -115,7 +115,7 @@ static void foreach_file(const gchar * song_dir_path, const GRegex * cRegex, Gly
         }
         else
         {
-            g_printerr("Opening %s failed: %s\n",song_dir_path,dir_error->message);
+            glyr_message(-1,NULL,"Opening %s failed: %s\n",song_dir_path,dir_error->message);
             g_error_free(dir_error);
         }
     }

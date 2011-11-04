@@ -121,7 +121,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
+
+    // FIXME: Silly amazon requires to be a Seller to use their API
+    // WTF?! God I hate thos Just-for-the-paying people-salesmen
+    // plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
     //FIXME: Coverhunt seems to be down. Add again when up and running
     // plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
@@ -156,7 +159,9 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
+    // FIXME: Silly amazon requires to be a Seller to use their API
+    // WTF?! God I hate thos Just-for-the-paying people-salesmen
+    //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_artist_lastfm_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_song_lastfm_src);

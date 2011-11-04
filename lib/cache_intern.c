@@ -56,7 +56,7 @@ gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache)
 			}
 			else if(err != SQLITE_DONE) 
 			{
-				fprintf(stderr,"db_contains: error message: %s\n", sqlite3_errmsg(db->db_handle));
+				glyr_message(-1,NULL,"db_contains: error message: %s\n", sqlite3_errmsg(db->db_handle));
 			}
 	
 			sqlite3_finalize(stmt);

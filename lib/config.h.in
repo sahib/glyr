@@ -26,3 +26,6 @@
 
 #define GLYR_VERSION_NAME  "@GLYR_VERSION_NAME@"
 #define GLYR_DEBUG         @GLYR_DEBUG@
+
+/* Message output */
+#define GLYR_OUTPUT stderr

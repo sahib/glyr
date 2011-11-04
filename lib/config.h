@@ -26,3 +26,6 @@
 
 #define GLYR_VERSION_NAME  "Catholic Cat"
 #define GLYR_DEBUG         TRUE
+
+/* Message output */
+#define GLYR_OUTPUT stderr

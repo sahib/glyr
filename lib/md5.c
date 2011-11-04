@@ -278,11 +278,10 @@ static void Transform(uint64_t *buf, uint64_t *in)
 /*********************************************/
 
 /* Prints a md5digest in human readable representation */
-void MDPrintArr(unsigned char *digest)
+void MDPrintArr(FILE * stream, unsigned char *digest)
 {
-    int i;
-    for (i = 0; i < 16; i++)
+    for(int i = 0; i < 16; i++)
     {
-        fprintf(stderr,"%02x", digest[i]);
+        fprintf(stream,"%02x", digest[i]);
     }
 }
