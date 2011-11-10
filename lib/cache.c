@@ -224,12 +224,12 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 				"LEFT JOIN (SELECT rowid FROM albums  AS b %s)\n"
 				"LEFT JOIN (SELECT rowid FROM titles  AS t %s)\n"
 				"INNER JOIN (SELECT rowid FROM providers AS p WHERE provider_name IN(%s))\n"
-				"WHERE get_type = %d %s;\n",
+				"WHERE get_type = %d %s LIMIT %d;\n",
 				artist_constr,
 				album_constr,
 				title_constr,
 				from_argument_list,
-				query->type, img_url_constr
+				query->type, img_url_constr, query->number
 				);
 
 		if(sql != NULL)
@@ -525,14 +525,14 @@ static void create_table_defs(GlyrDatabase * db)
             "CREATE INDEX IF NOT EXISTS index_album_id    ON metadata(album_id);\n"
             "CREATE INDEX IF NOT EXISTS index_title_id    ON metadata(title_id);\n"
             "CREATE INDEX IF NOT EXISTS index_provider_id ON metadata(provider_id);\n"
-            "CREATE UNIQUE INDEX IF NOT EXISTS index_unique ON metadata(data_type,data_checksum,source_url);\n"
+            "CREATE UNIQUE INDEX IF NOT EXISTS index_unique ON metadata(get_type,data_type,data_checksum,source_url);\n"
             "-- Insert imageformats\n"
             "INSERT OR IGNORE INTO image_types VALUES('jpeg');\n"
             "INSERT OR IGNORE INTO image_types VALUES('jpg');\n"
             "INSERT OR IGNORE INTO image_types VALUES('png');\n"
             "INSERT OR IGNORE INTO image_types VALUES('gif');\n"
             "INSERT OR IGNORE INTO image_types VALUES('tiff');\n"
-            "INSERT OR IGNORE INTO db_version VALUES(0);\n"
+            "INSERT OR IGNORE INTO db_version VALUES(1);\n"
             "COMMIT;\n"
             "VACUUM;\n"
             );

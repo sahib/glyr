@@ -42,6 +42,7 @@
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdio.h>
 
 /* Data structure for MD5 (Message Digest) computation */
 typedef struct
