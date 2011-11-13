@@ -534,7 +534,6 @@ static void create_table_defs(GlyrDatabase * db)
             "INSERT OR IGNORE INTO image_types VALUES('tiff');\n"
             "INSERT OR IGNORE INTO db_version VALUES(1);\n"
             "COMMIT;\n"
-            "VACUUM;\n"
             );
 }
 

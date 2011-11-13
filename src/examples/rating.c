@@ -24,7 +24,6 @@ int main(int argc, const char *argv[])
 
     glyr_init();
     atexit(glyr_cleanup);
-
     srand(time(NULL));
 
     GlyrDatabase * db = glyr_db_init("/tmp");

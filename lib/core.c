@@ -48,7 +48,7 @@ static int _msg(const char * fmt, va_list params)
 
 	if(written != -1 && tmp_buf != NULL)
 	{
-		fprintf(GLYR_OUTPUT,tmp_buf);
+		fwrite(tmp_buf,written,1,GLYR_OUTPUT);
 		g_free(tmp_buf);
 		tmp_buf = NULL;
 	}
