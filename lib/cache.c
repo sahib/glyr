@@ -229,7 +229,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 				album_constr,
 				title_constr,
 				from_argument_list,
-				query->type, img_url_constr, query->number
+				query->type, img_url_constr, query->number + 10000000
 				);
 
 		if(sql != NULL)
@@ -422,10 +422,12 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-#define INSERT_STRING(SQL,ARG) {                                                    \
-    if(SQL && ARG) {                                                                \
-        gchar * sql = sqlite3_mprintf(SQL,ARG); execute(db,sql); sqlite3_free(sql); \
-    }                                                                               \
+#define INSERT_STRING(SQL,ARG) {                 \
+    if(SQL && ARG) {                             \
+        gchar * sql = sqlite3_mprintf(SQL,ARG);  \
+        execute(db,sql);                         \
+        sqlite3_free(sql);                       \
+    }                                            \
 }
 
 /* Ensure no invalid data comes in */
@@ -711,7 +713,7 @@ static gchar * convert_from_option_to_sql(GlyrQuery * q)
     for(GList * elem = r_getSList(); elem; elem = elem->next)
     {
         MetaDataSource * item = elem->data;
-        if(item && q->type == item->type)
+        if(item && (q->type == item->type || item->type == GLYR_GET_ANY))
         {
             if(provider_is_enabled(q,item) == TRUE)
             {
