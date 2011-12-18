@@ -24,9 +24,6 @@
 #include "stringlib.h"
 #include "core.h"
 
-/* Checkumming */
-#include "md5.h"
-
 /* Get user agent string */
 #include "config.h"
 
@@ -48,8 +45,8 @@ static int _msg(const char * fmt, va_list params)
 
 	if(written != -1 && tmp_buf != NULL)
 	{
-		//fwrite(tmp_buf,written,1,GLYR_OUTPUT);
-        g_message("%s",tmp_buf);
+		fwrite(tmp_buf,written,1,GLYR_OUTPUT);
+//        g_message("%s",tmp_buf);
 		g_free(tmp_buf);
 		tmp_buf = NULL;
 	}
@@ -1750,15 +1747,17 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
 
 /*--------------------------------------------------------*/
 
+/* New glib implementation, thanks to Etienne Millon */
 void update_md5sum(GlyrMemCache * c)
 {
     if(c && c->data && c->size > 0)
     {
-        MD5_CTX mdContext;
-        MD5Init (&mdContext);
-        MD5Update(&mdContext,(unsigned char*)c->data,c->size);
-        MD5Final(&mdContext);
-        memcpy(c->md5sum, mdContext.digest, 16);
+        gsize bufsize = 16;
+        GChecksum *checksum = g_checksum_new(G_CHECKSUM_MD5);
+
+        g_checksum_update(checksum, (const guchar*)c->data, c->size);
+        g_checksum_get_digest(checksum, c->md5sum, &bufsize);
+        g_checksum_free(checksum);
     }
 }
 

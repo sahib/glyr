@@ -25,7 +25,6 @@
 #include "core.h"
 #include "register_plugins.h"
 #include "blacklist.h"
-#include "md5.h"
 #include "cache.h"
 
 //* ------------------------------------------------------- */
@@ -1053,7 +1052,13 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
         glyr_message(-1,NULL,"PROV: %s\n",cacheditem->prov);
         glyr_message(-1,NULL,"SIZE: %d Bytes\n",(int)cacheditem->size);
         glyr_message(-1,NULL,"MSUM: ");
-        MDPrintArr(GLYR_OUTPUT,cacheditem->md5sum);
+
+
+        /* Print md5sum */
+        for(int i = 0; i < 16; i++)
+        {
+            fprintf(stderr,"%02x", cacheditem->md5sum[i]);
+        }
 
         // Each cache identified it's data by a constant
         glyr_message(-1,NULL,"\nTYPE: ");
