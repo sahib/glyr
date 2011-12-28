@@ -361,8 +361,6 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         swap_string(&tmp,"${album}", p_album);
         swap_string(&tmp,"${title}", p_title);
 
-        puts(tmp);
-
         g_free(p_artist);
         g_free(p_album);
         g_free(p_title);
