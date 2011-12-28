@@ -202,22 +202,33 @@ gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const g
 				remove_tags_from_string(pretty_string,-1,'(',')');
 				remove_tags_from_string(pretty_other,-1, '(',')');
 
-				diff = levenshtein_strcasecmp(pretty_string,pretty_other);
+                gchar * unwinded_string = unwind_artist_name(pretty_string);
+                gchar * unwinded_other  = unwind_artist_name(pretty_other);
 
-				/* Apply correction */
-				gsize str_len = strlen(pretty_string);
-				gsize oth_len = strlen(pretty_other);
-				gsize ratio = (oth_len + str_len) / 2;
-				gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
-
-                /* Useful for debugging */
-                //g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
-
-                if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
+                if(unwinded_string && unwinded_other)
                 {
-                    /* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
-                    //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
-                    diff += 100;
+puts(unwinded_string);
+puts(unwinded_other);
+                    diff = levenshtein_strcasecmp(unwinded_string,unwinded_other);
+
+                    /* Apply correction */
+                    gsize str_len = strlen(unwinded_string);
+                    gsize oth_len = strlen(unwinded_other);
+                    gsize ratio = (oth_len + str_len) / 2;
+                    gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
+
+                    /* Useful for debugging */
+                    //g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
+
+                    if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
+                    {
+                        /* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
+                        //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
+                        diff += 100;
+                    }
+
+                    g_free(unwinded_string);
+                    g_free(unwinded_other);
                 }
             }
 
@@ -252,7 +263,7 @@ gchar * strreplace(const char * string, const char * subs, const char * with)
 /* "Clapton, Eric" -> "Eric Clapton"
  * Cheers Christoph for writing this.
  */
-static gchar * unwind_artist_name(const gchar * artist)
+gchar * unwind_artist_name(const gchar * artist)
 {
     if(NULL == artist)
     {
@@ -344,7 +355,7 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         tmp = g_strdup(URL);
 
         gchar * unwinded_artist = unwind_artist_name(s->artist);
-        
+
         gchar * p_artist = prepare_string(trim_nocopy(unwinded_artist),FALSE,do_curl_escape);
         gchar * p_album  = prepare_string(s->album,TRUE,do_curl_escape);
         gchar * p_title  = prepare_string(s->title,TRUE,do_curl_escape);
@@ -352,6 +363,8 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         swap_string(&tmp,"${artist}",p_artist);
         swap_string(&tmp,"${album}", p_album);
         swap_string(&tmp,"${title}", p_title);
+
+        puts(tmp);
 
         g_free(p_artist);
         g_free(p_album);
