@@ -38,7 +38,7 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "0")
 SET(GLYR_VERSION_MINOR "9")
-SET(GLYR_VERSION_MICRO "0")
+SET(GLYR_VERSION_MICRO "1")
 SET(GLYR_VERSION_NAME  "Catholic Cat")
 # ------------------------------------------------
 
@@ -112,7 +112,6 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_ROOT}/core.c"
 	"${DIR_ROOT}/cache_intern.c"
 	"${DIR_ROOT}/cache.c"
-	"${DIR_ROOT}/md5.c"
 	"${DIR_ROOT}/register_plugins.c"
 	"${DIR_ROOT}/stringlib.c"
 	"${DIR_ROOT}/blacklist.c"
@@ -214,4 +213,3 @@ configure_file(
     )
 
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake)
-

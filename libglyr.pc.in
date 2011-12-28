@@ -2,5 +2,5 @@ Name: libglyr
 Description: A music metadata search engine library [@GLYR_VERSION_NAME@]
 Requires: glib-2.0 libcurl sqlite3
 Version: @GLYR_VERSION_MAJOR@.@GLYR_VERSION_MINOR@.@GLYR_VERSION_MICRO@
-Libs: -L@CMAKE_INSTALL_PREFIX@/lib -lglyr
-Cflags: -I@CMAKE_INSTALL_PREFIX@/include
+Libs: -L@CMAKE_INSTALL_PREFIX@/@INSTALL_LIB_DIR@ -lglyr
+Cflags: -I@CMAKE_INSTALL_PREFIX@/@INSTALL_INC_DIR@

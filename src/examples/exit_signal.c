@@ -5,7 +5,13 @@
 
 #include "../../lib/glyr.h"
 
-void * killer_thread(void * arg)
+static GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
+{
+    glyr_cache_print(c);
+    return GLYRE_OK;
+}
+
+static void * killer_thread(void * arg)
 {
     GlyrQuery * q = arg;
     g_usleep(rand() % 10000000);
@@ -29,6 +35,7 @@ int main(int argc, const char *argv[])
     glyr_opt_album(&q,"Sagas");
     glyr_opt_number(&q,42);
     glyr_opt_verbosity(&q,3);
+    glyr_opt_dlcallback(&q,funny_callback,NULL);
 
     g_printerr("-- Starting GET\n");
 

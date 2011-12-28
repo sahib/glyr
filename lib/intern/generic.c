@@ -130,7 +130,7 @@ static GList * async_dl_callback(cb_object * capo, void * userptr, bool * stop_d
 		}
 		else
 		{
-			g_printerr("glyr: Warn: Hashtable is empty im image_callback!\n");
+			glyr_message(-1,NULL,"glyr: Warn: Hashtable is empty im image_callback!\n");
 		}
 	}
 	return NULL;

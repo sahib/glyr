@@ -1,10 +1,10 @@
 #define GLYR_VERSION_MAJOR "0"
 #define GLYR_VERSION_MINOR "9"
-#define GLYR_VERSION_MICRO "0"
+#define GLYR_VERSION_MICRO "1"
 
 #define GLYR_VERSION_MAJOR_INT 0
 #define GLYR_VERSION_MINOR_INT 9
-#define GLYR_VERSION_MICRO_INT 0
+#define GLYR_VERSION_MICRO_INT 1
 
 /**
  * GLYR_CHECK_VERSION:
@@ -26,3 +26,6 @@
 
 #define GLYR_VERSION_NAME  "Catholic Cat"
 #define GLYR_DEBUG         TRUE
+
+/* Message output */
+#define GLYR_OUTPUT stderr

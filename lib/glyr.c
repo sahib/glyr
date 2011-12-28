@@ -25,7 +25,6 @@
 #include "core.h"
 #include "register_plugins.h"
 #include "blacklist.h"
-#include "md5.h"
 #include "cache.h"
 
 //* ------------------------------------------------------- */
@@ -48,6 +47,7 @@ const char * err_strings[] =
     "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
     "Stopped by callback (pre)",                       /* GLYRE_STOP_PRE     */
     "Library is not yet initialized, use glyr_init()", /* GLYRE_NO_INIT      */
+    "Library was stopped by glyr_signal_exit()",       /* GLYRE_WAS_STOPPED  */
     NULL
 };
 
@@ -173,7 +173,7 @@ const char * glyr_strerror(GLYR_ERROR ID)
 
 void glyr_signal_exit(GlyrQuery * query)
 {
-    g_atomic_int_inc(&(query->signal_exit));
+    SET_ATOMIC_SIGNAL_EXIT(query,1);
 }
 
 /*-----------------------------------------------*/
@@ -224,7 +224,6 @@ GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * u
 
 GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
 {
-
 	if(s == NULL) return GLYRE_EMPTY_STRUCT;
 	if(type != GLYR_GET_UNSURE)
 	{
@@ -815,6 +814,17 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 		/* Start of the returned list */
 		GlyrMemCache * head = NULL;
 
+        /* Librarby was stopped, just return NULL. */
+        if(result != NULL && GET_ATOMIC_SIGNAL_EXIT(settings))
+        {
+            for(GList * elem = result; elem; elem = elem->next)
+                DL_free(elem->data);
+
+            g_list_free(result);
+            result = NULL;
+            if(e) *e = GLYRE_WAS_STOPPED;
+        }
+
         /* Set the length */
         if(length != NULL)
         {
@@ -855,9 +865,14 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
             g_list_free(result);
             result = NULL;
         }
+
+        /* Done! */
+        SET_ATOMIC_SIGNAL_EXIT(settings,0);
         return head;
     }
+
     if(e) *e = GLYRE_EMPTY_STRUCT;
+    SET_ATOMIC_SIGNAL_EXIT(settings,0);
     return NULL;
 }
 
@@ -1033,36 +1048,42 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
 {
     if(cacheditem != NULL)
     {
-        g_printerr("FROM: <%s>\n",cacheditem->dsrc);
-        g_printerr("PROV: %s\n",cacheditem->prov);
-        g_printerr("SIZE: %d Bytes\n",(int)cacheditem->size);
-        g_printerr("MSUM: ");
-        MDPrintArr(cacheditem->md5sum);
+        glyr_message(-1,NULL,"FROM: <%s>\n",cacheditem->dsrc);
+        glyr_message(-1,NULL,"PROV: %s\n",cacheditem->prov);
+        glyr_message(-1,NULL,"SIZE: %d Bytes\n",(int)cacheditem->size);
+        glyr_message(-1,NULL,"MSUM: ");
+
+
+        /* Print md5sum */
+        for(int i = 0; i < 16; i++)
+        {
+            fprintf(stderr,"%02x", cacheditem->md5sum[i]);
+        }
 
         // Each cache identified it's data by a constant
-        g_printerr("\nTYPE: ");
+        glyr_message(-1,NULL,"\nTYPE: ");
         if(cacheditem->type == GLYR_TYPE_TRACK)
         {
-            panic("[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
+            glyr_message(-1,NULL,"[%02d:%02d] ",cacheditem->duration/60, cacheditem->duration%60);
         }
-        g_printerr("%s",glyr_data_type_to_string(cacheditem->type));
+        glyr_message(-1,NULL,"%s",glyr_data_type_to_string(cacheditem->type));
 
-        g_printerr("\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
-        g_printerr("\nRATE: %d",cacheditem->rating);
+        glyr_message(-1,NULL,"\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
+        glyr_message(-1,NULL,"\nRATE: %d",cacheditem->rating);
 
         /* Print the actual data.
          * This might have funny results if using cover/photos
          */
         if(cacheditem->is_image == FALSE)
         {
-            g_printerr("\nDATA: \n%s",cacheditem->data);
+            glyr_message(-1,NULL,"\nDATA: \n%s",cacheditem->data);
         }
         else
         {
-            g_printerr("\nFRMT: %s",cacheditem->img_format);
-            g_printerr("\nDATA: <not printable>");
+            glyr_message(-1,NULL,"\nFRMT: %s",cacheditem->img_format);
+            glyr_message(-1,NULL,"\nDATA: <not printable>");
         }
-        g_printerr("\n");
+        glyr_message(-1,NULL,"\n");
     }
 }
 

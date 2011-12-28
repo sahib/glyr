@@ -25,6 +25,7 @@
 #include <curl/curl.h>
 
 #include "stringlib.h"
+#include "core.h"
 #include "types.h"
 
 /* Implementation of the Levenshtein distance algorithm
@@ -131,7 +132,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_
 
 		if(match_error != NULL)
     		{
-      			g_printerr ("glyr: Error while matching: %s\n", match_error->message);
+      			glyr_message(-1,NULL,"glyr: Error while matching: %s\n", match_error->message);
       			g_error_free(match_error);
     		}
 	}
@@ -190,30 +191,27 @@ gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const g
 	gsize diff = 100;
 	if(string != NULL && other != NULL)
 	{
-		gchar * norm_string = regex_replace_by_table(string,regex_table,regex_table_size);
-		gchar * norm_other  = regex_replace_by_table(other, regex_table,regex_table_size);
-		if(norm_string && norm_other)
-		{
-			gchar * pretty_string = beautify_string(norm_string);
-			gchar * pretty_other  = beautify_string(norm_other);
+        gchar * unwinded_string = unwind_artist_name(string);
+        gchar * unwinded_other  = unwind_artist_name(other);
+        if(unwinded_string && unwinded_other)
+        {
+            gchar * norm_string = regex_replace_by_table(unwinded_string,regex_table,regex_table_size);
+            gchar * norm_other  = regex_replace_by_table(unwinded_other, regex_table,regex_table_size);
+            if(norm_string && norm_other)
+            {
+                gchar * pretty_string = beautify_string(norm_string);
+                gchar * pretty_other  = beautify_string(norm_other);
 
-			if(pretty_string && pretty_other)
-			{
-				remove_tags_from_string(pretty_string,-1,'(',')');
-				remove_tags_from_string(pretty_other,-1, '(',')');
-
-                gchar * unwinded_string = unwind_artist_name(pretty_string);
-                gchar * unwinded_other  = unwind_artist_name(pretty_other);
-
-                if(unwinded_string && unwinded_other)
+                if(pretty_string && pretty_other)
                 {
-puts(unwinded_string);
-puts(unwinded_other);
-                    diff = levenshtein_strcasecmp(unwinded_string,unwinded_other);
+                    remove_tags_from_string(pretty_string,-1,'(',')');
+                    remove_tags_from_string(pretty_other,-1, '(',')');
+
+                    diff = levenshtein_strcasecmp(pretty_string,pretty_other);
 
                     /* Apply correction */
-                    gsize str_len = strlen(unwinded_string);
-                    gsize oth_len = strlen(unwinded_other);
+                    gsize str_len = strlen(pretty_string);
+                    gsize oth_len = strlen(pretty_other);
                     gsize ratio = (oth_len + str_len) / 2;
                     gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
 
@@ -226,17 +224,16 @@ puts(unwinded_other);
                         //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
                         diff += 100;
                     }
-
-                    g_free(unwinded_string);
-                    g_free(unwinded_other);
                 }
-            }
 
-            g_free(pretty_string);
-            g_free(pretty_other);
+                g_free(pretty_string);
+                g_free(pretty_other);
+            }
+            g_free(norm_string);
+            g_free(norm_other);
         }
-        g_free(norm_string);
-        g_free(norm_other);
+        g_free(unwinded_string);
+        g_free(unwinded_other);
     }
     return diff;
 }

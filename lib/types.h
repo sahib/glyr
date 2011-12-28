@@ -97,7 +97,8 @@ typedef enum
     GLYRE_SKIP,        
     GLYRE_STOP_POST,  
     GLYRE_STOP_PRE,   
-    GLYRE_NO_INIT     
+    GLYRE_NO_INIT,
+    GLYRE_WAS_STOPPED    
 }   GLYR_ERROR;
 
 /**
