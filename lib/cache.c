@@ -229,7 +229,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 				album_constr,
 				title_constr,
 				from_argument_list,
-				query->type, img_url_constr, query->number + 10000000
+				query->type, img_url_constr, query->number 
 				);
 
 		if(sql != NULL)
