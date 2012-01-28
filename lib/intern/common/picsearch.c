@@ -69,6 +69,7 @@ static GlyrMemCache * parse_details_page(GlyrMemCache * to_parse)
 /* ------------------------- */
 
 #define NODE "<div class=\"imgContainer\">"
+#define NODE_NEEDS_TO_BEGIN "/imageDetail.cgi"
 
 GList * generic_picsearch_parse(cb_object * capo)
 {
@@ -76,24 +77,32 @@ GList * generic_picsearch_parse(cb_object * capo)
 
 	gchar * node = capo->cache->data;
 	gint nodelen = (sizeof NODE) - 1;
-	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node, NODE)))
+
+    node = strstr(node,"<div id=\"results_table\">");
+
+	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node, "<a href=\"")))
 	{
 		node += nodelen;
 		gchar * details_url = get_search_value(node,"<a href=\"","\" ");
-		if(details_url != NULL)
+		if(details_url != NULL && strncmp(details_url,NODE_NEEDS_TO_BEGIN,sizeof(NODE_NEEDS_TO_BEGIN)-1) == 0)
 		{
-			GlyrMemCache * to_parse = download_single(details_url,capo->s,NULL);
-			if(to_parse != NULL)
-			{
-				GlyrMemCache * result = parse_details_page(to_parse);
-				if(result != NULL)
-				{
-					result_list = g_list_prepend(result_list,result);
-				}
-				DL_free(to_parse);
-			}
-			g_free(details_url);
-		}
-	}
-	return result_list;
+            gchar * full_url = g_strdup_printf("www.picsearch.com%s",details_url);
+            if(full_url != NULL)
+            {
+                GlyrMemCache * to_parse = download_single(full_url,capo->s,NULL);
+                if(to_parse != NULL)
+                {
+                    GlyrMemCache * result = parse_details_page(to_parse);
+                    if(result != NULL)
+                    {
+                        result_list = g_list_prepend(result_list,result);
+                    }
+                    DL_free(to_parse);
+                }
+                g_free(full_url);
+            }
+            g_free(details_url);
+        }
+    }
+    return result_list;
 }

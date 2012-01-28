@@ -143,7 +143,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
 
     // FIXME: Silly amazon requires to be a Seller to use their API
-    // WTF?! God I hate thos Just-for-the-paying people-salesmen
+    // WTF?! God I hate thos Just-for-the-paying-people-salesmen dudes
     // plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
     //FIXME: Coverhunt seems to be down. Add again when up and running
@@ -167,9 +167,10 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_elyrics_src);
 
-// FIXME: Chartlyrics reacts very slowly, and often not at all
-// add again when running again ( :( - good api though)    
-//    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
+    // FIXME: Chartlyrics reacts very slowly, and often not at all
+    // add again when running again ( :( - good api though)    
+    // 28.1.2012: Seems to be on again, API fails too often though still.
+    // plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);
@@ -179,6 +180,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
+
     // FIXME: Silly amazon requires to be a Seller to use their API
     // WTF?! God I hate thos Just-for-the-paying people-salesmen
     //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
