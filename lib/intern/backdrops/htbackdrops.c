@@ -74,7 +74,9 @@ static GList * backdrops_htbackdrops_parse(cb_object * capo)
             gchar * dimensions = get_search_value(node,"<dimensions>","</dimensions>");
             if(check_size(capo->s,dimensions) == TRUE)
             {
+
                 gchar * validate_artist = get_search_value(node,"<mb_name>","</mb_name>");
+g_message("%s %s\n",validate_artist,capo->s->artist);
                 if(levenshtein_strnormcmp(capo->s,validate_artist,capo->s->artist) <= capo->s->fuzzyness)
                 {
                     gchar * id = get_search_value(node,"<id>","</id>");
