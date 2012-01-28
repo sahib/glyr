@@ -189,7 +189,8 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_song_lastfm_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tags_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&tracklist_musicbrainz_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
+    // FIXME: Searchfunction of guitaretabs seems to be broken
+    //plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_guitaretab_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&guitartabs_chordie_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&backdrops_htbackdrops_src);
 
