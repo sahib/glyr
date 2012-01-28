@@ -67,42 +67,42 @@ typedef struct
 
 GlyrDatabase * glyr_db_init(char * root_path)
 {
-	if(sqlite3_threadsafe() == FALSE)
-	{
-		glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
+    if(sqlite3_threadsafe() == FALSE)
+    {
+        glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
                              "         Expect corrupted data and other weird behaviour!\n");
-	}
+    }
 
-	GlyrDatabase * to_return = NULL;
-	if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
-	{
-		sqlite3 * db_connection = NULL;
+    GlyrDatabase * to_return = NULL;
+    if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+    {
+        sqlite3 * db_connection = NULL;
 
         /* Use file:// Urls when supported */
 #if SQLITE_VERSION_NUMBER >= 3007007
-		gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX, NULL);
+        gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
+        gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX, NULL);
 #else
-		gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
+        gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
+        gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 #endif
 
-		if(db_err == SQLITE_OK)
-		{
-			to_return = g_malloc0(sizeof(GlyrDatabase));
-			to_return->root_path = g_strdup(root_path);
-			to_return->db_handle = db_connection;
+        if(db_err == SQLITE_OK)
+        {
+            to_return = g_malloc0(sizeof(GlyrDatabase));
+            to_return->root_path = g_strdup(root_path);
+            to_return->db_handle = db_connection;
             sqlite3_busy_timeout(db_connection,DB_BUSY_WAIT);
-			create_table_defs(to_return);
-		}
-		else
-		{
-			glyr_message(-1,NULL,"Connecting to database failed: %s\n",sqlite3_errmsg(db_connection));
-			sqlite3_close(db_connection);
-		}
-		g_free(db_file_path);
-	}
-	return to_return;
+            create_table_defs(to_return);
+        }
+        else
+        {
+            glyr_message(-1,NULL,"Connecting to database failed: %s\n",sqlite3_errmsg(db_connection));
+            sqlite3_close(db_connection);
+        }
+        g_free(db_file_path);
+    }
+    return to_return;
 }
 
 /*--------------------------------------------------------------*/
@@ -112,19 +112,19 @@ GlyrDatabase * glyr_db_init(char * root_path)
 
 void glyr_db_destroy(GlyrDatabase * db_object)
 {
-	if(db_object != NULL)
-	{
-		int db_err = sqlite3_close(db_object->db_handle);
-		if(db_err == SQLITE_OK)
-		{
-			g_free((gchar*)db_object->root_path);
-			g_free(db_object);
-		}
-		else
-		{
-			glyr_message(-1,NULL,"Disconnecting database failed: %s\n",sqlite3_errmsg(db_object->db_handle));
-		}
-	}
+    if(db_object != NULL)
+    {
+        int db_err = sqlite3_close(db_object->db_handle);
+        if(db_err == SQLITE_OK)
+        {
+            g_free((gchar*)db_object->root_path);
+            g_free(db_object);
+        }
+        else
+        {
+            glyr_message(-1,NULL,"Disconnecting database failed: %s\n",sqlite3_errmsg(db_object->db_handle));
+        }
+    }
 }
 
 /*--------------------------------------------------------------*/
@@ -133,19 +133,19 @@ void glyr_db_destroy(GlyrDatabase * db_object)
 
 int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
 {
-	int result = 0;
-	if(db && query)
-	{
-		result = glyr_db_delete(db,query);
-		if(result != 0)
-		{
-			for(GlyrMemCache * elem = edited; elem; elem = elem->next)
-			{
-				glyr_db_insert(db,query,edited);
-			}
-		}
-	}
-	return result;
+    int result = 0;
+    if(db && query)
+    {
+        result = glyr_db_delete(db,query);
+        if(result != 0)
+        {
+            for(GlyrMemCache * elem = edited; elem; elem = elem->next)
+            {
+                glyr_db_insert(db,query,edited);
+            }
+        }
+    }
+    return result;
 }
 
 /*--------------------------------------------------------------*/
@@ -154,25 +154,25 @@ int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
 
 void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data)
 {
-	if(db != NULL && md5sum != NULL) 
-	{
-		gchar * sql = "DELETE FROM metadata WHERE data_checksum = ? ;\n";
-		sqlite3_stmt *stmt = NULL;
-		sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
-		sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_STATIC);
+    if(db != NULL && md5sum != NULL) 
+    {
+        gchar * sql = "DELETE FROM metadata WHERE data_checksum = ? ;\n";
+        sqlite3_stmt *stmt = NULL;
+        sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
+        sqlite3_bind_blob(stmt, 1, md5sum, 16, SQLITE_STATIC);
 
-		if(sqlite3_step(stmt) != SQLITE_DONE) 
-		{
-			glyr_message(1,query,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
-		}
+        if(sqlite3_step(stmt) != SQLITE_DONE) 
+        {
+            glyr_message(1,query,"Error message: %s\n", sqlite3_errmsg(db->db_handle));
+        }
 
-		sqlite3_finalize(stmt);
+        sqlite3_finalize(stmt);
 
-		if(data != NULL)
-		{
-			glyr_db_insert(db,query,data);
-		}
-	}
+        if(data != NULL)
+        {
+            glyr_db_insert(db,query,data);
+        }
+    }
 }
 
 /*--------------------------------------------------------------*/
@@ -181,47 +181,47 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 
 gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 {
-	gint result = 0;
-	if(db && query)
-	{
+    gint result = 0;
+    if(db && query)
+    {
         /* Find out which fields are required for this getter */
-		GLYR_FIELD_REQUIREMENT reqs = get_req(query);
+        GLYR_FIELD_REQUIREMENT reqs = get_req(query);
 
         /* Spaces in SQL statements just for pretty debug printing */
-		gchar * artist_constr = "";
-		if((reqs & GLYR_REQUIRES_ARTIST) != 0)
-		{
-			artist_constr = sqlite3_mprintf("   AND a.artist_name  LIKE '%q'              \n" ,query->artist);
-		}
+        gchar * artist_constr = "";
+        if((reqs & GLYR_REQUIRES_ARTIST) != 0)
+        {
+            artist_constr = sqlite3_mprintf("   AND a.artist_name  LIKE '%q'              \n" ,query->artist);
+        }
 
-		gchar * album_constr  = "";
-		if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
-		{
-			album_constr = sqlite3_mprintf("   AND b.album_name   LIKE '%q'              \n" ,query->album);
-		}
+        gchar * album_constr  = "";
+        if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
+        {
+            album_constr = sqlite3_mprintf("   AND b.album_name   LIKE '%q'              \n" ,query->album);
+        }
 
-		gchar * title_constr = "";
-		if((reqs & GLYR_REQUIRES_TITLE ) != 0)
-		{
-			title_constr = sqlite3_mprintf("   AND t.title_name   LIKE '%q'              \n" ,query->title);
-		}
+        gchar * title_constr = "";
+        if((reqs & GLYR_REQUIRES_TITLE ) != 0)
+        {
+            title_constr = sqlite3_mprintf("   AND t.title_name   LIKE '%q'              \n" ,query->title);
+        }
 
         /* Get a SQL formatted list of enabled providers: IN('lastfm','...') */
-		gchar * from_argument_list = convert_from_option_to_sql(query);
+        gchar * from_argument_list = convert_from_option_to_sql(query);
 
         /* Check if links should be deleted */        
-		gchar * img_url_constr = "";
-		if(TYPE_IS_IMAGE(query->type))
-		{
-			if(query->download == FALSE)
-			{
-				img_url_constr = sqlite3_mprintf("AND data_type = %d ", GLYR_TYPE_IMG_URL);
-			}
-			else
-			{
-				img_url_constr = sqlite3_mprintf("AND NOT data_type = %d ", GLYR_TYPE_IMG_URL);
-			}
-		}
+        gchar * img_url_constr = "";
+        if(TYPE_IS_IMAGE(query->type))
+        {
+            if(query->download == FALSE)
+            {
+                img_url_constr = sqlite3_mprintf("AND data_type = %d ", GLYR_TYPE_IMG_URL);
+            }
+            else
+            {
+                img_url_constr = sqlite3_mprintf("AND NOT data_type = %d ", GLYR_TYPE_IMG_URL);
+            }
+        }
 
        gchar * sql = sqlite3_mprintf(
                 "SELECT get_type,                                     \n"
@@ -253,44 +253,44 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
                );
 
 
-		if(sql != NULL)
-		{
-			delete_callback_data cb_data;
-			cb_data.con = db;
-			cb_data.deleted = 0;
-			cb_data.max_delete = query->number;
+        if(sql != NULL)
+        {
+            delete_callback_data cb_data;
+            cb_data.con = db;
+            cb_data.deleted = 0;
+            cb_data.max_delete = query->number;
 
-			gchar * err_msg = NULL;
-			sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
-			if(err_msg != NULL)
-			{
-				glyr_message(-1,NULL,"SQL Delete error: %s\n",err_msg);
-				sqlite3_free(err_msg);
-			}
-			sqlite3_free(sql);
-			result = cb_data.deleted;
-		}
+            gchar * err_msg = NULL;
+            sqlite3_exec(db->db_handle,sql,delete_callback,&cb_data,&err_msg);
+            if(err_msg != NULL)
+            {
+                glyr_message(-1,NULL,"SQL Delete error: %s\n",err_msg);
+                sqlite3_free(err_msg);
+            }
+            sqlite3_free(sql);
+            result = cb_data.deleted;
+        }
 
         /**
          * Free ressources with according free calls,
          */
 
-		if(*artist_constr)
-			sqlite3_free(artist_constr);
+        if(*artist_constr)
+            sqlite3_free(artist_constr);
 
-		if(*album_constr)
-			sqlite3_free(album_constr);
+        if(*album_constr)
+            sqlite3_free(album_constr);
 
-		if(*title_constr)
-			sqlite3_free(title_constr);
+        if(*title_constr)
+            sqlite3_free(title_constr);
 
-		if(*img_url_constr)
-			sqlite3_free(img_url_constr);
+        if(*img_url_constr)
+            sqlite3_free(img_url_constr);
 
-		g_free(from_argument_list);
+        g_free(from_argument_list);
 
-	}
-	return result;
+    }
+    return result;
 }
 
 /*--------------------------------------------------------------*/
@@ -553,19 +553,19 @@ static void create_table_defs(GlyrDatabase * db)
             "                                                                            \n"
             "-- MetaData                                                                 \n"
             "CREATE TABLE IF NOT EXISTS metadata(                                        \n"
-            "			          artist_id INTEGER,                                     \n"
-            "			          album_id  INTEGER,                                     \n"
-            "			          title_id  INTEGER,                                     \n"
-            "			          provider_id INTEGER,                                   \n"
-            "			          source_url  VARCHAR(512),                              \n"
-            "			          image_type_id INTEGER,                                 \n"
+            "                     artist_id INTEGER,                                     \n"
+            "                     album_id  INTEGER,                                     \n"
+            "                     title_id  INTEGER,                                     \n"
+            "                     provider_id INTEGER,                                   \n"
+            "                     source_url  VARCHAR(512),                              \n"
+            "                     image_type_id INTEGER,                                 \n"
             "                     track_duration INTEGER,                                \n"
-            "			          get_type INTEGER,                                      \n"
-            "			          data_type INTEGER,                                     \n"
-            "			          data_size INTEGER,                                     \n"
+            "                     get_type INTEGER,                                      \n"
+            "                     data_type INTEGER,                                     \n"
+            "                     data_size INTEGER,                                     \n"
             "                     data_is_image INTEGER,                                 \n"
-            "			          data_checksum BLOB,                                    \n"
-            "			          data BLOB,                                             \n"
+            "                     data_checksum BLOB,                                    \n"
+            "                     data BLOB,                                             \n"
             "                     rating INTEGER,                                        \n"
             "                     timestamp FLOAT                                        \n"
             ");                                                                          \n"
