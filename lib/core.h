@@ -30,9 +30,21 @@
 #include <curl/curl.h>
 #include <glib.h>
 
-// libglyr uses checksums to filter double items
-// Also you can use those as easy comparasion method
-// There is no valid reason to diasable this actually
+/*
+ * Logdomain. 
+ * Use --log-filter="Glyr" for gmpc to
+ * just see glyrs debug output
+ */
+#ifdef G_LOG_DOMAIN
+    #undef G_LOG_DOMAIN
+#endif 
+
+#define G_LOG_DOMAIN "Glyr"
+
+/* libglyr uses checksums to filter double items
+ * Also you can use those as easy comparasion method
+ * There is no valid reason to diasable this actually
+ */
 #define CALC_MD5SUMS true
 
 /* Returned by get_url() in case of offline provider */

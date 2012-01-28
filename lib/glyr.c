@@ -59,6 +59,17 @@ const gchar * map_language[][2] = {
 	{"en_UK","uk"}
 };
 
+
+/*--------------------------------------------------------*/
+
+void glyr_internal_log(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message, gpointer user_data)
+{
+   fputs(message,stderr);
+}
+
+
+/*--------------------------------------------------------*/
+
 /* Local scopes are cool. */
 #define END_STRING(STR,CHAR) {gchar * term = strchr(STR,CHAR); if(term) *term = 0;}
 
@@ -639,6 +650,11 @@ void glyr_init(void)
 		/* Init for threads */
 		g_thread_init(NULL);
 
+        /* Set loghandler */
+        g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL
+                                                         | G_LOG_FLAG_RECURSION,
+                                                         glyr_internal_log, NULL);
+
 		if(curl_global_init(CURL_GLOBAL_ALL))
 		{
 			glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
@@ -1122,9 +1138,10 @@ char * glyr_md5sum_to_string(unsigned char * md5sum)
 
 /* --------------------------------------------------------- */
 
+#define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
+
 void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
 {
-#define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
     if(string != NULL && strlen(string) >= 32 && md5sum)
     {
         for(gint i = 0; i < 16; i++)
@@ -1133,7 +1150,7 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
             md5sum[i] = (CHAR_TO_NUM(string[index]) << 4) + CHAR_TO_NUM(string[index+1]);
         }
     } 
-#undef CHAR_TO_NUM
 }
+#undef CHAR_TO_NUM
 
 /* --------------------------------------------------------- */

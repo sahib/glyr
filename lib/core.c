@@ -38,15 +38,17 @@
 
 /*--------------------------------------------------------*/
 
+
 static int _msg(const char * fmt, va_list params)
 {
 	gchar * tmp_buf = NULL;
+
+    /* Silly, but needs a way to get length */
 	gint written = g_vasprintf(&tmp_buf,fmt,params);
 
 	if(written != -1 && tmp_buf != NULL)
 	{
-		fwrite(tmp_buf,written,1,GLYR_OUTPUT);
-//        g_message("%s",tmp_buf);
+        g_log(G_LOG_DOMAIN,G_LOG_LEVEL_INFO,"%s",tmp_buf);
 		g_free(tmp_buf);
 		tmp_buf = NULL;
 	}

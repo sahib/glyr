@@ -253,6 +253,8 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
                );
 
 
+        puts(sql);
+
         if(sql != NULL)
         {
             delete_callback_data cb_data;
