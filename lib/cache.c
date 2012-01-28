@@ -70,7 +70,7 @@ GlyrDatabase * glyr_db_init(char * root_path)
 	if(sqlite3_threadsafe() == FALSE)
 	{
 		glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
-                   "         Expect corrupted data and other weird behaviour!\n");
+                             "         Expect corrupted data and other weird behaviour!\n");
 	}
 
 	GlyrDatabase * to_return = NULL;
@@ -78,6 +78,7 @@ GlyrDatabase * glyr_db_init(char * root_path)
 	{
 		sqlite3 * db_connection = NULL;
 
+        /* Use file:// Urls when supported */
 #if SQLITE_VERSION_NUMBER >= 3007007
 		gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
 		gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX, NULL);
@@ -183,28 +184,33 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 	gint result = 0;
 	if(db && query)
 	{
+        /* Find out which fields are required for this getter */
 		GLYR_FIELD_REQUIREMENT reqs = get_req(query);
+
+        /* Spaces in SQL statements just for pretty debug printing */
 		gchar * artist_constr = "";
 		if((reqs & GLYR_REQUIRES_ARTIST) != 0)
 		{
-			artist_constr = sqlite3_mprintf("WHERE artist_name = '%q'",query->artist);
+			artist_constr = sqlite3_mprintf("   AND a.artist_name  LIKE '%q'              \n" ,query->artist);
 		}
+
 		gchar * album_constr  = "";
 		if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
 		{
-			album_constr = sqlite3_mprintf("WHERE album_name = '%q'",query->album);
+			album_constr = sqlite3_mprintf("   AND b.album_name   LIKE '%q'              \n" ,query->album);
 		}
 
 		gchar * title_constr = "";
 		if((reqs & GLYR_REQUIRES_TITLE ) != 0)
 		{
-			title_constr = sqlite3_mprintf("WHERE title_name = '%q'",query->title);
+			title_constr = sqlite3_mprintf("   AND t.title_name   LIKE '%q'              \n" ,query->title);
 		}
 
-
+        /* Get a SQL formatted list of enabled providers: IN('lastfm','...') */
 		gchar * from_argument_list = convert_from_option_to_sql(query);
-		gchar * img_url_constr = "";
 
+        /* Check if links should be deleted */        
+		gchar * img_url_constr = "";
 		if(TYPE_IS_IMAGE(query->type))
 		{
 			if(query->download == FALSE)
@@ -217,20 +223,35 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			}
 		}
 
+       gchar * sql = sqlite3_mprintf(
+                "SELECT get_type,                                     \n"
+                "       artist_id,                                    \n"
+                "       album_id,                                     \n"
+                "       title_id,                                     \n"
+                "       provider_id                                   \n"
+                "       FROM metadata AS m                            \n"
+                "LEFT JOIN artists    AS a ON a.rowid = m.artist_id   \n"
+                "LEFT JOIN albums     AS b ON b.rowid = m.album_id    \n"
+                "LEFT JOIN titles     AS t ON t.rowid = m.title_id    \n"
+                "INNER JOIN providers AS p ON p.rowid = m.provider_id \n"
+                "WHERE                                                \n"
+                "       m.get_type      = %d                          \n"
+                "   %s  -- Artist Constraint                          \n"
+                "   %s  -- Album  Constraint                          \n"
+                "   %s  -- Title  Contraint                           \n"
+                "   AND p.provider_name IN(%s)                        \n"
+                "   %s  -- 'IsALink' Constraint                       \n"
+                "LIMIT %d;                                            \n"
+                ,                   /* ------------------------------ */
+                query->type,        /* Limit to <type>                */
+                artist_constr,      /* Artist Constr, may be empty    */
+                album_constr,       /* Album Constr, may be empty     */ 
+                title_constr,       /* Title Constr, may be empty     */ 
+                from_argument_list, /* Provider contraint             */ 
+                img_url_constr,     /* Search for links?              */
+                query->number       /* LIMIT to <number>              */
+               );
 
-		gchar * sql = sqlite3_mprintf(
-				"SELECT DISTINCT get_type,artist_id,album_id,title_id,provider_id FROM metadata AS m \n"
-				"LEFT JOIN (SELECT rowid FROM artists AS a %s)\n"
-				"LEFT JOIN (SELECT rowid FROM albums  AS b %s)\n"
-				"LEFT JOIN (SELECT rowid FROM titles  AS t %s)\n"
-				"INNER JOIN (SELECT rowid FROM providers AS p WHERE provider_name IN(%s))\n"
-				"WHERE get_type = %d %s LIMIT %d;\n",
-				artist_constr,
-				album_constr,
-				title_constr,
-				from_argument_list,
-				query->type, img_url_constr, query->number 
-				);
 
 		if(sql != NULL)
 		{
@@ -250,22 +271,22 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 			result = cb_data.deleted;
 		}
 
+        /**
+         * Free ressources with according free calls,
+         */
+
 		if(*artist_constr)
-		{
 			sqlite3_free(artist_constr);
-		}
+
 		if(*album_constr)
-		{
 			sqlite3_free(album_constr);
-		}
+
 		if(*title_constr)
-		{
 			sqlite3_free(title_constr);
-		}
+
 		if(*img_url_constr)
-		{
 			sqlite3_free(img_url_constr);
-		}
+
 		g_free(from_argument_list);
 
 	}
@@ -282,15 +303,27 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
     if(db != NULL && cb != NULL)
     {
         const gchar * select_all = 
-            "SELECT artist_name,album_name,title_name,provider_name,source_url,image_type_name, \n"
-            "track_duration,get_type,data_type,data_size,data_is_image,data_checksum,data,rating \n"
-            "FROM metadata as m \n"
-            "LEFT JOIN artists as a on m.artist_id = a.rowid \n"
-            "LEFT JOIN albums as b on m.album_id = b.rowid \n"
-            "LEFT JOIN titles as t on m.title_id = t.rowid \n"
-            "INNER JOIN providers as p on m.provider_id = p.rowid \n"
-            "LEFT JOIN image_types as i on m.image_type_id = i.rowid \n"
-            "ORDER BY rating,timestamp;\n";
+            "SELECT artist_name,                                      \n"
+            "        album_name,                                      \n"
+            "        title_name,                                      \n"
+            "        provider_name,                                   \n"
+            "        source_url,                                      \n"
+            "        image_type_name,                                 \n"
+            "        track_duration,                                  \n"
+            "        get_type,                                        \n"
+            "        data_type,                                       \n"
+            "        data_size,                                       \n"
+            "        data_is_image,                                   \n"
+            "        data_checksum,                                   \n"
+            "        data,                                            \n"
+            "        rating                                           \n"
+            "FROM metadata as m                                       \n"
+            "LEFT JOIN artists     AS a ON m.artist_id     = a.rowid  \n"
+            "LEFT JOIN albums      AS b ON m.album_id      = b.rowid  \n"
+            "LEFT JOIN titles      AS t ON m.title_id      = t.rowid  \n"
+            "LEFT JOIN image_types AS i ON m.image_type_id = i.rowid  \n"
+            "INNER JOIN providers AS p on m.provider_id    = p.rowid  \n"
+            "ORDER BY rating,timestamp;                               \n";
 
             select_callback_data scb_data;
             scb_data.cb = cb;
@@ -328,18 +361,18 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
         gchar * artist_constr = "";
         if((reqs & GLYR_REQUIRES_ARTIST) != 0)
         {
-            artist_constr = sqlite3_mprintf("AND artist_name = '%q'\n",query->artist);
+            artist_constr = sqlite3_mprintf("AND artist_name LIKE '%q'\n",query->artist);
         }
         gchar * album_constr  = "";
         if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
         {
-            album_constr = sqlite3_mprintf("AND album_name = '%q'\n",query->album);
+            album_constr = sqlite3_mprintf("AND album_name LIKE '%q'\n",query->album);
         }
 
         gchar * title_constr = "";
         if((reqs & GLYR_REQUIRES_TITLE ) != 0)
         {
-            title_constr = sqlite3_mprintf("AND title_name = '%q'\n",query->title);
+            title_constr = sqlite3_mprintf("AND title_name LIKE '%q'\n",query->title);
         }
 
         gchar * from_argument_list = convert_from_option_to_sql(query);
@@ -358,17 +391,28 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
         }
 
         gchar * sql = sqlite3_mprintf(
-                "SELECT artist_name,album_name,title_name,provider_name,source_url,image_type_name, \n"
-                "track_duration,get_type,data_type,data_size,data_is_image,data_checksum,data,rating \n"
-                "FROM metadata as m \n"
-                "LEFT JOIN artists as a on m.artist_id = a.rowid \n"
-                "LEFT JOIN albums as b on m.album_id = b.rowid \n"
-                "LEFT JOIN titles as t on m.title_id = t.rowid \n"
-                "INNER JOIN providers as p on m.provider_id = p.rowid \n"
-                "LEFT JOIN image_types as i on m.image_type_id = i.rowid \n"
-                "WHERE m.get_type = %d AND provider_name IN(%s) %s\n"
-                "%s %s %s\n"
-                "ORDER BY rating,timestamp;\n",
+                "SELECT artist_name,                                         \n"
+                "        album_name,                                         \n"
+                "        title_name,                                         \n"
+                "        provider_name,                                      \n"
+                "        source_url,                                         \n"
+                "        image_type_name,                                    \n"
+                "        track_duration,                                     \n"
+                "        get_type,                                           \n"
+                "        data_type,                                          \n"
+                "        data_size,                                          \n"
+                "        data_is_image,                                      \n"
+                "        data_checksum,                                      \n"
+                "        data,rating                                         \n"
+                "FROM metadata as m                                          \n"
+                "LEFT JOIN artists AS a ON m.artist_id         = a.rowid     \n"
+                "LEFT JOIN albums  AS b ON m.album_id          = b.rowid     \n"
+                "LEFT JOIN titles  AS t ON m.title_id          = t.rowid     \n"
+                "INNER JOIN providers as p on m.provider_id    = p.rowid     \n"
+                "LEFT JOIN image_types as i on m.image_type_id = i.rowid     \n"
+                "WHERE m.get_type = %d AND provider_name IN(%s) %s           \n"
+                "%s %s %s                                                    \n"
+                "ORDER BY rating,timestamp;                                  \n",
                 query->type, from_argument_list, 
                 img_url_constr,
                 artist_constr,
@@ -422,20 +466,22 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-#define INSERT_STRING(SQL,ARG) {                 \
-    if(SQL && ARG) {                             \
-        gchar * sql = sqlite3_mprintf(SQL,ARG);  \
-        execute(db,sql);                         \
-        sqlite3_free(sql);                       \
-    }                                            \
+#define INSERT_STRING(SQL,ARG) {                       \
+    if(SQL && ARG) {                                   \
+        gchar * lower_str = g_utf8_strdown(ARG,-1);    \
+        gchar * sql = sqlite3_mprintf(SQL,lower_str);  \
+        execute(db,sql);                               \
+        sqlite3_free(sql);                             \
+        g_free(lower_str);                             \
+    }                                                  \
 }
 
 /* Ensure no invalid data comes in */
-#define ABORT_ON_FAILED_REQS(ARG) {                          \
-    if(ARG == NULL) {                                        \
-         glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);      \
-         return;                                             \
-    }                                                        \
+#define ABORT_ON_FAILED_REQS(ARG) {                                \
+    if(ARG == NULL) {                                              \
+         glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);  \
+         return;                                                   \
+    }                                                              \
 }
 
 void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
@@ -492,50 +538,51 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 static void create_table_defs(GlyrDatabase * db)
 {
     execute(db,
-            "BEGIN IMMEDIATE;\n"
-            "-- Provider\n"
-            "CREATE TABLE IF NOT EXISTS providers (provider_name VARCHAR(20) UNIQUE);\n"
-            "\n"
-            "-- Artist\n"
-            "CREATE TABLE IF NOT EXISTS artists (artist_name VARCHAR(128) UNIQUE);\n"
-            "CREATE TABLE IF NOT EXISTS albums  (album_name  VARCHAR(128) UNIQUE);\n"
-            "CREATE TABLE IF NOT EXISTS titles  (title_name  VARCHAR(128) UNIQUE);\n"
-            "\n"
-            "-- Enum\n"
-            "CREATE TABLE IF NOT EXISTS image_types(image_type_name VARCHAR(16) UNIQUE);\n"
-            "CREATE TABLE IF NOT EXISTS db_version(version INTEGER UNIQUE);\n"
-            "\n"
-            "-- MetaData\n"
-            "CREATE TABLE IF NOT EXISTS metadata(\n"
-            "			          artist_id INTEGER,\n"
-            "			          album_id  INTEGER,\n"
-            "			          title_id  INTEGER,\n"
-            "			          provider_id INTEGER,\n"
-            "			          source_url  VARCHAR(512),\n"
-            "			          image_type_id INTEGER,\n"
-            "                     track_duration INTEGER,\n"
-            "			          get_type INTEGER,\n"
-            "			          data_type INTEGER,\n"
-            "			          data_size INTEGER,\n"
-            "                     data_is_image INTEGER,\n"
-            "			          data_checksum BLOB,\n"
-            "			          data BLOB,\n"
-            "                     rating INTEGER,\n"
-            "                     timestamp FLOAT\n"
-            ");\n"
-            "CREATE INDEX IF NOT EXISTS index_artist_id   ON metadata(artist_id);\n"
-            "CREATE INDEX IF NOT EXISTS index_album_id    ON metadata(album_id);\n"
-            "CREATE INDEX IF NOT EXISTS index_title_id    ON metadata(title_id);\n"
-            "CREATE INDEX IF NOT EXISTS index_provider_id ON metadata(provider_id);\n"
-            "CREATE UNIQUE INDEX IF NOT EXISTS index_unique ON metadata(get_type,data_type,data_checksum,source_url);\n"
-            "-- Insert imageformats\n"
-            "INSERT OR IGNORE INTO image_types VALUES('jpeg');\n"
-            "INSERT OR IGNORE INTO image_types VALUES('jpg');\n"
-            "INSERT OR IGNORE INTO image_types VALUES('png');\n"
-            "INSERT OR IGNORE INTO image_types VALUES('gif');\n"
-            "INSERT OR IGNORE INTO image_types VALUES('tiff');\n"
-            "INSERT OR IGNORE INTO db_version VALUES(1);\n"
-            "COMMIT;\n"
+            "BEGIN IMMEDIATE;                                                            \n"
+            "-- Provider                                                                 \n"
+            "CREATE TABLE IF NOT EXISTS providers (provider_name VARCHAR(20) UNIQUE);    \n"
+            "                                                                            \n"
+            "-- Artist                                                                   \n"
+            "CREATE TABLE IF NOT EXISTS artists (artist_name VARCHAR(128) UNIQUE);       \n"
+            "CREATE TABLE IF NOT EXISTS albums  (album_name  VARCHAR(128) UNIQUE);       \n"
+            "CREATE TABLE IF NOT EXISTS titles  (title_name  VARCHAR(128) UNIQUE);       \n"
+            "                                                                            \n"
+            "-- Enum                                                                     \n"
+            "CREATE TABLE IF NOT EXISTS image_types(image_type_name VARCHAR(16) UNIQUE); \n"
+            "CREATE TABLE IF NOT EXISTS db_version(version INTEGER UNIQUE);              \n"
+            "                                                                            \n"
+            "-- MetaData                                                                 \n"
+            "CREATE TABLE IF NOT EXISTS metadata(                                        \n"
+            "			          artist_id INTEGER,                                     \n"
+            "			          album_id  INTEGER,                                     \n"
+            "			          title_id  INTEGER,                                     \n"
+            "			          provider_id INTEGER,                                   \n"
+            "			          source_url  VARCHAR(512),                              \n"
+            "			          image_type_id INTEGER,                                 \n"
+            "                     track_duration INTEGER,                                \n"
+            "			          get_type INTEGER,                                      \n"
+            "			          data_type INTEGER,                                     \n"
+            "			          data_size INTEGER,                                     \n"
+            "                     data_is_image INTEGER,                                 \n"
+            "			          data_checksum BLOB,                                    \n"
+            "			          data BLOB,                                             \n"
+            "                     rating INTEGER,                                        \n"
+            "                     timestamp FLOAT                                        \n"
+            ");                                                                          \n"
+            "CREATE INDEX IF NOT EXISTS index_artist_id   ON metadata(artist_id);        \n"
+            "CREATE INDEX IF NOT EXISTS index_album_id    ON metadata(album_id);         \n"
+            "CREATE INDEX IF NOT EXISTS index_title_id    ON metadata(title_id);         \n"
+            "CREATE INDEX IF NOT EXISTS index_provider_id ON metadata(provider_id);      \n"
+            "CREATE UNIQUE INDEX IF NOT EXISTS index_unique                              \n"
+            "       ON metadata(get_type,data_type,data_checksum,source_url);            \n"
+            "-- Insert imageformats                                                      \n"
+            "INSERT OR IGNORE INTO image_types VALUES('jpeg');                           \n"
+            "INSERT OR IGNORE INTO image_types VALUES('jpg');                            \n"
+            "INSERT OR IGNORE INTO image_types VALUES('png');                            \n"
+            "INSERT OR IGNORE INTO image_types VALUES('gif');                            \n"
+            "INSERT OR IGNORE INTO image_types VALUES('tiff');                           \n"
+            "INSERT OR IGNORE INTO db_version VALUES(1);                                 \n"
+            "COMMIT;                                                                     \n"
             );
 }
 
@@ -543,6 +590,10 @@ static void create_table_defs(GlyrDatabase * db)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+/**
+ *  Return the current time as double:
+ *  <seconds>.<microseconds/one_second>
+ */
 static double get_current_time(void)
 {
     struct timeval tim;
@@ -557,14 +608,16 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 {
     if(db && query && cache)
     {
-        char * sql= sqlite3_mprintf("INSERT OR IGNORE INTO metadata VALUES(\n"
-                "(SELECT rowid FROM artists WHERE artist_name = '%q'),\n"
-                "(SELECT rowid FROM albums  WHERE album_name = '%q'),\n"
-                "(SELECT rowid FROM titles  WHERE title_name = '%q'),\n"
-                "(SELECT rowid FROM providers WHERE provider_name = '%q'),\n"
-                "?,"
-                "(SELECT rowid FROM image_types WHERE image_type_name = '%q'),"
-                "?,?,?,?,?,?,?,?,?);\n",
+        char * sql = sqlite3_mprintf(
+                "INSERT OR IGNORE INTO metadata VALUES(                            \n"
+                "  (SELECT rowid FROM artists   WHERE artist_name   LIKE '%q'),    \n"
+                "  (SELECT rowid FROM albums    WHERE album_name    LIKE '%q'),    \n"
+                "  (SELECT rowid FROM titles    WHERE title_name    LIKE '%q'),    \n"
+                "  (SELECT rowid FROM providers WHERE provider_name LIKE '%q'),    \n"
+                "  ?,                                                              \n"
+                "  (SELECT rowid FROM image_types WHERE image_type_name LIKE '%q'),\n"
+                "  ?,?,?,?,?,?,?,?,?                                               \n"
+                ");                                                                \n",
                 query->artist,
                 query->album,
                 query->title,
@@ -577,7 +630,8 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 
         if(cache->dsrc != NULL)
             sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
-        else glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing source-url!\n");
+        else
+            glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing source-url!\n");
 
         sqlite3_bind_int (stmt, 2, cache->duration);
         sqlite3_bind_int (stmt, 3, query->type);
@@ -588,17 +642,16 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 
         if(cache->data != NULL)
             sqlite3_bind_blob(stmt, 8, cache->data, cache->size, SQLITE_STATIC);
-        else glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing data!\n");
+        else 
+            glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing data!\n");
 
         sqlite3_bind_int( stmt, 9, cache->rating);
         sqlite3_bind_double( stmt,10, get_current_time());
 
         if(sqlite3_step(stmt) != SQLITE_DONE) 
-        {
             glyr_message(1,query,"glyr_db_insert: SQL failure: %s\n", sqlite3_errmsg(db->db_handle));
-        }
-        sqlite3_finalize(stmt);
 
+        sqlite3_finalize(stmt);
         sqlite3_free(sql);
     }
 }

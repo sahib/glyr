@@ -192,7 +192,7 @@ START_TEST(test_glyr_download)
 {
     glyr_init();
     atexit(glyr_cleanup);
-    GlyrMemCache * c = glyr_download("www.google.de",NULL);
+    GlyrMemCache * c = glyr_download("www.duckduckgo.com",NULL);
     fail_unless(c != NULL,"Could not load www.google.de");
     glyr_cache_free(c);
 }

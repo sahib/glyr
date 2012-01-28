@@ -40,7 +40,7 @@ static int count_db_items(GlyrDatabase * db)
 
 static void cleanup_db(void)
 {
-    system("rm -rf /tmp/check/metadata.db");
+    system("rm -rf /tmp/check/");
 }
 
 //--------------------
@@ -71,6 +71,7 @@ START_TEST(test_simple_db)
 
     cleanup_db();
 
+    system("mkdir -p /tmp/check");
     GlyrDatabase * db = glyr_db_init("/tmp/check");
     GlyrMemCache * ct = glyr_cache_new();
 
@@ -92,6 +93,7 @@ START_TEST(test_simple_db)
     glyr_db_destroy(db);
     glyr_cache_free(ct);
     glyr_query_destroy(&q);
+    system("rm -r /tmp/check");
 }
 END_TEST
 
@@ -118,6 +120,7 @@ START_TEST(test_intelligent_lookup)
     glyr_cache_set_data(subject,g_strdup("These are lyrics. Really."),-1);
 
     cleanup_db();
+    system("mkdir -p /tmp/check");
     GlyrDatabase * db = glyr_db_init("/tmp/check");
     glyr_db_insert(db,&alt,subject);
 
@@ -139,6 +142,7 @@ START_TEST(test_intelligent_lookup)
 
     glyr_query_destroy(&alt);
     glyr_db_destroy(db);
+    system("rm -r /tmp/check");
 }
 END_TEST
 
@@ -149,6 +153,7 @@ START_TEST(test_db_editplace)
     cleanup_db();
     init();
 
+    system("mkdir -p /tmp/check");
     GlyrDatabase * db = glyr_db_init("/tmp/check");
     if(db != NULL)
     {
@@ -185,6 +190,7 @@ START_TEST(test_db_editplace)
         glyr_cache_free(test_data);
         glyr_db_destroy(db);
     }
+    system("rm -r /tmp/check");
 }
 END_TEST
 
