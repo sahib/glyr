@@ -955,6 +955,37 @@ char * glyr_md5sum_to_string(unsigned char * md5sum);
 */
 void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
 
+/**
+ * glyr_get_requirements:
+ * @type: The type to get the requirements from
+ *
+ * Different getters need different fields set. You can use this
+ * to check if the artist, album and title field of a specific getter 
+ * is required or optional.
+ *
+ * <informalexample>
+ * <programlisting>
+ * GLYR_FIELD_REQUIREMENT reqs = glyr_get_requirements(GLYR_GET_COVERART);
+ * if(reqs & GLYR_REQUIRES_ALBUM)
+ * { 
+ *    // do something when artist is required
+ * }
+ * else
+ * if(reqs / GLYR_OPTIONAL_TITLE)
+ * {
+ *   // Title is optional
+ * }
+ * else
+ * {
+ *   // None of both
+ * }
+ * </programlisting>
+ * </informalexample>
+ *
+ * Returns: A bitmask out of members of GLYR_FIELD_REQUIREMENT
+ */
+GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
+
 #ifdef _cplusplus
 }
 #endif

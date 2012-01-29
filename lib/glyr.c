@@ -1154,3 +1154,24 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum)
 #undef CHAR_TO_NUM
 
 /* --------------------------------------------------------- */
+
+GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
+{
+    GLYR_FIELD_REQUIREMENT result = 0;
+    GlyrFetcherInfo * info = glyr_info_get();
+    GlyrFetcherInfo * head = info;
+    while(head != NULL)
+    {
+        if(type == head->type)
+        {
+            result = head->reqs;
+        }
+        head = head->next;
+    }
+    glyr_info_free(info);
+    return result;
+}
+
+
+
+/* --------------------------------------------------------- */
