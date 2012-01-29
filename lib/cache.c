@@ -253,8 +253,6 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
                );
 
 
-        puts(sql);
-
         if(sql != NULL)
         {
             delete_callback_data cb_data;
@@ -540,6 +538,8 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 static void create_table_defs(GlyrDatabase * db)
 {
     execute(db,
+            "PRAGMA synchronous = 0;                                                     \n"
+            "PRAGMA quick_check;                                                         \n"
             "BEGIN IMMEDIATE;                                                            \n"
             "-- Provider                                                                 \n"
             "CREATE TABLE IF NOT EXISTS providers (provider_name VARCHAR(20) UNIQUE);    \n"

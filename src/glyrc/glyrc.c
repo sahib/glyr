@@ -768,7 +768,7 @@ int main(int argc, char * argv[])
     {
         update();
     }
-    else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--list")))
+    else if(argc >= 2 && (!strcmp(argv[1],"-V") || !strcmp(argv[1],"--version")))
     {
         print_version(NULL);
     }
@@ -783,6 +783,17 @@ int main(int argc, char * argv[])
 
     return result;
 }
+
+/*
+ * glyrc cache 
+ *       select
+ *       delete
+ *       list
+ *
+ *
+ *
+ */
+
 
 //* --------------------------------------------------------- */
 // ------------------End of program-------------------------- //
