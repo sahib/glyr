@@ -114,7 +114,9 @@ START_TEST(test_iter_db)
     system("mkdir -p /tmp/check");
     GlyrDatabase * db = glyr_db_init("/tmp/check");
 
-    const int N = 50000;
+    GTimer * insert_time = g_timer_new();
+
+    const int N = 20000;
     for(int i = 0; i < N; i++)
     {
         GlyrMemCache * ct = glyr_cache_new();
@@ -125,8 +127,13 @@ START_TEST(test_iter_db)
         glyr_db_insert(db,&q,(GlyrMemCache*)ct);
         glyr_cache_free(ct);
     }
-    
+
+    g_timer_stop(insert_time);
+    g_message("Used %.5f seconds to insert..",g_timer_elapsed(insert_time,NULL));
+
     fail_unless(count_db_items(db) == N, NULL);
+
+    g_timer_start(insert_time);
 
     /* Test if case-insensitivity works */
     glyr_opt_artist(&q,"eQuI");
@@ -147,11 +154,16 @@ START_TEST(test_iter_db)
     }
     glyr_free_list(c);
 
+    /* Test if we got exactly 10 items, (honoring number setting */
     fail_unless(ctr == 10);
 
+    g_timer_stop(insert_time);
+    g_message("Used %.5f seconds to lookup..",g_timer_elapsed(insert_time,NULL));
 
     glyr_db_destroy(db);
     glyr_query_destroy(&q);
+    g_timer_destroy(insert_time);
+    system("rm -r /tmp/check");
 }
 END_TEST 
 

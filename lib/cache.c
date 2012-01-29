@@ -179,6 +179,17 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+#define ADD_CONSTRAINT(TO_CONSTR, FIELDNAME, VARNAME)                    \
+{                                                                        \
+    gchar * lower = g_utf8_strdown(VARNAME,-1);                          \
+    if(lower != NULL)                                                    \
+    {                                                                    \
+        TO_CONSTR = sqlite3_mprintf("AND %s = '%q'\n",FIELDNAME,lower);  \
+        g_free(lower);                                                   \
+    }                                                                    \
+}
+
+
 gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 {
     gint result = 0;
@@ -189,21 +200,21 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 
         /* Spaces in SQL statements just for pretty debug printing */
         gchar * artist_constr = "";
-        if((reqs & GLYR_REQUIRES_ARTIST) != 0)
+        if((reqs & GLYR_REQUIRES_ARTIST) != 0 && query->artist)
         {
-            artist_constr = sqlite3_mprintf("   AND a.artist_name  LIKE '%q'              \n" ,query->artist);
+            ADD_CONSTRAINT(artist_constr,"a.artist_name",query->artist);
         }
 
         gchar * album_constr  = "";
-        if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
-        {
-            album_constr = sqlite3_mprintf("   AND b.album_name   LIKE '%q'              \n" ,query->album);
+        if((reqs & GLYR_REQUIRES_ALBUM ) != 0 && query->album)
+        {                  
+            ADD_CONSTRAINT(album_constr,"b.album_name",query->album);
         }
 
         gchar * title_constr = "";
-        if((reqs & GLYR_REQUIRES_TITLE ) != 0)
+        if((reqs & GLYR_REQUIRES_TITLE ) != 0 && query->title)
         {
-            title_constr = sqlite3_mprintf("   AND t.title_name   LIKE '%q'              \n" ,query->title);
+            ADD_CONSTRAINT(title_constr,"t.title_name",query->title);
         }
 
         /* Get a SQL formatted list of enabled providers: IN('lastfm','...') */
@@ -223,7 +234,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
             }
         }
 
-       gchar * sql = sqlite3_mprintf(
+        gchar * sql = sqlite3_mprintf(
                 "SELECT get_type,                                     \n"
                 "       artist_id,                                    \n"
                 "       album_id,                                     \n"
@@ -250,7 +261,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
                 from_argument_list, /* Provider contraint             */ 
                 img_url_constr,     /* Search for links?              */
                 query->number       /* LIMIT to <number>              */
-               );
+                    );
 
 
         if(sql != NULL)
@@ -297,7 +308,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-    
+
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr)
 {
     if(db != NULL && cb != NULL)
@@ -325,26 +336,26 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
             "INNER JOIN providers AS p on m.provider_id    = p.rowid  \n"
             "ORDER BY rating,timestamp;                               \n";
 
-            select_callback_data scb_data;
-            scb_data.cb = cb;
-            scb_data.userptr = userptr;
-     
-            GlyrQuery dummy;
-            dummy.number = G_MAXINT;
-            scb_data.query = &dummy;
-            scb_data.counter = 0;
-            scb_data.result = NULL;
-           
-            int rc = SQLITE_OK;
-            char * err_msg = NULL;
-            if((rc = sqlite3_exec(db->db_handle,select_all,select_callback,&scb_data,&err_msg)) != SQLITE_OK)
+        select_callback_data scb_data;
+        scb_data.cb = cb;
+        scb_data.userptr = userptr;
+
+        GlyrQuery dummy;
+        dummy.number = G_MAXINT;
+        scb_data.query = &dummy;
+        scb_data.counter = 0;
+        scb_data.result = NULL;
+
+        int rc = SQLITE_OK;
+        char * err_msg = NULL;
+        if((rc = sqlite3_exec(db->db_handle,select_all,select_callback,&scb_data,&err_msg)) != SQLITE_OK)
+        {
+            if(rc != SQLITE_ABORT)
             {
-                if(rc != SQLITE_ABORT)
-                {
-                    glyr_message(-1,NULL,"SQL Foreach error: %s\n",err_msg);
-                }
-                sqlite3_free(err_msg);
+                glyr_message(-1,NULL,"SQL Foreach error: %s\n",err_msg);
             }
+            sqlite3_free(err_msg);
+        }
     }
 }
 
@@ -361,18 +372,18 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
         gchar * artist_constr = "";
         if((reqs & GLYR_REQUIRES_ARTIST) != 0)
         {
-            artist_constr = sqlite3_mprintf("AND artist_name LIKE '%q'\n",query->artist);
+            ADD_CONSTRAINT(artist_constr,"artist_name",query->artist);
         }
         gchar * album_constr  = "";
         if((reqs & GLYR_REQUIRES_ALBUM ) != 0)
         {
-            album_constr = sqlite3_mprintf("AND album_name LIKE '%q'\n",query->album);
+            ADD_CONSTRAINT(album_constr,"album_name",query->album);
         }
 
         gchar * title_constr = "";
         if((reqs & GLYR_REQUIRES_TITLE ) != 0)
         {
-            title_constr = sqlite3_mprintf("AND title_name LIKE '%q'\n",query->title);
+            ADD_CONSTRAINT(title_constr,"title_name",query->title);
         }
 
         gchar * from_argument_list = convert_from_option_to_sql(query);
@@ -414,12 +425,12 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
                 "%s %s %s                                                    \n"
                 "ORDER BY rating,timestamp                                   \n"
                 "LIMIT %d;                                                   \n",
-                query->type, from_argument_list, 
-                img_url_constr,
-                artist_constr,
-                album_constr,
-                title_constr,
-                query->number
+            query->type, from_argument_list, 
+            img_url_constr,
+            artist_constr,
+            album_constr,
+            title_constr,
+            query->number
                 );
 
         if(sql != NULL)
@@ -481,8 +492,8 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 /* Ensure no invalid data comes in */
 #define ABORT_ON_FAILED_REQS(ARG) {                                \
     if(ARG == NULL) {                                              \
-         glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);  \
-         return;                                                   \
+        glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);  \
+        return;                                                   \
     }                                                              \
 }
 
@@ -586,7 +597,7 @@ static void create_table_defs(GlyrDatabase * db)
             "INSERT OR IGNORE INTO image_types VALUES('png');                            \n"
             "INSERT OR IGNORE INTO image_types VALUES('gif');                            \n"
             "INSERT OR IGNORE INTO image_types VALUES('tiff');                           \n"
-            "INSERT OR IGNORE INTO db_version VALUES(1);                                 \n"
+            "INSERT OR IGNORE INTO db_version VALUES(2);                                 \n"
             "COMMIT;                                                                     \n"
             );
 }
@@ -613,12 +624,13 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 {
     if(db && query && cache)
     {
+        
         char * sql = sqlite3_mprintf(
                 "INSERT OR IGNORE INTO metadata VALUES(                            \n"
-                "  (SELECT rowid FROM artists   WHERE artist_name   LIKE '%q'),    \n"
-                "  (SELECT rowid FROM albums    WHERE album_name    LIKE '%q'),    \n"
-                "  (SELECT rowid FROM titles    WHERE title_name    LIKE '%q'),    \n"
-                "  (SELECT rowid FROM providers WHERE provider_name LIKE '%q'),    \n"
+                "  (SELECT rowid FROM artists   WHERE artist_name   = LOWER('%q')),\n"
+                "  (SELECT rowid FROM albums    WHERE album_name    = LOWER('%q')),\n"
+                "  (SELECT rowid FROM titles    WHERE title_name    = LOWER('%q')),\n"
+                "  (SELECT rowid FROM providers WHERE provider_name = LOWER('%q')),\n"
                 "  ?,                                                              \n"
                 "  (SELECT rowid FROM image_types WHERE image_type_name LIKE '%q'),\n"
                 "  ?,?,?,?,?,?,?,?,?                                               \n"
@@ -747,7 +759,7 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
                 glyr_opt_artist(&q,argv[0]);
                 glyr_opt_album(&q, argv[1]);
                 glyr_opt_title(&q, argv[2]);
-                
+
                 rc = data->cb(&q,cache,data->userptr);
 
                 glyr_query_destroy(&q);
