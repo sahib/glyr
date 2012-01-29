@@ -109,6 +109,12 @@ START_TEST(test_iter_db)
     glyr_opt_artist(&q,"Equi");
     glyr_opt_title(&q,"lala");
 
+
+    GlyrQuery nugget;
+    setup(&nugget,GLYR_GET_COVERART,40);
+    glyr_opt_artist(&nugget,"A very special artist");
+    glyr_opt_album(&nugget,"A very special album");
+
     cleanup_db();
 
     system("mkdir -p /tmp/check");
@@ -122,47 +128,73 @@ START_TEST(test_iter_db)
         GlyrMemCache * ct = glyr_cache_new();
         glyr_cache_set_data(ct,g_strdup_printf("test# %d",i+1),-1);
         ct->dsrc = g_strdup_printf("Dummy url %d",i+1);
-        //ct->prov = g_strdup("testsuite");
         ct->rating = i+1;
-        glyr_db_insert(db,&q,(GlyrMemCache*)ct);
+
+        if(i % 42)
+            glyr_db_insert(db,&q,ct);
+        else
+            glyr_db_insert(db,&nugget,ct);
+
         glyr_cache_free(ct);
     }
 
     g_timer_stop(insert_time);
     g_message("Used %.5f seconds to insert..",g_timer_elapsed(insert_time,NULL));
 
+    /* Check if N items are in DB */
     fail_unless(count_db_items(db) == N, NULL);
 
-    g_timer_start(insert_time);
 
     /* Test if case-insensitivity works */
     glyr_opt_artist(&q,"eQuI");
     glyr_opt_title(&q,"LALA");
 
-    /* Get a list of the caches */
+    float fine_grained = 0.0;
+    GTimer * grain_time = g_timer_new();
+
+    g_timer_start(insert_time);
+
     GlyrMemCache * c, * ptr;
-    c = glyr_db_lookup(db,&q);
-    ptr = c;
-
-    fail_if(ptr == NULL);
-
-    int ctr = 0;
-    while(ptr)
+    for(int i = 0; i < 200; i++)
     {
-        ctr++;
-        ptr = ptr->next;
-    }
-    glyr_free_list(c);
+        g_timer_start(grain_time);
+        /* Get a list of the caches */
+        if(i % 10)
+            c = glyr_db_lookup(db,&q);
+        else
+            c = glyr_db_lookup(db,&nugget);
 
-    /* Test if we got exactly 10 items, (honoring number setting */
-    fail_unless(ctr == 10);
+        g_timer_stop(grain_time);
+        fine_grained += g_timer_elapsed(grain_time,NULL);
+
+        ptr = c;
+        fail_if(ptr == NULL);
+
+        int ctr = 0;
+        while(ptr) {
+            ctr++;
+            ptr = ptr->next;
+        }
+        glyr_free_list(c);
+
+        /* Test if we got exactly 10 or 42 items, (honoring number setting */
+        if(i % 10)
+            fail_unless(ctr == 10);
+        else
+            fail_unless(ctr == 40);
+    }
+
 
     g_timer_stop(insert_time);
     g_message("Used %.5f seconds to lookup..",g_timer_elapsed(insert_time,NULL));
+    g_message("Used %.5f for actual lookup..",fine_grained);
 
     glyr_db_destroy(db);
     glyr_query_destroy(&q);
+    glyr_query_destroy(&nugget);
+
     g_timer_destroy(insert_time);
+    g_timer_destroy(grain_time);
     system("rm -r /tmp/check");
 }
 END_TEST 

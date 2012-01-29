@@ -27,6 +27,13 @@
 /* How long to wait till returning SQLITE_BUSY */
 #define DB_BUSY_WAIT 5000
 
+#define DO_PROFILE false
+
+#if DO_PROFILE
+    GTimer * select_callback_timer = NULL;
+    float select_callback_spent = 0;
+#endif
+
 
 /* ------------------------------------------------------------------ */
 static void create_table_defs(GlyrDatabase * db);
@@ -72,6 +79,10 @@ GlyrDatabase * glyr_db_init(char * root_path)
         glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
                              "         Expect corrupted data and other weird behaviour!\n");
     }
+
+#if DO_PROFILE
+    select_callback_timer = g_timer_new();
+#endif
 
     GlyrDatabase * to_return = NULL;
     if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
@@ -333,7 +344,7 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
             "LEFT JOIN albums      AS b ON m.album_id      = b.rowid  \n"
             "LEFT JOIN titles      AS t ON m.title_id      = t.rowid  \n"
             "LEFT JOIN image_types AS i ON m.image_type_id = i.rowid  \n"
-            "INNER JOIN providers AS p on m.provider_id    = p.rowid  \n"
+            "JOIN providers AS p on m.provider_id          = p.rowid  \n"
             "ORDER BY rating,timestamp;                               \n";
 
         select_callback_data scb_data;
@@ -402,34 +413,39 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
         }
 
         gchar * sql = sqlite3_mprintf(
-                "SELECT artist_name,                                         \n"
-                "        album_name,                                         \n"
-                "        title_name,                                         \n"
-                "        provider_name,                                      \n"
-                "        source_url,                                         \n"
-                "        image_type_name,                                    \n"
-                "        track_duration,                                     \n"
-                "        get_type,                                           \n"
-                "        data_type,                                          \n"
-                "        data_size,                                          \n"
-                "        data_is_image,                                      \n"
-                "        data_checksum,                                      \n"
-                "        data,rating                                         \n"
-                "FROM metadata as m                                          \n"
-                "LEFT JOIN artists AS a ON m.artist_id         = a.rowid     \n"
-                "LEFT JOIN albums  AS b ON m.album_id          = b.rowid     \n"
-                "LEFT JOIN titles  AS t ON m.title_id          = t.rowid     \n"
-                "INNER JOIN providers as p on m.provider_id    = p.rowid     \n"
-                "LEFT JOIN image_types as i on m.image_type_id = i.rowid     \n"
-                "WHERE m.get_type = %d AND provider_name IN(%s) %s           \n"
-                "%s %s %s                                                    \n"
-                "ORDER BY rating,timestamp                                   \n"
-                "LIMIT %d;                                                   \n",
-            query->type, from_argument_list, 
-            img_url_constr,
-            artist_constr,
-            album_constr,
+                "SELECT artist_name,                                      \n"
+                "        album_name,                                      \n"
+                "        title_name,                                      \n"
+                "        provider_name,                                   \n"
+                "        source_url,                                      \n"
+                "        image_type_name,                                 \n"
+                "        track_duration,                                  \n"
+                "        get_type,                                        \n"
+                "        data_type,                                       \n"
+                "        data_size,                                       \n"
+                "        data_is_image,                                   \n"
+                "        data_checksum,                                   \n"
+                "        data,rating                                      \n"
+                "FROM metadata as m                                       \n"
+                "LEFT JOIN artists AS a ON m.artist_id  = a.rowid         \n"
+                "LEFT JOIN albums  AS b ON m.album_id   = b.rowid         \n"
+                "LEFT JOIN titles  AS t ON m.title_id   = t.rowid         \n"
+                "JOIN providers as p on m.provider_id   = p.rowid         \n"
+                "LEFT JOIN image_types as i on m.image_type_id = i.rowid  \n"
+                "WHERE m.get_type = %d                                    \n"
+                "                   %s  -- Title constr.                  \n"
+                "                   %s  -- Album constr.                  \n"
+                "                   %s  -- Artist constr.                 \n"
+                "                   %s                                    \n"
+                "           AND provider_name IN(%s)                      \n"
+//                "ORDER BY rating,timestamp                                \n" // GAAAAARGHL!!
+                "LIMIT %d;                                                \n",
+            query->type,
             title_constr,
+            album_constr,
+            artist_constr,
+            img_url_constr,
+            from_argument_list, 
             query->number
                 );
 
@@ -451,6 +467,11 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
             }
             sqlite3_free(sql);
         }
+
+#if DO_PROFILE
+        g_message("Spent %.5f Seconds in Selectcallback.\n",select_callback_spent);
+        select_callback_spent = 0;
+#endif
 
         if(*artist_constr)
         {
@@ -697,9 +718,11 @@ static void add_to_cache_list(GlyrMemCache * head, GlyrMemCache * to_add)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-
 static int select_callback(void * result, int argc, char ** argv, char ** azColName)
 {
+#if DO_PROFILE
+    g_timer_start(select_callback_timer);
+#endif
     int rc = 0;
     select_callback_data * data = result;
     GlyrMemCache ** list = data->result;
@@ -769,6 +792,10 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
     }
 
     data->counter++;
+#if DO_PROFILE
+       g_timer_stop(select_callback_timer);
+       select_callback_spent += g_timer_elapsed(select_callback_timer,NULL);
+#endif
     return rc;
 }
 
