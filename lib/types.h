@@ -241,6 +241,7 @@ typedef enum
  * @img_format: Format of the image (png,jpeg), NULL if text item.
  * @md5sum: A md5sum of the data field.
  * @cached: If this cache was locally cached.
+ * @timestamp: This is used internally by libglyr.
  * @next: A pointer to the next item in the list, or NULL
  * @prev: A pointer to the previous item in the list, or NULL
  *
@@ -261,6 +262,7 @@ typedef struct _GlyrMemCache {
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;
+  double timestamp;
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 

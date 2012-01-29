@@ -122,15 +122,19 @@ START_TEST(test_iter_db)
 
     GTimer * insert_time = g_timer_new();
 
-    const int N = 20000;
+    const int N = 2000;
     for(int i = 0; i < N; i++)
     {
         GlyrMemCache * ct = glyr_cache_new();
         glyr_cache_set_data(ct,g_strdup_printf("test# %d",i+1),-1);
         ct->dsrc = g_strdup_printf("Dummy url %d",i+1);
-        ct->rating = i+1;
 
-        if(i % 42)
+        if(i % 2)
+            ct->rating = N - i;
+        else
+            ct->rating = N - i + 1;
+
+        if(i % 23)
             glyr_db_insert(db,&q,ct);
         else
             glyr_db_insert(db,&nugget,ct);
@@ -142,8 +146,9 @@ START_TEST(test_iter_db)
     g_message("Used %.5f seconds to insert..",g_timer_elapsed(insert_time,NULL));
 
     /* Check if N items are in DB */
-    fail_unless(count_db_items(db) == N, NULL);
-
+    int cdb = count_db_items(db);
+    g_message("Counted %d items\n",cdb);
+    fail_unless(cdb == N, NULL);
 
     /* Test if case-insensitivity works */
     glyr_opt_artist(&q,"eQuI");
@@ -151,11 +156,11 @@ START_TEST(test_iter_db)
 
     float fine_grained = 0.0;
     GTimer * grain_time = g_timer_new();
-
+    
     g_timer_start(insert_time);
 
     GlyrMemCache * c, * ptr;
-    for(int i = 0; i < 200; i++)
+    for(int i = 1; i <= 200; i++)
     {
         g_timer_start(grain_time);
         /* Get a list of the caches */
@@ -170,14 +175,21 @@ START_TEST(test_iter_db)
         ptr = c;
         fail_if(ptr == NULL);
 
+        int last_rating = -1;
         int ctr = 0;
+        puts("--------------");
         while(ptr) {
             ctr++;
+            glyr_cache_print(ptr);
+            fail_unless(last_rating < ptr->rating);
+            last_rating = ptr->rating;
             ptr = ptr->next;
         }
         glyr_free_list(c);
 
-        /* Test if we got exactly 10 or 42 items, (honoring number setting */
+        /* Test if we got exactly 10 or 42 items, (honoring number setting) */
+ 
+        g_message("Counted: %d\n",ctr);       
         if(i % 10)
             fail_unless(ctr == 10);
         else

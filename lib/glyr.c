@@ -1086,6 +1086,7 @@ void glyr_cache_print(GlyrMemCache * cacheditem)
 
         glyr_message(-1,NULL,"\nSAFE: %s",(cacheditem->cached) ? "Yes" : "No");
         glyr_message(-1,NULL,"\nRATE: %d",cacheditem->rating);
+        glyr_message(-1,NULL,"\nSTMP: %f",cacheditem->timestamp);
 
         /* Print the actual data.
          * This might have funny results if using cover/photos

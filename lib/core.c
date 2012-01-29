@@ -250,6 +250,7 @@ GlyrMemCache* DL_init(void)
     cache->cached = FALSE;
     cache->duration = 0;
     cache->rating = 0;
+    cache->timestamp = 0.0;
     return cache;
 }
 

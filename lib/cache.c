@@ -43,7 +43,7 @@ static GLYR_FIELD_REQUIREMENT get_req(GlyrQuery * q);
 static int delete_callback(void * result, int argc, char ** argv, char ** azColName);
 static gchar * convert_from_option_to_sql(GlyrQuery * q);
 static double get_current_time(void);
-static void add_to_cache_list(GlyrMemCache * head, GlyrMemCache * to_add);
+static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add);
 static int select_callback(void * result, int argc, char ** argv, char ** azColName);
 
 /*--------------------------------------------------------------*/
@@ -257,18 +257,18 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
                 "LEFT JOIN titles     AS t ON t.rowid = m.title_id    \n"
                 "INNER JOIN providers AS p ON p.rowid = m.provider_id \n"
                 "WHERE                                                \n"
-                "       m.get_type      = %d                          \n"
-                "   %s  -- Artist Constraint                          \n"
-                "   %s  -- Album  Constraint                          \n"
+                "       m.get_type  = %d                              \n"
                 "   %s  -- Title  Contraint                           \n"
+                "   %s  -- Album  Constraint                          \n"
+                "   %s  -- Artist Constraint                          \n"
                 "   AND p.provider_name IN(%s)                        \n"
                 "   %s  -- 'IsALink' Constraint                       \n"
                 "LIMIT %d;                                            \n"
                 ,                   /* ------------------------------ */
                 query->type,        /* Limit to <type>                */
-                artist_constr,      /* Artist Constr, may be empty    */
-                album_constr,       /* Album Constr, may be empty     */ 
                 title_constr,       /* Title Constr, may be empty     */ 
+                album_constr,       /* Album Constr, may be empty     */ 
+                artist_constr,      /* Artist Constr, may be empty    */
                 from_argument_list, /* Provider contraint             */ 
                 img_url_constr,     /* Search for links?              */
                 query->number       /* LIMIT to <number>              */
@@ -338,7 +338,8 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
             "        data_is_image,                                   \n"
             "        data_checksum,                                   \n"
             "        data,                                            \n"
-            "        rating                                           \n"
+            "        rating,                                          \n"
+            "        timestamp                                        \n"
             "FROM metadata as m                                       \n"
             "LEFT JOIN artists     AS a ON m.artist_id     = a.rowid  \n"
             "LEFT JOIN albums      AS b ON m.album_id      = b.rowid  \n"
@@ -425,7 +426,9 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
                 "        data_size,                                       \n"
                 "        data_is_image,                                   \n"
                 "        data_checksum,                                   \n"
-                "        data,rating                                      \n"
+                "        data,                                            \n"
+                "        rating,                                          \n"
+                "        timestamp                                        \n"
                 "FROM metadata as m                                       \n"
                 "LEFT JOIN artists AS a ON m.artist_id  = a.rowid         \n"
                 "LEFT JOIN albums  AS b ON m.album_id   = b.rowid         \n"
@@ -645,7 +648,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 {
     if(db && query && cache)
     {
-        
+
         char * sql = sqlite3_mprintf(
                 "INSERT OR IGNORE INTO metadata VALUES(                            \n"
                 "  (SELECT rowid FROM artists   WHERE artist_name   = LOWER('%q')),\n"
@@ -653,7 +656,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
                 "  (SELECT rowid FROM titles    WHERE title_name    = LOWER('%q')),\n"
                 "  (SELECT rowid FROM providers WHERE provider_name = LOWER('%q')),\n"
                 "  ?,                                                              \n"
-                "  (SELECT rowid FROM image_types WHERE image_type_name LIKE '%q'),\n"
+                "  (SELECT rowid FROM image_types WHERE image_type_name = LOWER('%q')),\n"
                 "  ?,?,?,?,?,?,?,?,?                                               \n"
                 ");                                                                \n",
                 query->artist,
@@ -701,16 +704,46 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 /*--------------------------------------------------------------*/
 
 
-static void add_to_cache_list(GlyrMemCache * head, GlyrMemCache * to_add)
+static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
 {
-    while(head && head->next)
+    if(to_add && list)
     {
-        head = head->next;
-    }
-    if(head != NULL && to_add != NULL)
-    {
-        head->next = to_add;
-        to_add->prev = head;
+        GlyrMemCache * head = *list;
+        if(head == NULL)
+        {
+            *list = to_add;
+        }
+        else /* find right place */ 
+        {
+            //FIXME: Subsort groups by timestamp
+            GlyrMemCache * tail = head;
+            while(head && head->rating < to_add->rating)
+            {
+                tail = head;
+                head = head->next;
+            }
+
+
+            if(head != NULL)
+            {
+                GlyrMemCache * prev = head->prev;
+                if(prev != NULL)
+                    prev->next = to_add;
+                
+                to_add->prev = prev;
+                to_add->next = head;
+
+                head->prev = to_add;
+
+                if(prev == NULL)
+                    *list = to_add;
+            }
+            else /* We're at the end */
+            {
+                tail->next = to_add;
+                to_add->prev = tail; 
+            }
+        }
     }
 }
 
@@ -723,11 +756,13 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 #if DO_PROFILE
     g_timer_start(select_callback_timer);
 #endif
+
+
     int rc = 0;
     select_callback_data * data = result;
     GlyrMemCache ** list = data->result;
 
-    if(argc >= 14 && data->counter < data->query->number)
+    if(argc >= 15 && data->counter < data->query->number)
     {
         GlyrMemCache * cache = DL_init();
         if(cache != NULL)
@@ -754,19 +789,12 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
             }
 
             cache->rating = (argv[13] ? strtol(argv[13],NULL,10) : 0);
+            cache->timestamp = (argv[14] ? strtod(argv[14],NULL) : 0);
             cache->cached = TRUE;
 
             if(list != NULL)
             {
-                GlyrMemCache * head  = *list;
-                if(head == NULL)
-                {
-                    *list = cache;
-                }
-                else
-                { 
-                    add_to_cache_list(head,cache);
-                }
+                add_to_cache_list(list,cache);
             }
             else if(data->cb != NULL && cache)
             {
@@ -793,8 +821,8 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 
     data->counter++;
 #if DO_PROFILE
-       g_timer_stop(select_callback_timer);
-       select_callback_spent += g_timer_elapsed(select_callback_timer,NULL);
+    g_timer_stop(select_callback_timer);
+    select_callback_spent += g_timer_elapsed(select_callback_timer,NULL);
 #endif
     return rc;
 }
