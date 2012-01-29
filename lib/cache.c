@@ -412,12 +412,14 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
                 "LEFT JOIN image_types as i on m.image_type_id = i.rowid     \n"
                 "WHERE m.get_type = %d AND provider_name IN(%s) %s           \n"
                 "%s %s %s                                                    \n"
-                "ORDER BY rating,timestamp;                                  \n",
+                "ORDER BY rating,timestamp                                   \n"
+                "LIMIT %d;                                                   \n",
                 query->type, from_argument_list, 
                 img_url_constr,
                 artist_constr,
                 album_constr,
-                title_constr
+                title_constr,
+                query->number
                 );
 
         if(sql != NULL)
@@ -540,6 +542,7 @@ static void create_table_defs(GlyrDatabase * db)
     execute(db,
             "PRAGMA synchronous = 0;                                                     \n"
             "PRAGMA quick_check;                                                         \n"
+            "PRAGMA temp_store = 2;                                                      \n"
             "BEGIN IMMEDIATE;                                                            \n"
             "-- Provider                                                                 \n"
             "CREATE TABLE IF NOT EXISTS providers (provider_name VARCHAR(20) UNIQUE);    \n"

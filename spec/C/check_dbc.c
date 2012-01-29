@@ -21,6 +21,8 @@
 #include "test_common.h"
 
 #include "../../lib/cache.h"
+#include "stdlib.h"
+#include "unistd.h"
 
 //--------------------
 
@@ -99,6 +101,62 @@ END_TEST
 
 //--------------------
 
+START_TEST(test_iter_db)
+{
+    init();
+    GlyrQuery q;
+    setup(&q,GLYR_GET_LYRICS,10);
+    glyr_opt_artist(&q,"Equi");
+    glyr_opt_title(&q,"lala");
+
+    cleanup_db();
+
+    system("mkdir -p /tmp/check");
+    GlyrDatabase * db = glyr_db_init("/tmp/check");
+
+    const int N = 50000;
+    for(int i = 0; i < N; i++)
+    {
+        GlyrMemCache * ct = glyr_cache_new();
+        glyr_cache_set_data(ct,g_strdup_printf("test# %d",i+1),-1);
+        ct->dsrc = g_strdup_printf("Dummy url %d",i+1);
+        //ct->prov = g_strdup("testsuite");
+        ct->rating = i+1;
+        glyr_db_insert(db,&q,(GlyrMemCache*)ct);
+        glyr_cache_free(ct);
+    }
+    
+    fail_unless(count_db_items(db) == N, NULL);
+
+    /* Test if case-insensitivity works */
+    glyr_opt_artist(&q,"eQuI");
+    glyr_opt_title(&q,"LALA");
+
+    /* Get a list of the caches */
+    GlyrMemCache * c, * ptr;
+    c = glyr_db_lookup(db,&q);
+    ptr = c;
+
+    fail_if(ptr == NULL);
+
+    int ctr = 0;
+    while(ptr)
+    {
+        ctr++;
+        ptr = ptr->next;
+    }
+    glyr_free_list(c);
+
+    fail_unless(ctr == 10);
+
+
+    glyr_db_destroy(db);
+    glyr_query_destroy(&q);
+}
+END_TEST 
+
+//--------------------
+
 /* Write artist|album|title, select only artist|title */
 START_TEST(test_intelligent_lookup)
 {
@@ -164,17 +222,17 @@ START_TEST(test_db_editplace)
         GlyrQuery q;
         setup(&q,GLYR_GET_LYRICS,1);
         glyr_db_insert(db,&q,test_data);
-        
+
         fail_unless(count_db_items(db) == 1, NULL);
-        
+
         GlyrMemCache * edit_one = glyr_cache_new();
         glyr_cache_set_data(edit_one,g_strdup("my new data"),-1);
         glyr_db_edit(db,&q,edit_one);
-        
+
         fail_unless(count_db_items(db) == 1, NULL);
         GlyrMemCache * lookup_one = glyr_db_lookup(db,&q);
         fail_unless(memcmp(lookup_one->data,edit_one->data,edit_one->size) == 0, NULL);
-        
+
         GlyrMemCache * edit_two = glyr_cache_new();
         glyr_cache_set_data(edit_two,g_strdup("my even new data"),-1);
         glyr_db_replace(db,edit_one->md5sum,&q,edit_two);
@@ -182,7 +240,7 @@ START_TEST(test_db_editplace)
         fail_unless(count_db_items(db) == 1, NULL);
         GlyrMemCache * lookup_two = glyr_db_lookup(db,&q);
         fail_unless(memcmp(lookup_two->data,edit_two->data,edit_two->size) == 0, NULL);
-       
+
         glyr_cache_free(lookup_one);
         glyr_cache_free(lookup_two);
         glyr_cache_free(edit_one);
@@ -199,17 +257,18 @@ END_TEST
 
 Suite * create_test_suite(void)
 {
-  Suite *s = suite_create ("Libglyr");
+    Suite *s = suite_create ("Libglyr");
 
-  /* Core test case */
-  TCase * tc_dbcache = tcase_create("DBCache");
-  tcase_set_timeout(tc_dbcache,GLYR_DEFAULT_TIMEOUT * 4);
-  tcase_add_test(tc_dbcache, test_create_db);
-  tcase_add_test(tc_dbcache, test_simple_db);
-  tcase_add_test(tc_dbcache, test_intelligent_lookup);
-  tcase_add_test(tc_dbcache, test_db_editplace);
-  suite_add_tcase(s, tc_dbcache);
-  return s;
+    /* Core test case */
+    TCase * tc_dbcache = tcase_create("DBCache");
+    tcase_set_timeout(tc_dbcache,GLYR_DEFAULT_TIMEOUT * 4);
+    tcase_add_test(tc_dbcache, test_create_db);
+    tcase_add_test(tc_dbcache, test_simple_db);
+    tcase_add_test(tc_dbcache, test_iter_db);
+    tcase_add_test(tc_dbcache, test_intelligent_lookup);
+    tcase_add_test(tc_dbcache, test_db_editplace);
+    suite_add_tcase(s, tc_dbcache);
+    return s;
 }
 
 //--------------------
