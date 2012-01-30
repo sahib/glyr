@@ -130,9 +130,9 @@ START_TEST(test_iter_db)
         ct->dsrc = g_strdup_printf("Dummy url %d",i+1);
 
         if(i % 2)
-            ct->rating = N - i;
+            ct->rating = N ;
         else
-            ct->rating = N - i + 1;
+            ct->rating = N ;
 
         if(i % 23)
             glyr_db_insert(db,&q,ct);
@@ -160,7 +160,7 @@ START_TEST(test_iter_db)
     g_timer_start(insert_time);
 
     GlyrMemCache * c, * ptr;
-    for(int i = 1; i <= 200; i++)
+    for(int i = 1; i <= N/10; i++)
     {
         g_timer_start(grain_time);
         /* Get a list of the caches */
@@ -177,11 +177,10 @@ START_TEST(test_iter_db)
 
         int last_rating = -1;
         int ctr = 0;
-        puts("--------------");
         while(ptr) {
             ctr++;
-            glyr_cache_print(ptr);
-            fail_unless(last_rating < ptr->rating);
+           // glyr_cache_print(ptr);
+            fail_unless(last_rating <= ptr->rating);
             last_rating = ptr->rating;
             ptr = ptr->next;
         }
@@ -189,7 +188,7 @@ START_TEST(test_iter_db)
 
         /* Test if we got exactly 10 or 42 items, (honoring number setting) */
  
-        g_message("Counted: %d\n",ctr);       
+        //g_message("Counted: %d\n",ctr);       
         if(i % 10)
             fail_unless(ctr == 10);
         else
@@ -207,9 +206,53 @@ START_TEST(test_iter_db)
 
     g_timer_destroy(insert_time);
     g_timer_destroy(grain_time);
-    system("rm -r /tmp/check");
+    cleanup_db();
 }
 END_TEST 
+
+//--------------------
+
+START_TEST(test_sorted_rating)
+{
+    const int N = 10;
+    
+    system("mkdir -p /tmp/check");
+
+    GlyrQuery q;
+    glyr_query_init(&q);
+    setup(&q,GLYR_GET_LYRICS,10);
+
+    GlyrDatabase * db = glyr_db_init("/tmp/check");
+
+    for(int i = 0; i < N; ++i)
+    {
+        GlyrMemCache * ct = glyr_cache_new();
+        fail_if(ct == NULL);
+
+        glyr_cache_set_data(ct,g_strdup_printf("MyLyrics %d",i),-1);
+        ct->dsrc = g_strdup("http://MyLyrics.com");
+        ct->rating = N - i;
+        glyr_db_insert(db,&q,ct);
+
+        glyr_cache_free(ct);
+    }
+
+    fail_unless(count_db_items(db) == N);
+
+    GlyrMemCache * list = glyr_db_lookup(db,&q);
+    GlyrMemCache * iter = list;
+    fail_if(list == NULL);
+
+    while(iter)
+    {
+        glyr_cache_print(iter);
+        iter = iter->next;    
+    }
+    
+    glyr_free_list(list);
+    cleanup_db();
+}
+END_TEST
 
 //--------------------
 
@@ -256,7 +299,7 @@ START_TEST(test_intelligent_lookup)
 
     glyr_query_destroy(&alt);
     glyr_db_destroy(db);
-    system("rm -r /tmp/check");
+    cleanup_db();
 }
 END_TEST
 
@@ -304,7 +347,7 @@ START_TEST(test_db_editplace)
         glyr_cache_free(test_data);
         glyr_db_destroy(db);
     }
-    system("rm -r /tmp/check");
+    cleanup_db();
 }
 END_TEST
 
@@ -321,6 +364,7 @@ Suite * create_test_suite(void)
     tcase_add_test(tc_dbcache, test_create_db);
     tcase_add_test(tc_dbcache, test_simple_db);
     tcase_add_test(tc_dbcache, test_iter_db);
+    tcase_add_test(tc_dbcache, test_sorted_rating);
     tcase_add_test(tc_dbcache, test_intelligent_lookup);
     tcase_add_test(tc_dbcache, test_db_editplace);
     suite_add_tcase(s, tc_dbcache);

@@ -575,7 +575,7 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 static void create_table_defs(GlyrDatabase * db)
 {
     execute(db,
-            "PRAGMA synchronous = 0;                                                     \n"
+            "PRAGMA synchronous = 1;                                                     \n"
             "PRAGMA quick_check;                                                         \n"
             "PRAGMA temp_store = 2;                                                      \n"
             "BEGIN IMMEDIATE;                                                            \n"
@@ -721,6 +721,20 @@ static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
             {
                 tail = head;
                 head = head->next;
+            }
+
+            GlyrMemCache * iter = tail;
+            int cRating = tail->rating;
+            int my_ctr = 0;
+            while(iter && iter->rating == cRating)
+            {
+                my_ctr++;
+                iter = iter->prev;
+            }
+
+            if(my_ctr != 1)
+            {
+                printf("%d INROW\n",my_ctr);
             }
 
 
