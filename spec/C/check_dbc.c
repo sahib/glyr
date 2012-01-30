@@ -175,13 +175,13 @@ START_TEST(test_iter_db)
         ptr = c;
         fail_if(ptr == NULL);
 
-        int last_rating = -1;
+        int last_rating = INT_MAX;
         int ctr = 0;
         puts("--------------");
         while(ptr) {
             ctr++;
             glyr_cache_print(ptr);
-            fail_unless(last_rating < ptr->rating);
+            fail_unless(last_rating > ptr->rating);
             last_rating = ptr->rating;
             ptr = ptr->next;
         }

@@ -717,12 +717,11 @@ static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
         {
             //FIXME: Subsort groups by timestamp
             GlyrMemCache * tail = head;
-            while(head && head->rating < to_add->rating)
+            while(head && head->rating > to_add->rating)
             {
                 tail = head;
                 head = head->next;
             }
-
 
             if(head != NULL)
             {
