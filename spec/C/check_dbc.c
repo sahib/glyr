@@ -21,8 +21,10 @@
 #include "test_common.h"
 
 #include "../../lib/cache.h"
-#include "stdlib.h"
-#include "unistd.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 //--------------------
 
@@ -122,7 +124,7 @@ START_TEST(test_iter_db)
 
     GTimer * insert_time = g_timer_new();
 
-    const int N = 2000;
+    const int N = 5000;
     for(int i = 0; i < N; i++)
     {
         GlyrMemCache * ct = glyr_cache_new();
@@ -147,7 +149,7 @@ START_TEST(test_iter_db)
 
     /* Check if N items are in DB */
     int cdb = count_db_items(db);
-    g_message("Counted %d items\n",cdb);
+    g_message("Counted %d items",cdb);
     fail_unless(cdb == N, NULL);
 
     /* Test if case-insensitivity works */
@@ -175,12 +177,11 @@ START_TEST(test_iter_db)
         ptr = c;
         fail_if(ptr == NULL);
 
-        int last_rating = -1;
+        int last_rating = INT_MAX;
         int ctr = 0;
         while(ptr) {
             ctr++;
-           // glyr_cache_print(ptr);
-            fail_unless(last_rating <= ptr->rating);
+            fail_unless(last_rating >= ptr->rating);
             last_rating = ptr->rating;
             ptr = ptr->next;
         }
@@ -188,7 +189,6 @@ START_TEST(test_iter_db)
 
         /* Test if we got exactly 10 or 42 items, (honoring number setting) */
  
-        //g_message("Counted: %d\n",ctr);       
         if(i % 10)
             fail_unless(ctr == 10);
         else
@@ -220,18 +220,20 @@ START_TEST(test_sorted_rating)
 
     GlyrQuery q;
     glyr_query_init(&q);
-    setup(&q,GLYR_GET_LYRICS,10);
+    setup(&q,GLYR_GET_LYRICS,N);
 
     GlyrDatabase * db = glyr_db_init("/tmp/check");
 
     for(int i = 0; i < N; ++i)
     {
+        int rate = (i / 2) + 1;
+
         GlyrMemCache * ct = glyr_cache_new();
         fail_if(ct == NULL);
 
         glyr_cache_set_data(ct,g_strdup_printf("MyLyrics %d",i),-1);
         ct->dsrc = g_strdup("http://MyLyrics.com");
-        ct->rating = N - i;
+        ct->rating = rate;
         glyr_db_insert(db,&q,ct);
 
         glyr_cache_free(ct);
@@ -243,9 +245,17 @@ START_TEST(test_sorted_rating)
     GlyrMemCache * iter = list;
     fail_if(list == NULL);
 
+    double last_timestamp = DBL_MAX;
+    int last_rating = INT_MAX;
     while(iter)
     {
         glyr_cache_print(iter);
+        fail_unless(last_rating >= iter->rating);
+        if(last_rating == iter->rating)
+            fail_unless(last_timestamp >= iter->timestamp);
+
+        last_timestamp = iter->timestamp;
+        last_rating = iter->rating;
         iter = iter->next;    
     }
     

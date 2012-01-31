@@ -38,11 +38,9 @@ static const gchar * lyrics_chartlyrics_url(GlyrQuery * s)
 static GlyrMemCache * get_lyrics_from_results(GlyrQuery * s, const gchar * url)
 {
 	GlyrMemCache * result = NULL;
-    puts(url);
 	GlyrMemCache * dl_cache = download_single(url,s,NULL);
 	if(dl_cache != NULL)
 	{
-        puts(dl_cache->data);
 		gchar * text = get_search_value(dl_cache->data,LYRIC_TEXT_BEG,LYRIC_TEXT_END);
 		if(text != NULL)
 		{
@@ -78,8 +76,6 @@ static GList * lyrics_chartlyrics_parse(cb_object * capo)
 	gchar * node = capo->cache->data;
 	gint nodelen = (sizeof LYRIC_NODE) - 1;
 
-    puts(capo->cache->data);
-        
 	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node + nodelen, LYRIC_NODE)) != NULL)
 	{
 		node += nodelen;
@@ -91,12 +87,9 @@ static GList * lyrics_chartlyrics_parse(cb_object * capo)
 		{
 			gchar * lyric_id = get_search_value(node,LYRIC_ID_BEG,LYRIC_ID_END);
 			gchar * lyric_checksum = get_search_value(node,LYRIC_CHECKSUM_BEG,LYRIC_CHECKSUM_END);
-            puts(artist);
-            puts(title);
 			if(lyric_id && lyric_checksum && strcmp(lyric_id,"0") != 0)
 			{
 				gchar * content_url = g_strdup_printf(CL_API_GET,lyric_id,lyric_checksum);
-                puts(content_url);
 				GlyrMemCache * result = get_lyrics_from_results(capo->s,content_url);
 				if(result != NULL)
 				{

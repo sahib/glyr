@@ -147,9 +147,6 @@ static GList * cover_discogs_parse(cb_object * capo)
 {
 	GList * result_list = NULL;
 
-    puts(capo->cache->data);
-    puts(capo->url);
-
 	/* Go through all release nodes */
 	gchar * release_node = capo->cache->data;
 	while(continue_search(g_list_length(result_list),capo->s) && (release_node = strstr(release_node+1,RELEASE_ID)) != NULL)
@@ -166,7 +163,6 @@ static GList * cover_discogs_parse(cb_object * capo)
 				{
 					/*Construct release_url */
 					gchar *release_url = g_strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY_DISCOGS,release_ID);
-                    puts(release_url);
 					if(release_url != NULL)
 					{
 						/* Only download till artists tag */

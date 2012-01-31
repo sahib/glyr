@@ -441,7 +441,9 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
                 "                   %s  -- Artist constr.                 \n"
                 "                   %s                                    \n"
                 "           AND provider_name IN(%s)                      \n"
-//                "ORDER BY rating,timestamp                                \n" // GAAAAARGHL!!
+/*                "ORDER BY rating,timestamp                              \n" // GAAAAARGHL!!
+ *                -- This line is here to remember me that ORDER BY       *
+ *                -- is damn slow. Half a day of debugging..              */
                 "LIMIT %d;                                                \n",
             query->type,
             title_constr,
@@ -638,7 +640,7 @@ static double get_current_time(void)
 {
     struct timeval tim;
     gettimeofday(&tim, NULL);
-    return tim.tv_sec + (tim.tv_usec/1000000.0);
+    return (double)tim.tv_sec + ((double)tim.tv_usec/1e6);
 }
 
 /*--------------------------------------------------------------*/
@@ -687,6 +689,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
             glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing data!\n");
 
         sqlite3_bind_int( stmt, 9, cache->rating);
+       // g_printerr("%lf\n",get_current_time());
         sqlite3_bind_double( stmt,10, get_current_time());
 
         if(sqlite3_step(stmt) != SQLITE_DONE) 
@@ -703,6 +706,7 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+#define DEBUG_LIST false 
 
 static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
 {
@@ -711,33 +715,54 @@ static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
         GlyrMemCache * head = *list;
         if(head == NULL)
         {
+            /* Initialize list */
             *list = to_add;
         }
-        else /* find right place */ 
+        else 
         {
-            //FIXME: Subsort groups by timestamp
+            /* Find rating in list
+             * head will store the first non-matchin item,
+             * tail = head->prev
+             * */
             GlyrMemCache * tail = head;
-            while(head && head->rating < to_add->rating)
+            while(head && head->rating > to_add->rating)
             {
                 tail = head;
                 head = head->next;
             }
 
-            GlyrMemCache * iter = tail;
-            int cRating = tail->rating;
-            int my_ctr = 0;
-            while(iter && iter->rating == cRating)
+           
+            /* Now see what timestamp we have,
+             * and sort it accordingly, younger 
+             * caches (== higher timestamp), are sorted
+             * at the start 
+             */
+            if(head != NULL)
             {
-                my_ctr++;
-                iter = iter->prev;
+                int last_rating = head->rating;
+                while(head && head->rating == last_rating && head->timestamp > to_add->timestamp)
+                {
+                    GlyrMemCache * p = head->next;
+                    if(p && p->rating == last_rating)
+                    {
+                        tail = head;
+                        head = p;
+                    }
+                    else if(p == NULL)
+                    {
+                        tail = head;
+                        head = p;
+                    }
+                    else break;
+
+                }
             }
-
-            if(my_ctr != 1)
-            {
-                printf("%d INROW\n",my_ctr);
-            }
-
-
+           
+            /* Check if we're at the end of the list,
+             * If so just append it, 
+             * else we insert to_add before head
+             */ 
+            g_assert(tail);
             if(head != NULL)
             {
                 GlyrMemCache * prev = head->prev;
@@ -759,12 +784,25 @@ static void add_to_cache_list(GlyrMemCache ** list, GlyrMemCache * to_add)
             }
         }
     }
+
+#if DEBUG_LIST
+    GlyrMemCache * p = *list;
+    while(p != NULL)
+    {
+        char * surr = (to_add == p) ? "*" : "|";
+        g_printerr("%s(%d|%2.10f)%s %c ",surr,p->rating,p->timestamp,surr,(p->next) ? '-' : ' ');
+        p = p->next;
+    }
+    puts("");
+#endif
+
 }
 
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
+/* Convert a single result from the DB to an actual Cache */
 static int select_callback(void * result, int argc, char ** argv, char ** azColName)
 {
 #if DO_PROFILE
@@ -803,7 +841,15 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
             }
 
             cache->rating = (argv[13] ? strtol(argv[13],NULL,10) : 0);
-            cache->timestamp = (argv[14] ? strtod(argv[14],NULL) : 0);
+
+            /* Timestamp */
+            if(argv[14] != NULL)
+            {
+                /* Normal strtod() cuts off part behin the comma.. */
+                cache->timestamp = (argv[14] ? g_ascii_strtod(argv[14],NULL) : 0);
+            }
+
+            /* We're in the cache, so this one was cached.. :) */
             cache->cached = TRUE;
 
             if(list != NULL)
