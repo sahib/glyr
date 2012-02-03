@@ -64,7 +64,7 @@ const gchar * map_language[][2] = {
 
 void glyr_internal_log(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message, gpointer user_data)
 {
-   fputs(message,stderr);
+   fputs(message,GLYR_OUTPUT);
 }
 
 

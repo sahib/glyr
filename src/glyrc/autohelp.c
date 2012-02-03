@@ -92,7 +92,7 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 
 /* ------------------------------------------------------------- */
 
-void suggest_other_getter(GlyrQuery * query, gchar * wrong_input)
+void suggest_other_getter(GlyrQuery * query, const char * wrong_input)
 {
 	if(query->verbosity <= 0)
 	{
@@ -123,7 +123,7 @@ void suggest_other_getter(GlyrQuery * query, gchar * wrong_input)
 
 /*-----------------------------------------*/
 
-void suggest_other_provider(GlyrQuery * query, gchar * wrong_input)
+void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
 {
 	if(query->verbosity <= 0)
 	{
