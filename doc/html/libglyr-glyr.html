@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-config.html" title="config">
-<link rel="next" href="libglyr-types.html" title="types">
+<link rel="next" href="libglyr-Testing.html" title="Testing">
 <meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -18,7 +18,7 @@
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libglyr Reference Manual</th>
-<td><a accesskey="n" href="libglyr-types.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="libglyr-Testing.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libglyr-glyr.synopsis" class="shortcut">Top</a>
@@ -55,6 +55,7 @@ const <span class="returnvalue">char</span> *        <a class="link" href="libgl
 <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()">glyr_get</a>                            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *settings</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a> *error</code></em>,
                                                          <em class="parameter"><code><span class="type">int</span> *length</code></em>);
+<a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT"><span class="returnvalue">GLYR_FIELD_REQUIREMENT</span></a> <a class="link" href="libglyr-glyr.html#glyr-get-requirements" title="glyr_get_requirements ()">glyr_get_requirements</a>            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
 const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-glyr.html#glyr-get-type-to-string" title="glyr_get_type_to_string ()">glyr_get_type_to_string</a>             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()">glyr_info_free</a>                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">GlyrFetcherInfo</span></a> *info</code></em>);
 <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="returnvalue">GlyrFetcherInfo</span></a> *   <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()">glyr_info_get</a>                       (<em class="parameter"><code><span class="type">void</span></code></em>);
@@ -415,6 +416,49 @@ Once an item is found the callback (set via <a class="link" href="libglyr-glyr.h
 </div>
 <hr>
 <div class="refsect2">
+<a name="glyr-get-requirements"></a><h3>glyr_get_requirements ()</h3>
+<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT"><span class="returnvalue">GLYR_FIELD_REQUIREMENT</span></a> glyr_get_requirements            (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
+<p>
+Different getters need different fields set. You can use this
+to check if the artist, album and title field of a specific getter 
+is required or optional.
+</p>
+<p>
+</p>
+<div class="informalexample"><pre class="programlisting">
+GLYR_FIELD_REQUIREMENT reqs = glyr_get_requirements(GLYR_GET_COVERART);
+if(reqs &amp; GLYR_REQUIRES_ALBUM)
+{ 
+   // do something when artist is required
+}
+else
+if(reqs / GLYR_OPTIONAL_TITLE)
+{
+  // Title is optional
+}
+else
+{
+  // None of both
+}
+</pre></div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>type</code></em> :</span></p></td>
+<td>The type to get the requirements from</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>A bitmask out of members of GLYR_FIELD_REQUIREMENT</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
 <a name="glyr-get-type-to-string"></a><h3>glyr_get_type_to_string ()</h3>
 <pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_get_type_to_string             (<em class="parameter"><code><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>);</pre>
 <p>
@@ -464,7 +508,7 @@ being a pointer to a doubly linked list of GlyrSourceInfos
 It is best understood by an example:
 </p>
 <div class="example">
-<a name="id538228"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
+<a name="id661614"></a><p class="title"><b>Example 1. Using GlyrFetcherInfo:</b></p>
 <div class="example-contents"><pre class="programlisting">
 static void visualize_from_options(void)
 {
@@ -1160,14 +1204,14 @@ containing directory (see the 'dirname' utility) - the path can be either absolu
 </p>
 <p>
 From there on it works by cascading upwards - i.e. checking all files in the dir (not recursing), go up, repeat.
-This will be repeated $(recurse_depth) times or till no
+This will be repeated $(recurse_depth) times or till it cannot go upwards.
 How the file is checked depends on the metadata type to search, see below.
 </p>
 <p>
-For reference the actual code the actual C code is given:
+For reference the actual C code is given (${artist} gets expanded):
 </p>
 <div class="example">
-<a name="id553256"></a><p class="title"><b>Example 2. Used regexes and recurse_depth</b></p>
+<a name="id663973"></a><p class="title"><b>Example 2. Used regexes and recurse_depth</b></p>
 <div class="example-contents"><pre class="programlisting">
         case GLYR_GET_COVERART:
             search_regex = "^(folder|front|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";

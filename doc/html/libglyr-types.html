@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
-<link rel="prev" href="libglyr-glyr.html" title="glyr">
+<link rel="prev" href="libglyr-Testing.html" title="Testing">
 <link rel="next" href="api-index-full.html" title="API Index">
 <meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
@@ -14,7 +14,7 @@
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
 <tr valign="middle">
-<td><a accesskey="p" href="libglyr-glyr.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="p" href="libglyr-Testing.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libglyr Reference Manual</th>
@@ -400,7 +400,8 @@ It describes what kind of data the cache holds.
     GLYRE_SKIP,        
     GLYRE_STOP_POST,  
     GLYRE_STOP_PRE,   
-    GLYRE_NO_INIT     
+    GLYRE_NO_INIT,
+    GLYRE_WAS_STOPPED    
 } GLYR_ERROR;
 </pre>
 <p>
@@ -470,6 +471,11 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
 <tr>
 <td><p><a name="GLYRE-NO-INIT:CAPS"></a><span class="term"><code class="literal">GLYRE_NO_INIT</code></span></p></td>
 <td>Library has not been initialized with <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()"><code class="function">glyr_init()</code></a> yet
+</td>
+</tr>
+<tr>
+<td><p><a name="GLYRE-WAS-STOPPED:CAPS"></a><span class="term"><code class="literal">GLYRE_WAS_STOPPED</code></span></p></td>
+<td>Library was stopped by <a class="link" href="libglyr-glyr.html#glyr-signal-exit" title="glyr_signal_exit ()"><code class="function">glyr_signal_exit()</code></a>  
 </td>
 </tr>
 </tbody>
@@ -723,6 +729,7 @@ You should pass it to <a class="link" href="libglyr-glyr.html#glyr-info-free" ti
   char * img_format; 
   unsigned char md5sum[16]; 
   bool cached;
+  double timestamp;
 
   struct _GlyrMemCache * next; 
   struct _GlyrMemCache * prev; 
@@ -778,6 +785,10 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
 <tr>
 <td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrMemCache.cached"></a>cached</code></em>;</span></p></td>
 <td>If this cache was locally cached.</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="type">double</span> <em class="structfield"><code><a name="GlyrMemCache.timestamp"></a>timestamp</code></em>;</span></p></td>
+<td>This is used internally by libglyr.</td>
 </tr>
 <tr>
 <td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.next"></a>next</code></em>;</span></p></td>
