@@ -20,6 +20,17 @@
 #ifndef GLYR_H
 #define GLYR_H
 
+/**
+ * SECTION:glyr
+ * @short_description: Main interface to search metadata 
+ * @title: Glyr 
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/glyr.h
+ *
+ * All functions used to search metadata and use the essential of libglyr
+ * is located here. 
+ */
 /* All structs used by glyr are here */
 #include "types.h"
 

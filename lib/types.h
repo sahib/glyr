@@ -20,6 +20,18 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+/**
+ * SECTION:types
+ * @short_description: Types, Enums and Defines of libglyr
+ * @title: Types
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/types.h
+ *
+ * All structs / enums / defines of the libglyr API can be found here.
+ * You do not need to include this header directly, use glyr/glyr.h
+ */
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include <sqlite3.h>
@@ -78,6 +90,7 @@
  * @GLYRE_STOP_POST: Will stop searching, but still add the current item 
  * @GLYRE_STOP_PRE: Will stop searching, but won't add the current item
  * @GLYRE_NO_INIT: Library has not been initialized with glyr_init() yet
+ * @GLYRE_WAS_STOPPED: Library was stopped by glyr_signal_exit()  
  *
  * All errors you can get, via glyr_get() and the glyr_opt_* calls.
  * 

@@ -1,3 +1,15 @@
+/**
+ * SECTION:config
+ * @short_description: Compiletime Information
+ * @title: Config 
+ * @section_id:
+ * @stability: Stable
+ * @include: glyr/config.h
+ *
+ * Misc. version checking macros and other defines
+ * that may vary between builds.
+ */
+
 #define GLYR_VERSION_MAJOR "@GLYR_VERSION_MAJOR@"
 #define GLYR_VERSION_MINOR "@GLYR_VERSION_MINOR@"
 #define GLYR_VERSION_MICRO "@GLYR_VERSION_MICRO@"
@@ -17,7 +29,7 @@
  * <informalexample>
  * <programlisting>
  * #if GLYR_CHECK_VERSION(0,8,7)
- *      puts("Version is above 0.87!");
+ *      puts("Version is at least 0.87!");
  * #endif
  * </programlisting>
  * </informalexample>

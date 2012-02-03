@@ -32,6 +32,7 @@ BUILD_HEADERS =
   "#{DIR}/types.h",
   "#{DIR}/cache.h",
   "#{DIR}/config.h",
+  "#{DIR}/testing.h",
 ]
 
 DOC_DIR = "#{File.expand_path(Dir.getwd)}/doc"
