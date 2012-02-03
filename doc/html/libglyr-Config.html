@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>config</title>
+<title>Config</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
@@ -21,41 +21,52 @@
 <td><a accesskey="n" href="libglyr-Glyr.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
-<a href="#libglyr-config.synopsis" class="shortcut">Top</a>
+<a href="#libglyr-Config.synopsis" class="shortcut">Top</a>
                    | 
-                  <a href="#libglyr-config.description" class="shortcut">Description</a>
+                  <a href="#libglyr-Config.description" class="shortcut">Description</a>
 </td></tr>
 </table>
 <div class="refentry">
-<a name="libglyr-config"></a><div class="titlepage"></div>
+<a name="libglyr-Config"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
-<h2><span class="refentrytitle"><a name="libglyr-config.top_of_page"></a>config</span></h2>
-<p>config</p>
+<h2><span class="refentrytitle"><a name="libglyr-Config.top_of_page"></a>Config</span></h2>
+<p>Config — Compiletime Information</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
+<div class="refsect1">
+<a name="libglyr-Config.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
 <div class="refsynopsisdiv">
-<a name="libglyr-config.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis">#define             <a class="link" href="libglyr-config.html#GLYR-CHECK-VERSION:CAPS" title="GLYR_CHECK_VERSION()">GLYR_CHECK_VERSION</a>                  (X,
+<a name="libglyr-Config.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;glyr/config.h&gt;
+
+#define             <a class="link" href="libglyr-Config.html#GLYR-CHECK-VERSION:CAPS" title="GLYR_CHECK_VERSION()">GLYR_CHECK_VERSION</a>                  (X,
                                                          Y,
                                                          Z)
-#define             <a class="link" href="libglyr-config.html#GLYR-DEBUG:CAPS" title="GLYR_DEBUG">GLYR_DEBUG</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-OUTPUT:CAPS" title="GLYR_OUTPUT">GLYR_OUTPUT</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MAJOR:CAPS" title="GLYR_VERSION_MAJOR">GLYR_VERSION_MAJOR</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MAJOR-INT:CAPS" title="GLYR_VERSION_MAJOR_INT">GLYR_VERSION_MAJOR_INT</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MICRO:CAPS" title="GLYR_VERSION_MICRO">GLYR_VERSION_MICRO</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MICRO-INT:CAPS" title="GLYR_VERSION_MICRO_INT">GLYR_VERSION_MICRO_INT</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MINOR:CAPS" title="GLYR_VERSION_MINOR">GLYR_VERSION_MINOR</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-MINOR-INT:CAPS" title="GLYR_VERSION_MINOR_INT">GLYR_VERSION_MINOR_INT</a>
-#define             <a class="link" href="libglyr-config.html#GLYR-VERSION-NAME:CAPS" title="GLYR_VERSION_NAME">GLYR_VERSION_NAME</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-DEBUG:CAPS" title="GLYR_DEBUG">GLYR_DEBUG</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-OUTPUT:CAPS" title="GLYR_OUTPUT">GLYR_OUTPUT</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MAJOR:CAPS" title="GLYR_VERSION_MAJOR">GLYR_VERSION_MAJOR</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MAJOR-INT:CAPS" title="GLYR_VERSION_MAJOR_INT">GLYR_VERSION_MAJOR_INT</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MICRO:CAPS" title="GLYR_VERSION_MICRO">GLYR_VERSION_MICRO</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MICRO-INT:CAPS" title="GLYR_VERSION_MICRO_INT">GLYR_VERSION_MICRO_INT</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MINOR:CAPS" title="GLYR_VERSION_MINOR">GLYR_VERSION_MINOR</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-MINOR-INT:CAPS" title="GLYR_VERSION_MINOR_INT">GLYR_VERSION_MINOR_INT</a>
+#define             <a class="link" href="libglyr-Config.html#GLYR-VERSION-NAME:CAPS" title="GLYR_VERSION_NAME">GLYR_VERSION_NAME</a>
 </pre>
 </div>
 <div class="refsect1">
-<a name="libglyr-config.description"></a><h2>Description</h2>
+<a name="libglyr-Config.description"></a><h2>Description</h2>
+<p>
+Misc. version checking macros and other defines
+that may vary between builds.
+</p>
 </div>
 <div class="refsect1">
-<a name="libglyr-config.details"></a><h2>Details</h2>
+<a name="libglyr-Config.details"></a><h2>Details</h2>
 <div class="refsect2">
 <a name="GLYR-CHECK-VERSION:CAPS"></a><h3>GLYR_CHECK_VERSION()</h3>
 <pre class="programlisting">#define GLYR_CHECK_VERSION(X,Y,Z) (X &lt;= GLYR_VERSION_MAJOR_INT &amp;&amp; Y &lt;= GLYR_VERSION_MINOR_INT &amp;&amp; Z &lt;= GLYR_VERSION_MICRO_INT)

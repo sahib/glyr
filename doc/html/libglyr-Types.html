@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>types</title>
+<title>Types</title>
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
@@ -21,69 +21,80 @@
 <td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
-<a href="#libglyr-types.synopsis" class="shortcut">Top</a>
+<a href="#libglyr-Types.synopsis" class="shortcut">Top</a>
                    | 
-                  <a href="#libglyr-types.description" class="shortcut">Description</a>
+                  <a href="#libglyr-Types.description" class="shortcut">Description</a>
 </td></tr>
 </table>
 <div class="refentry">
-<a name="libglyr-types"></a><div class="titlepage"></div>
+<a name="libglyr-Types"></a><div class="titlepage"></div>
 <div class="refnamediv"><table width="100%"><tr>
 <td valign="top">
-<h2><span class="refentrytitle"><a name="libglyr-types.top_of_page"></a>types</span></h2>
-<p>types</p>
+<h2><span class="refentrytitle"><a name="libglyr-Types.top_of_page"></a>Types</span></h2>
+<p>Types — Types, Enums and Defines of libglyr</p>
 </td>
 <td valign="top" align="right"></td>
 </tr></table></div>
+<div class="refsect1">
+<a name="libglyr-Types.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
 <div class="refsynopsisdiv">
-<a name="libglyr-types.synopsis"></a><h2>Synopsis</h2>
-<pre class="synopsis"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (<a class="link" href="libglyr-types.html#DL-callback" title="DL_callback ()">*DL_callback</a>)                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
+<a name="libglyr-Types.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;glyr/types.h&gt;
+
+<a class="link" href="libglyr-Types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (<a class="link" href="libglyr-Types.html#DL-callback" title="DL_callback ()">*DL_callback</a>)                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
                                                          <em class="parameter"><code><span class="type">struct _GlyrQuery</span> *s</code></em>);
-enum                <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE">GLYR_DATA_TYPE</a>;
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" title="GLYR_DEFAULT_ALLOWED_FORMATS">GLYR_DEFAULT_ALLOWED_FORMATS</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-CMAXSIZE:CAPS" title="GLYR_DEFAULT_CMAXSIZE">GLYR_DEFAULT_CMAXSIZE</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-CMINSIZE:CAPS" title="GLYR_DEFAULT_CMINSIZE">GLYR_DEFAULT_CMINSIZE</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS" title="GLYR_DEFAULT_DB_AUTOREAD">GLYR_DEFAULT_DB_AUTOREAD</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS" title="GLYR_DEFAULT_DB_AUTOWRITE">GLYR_DEFAULT_DB_AUTOWRITE</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-DOWNLOAD:CAPS" title="GLYR_DEFAULT_DOWNLOAD">GLYR_DEFAULT_DOWNLOAD</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS" title="GLYR_DEFAULT_FORCE_UTF8">GLYR_DEFAULT_FORCE_UTF8</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FROM:CAPS" title="GLYR_DEFAULT_FROM">GLYR_DEFAULT_FROM</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS" title="GLYR_DEFAULT_FROM_ARGUMENT_DELIM">GLYR_DEFAULT_FROM_ARGUMENT_DELIM</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-FUZZYNESS:CAPS" title="GLYR_DEFAULT_FUZZYNESS">GLYR_DEFAULT_FUZZYNESS</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-LANG:CAPS" title="GLYR_DEFAULT_LANG">GLYR_DEFAULT_LANG</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" title="GLYR_DEFAULT_LANG_AWARE_ONLY">GLYR_DEFAULT_LANG_AWARE_ONLY</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-MUISCTREE-PATH:CAPS" title="GLYR_DEFAULT_MUISCTREE_PATH">GLYR_DEFAULT_MUISCTREE_PATH</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-NUMBER:CAPS" title="GLYR_DEFAULT_NUMBER">GLYR_DEFAULT_NUMBER</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PARALLEL:CAPS" title="GLYR_DEFAULT_PARALLEL">GLYR_DEFAULT_PARALLEL</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PLUGMAX:CAPS" title="GLYR_DEFAULT_PLUGMAX">GLYR_DEFAULT_PLUGMAX</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-PROXY:CAPS" title="GLYR_DEFAULT_PROXY">GLYR_DEFAULT_PROXY</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-QSRATIO:CAPS" title="GLYR_DEFAULT_QSRATIO">GLYR_DEFAULT_QSRATIO</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-REDIRECTS:CAPS" title="GLYR_DEFAULT_REDIRECTS">GLYR_DEFAULT_REDIRECTS</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS" title="GLYR_DEFAULT_SUPPORTED_LANGS">GLYR_DEFAULT_SUPPORTED_LANGS</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-TIMEOUT:CAPS" title="GLYR_DEFAULT_TIMEOUT">GLYR_DEFAULT_TIMEOUT</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-USERAGENT:CAPS" title="GLYR_DEFAULT_USERAGENT">GLYR_DEFAULT_USERAGENT</a>
-#define             <a class="link" href="libglyr-types.html#GLYR-DEFAULT-VERBOSITY:CAPS" title="GLYR_DEFAULT_VERBOSITY">GLYR_DEFAULT_VERBOSITY</a>
-enum                <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR">GLYR_ERROR</a>;
-enum                <a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT">GLYR_FIELD_REQUIREMENT</a>;
-enum                <a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE">GLYR_GET_TYPE</a>;
-                    <a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase">GlyrDatabase</a>;
-                    <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo">GlyrFetcherInfo</a>;
-                    <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache">GlyrMemCache</a>;
-                    <a class="link" href="libglyr-types.html#GlyrQuery" title="GlyrQuery">GlyrQuery</a>;
-                    <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo">GlyrSourceInfo</a>;
+enum                <a class="link" href="libglyr-Types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE">GLYR_DATA_TYPE</a>;
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-ALLOWED-FORMATS:CAPS" title="GLYR_DEFAULT_ALLOWED_FORMATS">GLYR_DEFAULT_ALLOWED_FORMATS</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-CMAXSIZE:CAPS" title="GLYR_DEFAULT_CMAXSIZE">GLYR_DEFAULT_CMAXSIZE</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-CMINSIZE:CAPS" title="GLYR_DEFAULT_CMINSIZE">GLYR_DEFAULT_CMINSIZE</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-DB-AUTOREAD:CAPS" title="GLYR_DEFAULT_DB_AUTOREAD">GLYR_DEFAULT_DB_AUTOREAD</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-DB-AUTOWRITE:CAPS" title="GLYR_DEFAULT_DB_AUTOWRITE">GLYR_DEFAULT_DB_AUTOWRITE</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-DOWNLOAD:CAPS" title="GLYR_DEFAULT_DOWNLOAD">GLYR_DEFAULT_DOWNLOAD</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-FORCE-UTF8:CAPS" title="GLYR_DEFAULT_FORCE_UTF8">GLYR_DEFAULT_FORCE_UTF8</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-FROM:CAPS" title="GLYR_DEFAULT_FROM">GLYR_DEFAULT_FROM</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-FROM-ARGUMENT-DELIM:CAPS" title="GLYR_DEFAULT_FROM_ARGUMENT_DELIM">GLYR_DEFAULT_FROM_ARGUMENT_DELIM</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-FUZZYNESS:CAPS" title="GLYR_DEFAULT_FUZZYNESS">GLYR_DEFAULT_FUZZYNESS</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-LANG:CAPS" title="GLYR_DEFAULT_LANG">GLYR_DEFAULT_LANG</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-LANG-AWARE-ONLY:CAPS" title="GLYR_DEFAULT_LANG_AWARE_ONLY">GLYR_DEFAULT_LANG_AWARE_ONLY</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-MUISCTREE-PATH:CAPS" title="GLYR_DEFAULT_MUISCTREE_PATH">GLYR_DEFAULT_MUISCTREE_PATH</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-NUMBER:CAPS" title="GLYR_DEFAULT_NUMBER">GLYR_DEFAULT_NUMBER</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-PARALLEL:CAPS" title="GLYR_DEFAULT_PARALLEL">GLYR_DEFAULT_PARALLEL</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-PLUGMAX:CAPS" title="GLYR_DEFAULT_PLUGMAX">GLYR_DEFAULT_PLUGMAX</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-PROXY:CAPS" title="GLYR_DEFAULT_PROXY">GLYR_DEFAULT_PROXY</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-QSRATIO:CAPS" title="GLYR_DEFAULT_QSRATIO">GLYR_DEFAULT_QSRATIO</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-REDIRECTS:CAPS" title="GLYR_DEFAULT_REDIRECTS">GLYR_DEFAULT_REDIRECTS</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-SUPPORTED-LANGS:CAPS" title="GLYR_DEFAULT_SUPPORTED_LANGS">GLYR_DEFAULT_SUPPORTED_LANGS</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-TIMEOUT:CAPS" title="GLYR_DEFAULT_TIMEOUT">GLYR_DEFAULT_TIMEOUT</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-USERAGENT:CAPS" title="GLYR_DEFAULT_USERAGENT">GLYR_DEFAULT_USERAGENT</a>
+#define             <a class="link" href="libglyr-Types.html#GLYR-DEFAULT-VERBOSITY:CAPS" title="GLYR_DEFAULT_VERBOSITY">GLYR_DEFAULT_VERBOSITY</a>
+enum                <a class="link" href="libglyr-Types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR">GLYR_ERROR</a>;
+enum                <a class="link" href="libglyr-Types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT">GLYR_FIELD_REQUIREMENT</a>;
+enum                <a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE">GLYR_GET_TYPE</a>;
+                    <a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase">GlyrDatabase</a>;
+                    <a class="link" href="libglyr-Types.html#GlyrFetcherInfo" title="GlyrFetcherInfo">GlyrFetcherInfo</a>;
+                    <a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache">GlyrMemCache</a>;
+                    <a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery">GlyrQuery</a>;
+                    <a class="link" href="libglyr-Types.html#GlyrSourceInfo" title="GlyrSourceInfo">GlyrSourceInfo</a>;
 </pre>
 </div>
 <div class="refsect1">
-<a name="libglyr-types.description"></a><h2>Description</h2>
+<a name="libglyr-Types.description"></a><h2>Description</h2>
+<p>
+All structs / enums / defines of the libglyr API can be found here.
+You do not need to include this header directly, use glyr/glyr.h
+</p>
 </div>
 <div class="refsect1">
-<a name="libglyr-types.details"></a><h2>Details</h2>
+<a name="libglyr-Types.details"></a><h2>Details</h2>
 <div class="refsect2">
 <a name="DL-callback"></a><h3>DL_callback ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (*DL_callback)                      (<em class="parameter"><code><a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
+<pre class="programlisting"><a class="link" href="libglyr-Types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="returnvalue">GLYR_ERROR</span></a>          (*DL_callback)                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *dl</code></em>,
                                                          <em class="parameter"><code><span class="type">struct _GlyrQuery</span> *s</code></em>);</pre>
 <p>
-Typedef'd version of the callback option used by <a class="link" href="libglyr-glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a>
+Typedef'd version of the callback option used by <a class="link" href="libglyr-Glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -94,12 +105,12 @@ Typedef'd version of the callback option used by <a class="link" href="libglyr-g
 </tr>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>s</code></em> :</span></p></td>
-<td>The GlyrQuery you initially passed to <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a>
+<td>The GlyrQuery you initially passed to <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a>
 </td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>a <a class="link" href="libglyr-types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a>
+<td>a <a class="link" href="libglyr-Types.html#GLYR-ERROR:CAPS" title="enum GLYR_ERROR"><span class="type">GLYR_ERROR</span></a>
 </td>
 </tr>
 </tbody>
@@ -405,10 +416,10 @@ It describes what kind of data the cache holds.
 } GLYR_ERROR;
 </pre>
 <p>
-All errors you can get, via <a class="link" href="libglyr-glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> and the glyr_opt_* calls.
+All errors you can get, via <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> and the glyr_opt_* calls.
 </p>
 <p>
-Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror ()"><code class="function">glyr_strerror()</code></a> to convert them to meaningful strings.
+Use <a class="link" href="libglyr-Glyr.html#glyr-strerror" title="glyr_strerror ()"><code class="function">glyr_strerror()</code></a> to convert them to meaningful strings.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -440,7 +451,7 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
 </tr>
 <tr>
 <td><p><a name="GLYRE-NO-PROVIDER:CAPS"></a><span class="term"><code class="literal">GLYRE_NO_PROVIDER</code></span></p></td>
-<td>No valid provider specified in <a class="link" href="libglyr-glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a>
+<td>No valid provider specified in <a class="link" href="libglyr-Glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a>
 </td>
 </tr>
 <tr>
@@ -470,12 +481,12 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
 </tr>
 <tr>
 <td><p><a name="GLYRE-NO-INIT:CAPS"></a><span class="term"><code class="literal">GLYRE_NO_INIT</code></span></p></td>
-<td>Library has not been initialized with <a class="link" href="libglyr-glyr.html#glyr-init" title="glyr_init ()"><code class="function">glyr_init()</code></a> yet
+<td>Library has not been initialized with <a class="link" href="libglyr-Glyr.html#glyr-init" title="glyr_init ()"><code class="function">glyr_init()</code></a> yet
 </td>
 </tr>
 <tr>
 <td><p><a name="GLYRE-WAS-STOPPED:CAPS"></a><span class="term"><code class="literal">GLYRE_WAS_STOPPED</code></span></p></td>
-<td>Library was stopped by <a class="link" href="libglyr-glyr.html#glyr-signal-exit" title="glyr_signal_exit ()"><code class="function">glyr_signal_exit()</code></a>  
+<td>Library was stopped by <a class="link" href="libglyr-Glyr.html#glyr-signal-exit" title="glyr_signal_exit ()"><code class="function">glyr_signal_exit()</code></a>  
 </td>
 </tr>
 </tbody>
@@ -495,7 +506,7 @@ Use <a class="link" href="libglyr-glyr.html#glyr-strerror" title="glyr_strerror 
 </pre>
 <p>
 Bitmasks you can use to determine what fields a certain getter needs.
-You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>)
+You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class="link" href="libglyr-Glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>)
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -556,7 +567,7 @@ You can obtain it in the 'reqs' field of GlyrFetcherInfo (retrieved via <a class
 </pre>
 <p>
 You tell libglyr what metadata you want by choosing one of the below
-and set it via <a class="link" href="libglyr-glyr.html#glyr-opt-type" title="glyr_opt_type ()"><code class="function">glyr_opt_type()</code></a>
+and set it via <a class="link" href="libglyr-Glyr.html#glyr-opt-type" title="glyr_opt_type ()"><code class="function">glyr_opt_type()</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -679,10 +690,10 @@ It's a simpler version of the internal version,
 therefore you can modify and read to your liking.
 </p>
 <p>
-You should pass it to <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> once done.
+You should pass it to <a class="link" href="libglyr-Glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> once done.
 </p>
 <p>
-<em class="parameter"><code>see_also</code></em>: <a class="link" href="libglyr-glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
+<em class="parameter"><code>see_also</code></em>: <a class="link" href="libglyr-Glyr.html#glyr-info-get" title="glyr_info_get ()"><code class="function">glyr_info_get()</code></a>
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -692,23 +703,23 @@ You should pass it to <a class="link" href="libglyr-glyr.html#glyr-info-free" ti
 <td>The name of the provider.</td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.type"></a>type</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.type"></a>type</code></em>;</span></p></td>
 <td>Tells what type of data this getter delivers.</td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT"><span class="type">GLYR_FIELD_REQUIREMENT</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.reqs"></a>reqs</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GLYR-FIELD-REQUIREMENT:CAPS" title="enum GLYR_FIELD_REQUIREMENT"><span class="type">GLYR_FIELD_REQUIREMENT</span></a> <em class="structfield"><code><a name="GlyrFetcherInfo.reqs"></a>reqs</code></em>;</span></p></td>
 <td>A bitmask. You can test if this getter requires a filled artist: (reqs &amp; GLYR_REQUIRES_ARTIST)</td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.head"></a>head</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.head"></a>head</code></em>;</span></p></td>
 <td>A doubly linked list of GlyrSourceInfo (the provider available for this getter)</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.next"></a>next</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.next"></a>next</code></em>;</span></p></td>
 <td>A pointer to the next provider.</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.prev"></a>prev</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrFetcherInfo" title="GlyrFetcherInfo"><span class="type">_GlyrFetcherInfo</span></a> *<em class="structfield"><code><a name="GlyrFetcherInfo.prev"></a>prev</code></em>;</span></p></td>
 <td>A pointer to the previous provider.</td>
 </tr>
 </tbody>
@@ -759,8 +770,8 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
 <td>name of the provider that delivered this item.</td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> <em class="structfield"><code><a name="GlyrMemCache.type"></a>type</code></em>;</span></p></td>
-<td>The <a class="link" href="libglyr-types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> of this item.</td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> <em class="structfield"><code><a name="GlyrMemCache.type"></a>type</code></em>;</span></p></td>
+<td>The <a class="link" href="libglyr-Types.html#GLYR-DATA-TYPE:CAPS" title="enum GLYR_DATA_TYPE"><span class="type">GLYR_DATA_TYPE</span></a> of this item.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrMemCache.duration"></a>duration</code></em>;</span></p></td>
@@ -791,11 +802,11 @@ You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (
 <td>This is used internally by libglyr.</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.next"></a>next</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.next"></a>next</code></em>;</span></p></td>
 <td>A pointer to the next item in the list, or NULL</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.prev"></a>prev</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">_GlyrMemCache</span></a> *<em class="structfield"><code><a name="GlyrMemCache.prev"></a>prev</code></em>;</span></p></td>
 <td>A pointer to the previous item in the list, or NULL</td>
 </tr>
 </tbody>
@@ -851,13 +862,13 @@ This structure holds all settings used to influence libglyr.
 You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
 </p>
 <p>
-You can safely read from all fields and should free the query with <a class="link" href="libglyr-glyr.html#glyr-query-destroy" title="glyr_query_destroy ()"><code class="function">glyr_query_destroy()</code></a> after use.
+You can safely read from all fields and should free the query with <a class="link" href="libglyr-Glyr.html#glyr-query-destroy" title="glyr_query_destroy ()"><code class="function">glyr_query_destroy()</code></a> after use.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
 <tbody>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrQuery.type"></a>type</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrQuery.type"></a>type</code></em>;</span></p></td>
 <td>The type of metadata to get.</td>
 </tr>
 <tr>
@@ -914,11 +925,11 @@ You can safely read from all fields and should free the query with <a class="lin
 </tr>
 <tr>
 <td><p><span class="term"><span class="type">bool</span> <em class="structfield"><code><a name="GlyrQuery.db-autowrite"></a>db_autowrite</code></em>;</span></p></td>
-<td>Write found items automagically to the cache, if any specified by <a class="link" href="libglyr-glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
+<td>Write found items automagically to the cache, if any specified by <a class="link" href="libglyr-Glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a>
 </td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *<em class="structfield"><code><a name="GlyrQuery.local-db"></a>local_db</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *<em class="structfield"><code><a name="GlyrQuery.local-db"></a>local_db</code></em>;</span></p></td>
 <td>The database to write and search in.</td>
 </tr>
 <tr>
@@ -990,7 +1001,7 @@ with statically allocated data only,
 therefore you can modify and read to your liking.
 </p>
 <p>
-It is freed when <a class="link" href="libglyr-glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> is called on it's GlyrFetcherInfo
+It is freed when <a class="link" href="libglyr-Glyr.html#glyr-info-free" title="glyr_info_free ()"><code class="function">glyr_info_free()</code></a> is called on it's GlyrFetcherInfo
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -1005,7 +1016,7 @@ It is freed when <a class="link" href="libglyr-glyr.html#glyr-info-free" title="
 </td>
 </tr>
 <tr>
-<td><p><span class="term"><a class="link" href="libglyr-types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrSourceInfo.type"></a>type</code></em>;</span></p></td>
+<td><p><span class="term"><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> <em class="structfield"><code><a name="GlyrSourceInfo.type"></a>type</code></em>;</span></p></td>
 <td>Tells what type of data this provider delivers</td>
 </tr>
 <tr>
@@ -1021,11 +1032,11 @@ It is freed when <a class="link" href="libglyr-glyr.html#glyr-info-free" title="
 <td>Does this provider offer language specific content?</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.next"></a>next</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.next"></a>next</code></em>;</span></p></td>
 <td>A pointer to the next provider.</td>
 </tr>
 <tr>
-<td><p><span class="term">struct <a class="link" href="libglyr-types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.prev"></a>prev</code></em>;</span></p></td>
+<td><p><span class="term">struct <a class="link" href="libglyr-Types.html#GlyrSourceInfo" title="GlyrSourceInfo"><span class="type">_GlyrSourceInfo</span></a> *<em class="structfield"><code><a name="GlyrSourceInfo.prev"></a>prev</code></em>;</span></p></td>
 <td>A pointer to the previous provider.</td>
 </tr>
 </tbody>
