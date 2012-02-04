@@ -27,7 +27,7 @@
 /* How long to wait till returning SQLITE_BUSY */
 #define DB_BUSY_WAIT 5000
 
-#define DO_PROFILE false
+#define DO_PROFILE false 
 
 #if DO_PROFILE
     GTimer * select_callback_timer = NULL;
@@ -74,6 +74,9 @@ typedef struct
 
 GlyrDatabase * glyr_db_init(char * root_path)
 {
+#if DO_PROFILE 
+    GTimer * open_db = g_timer_new();
+#endif
     if(sqlite3_threadsafe() == FALSE)
     {
         glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
@@ -113,6 +116,10 @@ GlyrDatabase * glyr_db_init(char * root_path)
         }
         g_free(db_file_path);
     }
+#if DO_PROFILE
+    g_message("Time to open DB: %lf\n",g_timer_elapsed(open_db,NULL));
+    g_timer_destroy(open_db);
+#endif
     return to_return;
 }
 
@@ -573,12 +580,10 @@ static void execute(GlyrDatabase * db, const gchar * sql_statement)
 /*--------------------------------------------------------------*/
 /*--------------------------------------------------------------*/
 
-
 static void create_table_defs(GlyrDatabase * db)
 {
     execute(db,
             "PRAGMA synchronous = 1;                                                     \n"
-            "PRAGMA quick_check;                                                         \n"
             "PRAGMA temp_store = 2;                                                      \n"
             "BEGIN IMMEDIATE;                                                            \n"
             "-- Provider                                                                 \n"
