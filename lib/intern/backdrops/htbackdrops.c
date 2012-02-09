@@ -22,13 +22,13 @@
 #include "../../apikeys.h"
 #include "../../stringlib.h"
 
-#define HTBACKDROPS_URL "http://htbackdrops.com/api/%s"                       \
-                        "/searchXML?keywords=${artist}&default_operator=and&" \
+#define HTBACKDROPS_URL "http://htbackdrops.com/api/%s"                        \
+                        "/searchXML?keywords=${artist}&default_operator=and&"  \
                         "fields=title&inc=mb_name&limit=%d&dmax_w=%d&dmin_h=%d"
 
 static const gchar * backdrops_htbackdrops_url(GlyrQuery * q)
 {
-    gchar * result = g_strdup_printf(HTBACKDROPS_URL, API_KEY_HTBACK,q->number * 20000, 
+    gchar * result = g_strdup_printf(HTBACKDROPS_URL, API_KEY_HTBACK,q->number * 20, 
                                      (q->img_max_size < 0) ? (gint)1e10 : q->img_max_size,
                                      (q->img_min_size < 0) ? 0          : q->img_min_size);
 
@@ -42,6 +42,7 @@ static gboolean check_size(GlyrQuery * query, const gchar * size_string)
     gboolean result = FALSE;
     if(size_string != NULL && query != NULL)
     {
+        /* "1024x1024" -> ["1024","1024"] */
         gchar ** strv = g_strsplit(size_string,"x",0);
         if(strv && strv[0] && strv[1])
         {
@@ -74,9 +75,7 @@ static GList * backdrops_htbackdrops_parse(cb_object * capo)
             gchar * dimensions = get_search_value(node,"<dimensions>","</dimensions>");
             if(check_size(capo->s,dimensions) == TRUE)
             {
-
                 gchar * validate_artist = get_search_value(node,"<mb_name>","</mb_name>");
-g_message("%s %s\n",validate_artist,capo->s->artist);
                 if(levenshtein_strnormcmp(capo->s,validate_artist,capo->s->artist) <= capo->s->fuzzyness)
                 {
                     gchar * id = get_search_value(node,"<id>","</id>");

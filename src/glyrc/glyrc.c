@@ -51,7 +51,7 @@
 //* ------------------------------------------------------- */
 //* ------------------------------------------------------- */
 
-#define SET_IF_NULL(VAR, SET_TO) (VAR) = (VAR) ? (VAR) : (SET_TO) 
+#define SET_IF_NULL(VAR, SET_TO) (VAR) = ((VAR) ? (VAR) : (SET_TO))
 #define LOG_DOMAIN "Glyr"
 
 //* ------------------------------------------------------- */
@@ -618,7 +618,7 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     }
 
     /* Text Represantation of this item */
-    message(1,s,"\n///// ITEM #%d /////\n",(CBQueryData->item_counter) ? CBQueryData->item_counter : -1);
+    message(1,s,"\n///// ITEM #%d /////\n",CBQueryData->item_counter);
     if(write_to_path != NULL)
     {
         message(1,s,"WRITE to '%s'\n",write_to_path);

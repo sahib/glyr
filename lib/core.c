@@ -197,6 +197,7 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
         }
         result->dsrc = g_strdup(cache->dsrc);
         result->prov = g_strdup(cache->prov);
+        result->img_format = g_strdup(cache->img_format);
         memcpy(result->md5sum,cache->md5sum,16);
 
         result->next = NULL;

@@ -29,34 +29,58 @@
 
 //* ------------------------------------------------------- */
 
-gboolean is_initalized = FALSE;
+static volatile gboolean is_initalized = FALSE;
 
 //* ------------------------------------------------------- */
 
-const char * err_strings[] =
+static const char * err_strings[] =
 {
-    "Unknown Error",                                   /* GLYRE_UNKNOWN      */
-    "Everything is fine",                              /* GLYRE_OK           */
-    "Bad option for gly_opt_*()",                      /* GLYRE_BAD_OPTION   */
-    "Bad value for glyr_opt_*()",                      /* GLYRE_BAD_VALUE    */
-    "Empty Query structure (NULL)",                    /* GLYRE_EMPTY_STRUCT */
-    "No valid provider specified in glyr_opt_from()",  /* GLYRE_NO_PROVIDER  */
-    "Unknown GLYR_GET_TYPE in glyr_get()",             /* GLYRE_UNKNOWN_GET  */
-    "Insufficient data supplied for this getter",      /* GLYRE_INSUFF_DATA  */
-    "Cache was skipped due to user",                   /* GLYRE_SKIP         */
-    "Stopped by callback (post)",                      /* GLYRE_STOP_POST    */
-    "Stopped by callback (pre)",                       /* GLYRE_STOP_PRE     */
-    "Library is not yet initialized, use glyr_init()", /* GLYRE_NO_INIT      */
-    "Library was stopped by glyr_signal_exit()",       /* GLYRE_WAS_STOPPED  */
-    NULL
+    [GLYRE_UNKNOWN] = "Unknown error",
+    [GLYRE_OK] = "No error",
+    [GLYRE_BAD_VALUE] ="Bad value for glyr_opt_[...]()",                      
+    [GLYRE_BAD_OPTION] = "Bad option passed to gly_opt_[...]()",             
+    [GLYRE_NO_PROVIDER] = "No valid provider specified in glyr_opt_from()",  
+    [GLYRE_EMPTY_STRUCT] = "Empty Query structure (NULL)",                   
+    [GLYRE_UNKNOWN_GET] = "Unknown GLYR_GET_TYPE in glyr_get(); Use glyr_opt_type()",             
+    [GLYRE_INSUFF_DATA] = "Insufficient data supplied for this getter",      
+    [GLYRE_SKIP] = "Item was skipped due to user",                  
+    [GLYRE_STOP_POST] = "Stopped by callback (POST)",               
+    [GLYRE_STOP_PRE] = "Stopped by callback (PRE)",   
+    [GLYRE_NO_INIT] = "Library is not yet initialized, use glyr_init()",
+    [GLYRE_WAS_STOPPED] = "Library was stopped by glyr_signal_exit()"      
+};
+
+static const char * type_strings[] = 
+{
+    [GLYR_TYPE_COVERART] = "cover",
+    [GLYR_TYPE_COVERART_PRI] = "cover_front",
+    [GLYR_TYPE_COVERART_SEC] = "cover_back",
+    [GLYR_TYPE_LYRICS] = "songtext",
+    [GLYR_TYPE_ARTIST_PHOTO] = "artistphoto",
+    [GLYR_TYPE_ALBUM_REVIEW] = "albumreview",
+    [GLYR_TYPE_ARTISTBIO] = "artistbio",
+    [GLYR_TYPE_SIMILAR_ARTIST] = "similiar_artist",
+    [GLYR_TYPE_SIMILAR_SONG] = "similiar_song",
+    [GLYR_TYPE_TRACK] = "trackname",
+    [GLYR_TYPE_ALBUMLIST] = "albumname",
+    [GLYR_TYPE_TAG] = "tag",
+    [GLYR_TYPE_TAG_ARTIST] = "artisttag",
+    [GLYR_TYPE_TAG_ALBUM] = "albumtag",
+    [GLYR_TYPE_TAG_TITLE] = "titletag",
+    [GLYR_TYPE_RELATION] = "relation",
+    [GLYR_TYPE_IMG_URL] = "ImageURL",
+    [GLYR_TYPE_TXT_URL] = "HTMLURL",
+    [GLYR_TYPE_GUITARTABS] = "guitartabs",
+    [GLYR_TYPE_BACKDROPS] = "backdrop",
+    [GLYR_TYPE_NOIDEA] = "unknown"
 };
 
 /*--------------------------------------------------------*/
 
 const gchar * map_language[][2] = {
-	{"en_US","us"},
-	{"en_CA","ca"},
-	{"en_UK","uk"}
+    {"en_US","us"},
+    {"en_CA","ca"},
+    {"en_UK","uk"}
 };
 
 
@@ -64,101 +88,105 @@ const gchar * map_language[][2] = {
 
 void glyr_internal_log(const gchar *log_domain,GLogLevelFlags log_level,const gchar *message, gpointer user_data)
 {
-   fputs(message,GLYR_OUTPUT);
+    if(message != NULL) fputs(message,GLYR_OUTPUT);
 }
 
 
 /*--------------------------------------------------------*/
 
 /* Local scopes are cool. */
-#define END_STRING(STR,CHAR) {gchar * term = strchr(STR,CHAR); if(term) *term = 0;}
+#define END_STRING(STR,CHAR)           \
+{                                      \
+    gchar * term = strchr(STR,CHAR);   \
+    if(term) *term = 0;                \
+}                        
 
 /**
-* @brief Guesses the users language (in ISO639-1 codes like 'de') by the system locale
-*
-* @return a newly allocated language code. Free.
-*/
+ * @brief Guesses the users language (in ISO639-1 codes like 'de') by the system locale
+ *
+ * @return a newly allocated language code. Free.
+ */
 gchar * guess_language(void)
 {
-	/* Default to 'en' in any case */
-	gchar * result_lang = g_strdup("en");
+    /* Default to 'en' in any case */
+    gchar * result_lang = g_strdup("en");
 
 #if GLIB_CHECK_VERSION(2,28,0)
-	gboolean break_out = FALSE;
+    gboolean break_out = FALSE;
 
-	/* Please never ever free this */
-	const gchar * const * languages = g_get_language_names();
+    /* Please never ever free this */
+    const gchar * const * languages = g_get_language_names();
 
-	for (gint i = 0; languages[i] && break_out == FALSE; i++) 
-	{
-		gchar ** variants = g_get_locale_variants(languages[i]);
-		for(gint j = 0; variants[j] && !break_out; j++)
-		{
-			/* Look up if we need to map a language */
-			gchar * to_investigate = variants[j];
-			gint map_size = (sizeof(map_language)/(2 * sizeof(char*)));
-			for(gint map = 0; map < map_size; map++)
-			{
-				const gchar * to_map = map_language[map][0];
-				gsize map_len  = strlen(to_map);
-				if(g_ascii_strncasecmp(to_map,to_investigate,map_len) == 0)
-				{
-					to_investigate = (gchar*)map_language[map][1];
-					break;
-				}
-			}
+    for (gint i = 0; languages[i] && break_out == FALSE; i++) 
+    {
+        gchar ** variants = g_get_locale_variants(languages[i]);
+        for(gint j = 0; variants[j] && !break_out; j++)
+        {
+            /* Look up if we need to map a language */
+            gchar * to_investigate = variants[j];
+            gint map_size = (sizeof(map_language)/(2 * sizeof(char*)));
+            for(gint map = 0; map < map_size; map++)
+            {
+                const gchar * to_map = map_language[map][0];
+                gsize map_len  = strlen(to_map);
+                if(g_ascii_strncasecmp(to_map,to_investigate,map_len) == 0)
+                {
+                    to_investigate = (gchar*)map_language[map][1];
+                    break;
+                }
+            }
 
-			gboolean allowed_lang = TRUE;
+            gboolean allowed_lang = TRUE;
 
-			if(allowed_lang &&
-		  	  g_ascii_strncasecmp("en",to_investigate,2) != 0 &&
-			  g_ascii_strncasecmp("C", to_investigate,1) != 0 &&
-			  !strchr(to_investigate,'@') && !strchr(to_investigate,'.'))
-			{
-				g_free(result_lang);
-				result_lang = g_strdup(to_investigate);
-				break_out = TRUE;
-			}
-		}
-		g_strfreev(variants);
-	}
+            if(allowed_lang &&
+                    g_ascii_strncasecmp("en",to_investigate,2) != 0 &&
+                    g_ascii_strncasecmp("C", to_investigate,1) != 0 &&
+                    !strchr(to_investigate,'@') && !strchr(to_investigate,'.'))
+            {
+                g_free(result_lang);
+                result_lang = g_strdup(to_investigate);
+                break_out = TRUE;
+            }
+        }
+        g_strfreev(variants);
+    }
 
 #elif GLIB_CHECK_VERSION(2,26,0)
 
-	/* Fallback to simpler version of the above, 
-         * g_get_locale_variants is not there in this version
-         */
-	const gchar * const * possible_locales = g_get_language_names();
-	if(possible_locales != NULL)
-	{
-		/* might be a bit weird */
-		for(gint i = 0; possible_locales[i]; i++)
-		{
-		  	if(g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
-			   g_ascii_strncasecmp("C", possible_locales[i],1) != 0)
-			{
-				g_free(result_lang);
-				result_lang = g_strdup(possible_locales[i]);
-				break;
-			}
-		}
-	}
+    /* Fallback to simpler version of the above, 
+     * g_get_locale_variants is not there in this version
+     */
+    const gchar * const * possible_locales = g_get_language_names();
+    if(possible_locales != NULL)
+    {
+        /* might be a bit weird */
+        for(gint i = 0; possible_locales[i]; i++)
+        {
+            if(g_ascii_strncasecmp("en",possible_locales[i],2) != 0 &&
+                    g_ascii_strncasecmp("C", possible_locales[i],1) != 0)
+            {
+                g_free(result_lang);
+                result_lang = g_strdup(possible_locales[i]);
+                break;
+            }
+        }
+    }
 #else 
-	/* Fallback for version prior GLib 2.26:
-	 * Fallback to "en" always.
-	 * Gaaah... shame on you if this happens to you ;-)
-	 */
+    /* Fallback for version prior GLib 2.26:
+     * Fallback to "en" always.
+     * Gaaah... shame on you if this happens to you ;-)
+     */
 #endif
 
-	/* Properly terminate string */
-	END_STRING(result_lang,'_');
-	END_STRING(result_lang,'@');
-	END_STRING(result_lang,'.');
+    /* Properly terminate string */
+    END_STRING(result_lang,'_');
+    END_STRING(result_lang,'@');
+    END_STRING(result_lang,'.');
 
-/* We don't need it anymore */
+    /* We don't need it anymore */
 #undef END_STRING
 
-	return result_lang;
+    return result_lang;
 }
 
 /*--------------------------------------------------------*/
@@ -173,11 +201,11 @@ static void set_query_on_defaults(GlyrQuery * glyrs);
 // return a descriptive string on error ID
 const char * glyr_strerror(GLYR_ERROR ID)
 {
-	if(ID < (sizeof(err_strings)/sizeof(const char *)))
-	{
-		return err_strings[ID];
-	}
-	return err_strings[0];
+    if(ID < (sizeof(err_strings)/sizeof(const char *)))
+    {
+        return err_strings[ID];
+    }
+    return err_strings[GLYRE_UNKNOWN];
 }
 
 /*-----------------------------------------------*/
@@ -191,28 +219,28 @@ void glyr_signal_exit(GlyrQuery * query)
 
 void glyr_cache_update_md5sum(GlyrMemCache * cache)
 {
-	update_md5sum(cache);
+    update_md5sum(cache);
 }
 
 /*-----------------------------------------------*/
 
 void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len)
 {
-	DL_set_data(cache,data,len);
+    DL_set_data(cache,data,len);
 }
 
 /*-----------------------------------------------*/
 
 GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache)
 {
-	return DL_copy(cache);
+    return DL_copy(cache);
 }
 
 /*-----------------------------------------------*/
 
 const char * glyr_version(void)
 {
-	return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+    return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
 }
 
 /*-----------------------------------------------*/
@@ -222,293 +250,293 @@ const char * glyr_version(void)
 // Seperate method because va_arg struggles with function pointers
 GLYR_ERROR glyr_opt_dlcallback(GlyrQuery * settings, DL_callback dl_cb, void * userp)
 {
-	if(settings)
-	{
-		settings->callback.download     = dl_cb;
-		settings->callback.user_pointer = userp;
-		return GLYRE_OK;
-	}
-	return GLYRE_EMPTY_STRUCT;
+    if(settings)
+    {
+        settings->callback.download     = dl_cb;
+        settings->callback.user_pointer = userp;
+        return GLYRE_OK;
+    }
+    return GLYRE_EMPTY_STRUCT;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_type(GlyrQuery * s, GLYR_GET_TYPE type)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(type != GLYR_GET_UNSURE)
-	{
-		s->type = type;
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(type != GLYR_GET_UNSURE)
+    {
+        s->type = type;
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_artist(GlyrQuery * s, char * artist)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,0,artist);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,0,artist);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_album(GlyrQuery * s, char * album)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,1,album);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,1,album);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_title(GlyrQuery * s, char * title)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,2,title);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,2,title);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 static int size_set(int * ref, int size)
 {
-	if(size < -1 && ref)
-	{
-		*ref = -1;
-		return GLYRE_BAD_VALUE;
-	}
+    if(size < -1 && ref)
+    {
+        *ref = -1;
+        return GLYRE_BAD_VALUE;
+    }
 
-	if(ref)
-	{
-		*ref = size;
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_OPTION;
+    if(ref)
+    {
+        *ref = size;
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_OPTION;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_img_maxsize(GlyrQuery * s, int size)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return size_set(&s->img_max_size,size);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return size_set(&s->img_max_size,size);
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_img_minsize(GlyrQuery * s, int size)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	return size_set(&s->img_min_size,size);
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    return size_set(&s->img_min_size,size);
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_parallel(GlyrQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->parallel = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->parallel = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_timeout(GlyrQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->timeout = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->timeout = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_redirects(GlyrQuery * s, unsigned long val)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->redirects = (long)val;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->redirects = (long)val;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_useragent(GlyrQuery * s, const char * useragent)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,6,(useragent) ? useragent : "");
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,6,(useragent) ? useragent : "");
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_lang(GlyrQuery * s, char * langcode)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(langcode != NULL)
-	{
-		if(g_ascii_strncasecmp("auto",langcode,4) == 0)
-		{
-			gchar * auto_lang = guess_language();
-			glyr_set_info(s,7,auto_lang);
-			g_free(auto_lang);
-		}
-		else
-		{
-			glyr_set_info(s,7,langcode);
-		}
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(langcode != NULL)
+    {
+        if(g_ascii_strncasecmp("auto",langcode,4) == 0)
+        {
+            gchar * auto_lang = guess_language();
+            glyr_set_info(s,7,auto_lang);
+            g_free(auto_lang);
+        }
+        else
+        {
+            glyr_set_info(s,7,langcode);
+        }
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_lang_aware_only(GlyrQuery * s, bool lang_aware_only)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->lang_aware_only = lang_aware_only;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->lang_aware_only = lang_aware_only;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_number(GlyrQuery * s, unsigned int num)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->number = num == 0 ? INT_MAX : num;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->number = num == 0 ? INT_MAX : num;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_verbosity(GlyrQuery * s, unsigned int level)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->verbosity = level;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->verbosity = level;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_from(GlyrQuery * s, const char * from)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(from != NULL)
-	{
-		glyr_set_info(s,4,from);
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(from != NULL)
+    {
+        glyr_set_info(s,4,from);
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_allowed_formats(GlyrQuery * s, const char * formats)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,5,(formats==NULL) ? GLYR_DEFAULT_ALLOWED_FORMATS : formats);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,5,(formats==NULL) ? GLYR_DEFAULT_ALLOWED_FORMATS : formats);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_musictree_path(GlyrQuery * s, const char * musictree_path)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,8,(musictree_path==NULL) ? GLYR_DEFAULT_MUISCTREE_PATH : musictree_path);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,8,(musictree_path==NULL) ? GLYR_DEFAULT_MUISCTREE_PATH : musictree_path);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(plugmax < 0)
-	{
-		return GLYRE_BAD_VALUE;
-	}
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(plugmax < 0)
+    {
+        return GLYRE_BAD_VALUE;
+    }
 
-	s->plugmax = plugmax;
-	return GLYRE_OK;
+    s->plugmax = plugmax;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_qsratio(GlyrQuery * s, float ratio)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->qsratio = MIN(MAX(ratio,0.0),1.0);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->qsratio = MIN(MAX(ratio,0.0),1.0);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_proxy(GlyrQuery * s, const char * proxystring)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	glyr_set_info(s,3,proxystring);
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    glyr_set_info(s,3,proxystring);
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_fuzzyness(GlyrQuery * s, int fuzz)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->fuzzyness = fuzz;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->fuzzyness = fuzz;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_download(GlyrQuery * s, bool download)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->download = download;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->download = download;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_force_utf8(GlyrQuery * s, bool force_utf8)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->force_utf8 = force_utf8;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->force_utf8 = force_utf8;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_lookup_db(GlyrQuery * s, GlyrDatabase * db)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	if(db != NULL)
-	{
-		s->local_db = db;
-		return GLYRE_OK;
-	}
-	return GLYRE_BAD_VALUE;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    if(db != NULL)
+    {
+        s->local_db = db;
+        return GLYRE_OK;
+    }
+    return GLYRE_BAD_VALUE;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_db_autowrite(GlyrQuery * s, bool db_autowrite)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->db_autowrite = db_autowrite;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->db_autowrite = db_autowrite;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
 
 GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool db_autoread)
 {
-	if(s == NULL) return GLYRE_EMPTY_STRUCT;
-	s->db_autoread = db_autoread;
-	return GLYRE_OK;
+    if(s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->db_autoread = db_autoread;
+    return GLYRE_OK;
 }
 
 /*-----------------------------------------------*/
@@ -517,45 +545,45 @@ GLYR_ERROR glyr_opt_db_autoread(GlyrQuery * s, bool db_autoread)
 
 static void set_query_on_defaults(GlyrQuery * glyrs)
 {
-	if(glyrs == NULL)
-	{
-		return;
-	}
+    if(glyrs == NULL)
+    {
+        return;
+    }
 
-	/* Initialize free pointer pool */
-	memset(glyrs,0,sizeof(GlyrQuery));
+    /* Initialize free pointer pool */
+    memset(glyrs,0,sizeof(GlyrQuery));
 
-	glyrs->type = GLYR_GET_UNSURE;
-	glyrs->artist = NULL;
-	glyrs->album  = NULL;
-	glyrs->title  = NULL;
-	glyrs->local_db = NULL;
-	glyrs->callback.download = NULL;
-	glyrs->callback.user_pointer = NULL;
+    glyrs->type = GLYR_GET_UNSURE;
+    glyrs->artist = NULL;
+    glyrs->album  = NULL;
+    glyrs->title  = NULL;
+    glyrs->local_db = NULL;
+    glyrs->callback.download = NULL;
+    glyrs->callback.user_pointer = NULL;
     glyrs->musictree_path = NULL;
 
-	glyrs->db_autoread = GLYR_DEFAULT_DB_AUTOREAD;
-	glyrs->db_autowrite = GLYR_DEFAULT_DB_AUTOWRITE;	
-	glyrs->from   = GLYR_DEFAULT_FROM;
-	glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
-	glyrs->img_max_size = GLYR_DEFAULT_CMAXSIZE;
-	glyrs->number = GLYR_DEFAULT_NUMBER;
-	glyrs->parallel  = GLYR_DEFAULT_PARALLEL;
-	glyrs->redirects = GLYR_DEFAULT_REDIRECTS;
-	glyrs->timeout   = GLYR_DEFAULT_TIMEOUT;
-	glyrs->verbosity = GLYR_DEFAULT_VERBOSITY;
-	glyrs->plugmax = GLYR_DEFAULT_PLUGMAX;
-	glyrs->download = GLYR_DEFAULT_DOWNLOAD;
-	glyrs->fuzzyness = GLYR_DEFAULT_FUZZYNESS;
-	glyrs->proxy = GLYR_DEFAULT_PROXY;
-	glyrs->qsratio = GLYR_DEFAULT_QSRATIO;
-	glyrs->allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
-	glyrs->useragent = GLYR_DEFAULT_USERAGENT;
-	glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
-	glyrs->lang = GLYR_DEFAULT_LANG;
+    glyrs->db_autoread = GLYR_DEFAULT_DB_AUTOREAD;
+    glyrs->db_autowrite = GLYR_DEFAULT_DB_AUTOWRITE;	
+    glyrs->from   = GLYR_DEFAULT_FROM;
+    glyrs->img_min_size = GLYR_DEFAULT_CMINSIZE;
+    glyrs->img_max_size = GLYR_DEFAULT_CMAXSIZE;
+    glyrs->number = GLYR_DEFAULT_NUMBER;
+    glyrs->parallel  = GLYR_DEFAULT_PARALLEL;
+    glyrs->redirects = GLYR_DEFAULT_REDIRECTS;
+    glyrs->timeout   = GLYR_DEFAULT_TIMEOUT;
+    glyrs->verbosity = GLYR_DEFAULT_VERBOSITY;
+    glyrs->plugmax = GLYR_DEFAULT_PLUGMAX;
+    glyrs->download = GLYR_DEFAULT_DOWNLOAD;
+    glyrs->fuzzyness = GLYR_DEFAULT_FUZZYNESS;
+    glyrs->proxy = GLYR_DEFAULT_PROXY;
+    glyrs->qsratio = GLYR_DEFAULT_QSRATIO;
+    glyrs->allowed_formats = GLYR_DEFAULT_ALLOWED_FORMATS;
+    glyrs->useragent = GLYR_DEFAULT_USERAGENT;
+    glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
+    glyrs->lang = GLYR_DEFAULT_LANG;
     glyrs->lang_aware_only = GLYR_DEFAULT_LANG_AWARE_ONLY;
     glyrs->signal_exit = FALSE;
-	glyrs->itemctr = 0;
+    glyrs->itemctr = 0;
 
     /* Set on a very specific value, so we can pretty sure,
        we are not accessing bad memory - feels little hackish.. */
@@ -568,7 +596,7 @@ void glyr_query_init(GlyrQuery * glyrs)
 {
     if(glyrs != NULL)
     {
-	    set_query_on_defaults(glyrs);
+        set_query_on_defaults(glyrs);
     }
 }
 
@@ -576,20 +604,20 @@ void glyr_query_init(GlyrQuery * glyrs)
 
 void glyr_query_destroy(GlyrQuery * sets)
 {
-	if(sets != NULL && QUERY_IS_INITALIZED(sets))
-	{
-		for(gsize i = 0; i < 10; i++)
-		{
-			if(sets->info[i] != NULL)
-			{
-				g_free((char*)sets->info[i]);
-				sets->info[i] = NULL;
-			}
-		}
+    if(sets != NULL && QUERY_IS_INITALIZED(sets))
+    {
+        for(gsize i = 0; i < 10; i++)
+        {
+            if(sets->info[i] != NULL)
+            {
+                g_free((char*)sets->info[i]);
+                sets->info[i] = NULL;
+            }
+        }
 
-		/* Reset query so it can be used again */
-		set_query_on_defaults(sets);
-	}
+        /* Reset query so it can be used again */
+        set_query_on_defaults(sets);
+    }
 
 }
 
@@ -597,46 +625,46 @@ void glyr_query_destroy(GlyrQuery * sets)
 
 GlyrMemCache * glyr_download(const char * url, GlyrQuery * s)
 {
-	return download_single(url,s,NULL);
+    return download_single(url,s,NULL);
 }
 
 /*-----------------------------------------------*/
 
 void glyr_free_list(GlyrMemCache * head)
 {
-	if(head != NULL)
-	{
-		GlyrMemCache * next = head;
-		GlyrMemCache * prev = head->prev;
+    if(head != NULL)
+    {
+        GlyrMemCache * next = head;
+        GlyrMemCache * prev = head->prev;
 
-		while(next != NULL)
-		{
-			GlyrMemCache * p = next;
-			next = next->next;
-			DL_free(p);
-		}
+        while(next != NULL)
+        {
+            GlyrMemCache * p = next;
+            next = next->next;
+            DL_free(p);
+        }
 
-		while(prev != NULL)
-		{
-			GlyrMemCache * p = prev;
-			prev = prev->prev;
-			DL_free(p);
-		}
-	}
+        while(prev != NULL)
+        {
+            GlyrMemCache * p = prev;
+            prev = prev->prev;
+            DL_free(p);
+        }
+    }
 }
 
 /*-----------------------------------------------*/
 
 void glyr_cache_free(GlyrMemCache * c)
 {
-	DL_free(c);
+    DL_free(c);
 }
 
 /*-----------------------------------------------*/
 
 GlyrMemCache * glyr_cache_new(void)
 {
-	return DL_init();
+    return DL_init();
 }
 
 /*-----------------------------------------------*/
@@ -644,36 +672,36 @@ GlyrMemCache * glyr_cache_new(void)
 // !! NOT THREADSAFE !! //
 void glyr_init(void)
 {
-	/* Protect agains double initialization */
-	if(is_initalized == FALSE)
-	{
-		/* Init for threads */
-		g_thread_init(NULL);
+    /* Protect agains double initialization */
+    if(is_initalized == FALSE)
+    {
+        /* Init for threads */
+        g_thread_init(NULL);
 
         /* Set loghandler */
         g_log_set_handler(G_LOG_DOMAIN, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL
-                                                         | G_LOG_FLAG_RECURSION,
-                                                         glyr_internal_log, NULL);
+                | G_LOG_FLAG_RECURSION,
+                glyr_internal_log, NULL);
 
-		if(curl_global_init(CURL_GLOBAL_ALL))
-		{
-			glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
-		}
+        if(curl_global_init(CURL_GLOBAL_ALL))
+        {
+            glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
+        }
 
-		/* Locale */
-		if(setlocale (LC_ALL, "") == NULL)
-		{
-			glyr_message(-1,NULL,"glyr: Cannot set locale!\n");
-		}
+        /* Locale */
+        if(setlocale (LC_ALL, "") == NULL)
+        {
+            glyr_message(-1,NULL,"glyr: Cannot set locale!\n");
+        }
 
-		/* Register plugins */
-		register_fetcher_plugins();
+        /* Register plugins */
+        register_fetcher_plugins();
 
-		/* Init the smallest blacklist in the world :-) */
-		blacklist_build();
+        /* Init the smallest blacklist in the world :-) */
+        blacklist_build();
 
-		is_initalized = TRUE;
-	}
+        is_initalized = TRUE;
+    }
 }
 
 
@@ -682,19 +710,19 @@ void glyr_init(void)
 // !! NOT THREADSAFE !! //
 void glyr_cleanup(void)
 {
-	if(is_initalized == TRUE)
-	{
-		/* Curl no longer needed */
-		curl_global_cleanup();
+    if(is_initalized == TRUE)
+    {
+        /* Curl no longer needed */
+        curl_global_cleanup();
 
-		/* Destroy all fetchers */
-		unregister_fetcher_plugins();
+        /* Destroy all fetchers */
+        unregister_fetcher_plugins();
 
-		/* Kill it again */
-		blacklist_destroy();
+        /* Kill it again */
+        blacklist_destroy();
 
-		is_initalized = FALSE;
-	}
+        is_initalized = FALSE;
+    }
 }
 
 
@@ -704,131 +732,131 @@ void glyr_cleanup(void)
 /* Sets parallel field depending on the get_type */
 static void auto_detect_parallel(MetaDataFetcher * fetcher, GlyrQuery * query)
 {
-	if(query->parallel <= 0)
-	{
-		if(fetcher->default_parallel <= 0)
-		{
-			gint div = (int)(1.0/(CLAMP(query->qsratio,0.01,0.99) * 2));
-			query->parallel = (div == 0) ? 3 : g_list_length(fetcher->provider) / div;
-		}
-		else
-		{
-			query->parallel = fetcher->default_parallel;
-		}
-	}
+    if(query->parallel <= 0)
+    {
+        if(fetcher->default_parallel <= 0)
+        {
+            gint div = (int)(1.0/(CLAMP(query->qsratio,0.01,0.99) * 2));
+            query->parallel = (div == 0) ? 3 : g_list_length(fetcher->provider) / div;
+        }
+        else
+        {
+            query->parallel = fetcher->default_parallel;
+        }
+    }
 }
 
 /*-----------------------------------------------*/
 
 static gboolean check_if_valid(GlyrQuery * q, MetaDataFetcher * fetch)
 {
-	gboolean isValid = TRUE;
-	if(fetch->reqs & GLYR_REQUIRES_ARTIST && q->artist == NULL)
-	{
-		glyr_message(2,q,"Artist is required for this getter\n");
-		isValid = FALSE;
-	}
+    gboolean isValid = TRUE;
+    if(fetch->reqs & GLYR_REQUIRES_ARTIST && q->artist == NULL)
+    {
+        glyr_message(2,q,"Artist is required for this getter\n");
+        isValid = FALSE;
+    }
 
-	if(fetch->reqs & GLYR_REQUIRES_ALBUM && q->album == NULL)
-	{
-		glyr_message(2,q,"Albumname is required for this getter\n");
-		isValid = FALSE;
-	}
+    if(fetch->reqs & GLYR_REQUIRES_ALBUM && q->album == NULL)
+    {
+        glyr_message(2,q,"Albumname is required for this getter\n");
+        isValid = FALSE;
+    }
 
-	if(fetch->reqs & GLYR_REQUIRES_TITLE && q->title == NULL)
-	{
-		glyr_message(2,q,"Songname is required for this getter\n");
-		isValid = FALSE;
-	}
+    if(fetch->reqs & GLYR_REQUIRES_TITLE && q->title == NULL)
+    {
+        glyr_message(2,q,"Songname is required for this getter\n");
+        isValid = FALSE;
+    }
 
-	if(isValid == FALSE && fetch->reqs > GLYR_REQUIRES_TITLE)
-	{
-		glyr_message(2,q,"\nFollowing fields are optional:\n");
-		if(fetch->reqs & GLYR_OPTIONAL_ARTIST) glyr_message(2,q,"Artist\n");
-		if(fetch->reqs & GLYR_OPTIONAL_ALBUM)  glyr_message(2,q,"Albumname\n");
-		if(fetch->reqs & GLYR_OPTIONAL_TITLE)  glyr_message(2,q,"Songtitle\n");
-	}
-	return isValid;
+    if(isValid == FALSE && fetch->reqs > GLYR_REQUIRES_TITLE)
+    {
+        glyr_message(2,q,"\nFollowing fields are optional:\n");
+        if(fetch->reqs & GLYR_OPTIONAL_ARTIST) glyr_message(2,q,"Artist\n");
+        if(fetch->reqs & GLYR_OPTIONAL_ALBUM)  glyr_message(2,q,"Albumname\n");
+        if(fetch->reqs & GLYR_OPTIONAL_TITLE)  glyr_message(2,q,"Songtitle\n");
+    }
+    return isValid;
 }
 
 /*-----------------------------------------------*/
 
 GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
 {
-	if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
-	{
+    if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
+    {
         glyr_message(-1,NULL,"Warning: Either query or library is not initialized.\n");
-		if(e != NULL)
-		{
-			*e = GLYRE_NO_INIT;
-		}
-		return NULL;
-	}
+        if(e != NULL)
+        {
+            *e = GLYRE_NO_INIT;
+        }
+        return NULL;
+    }
 
-	if(e) *e = GLYRE_OK;
-	if(settings != NULL)
-	{
-		if(g_ascii_strncasecmp(settings->lang,"auto",4) == 0)
-		{
-			glyr_opt_lang(settings,"auto");
-		}
+    if(e) *e = GLYRE_OK;
+    if(settings != NULL)
+    {
+        if(g_ascii_strncasecmp(settings->lang,"auto",4) == 0)
+        {
+            glyr_opt_lang(settings,"auto");
+        }
 
-		GList * result = NULL;
-		if(e) *e = GLYRE_UNKNOWN_GET;
-		for(GList * elem = r_getFList(); elem; elem = elem->next)
-		{
-			MetaDataFetcher * item = elem->data;
-			if(settings->type == item->type)
-			{
-				if(check_if_valid(settings,item) == TRUE)
-				{
-					/* Print some user info, always useful */
-					if(settings->artist != NULL)
-					{
-						glyr_message(2,settings,"- Artist   : ");
-						glyr_puts(2,settings,settings->artist);
-					}
-					if(settings->album != NULL)
-					{
-						glyr_message(2,settings,"- Album    : ");
-						glyr_puts(2,settings,settings->album);
-					}
-					if(settings->title != NULL)
-					{
-						glyr_message(2,settings,"- Title    : ");
-						glyr_puts(2,settings,settings->title);
-					}
-					if(settings->lang != NULL)
-					{
-						glyr_message(2,settings,"- Language : ");
-						glyr_puts(2,settings,settings->lang);
-					}
+        GList * result = NULL;
+        if(e) *e = GLYRE_UNKNOWN_GET;
+        for(GList * elem = r_getFList(); elem; elem = elem->next)
+        {
+            MetaDataFetcher * item = elem->data;
+            if(settings->type == item->type)
+            {
+                if(check_if_valid(settings,item) == TRUE)
+                {
+                    /* Print some user info, always useful */
+                    if(settings->artist != NULL)
+                    {
+                        glyr_message(2,settings,"- Artist   : ");
+                        glyr_puts(2,settings,settings->artist);
+                    }
+                    if(settings->album != NULL)
+                    {
+                        glyr_message(2,settings,"- Album    : ");
+                        glyr_puts(2,settings,settings->album);
+                    }
+                    if(settings->title != NULL)
+                    {
+                        glyr_message(2,settings,"- Title    : ");
+                        glyr_puts(2,settings,settings->title);
+                    }
+                    if(settings->lang != NULL)
+                    {
+                        glyr_message(2,settings,"- Language : ");
+                        glyr_puts(2,settings,settings->lang);
+                    }
 
-					if(e) *e = GLYRE_OK;
-					glyr_message(2,settings,"- Type     : %s\n\n",item->name);
+                    if(e) *e = GLYRE_OK;
+                    glyr_message(2,settings,"- Type     : %s\n\n",item->name);
 
-					/* Lookup what we search for here: Images (url, or raw) or text */
-					settings->imagejob = !(item->full_data);
+                    /* Lookup what we search for here: Images (url, or raw) or text */
+                    settings->imagejob = !(item->full_data);
 
-					/* If ->parallel is <= 0, it gets autodetected */
-					auto_detect_parallel(item, settings);
+                    /* If ->parallel is <= 0, it gets autodetected */
+                    auto_detect_parallel(item, settings);
 
-					/* Now start your engines, gentlemen */
-					result = start_engine(settings,item,e);
-					break;
-				}
-				else
-				{
-					if(e) *e = GLYRE_INSUFF_DATA;
-				}
-			}
-		}
+                    /* Now start your engines, gentlemen */
+                    result = start_engine(settings,item,e);
+                    break;
+                }
+                else
+                {
+                    if(e) *e = GLYRE_INSUFF_DATA;
+                }
+            }
+        }
 
-		/* Make this query reusable */
-		settings->itemctr = 0;
+        /* Make this query reusable */
+        settings->itemctr = 0;
 
-		/* Start of the returned list */
-		GlyrMemCache * head = NULL;
+        /* Start of the returned list */
+        GlyrMemCache * head = NULL;
 
         /* Librarby was stopped, just return NULL. */
         if(result != NULL && GET_ATOMIC_SIGNAL_EXIT(settings))
@@ -1007,56 +1035,16 @@ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
 
 /*-----------------------------------------------*/
 
-/* This is silly. I don't see a easy way to remove this though */
 const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
 {
-    switch(type)
+    if(type > 0 && type < (sizeof(type_strings)/sizeof(const char*)))
     {
-        case GLYR_TYPE_COVERART:
-            return "cover";
-        case GLYR_TYPE_COVERART_PRI:
-            return "cover_front";
-        case GLYR_TYPE_COVERART_SEC:
-            return "cover_back";
-        case GLYR_TYPE_LYRICS:
-            return "songtext";
-        case GLYR_TYPE_ARTIST_PHOTO:
-            return "artistphoto";
-        case GLYR_TYPE_ALBUM_REVIEW:
-            return "albumreview";
-        case GLYR_TYPE_ARTISTBIO:
-            return "artistbio";
-        case GLYR_TYPE_SIMILAR_ARTIST:
-            return "similiar_artist";
-        case GLYR_TYPE_SIMILAR_SONG:
-            return "similiar_song";
-        case GLYR_TYPE_TRACK:
-            return "trackname";
-        case GLYR_TYPE_ALBUMLIST:
-            return "albumname";
-        case GLYR_TYPE_TAG:
-            return "tag";
-        case GLYR_TYPE_TAG_ARTIST:
-            return "artisttag";
-        case GLYR_TYPE_TAG_ALBUM:
-            return "albumtag";
-        case GLYR_TYPE_TAG_TITLE:
-            return "titletag";
-        case GLYR_TYPE_RELATION:
-            return "relation";
-        case GLYR_TYPE_IMG_URL:
-            return "ImageURL";
-        case GLYR_TYPE_TXT_URL:
-            return "HTMLURL";
-        case GLYR_TYPE_GUITARTABS:
-            return "guitartabs";
-        case GLYR_TYPE_BACKDROPS:
-            return "backdrop";
-        case GLYR_TYPE_NOIDEA:
-        default:
-            return "unknown";
+        return type_strings[type];
     }
-    return NULL;
+    else
+    {
+        return type_strings[GLYR_TYPE_NOIDEA];
+    }
 }
 /*-----------------------------------------------*/
 

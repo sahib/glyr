@@ -9,16 +9,6 @@ static void foreach_file(const gchar * song_dir_path, const GRegex * cRegex, Gly
 
 //---------------------------------------------------
 
-gboolean is_file(const gchar * song_path_dir, const gchar * elem_name)
-{
-    gchar * absolute_path = g_strdup_printf("%s%c%s",song_path_dir,G_DIR_SEPARATOR,elem_name);
-    gboolean retv = g_file_test(absolute_path,G_FILE_TEST_IS_REGULAR);
-    g_free(absolute_path);
-    return retv;  
-}
-
-//---------------------------------------------------
-
 static gchar * get_file_contents(const gchar * filename, gsize * len)
 {
     gchar * content = NULL;
@@ -149,7 +139,16 @@ static gboolean path_go_up(char * song_dir_path)
 static GList * find_in_musictree(const gchar * song_file_path, const gchar * regex, gint up_to,GlyrQuery * query)
 {
     GList * retv_list = NULL;
-    gchar * song_dir_path = g_path_get_dirname(song_file_path);
+
+    gchar * song_dir_path = NULL;
+    if(g_file_test(song_file_path,G_FILE_TEST_IS_DIR))
+    {
+        song_dir_path = g_strdup(song_file_path);
+    }
+    else 
+    {
+        song_dir_path = g_path_get_dirname(song_file_path);
+    }
 
     if(song_dir_path != NULL)
     {
@@ -177,16 +176,21 @@ static GList * find_in_musictree(const gchar * song_file_path, const gchar * reg
 
 //---------------------------------------------------
 
-/* Dirty Hack :-( */
+#define REGEX_ESCAPE(str)         \
+    (str != NULL) ?               \
+    g_regex_escape_string(str,-1) \
+    : NULL                      
+
 static gchar * configure_regex(const gchar * regex, GlyrQuery * subs)
 {
     gchar * correct_regex = NULL;
     if(regex && subs)
     {
         GlyrQuery temp;
-        temp.artist = g_regex_escape_string(subs->artist,-1);
-        temp.album  = g_regex_escape_string(subs->album, -1);
-        temp.title  = g_regex_escape_string(subs->title ,-1);
+        temp.artist = REGEX_ESCAPE(subs->artist); 
+        temp.album  = REGEX_ESCAPE(subs->album);
+        temp.title  = REGEX_ESCAPE(subs->title); 
+
         correct_regex = prepare_url(regex,&temp,FALSE);
 
         g_free(temp.artist);
@@ -203,6 +207,7 @@ static gchar * configure_regex(const gchar * regex, GlyrQuery * subs)
 
 static const gchar * musictree_provider_url(GlyrQuery * query)
 {
+    /* Flag this as a Offline provider */
     return OFFLINE_PROVIDER; 
 }
 
