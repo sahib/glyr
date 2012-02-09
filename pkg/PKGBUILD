@@ -1,5 +1,5 @@
 # Maintainer: Christopher Pahl <sahib@online.de>
-# glyr PKGBUILD for glyr 
+# glyr PKGBUILD for ArchLinux
 pkgname=glyr-git
 pkgver=20110901
 pkgrel=1
