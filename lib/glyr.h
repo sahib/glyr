@@ -997,6 +997,15 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
  */
 GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
 
+
+void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source);
+void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider);
+void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format);
+void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type);
+void glyr_cache_set_rating(GlyrMemCache * cache, int rating);
+
+    
+
 #ifdef _cplusplus
 }
 #endif

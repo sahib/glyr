@@ -246,8 +246,8 @@ GlyrMemCache* DL_init(void)
 {
     GlyrMemCache * cache = g_malloc0(sizeof(GlyrMemCache));
     memset(cache,0,sizeof(GlyrMemCache));
-    cache->type = GLYR_TYPE_NOIDEA;
 
+    cache->type = GLYR_TYPE_NOIDEA;
     cache->cached = FALSE;
     cache->duration = 0;
     cache->rating = 0;

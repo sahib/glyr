@@ -655,7 +655,6 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
 {
     if(db && query && cache)
     {
-
         char * sql = sqlite3_mprintf(
                 "INSERT OR IGNORE INTO metadata VALUES(                            \n"
                 "  (SELECT rowid FROM artists   WHERE artist_name   = LOWER('%q')),\n"
@@ -676,10 +675,14 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
         sqlite3_stmt *stmt = NULL;
         sqlite3_prepare_v2(db->db_handle, sql, strlen(sql) + 1, &stmt, NULL);
 
-        if(cache->dsrc != NULL)
+        if(cache->dsrc != NULL) 
+        {
             sqlite3_bind_text(stmt, 1, cache->dsrc,strlen(cache->dsrc) + 1, SQLITE_STATIC);
+        }
         else
-            glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing source-url!\n");
+        {
+            //sqlite3_bind_text(stmt, 1, "none",5, SQLITE_STATIC);
+        }
 
         sqlite3_bind_int (stmt, 2, cache->duration);
         sqlite3_bind_int (stmt, 3, query->type);
@@ -694,7 +697,6 @@ static void insert_cache_data(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache
             glyr_message(1,query,"glyr: Warning: Attempting to insert cache with missing data!\n");
 
         sqlite3_bind_int( stmt, 9, cache->rating);
-       // g_printerr("%lf\n",get_current_time());
         sqlite3_bind_double( stmt,10, get_current_time());
 
         if(sqlite3_step(stmt) != SQLITE_DONE) 

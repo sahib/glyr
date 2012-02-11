@@ -34,7 +34,7 @@ describe "tracklist" do
 
 			list.should be_an_instance_of Array
 			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 13 
+			list.size.should == 13 
 
 			x = 0
 			list.each do |track|
@@ -51,7 +51,7 @@ describe "tracklist" do
 			list = @spit.get
 		
 			list.should be_an_instance_of Array
-			list.size.should equal 0
+			list.size.should == 0
 		end
 	end	
 end

@@ -48,7 +48,13 @@ static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
 	GlyrMemCache * result_cache = NULL;
 	if (cache && (start = strstr(cache->data,START)) != NULL)
 	{
-        start = strstr(start,"<br />");
+        start += (sizeof START) - 1;
+        char * lyrics_start = strstr(start,"<br />");
+        if(lyrics_start != NULL)
+        {
+            start = lyrics_start;
+        }
+
 		if (start && (end = strstr(start + (sizeof START) ,END)) != NULL)
 		{
 			if (ABS(end-start) > 35)
