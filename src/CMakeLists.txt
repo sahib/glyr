@@ -25,9 +25,6 @@ TARGET_LINK_LIBRARIES(exit_signal glyr)
 ADD_EXECUTABLE(async_queue examples/async_queue.c)
 TARGET_LINK_LIBRARIES(async_queue glyr)
 
-ADD_EXECUTABLE(dbtest examples/dbtest.c)
-TARGET_LINK_LIBRARIES(dbtest glyr)
-
 ADD_EXECUTABLE(ping_url utils/ping_url.c)
 TARGET_LINK_LIBRARIES(ping_url glyr) 
 
