@@ -193,6 +193,7 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
         {
             /* Remember NUL for strings */
             result->data = g_malloc(cache->size + 1);
+            result->data[cache->size] = 0;
             memcpy(result->data,cache->data,cache->size);
         }
         result->dsrc = g_strdup(cache->dsrc);

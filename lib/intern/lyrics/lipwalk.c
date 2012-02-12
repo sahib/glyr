@@ -36,7 +36,6 @@ static const gchar * lyrics_lipwalk_url(GlyrQuery * settings)
 {
 	return LIPWALK_URL;
 }
-
 /*---------------------------------------------------*/
 
 static GlyrMemCache * parse_lyrics_page(GlyrMemCache * cache)
