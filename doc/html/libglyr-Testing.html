@@ -7,7 +7,7 @@
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-Glyr.html" title="Glyr">
-<link rel="next" href="libglyr-Types.html" title="Types">
+<link rel="next" href="api-index-full.html" title="API Index">
 <meta name="generator" content="GTK-Doc V1.18 (XML mode)">
 <link rel="stylesheet" href="style.css" type="text/css">
 </head>
@@ -18,7 +18,7 @@
 <td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
 <td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
 <th width="100%" align="center">libglyr Reference Manual</th>
-<td><a accesskey="n" href="libglyr-Types.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+<td><a accesskey="n" href="api-index-full.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
 </tr>
 <tr><td colspan="5" class="shortcuts">
 <a href="#libglyr-Testing.synopsis" class="shortcut">Top</a>
@@ -44,13 +44,13 @@ Stable, unless otherwise indicated
 <pre class="synopsis">
 #include &lt;glyr/testing.h&gt;
 
-<a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-Testing.html#glyr-testing-call-parser" title="glyr_testing_call_parser ()">glyr_testing_call_parser</a>            (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
+<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Testing.html#glyr-testing-call-parser" title="glyr_testing_call_parser ()">glyr_testing_call_parser</a>            (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
+                                                         <em class="parameter"><code><span class="type">GLYR_GET_TYPE</span> type</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *cache</code></em>);
 const <span class="returnvalue">char</span> *        <a class="link" href="libglyr-Testing.html#glyr-testing-call-url" title="glyr_testing_call_url ()">glyr_testing_call_url</a>               (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
+                                                         <em class="parameter"><code><span class="type">GLYR_GET_TYPE</span> type</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);
 </pre>
 </div>
 <div class="refsect1">
@@ -65,10 +65,10 @@ tests for their providers.
 <a name="libglyr-Testing.details"></a><h2>Details</h2>
 <div class="refsect2">
 <a name="glyr-testing-call-parser"></a><h3>glyr_testing_call_parser ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_testing_call_parser            (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_testing_call_parser            (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
+                                                         <em class="parameter"><code><span class="type">GLYR_GET_TYPE</span> type</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *cache</code></em>);</pre>
 <p>
 Call a certain parser. Example: ("google",GLYR_GET_COVERART,&amp;query,pagesource_cache); 
 This is meant for testing purpose only.
@@ -103,8 +103,8 @@ This is meant for testing purpose only.
 <div class="refsect2">
 <a name="glyr-testing-call-url"></a><h3>glyr_testing_call_url ()</h3>
 <pre class="programlisting">const <span class="returnvalue">char</span> *        glyr_testing_call_url               (<em class="parameter"><code>const <span class="type">char</span> *provider_name</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GLYR-GET-TYPE:CAPS" title="enum GLYR_GET_TYPE"><span class="type">GLYR_GET_TYPE</span></a> type</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">GLYR_GET_TYPE</span> type</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);</pre>
 <p>
 Call a provider's <code class="function">get_url()</code> function
 This is meant for testing purpose only.
