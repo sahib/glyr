@@ -167,6 +167,43 @@ void glyr_cache_free(GlyrMemCache * cache);
 GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
 
 /**
+ * glyr_cache_set_dsrc:
+ * @cache: The cache to change
+ * @download_source: The string to be changed too
+ *
+ * Copies download_source to the dsrc field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source);
+/**
+ * glyr_cache_set_prov:
+ * @cache: The cache to change
+ * @provider: The string to be changed too
+ *
+ * Copies provider to the prov field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider);
+/**
+ * glyr_cache_set_img_format:
+ * @cache: The cache to change
+ * @img_format: The string to be changed too
+ *
+ * Copies img_format to the img_format field, clearing all previously allocated content safely.
+ */
+void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format);
+/**
+ * glyr_cache_set_type:
+ * @cache: The cache to change
+ * @type: The new type
+ */
+void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type);
+/**
+ * glyr_cache_set_rating:
+ * @cache: The cache to change
+ * @rating: The new rating 
+ */
+void glyr_cache_set_rating(GlyrMemCache * cache, int rating);
+
+/**
 * glyr_cache_set_data:
 * @cache: The cache where to set the data.
 * @data: The data
@@ -175,7 +212,8 @@ GlyrMemCache * glyr_cache_copy(GlyrMemCache * cache);
 * Safely sets the data of the cache. It frees the old data first, updates 
 * the checksum and adjusts the size fields accordingly to len.
 * If len is a negative number strlen() is used to determine the size.
-* Note: @data is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
+*
+* Attention: @data is set directly! It get's freed once you free the cache. Be sure it's safe to be free'd.
 *
 */
 void glyr_cache_set_data(GlyrMemCache * cache, const char * data, int len);
@@ -996,13 +1034,6 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
  * Returns: A bitmask out of members of GLYR_FIELD_REQUIREMENT
  */
 GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
-
-
-void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source);
-void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider);
-void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format);
-void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type);
-void glyr_cache_set_rating(GlyrMemCache * cache, int rating);
 
     
 

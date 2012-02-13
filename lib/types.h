@@ -256,7 +256,9 @@ typedef enum
  * @prev: A pointer to the previous item in the list, or NULL
  *
  * GlyrMemCache represents a single item received by libglyr. 
- * You should <emphasis>NOT</emphasis> modify any of the fields (with the sole excepetion of @rating), it is meant to be read-only.
+ * You should <emphasis>NOT</emphasis> modify any of the fields directly, they are meant to be read-only.
+ * If you need to set any field (usually only necessary in conjunction with glyr/cache.h) you may 
+ * want to use the glyr_cache_set_<public field> routines to safely modify the data.
  */
 typedef struct _GlyrMemCache {
 
