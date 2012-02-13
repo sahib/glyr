@@ -53,8 +53,6 @@ static const char * err_strings[] =
 static const char * type_strings[] = 
 {
     [GLYR_TYPE_COVERART] = "cover",
-    [GLYR_TYPE_COVERART_PRI] = "cover_front",
-    [GLYR_TYPE_COVERART_SEC] = "cover_back",
     [GLYR_TYPE_LYRICS] = "songtext",
     [GLYR_TYPE_ARTIST_PHOTO] = "artistphoto",
     [GLYR_TYPE_ALBUM_REVIEW] = "albumreview",
@@ -1166,7 +1164,8 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
  * There is not a setter for everything, just for things,
  * you might be interested in to set. 
  * (No setter for is_image e.g.)
- * --------------------------------------------------------- */
+ * --------------------------------------------------------- 
+ */
 
 #define SET_CACHE_STRING(Cache, Field, Value) \
     if(Cache != NULL) {                       \
@@ -1176,26 +1175,36 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type)
         Field = g_strdup(Value);              \
     }
 
+/* --------------------------------------------------------- */
+
 void glyr_cache_set_dsrc(GlyrMemCache * cache, const char * download_source)
 {
     SET_CACHE_STRING(cache,cache->dsrc,download_source);
 }
+
+/* --------------------------------------------------------- */
 
 void glyr_cache_set_prov(GlyrMemCache * cache, const char * provider)
 {
     SET_CACHE_STRING(cache,cache->prov,provider);
 }
 
+/* --------------------------------------------------------- */
+
 void glyr_cache_set_img_format(GlyrMemCache * cache, const char * img_format)
 {
     SET_CACHE_STRING(cache,cache->img_format,img_format);
 }
+
+/* --------------------------------------------------------- */
 
 void glyr_cache_set_type(GlyrMemCache * cache, GLYR_DATA_TYPE type)
 {
     if(cache != NULL)
         cache->type = MAX(type,GLYR_TYPE_NOIDEA);
 }
+
+/* --------------------------------------------------------- */
 
 void glyr_cache_set_rating(GlyrMemCache * cache, int rating)
 {

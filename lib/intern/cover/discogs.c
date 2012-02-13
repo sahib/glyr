@@ -21,175 +21,135 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define RELEASE_ID  "<release id=\""
-#define RELEASE_END "\" "
-#define TITLE_BEGIN "<title>"
-#define TITLE_ENDIN "</title>"
-#define IMGNODE_BEGIN "<image "
-#define URL_BEGIN "uri=\""
-#define IMG_TYPE "primary"
-#define NODE_END "\" "
-
-static const gchar * cover_discogs_url(GlyrQuery * sets)
-{
-	if(sets->img_max_size >= 300 || sets->img_max_size == -1)
-	{
-		return "http://www.discogs.com/artist/${artist}?f=xml&api_key="API_KEY_DISCOGS;
-	}
-	return NULL;
-}
+#define API_ENTRY "http://api.discogs.com/database/search?type=release&q=${artist}"
 
 /*------------------------------------------------*/
 
-static gboolean check_image_size(GlyrQuery * query, gchar * image_begin)
-{
-	gboolean result = FALSE;
-	gchar * height = get_search_value(image_begin,"height=\"",NODE_END);
-	gchar * width  = get_search_value(image_begin,"width=\"", NODE_END);
-	if(width && height)
-	{
-		gint numeric_width  = strtol(width, NULL,10);
-		gint numeric_height = strtol(height,NULL,10);
-		gint ratio = (numeric_width + numeric_height) / 2;
-		result = size_is_okay(ratio,query->img_min_size,query->img_max_size);
+/*
+ * # Example Snippet (for type = release)
+ * { # Start of item 
+ *   "style": ["Grunge"],
+ *   "thumb": "http://api.discogs.com/image/R-90-2845667-1303704896.jpeg",
+ *   "title": "Nirvana - Nirvana", 
+ *   "country": "Russia",
+ *   "format": ["CD"],
+ *   "uri": "/Nirvana-Nirvana/release/2845667", 
+ *   "label": "\u0414\u043e\u043c\u0430\u0448\u043d\u044f\u044f \u041a\u043e\u043b\u043b\u0435\u043a\u0446\u0438\u044f",
+ *   "catno": "none",
+ *   "year": "2001", 
+ *   "genre": ["Rock"],
+ *   "resource_url": "http://api.discogs.com/releases/2845667",
+ *   "type": "release",
+ *   "id": 2845667
+ *  }, # End of item
+ *  {
+ *     ..more data..
+ *  }
+ */ 
 
-		g_free(height);
-		g_free(width);
-	}
-	return result;
+/* Note: "thumb": null is ignored! */
+#define TITLE_SUBNODE "\"title\": \"" 
+#define THUMB_SUBDNOE "\"thumb\": \""
+#define FOLLR_SUBNODE "\"uri\": \""
+#define NODE THUMB_SUBDNOE 
+#define ENDOF_SUBNODE "\","
+
+
+/////////////////////////////////////////////////////
+
+static bool check_artist_album(GlyrQuery * q, const char * artist_album)
+{
+    bool rc = false;
+
+    char ** split = g_strsplit(artist_album," - ",2);
+    if(split && split[0] && split[1])
+    {
+        rc = levenshtein_strnormcmp(q,q->artist,split[0]) <= q->fuzzyness &&
+             levenshtein_strnormcmp(q,q->album, split[1]) <= q->fuzzyness;
+    }
+
+    g_strfreev(split);
+    return rc;
 }
 
-/*------------------------------------------------*/
+/////////////////////////////////////////////////////
 
-static void parse_single_page(GlyrQuery * query, GlyrMemCache * tmp_cache, GList ** result_list)
+static GlyrMemCache * transform_url(cb_object * s, const char * url)
 {
-	if(tmp_cache != NULL)
-	{
-		/* Parsing the image url from here on */
-		char * imgurl_begin = tmp_cache->data;
-		while((imgurl_begin = strstr(imgurl_begin + (sizeof IMGNODE_BEGIN) - 1,IMGNODE_BEGIN)) != NULL)
-		{
-			GLYR_DATA_TYPE img_type;
-			gchar * is_primary = strstr(imgurl_begin,IMG_TYPE);
-			if(((is_primary - imgurl_begin) > 42))
-				continue;
+    GlyrMemCache * rc = NULL;
+    size_t rc_size = strlen(url);
+    char * rc_url  = g_strdup(url);
 
-			if(is_primary != NULL)
-				img_type = GLYR_TYPE_COVERART_PRI;
-			else
-				img_type = GLYR_TYPE_COVERART_SEC;
+    if(rc_url != NULL) {
+        char * slash = strrchr(rc_url,'/');
+        if(slash != NULL) {
+            char * sp = strchr(slash,'-');
+            if(sp != NULL) {
+                char * ep = strchr(sp + 1, '-');
+                size_t rest_len = rc_size - (ep - rc_url) + 1;
+                memmove(sp,ep,rest_len);
 
-
-			if(check_image_size(query,imgurl_begin) == TRUE)
-			{
-				gchar * final_url = get_search_value(imgurl_begin,URL_BEGIN,NODE_END);
-				if(final_url != NULL)
-				{
-					GlyrMemCache * result = DL_init();
-					result->data = final_url;
-					result->size = strlen(result->data);
-					result->type = img_type;
-					result->dsrc = g_strdup(tmp_cache->dsrc);
-					*result_list = g_list_prepend(*result_list,result);
-				}
-			}
-		}
-		DL_free(tmp_cache);
-	}
+                rc = DL_init();
+                rc->data = (char*)rc_url;
+                rc->size = strlen(url);
+                rc->dsrc = g_strdup(s->url);
+            }
+        }
+    }
+    return rc;
 }
 
-/*------------------------------------------------*/
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 
-static gboolean validate_title(GlyrQuery * query, gchar * release_node)
+static const char * cover_discogs_url(GlyrQuery * q)
 {
-	gboolean result = FALSE;
-	gchar * album_value = get_search_value(release_node,TITLE_BEGIN,TITLE_ENDIN);
-	if(album_value && levenshtein_strnormcmp(query,album_value,query->album) <= query->fuzzyness)
-	{
-		result = TRUE;
-	}
-	g_free(album_value);
-	return result;
+    return API_ENTRY; 
 }
 
-/*------------------------------------------------*/
+/////////////////////////////////////////////////////
 
-/* Most of the time there are no primary covers, just to be sure */
-static void sort_primary_before_secondary(GList ** result_list)
-{
-	if(result_list != NULL && *result_list != NULL)
-	{
-		GList * last_element = *result_list;
-		while(TRUE)
-		{
-			GList * elem = NULL;
-			for(elem = last_element; elem; elem = elem->next)
-			{
-				GlyrMemCache * item = elem->data;
-				if(item->type == GLYR_TYPE_COVERART_PRI)
-				{
-					last_element = elem->next;
-					*result_list = g_list_delete_link(*result_list,elem);
-					*result_list = g_list_prepend(*result_list,item);
-					break;
-				}
-			}
-
-			if(elem == NULL) break;
-		}
-	}
-}
-
-/*------------------------------------------------*/
-
-/* The discogs.com parser is a little more complicated... */
 static GList * cover_discogs_parse(cb_object * capo)
 {
-	GList * result_list = NULL;
+    GList * result_list = NULL;
 
-	/* Go through all release nodes */
-	gchar * release_node = capo->cache->data;
-	while(continue_search(g_list_length(result_list),capo->s) && (release_node = strstr(release_node+1,RELEASE_ID)) != NULL)
-	{
-		if(validate_title(capo->s,release_node) == TRUE)
-		{
-			/* Get release ID */
-			gchar * release_end = strstr(release_node, RELEASE_END);
-			if(release_end != NULL)
-			{
-				// Copy ID from cache
-				gchar * release_ID = copy_value(release_node + (sizeof RELEASE_ID) - 1,release_end);
-				if(release_ID != NULL)
-				{
-					/*Construct release_url */
-					gchar *release_url = g_strdup_printf("http://www.discogs.com/release/%s?f=xml&api_key="API_KEY_DISCOGS,release_ID);
-					if(release_url != NULL)
-					{
-						/* Only download till artists tag */
-						GlyrMemCache * tmp_cache = download_single(release_url,capo->s,"<artists>");
-						parse_single_page(capo->s,tmp_cache,&result_list);
-						g_free(release_url);
-					}
-					g_free(release_ID);
-				}
-			}
-		}
-	}
-	sort_primary_before_secondary(&result_list);
-	return result_list;
+    /* Jump to the very first node 'directly' */
+    gchar * node = capo->cache->data;
+
+    while(continue_search(g_list_length(result_list),capo->s)
+         && (node = strstr(node + (sizeof NODE) - 1,NODE)) != NULL) {
+
+        char * artist_album = get_search_value(node,TITLE_SUBNODE,ENDOF_SUBNODE);
+        if(artist_album && check_artist_album(capo->s,artist_album)) {
+
+            char * thumb_url = get_search_value(node,THUMB_SUBDNOE,ENDOF_SUBNODE);
+            if(thumb_url) {
+
+                GlyrMemCache * p = transform_url(capo,thumb_url);
+                if(p != NULL) {
+                    result_list = g_list_prepend(result_list,p);
+                } 
+                g_free(thumb_url);
+            }
+        }
+        g_free(artist_album);
+    }
+
+    return result_list;
 }
 
 /*------------------------------------------------*/
 
 MetaDataSource cover_discogs_src =
 {
-	.name      = "discogs",
-	.key       = 'd',
-	.parser    = cover_discogs_parse,
-	.get_url   = cover_discogs_url,
-	.type      = GLYR_GET_COVERART,
-	.quality   = 50,
-	.speed     = 35,
-	.endmarker = NULL,
-	.free_url  = false
+    .name      = "discogs",
+    .key       = 'd',
+    .parser    = cover_discogs_parse,
+    .get_url   = cover_discogs_url,
+    .type      = GLYR_GET_COVERART,
+    .quality   = 60,
+    .speed     = 70,
+    .endmarker = NULL,
+    .free_url  = false
 };

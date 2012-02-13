@@ -924,7 +924,7 @@ void glyr_info_free(GlyrFetcherInfo * info);
 
 /**
 * glyr_data_type_to_string:
-* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_COVERART_PRI for example
+* @type: a member of the %GLYR_DATA_TYPE enum, %GLYR_TYPE_LYRICS for example
 *
 * Converts a type to a string.
 *

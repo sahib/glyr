@@ -70,7 +70,7 @@
 #define GLYR_DEFAULT_ALLOWED_FORMATS "png;jpeg;tiff;jpg;"
 
 /* Be honest by default */
-#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME")"
+#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") +https://www.github.com/sahib/glyr"
 
 /* --------------------------- */
 /* --------- GROUPS ---------- */
@@ -167,8 +167,6 @@ typedef enum
 * @GLYR_TYPE_ALBUM_REVIEW: Albumreview
 * @GLYR_TYPE_ARTIST_PHOTO: Pictures showing a certain band
 * @GLYR_TYPE_COVERART: coverart
-* @GLYR_TYPE_COVERART_PRI:  A cover known to be the front side of the album 
-* @GLYR_TYPE_COVERART_SEC:  A cover known to be the backside: inlet etc. 
 * @GLYR_TYPE_ARTISTBIO: Artist bio 
 * @GLYR_TYPE_SIMILAR_ARTIST: Similiar artists 
 * @GLYR_TYPE_SIMILAR_SONG: Similar songs 
@@ -186,7 +184,8 @@ typedef enum
 * 
 * Mainly used in the 'type' field of GlyrMemCache.
 * It describes what kind of data the cache holds.
-* 
+* As a user of the API you will need this very seldom.
+* libglyr makes internally use of it.
 */
 
 /* DO NOT CHANGE THE ORDER HERE 
@@ -200,8 +199,6 @@ typedef enum
     GLYR_TYPE_ALBUM_REVIEW, 
     GLYR_TYPE_ARTIST_PHOTO, 
     GLYR_TYPE_COVERART,  
-    GLYR_TYPE_COVERART_PRI, 
-    GLYR_TYPE_COVERART_SEC, 
     GLYR_TYPE_ARTISTBIO,  
     GLYR_TYPE_SIMILAR_ARTIST,
     GLYR_TYPE_SIMILAR_SONG, 
