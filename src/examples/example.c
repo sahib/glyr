@@ -59,11 +59,11 @@ static GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
         puts("=> Therefore we return GLYRE_STOP_PRE. Goodbye.");
         return GLYRE_STOP_PRE;
         /*
-             * You can also return:
-             * - GLYRE_STOP_POST which will stop libglyr, but still add the current item
-             * - GLYRE_STOP_PRE  which will stop libglyr, but skip the current item
-             * - GLYRE_SKIP which will cause libglyr not to add this item to the results
-             */
+         * You can also return:
+         * - GLYRE_STOP_POST which will stop libglyr, but still add the current item
+         * - GLYRE_STOP_PRE  which will stop libglyr, but skip the current item
+         * - GLYRE_SKIP which will cause libglyr not to add this item to the results
+         */
     }
     *i = *i + 1;
     return GLYRE_OK;
@@ -92,29 +92,30 @@ int main(int argc, char * argv[])
     glyr_opt_album (&q,(char*)"Riders on the Storm");
     glyr_opt_title (&q,(char*)"Friede sei mit dir");
 
-    // Execute a func when getting one item
+    /* Execute a func when getting one item */
     int this_be_my_counter = 0;
     glyr_opt_dlcallback(&q,funny_callback,&this_be_my_counter);
 
-    // For the start: Enable verbosity
+    /* For the start: Enable verbosity */
     glyr_opt_verbosity(&q,2);
 
-    // Download 5 items
+    /* Download 5 (or less) items */
     glyr_opt_number(&q,5);
 
-    // Just search, without downloading items
+    /* Just search, without downloading items */
     glyr_opt_download(&q,0);
 
-    // Call the most important command: GET!
-    // This returned a list of (GlyrMemCache *)s
-    // Each containing ONE item. (i.e. a songtext)
+    /* Call the most important command: GET!
+     * This returned a list of (GlyrMemCache *)s
+     * Each containing ONE item. (i.e. a songtext)
+     */
     GLYR_ERROR err;
     GlyrMemCache * it = glyr_get(&q,&err,NULL);
 
     if(err != GLYRE_OK)
         fprintf(stderr,"E:%s\n",glyr_strerror(err));
 
-    // Now iterate through it...
+    /* Now iterate through it... */
     if(it != NULL)
     {
         GlyrMemCache * start = it;
@@ -122,22 +123,23 @@ int main(int argc, char * argv[])
         int counter = 0;
         while(it != NULL)
         {
-            // This has the same effect as in the callback,
-            // Just that it's executed just once after all DL is done.
-            // Commented out, as this would print it twice
+            /* This has the same effect as in the callback,
+             * Just that it's executed just once after all DL is done.
+             * Commented out, as this would print it twice 
+             * */
             print_item(it,counter);
 
-            // Every cache has a link to the next and prev one (or NULL respectively)
+            /* Every cache has a link to the next and prev one (or NULL respectively) */
             it = it->next;
             ++counter;
         }
 
-        // The contents of it are dynamically allocated.
-        // So better free them if you're not keen on memoryleaks
+        /* The contents of it are dynamically allocated. */
+        /* So better free them if you're not keen on memoryleaks */
         glyr_free_list(start);
     }
-    // Destroy query (reset to default values and free dyn memory)
-    // You could start right off to use this query in another glyr_get
+    /* Destroy query (reset to default values and free dyn memory) */
+    /* You could start right off to use this query in another glyr_get */
     glyr_query_destroy(&q);
     return EXIT_SUCCESS;
 }

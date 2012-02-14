@@ -27,7 +27,7 @@
 
 /*
  * Example program showing how to use libglyr with multiple threads.
- * libglyr is fully thread-compatible as long every thread uses it's own query struct.
+ * libglyr is fully thread-compatible as long every thread uses it's own query.
 */
 
 static void * call_get(void * p)

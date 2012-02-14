@@ -21,11 +21,14 @@
 #include "../../lib/glyr.h"
 #include <glib.h>
 
-/* Simple example to show the use of the glyr_info_get() call */
+/* -------------------------------------------------------
+ * Using glyr_info_get() and the GlyrFetcherInfo structure
+ * (This does about the same as glyrc --list)
+ * -------------------------------------------------------- */ 
 
 int main(int argc, const char *argv[])
 {
-    /* We NEED to init first*/
+    /* We need to init first*/
     glyr_init();
     atexit(glyr_cleanup);
 

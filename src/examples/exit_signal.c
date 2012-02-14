@@ -5,6 +5,10 @@
 
 #include "../../lib/glyr.h"
 
+/* ----------------------------------------------
+ * Example on using the glyr_signal_exit() method.
+ * -----------------------------------------------*/
+
 static GLYR_ERROR funny_callback(GlyrMemCache * c, GlyrQuery * q)
 {
     glyr_cache_print(c);

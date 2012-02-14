@@ -4,10 +4,16 @@
 #include <glib.h>
 #include "../../lib/glyr.h"
 
-/*
- * Example program showing how to use libglyr with multiple threads.
- * libglyr is fully thread-compatible as long every thread uses it's own query struct.
-*/
+/* --------------------------------------------------
+ * Example of using the builtin musictree provider.
+ * It searches metadata items in a directory structure,
+ * in most cases your music-directory. 
+ * A typical example would be the famous 'folder.jpg'.
+ *
+ * Usage is the same as before, but you have to 
+ * use glyr_opt_musictree_path() with a valid path
+ * to enable it.
+ * -------------------------------------------------- */
 
 static void configure(GlyrQuery * s)
 {

@@ -18,7 +18,7 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-/* Simples possible example for libglyr, see src/example.c for a little more advanced one */
+/* Simplest possible example of libglyr, see src/example.c for a little more advanced one */
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -27,7 +27,6 @@
 
 /* use this include path for your project, or directly clone libglyr to your project */
 //#include <glyr/glyr.h>
-
 
 int main(void)
 {
