@@ -667,6 +667,18 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
 ////////////////////////////////////
 ////////////////////////////////////
 
+GlyrMemCache * glyr_db_make_dummy(int rating)
+{
+    GlyrMemCache * c = glyr_cache_new();
+    glyr_cache_set_data(c,g_strdup("[dummy]"),-1);
+    c->rating = rating;
+    return c;
+}
+
+////////////////////////////////////
+////////////////////////////////////
+////////////////////////////////////
+
 // --------- INTERNALS ------------ //
 
 static void execute(GlyrDatabase * db, const gchar * sql_statement)

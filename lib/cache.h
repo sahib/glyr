@@ -284,6 +284,21 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 *
 */
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr);
+
+
+/**
+ * glyr_db_make_dummy: 
+ * @rating: The rating to set in the dummy.
+ *
+ * The idea behind this function is to create a dummy entry for the cache, e.g. to indicate a certain item
+ * was not found. In this case you create a dummy with a rating of (e.g.) -1 and push it into the DB. 
+ * If one does a lookup (via glyr_get() or glyr_db_lookup()) then this cache will be returned, and you will
+ * know that it's a dummy due to the -1 you set before.
+ *
+ * Returns: A newly allocated cache, use glyr_cache_free() to free it.
+ */
+GlyrMemCache * glyr_db_make_dummy(int rating);
+
 #ifdef __cplusplus
 }
 #endif
