@@ -1,4 +1,4 @@
-h1. _Glyr_ is a searcheninge for musicrelated metadata
+h1. Glyr is a searcheninge for musicrelated metadata
 
 _The finest search you can buy for no money_
 
@@ -17,6 +17,8 @@ work as a standalone program which is able to download:
 * relations, for example links to wikipedia
 * similar artists 
 * similar songs
+* guitartabs
+* backdrops (large artist photos)
 
 *Terminology*:
 To prevent disambiguation the following terms are used below: 	
@@ -24,7 +26,7 @@ To prevent disambiguation the following terms are used below:
 * _libglyr_ is the library behind, which may be used by your program.
 * a _getter_ is a type of metadata to download, e.g. @cover@, sometimes also called _fetcher_
 * a _provider_ is a source libglyr queries in order to find the data.
-* _glyros_ is the ruby wrapper for this lib.
+* _glyros_ is the ruby wrapper for this lib. Currently it is not maintained.
 
 h2. FEATURES
 
@@ -36,10 +38,11 @@ h2. FEATURES
 * Lightweight dependencies: libcurl and glib - typical linux systems have those installed.
 * Download of a user defined amount of items, @glyrc cover -a Foo -b Bar -n 30@ loads 30 covers of album 'Bar' by artist 'Foo'.
 * Grouped download: Query providers by descending Accuray / Speed; controllable by the user over the @qsratio@
-* Optional download of images, URL is returned otherwise - so it can act like a search-engine.
+* Optional download of images, URL is returned otherwise - so it can act a bit like a search-engine.
 * Free Software licensed under the terms of the GPLv3
 * libglyr is portable, easy, threadsafe and lowlevel enough for everyone.
 * ...lots of other options like min/max size for images.
+* A built-in cache to store the metadata (using SQLite)
 
 h2. GETTING STARTED
 
@@ -52,7 +55,7 @@ h3. libglyr:
 See the "examples in src/examples":https://github.com/sahib/glyr/wiki for a quickstart.
 There's also a more "gentle (and brief) introduction.":https://github.com/sahib/glyr/wiki/Introduction-to-libglyr
 Also see the "API Reference":http://sahib.github.com/glyr/doc/html/index.html
-Please note: The Api won't be guaranteed to be stable before version 1.0.
+*Please note:* The Api won't be guaranteed to be stable before version 1.0.
 
 h3. glyrc:
 
@@ -63,9 +66,8 @@ h2. FAQ
 
 h3. Anyone using it already?
 
-Well, yeah. Me. It's quite fresh and I didn't release it yet.
-But the first plugin is already there: "gmpc-glyros":https://github.com/sahib/gmpc-glyros
-It replaces pretty much every other metadata plugin gmpc. Grab it while it's hot!
+"GMPC":http://gmpc.wikia.com/wiki/Gnome_Music_Player_Client and "Pragha":http://pragha.wikispaces.com/,
+and soon "Freya":https://github.com/studentkittens/Freya
 
 h3. Glyr.. such a silly name! Why? 
 
@@ -73,7 +75,7 @@ Indeed. Should have named it 'Glyros'.
 
 h3. Is it hard to write something with it?
 
-A decent knowledge of C might be required, but the code is staright forward.
+A decent knowledge of C might be required, but the code is straight forward most of the time.
 In the ruby wrapper you can almost use "english to order covers":http://sahib.github.com/glyr/ruby_example.html .
 
 Bash scripts are even easier:
@@ -86,7 +88,8 @@ As developers you have lots of option, you could write glyr-plugins for musicpla
 hack up little scripts showing covers on the desktop.. everything related to musicmetadat is possible here.
 You could also extend libglyr itself but that's a little harder.
 
-<h3>Isn't there musicbrainz already?</h3>
+h3. Isn't there musicbrainz already?
+
 # The kind of metadata downloaded by glyr differs heavily from musicbrainz.
 i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Rippers and taggers.
 # Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
@@ -108,7 +111,8 @@ If you file a bugreport: _Wow, thank you!_
 Use the "Issue Tracker":https://github.com/sahib/glyr/issues to share your find.
 Alternatively you may drop me a mail at <sahib@online.de>
 
-<h3>PATCHES</h3>
+h3. PATCHES
+
 If you hacked one: Excellent! Send it to me via mail or see below.
 If you want to add new providers you should look at the existing provider plugins to get an idea how to write one.
 Starting with lib/cover/lastfm.c isn't a bad idea either, because it is one of the very simple ones.
