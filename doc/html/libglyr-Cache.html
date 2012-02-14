@@ -60,7 +60,7 @@ Stable, unless otherwise indicated
                                                          <em class="parameter"><code><span class="type">GlyrMemCache</span> *cache</code></em>);
 <span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()">glyr_db_lookup</a>                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);
-<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-make-dummy" title="glyr_db_make_dummy ()">glyr_db_make_dummy</a>                  (<em class="parameter"><code><span class="type">int</span> rating</code></em>);
+<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-make-dummy" title="glyr_db_make_dummy ()">glyr_db_make_dummy</a>                  (<em class="parameter"><code><span class="type">void</span></code></em>);
 <span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-replace" title="glyr_db_replace ()">glyr_db_replace</a>                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>,
                                                          <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
@@ -387,25 +387,19 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-l
 <hr>
 <div class="refsect2">
 <a name="glyr-db-make-dummy"></a><h3>glyr_db_make_dummy ()</h3>
-<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_db_make_dummy                  (<em class="parameter"><code><span class="type">int</span> rating</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_db_make_dummy                  (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
 The idea behind this function is to create a dummy entry for the cache, e.g. to indicate a certain item
-was not found. In this case you create a dummy with a rating of (e.g.) -1 and push it into the DB. 
-If one does a lookup (via <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> or <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()"><code class="function">glyr_db_lookup()</code></a>) then this cache will be returned, and you will
-know that it's a dummy due to the -1 you set before.
+was not found. In this case you create a dummy with a 'rating' of -1 and push it into the DB. 
+If one does a lookup (via <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> or <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()"><code class="function">glyr_db_lookup()</code></a>) then this cache will be returned, one is able
+to check if the item was not found before.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
-<tbody>
-<tr>
-<td><p><span class="term"><em class="parameter"><code>rating</code></em> :</span></p></td>
-<td>The rating to set in the dummy.</td>
-</tr>
-<tr>
+<tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>A newly allocated cache, use <a class="link" href="libglyr-Glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> to free it.</td>
-</tr>
-</tbody>
+</tr></tbody>
 </table></div>
 </div>
 <hr>
