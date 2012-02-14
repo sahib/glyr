@@ -40,6 +40,8 @@ describe "review" do
 		end
 	end
 
+=begin
+# Amazon disabled due to their new API terms.
 	describe "amazon" do
 		it "should get a review of Adele-21" do
 			@spit.artist = "Adele"
@@ -54,6 +56,7 @@ describe "review" do
 			puts list.first.data
 		end
 	end
+=end
 
 	describe "metallum" do
 		it "should get me a review of Riders on the Storm" do

@@ -30,14 +30,18 @@ describe "albumlist" do
 			@spit.from = "musicbrainz"
 		end
 
-		it "should get me 6 In Flames albums" do
+		it "should get me 4 In Flames albums" do
 			@spit.artist = "In Flames"
 			@spit.number = 12
 			list = @spit.get
 
+            list.each do |item|
+                puts item.data
+            end
+
 			list.should be_an_instance_of Array
-		        list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should == 6
+	        list.first.should be_an_instance_of Glyros::GlyrMemCache
+			list.size.should == 4
 		end
 
 		it "should find nothing at all" do

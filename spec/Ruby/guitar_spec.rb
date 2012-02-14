@@ -1,3 +1,4 @@
+# vi: set fileencoding=utf-8 :
 #################################################################
 # This file is part of glyr
 # + a commnandline tool and library to download various sort of musicrelated metadata.
@@ -17,7 +18,6 @@
 # You should have received a copy of the GNU General Public License
 # along with glyr. If not, see <http://www.gnu.org/licenses/>.
 #################################################################
-# vi: set fileencoding=utf-8 :
 require_relative 'spec_helper.rb'
 
 describe 'guitartabs' do

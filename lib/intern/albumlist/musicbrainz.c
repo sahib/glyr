@@ -26,11 +26,36 @@ static const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=\"Official\"";
 }
 
+/////////////////////////////////////////////////////////////
+
 #define ALBUM_BEGIN "<release type=\"Album Official\""
 #define ALBUM_ENDIN "\" id=\""
 
 #define TITLE_BEGIN "<title>"
 #define TITLE_ENDIN "</title>"
+
+/////////////////////////////////////////////////////////////
+
+static bool is_in_list(GList * list, const char * to_cmp)
+{
+    bool rc = false;
+    for(GList * elem = list; elem; elem = elem->next)
+    {
+        GlyrMemCache * item = elem->data;
+        if(item != NULL)
+        {
+            if(g_ascii_strcasecmp(item->data,to_cmp) == 0)
+            {
+                rc = true;
+                break;
+            }
+        }
+    }
+
+    return rc;
+}
+
+/////////////////////////////////////////////////////////////
 
 static GList * albumlist_musicbrainz_parse(cb_object * capo)
 {
@@ -40,7 +65,8 @@ static GList * albumlist_musicbrainz_parse(cb_object * capo)
 	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
 	{
 		gchar * name = get_search_value(node,TITLE_BEGIN,TITLE_ENDIN);
-		if(name != NULL)
+        puts(name);
+		if(name != NULL && is_in_list(result_list,name) == false)
 		{
 			GlyrMemCache * result = DL_init();
 			result->data = name;
@@ -51,7 +77,7 @@ static GList * albumlist_musicbrainz_parse(cb_object * capo)
 	return result_list;
 }
 
-/*-----------------------------*/
+/////////////////////////////////////////////////////////////
 
 MetaDataSource albumlist_musicbrainz_src =
 {

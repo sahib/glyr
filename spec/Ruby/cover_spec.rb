@@ -116,6 +116,7 @@ describe "cover" do
 		end
 	end
 
+=begin
 	describe "amazon" do
 		before :each do
 			@spit.from = "amazon"
@@ -142,6 +143,7 @@ describe "cover" do
 			list.size.should equal 0
 		end
 	end
+=end
 
 	# coverhnt seems to be down.
 
@@ -151,8 +153,8 @@ describe "cover" do
 		end
 		
 		it "should test a pagehit" do
-			@spit.artist = "Böhse Onkelz"
-			@spit.album  = "Buch der Erinnerung"
+			@spit.artist = "Nirvana"
+			@spit.album  = "In Utero"
 			list = @spit.get
 
 			list.should be_an_instance_of Array

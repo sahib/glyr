@@ -114,6 +114,8 @@ static GList * cover_discogs_parse(cb_object * capo)
 {
     GList * result_list = NULL;
 
+    puts(capo->cache->data);
+
     /* Jump to the very first node 'directly' */
     gchar * node = capo->cache->data;
 

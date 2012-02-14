@@ -40,8 +40,8 @@ describe "artistphotos" do
 			@spit.from = "discogs"
 		end
 		
-		it "should get the image of the bad band Onkelz" do
-			@spit.artist = "Böhse Onkelz"
+		it "should get the image of the Nirvana" do
+			@spit.artist = "Nirvana"
 			@spit.download = false
 			list = @spit.get
 

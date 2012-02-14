@@ -83,6 +83,7 @@ describe GlyrosSpit do
 			Glyros::glyr_init()
 			Glyros::glyr_init()
 			Glyros::glyr_init()
+The URL for this server was mis-typed or incorrect
 		end
 
 		it "should not crash now" do
