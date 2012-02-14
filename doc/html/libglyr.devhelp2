@@ -20,6 +20,7 @@
     <keyword type="function" name="glyr_db_init ()" link="libglyr-Cache.html#glyr-db-init"/>
     <keyword type="function" name="glyr_db_insert ()" link="libglyr-Cache.html#glyr-db-insert"/>
     <keyword type="function" name="glyr_db_lookup ()" link="libglyr-Cache.html#glyr-db-lookup"/>
+    <keyword type="function" name="glyr_db_make_dummy ()" link="libglyr-Cache.html#glyr-db-make-dummy"/>
     <keyword type="function" name="glyr_db_replace ()" link="libglyr-Cache.html#glyr-db-replace"/>
     <keyword type="function" name="glyr_foreach_callback ()" link="libglyr-Cache.html#glyr-foreach-callback"/>
     <keyword type="macro" name="GLYR_CHECK_VERSION()" link="libglyr-Config.html#GLYR-CHECK-VERSION:CAPS"/>
