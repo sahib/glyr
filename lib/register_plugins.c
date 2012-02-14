@@ -147,7 +147,7 @@ static void register_provider_plugins(void)
     // plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
     //FIXME: Coverhunt seems to be down. Add again when up and running
-    // plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
 
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
