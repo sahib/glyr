@@ -303,7 +303,7 @@ typedef struct _GlyrDatabase {
 * @number: The maximum number of items to get; 0 -> inf
 * @plugmax: Max number of items per provider.
 * @verbosity: How verbose this query should be treated.
-* @fuzzyness: Max. treshold for levenshtein.
+* @fuzzyness: Max. threshold for levenshtein.
 * @img_min_size: Min. size in pixels an image may have.
 * @img_max_size: Min. size in pixels an image may have.
 * @parallel: Max. number of parallel queried providers.
