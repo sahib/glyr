@@ -1,0 +1,35 @@
+Source: libglyr
+Priority: optional
+Maintainer: Christoph Korn <christoph.korn@getdeb.net>
+Build-Depends: debhelper (>= 7.0.50~), cmake,
+  libglib2.0-dev, libsqlite3-dev, libcurl4-gnutls-dev
+Standards-Version: 3.9.2
+Section: libs
+Homepage: https://github.com/sahib/glyr
+Vcs-Git: https://github.com/sahib/glyr.git
+Vcs-Browser: https://github.com/sahib/glyr
+
+Package: glyr
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Music metadata search engine library (binary package)
+ Music metadata search engine library
+ .
+ (This package contains the executable binary).
+
+Package: libglyr-dev
+Section: libdevel
+Architecture: all
+Depends: libglyr1 (= ${binary:Version}), ${misc:Depends}
+Description: Music metadata search engine library (header files)
+ Music metadata search engine library
+ .
+ (This package contains the header files).
+
+Package: libglyr1
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Music metadata search engine library (library package)
+ Music metadata search engine library
+ .
+ (This package contains the shared libraries).
