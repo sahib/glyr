@@ -624,7 +624,7 @@ GLYR_ERROR glyr_opt_plugmax(GlyrQuery * s, int plugmax);
 /**
 * glyr_opt_allowed_formats:
 * @s: The GlyrQuery settings struct to store this option in.
-* @formats: A commaseperated list of allowed formats.
+* @formats: A commaseparated list of allowed formats.
 *
 * Restricts providers to retrieve at max. @plugmax items, you might use this to get results
 * over several providers when glyr_opt_number() is set to something higher than 1.

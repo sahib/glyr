@@ -54,7 +54,7 @@ static const gchar * lyrics_elyrics_url(GlyrQuery * settings)
 #define FROM_END   "<br><br>"
 #define BAD_STRING "Lyrics removed for copyright protection!"
 
-/* This data is seperated from the actual lyrics => remove it from here */
+/* This data is separated from the actual lyrics => remove it from here */
 static void remove_from_from_string(gchar * string)
 {
     gchar * from_middle = strstr(string,FROM_MIDDLE);
