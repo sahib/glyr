@@ -65,7 +65,6 @@ static GList * albumlist_musicbrainz_parse(cb_object * capo)
 	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
 	{
 		gchar * name = get_search_value(node,TITLE_BEGIN,TITLE_ENDIN);
-        puts(name);
 		if(name != NULL && is_in_list(result_list,name) == false)
 		{
 			GlyrMemCache * result = DL_init();
