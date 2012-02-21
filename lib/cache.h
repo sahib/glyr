@@ -103,7 +103,7 @@ typedef int (*glyr_foreach_callback)(GlyrQuery * q, GlyrMemCache * item, void * 
 *
 * Returns: A newly allocated GlyrDatabase, free with glyr_db_destroy
 */
-GlyrDatabase * glyr_db_init(char * root_path);
+GlyrDatabase * glyr_db_init(const char * root_path);
 
 /** 
 * glyr_db_destroy:

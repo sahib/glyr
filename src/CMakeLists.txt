@@ -34,5 +34,8 @@ TARGET_LINK_LIBRARIES(musictree glyr)
 ADD_EXECUTABLE(guess_lang utils/guess_lang.c)
 TARGET_LINK_LIBRARIES(guess_lang glyr) 
 
+ADD_EXECUTABLE(clean_db utils/clean_db.c)
+TARGET_LINK_LIBRARIES(clean_db glyr) 
+
 #install
 INSTALL(TARGETS glyrc RUNTIME DESTINATION ${INSTALL_BIN_DIR})

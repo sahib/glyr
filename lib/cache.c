@@ -292,7 +292,7 @@ typedef struct
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
-GlyrDatabase * glyr_db_init(char * root_path)
+GlyrDatabase * glyr_db_init(const char * root_path)
 {
 #if DO_PROFILE 
     GTimer * open_db = g_timer_new();
