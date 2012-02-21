@@ -18,7 +18,7 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-#include <glyr/glyr.h> 
+#include "../../lib/glyr.h" 
 #include <glib.h>
 
 /* GLib does not allow it to be NULL */
