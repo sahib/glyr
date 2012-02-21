@@ -194,14 +194,19 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 ////////////////// Useful Defines //////////////////////
 ////////////////////////////////////////////////////////
 
-#define INSERT_STRING(SQL,ARG) {                       \
-    if(SQL && ARG) {                                   \
-        gchar * lower_str = g_utf8_strdown(ARG,-1);    \
-        gchar * sql = sqlite3_mprintf(SQL,lower_str);  \
-        execute(db,sql);                               \
-        sqlite3_free(sql);                             \
-        g_free(lower_str);                             \
-    }                                                  \
+#define INSERT_STRING(SQL,ARG) {                        \
+    if(SQL && ARG) {                                    \
+    /* We have to use _ascii_ here,                   */\
+    /* since there seems to be some encoding problems */\
+    /* in SQLite, which are triggered by comparing    */\
+    /* lower and highercase umlauts for example       */\
+    /* Simple encoding-indepent lowercase prevents it */\
+        gchar * lower_str = g_ascii_strdown(ARG,-1);    \
+        gchar * sql = sqlite3_mprintf(SQL,lower_str);   \
+        execute(db,sql);                                \
+        sqlite3_free(sql);                              \
+        g_free(lower_str);                              \
+    }                                                   \
 }
 
 ////////////////////////////////////////////////////////
@@ -218,7 +223,13 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 
 #define ADD_CONSTRAINT(TO_CONSTR, FIELDNAME, VARNAME)                    \
 {                                                                        \
-    gchar * lower = g_utf8_strdown(VARNAME,-1);                          \
+    /* We have to use _ascii_ here,                   */                 \
+    /* since there seems to be some encoding problems */                 \
+    /* in SQLite, which are triggered by comparing    */                 \
+    /* lower and highercase umlauts for example       */                 \
+    /* Simple encoding-indepent lowercase prevents it */                 \
+                                                                         \
+    gchar * lower = g_ascii_strdown(VARNAME,-1);                         \
     if(lower != NULL)                                                    \
     {                                                                    \
         TO_CONSTR = sqlite3_mprintf("AND %s = '%q'\n",FIELDNAME,lower);  \
@@ -584,6 +595,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
                 from_argument_list, 
                 query->number
                 );
+
 
         if(sql != NULL)
         {

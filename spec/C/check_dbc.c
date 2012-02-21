@@ -274,9 +274,9 @@ START_TEST(test_intelligent_lookup)
     GlyrQuery alt;
     glyr_query_init(&alt);
 
-    gchar * artist = "Equilibrium";
-    gchar * album  = "Sagas";
-    gchar * title  = "Wurzelbert";
+    gchar * artist = "Аркона";
+    gchar * album  = "Ot Serdca k Nebu";
+    gchar * title  = "Pokrovy Nebesnogo Startsa (Shrouds Of Celestial Sage)";
 
     glyr_opt_artist(&alt,artist);
     glyr_opt_album (&alt,album );
