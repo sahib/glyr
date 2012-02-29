@@ -60,7 +60,8 @@ int main(void)
     if(head != NULL)
     {
         /* head contains also a pointer to the next element, you can use it therefore as linkedlist */
-        puts(head->data);
+        //        puts(head->data);
+        glyr_cache_print(head);
 
         /* We have to free it again also, you can pass ANY pointer of the list, it works in both directions */
         glyr_free_list(head);

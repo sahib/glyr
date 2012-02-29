@@ -287,4 +287,32 @@ describe "cover" do
 			list.size.should equal 0
 		end
 	end
+	
+    describe "jamendo" do
+		before :each do
+			@spit.from = "jamendo"
+		end
+		
+		it "should test a pagehit" do
+			@spit.artist = "Diablo Swing Orchestra"
+			@spit.album  = "The Butcher's Ballroom"
+            @spit.max_size = 599
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.size.should equal 1
+			list.first.should be_an_instance_of Glyros::GlyrMemCache
+
+			show_in_sxiv(list.first)
+		end
+
+		it "Don't know this cover" do
+			@spit.artist = "Unknownartist" 
+			@spit.album  = "Myalbum"
+			list = @spit.get
+
+			list.should be_an_instance_of Array
+			list.size.should equal 0
+		end
+	end
 end

@@ -62,6 +62,7 @@ extern MetaDataSource cover_coverhunt_src;
 extern MetaDataSource cover_discogs_src;
 extern MetaDataSource cover_google_src;
 extern MetaDataSource cover_lastfm_src;
+extern MetaDataSource cover_jamendo_src;
 extern MetaDataSource cover_lyricswiki_src;
 extern MetaDataSource cover_rhapsody_src;
 extern MetaDataSource cover_picsearch_src;
@@ -152,6 +153,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_lastfm_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_jamendo_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_lyricswiki_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_picsearch_src);

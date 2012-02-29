@@ -155,6 +155,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_RELATIONS}/generated.c"
 	"${DIR_TAGS}/musicbrainz.c"
 	"${DIR_COVER}/lastfm.c"
+	"${DIR_COVER}/jamendo.c"
 	"${DIR_COVER}/google.c"
 	"${DIR_COVER}/coverhunt.c"
 	"${DIR_COVER}/lyricswiki.c"
