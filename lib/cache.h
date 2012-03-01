@@ -62,15 +62,8 @@
  * the following piece of code:
  * <informalexample>
  * <programlisting>
-        // Create a new cache
-        GlyrMemCache * ct = glyr_cache_new();
-
-        // Fill in random data
-        glyr_cache_set_data(ct,g_strdup_printf("Dummy data"),-1);
-        ct->dsrc = g_strdup_printf("Dummy url %d",i+1);
-
-        // Let's define a rating of -1 to be empty
-        ct->rating = -1;
+        // Create a new "dummy" cache
+        GlyrMemCache * ct = glyr_db_make_dummy();
 
         // Query with filled in artist, album, title, type,
         // and opened db
