@@ -355,7 +355,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"lang",          required_argument, 0, 'l'},
         {"fuzzyness",     required_argument, 0, 'z'},
         {"callback",	  required_argument, 0, 'j'},
-        {"musictree",     required_argument, 0, 's'},
+        {"musictree-path",required_argument, 0, 's'},
         {0,               0,                 0, '0'}
     };
 
