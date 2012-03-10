@@ -111,10 +111,10 @@ const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset)
         while(node && (node = strstr(node,searchterm)) && mbid == NULL)
         {
             if(!(node = strstr(node,ID_BEGIN)))
-                continue;
+                break;
 
             if(!(search_check = strstr(node,checkstring)))
-                continue;
+                break;
 
             search_check += clen;
             gchar * to_compare = copy_value(search_check,strstr(search_check,"</"));

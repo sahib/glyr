@@ -212,10 +212,10 @@ static int select_callback(void * result, int argc, char ** argv, char ** azColN
 ////////////////////////////////////////////////////////
 
 /* Ensure no invalid data comes in */
-#define ABORT_ON_FAILED_REQS(ARG) {                                \
-    if(ARG == NULL) {                                              \
+#define ABORT_ON_FAILED_REQS(REQS,OPT_ARG,ARG) {                   \
+    if((REQS & OPT_ARG) == 0 && ARG == NULL) {                     \
         glyr_message(-1,NULL,"Warning: %s != NULL failed",#ARG);   \
-        return;                                                    \
+        goto rollback;                                             \
     }                                                              \
 }
 
@@ -656,21 +656,23 @@ void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
         GLYR_FIELD_REQUIREMENT reqs = glyr_get_requirements(q->type);
         execute(db,"BEGIN IMMEDIATE;");
         if((reqs & GLYR_REQUIRES_ARTIST) || (reqs & GLYR_OPTIONAL_ARTIST)) {
-            ABORT_ON_FAILED_REQS(q->artist); 
+            ABORT_ON_FAILED_REQS(reqs,GLYR_OPTIONAL_ARTIST,q->artist); 
             INSERT_STRING("INSERT OR IGNORE INTO artists VALUES('%q');",q->artist); 
         }
         if((reqs & GLYR_REQUIRES_ALBUM) || (reqs & GLYR_OPTIONAL_ALBUM)) {
-            ABORT_ON_FAILED_REQS(q->album); 
+            ABORT_ON_FAILED_REQS(reqs,GLYR_OPTIONAL_ALBUM,q->album); 
             INSERT_STRING("INSERT OR IGNORE INTO albums  VALUES('%q');",q->album);
         }
         if((reqs & GLYR_REQUIRES_TITLE) || (reqs & GLYR_OPTIONAL_TITLE)) {
-            ABORT_ON_FAILED_REQS(q->title); 
+            ABORT_ON_FAILED_REQS(reqs,GLYR_OPTIONAL_TITLE,q->title); 
             INSERT_STRING("INSERT OR IGNORE INTO titles  VALUES('%q');",q->title);
         }
 
         gchar * provider = CACHE_GET_PROVIDER(cache);
         INSERT_STRING("INSERT OR IGNORE INTO providers VALUES('%q');",provider);
         insert_cache_data(db,q,cache);
+
+rollback:
         execute(db,"COMMIT;");
     }
 }
