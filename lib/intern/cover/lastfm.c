@@ -57,21 +57,21 @@ static GList * cover_lastfm_parse(cb_object *capo)
 
     while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find + tag_len, tag_ssize)) != NULL)
     {
-	    gchar * url = get_search_value(find, (gchar*)tag_ssize, (gchar*)tag_esize);
-	    if(url != NULL)
-	    {
-		    if(strcmp(url,BAD_DEFAULT_IMAGE) != 0)
-		    {
-    			    GlyrMemCache * result = DL_init();
-			    result->data = url;
-			    result->size = strlen(url);
-			    result_list = g_list_prepend(result_list,result);
-		    }
-		    else
-		    {
-			    g_free(url);
-		    }
-	    }
+        gchar * url = get_search_value(find, (gchar*)tag_ssize, (gchar*)tag_esize);
+        if(url != NULL)
+        {
+            if(strcmp(url,BAD_DEFAULT_IMAGE) != 0)
+            {
+                GlyrMemCache * result = DL_init();
+                result->data = url;
+                result->size = strlen(url);
+                result_list = g_list_prepend(result_list,result);
+            }
+            else
+            {
+                g_free(url);
+            }
+        }
     }
     return result_list;
 }
@@ -80,13 +80,13 @@ static GList * cover_lastfm_parse(cb_object *capo)
 
 MetaDataSource cover_lastfm_src =
 {
-	.name      = "lastfm",
-	.key       = 'l',
-	.parser    = cover_lastfm_parse,
-	.get_url   = cover_lastfm_url,
-	.type      = GLYR_GET_COVERART,
-	.quality   = 90,
-	.speed     = 75,
-	.endmarker = NULL,
-	.free_url  = false
+    .name      = "lastfm",
+    .key       = 'l',
+    .parser    = cover_lastfm_parse,
+    .get_url   = cover_lastfm_url,
+    .type      = GLYR_GET_COVERART,
+    .quality   = 90,
+    .speed     = 75,
+    .endmarker = NULL,
+    .free_url  = false
 };

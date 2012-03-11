@@ -66,6 +66,7 @@ extern MetaDataSource cover_jamendo_src;
 extern MetaDataSource cover_lyricswiki_src;
 extern MetaDataSource cover_rhapsody_src;
 extern MetaDataSource cover_picsearch_src;
+extern MetaDataSource cover_musicbrainz_src;
 extern MetaDataSource lyrics_lipwalk_src;
 extern MetaDataSource lyrics_lyrdb_src;
 extern MetaDataSource lyrics_lyricsreg_src;
@@ -157,6 +158,7 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_lyricswiki_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_picsearch_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lipwalk_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyrdb_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_lyricsreg_src);
