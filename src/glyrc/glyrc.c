@@ -625,7 +625,11 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
         message(1,s,"WRITE to '%s'\n",write_to_path);
         g_free(write_to_path);
     }
-    glyr_cache_print(c);
+
+    if(s->verbosity > 0) 
+    {
+        glyr_cache_print(c);
+    }
     message(1,s,"\n////////////////////\n");
 
     CBQueryData->item_counter += 1;
