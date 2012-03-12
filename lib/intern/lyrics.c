@@ -26,21 +26,21 @@
 
 static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	/* Fix up lyrics, escape chars etc.  */
-	for(GList * elem = list; elem; elem = elem->next)
-	{
-		GlyrMemCache * item = elem->data;
-		if(item != NULL)
-		{
-			gchar * temp = beautify_string(item->data);
-			g_free(item->data);
-			item->data = temp;
-			item->size = (item->data) ? strlen(item->data) : 0;
-		}
-	}
+    /* Fix up lyrics, escape chars etc.  */
+    for(GList * elem = list; elem; elem = elem->next)
+    {
+        GlyrMemCache * item = elem->data;
+        if(item != NULL)
+        {
+            gchar * temp = beautify_string(item->data);
+            g_free(item->data);
+            item->data = temp;
+            item->size = (item->data) ? strlen(item->data) : 0;
+        }
+    }
 
-	/* Let the rest do by the norma generic finalizer */
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS,result_list);
+    /* Let the rest do by the norma generic finalizer */
+    return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_LYRICS,result_list);
 }
 
 /* ------------------------------------- */
@@ -48,15 +48,15 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_lyrics =
 {
-	.name = "lyrics",
-	.type = GLYR_GET_LYRICS,
-    	.default_data_type = GLYR_TYPE_LYRICS,
-	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory,
-	.default_parallel = 2
+    .name = "lyrics",
+    .type = GLYR_GET_LYRICS,
+    .default_data_type = GLYR_TYPE_LYRICS,
+    .reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_TITLE,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory,
+    .default_parallel = 1
 };
 
 /* ------------------------------------- */

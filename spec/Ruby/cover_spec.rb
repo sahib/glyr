@@ -321,20 +321,6 @@ describe "cover" do
 			@spit.from = "musicbrainz"
 		end
 		
-        it "should test two pagehits" do
-			@spit.artist = "Cher"
-			@spit.album  = "Believe"
-            @spit.number = 2
-			list = @spit.get
-
-			list.should be_an_instance_of Array
-			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should equal 2
-
-			show_in_sxiv(list[0])
-			show_in_sxiv(list[1])
-		end
-		
 		it "should test a pagehit" do
 			@spit.artist = "Akrea"
 			@spit.album  = "Lebenslinie"
