@@ -18,6 +18,9 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
+#ifndef GLYR_TESTING_H 
+#define GLYR_TESTING_H 
+
 /**
  * SECTION:testing
  * @short_description: Testing interface to libglyr 
@@ -30,6 +33,10 @@
  * They are merely for developers that want to have automated 
  * tests for their providers.
  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include "types.h"
 
@@ -59,3 +66,10 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
  * Returns: A list of more or less finished items. 
  **/
 GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache);
+
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif

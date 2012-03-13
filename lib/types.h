@@ -31,6 +31,10 @@
  * All structs / enums / defines of the libglyr API can be found here.
  * You do not need to include this header directly, use glyr/glyr.h
  */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -530,5 +534,8 @@ typedef GLYR_ERROR (*DL_callback)(GlyrMemCache * dl, struct _GlyrQuery * s);
 	#endif
 #endif
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
