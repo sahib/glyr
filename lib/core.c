@@ -1687,8 +1687,14 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
 
     for(GList * result = sub_result_list; result; result = result->next)
     {
-        if(result->data != NULL)
+        GlyrMemCache * result_cache = result->data;
+        if(result_cache != NULL)
         {
+            /* Trim textual items */
+            if(result_cache->data && result_cache->is_image == false)
+            {
+                g_strstrip(result_cache->data);
+            }
             *result_list = g_list_prepend(*result_list,result->data);
         }
     }
