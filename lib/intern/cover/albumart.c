@@ -26,11 +26,15 @@ static const gchar * cover_albumart_url(GlyrQuery * sets)
 	gint i = sets->img_min_size;
 	gint e = sets->img_max_size;
 
-	if((e >= 50 || e==-1) && (i == -1 || i < 450))
+    gchar * result = NULL;
+
+	if((e >= 50 || e == -1) && (i == -1 || i < 450))
 	{
-		return "http://www.albumart.org/index.php?srchkey=${artist}+${album}&itempage=1&newsearch=1&searchindex=Music";
+        gchar * escaped = curl_easy_escape(NULL,sets->artist,0);
+		result = g_strdup_printf("http://www.albumart.org/index.php?searchkey=%s&itempage=1&newsearch=1&searchindex=Music",escaped);
+        curl_free(escaped);
 	}
-	return NULL;
+	return result;
 }
 
 /*------------------------------------*/
@@ -59,41 +63,46 @@ static GList * cover_albumart_parse(cb_object * capo)
 			gchar * img_tag = node;
 			gchar * img_end = NULL;
 
-			for(gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1)
-			{
-				if((img_tag = strstr(img_tag,AMZ)) == NULL)
-				{
-					break;
-				}
-			}
+            gchar * album_name = get_search_value(node,"title=\"","\"");
+            if(levenshtein_strnormcmp(capo->s,album_name,capo->s->album) <= capo->s->fuzzyness)
+            {
+                for(gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1)
+                {
+                    if((img_tag = strstr(img_tag,AMZ)) == NULL)
+                    {
+                        break;
+                    }
+                }
 
-			if((img_end  = strstr(img_tag,IMG_FORMAT)) != NULL)
-			{
-				gchar * img_url = copy_value(img_tag,img_end);
-				if(img_url != NULL)
-				{
-					GlyrMemCache * result = DL_init();
-					result->data = g_strdup_printf(AMZ"%s"IMG_FORMAT, img_url);
-					result->size = strlen(result->data);
-					result_list = g_list_prepend(result_list,result);
-					g_free(img_url);
-				}
-			}
-		}
-	}
-	return result_list;
+                if((img_end  = strstr(img_tag,IMG_FORMAT)) != NULL)
+                {
+                    gchar * img_url = copy_value(img_tag,img_end);
+                    if(img_url != NULL)
+                    {
+                        GlyrMemCache * result = DL_init();
+                        result->data = g_strdup_printf(AMZ"%s"IMG_FORMAT, img_url);
+                        result->size = strlen(result->data);
+                        result_list = g_list_prepend(result_list,result);
+                        g_free(img_url);
+                    }
+                }
+            }
+            g_free(album_name);
+        }
+    }
+    return result_list;
 }
 
 /*------------------------------------*/
 
 MetaDataSource cover_albumart_src =
 {
-	.name      = "albumart",
-	.key       = 'b',
-	.parser    = cover_albumart_parse,
-	.get_url   = cover_albumart_url,
-	.type      = GLYR_GET_COVERART,
-	.quality   = 80,
-	.speed     = 65,
-	.free_url  = false
+    .name      = "albumart",
+    .key       = 'b',
+    .parser    = cover_albumart_parse,
+    .get_url   = cover_albumart_url,
+    .type      = GLYR_GET_COVERART,
+    .quality   = 80,
+    .speed     = 65,
+    .free_url  = true 
 };
