@@ -26,15 +26,11 @@ static const gchar * cover_albumart_url(GlyrQuery * sets)
 	gint i = sets->img_min_size;
 	gint e = sets->img_max_size;
 
-    gchar * result = NULL;
-
 	if((e >= 50 || e == -1) && (i == -1 || i < 450))
 	{
-        gchar * escaped = curl_easy_escape(NULL,sets->artist,0);
-		result = g_strdup_printf("http://www.albumart.org/index.php?searchkey=%s&itempage=1&newsearch=1&searchindex=Music",escaped);
-        curl_free(escaped);
+		return "http://www.albumart.org/index.php?searchkey=${artist}&itempage=1&newsearch=1&searchindex=Music";
 	}
-	return result;
+	return NULL;
 }
 
 /*------------------------------------*/
@@ -104,5 +100,5 @@ MetaDataSource cover_albumart_src =
     .type      = GLYR_GET_COVERART,
     .quality   = 80,
     .speed     = 65,
-    .free_url  = true 
+    .free_url  = false 
 };

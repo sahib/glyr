@@ -154,7 +154,7 @@ describe "cover" do
 		
 		it "should test a pagehit" do
 			@spit.artist = "Nirvana"
-			@spit.album  = "In Utero"
+			@spit.album  = "Smells Like Nirvana"
 			list = @spit.get
 
 			list.should be_an_instance_of Array

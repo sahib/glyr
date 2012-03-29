@@ -121,6 +121,7 @@ static GList * cover_discogs_parse(cb_object * capo)
          && (node = strstr(node + (sizeof NODE) - 1,NODE)) != NULL) {
 
         char * artist_album = get_search_value(node,TITLE_SUBNODE,ENDOF_SUBNODE);
+
         if(artist_album && check_artist_album(capo->s,artist_album)) {
 
             char * thumb_url = get_search_value(node,THUMB_SUBDNOE,ENDOF_SUBNODE);
