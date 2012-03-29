@@ -928,6 +928,8 @@ gchar * beautify_string(const gchar * lyrics)
             {
                 result = trimmed;
             }
+
+            trim_inplace(result);
         }
         g_free(strip);
     }

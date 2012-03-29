@@ -186,8 +186,6 @@ static void query_search_page_results(cb_object * capo, GList ** result_list)
 
 static GList * lyrics_magistrix_parse (cb_object * capo)
 {
-    puts(capo->url);
-
     GList * result_list = NULL;
     if(strstr(capo->cache->data,"<div class='empty_collection'>") == NULL)   /* "No songtext" page? */
     {
