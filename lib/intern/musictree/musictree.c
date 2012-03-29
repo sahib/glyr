@@ -224,7 +224,7 @@ static GList * musictree_provider_parse(cb_object * capo)
     switch(capo->s->type)
     {
         case GLYR_GET_COVERART:
-            search_regex = "^(folder|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
+            search_regex = "^(folder|AlbumArt|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
             recurse_depth = 2;
             break;
         case GLYR_GET_ARTIST_PHOTOS:
