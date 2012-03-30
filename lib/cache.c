@@ -294,47 +294,60 @@ typedef struct
 
 GlyrDatabase * glyr_db_init(const char * root_path)
 {
+    GlyrDatabase * to_return = NULL;
+
 #if DO_PROFILE 
     GTimer * open_db = g_timer_new();
     select_callback_timer = g_timer_new();
 #endif
+
     if(sqlite3_threadsafe() == FALSE)
     {
         glyr_message(-1,NULL,"WARNING: Your SQLite version seems not to be threadsafe? \n"
-                "         Expect corrupted data and other weird behaviour!\n");
+                             "         Expect corrupted data and other weird behaviour!\n");
     }
 
-    GlyrDatabase * to_return = NULL;
-    if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+    if(root_path != NULL && g_file_test(root_path,G_FILE_TEST_EXISTS))
     {
         sqlite3 * db_connection = NULL;
 
-        /* Use file:// Urls when supported */
-#if SQLITE_VERSION_NUMBER >= 3007007
-        gchar * db_file_path = g_strdup_printf("file://%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-        gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_URI | SQLITE_OPEN_FULLMUTEX, NULL);
-#else
-        gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,(g_str_has_suffix(root_path,"/") ? "" : "/"),GLYR_DB_FILENAME);
-        gint db_err = sqlite3_open_v2(db_file_path,&db_connection, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
-#endif
-
-        if(db_err == SQLITE_OK)
+        if(g_file_test(root_path,G_FILE_TEST_IS_DIR))
         {
-            to_return = g_malloc0(sizeof(GlyrDatabase));
-            to_return->root_path = g_strdup(root_path);
-            to_return->db_handle = db_connection;
-            sqlite3_busy_timeout(db_connection,DB_BUSY_WAIT);
+            gchar * db_file_path = g_strdup_printf("%s%s%s",root_path,
+                    (g_str_has_suffix(root_path,G_DIR_SEPARATOR_S) ? "" : G_DIR_SEPARATOR_S),
+                    GLYR_DB_FILENAME);
 
-            /* Now create the Tables via sql */
-            execute(to_return,(char*)sqlcode[SQL_TABLE_DEF]);
+            gint db_open_err = sqlite3_open_v2(db_file_path,&db_connection,
+                    SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX,
+                    NULL);
+
+            if(db_open_err == SQLITE_OK)
+            {
+                to_return = g_malloc0(sizeof(GlyrDatabase));
+                to_return->root_path = g_strdup(root_path);
+                to_return->db_handle = db_connection;
+                sqlite3_busy_timeout(db_connection,DB_BUSY_WAIT);
+
+                /* Now create the Tables via sql */
+                execute(to_return,(char*)sqlcode[SQL_TABLE_DEF]);
+            }
+            else
+            {
+                glyr_message(-1,NULL,"Connecting to database failed: %s\n",sqlite3_errmsg(db_connection));
+                sqlite3_close(db_connection);
+            }
+            g_free(db_file_path);
         }
         else
         {
-            glyr_message(-1,NULL,"Connecting to database failed: %s\n",sqlite3_errmsg(db_connection));
-            sqlite3_close(db_connection);
+            glyr_message(-1,NULL,"Warning: %s is not a directory; Creating DB Structure failed.\n",root_path);
         }
-        g_free(db_file_path);
     }
+    else
+    {
+       glyr_message(-1,NULL,"Warning: %s does not exist; Creating DB Structure failed.\n",root_path);
+    }
+
 #if DO_PROFILE
     g_message("Time to open DB: %lf\n",g_timer_elapsed(open_db,NULL));
     g_timer_destroy(open_db);
