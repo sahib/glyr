@@ -314,7 +314,9 @@ gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl
                 {
                     if(do_curl_escape)
                     {
-                        result = curl_easy_escape(NULL,no_lint,0);
+                        char* m_result = curl_easy_escape(NULL,no_lint,0);
+                        result = g_strdup(m_result);
+                        curl_free(m_result);
                     }
                     else
                     {
