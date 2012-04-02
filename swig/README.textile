@@ -26,7 +26,3 @@ Now you can load it in Ruby:
 >>> Glubyr::version() 
 => "Version 0.8.7 (Horny Hornet [beta]) of [Sep 19 2011] compiled at [12:04:08]"
 >>> exit
-
-h6. There will be proper ruby bindings (thanks to gregf) soon.
-
-h6. The subdir 'ruby' contains a wrapper class you can easily use to start right off.

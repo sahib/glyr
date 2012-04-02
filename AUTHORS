@@ -1,7 +1,21 @@
-Authors
--------
-Christopher Pahl  
+Christopher Pahl <sahib@online.de>
 
 CONTRIBUTORS
 ------------
-Sebastian Pahl -- lyricsvip, books, various fixes in stringop.c
+Sebastian Pahl <sebastion@ira-kunststoffe.de> 
+  - lyricsvip provider
+  - various fixes (in stringlib.c)
+Christoph Piechula <christoph@nullcat.de>
+  - jamendo provider
+Matias De lellis <matias@HP.G42>
+  - 'make dist' target
+Etienne Millon <etienne.millon@gmail.com>
+  - Copyright issues
+  - md5_update from RSA to Glib checksum
+Qball Cow
+  - Numerous bugreports and partly fixes
+  - Being the first adaptor
+
++ People reporting bugs and using libglyr.
+
+Please tell me if I forgot somebody.

@@ -39,8 +39,27 @@ static const char * cover_jamendo_url(GlyrQuery * sets)
 
 /* ----------------------------------------------- */
 
+void do_line_split(char ** p_arr, char * line)
+{
+    g_return_if_fail(p_arr && line);
+
+    char * hop = line;
+    *p_arr = line;
+
+    while((hop = strchr(hop,'\t')) != NULL)
+    {
+        p_arr++;
+    
+        *hop = 0;
+        (*p_arr) = ++hop;
+    }
+}
+
+/* ----------------------------------------------- */
+
 static GList * cover_jamendo_parse(cb_object *capo)
 {
+    // A nice parser with zero memory overhead..
 
     GList * result_list = NULL;
     gchar * line = capo->cache->data;
@@ -52,19 +71,19 @@ static GList * cover_jamendo_parse(cb_object *capo)
         if ((line_end = strchr(line,'\n')) != NULL)
         {
             *line_end = 0;
-            char **line_split = g_strsplit(line,"\t",3);
 
-            if (line_split != NULL)
+            char * line_split[3] = {0,0,0};
+            do_line_split(line_split,line);
+
+            if (check_values(capo->s,line_split[2],line_split[1]))
             {
-                if (check_values(capo->s,line_split[2],line_split[1]))
-                {
-                    char * url =  g_strdup_printf(RESULT_URL,line_split[0],get_cover_size(capo->s));
-                    GlyrMemCache * result = DL_init();
-                    result->data = url;
-                    result->size = strlen(url);
-                    result_list = g_list_prepend(result_list,result);
-                }
+                char * url =  g_strdup_printf(RESULT_URL,line_split[0],get_cover_size(capo->s));
+                GlyrMemCache * result = DL_init();
+                result->data = url;
+                result->size = strlen(url);
+                result_list = g_list_prepend(result_list,result);
             }
+
             line = ++line_end;
         }
         else
@@ -97,7 +116,6 @@ static int get_cover_size(GlyrQuery * query)
     if (query->img_max_size == -1)
     {
         return 400;
-
     }
     else
     {
