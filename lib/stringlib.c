@@ -72,7 +72,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
                 c = d[im1][jm1] + (t[jm1] != cats);
 
             // Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j]
- 	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
+     	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
         }
     }
 

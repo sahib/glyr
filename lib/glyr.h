@@ -18,7 +18,7 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 #ifndef GLYR_H
-#define GLYR_H
+#define GLYR_GLYR_H
 
 /**
  * SECTION:glyr
