@@ -1,0 +1,7 @@
+h3. Building a Python testmodule
+@$ swig -python python_glyr.i@
+@$ gcc -shared python_glyr_wrap.o -o _glypy.so $(pkg-config --libs libglyr python3)@
+@$ gcc python_glyr_wrap.c -c -I/usr/include/python3.2mu/ -fPIC $(pkg-config --cflags libglyr)@
+@$ python@
+@>>> impor glypy@
+@>>> glypy.glyr_version()@
