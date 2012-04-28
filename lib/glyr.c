@@ -1116,8 +1116,8 @@ char * glyr_md5sum_to_string(unsigned char * md5sum)
         for(int i = 0; i < 16; i++)
         {
             gint index = i * 2;
-            md5str[index + 0] = hex[MIN(md5sum[i] / 16,15)]; 
-            md5str[index + 1] = hex[MIN(md5sum[i] % 16,15)]; 
+            md5str[index + 0] = hex[md5sum[i] / 16]; 
+            md5str[index + 1] = hex[md5sum[i] % 16]; 
         }
     }
     return md5str;
@@ -1210,6 +1210,13 @@ void glyr_cache_set_rating(GlyrMemCache * cache, int rating)
 {
     if(cache != NULL)
         cache->rating = rating;
+}
+
+/* --------------------------------------------------------- */
+
+bool glyr_type_is_image(GLYR_GET_TYPE type)
+{
+    return TYPE_IS_IMAGE(type);
 }
 
 /* --------------------------------------------------------- */
