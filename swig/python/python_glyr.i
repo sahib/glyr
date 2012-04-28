@@ -7,7 +7,6 @@
 /* module name */
 %module glypy 
 
-/* Inform headers */
 /*#define COMING_FROM_SWIG*/
 
 /* let wrapper file compile */
@@ -23,8 +22,10 @@
 %include "../../lib/testing.h"
 
 /* make sure libglyr wakes  up */
+/*
 %init 
 %{
   glyr_init();
   atexit(glyr_cleanup);
 %}
+*/

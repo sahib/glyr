@@ -1,7 +1,16 @@
 h3. Building a Python testmodule
-@$ swig -python python_glyr.i@
-@$ gcc -shared python_glyr_wrap.o -o _glypy.so $(pkg-config --libs libglyr python3)@
-@$ gcc python_glyr_wrap.c -c -I/usr/include/python3.2mu/ -fPIC $(pkg-config --cflags libglyr)@
-@$ python@
-@>>> impor glypy@
-@>>> glypy.glyr_version()@
+
+* A nicer name than silly 'glypy' would be appreciated.
+* This requires SWIG >= 2.0
+
+# Generate actual bindings
+## @$ swig -python python_glyr.i@
+# Build wrapper code
+## @$ gcc python_glyr_wrap.c -c -fPIC $(pkg-config --cflags libglyr python3)@
+# Link wrapper code 
+## @$ gcc -shared python_glyr_wrap.o -o _glypy.so $(pkg-config --libs libglyr python3)@
+# Test it.
+## @$ python@
+## @>>> import glypy@
+## @>>> glypy.glyr_version()@
+## @'Version 0.9.8 (Catholic Cat) of [Apr 28 2012] compiled at [15:31:54]'@
