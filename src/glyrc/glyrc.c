@@ -52,7 +52,7 @@
 //* ------------------------------------------------------- */
 
 #define SET_IF_NULL(VAR, SET_TO) (VAR) = ((VAR) ? (VAR) : (SET_TO))
-#define LOG_DOMAIN "Glyr"
+#define LOG_DOMAIN "Glyrc"
 
 //* ------------------------------------------------------- */
 //* ------------------------------------------------------- */
@@ -64,6 +64,7 @@ typedef struct
 {
     char * output_path;
     char * exec_on_call;
+    bool as_one;
     int item_counter;
 
 } callback_data_t;
@@ -74,6 +75,7 @@ typedef struct
 {                          \
     .output_path  = NULL,  \
     .exec_on_call = NULL,  \
+    .as_one       = false, \
     .item_counter = 0      \
 }                          \
 
@@ -345,6 +347,8 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"no-download",   no_argument,       0, 'D'},
         {"list",          no_argument,       0, 'L'},
         {"force-utf8",    no_argument,       0, '8'},
+        {"as-one",        no_argument,       0, 'g'},
+        {"no-as-one",     no_argument,       0, 'G'},
         // ---------- plugin specific ------------ //
         {"only-lang",     no_argument,       0, 'o'},
         {"artist",        required_argument, 0, 'a'},
@@ -364,7 +368,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gG",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -485,6 +489,12 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 break;
             case 's':
                 glyr_opt_musictree_path(glyrs,optarg);
+                break;
+            case 'g':
+                CBData->as_one = true;
+                break;
+            case 'G':
+                CBData->as_one = false;
                 break;
             case '?':
                 break;
@@ -778,12 +788,44 @@ static bool parse_type_argument(const char * argvi, GlyrQuery * qp)
 
 /*----------------------*/
 
+static GlyrMemCache * concatenate_list(GlyrMemCache * list)
+{
+    if(list == NULL)
+        return NULL;
+
+    GlyrMemCache * iter = list;
+    GlyrMemCache * retv = glyr_cache_copy(list);
+    gchar * concat_data = g_strdup("");
+
+    retv->duration = 0;
+
+    while(iter != NULL)
+    {
+        gchar * tmp = g_strdup_printf("%s%s\n",concat_data,iter->data);
+        g_free(concat_data);
+        concat_data = tmp;
+        retv->duration += iter->duration;
+        iter = iter->next;
+    }
+
+    retv->next = NULL;
+    retv->prev = NULL;
+
+    glyr_cache_set_data(retv,concat_data,-1);
+    glyr_free_list(list);
+    return retv;
+}
+
+/*----------------------*/
+
 
 int main(int argc, char * argv[])
 {
     /* Set the loghandler (used by message()) */
-    g_log_set_handler(LOG_DOMAIN ,G_LOG_LEVEL_MASK |
-            G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
+    g_log_set_handler(LOG_DOMAIN ,
+            G_LOG_LEVEL_MASK |
+            G_LOG_FLAG_FATAL |
+            G_LOG_FLAG_RECURSION,
             log_func, NULL);
 
     init_signals();
@@ -793,7 +835,7 @@ int main(int argc, char * argv[])
 
     /* Init / Destroy of libglyr.
      * You _have_ to call this before making any calls 
-     * Both functions are not THREADSAFE!
+     * Both functions are not threadsafe!
      * */
     glyr_init();
     atexit(glyr_cleanup);
@@ -816,16 +858,31 @@ int main(int argc, char * argv[])
 
             parse_commandline_general(argc-1, argv+1, &my_query,&CBQueryData,&db);
             SET_IF_NULL(CBQueryData.output_path,".");
-            glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+
+            if(CBQueryData.as_one == false || glyr_type_is_image(my_query.type))
+            {
+                glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+            }
 
             /* Doing the 'hard' work here. */
             GlyrMemCache * my_list = glyr_get(&my_query, &get_error, &length);
 
             if(my_list != NULL)
             {
-                /* Free all downloaded buffers */
-                glyr_free_list(my_list);
-                message(2,&my_query,"# => %d item(s) in total.\n",length);
+                if(CBQueryData.as_one && glyr_type_is_image(my_query.type) == false)
+                {
+                    GlyrMemCache * concat = concatenate_list(my_list);
+                    glyr_opt_dlcallback(&my_query, callback, &CBQueryData);
+                    callback(concat,&my_query);
+
+                    glyr_cache_free(concat);
+                }
+                else
+                {
+                    /* Free all downloaded buffers */
+                    glyr_free_list(my_list);
+                    message(2,&my_query,"# => %d item(s) in total.\n",length);
+                }
             }
             else if(get_error == GLYRE_NO_PROVIDER)
             {
