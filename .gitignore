@@ -1,5 +1,8 @@
 # Ignore object files
 *.o
+*.so
+__pycache__/
+*.pyc
 
 # Ignore documentation, local working directory
 child/

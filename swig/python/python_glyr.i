@@ -20,12 +20,13 @@
 %include "../../lib/types.h"
 %include "../../lib/config.h"
 %include "../../lib/testing.h"
+%include "glypy.h"
 
 /* make sure libglyr wakes  up */
-/*
 %init 
 %{
+  /* User init code */  
   glyr_init();
   atexit(glyr_cleanup);
 %}
-*/
+
