@@ -112,7 +112,7 @@ SET(LIB_SOURCE_LOCATIONS
 	# core
 	"${DIR_ROOT}/glyr.c"
 	"${DIR_ROOT}/core.c"
-	"${DIR_ROOT}/utils.c"
+	"${DIR_ROOT}/misc.c"
 	"${DIR_ROOT}/cache_intern.c"
 	"${DIR_ROOT}/cache.c"
 	"${DIR_ROOT}/register_plugins.c"

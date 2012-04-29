@@ -19,7 +19,7 @@
 **************************************************************/
 
 #include "stringlib.h"
-#include "utils.h"
+#include "misc.h"
 
 size_t glyr_levenshtein_strcmp(const char * string, const char * other)
 {
