@@ -262,7 +262,7 @@ typedef enum
  * GlyrMemCache represents a single item received by libglyr. 
  * You should <emphasis>NOT</emphasis> modify any of the fields directly, they are meant to be read-only.
  * If you need to set any field (usually only necessary in conjunction with glyr/cache.h) you may 
- * want to use the glyr_cache_set_<public field> routines to safely modify the data.
+ * want to use the glyr_cache_set_[public field] routines to safely modify the data.
  */
 typedef struct _GlyrMemCache {
 

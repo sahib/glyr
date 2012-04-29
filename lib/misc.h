@@ -18,8 +18,8 @@
 * along with glyr. If not, see <http://www.gnu.org/licenses/>.
 **************************************************************/
 
-#ifndef GLYR_UTILS_HH
-#define GLYR_UTILS_HH
+#ifndef GLYR_MISC_HH
+#define GLYR_MISC_HH
 
 #ifdef __cplusplus
 extern "C"
@@ -27,12 +27,12 @@ extern "C"
 #endif
 
 /**
- * SECTION:utils
+ * SECTION:misc
  * @short_description: Random utils that may be useful for users of the API for different reasons 
- * @title: Utils 
+ * @title: Misc 
  * @section_id:
  * @stability: Stable
- * @include: glyr/util.h
+ * @include: glyr/misc.h
  *
  * Provides different functions to help with certain tasks
  * may run into in certain cases. 
@@ -65,8 +65,11 @@ extern "C"
 * Equilibrium <=> Aqquilibrim
 * will return 3 since:
 * Equilibrium -> Aquilibrium // one Edit:   'E' -> 'A' 
-* Aquilibrium -> Aquilibrim  // one Delete: 'u' -> ''
+*
+* Aquilibrium -> Aquilibrim  // one Delete: 'u' -> ''  
+*
 * Aquilibrim  -> Aqquilibrim // one Insert: ''  -> 'q'
+*
 * </para>
 * </note>
 *
@@ -93,8 +96,8 @@ size_t glyr_levenshtein_strcmp(const char * string, const char * other);
 * Adios <=> Weiß or 19 <=> 21 return 4 or 2 for glyr_levenshtein_strcmp()
 * (and may pass a max threshold of e.g. 4),
 * but a lot higher value with glyr_levenshtein_strnormcmp()
-* <para>
-* <note>
+* </para>
+* </note>
 *
 * Returns: the levenshtein distance
 */

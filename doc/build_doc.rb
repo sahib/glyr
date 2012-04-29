@@ -81,6 +81,7 @@ def create_dir_and_cd dirname
 end
 
 def do_or_die is_cool
+    puts is_cool
 	exit unless system is_cool	
 end
 

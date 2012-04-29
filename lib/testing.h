@@ -46,7 +46,7 @@ extern "C"
  * @type: What type the provider belongs to
  * @query: What exactly to search for
  *
- * Call a provider's get_url() function
+ * Call a provider's url-builder function and deliver it's result
  * This is meant for testing purpose only.
  *
  * Returns: The URL that the provider would want to download
