@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Misc</title>
+<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<link rel="home" href="index.html" title="libglyr Reference Manual">
+<link rel="up" href="ch01.html" title="[Insert title here]">
+<link rel="prev" href="libglyr-Glyr.html" title="Glyr">
+<link rel="next" href="libglyr-Testing.html" title="Testing">
+<meta name="generator" content="GTK-Doc V1.18 (XML mode)">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+<body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
+<table class="navigation" id="top" width="100%" summary="Navigation header" cellpadding="2" cellspacing="2">
+<tr valign="middle">
+<td><a accesskey="p" href="libglyr-Glyr.html"><img src="left.png" width="24" height="24" border="0" alt="Prev"></a></td>
+<td><a accesskey="u" href="ch01.html"><img src="up.png" width="24" height="24" border="0" alt="Up"></a></td>
+<td><a accesskey="h" href="index.html"><img src="home.png" width="24" height="24" border="0" alt="Home"></a></td>
+<th width="100%" align="center">libglyr Reference Manual</th>
+<td><a accesskey="n" href="libglyr-Testing.html"><img src="right.png" width="24" height="24" border="0" alt="Next"></a></td>
+</tr>
+<tr><td colspan="5" class="shortcuts">
+<a href="#libglyr-Misc.synopsis" class="shortcut">Top</a>
+                   | 
+                  <a href="#libglyr-Misc.description" class="shortcut">Description</a>
+</td></tr>
+</table>
+<div class="refentry">
+<a name="libglyr-Misc"></a><div class="titlepage"></div>
+<div class="refnamediv"><table width="100%"><tr>
+<td valign="top">
+<h2><span class="refentrytitle"><a name="libglyr-Misc.top_of_page"></a>Misc</span></h2>
+<p>Misc — Random utils that may be useful for users of the API for different reasons</p>
+</td>
+<td valign="top" align="right"></td>
+</tr></table></div>
+<div class="refsect1">
+<a name="libglyr-Misc.stability-level"></a><h2>Stability Level</h2>
+Stable, unless otherwise indicated
+</div>
+<div class="refsynopsisdiv">
+<a name="libglyr-Misc.synopsis"></a><h2>Synopsis</h2>
+<pre class="synopsis">
+#include &lt;glyr/misc.h&gt;
+
+<span class="returnvalue">size_t</span>              <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()">glyr_levenshtein_strcmp</a>             (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);
+<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strnormcmp" title="glyr_levenshtein_strnormcmp ()">glyr_levenshtein_strnormcmp</a>         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);
+</pre>
+</div>
+<div class="refsect1">
+<a name="libglyr-Misc.description"></a><h2>Description</h2>
+<p>
+Provides different functions to help with certain tasks
+may run into in certain cases. 
+This includes: 
+</p>
+<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+String utils (e.g. <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a>) 
+</p></li></ul></div>
+<p>
+</p>
+</div>
+<div class="refsect1">
+<a name="libglyr-Misc.details"></a><h2>Details</h2>
+<div class="refsect2">
+<a name="glyr-levenshtein-strcmp"></a><h3>glyr_levenshtein_strcmp ()</h3>
+<pre class="programlisting"><span class="returnvalue">size_t</span>              glyr_levenshtein_strcmp             (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);</pre>
+<p>
+Computes the levenshtein distance betwenn <em class="parameter"><code>string</code></em> and <em class="parameter"><code>other</code></em>.
+See Also: http://de.wikipedia.org/wiki/Levenshtein-Distanz  
+</p>
+<p>
+In very simple words this means: <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a> checks if two 
+string are 'similar', the similarity is returned as int from 
+0 (== total match) to MAX(strlen(string),strlen(other)) 
+</p>
+<p>
+Example:
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+Equilibrium &lt;=&gt; Aqquilibrim
+will return 3 since:
+Equilibrium -&gt; Aquilibrium // one Edit:   'E' -&gt; 'A' 
+</p>
+<p>
+Aquilibrium -&gt; Aquilibrim  // one Delete: 'u' -&gt; ''  
+</p>
+<p>
+Aquilibrim  -&gt; Aqquilibrim // one Insert: ''  -&gt; 'q'
+</p>
+<p>
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>string</code></em> :</span></p></td>
+<td>first string to compare</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>other</code></em> :</span></p></td>
+<td>second string to compare</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the levenshtein distance (number of Edits, Deletes and Inserts needed to turn string to other)</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<hr>
+<div class="refsect2">
+<a name="glyr-levenshtein-strnormcmp"></a><h3>glyr_levenshtein_strnormcmp ()</h3>
+<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               glyr_levenshtein_strnormcmp         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+                                                         <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);</pre>
+<p>
+Same as levenshtein_strcmp, but tries to normalize the two strings as  
+best as it can (includes strdown, stripping html, 
+utf8 normalization, stripping stuff like (CD 1) 
+and Clapton, Eric -&gt; Eric Clapton
+</p>
+<p>
+For very small strings the function may return very high values in order
+to prevent accidental matches. See below.
+</p>
+<p>
+Example:
+</p>
+<div class="note" style="margin-left: 0.5in; margin-right: 0.5in;">
+<h3 class="title">Note</h3>
+<p>
+Adios &lt;=&gt; Weiß or 19 &lt;=&gt; 21 return 4 or 2 for <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a>
+(and may pass a max threshold of e.g. 4),
+but a lot higher value with <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strnormcmp" title="glyr_levenshtein_strnormcmp ()"><code class="function">glyr_levenshtein_strnormcmp()</code></a>
+</p>
+</div>
+<p>
+</p>
+<div class="variablelist"><table border="0">
+<col align="left" valign="top">
+<tbody>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>string</code></em> :</span></p></td>
+<td>first string to compare</td>
+</tr>
+<tr>
+<td><p><span class="term"><em class="parameter"><code>other</code></em> :</span></p></td>
+<td>second string to compare</td>
+</tr>
+<tr>
+<td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
+<td>the levenshtein distance</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+</div>
+<div class="footer">
+<hr>
+          Generated by GTK-Doc V1.18</div>
+</body>
+</html>
