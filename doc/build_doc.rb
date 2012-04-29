@@ -31,7 +31,7 @@ BUILD_HEADERS =
   "#{DIR}/glyr.h",
   "#{DIR}/types.h",
   "#{DIR}/cache.h",
-  "#{DIR}/utils.h",
+  "#{DIR}/misc.h",
   "#{DIR}/config.h",
   "#{DIR}/testing.h",
 ]
