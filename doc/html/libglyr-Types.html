@@ -125,8 +125,6 @@ Typedef'd version of the callback option used by <a class="link" href="libglyr-G
     GLYR_TYPE_ALBUM_REVIEW, 
     GLYR_TYPE_ARTIST_PHOTO, 
     GLYR_TYPE_COVERART,  
-    GLYR_TYPE_COVERART_PRI, 
-    GLYR_TYPE_COVERART_SEC, 
     GLYR_TYPE_ARTISTBIO,  
     GLYR_TYPE_SIMILAR_ARTIST,
     GLYR_TYPE_SIMILAR_SONG, 
@@ -146,6 +144,8 @@ Typedef'd version of the callback option used by <a class="link" href="libglyr-G
 <p>
 Mainly used in the 'type' field of GlyrMemCache.
 It describes what kind of data the cache holds.
+As a user of the API you will need this very seldom.
+libglyr makes internally use of it.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -173,16 +173,6 @@ It describes what kind of data the cache holds.
 <tr>
 <td><p><a name="GLYR-TYPE-COVERART:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART</code></span></p></td>
 <td>coverart
-</td>
-</tr>
-<tr>
-<td><p><a name="GLYR-TYPE-COVERART-PRI:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART_PRI</code></span></p></td>
-<td>A cover known to be the front side of the album 
-</td>
-</tr>
-<tr>
-<td><p><a name="GLYR-TYPE-COVERART-SEC:CAPS"></a><span class="term"><code class="literal">GLYR_TYPE_COVERART_SEC</code></span></p></td>
-<td>A cover known to be the backside: inlet etc. 
 </td>
 </tr>
 <tr>
@@ -387,7 +377,7 @@ It describes what kind of data the cache holds.
 <hr>
 <div class="refsect2">
 <a name="GLYR-DEFAULT-USERAGENT:CAPS"></a><h3>GLYR_DEFAULT_USERAGENT</h3>
-<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME")"
+<pre class="programlisting">#define GLYR_DEFAULT_USERAGENT "libglyr/"GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"-"GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") +https://www.github.com/sahib/glyr"
 </pre>
 </div>
 <hr>
@@ -748,7 +738,9 @@ You should pass it to <a class="link" href="libglyr-Glyr.html#glyr-info-free" ti
 </pre>
 <p>
 GlyrMemCache represents a single item received by libglyr. 
-You should <span class="emphasis"><em>NOT</em></span> modify any of the fields (with the sole excepetion of <em class="parameter"><code>rating</code></em>), it is meant to be read-only.
+You should <span class="emphasis"><em>NOT</em></span> modify any of the fields directly, they are meant to be read-only.
+If you need to set any field (usually only necessary in conjunction with glyr/cache.h) you may 
+want to use the glyr_cache_set_[public field] routines to safely modify the data.
 </p>
 <div class="variablelist"><table border="0">
 <col align="left" valign="top">
@@ -885,7 +877,7 @@ You can safely read from all fields and should free the query with <a class="lin
 </tr>
 <tr>
 <td><p><span class="term"><span class="type">size_t</span> <em class="structfield"><code><a name="GlyrQuery.fuzzyness"></a>fuzzyness</code></em>;</span></p></td>
-<td>Max. treshold for levenshtein.</td>
+<td>Max. threshold for levenshtein.</td>
 </tr>
 <tr>
 <td><p><span class="term"><span class="type">int</span> <em class="structfield"><code><a name="GlyrQuery.img-min-size"></a>img_min_size</code></em>;</span></p></td>
