@@ -65,6 +65,7 @@ typedef struct
     char * output_path;
     char * exec_on_call;
     bool as_one;
+    bool append_format;
     int item_counter;
 
 } callback_data_t;
@@ -76,6 +77,7 @@ typedef struct
     .output_path  = NULL,  \
     .exec_on_call = NULL,  \
     .as_one       = false, \
+    .append_format= false, \
     .item_counter = 0      \
 }                          \
 
@@ -249,6 +251,8 @@ void help_short(GlyrQuery * s)
             IN"-h --help                This text you unlucky wanderer are viewing.\n"
             IN"-V --version             Print the version string.\n"
             IN"-U --update              Updates libglyr if new version is available.\n"
+            IN"-g --as-one              (Textitems only) Output all results as one (useful for tracklist and albumlist).\n"
+            IN"-G --no-as-one           Disables --as-one (Default)\n"
             IN"-s --musictree-path <p>  <p> is a path to your music directory. Glyr might fetch things like folger.jpg from there;\n"
             IN"-j --callback            Command: Set a bash command to be executed when a item is finished downloading;\n"
             IN"                         The special string <path> is expanded with the actual path to the data.\n"
@@ -331,6 +335,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         {"from",          required_argument, 0, 'f'},
         {"write",         required_argument, 0, 'w'},
+        {"Write",         required_argument, 0, 'W'},
         {"parallel",      required_argument, 0, 'p'},
         {"redirects",     required_argument, 0, 'r'},
         {"timeout",       required_argument, 0, 'm'},
@@ -368,7 +373,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gG",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gG",long_options, &option_index)) == -1)
         {
             break;
         }
