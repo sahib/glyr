@@ -1,4 +1,4 @@
-ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c)
+ADD_EXECUTABLE(glyrc glyrc/glyrc.c glyrc/autohelp.c glyrc/update.c glyrc/escape.c)
 TARGET_LINK_LIBRARIES(glyrc glyr)
 
 ADD_EXECUTABLE(example examples/example.c)

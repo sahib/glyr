@@ -46,6 +46,9 @@
 /* Update mechanism */
 #include "update.h"
 
+/* --callback and --write escape strings */
+#include "escape.h"
+
 //* ------------------------------------------------------- */
 //* ------------------------------------------------------- */
 //* ------------------------------------------------------- */
@@ -66,7 +69,6 @@ typedef struct
     char * exec_on_call;
     bool as_one;
     bool append_format;
-    int item_counter;
 
 } callback_data_t;
 
@@ -77,8 +79,7 @@ typedef struct
     .output_path  = NULL,  \
     .exec_on_call = NULL,  \
     .as_one       = false, \
-    .append_format= false, \
-    .item_counter = 0      \
+    .append_format= false  \
 }                          \
 
 //////////////////////////
@@ -222,7 +223,6 @@ void help_short(GlyrQuery * s)
 #define IN "    "
     message(-1,s,"\nGENERAL OPTIONS:\n"
             IN"-f --from                String: Providers from where to get metadata. Refer to glyrc --list for a full list\n"
-            IN"-w --write               Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
             IN"-n --number              Integer: Download max. <n> items. Amount of actual downloaded items may be less.\n"
             IN"-l --lang                String: Language settings. Used by a few getters to deliever localized data. Given in ISO 639-1 codes like 'de'\n"
             IN"-o --only-lang           Only use providers that offer language specific data, this only applies for text items.\n"
@@ -230,6 +230,25 @@ void help_short(GlyrQuery * s)
             IN"-q --qsratio             Float: How to weight quality/speed; 1.0 = full quality, 0.0 = full speed.\n"
             IN"-x --plugmax             Integer. Maximum number od download a plugin may deliever. Use to make results more vary.\n"
             IN"-v --verbosity           Integer. Set verbosity from 0 to 4. See online-README for details.\n"
+            IN"-w --write               Path: Write metadata to the dir <d>, or filename <d>, special values stdout, stderr and null are supported\n"
+            IN"                               Certain escapes are escaped inside the filename in the form :X:, where X may be one of:\n" 
+            IN"                                  * type     : The getter used in this query (e.g. cover)\n"
+            IN"                                  * artist   : Artist - as passed by -a\n"
+            IN"                                  * album    : Album  - as passed by -b\n"
+            IN"                                  * title    : Title  - as passed by -t\n"
+            IN"                                  * size     : Size in bytes\n"
+            IN"                                  * format   : The image format or 'txt' for textitems\n"
+            IN"                                  * source   : The source URL of this item\n"
+            IN"                                  * prov     : The Provider of this item\n"
+            IN"                                  * cksum    : a md5sum of the data\n"
+            IN"                                  * rating   : (Usually 0)\n"
+            IN"                                  * duration : (Only for tracks) Duration in seconds\n"
+            IN"                                  * number   : An index incremented with each item (starting with 0)\n"
+            IN"\n"
+            IN"                               The default format is ':artist:_:album:_:title:_:type:_:number:.:format:'\n"
+            IN"                               Strings containing '/' are replaced with '|' automatically,\n"
+            IN"                               so --write ':artist:' for AC/DC will result in AC|DC\n"
+            IN"\n"
             "\nNETWORK OPTIONS\n"
             IN"-p --parallel            Integer: Define the number of downloads that may be performed in parallel.\n"
             IN"-u --useragent           String: The useragent to use during HTTP requests\n"
@@ -255,7 +274,8 @@ void help_short(GlyrQuery * s)
             IN"-G --no-as-one           Disables --as-one (Default)\n"
             IN"-s --musictree-path <p>  <p> is a path to your music directory. Glyr might fetch things like folger.jpg from there;\n"
             IN"-j --callback            Command: Set a bash command to be executed when a item is finished downloading;\n"
-            IN"                         The special string <path> is expanded with the actual path to the data.\n"
+            IN"                                  All escapes mentioned in --write are supported too, and additonally:\n"
+            IN"                                    * path : The path were the item was written to.\n"
             "\nDATABASE OPTIONS\n"
             IN"-c --cache <folder>      Creates or opens an existing cache at <folder>/metadata.db and lookups data from there.\n"
             IN"cache select [Query]     Selects data from the cache; you can use any other option behind this.\n"
@@ -335,7 +355,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         {"from",          required_argument, 0, 'f'},
         {"write",         required_argument, 0, 'w'},
-        {"Write",         required_argument, 0, 'W'},
         {"parallel",      required_argument, 0, 'p'},
         {"redirects",     required_argument, 0, 'r'},
         {"timeout",       required_argument, 0, 'm'},
@@ -354,7 +373,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"force-utf8",    no_argument,       0, '8'},
         {"as-one",        no_argument,       0, 'g'},
         {"no-as-one",     no_argument,       0, 'G'},
-        // ---------- plugin specific ------------ //
         {"only-lang",     no_argument,       0, 'o'},
         {"artist",        required_argument, 0, 'a'},
         {"album",         required_argument, 0, 'b'},
@@ -509,75 +527,6 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     }
 }
 
-//* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-static void replace_char(char * string, gchar a, gchar b)
-{
-    if(string != NULL)
-    {
-        gsize str_len = strlen(string);
-        for(gsize i = 0; i < str_len; i++)
-        {
-            if(string[i] == a)
-            {
-                string[i] = b;
-            }
-        }
-    }
-}
-
-//* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-char * correct_path(const char * path)
-{
-    char * result = NULL;
-    if(path != NULL)
-    {
-        result = g_strdup(path);
-        replace_char(result,'/','+');
-        replace_char(result,' ','+');
-    }
-    return result;
-}
-
-/* --------------------------------------------------------- */
-// --------------------------------------------------------- //
-/* --------------------------------------------------------- */
-
-char * get_path_by_type(GlyrQuery * s, GlyrMemCache * c, const gchar * save_dir, gint num)
-{
-    char * artist = correct_path(s->artist);
-    char * album  = correct_path(s->album);
-    char * title  = correct_path(s->title);
-
-    artist = (artist == NULL) ? "" : artist;
-    album  = (album  == NULL) ? "" : album;
-    title  = (title  == NULL) ? "" : title;
-
-    char * type_string = (gchar*)glyr_get_type_to_string(s->type);
-    char * specifier = g_strdup_printf("%s%s%s%s%s%s",
-            artist,(*artist) ? "_" : "", 
-            album ,(*album ) ? "_" : "", 
-            title ,(*title ) ? "_" : "");
-
-    char * result = g_strdup_printf("%s/%s%s_%d.%s",
-            save_dir,
-            specifier,
-            type_string,
-            num,
-            (c->is_image) ? c->img_format : "txt");
-
-    if(*artist) g_free(artist); 
-    if(*album)  g_free(album);
-    if(*title)  g_free(title);
-    g_free(specifier);
-    return result;
-}
-
 /* --------------------------------------------------------- */
 // --------------------------------------------------------- //
 /* -------------------------------------------------------- */
@@ -589,13 +538,15 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
 
     char * write_to_path = NULL;
 
+    increment_item_counter();
+
     /* write out 'live' */
     if(CBQueryData->output_path != NULL)
     {
         gsize write_len = strlen(CBQueryData->output_path);
         if(g_ascii_strncasecmp(CBQueryData->output_path,"stdout",write_len) == 0 ||
-                g_ascii_strncasecmp(CBQueryData->output_path,"stderr",write_len) == 0 ||
-                g_ascii_strncasecmp(CBQueryData->output_path,"null",  write_len) == 0)
+           g_ascii_strncasecmp(CBQueryData->output_path,"stderr",write_len) == 0 ||
+           g_ascii_strncasecmp(CBQueryData->output_path,"null",  write_len) == 0)
         {
             glyr_cache_write(c,CBQueryData->output_path);
         }
@@ -603,42 +554,49 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
         {
             if(g_file_test(CBQueryData->output_path,G_FILE_TEST_IS_DIR) == TRUE)
             {
-                write_to_path = get_path_by_type(s,c,CBQueryData->output_path,CBQueryData->item_counter);
+                char * filename  = escape_colon_expr(":artist:_:album:_:title:_:type:_:number:.:format:",s,c);
+                char * directory = escape_colon_expr(CBQueryData->output_path,s,c);
+                write_to_path = g_strdup_printf("%s%s%s",directory,
+                        g_str_has_suffix(directory,G_DIR_SEPARATOR_S) ? "" : G_DIR_SEPARATOR_S,
+                        filename);
+
+                g_free(filename);
+                g_free(directory);
             }
             else
             {
-                write_to_path = g_strdup(CBQueryData->output_path);
+                write_to_path = escape_colon_expr(CBQueryData->output_path,s,c);
             }
 
             if(glyr_cache_write(c,write_to_path) == -1)
             {
-                message(1,s,"(!!) glyrc: writing data to <%s> failed.\n",write_to_path);
+                message(1,s,"(!!) writing data to <%s> failed.\n",write_to_path);
             }
+
+            set_write_path(write_to_path);
 
             /* call a program if any specified */
             if(CBQueryData->exec_on_call != NULL)
             {
-                char ** path_splitv = g_strsplit(CBQueryData->exec_on_call,"<path>",0);
-                char * replace_path = g_strjoinv(write_to_path,path_splitv);
-                g_strfreev(path_splitv);
+                char * command = escape_colon_expr(CBQueryData->exec_on_call,s,c);
 
                 /* Call that command */
-                int exitVal = system(replace_path);
+                int exitVal = system(command);
                 if(exitVal != EXIT_SUCCESS)
                 {
                     message(3,s,"glyrc: cmd returned a value != EXIT_SUCCESS\n");
                 }
-                g_free(replace_path);
+                g_free(command);
             }
         }
     }
 
     /* Text Represantation of this item */
-    message(1,s,"\n///// ITEM #%d /////\n",CBQueryData->item_counter);
+    message(1,s,"\n///// ITEM #%d /////\n",get_item_counter());
     if(write_to_path != NULL)
     {
         message(1,s,"WRITE to '%s'\n",write_to_path);
-        g_free(write_to_path);
+        //g_free(write_to_path);
     }
 
     if(s->verbosity > 0) 
@@ -647,7 +605,6 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     }
     message(1,s,"\n////////////////////\n");
 
-    CBQueryData->item_counter += 1;
     return GLYRE_OK;
 }
 
@@ -823,6 +780,12 @@ static GlyrMemCache * concatenate_list(GlyrMemCache * list)
 
 /*----------------------*/
 
+static void global_cleanup(void)
+{
+    set_write_path(NULL);
+}
+
+/*----------------------*/
 
 int main(int argc, char * argv[])
 {
@@ -833,6 +796,7 @@ int main(int argc, char * argv[])
             G_LOG_FLAG_RECURSION,
             log_func, NULL);
 
+    atexit(global_cleanup);
     init_signals();
 
     /* Assume success */
