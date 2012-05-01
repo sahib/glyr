@@ -2,6 +2,8 @@ h1. Glyr is a searcheninge for musicrelated metadata
 
 _The finest search you can buy for no money_
 
+!https://github.com/sahib/glyr/blob/master/doc/screenshot.png!
+
 It comes both in a commandline interface tool and as a C library, both with an easy to use interface.
 The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
 And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
@@ -66,7 +68,7 @@ h2. FAQ
 
 h3. Anyone using it already?
 
-"GMPC":http://gmpc.wikia.com/wiki/Gnome_Music_Player_Client,"Pragha":http://pragha.wikispaces.com/, and "Freya":https://github.com/studentkittens/Freya .
+"GMPC":http://gmpc.wikia.com/wiki/Gnome_Music_Player_Client, "Pragha":http://pragha.wikispaces.com/, and "Freya":https://github.com/studentkittens/Freya .
 
 h3. Glyr.. such a silly name! Why? 
 
