@@ -8,12 +8,26 @@ It comes both in a commandline interface tool and as a C library, both with an e
 The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
 And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
 work as a standalone program which is able to download:
+<p>
 <tr>
 <th>Getter</th>
 <th>Description</th>
 </tr>
-<tr><td>cover</td><td>Coverart (front images supported only)</td></tr><tr><td>lyrics</td><td>Songtext</td></tr><tr><td>artistphotos</td><td>Photos of a certain band (press or live)</td></tr><tr><td>artistbio</td><td>Artist biography from various sites</td></tr><tr><td>review</td><td>album reviews from various sites</td></tr><tr><td>albumlist</td><td>A list of albums from a specific artist.</td></tr><tr><td>tags</td><td>Tags, either related to artist, album or title</td></tr><tr><td>relations</td><td>links to wikipedia, myspace, musicbrainz ...</td></tr><tr><td>similarartists</td><td>similar artists</td></tr><tr><td>similarsongs</td><td>similar songs</td></tr><tr><td>tracklist</td><td>tracklists of an album</td></tr><tr><td>guitartabs</td><td>guitartabs in textual form</td></tr><tr><td>backdrops</td><td> Large artist photos, suitable for backgrounds</td></tr>
+<tr><td>cover</td><td>Coverart (front images supported only)</td></tr>
+<tr><td>lyrics</td><td>Songtext</td></tr>
+<tr><td>artistphotos</td><td>Photos of a certain band (press or live)</td></tr>
+<tr><td>artistbio</td><td>Artist biography from various sites</td></tr>
+<tr><td>review</td><td>album reviews from various sites</td></tr>
+<tr><td>albumlist</td><td>A list of albums from a specific artist.</td></tr>
+<tr><td>tags</td><td>Tags, either related to artist, album or title</td></tr>
+<tr><td>relations</td><td>links to wikipedia, myspace, musicbrainz ...</td></tr>
+<tr><td>similarartists</td><td>similar artists</td></tr>
+<tr><td>similarsongs</td><td>similar songs</td></tr>
+<tr><td>tracklist</td><td>tracklists of an album</td></tr>
+<tr><td>guitartabs</td><td>guitartabs in textual form</td></tr>
+<tr><td>backdrops</td><td> Large artist photos, suitable for backgrounds</td></tr>
 </table>
+</p>
 
 *Terminology*:
 To prevent disambiguation the following terms are used below: 	
@@ -150,7 +164,5 @@ Refer to the provider's terms of use. Every item you get from libglyr contains t
 <br>
 
 h3. 
-
-h4. @footnotes@
 
 [1] Glyr has not been tested on Mac OSX yet. If you own a Mac, any help with 'porting' glyr is highly appreciated. My guess would be that no to almost no changes need to be done though.
