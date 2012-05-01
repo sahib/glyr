@@ -95,7 +95,7 @@ i.e. glyr finds metadata for musicplayers while musicbrainz finds data for CD Ri
 # Musicbrainz runs remotely on some server and uses a large database which is searched through lucene.
 Glyr is a client program which hops over several sites and does not cache anything, unless you do it yourself.
 You could of course let glyr run on a (remote) server, and cache all results to do something similiar.
-# There is "coverarchive.org":www.coverartarchive.org
+# There is "coverarchive.org":www.coverartarchive.org , but it does not seem to fully work yet. But it will be accessible once it does.
 
 h2. AUTHOR
 
