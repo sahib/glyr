@@ -292,6 +292,7 @@ typedef struct
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
 
+__attribute__((visibility("default")))
 GlyrDatabase * glyr_db_init(const char * root_path)
 {
     GlyrDatabase * to_return = NULL;
@@ -360,6 +361,7 @@ GlyrDatabase * glyr_db_init(const char * root_path)
 ////////////////////////////////////
 
 
+__attribute__((visibility("default")))
 void glyr_db_destroy(GlyrDatabase * db_object)
 {
     if(db_object != NULL)
@@ -381,6 +383,7 @@ void glyr_db_destroy(GlyrDatabase * db_object)
 ////////////////////////////////////
 ////////////////////////////////////
 
+__attribute__((visibility("default")))
 int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
 {
     int result = 0;
@@ -402,6 +405,7 @@ int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
 ////////////////////////////////////
 ////////////////////////////////////
 
+__attribute__((visibility("default")))
 void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * query, GlyrMemCache * data)
 {
     if(db != NULL && md5sum != NULL) 
@@ -430,6 +434,7 @@ void glyr_db_replace(GlyrDatabase * db, unsigned char * md5sum, GlyrQuery * quer
 ////////////////////////////////////
 
 
+__attribute__((visibility("default")))
 gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 {
     gint result = 0;
@@ -530,6 +535,7 @@ gint glyr_db_delete(GlyrDatabase * db, GlyrQuery * query)
 ////////////////////////////////////
 
 
+__attribute__((visibility("default")))
 void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr)
 {
     if(db != NULL && cb != NULL)
@@ -561,6 +567,7 @@ void glyr_db_foreach(GlyrDatabase * db, glyr_foreach_callback cb, void * userptr
 ////////////////////////////////////
 ////////////////////////////////////
 
+__attribute__((visibility("default")))
 GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 {
     GlyrMemCache * result = NULL;
@@ -662,6 +669,7 @@ GlyrMemCache * glyr_db_lookup(GlyrDatabase * db, GlyrQuery * query)
 ////////////////////////////////////
 
 
+__attribute__((visibility("default")))
 void glyr_db_insert(GlyrDatabase * db, GlyrQuery * q, GlyrMemCache * cache)
 {
     if(db && q && cache)
@@ -694,6 +702,7 @@ rollback:
 ////////////////////////////////////
 ////////////////////////////////////
 
+__attribute__((visibility("default")))
 GlyrMemCache * glyr_db_make_dummy(void)
 {
     GlyrMemCache * c = glyr_cache_new();

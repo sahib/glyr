@@ -21,11 +21,13 @@
 #include "stringlib.h"
 #include "misc.h"
 
+__attribute__((visibility("default")))
 size_t glyr_levenshtein_strcmp(const char * string, const char * other)
 {
     return levenshtein_strcmp(string,other);
 }
 
+__attribute__((visibility("default")))
 size_t glyr_levenshtein_strnormcmp(const char * string, const char * other)
 {
     return levenshtein_strnormcmp(NULL,string,other);
