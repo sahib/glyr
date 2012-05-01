@@ -18,7 +18,6 @@
  * along with glyr. If not, see <http://www.gnu.org/licenses/>.
  **************************************************************/
 
-
 #include <glib.h>
 #include <string.h>
 #include <stdio.h>
@@ -96,7 +95,7 @@ typedef char * (* ExpandFunction)(GlyrQuery *,GlyrMemCache *);
     .escape_slashes = escp   \
 }                            \
 
-struct {
+struct escape_table {
     const char * name;
     ExpandFunction func;
     bool escape_slashes;
@@ -116,6 +115,8 @@ struct {
     EXPAND(path,false)
 };
 
+const size_t _escape_table_size = (sizeof(_escapes)/sizeof(struct escape_table));
+
 ////////////////////////
 
 static void replace_char(char * string, gchar a, gchar b)
@@ -123,7 +124,7 @@ static void replace_char(char * string, gchar a, gchar b)
     if(string != NULL)
     {
         gsize str_len = strlen(string);
-        for(gsize i = 0; i < str_len; i++)
+        for(size_t i = 0; i < str_len; i++)
         {
             if(string[i] == a)
             {
@@ -135,13 +136,16 @@ static void replace_char(char * string, gchar a, gchar b)
 
 ////////////////////////
 
-static char * lookup_escape(const char * escape, size_t escape_len, GlyrQuery * q,  GlyrMemCache * c)
+static char * lookup_escape(const char * escape, size_t escape_len, GlyrQuery * q,  GlyrMemCache * c, bool * is_valid)
 {
-    size_t table_size = sizeof(_escapes) / (sizeof(char*) + sizeof(ExpandFunction));
-    for(size_t i = 0; i < table_size; ++i)
+    for(size_t i = 0; i < _escape_table_size; ++i)
     {
+        if(_escapes[i].name == NULL)
+            continue;
+
         if(strncmp(escape,_escapes[i].name,escape_len) == 0)
         {
+            *is_valid = true;
             char * result = _escapes[i].func(q,c);
             if(_escapes[i].escape_slashes)
             {
@@ -150,6 +154,7 @@ static char * lookup_escape(const char * escape, size_t escape_len, GlyrQuery * 
             return result;
         }
     }
+    *is_valid = false;
     return NULL;
 }
 
@@ -176,22 +181,24 @@ char * escape_colon_expr(const char * path, GlyrQuery * q, GlyrMemCache * c)
     {
         size_t maxbufsize = estimate_alloc_size(path);
         size_t off = 0;
+        bool always_copy = false;
         retv = g_malloc0(maxbufsize+1);
 
         size_t path_len = strlen(path);
         for(size_t i = 0; i < path_len; ++i)
         {
-            if(path[i] == ':')
+            if(always_copy == false && path[i] == ':')
             {
                 const char * escape_begin = &path[i+1];
                 char * end_colon = strchr(escape_begin,':');
                 if(end_colon != NULL)
                 {
+                    bool is_valid = false;
                     size_t escape_len = end_colon - escape_begin;
                     if(escape_len == 0) 
                         continue;
 
-                    char * subsitution = lookup_escape(escape_begin,escape_len,q,c);
+                    char * subsitution = lookup_escape(escape_begin,escape_len,q,c,&is_valid);
                     if(subsitution != NULL) 
                     {
                         size_t subs_len = strlen(subsitution);
@@ -199,7 +206,17 @@ char * escape_colon_expr(const char * path, GlyrQuery * q, GlyrMemCache * c)
                         off += subs_len;
                         g_free(subsitution);
                     }
+                    else if(is_valid == false)
+                    {
+                        strncpy(retv+off,&path[i],escape_len + 2);
+                        off += escape_len + 2;
+                    }
                     i += escape_len + 1;
+                }
+                else
+                {
+                    always_copy = true;
+                    i--;
                 }
             }
             else

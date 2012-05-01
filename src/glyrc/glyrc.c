@@ -243,7 +243,7 @@ void help_short(GlyrQuery * s)
             IN"                                  * cksum    : a md5sum of the data\n"
             IN"                                  * rating   : (Usually 0)\n"
             IN"                                  * duration : (Only for tracks) Duration in seconds\n"
-            IN"                                  * number   : An index incremented with each item (starting with 0)\n"
+            IN"                                  * number   : An index incremented with each item (starting with 1)\n"
             IN"\n"
             IN"                               The default format is ':artist:_:album:_:title:_:type:_:number:.:format:'\n"
             IN"                               Strings containing '/' are replaced with '|' automatically,\n"
