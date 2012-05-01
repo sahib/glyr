@@ -21,7 +21,7 @@
 #include <string.h>
 #include "autohelp.h"
 
-#include "../../lib/stringlib.h"
+//#include "../../lib/stringlib.h"
 
 /* Copied from lib/stringlib.c - more details there */
 gsize levenshtein_strcmp(const gchar * s, const gchar * t)
@@ -149,11 +149,10 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
 		GHashTable * key_table = g_hash_table_new(g_direct_hash,g_direct_equal);
 		while(head != NULL)
 		{
-			gsize offset = 0;
-			gsize length = strlen(wrong_input);
-			gchar *token = NULL;
-			while((token = get_next_word(wrong_input,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,&offset,length)) != NULL)
-			{	
+            gchar ** tokens = g_strsplit(wrong_input,GLYR_DEFAULT_FROM_ARGUMENT_DELIM,0);
+            for(int i = 0; tokens[i] != NULL; i++)
+            {
+			    gchar * token = tokens[i];
 				if(levenshtein_strcasecmp(token,head->name) < 5 &&
 						g_hash_table_lookup(key_table,head->name) == NULL)
 				{
@@ -165,9 +164,9 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
 					g_print(" - %s\n",head->name);
 					g_hash_table_insert(key_table,head->name,head);
 				}
-				g_free(token);
-			}
+            }
 			head = head->next;	
+            g_strfreev(tokens);
 		}
 		g_hash_table_destroy(key_table);
 	}		
