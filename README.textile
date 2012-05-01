@@ -1,6 +1,6 @@
 h1. Glyr is a searcheninge for musicrelated metadata
 
-_The finest search you can buy for no money_
+_The finest search you can buy for no money^TM^_
 
 !https://github.com/sahib/glyr/blob/master/doc/screenshot.png!
 
@@ -8,19 +8,19 @@ It comes both in a commandline interface tool and as a C library, both with an e
 The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
 And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
 work as a standalone program which is able to download:
-* cover art
-* lyrics
-* bandphotos
-* artist biography
-* album reviews 
-* tracklists of an album
-* a list of albums from a specific artist.
-* Tags, either related to artist, album or title
-* relations, for example links to wikipedia
-* similar artists 
-* similar songs
-* guitartabs
-* backdrops (large artist photos)
+|cover|Coverart (front images supported only)|
+|lyrics|Songtext|
+|artistphotos|Photos of a certain band (press or live)|
+|artistbio|Artist biography from various sites|
+|review|album reviews from various sites|
+|albumlist|A list of albums from a specific artist.|
+|tags|Tags, either related to artist, album or title|
+|relations|links to wikipedia, myspace, musicbrainz ...|
+|similarartists|similar artists|
+|similarsongs|similar songs|
+|tracklist|tracklists of an album|
+|guitartabs|guitartabs in textual form|
+|backdrops| Large artist photos, suitable for backgrounds|
 
 *Terminology*:
 To prevent disambiguation the following terms are used below: 	
@@ -33,7 +33,7 @@ To prevent disambiguation the following terms are used below:
 h2. FEATURES
 
 * Many built-in providers (46 at time of writing, ~30 distinct sites), high success-rate (the longer the search, the higher the risk :))
-* Portable: Windows and Linux are supported (Developement on Linux) see [1] for Mac OSX, 
+* Portable: Windows and Linux are supported (Developement on Linux) see ~[1]~ for Mac OSX, 
 * Fuzzy matching: Search providers with Levenshtein algorithm to eliminate typos and enhance search results.
 * Decent Unicode support: All sort of valid UTF8 is taken, and UTf8 output can be forced.
 * Fast Download: libcurl is used internally, and sources are searched in parallel, unneeded data is not downloaded if possible.
