@@ -31,9 +31,12 @@ static const char * cover_musicbrainz_url(GlyrQuery * q)
 /* ----------------------------------------------- */
 
 #define COVERART "<div class=\"cover-art\">"
-#define CA_BEGIN "<img src=\""
-#define CA_ENDIN "\" alt=\"Cover Art\" />"
+#define AMZ_URL_START "\"http://ecx.images-amazon.com/"
 
+/*
+ * This is silly overall,
+ * but coverartarchive.org does not seem to work fully yet.
+ */
 static GlyrMemCache * parse_web_page(GlyrMemCache * page)
 {
     GlyrMemCache * retv = NULL;
@@ -42,20 +45,16 @@ static GlyrMemCache * parse_web_page(GlyrMemCache * page)
         char * begin = strstr(page->data,COVERART);
         if(begin != NULL)
         {
-            char * img_url = get_search_value(begin,CA_BEGIN,CA_ENDIN);
-            if(img_url != NULL)
+            char * amz_url = strstr(begin,AMZ_URL_START);
+            if(amz_url != NULL)
             {
-                gsize img_url_len = strlen(img_url);
-                if(img_url_len < 100)
+                char * img_url = get_search_value(amz_url,"\"","\"");
+                if(img_url != NULL)
                 {
                     retv = DL_init();
                     retv->dsrc = g_strdup(page->dsrc);
                     retv->data  = img_url;
-                    retv->size  = img_url_len;
-                }
-                else
-                {
-                    g_free(img_url);
+                    retv->size  = strlen(img_url);
                 }
             }
         }
@@ -97,7 +96,6 @@ static GList * cover_musicbrainz_parse(cb_object * capo)
                     }
                 }
                 g_free(url);
-
             }
             g_free(ID);
         }

@@ -94,7 +94,6 @@ GList * generic_picsearch_parse(cb_object * capo)
         if(details_url != NULL && strncmp(details_url,NODE_NEEDS_TO_BEGIN,sizeof(NODE_NEEDS_TO_BEGIN)-1) == 0)
         {
             gchar * full_url = g_strdup_printf("www.picsearch.com%s",details_url);
-            puts(full_url);
             if(full_url != NULL)
             {
                 GlyrMemCache * to_parse = download_single(full_url,capo->s,NULL);

@@ -116,37 +116,6 @@ describe "cover" do
 		end
 	end
 
-=begin
-	describe "amazon" do
-		before :each do
-			@spit.from = "amazon"
-		end
-		
-		it "should test a pagehit" do
-			@spit.artist = "Adele"
-			@spit.album  = "21"
-			list = @spit.get
-
-			list.should be_an_instance_of Array
-			list.first.should be_an_instance_of Glyros::GlyrMemCache
-			list.size.should == 1
-
-			show_in_sxiv(list.first)
-		end
-
-		it "Don't know this cover" do
-			@spit.artist = "The band they called horst"
-			@spit.album  = "Album"
-			list = @spit.get
-
-			list.should be_an_instance_of Array
-			list.size.should == 0
-		end
-	end
-=end
-
-	# coverhnt seems to be down.
-
 	describe "discogs" do
 		before :each do
 			@spit.from = "discogs"
@@ -375,5 +344,4 @@ describe "cover" do
 			list.size.should == 0
 		end
 	end
-
 end

@@ -1,2 +1,2 @@
 - Keep providers updated :)
-- Expose utils like levenshtein to the API
+- Replace cover:musicbrainz with coverartarchive once they got it working... (d'oh')
