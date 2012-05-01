@@ -319,7 +319,7 @@ static void visualize_from_options(void)
                 message(-1,NULL,"   # %s [%c]\n",elem1->name,elem1->key);
                 message(-1,NULL,"     - Quality: %d\n",elem1->quality);
                 message(-1,NULL,"     - Speed:   %d\n",elem1->speed);
-                message(-1,NULL,"     - Type:    %s\n",glyr_data_type_to_string(elem1->type));
+                message(-1,NULL,"     - Type:    %s\n",glyr_get_type_to_string(elem1->type));
             }
 
             message(-1,NULL," + Requires: (%s%s%s)\n",

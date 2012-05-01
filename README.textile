@@ -1,6 +1,6 @@
 h1. Glyr is a searcheninge for musicrelated metadata
 
-_The finest search you can buy for no money ^TM^ _
+The finest search you can buy for no money ^TM^
 
 !https://github.com/sahib/glyr/blob/master/doc/screenshot.png([screenshot])!
 

@@ -56,8 +56,13 @@ ELSE()
 ENDIF()
 MESSAGE("-- Building Target: ${CMAKE_BUILD_TYPE}")
 
-SET(COMMON_FLAGS "-Wall -Wextra -Wstrict-prototypes -std=c99 -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
-SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os -s")
+IF(CMAKE_COMPILER_IS_GNUCC)
+    SET(GCC_ONLY_FLAGS "-std=c99")
+    SET(GCC_ONLY_OPT   "-s")
+ENDIF()
+
+SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
+SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os ${GCC_ONLY_OPT}")
 SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -ggdb3")
 SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
 # ------------------------------------------------
