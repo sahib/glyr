@@ -101,7 +101,7 @@ size_t glyr_levenshtein_strcmp(const char * string, const char * other);
 *
 * Returns: the levenshtein distance
 */
-gsize glyr_levenshtein_strnormcmp(const char * string, const char * other);
+size_t glyr_levenshtein_strnormcmp(const char * string, const char * other);
 
 #ifdef __cplusplus
 }
