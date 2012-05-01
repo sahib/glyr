@@ -8,6 +8,8 @@ It comes both in a commandline interface tool and as a C library, both with an e
 The sort of metadata glyr is searching (and downloading) is usually the data you see in your musicplayer.
 And indeed, originally it was written to serve as internally library for a musicplayer, but has been extended to 
 work as a standalone program which is able to download:
+<p>
+<table border="1">
 <tr>
 <th>Getter</th><th>Description</th>
 </tr>
@@ -25,6 +27,7 @@ work as a standalone program which is able to download:
 <tr><td>guitartabs</td><td>guitartabs in textual form</td></tr>
 <tr><td>backdrops</td><td> Large artist photos, suitable for backgrounds</td></tr>
 </table>
+</p>
 
 *Terminology*:
 To prevent disambiguation the following terms are used below: 	
