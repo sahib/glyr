@@ -114,7 +114,6 @@ static GList * cover_slothradio_parse(cb_object * capo)
                 result->dsrc = g_strdup(capo->url);
                 result->data = url;
                 result->size = strlen(url);
-                puts(url);
 
                 result_list = g_list_prepend(result_list,result);
             }

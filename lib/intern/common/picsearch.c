@@ -43,27 +43,29 @@ const gchar * generic_picsearch_url(GlyrQuery * s, const char * fmt)
 
 /* ------------------------- */
 
-#define IMG_HOOK "<span class=\"key\">Image URL:</span>"
+#define IMG_HOOK "div class=\"thumbnailTop\">"
+#define IMG_HOOK_BEGIN "<a rel=\"nofollow\" href=\""
+#define IMG_HOOK_ENDIN "\"><img src=\""
 
 static GlyrMemCache * parse_details_page(GlyrMemCache * to_parse)
 {
 	GlyrMemCache * result = NULL;
 	if(to_parse != NULL)
 	{
-		gchar * hook = strstr(to_parse->data,IMG_HOOK);
-		if(hook != NULL)
-		{
-			gchar * img_url = get_search_value(hook,"href=\"","\">");
-			if(img_url != NULL)
-			{
-				result = DL_init();
-				result->data = img_url;
-				result->size = strlen(img_url);
-				result->dsrc = g_strdup(to_parse->dsrc);
-			}
-		}
-	}
-	return result;
+        char * start = strstr(to_parse->data,IMG_HOOK);
+        if(start != NULL)
+        {
+            char * img_url = get_search_value(start,IMG_HOOK_BEGIN,IMG_HOOK_ENDIN);
+            if(img_url != NULL)
+            {
+                result = DL_init();
+                result->data = img_url;
+                result->size = strlen(img_url);
+                result->dsrc = g_strdup(to_parse->dsrc);
+            }
+        }
+    }
+    return result;
 }
 
 /* ------------------------- */
@@ -73,20 +75,26 @@ static GlyrMemCache * parse_details_page(GlyrMemCache * to_parse)
 
 GList * generic_picsearch_parse(cb_object * capo)
 {
-	GList * result_list = NULL;
+    GList * result_list = NULL;
 
-	gchar * node = capo->cache->data;
-	gint nodelen = (sizeof NODE) - 1;
+    gchar * node = capo->cache->data;
+    gint nodelen = (sizeof NODE) - 1;
 
     node = strstr(node,"<div id=\"results_table\">");
 
-	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node, "<a href=\"")))
-	{
-		node += nodelen;
-		gchar * details_url = get_search_value(node,"<a href=\"","\" ");
-		if(details_url != NULL && strncmp(details_url,NODE_NEEDS_TO_BEGIN,sizeof(NODE_NEEDS_TO_BEGIN)-1) == 0)
-		{
+    int items = 0, tries = 0;
+    const int MAX_TRIES = capo->s->number * 4;
+
+    while(continue_search(items,capo->s)         &&
+            (node = strstr(node, "<a href=\""))  &&
+            tries++ < MAX_TRIES)
+    {
+        node += nodelen;
+        gchar * details_url = get_search_value(node,"<a href=\"","\" ");
+        if(details_url != NULL && strncmp(details_url,NODE_NEEDS_TO_BEGIN,sizeof(NODE_NEEDS_TO_BEGIN)-1) == 0)
+        {
             gchar * full_url = g_strdup_printf("www.picsearch.com%s",details_url);
+            puts(full_url);
             if(full_url != NULL)
             {
                 GlyrMemCache * to_parse = download_single(full_url,capo->s,NULL);
@@ -96,6 +104,7 @@ GList * generic_picsearch_parse(cb_object * capo)
                     if(result != NULL)
                     {
                         result_list = g_list_prepend(result_list,result);
+                        items++;
                     }
                     DL_free(to_parse);
                 }
