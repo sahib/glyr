@@ -26,12 +26,9 @@
 
 void setup(GlyrQuery * q, GLYR_GET_TYPE type, int num)
 {
-    glyr_init();
-    atexit(glyr_cleanup);
-
     glyr_query_init(q);
     glyr_opt_artist(q,"Equilibrium");
-    //glyr_opt_album(q, "Sagas");
+    glyr_opt_album(q, "Sagas");
     glyr_opt_title(q, "Wurzelbert");
     glyr_opt_type(q, type);
     glyr_opt_number(q,num);

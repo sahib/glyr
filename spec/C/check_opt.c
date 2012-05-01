@@ -55,9 +55,6 @@ static GLYR_ERROR test_callback_skip2(GlyrMemCache * c, GlyrQuery * q)
 
 START_TEST(test_glyr_opt_dlcallback)
 {
-    glyr_init();
-    atexit(glyr_cleanup);
-
     GlyrQuery q;
     GlyrMemCache * list;
     gint length = -1;
@@ -127,9 +124,6 @@ END_TEST
 
 START_TEST(test_glyr_opt_number)
 {
-    glyr_init();
-    atexit(glyr_cleanup);
-
     GlyrQuery q;
     int length = 0;
     setup(&q,GLYR_GET_ARTIST_PHOTOS,4);
@@ -147,9 +141,6 @@ END_TEST
 
 START_TEST(test_glyr_opt_allowed_formats)
 {
-    glyr_init();
-    atexit(glyr_cleanup);
-    
     GlyrQuery q;
     setup(&q,GLYR_GET_COVERART,1);
     glyr_opt_verbosity(&q,0);
@@ -168,9 +159,6 @@ END_TEST
 
 START_TEST(test_glyr_opt_proxy)
 {
-    glyr_init();
-    atexit(glyr_cleanup);
-    
     GlyrQuery q;
     setup(&q,GLYR_GET_COVERART,1);
     glyr_opt_verbosity(&q,0);
@@ -206,6 +194,8 @@ Suite * create_test_suite(void)
 
 int main(void)
 {
+    init();
+
     int number_failed;
     Suite * s = create_test_suite();
 

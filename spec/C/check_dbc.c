@@ -47,6 +47,14 @@ static void cleanup_db(void)
     system("rm -rf /tmp/check/");
 }
 
+
+static GlyrDatabase * setup_db(void)
+{
+    cleanup_db();
+    system("mkdir -p /tmp/check");
+    return glyr_db_init("/tmp/check");
+}
+
 //--------------------
 //--------------------
 //--------------------
@@ -54,12 +62,12 @@ static void cleanup_db(void)
 
 START_TEST(test_create_db)
 {
-    init();
-
     glyr_db_init(NULL);
-    GlyrDatabase * db = glyr_db_init("/tmp");
+    GlyrDatabase * db = glyr_db_init("/tmp/");
     glyr_db_destroy(db);
     glyr_db_destroy(NULL);
+
+    system("rm /tmp/metadata.db");
 }
 END_TEST
 
@@ -67,16 +75,13 @@ END_TEST
 
 START_TEST(test_simple_db)
 {
-    init();
     GlyrQuery q;
     setup(&q,GLYR_GET_LYRICS,10);
     glyr_opt_artist(&q,"Equi");
     glyr_opt_title(&q,"lala");
 
-    cleanup_db();
+    GlyrDatabase * db = setup_db(); 
 
-    system("mkdir -p /tmp/check");
-    GlyrDatabase * db = glyr_db_init("/tmp/check");
     GlyrMemCache * ct = glyr_cache_new();
 
     glyr_cache_set_data(ct,g_strdup("test"),-1);
@@ -97,7 +102,6 @@ START_TEST(test_simple_db)
     glyr_db_destroy(db);
     glyr_cache_free(ct);
     glyr_query_destroy(&q);
-    system("rm -r /tmp/check");
 }
 END_TEST
 
@@ -105,22 +109,17 @@ END_TEST
 
 START_TEST(test_iter_db)
 {
-    init();
     GlyrQuery q;
     setup(&q,GLYR_GET_LYRICS,10);
     glyr_opt_artist(&q,"Equi");
     glyr_opt_title(&q,"lala");
 
+    GlyrDatabase * db = setup_db(); 
 
     GlyrQuery nugget;
     setup(&nugget,GLYR_GET_COVERART,40);
     glyr_opt_artist(&nugget,"A very special artist");
     glyr_opt_album(&nugget,"A very special album");
-
-    cleanup_db();
-
-    system("mkdir -p /tmp/check");
-    GlyrDatabase * db = glyr_db_init("/tmp/check");
 
     GTimer * insert_time = g_timer_new();
 
@@ -206,7 +205,6 @@ START_TEST(test_iter_db)
 
     g_timer_destroy(insert_time);
     g_timer_destroy(grain_time);
-    cleanup_db();
 }
 END_TEST 
 
@@ -216,13 +214,11 @@ START_TEST(test_sorted_rating)
 {
     const int N = 10;
     
-    system("mkdir -p /tmp/check");
+    GlyrDatabase * db = setup_db(); 
 
     GlyrQuery q;
     glyr_query_init(&q);
     setup(&q,GLYR_GET_LYRICS,N);
-
-    GlyrDatabase * db = glyr_db_init("/tmp/check");
 
     for(int i = 0; i < N; ++i)
     {
@@ -260,7 +256,6 @@ START_TEST(test_sorted_rating)
     }
     
     glyr_free_list(list);
-    cleanup_db();
 }
 END_TEST
 
@@ -269,7 +264,7 @@ END_TEST
 /* Write artist|album|title, select only artist|title */
 START_TEST(test_intelligent_lookup)
 {
-    init();
+    GlyrDatabase * db = setup_db(); 
 
     GlyrQuery alt;
     glyr_query_init(&alt);
@@ -286,9 +281,6 @@ START_TEST(test_intelligent_lookup)
     GlyrMemCache * subject = glyr_cache_new();
     glyr_cache_set_data(subject,g_strdup("These are lyrics. Really."),-1);
 
-    cleanup_db();
-    system("mkdir -p /tmp/check");
-    GlyrDatabase * db = glyr_db_init("/tmp/check");
     glyr_db_insert(db,&alt,subject);
 
     GlyrMemCache * one = glyr_db_lookup(db,&alt);
@@ -309,7 +301,6 @@ START_TEST(test_intelligent_lookup)
 
     glyr_query_destroy(&alt);
     glyr_db_destroy(db);
-    cleanup_db();
 }
 END_TEST
 
@@ -317,11 +308,8 @@ END_TEST
 
 START_TEST(test_db_editplace)
 {
-    cleanup_db();
-    init();
 
-    system("mkdir -p /tmp/check");
-    GlyrDatabase * db = glyr_db_init("/tmp/check");
+    GlyrDatabase * db = setup_db(); 
     if(db != NULL)
     {
         fail_unless(count_db_items(db) == 0, NULL);
@@ -357,7 +345,6 @@ START_TEST(test_db_editplace)
         glyr_cache_free(test_data);
         glyr_db_destroy(db);
     }
-    cleanup_db();
 }
 END_TEST
 
@@ -385,6 +372,8 @@ Suite * create_test_suite(void)
 
 int main(void)
 {
+    init();
+
     int number_failed;
     Suite * s = create_test_suite();
 
@@ -394,5 +383,7 @@ int main(void)
 
     number_failed = srunner_ntests_failed(sr);
     srunner_free (sr);
+
+    cleanup_db();
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 };

@@ -102,9 +102,6 @@ START_TEST(test_glyr_cache_copy)
 
     GlyrMemCache * copy = glyr_cache_copy(test);
     fail_unless(memcmp(copy->data,test->data,test->size) == 0,"Should have the same data");
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
     fail_unless(copy->next == NULL,NULL);
     fail_unless(copy->prev == NULL,NULL);
 
@@ -224,6 +221,8 @@ Suite * create_test_suite(void)
 
 int main(void)
 {
+    init();
+
     int number_failed;
     Suite *s = create_test_suite();
 
