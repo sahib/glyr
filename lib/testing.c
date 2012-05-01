@@ -51,6 +51,7 @@ static MetaDataSource * get_metadata_struct(const char * provider_name, GLYR_GET
 
 /*-----------------------------------*/
 
+__attribute__((visibility("default")))
 const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query)
 {
     const char * result = NULL;
@@ -76,6 +77,7 @@ const char * glyr_testing_call_url(const char * provider_name, GLYR_GET_TYPE typ
 
 /*-----------------------------------*/
 
+__attribute__((visibility("default")))
 GlyrMemCache * glyr_testing_call_parser(const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
 {
     GlyrMemCache * result = NULL;
