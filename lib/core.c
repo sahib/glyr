@@ -36,7 +36,7 @@
 /* Somehow needed to prevent some compiler warning.. */
 #include <glib/gprintf.h>
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 
 static int _msg(const char * fmt, va_list params)
@@ -55,17 +55,7 @@ static int _msg(const char * fmt, va_list params)
 	return written;
 }
 
-/*--------------------------------------------------------*/
-
-void panic(const char * fmt, ...)
-{
-	va_list list;
-	va_start(list,fmt);
-	_msg(fmt,list);
-	va_end(list);
-}
-
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 {
@@ -87,23 +77,7 @@ int glyr_message(int verbosity, GlyrQuery * s, const char * fmt, ...)
 	return written;
 }
 
-/*--------------------------------------------------------*/
-
-int glyr_puts(int verbosity, GlyrQuery * s, const char * string)
-{
-	gint written = 0;
-	if(s != NULL || verbosity == -1)
-	{
-		if(string && (verbosity == -1 || verbosity <= s->verbosity))
-		{
-			fputs(string,GLYR_OUTPUT);
-            fputs("\n",GLYR_OUTPUT);
-		}
-	}
-	return written;
-}
-
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /**
 * Check if the size of a cover fits the specs
@@ -119,7 +93,7 @@ gboolean size_is_okay(int sZ, int min, int max)
     return FALSE;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* cache incoming data in a GlyrMemCache
  * libglyr is spending quite some time here
@@ -158,7 +132,7 @@ static size_t DL_buffer(void *puffer, size_t size, size_t nmemb, void * buff_dat
     return realsize;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len)
 {
@@ -180,7 +154,7 @@ void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 GlyrMemCache * DL_copy(GlyrMemCache * cache)
 {
@@ -207,7 +181,7 @@ GlyrMemCache * DL_copy(GlyrMemCache * cache)
     return result;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // cleanup internal buffer if no longer used
 void DL_free(GlyrMemCache *cache)
@@ -240,7 +214,7 @@ void DL_free(GlyrMemCache *cache)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // Use this to init the internal buffer
 GlyrMemCache* DL_init(void)
@@ -256,7 +230,7 @@ GlyrMemCache* DL_init(void)
     return cache;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // Splits http_proxy to libcurl conform represantation
 static gboolean proxy_to_curl(gchar * proxystring, char ** userpwd, char ** server)
@@ -298,7 +272,7 @@ static gboolean proxy_to_curl(gchar * proxystring, char ** userpwd, char ** serv
 }
 
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 struct header_data
 {
@@ -307,7 +281,7 @@ struct header_data
     gchar * extra;
 };
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* Parse header file. Get Contenttype from it and save it in the header_data struct */
 gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
@@ -379,7 +353,7 @@ gsize header_cb(void *ptr, gsize size, gsize nmemb, void *userdata)
     return bytes;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* empty callback just prevent writing header to stdout */
 gsize nearly_empty_callback(void * p, gsize size, gsize numb, void * pp_Query)
@@ -388,7 +362,7 @@ gsize nearly_empty_callback(void * p, gsize size, gsize numb, void * pp_Query)
     return (query && GET_ATOMIC_SIGNAL_EXIT(query)) ? 0 : (size * numb);
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void DL_setproxy(CURL *eh, gchar * proxystring)
 {
@@ -405,7 +379,7 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
         }
         else
         {
-            panic("glyr: Warning: Invalid proxy string.\n");
+            glyr_message(-1,NULL,"Warning: Invalid proxy string.\n");
         }
 
         if(userpwd != NULL)
@@ -416,7 +390,7 @@ static void DL_setproxy(CURL *eh, gchar * proxystring)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static struct header_data * retrieve_content_info(gchar * url, gchar * proxystring, gchar * useragent, GlyrQuery * query)
 {
@@ -468,7 +442,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
         {
             if(GET_ATOMIC_SIGNAL_EXIT(query) == FALSE)
             {
-                panic("- g_ping: E: %s [%d]\n",curl_easy_strerror(rc),rc);
+                glyr_message(1,query,"- DLError: %s [%d]\n",curl_easy_strerror(rc),rc);
             }
             g_free(info);
             info = NULL;
@@ -486,7 +460,7 @@ static struct header_data * retrieve_content_info(gchar * url, gchar * proxystri
     return info;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // Init an easyhandler with all relevant options
 static DLBufferContainer * DL_setopt(CURL *eh, GlyrMemCache * cache, const char * url, GlyrQuery * s, void * magic_private_ptr, long timeout, gchar * endmarker)
@@ -533,7 +507,7 @@ static DLBufferContainer * DL_setopt(CURL *eh, GlyrMemCache * cache, const char 
     return dlbuffer;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 gboolean continue_search(gint current, GlyrQuery * s)
 {
@@ -556,9 +530,9 @@ gboolean continue_search(gint current, GlyrQuery * s)
     return decision;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 // Bad data checker mehods:
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* Check for dupes. This does not affect the HEAD of the list, therefore no GList return */
 gsize delete_dupes(GList * result, GlyrQuery * s)
@@ -623,7 +597,7 @@ gsize delete_dupes(GList * result, GlyrQuery * s)
     return double_items;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // Download a singe file NOT in parallel
 GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
@@ -683,7 +657,7 @@ GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end)
     return NULL;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 // Init a callback object and a curl_easy_handle
 static GlyrMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyrQuery *s, long timeout, gchar * endmark)
@@ -716,7 +690,7 @@ static GlyrMemCache * init_async_cache(CURLM * cm, cb_object * capo, GlyrQuery *
     return dlcache;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM * cmHandle, GlyrQuery * s, int abs_timeout)
 {
@@ -741,7 +715,7 @@ static GList * init_async_download(GList * url_list, GList * endmark_list, CURLM
     return cb_list;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean free_caches)
 {
@@ -775,9 +749,9 @@ static void destroy_async_download(GList * cb_list, CURLM * cmHandle, gboolean f
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 /* ----------------- THE HEART OF GOLD ------------------ */
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB asdl_callback, void * userptr, gboolean free_caches)
 {
     /* Storage for result items */
@@ -814,7 +788,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
             }
             if(merr != CURLM_OK)
             {
-                panic("curl_multi_perform() failed!");
+                glyr_message(1,s,"Error: curl_multi_perform() failed!");
                 return NULL;
             }
 
@@ -828,7 +802,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                 if (curl_multi_fdset(cmHandle, &ReadFDS, &WriteFDS, &ErrorFDS, &max_fd) ||
                         curl_multi_timeout(cmHandle, &wait_time))
                 {
-                    panic("glyr: error while selecting stream. Might be a bug.\n");
+                    glyr_message(1,s,"Error while selecting stream. Might be a bug.\n");
                     return NULL;
                 }
 
@@ -849,7 +823,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                     /* Now block till something interesting happens with the download */
                     if (select(max_fd+1, &ReadFDS, &WriteFDS, &ErrorFDS, &Tmax) == -1)
                     {
-                        panic("glyr: E: select(%i <=> %li): %i: %s\n",max_fd+1, wait_time, errno, strerror(errno));
+                        glyr_message(1,s,"Error: select(%i <=> %li): %i: %s\n",max_fd+1, wait_time, errno, strerror(errno));
                         return NULL;
                     }
                 }
@@ -948,7 +922,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                                 msg->data.result);
 
                         glyr_message(3,capo->s,"  On URL: ");
-                        glyr_puts(3,capo->s,capo->url);
+                        glyr_message(3,capo->s,"%s\n",capo->url);
 
                         DL_free(capo->cache);
                         capo->cache = NULL;
@@ -963,7 +937,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
                 else
                 {
                     /* Something in the multidownloading gone wrong */
-                    panic("glyrE: multiDL-errorcode: %d\n",msg->msg);
+                    glyr_message(1,s,"Error: multiDownload-errorcode: %d\n",msg->msg);
                 }
             }
         }
@@ -972,7 +946,7 @@ GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, lo
     return item_list;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 struct wrap_retrieve_pass_data
 {
@@ -994,7 +968,7 @@ static void * wrap_retrieve_content(gpointer data)
     return head;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void check_all_types_in_url_list(GList * cache_list, GlyrQuery * s)
 {
@@ -1040,7 +1014,7 @@ static void check_all_types_in_url_list(GList * cache_list, GlyrQuery * s)
                 }
                 else
                 {
-                    panic("glyr: Uh oh.. empty link in hashtable..\n");
+                    glyr_message(1,s,"glyr: Uh oh.. empty link in hashtable..\n");
                 }
                 g_free(info->format);
                 g_free(info->type);
@@ -1056,7 +1030,7 @@ static void check_all_types_in_url_list(GList * cache_list, GlyrQuery * s)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static gboolean format_is_allowed(gchar * format, gchar * allowed)
 {
@@ -1083,7 +1057,7 @@ static gboolean format_is_allowed(gchar * format, gchar * allowed)
 }
 
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static gint delete_wrong_formats(GList ** list, GlyrQuery * s)
 {
@@ -1122,7 +1096,7 @@ static gint delete_wrong_formats(GList ** list, GlyrQuery * s)
     return invalid_format_counter;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
 {
@@ -1138,7 +1112,7 @@ static GList * kick_out_wrong_formats(GList * data_list, GlyrQuery * s)
     return new_head;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void do_charset_conversion(MetaDataSource * source, GList * text_list)
 {
@@ -1166,7 +1140,7 @@ static void do_charset_conversion(MetaDataSource * source, GList * text_list)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
 {
@@ -1206,7 +1180,7 @@ static GList * check_for_forced_utf8(GlyrQuery * query, GList * text_list)
     return new_head;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void normalize_utf8(GList * text_list)
 {
@@ -1230,7 +1204,7 @@ static void normalize_utf8(GList * text_list)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static gint delete_already_cached_items(cb_object * capo, GList ** list)
 {
@@ -1267,7 +1241,7 @@ static gint delete_already_cached_items(cb_object * capo, GList ** list)
     return deleted;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void fix_data_types(GList * list, MetaDataSource * src, GlyrQuery * query)
 {
@@ -1289,7 +1263,7 @@ static void fix_data_types(GList * list, MetaDataSource * src, GlyrQuery * query
 }
 
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* The actual call to the metadata provider here, coming from the downloader, triggered by start_engine() */
 static GList * call_provider_callback(cb_object * capo, void * userptr, bool * stop_download, gint * to_add)
@@ -1379,7 +1353,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
         }
         else
         {
-            panic("glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
+            glyr_message(1,capo->s,"glyr: hashmap lookup failed. Cannot call plugin => Bug.\n");
         }
 
     }
@@ -1399,7 +1373,7 @@ static GList * call_provider_callback(cb_object * capo, void * userptr, bool * s
     return parsed;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 gboolean provider_is_enabled(GlyrQuery * q, MetaDataSource * f)
 {
@@ -1456,7 +1430,7 @@ gboolean provider_is_enabled(GlyrQuery * q, MetaDataSource * f)
     return (all_occured) ? (is_excluded == FALSE) : is_found;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* GnuPlot: plot3d(1/X*Y + (100-Y)*1/(1-X) + 1000,[X,0.1,0.9],[Y,0,100]); */
 static gfloat calc_rating(gfloat qsratio, gint quality, gint speed)
@@ -1465,7 +1439,7 @@ static gfloat calc_rating(gfloat qsratio, gint quality, gint speed)
     return 1000.0f + ((1.0/(1-cratio)*quality) + (1.0/cratio*speed));
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired)
 {
@@ -1512,7 +1486,7 @@ static GList * get_queued(GlyrQuery * s, MetaDataFetcher * fetcher, gint * fired
     return source_list;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list)
 {
@@ -1531,7 +1505,7 @@ gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list)
     return result;
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * source_list, gboolean * stop_me, GList ** result_list)
 {
@@ -1695,7 +1669,7 @@ static void execute_query(GlyrQuery * query, MetaDataFetcher * fetcher, GList * 
     }
     g_list_free(sub_result_list);
 }
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 static void print_trigger(GlyrQuery * query, GList * src_list)
 {
@@ -1708,7 +1682,7 @@ static void print_trigger(GlyrQuery * query, GList * src_list)
     glyr_message(2,query,"\n");
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err)
 {
@@ -1751,7 +1725,7 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
 }
 
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 /* New glib implementation, thanks to Etienne Millon */
 void update_md5sum(GlyrMemCache * c)
@@ -1767,7 +1741,7 @@ void update_md5sum(GlyrMemCache * c)
     }
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////
 
 void glist_free_full(GList * List, void (* free_func)(void * ptr))
 {
@@ -1790,4 +1764,4 @@ void glist_free_full(GList * List, void (* free_func)(void * ptr))
 #endif
 }
 
-/*--------------------------------------------------------*/
+//////////////////////////////////////

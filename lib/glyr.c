@@ -812,22 +812,22 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
                     if(settings->artist != NULL)
                     {
                         glyr_message(2,settings,"- Artist   : ");
-                        glyr_puts(2,settings,settings->artist);
+                        glyr_message(2,settings,"%s\n",settings->artist);
                     }
                     if(settings->album != NULL)
                     {
                         glyr_message(2,settings,"- Album    : ");
-                        glyr_puts(2,settings,settings->album);
+                        glyr_message(2,settings,"%s\n",settings->album);
                     }
                     if(settings->title != NULL)
                     {
                         glyr_message(2,settings,"- Title    : ");
-                        glyr_puts(2,settings,settings->title);
+                        glyr_message(2,settings,"%s\n",settings->title);
                     }
                     if(settings->lang != NULL)
                     {
                         glyr_message(2,settings,"- Language : ");
-                        glyr_puts(2,settings,settings->lang);
+                        glyr_message(2,settings,"%s\n",settings->lang);
                     }
 
                     if(e) *e = GLYRE_OK;

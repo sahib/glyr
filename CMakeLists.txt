@@ -167,6 +167,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_COVER}/rhapsody.c"
 	"${DIR_COVER}/picsearch.c"
 	"${DIR_COVER}/musicbrainz.c"
+	"${DIR_COVER}/slothradio.c"
 	"${DIR_LYRICS}/lyrdb.c"
 	"${DIR_LYRICS}/metallum.c"
 	"${DIR_LYRICS}/magistrix.c"

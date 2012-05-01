@@ -186,7 +186,6 @@ void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len);
 
 void update_md5sum(GlyrMemCache * c);
 void glist_free_full(GList * List, void (* free_func)(void * ptr));
-int glyr_puts(int verbosity, GlyrQuery * s, const char * string);
 
 /*------------------------------------------------------*/
 
