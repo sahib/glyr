@@ -1,0 +1,29 @@
+h2. Ruby bindings to libglyr
+
+(Not really useful yet, only used for the testcases at the moment)
+
+h4. Self compiling:
+
+You don't need this, except if you want write bindings to other languages. 
+
+# let SWIG generate the wrapper code
+# This will create a file called glyr_wrap.c
+# @swig -ruby ruby_glyr.i@
+
+# Compile the wrapper code, -I is the includedir of the Ruby headers, -fpic is needed
+> @gcc -c ruby_glyr_wrap.c -o glyr_wrap.o $(pkg-config --cflags libglyr ruby-1.9) -fPIC -Wall@
+
+# Create the library by linking the .o against all needed libs:
+> @gcc -shared -Wl,-soname,glyros -o glyros.so glyr_wrap.o $(pkg-config --libs libglyr ruby-1.9)@
+
+If everything went fine you should have a 'glyros.so' in this directory.
+Now you can load it in Ruby:
+
+@> irb -r rubygems@
+@>>> require './glyros.so'@
+@>>> Glyros::glyr_version() @
+@=> "Version 0.8.7 (Horny Hornet [beta]) of [Sep 19 2011] compiled at [12:04:08]"@
+@>>> exit@
+
+Note that this is outdated, but will be moved to an separate repository with a proper gem, 
+and perhaps even a nice wrapper class.

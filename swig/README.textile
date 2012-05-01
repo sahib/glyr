@@ -1,28 +1,11 @@
 h2. SWIG BINDINGS
 
-Glyr provides a interface file (glyr.i) to provide bindings for languages other than C/C++
+Glyr provides a interface file (generic_glyr.i) to provide bindings for languages other than C/C++
 To generate the wrapping code you should install SWIG and the devel headers of your scripting language.
 (+ all dependecies of glyr..)
 
-h4. Self compiling:
+Currently these languages have "supported" bindings:
+* Python
+* Ruby
 
-You don't need this, except if you want write bindings to other languages. 
-
-# let SWIG generate the wrapper code
-# This will create a file called glyr_wrap.c
-# @swig -ruby ruby_glyr.i@
-
-# Compile the wrapper code, -I is the includedir of the Ruby headers, -fpic is needed
-> @gcc -c ruby_glyr_wrap.c -I/usr/include/ruby-1.9.1/ -o glyr_wrap.o $(pkg-config --cflags libglyr) -fPIC -Wall -W -Wno-unused-parameter@
-
-# Create the library by linking the .o against all needed libs:
-> @gcc -shared -Wl,-soname,glyros -o glyros.so glyr_wrap.o $(pkg-config --libs libglyr) -lruby@
-
-If everything went fine you should have a 'glubyr.so' in this directory.
-Now you can load it in Ruby:
-
-> irb -r rubygems
->>> require './glyros.so'
->>> Glubyr::version() 
-=> "Version 0.8.7 (Horny Hornet [beta]) of [Sep 19 2011] compiled at [12:04:08]"
->>> exit
+Each of them have a subdirectory here.
