@@ -26,6 +26,10 @@
 
 /////////////////////////////
 
+static bool global_enable_color = true;
+
+/////////////////////////////
+
 static void printcol(FILE * stream, termcolor fg)
 {
     fprintf(stream,"%c[0;%dm", 0x1B, fg + 30);
@@ -42,7 +46,7 @@ void cprint(termcolor col,gint verbosity, GlyrQuery * s, const char * fmt, ...)
 {
     if((s && verbosity <= s->verbosity) || verbosity == -1)
     {
-        if(col != DEFAULT)
+        if(col != DEFAULT && global_enable_color)
             printcol(GLYR_OUTPUT,col);
 
         va_list param;
@@ -50,7 +54,19 @@ void cprint(termcolor col,gint verbosity, GlyrQuery * s, const char * fmt, ...)
         g_logv("Glyrc",G_LOG_LEVEL_INFO,fmt,param);
         va_end(param);
 
-        if(col != DEFAULT)
+        if(col != DEFAULT && global_enable_color)
             resetcolor(GLYR_OUTPUT);
     }
 }
+
+
+/////////////////////////////
+
+void enable_color(bool enable)
+{
+    global_enable_color = enable;
+}
+
+/////////////////////////////
+
+void enable_color(bool enable);

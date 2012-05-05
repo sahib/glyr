@@ -40,6 +40,10 @@ typedef enum
 
 /////////////////////////////
 
+void enable_color(bool enable);
+
+/////////////////////////////
+
 void cprint(termcolor col,int verbosity, GlyrQuery * s, const char * fmt, ...);
 
 #define cvprint(col,fmt, ...) cprint(col,-1,NULL,fmt,##__VA_ARGS__)

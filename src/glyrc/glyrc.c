@@ -262,6 +262,8 @@ void help_short(GlyrQuery * s)
             IN"-U --update              Updates libglyr if new version is available.\n"
             IN"-g --as-one              (Textitems only) Output all results as one (useful for tracklist and albumlist).\n"
             IN"-G --no-as-one           Disables --as-one (Default)\n"
+            IN"-y --color               Enables colored output for glyrc (Default)\n"
+            IN"-Y --no-color            Prints no colored output\n"
             IN"-s --musictree-path <p>  <p> is a path to your music directory. Glyr might fetch things like folger.jpg from there;\n"
             IN"-j --callback            Command: Set a bash command to be executed when a item is finished downloading;\n"
             IN"                                  All escapes mentioned in --write are supported too, and additonally:\n"
@@ -364,6 +366,8 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {"as-one",        no_argument,       0, 'g'},
         {"no-as-one",     no_argument,       0, 'G'},
         {"only-lang",     no_argument,       0, 'o'},
+        {"color",         no_argument,       0, 'y'},
+        {"no-color",      no_argument,       0, 'Y'},
         {"artist",        required_argument, 0, 'a'},
         {"album",         required_argument, 0, 'b'},
         {"title",         required_argument, 0, 't'},
@@ -382,7 +386,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gG",long_options, &option_index)) == -1)
+        if((c = getopt_long_only(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index)) == -1)
         {
             break;
         }
@@ -509,6 +513,12 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 break;
             case 'G':
                 CBData->as_one = false;
+                break;
+            case 'y':
+                enable_color(true);
+                break;
+            case 'Y':
+                enable_color(false);
                 break;
             case '?':
                 cprint(RED,-1,NULL,"Option \"%s\" is not known\n",argv[optind-1]);
