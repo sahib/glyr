@@ -387,6 +387,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
         {0,               0,                 0, '0'}
     };
 
+    opterr = 0;
     while(TRUE)
     {
         gint c;
@@ -520,10 +521,23 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
                 CBData->as_one = false;
                 break;
             case '?':
+                message(-1,NULL,"Option \"%s\" is not known\n",argv[optind-1]);
+                exit(-1);
                 break;
             default:
-                exit(0);
+                message(-1,NULL,"Unknown Error while parsing commandline arguments.\n");
+                exit(-1);
+        } // end switch()
+    } // end while()
+
+    if(optind < argc && glyrs->verbosity >= 2)
+    {
+        message(2,glyrs,"Note: You have unused arguments:\n");
+        for(int i = optind; i < argc; ++i)
+        {
+            message(2,glyrs,"      * %s\n",argv[optind]);
         }
+        message(2,glyrs,"\n\n");
     }
 }
 
@@ -545,8 +559,8 @@ static GLYR_ERROR callback(GlyrMemCache * c, GlyrQuery * s)
     {
         gsize write_len = strlen(CBQueryData->output_path);
         if(g_ascii_strncasecmp(CBQueryData->output_path,"stdout",write_len) == 0 ||
-           g_ascii_strncasecmp(CBQueryData->output_path,"stderr",write_len) == 0 ||
-           g_ascii_strncasecmp(CBQueryData->output_path,"null",  write_len) == 0)
+                g_ascii_strncasecmp(CBQueryData->output_path,"stderr",write_len) == 0 ||
+                g_ascii_strncasecmp(CBQueryData->output_path,"null",  write_len) == 0)
         {
             glyr_cache_write(c,CBQueryData->output_path);
         }
@@ -733,10 +747,21 @@ static bool parse_type_argument(const char * argvi, GlyrQuery * qp)
         GLYR_GET_TYPE type = get_type_from_string(argvi);
         if(type == GLYR_GET_UNSURE)
         {
-            message(-1,NULL,"glyr: \"%s\" is not a know getter. See `glyrc -L` for a list.\n",argvi);
+            message(-1,NULL,"Error: \"%s\" is not a know getter.\n",argvi);
+            message(-1,NULL,"Currently available are:\n");
+            GlyrFetcherInfo * info = glyr_info_get();
+            GlyrFetcherInfo * iter = info;
+            while(iter != NULL)
+            {
+                message(-1,NULL,"  * %s\n",iter->name);
+                iter = iter->next;
+            }
+            glyr_info_free(info);
+
             suggest_other_getter(qp,argvi);
-            message(-1,NULL,"\n");
+            message(-1,NULL,"\nSee `glyrc -L` for a detailed list\n");
             retv = false;
+
         }
         else
         {
@@ -855,12 +880,12 @@ int main(int argc, char * argv[])
             }
             else if(get_error == GLYRE_NO_PROVIDER)
             {
-                message(-1,NULL,"glyr: --from \"%s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",my_query.from);
+                message(-1,NULL,"glyr: \"--from %s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",my_query.from);
                 suggest_other_provider(&my_query,my_query.from);
             }
             else if(get_error != GLYRE_OK)
             {
-                message(1,&my_query,"E: %s\n",glyr_strerror(get_error));
+                message(1,&my_query,"Error: %s\n",glyr_strerror(get_error));
             }
         }
 

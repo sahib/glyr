@@ -44,7 +44,7 @@ void suggest_other_getter(GlyrQuery * query, const char * wrong_input)
                     g_print("\nDid you mean this?\n");
                     did_you_mean_printed = TRUE;
                 }
-                g_print(" - %s\n",it->name);
+                g_print("  * %s\n",it->name);
             }		
             it = it->next;
         }
@@ -92,7 +92,7 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
                         g_print("\nDid you mean this?\n");
                         did_you_mean_printed = TRUE;
                     }
-                    g_print(" - %s\n",head->name);
+                    g_print("  * %s\n",head->name);
                     g_hash_table_insert(key_table,head->name,head);
                 }
             }
@@ -105,4 +105,3 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
 }
 
 /*-----------------------------------------*/
-
