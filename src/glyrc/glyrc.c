@@ -880,7 +880,7 @@ int main(int argc, char * argv[])
             }
             else if(get_error == GLYRE_NO_PROVIDER)
             {
-                message(-1,NULL,"glyr: \"--from %s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",my_query.from);
+                message(-1,NULL,"\"--from %s\" does not contain any valid provider.\nSee `glyrc -L` for a list.\n",my_query.from);
                 suggest_other_provider(&my_query,my_query.from);
             }
             else if(get_error != GLYRE_OK)

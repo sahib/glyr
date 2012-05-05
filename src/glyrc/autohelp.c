@@ -89,7 +89,7 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
                 {
                     if(did_you_mean_printed == FALSE)
                     {
-                        g_print("\nDid you mean this?\n");
+                        g_print("\nI would suggest the following similar providers:\n");
                         did_you_mean_printed = TRUE;
                     }
                     g_print("  * %s\n",head->name);

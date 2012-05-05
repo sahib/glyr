@@ -723,13 +723,13 @@ void glyr_init(void)
 
         if(curl_global_init(CURL_GLOBAL_ALL))
         {
-            glyr_message(-1,NULL,"glyr: Fatal: libcurl failed to init\n");
+            glyr_message(-1,NULL,"Fatal: libcurl failed to init\n");
         }
 
         /* Locale */
         if(setlocale (LC_ALL, "") == NULL)
         {
-            glyr_message(-1,NULL,"glyr: Cannot set locale!\n");
+            glyr_message(-1,NULL,"Cannot set locale!\n");
         }
 
         /* Register plugins */
@@ -810,10 +810,14 @@ static gboolean check_if_valid(GlyrQuery * q, MetaDataFetcher * fetch)
 
     if(isValid == FALSE && fetch->reqs > GLYR_REQUIRES_TITLE)
     {
-        glyr_message(2,q,"\nFollowing fields are optional:\n");
-        if(fetch->reqs & GLYR_OPTIONAL_ARTIST) glyr_message(2,q,"Artist\n");
-        if(fetch->reqs & GLYR_OPTIONAL_ALBUM)  glyr_message(2,q,"Albumname\n");
-        if(fetch->reqs & GLYR_OPTIONAL_TITLE)  glyr_message(2,q,"Songtitle\n");
+        char * f1 = "",* f2 = "", * f3 = "";
+        if(fetch->reqs & GLYR_OPTIONAL_ARTIST) f1 = "Artist ";
+        if(fetch->reqs & GLYR_OPTIONAL_ALBUM)  f2 = "Album ";
+        if(fetch->reqs & GLYR_OPTIONAL_TITLE)  f3 = "Songtitle ";
+
+        if(*f1 || *f2 || *f3) {
+            glyr_message(2,q,"\nFollowing fields are optional: %s%s%s\n",f1,f2,f3);
+        }
     }
     return isValid;
 }
