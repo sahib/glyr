@@ -23,6 +23,8 @@
 #include "../../lib/glyr.h"
 #include "../../lib/misc.h"
 
+#include "colorprint.h"
+
 void suggest_other_getter(GlyrQuery * query, const char * wrong_input)
 {
     if(query->verbosity <= 0)
@@ -41,10 +43,10 @@ void suggest_other_getter(GlyrQuery * query, const char * wrong_input)
             {
                 if(did_you_mean_printed == FALSE)
                 {
-                    g_print("\nDid you mean this?\n");
+                    cvprint(DEFAULT,"\nDid you mean this?\n");
                     did_you_mean_printed = TRUE;
                 }
-                g_print("  * %s\n",it->name);
+                cvprint(GREEN,"  * %s\n",it->name);
             }		
             it = it->next;
         }
@@ -89,10 +91,10 @@ void suggest_other_provider(GlyrQuery * query, const char * wrong_input)
                 {
                     if(did_you_mean_printed == FALSE)
                     {
-                        g_print("\nI would suggest the following similar providers:\n");
+                        cvprint(DEFAULT,"\nI would suggest the following similar providers:\n");
                         did_you_mean_printed = TRUE;
                     }
-                    g_print("  * %s\n",head->name);
+                    cvprint(GREEN,"  * %s\n",head->name);
                     g_hash_table_insert(key_table,head->name,head);
                 }
             }
