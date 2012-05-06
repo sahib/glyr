@@ -59,6 +59,8 @@ extern "C"
 * string are 'similar', the similarity is returned as int from 
 * 0 (== total match) to MAX(strlen(string),strlen(other)) 
 *
+* This is fully UTF-8 aware and calls g_utf8_normalize() beforehand.
+*
 * Example:
 * <note>
 * <para>
@@ -89,6 +91,8 @@ size_t glyr_levenshtein_strcmp(const char * string, const char * other);
 *
 * For very small strings the function may return very high values in order
 * to prevent accidental matches. See below.
+*
+* internally glyr_levenshtein_strcmp() is used, so this is UTF-8 aware as well.
 *
 * Example:
 * <note>

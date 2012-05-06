@@ -32,6 +32,9 @@
 /* Compute levenshtein distance of 'string' to 'other' */
 gsize levenshtein_strcmp(const gchar * string, const gchar * other);
 
+/* Calls g_utf8_normalize() and g_utf8_validate() before calling levenshtein_strcmp() */
+gsize levenshtein_safe_strcmp(const gchar * s, const gchar * t);
+
 /* Same as above, but converts to lowercase before */
 gsize levenshtein_strcasecmp(const gchar * sstring, const gchar * other);
 

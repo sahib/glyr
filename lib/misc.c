@@ -24,7 +24,7 @@
 __attribute__((visibility("default")))
 size_t glyr_levenshtein_strcmp(const char * string, const char * other)
 {
-    return levenshtein_strcmp(string,other);
+    return levenshtein_safe_strcmp(string,other);
 }
 
 __attribute__((visibility("default")))
