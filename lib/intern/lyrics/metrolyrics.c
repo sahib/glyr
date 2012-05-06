@@ -30,7 +30,7 @@ static const gchar * lyrics_metrolyrics_url(GlyrQuery * settings)
     return ML_URL;
 }
 
-/*--------------------------------------------------------*/
+///////////////////////////////////
 
 static void replace_from_message_inline(gchar * text)
 {
@@ -53,7 +53,8 @@ static void replace_from_message_inline(gchar * text)
     }
 }
 
-/*--------------------------------------------------------*/
+///////////////////////////////////
+
 #define LYRICS_DIV "<div id=\"lyrics-body\">"
 #define LYRICS_END "</div>"
 
@@ -82,7 +83,7 @@ static GlyrMemCache * parse_lyrics_page(const gchar * buffer)
     return result;
 }
 
-/*--------------------------------------------------------*/
+///////////////////////////////////
 
 //#define ROOT_NODE "<div id=\"listResults\">"
 #define ROOT_NODE "<ul id=\"search-results\""
@@ -156,7 +157,7 @@ static GList * lyrics_metrolyrics_parse(cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+///////////////////////////////////
 
 MetaDataSource lyrics_metrolyrics_src =
 {
