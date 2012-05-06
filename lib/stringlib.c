@@ -37,15 +37,20 @@
  * (not meant to be serious, you guys are cool ;-))
  * For instructions go to http://www.merriampark.com/ld.htm
  * They have also Source code in C++, Java & VB
+ *
+ * Also, this is UTF-8 aware.
  */
 gsize levenshtein_strcmp(const gchar * s, const gchar * t)
 {
-    int n = (s) ? strlen(s)+1 : 0;
-    int m = (t) ? strlen(t)+1 : 0;
+    int n = (s) ? g_utf8_strlen(s,-1)+1 : 0;
+    int m = (t) ? g_utf8_strlen(t,-1)+1 : 0;
+
+    // NOTE: Be sure to call g_utf8_validate(), might fail otherwise
+    //       It's advisable to call g_utf8_normalize() too.
 
     // Nothing to compute really..
-    if (n==0) return m;
-    if (m==0) return n;
+    if (n < 2) return m;
+    if (m < 2) return n;
 
     // String matrix
     int d[n][m];
@@ -58,7 +63,7 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
     for (i=1; i<n; i++)
     {
         // Current char in string s
-        char cats = s[i-1];
+        gunichar cats = g_utf8_get_char(g_utf8_offset_to_pointer(s,i-1));
 
         for (j=1; j<m; j++)
         {
@@ -66,10 +71,12 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
             int jm1 = j-1,
                 im1 = i-1;
 
+            gunichar tats = g_utf8_get_char(g_utf8_offset_to_pointer(t,jm1));
+
             // a = above cell, b = left cell, c = left above celli
             int a = d[im1][j] + 1,
                 b = d[i][jm1] + 1,
-                c = d[im1][jm1] + (t[jm1] != cats);
+                c = d[im1][jm1] + (tats != cats);
 
             // Now compute the minimum of a,b,c and set MIN(a,b,c) to cell d[i][j]
      	    d[i][j] = (a < b) ? MIN(a,c) : MIN(b,c);
@@ -80,7 +87,29 @@ gsize levenshtein_strcmp(const gchar * s, const gchar * t)
     return d[n-1][m-1];
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////
+
+// A utf8 aware levenshtein that normalizes ambigious codepoints
+// and validates input-data
+gsize levenshtein_safe_strcmp(const gchar * s, const gchar * t)
+{
+    gsize rc = 0;
+    if(g_utf8_validate(s,-1,NULL) == FALSE ||
+       g_utf8_validate(t,-1,NULL) == FALSE)
+     return rc;
+
+    gchar * s_norm = g_utf8_normalize(s,-1,G_NORMALIZE_ALL_COMPOSE);
+    gchar * t_norm = g_utf8_normalize(t,-1,G_NORMALIZE_ALL_COMPOSE);
+
+    rc = levenshtein_strcmp(s_norm,t_norm);
+
+    g_free(s_norm);
+    g_free(t_norm);
+
+    return rc;
+}
+
+///////////////////////////////
 
 /**
  * @brief Strips lint like "feat.", "CD1" etc.
@@ -166,11 +195,11 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 
 	if(lower_string && lower_other)
 	{
-		gchar * normalized_lower = g_utf8_normalize(lower_string,-1,G_NORMALIZE_NFKC);
-		gchar * normalized_other = g_utf8_normalize(lower_other, -1,G_NORMALIZE_NFKC);
+		gchar * normalized_lower = g_utf8_normalize(lower_string,-1,G_NORMALIZE_ALL_COMPOSE);
+		gchar * normalized_other = g_utf8_normalize(lower_other, -1,G_NORMALIZE_ALL_COMPOSE);
 		if(normalized_lower && normalized_other)
 		{
-        		diff = levenshtein_strcmp(normalized_lower, normalized_other);
+        		diff = levenshtein_safe_strcmp(normalized_lower, normalized_other);
 		}
 		g_free(normalized_lower);
 		g_free(normalized_other);
