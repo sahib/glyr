@@ -182,7 +182,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_
 	return result_string;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////
 
 gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
 {
@@ -193,81 +193,80 @@ gsize levenshtein_strcasecmp(const gchar * string, const gchar * other)
         gchar * lower_string = g_utf8_strdown(string,-1);
         gchar * lower_other  = g_utf8_strdown(other, -1);
 
-	if(lower_string && lower_other)
-	{
-		gchar * normalized_lower = g_utf8_normalize(lower_string,-1,G_NORMALIZE_ALL_COMPOSE);
-		gchar * normalized_other = g_utf8_normalize(lower_other, -1,G_NORMALIZE_ALL_COMPOSE);
-		if(normalized_lower && normalized_other)
-		{
-        		diff = levenshtein_safe_strcmp(normalized_lower, normalized_other);
-		}
-		g_free(normalized_lower);
-		g_free(normalized_other);
-	}
+        if(lower_string && lower_other)
+        {
+            diff = levenshtein_safe_strcmp(lower_string, lower_other);
+        }
 
-        /* Free 'em */
         g_free(lower_string);
         g_free(lower_other);
     }
     return diff;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////
+
+static gchar * leven_normalize_string(const gchar * str)
+{
+    gchar * rv = NULL;
+    gchar * unwinded_string = unwind_artist_name(str);
+    if(unwinded_string != NULL)
+    {
+        gchar * norm_string = regex_replace_by_table(unwinded_string,regex_table,regex_table_size);
+        if(norm_string != NULL)
+        {
+            gchar * pretty_string = beautify_string(norm_string);
+            if(pretty_string != NULL)
+            {
+                remove_tags_from_string(pretty_string,-1,'(',')');
+                rv = pretty_string;
+            }
+            g_free(norm_string);
+        }
+        g_free(unwinded_string);
+    }
+    return rv;
+}
+
+///////////////////////////////
 
 /* Tries to strip unused strings before comparing with levenshtein_strcasecmp */
 gsize levenshtein_strnormcmp(GlyrQuery * settings, const gchar * string, const gchar * other)
 {
-	gsize diff = 100;
-	if(string != NULL && other != NULL)
-	{
-        gchar * unwinded_string = unwind_artist_name(string);
-        gchar * unwinded_other  = unwind_artist_name(other);
-        if(unwinded_string && unwinded_other)
+    gsize diff = 100;
+    if(string != NULL && other != NULL)
+    {
+        gchar * normalized_string = leven_normalize_string(string);
+        gchar * normalized_other  = leven_normalize_string(other);
+
+        if(normalized_string && normalized_other)
         {
-            gchar * norm_string = regex_replace_by_table(unwinded_string,regex_table,regex_table_size);
-            gchar * norm_other  = regex_replace_by_table(unwinded_other, regex_table,regex_table_size);
-            if(norm_string && norm_other)
+            diff = levenshtein_strcasecmp(normalized_string,normalized_other);
+
+            /* Apply correction */
+            gsize str_len = strlen(normalized_string);
+            gsize oth_len = strlen(normalized_other);
+            gsize ratio = (oth_len + str_len) / 2;
+            gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
+
+            /* Useful for debugging */
+            //g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
+
+            if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
             {
-                gchar * pretty_string = beautify_string(norm_string);
-                gchar * pretty_other  = beautify_string(norm_other);
-
-                if(pretty_string && pretty_other)
-                {
-                    remove_tags_from_string(pretty_string,-1,'(',')');
-                    remove_tags_from_string(pretty_other,-1, '(',')');
-
-                    diff = levenshtein_strcasecmp(pretty_string,pretty_other);
-
-                    /* Apply correction */
-                    gsize str_len = strlen(pretty_string);
-                    gsize oth_len = strlen(pretty_other);
-                    gsize ratio = (oth_len + str_len) / 2;
-                    gsize fuzz  = (settings) ? settings->fuzzyness : GLYR_DEFAULT_FUZZYNESS;
-
-                    /* Useful for debugging */
-                    //g_print("%d:%s <=> %d:%s -> %d\n",(gint)str_len,string,(gint)oth_len,other,(gint)diff);
-
-                    if((ratio - diff < ratio / 2 + 1 && diff <= fuzz) || MIN(str_len,oth_len) <= diff)
-                    {
-                        /* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
-                        //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
-                        diff += 100;
-                    }
-                }
-
-                g_free(pretty_string);
-                g_free(pretty_other);
+                /* Examples: Adios <=> Weiß or 19 <=> 21 pass levenshtein_strcasecmp */
+                //g_print("warn: The strings might accidentally pass levenshtein: %s <=> %s = %d\n",pretty_string,pretty_other,(gint)diff);
+                diff += 100;
             }
-            g_free(norm_string);
-            g_free(norm_other);
         }
-        g_free(unwinded_string);
-        g_free(unwinded_other);
+
+        g_free(normalized_string);
+        g_free(normalized_other);
     }
     return diff;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////
 
 gchar * strreplace(const char * string, const char * subs, const char * with)
 {
