@@ -46,7 +46,7 @@ Stable, unless otherwise indicated
 
 <span class="returnvalue">size_t</span>              <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()">glyr_levenshtein_strcmp</a>             (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);
-<a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strnormcmp" title="glyr_levenshtein_strnormcmp ()">glyr_levenshtein_strnormcmp</a>         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+<span class="returnvalue">size_t</span>              <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strnormcmp" title="glyr_levenshtein_strnormcmp ()">glyr_levenshtein_strnormcmp</a>         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);
 </pre>
 </div>
@@ -77,6 +77,9 @@ See Also: http://de.wikipedia.org/wiki/Levenshtein-Distanz
 In very simple words this means: <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a> checks if two 
 string are 'similar', the similarity is returned as int from 
 0 (== total match) to MAX(strlen(string),strlen(other)) 
+</p>
+<p>
+This is fully UTF-8 aware and calls <a href="../glib/glib-Unicode-Manipulation.html#g-utf8-normalize"><code class="function">g_utf8_normalize()</code></a> beforehand.
 </p>
 <p>
 Example:
@@ -120,7 +123,7 @@ Aquilibrim  -&gt; Aqquilibrim // one Insert: ''  -&gt; 'q'
 <hr>
 <div class="refsect2">
 <a name="glyr-levenshtein-strnormcmp"></a><h3>glyr_levenshtein_strnormcmp ()</h3>
-<pre class="programlisting"><a href="../glib/glib-Basic-Types.html#gsize"><span class="returnvalue">gsize</span></a>               glyr_levenshtein_strnormcmp         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
+<pre class="programlisting"><span class="returnvalue">size_t</span>              glyr_levenshtein_strnormcmp         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);</pre>
 <p>
 Same as levenshtein_strcmp, but tries to normalize the two strings as  
@@ -131,6 +134,9 @@ and Clapton, Eric -&gt; Eric Clapton
 <p>
 For very small strings the function may return very high values in order
 to prevent accidental matches. See below.
+</p>
+<p>
+internally <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a> is used, so this is UTF-8 aware as well.
 </p>
 <p>
 Example:
