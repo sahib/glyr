@@ -119,17 +119,20 @@ const size_t _escape_table_size = (sizeof(_escapes)/sizeof(struct escape_table))
 
 ////////////////////////
 
-static void replace_char(char * string, gchar a, gchar b)
+static void utf8_replace_char(char * string, char a, char b)
 {
     if(string != NULL)
     {
-        gsize str_len = strlen(string);
-        for(size_t i = 0; i < str_len; i++)
+        if(g_utf8_validate(string,-1,NULL) == false)
+            return;
+
+        while(*string)
         {
-            if(string[i] == a)
+            if(*string == a) 
             {
-                string[i] = b;
+                *string = b;
             }
+            string = g_utf8_next_char(string); 
         }
     }
 }
@@ -149,7 +152,7 @@ static char * lookup_escape(const char * escape, size_t escape_len, GlyrQuery * 
             char * result = _escapes[i].func(q,c);
             if(_escapes[i].escape_slashes)
             {
-                replace_char(result,'/','|');
+                utf8_replace_char(result,'/','|');
             }
             return result;
         }
