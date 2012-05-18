@@ -1073,10 +1073,32 @@ const char * glyr_get_type_to_string(GLYR_GET_TYPE type)
         if(fetch->type == type)
         {
             result = fetch->name;
+            break;
         }
     }
 
     return result;
+}
+
+/*-----------------------------------------------*/
+
+__attribute__((visibility("default")))
+GLYR_GET_TYPE glyr_string_to_get_type(const char * string)
+{
+    if(string != NULL)
+    {
+        GList * fetcher_list = r_getFList();
+        for(GList * elem = fetcher_list; elem != NULL; elem = elem->next)
+        {
+            MetaDataFetcher * fetch = elem->data;
+            if(g_ascii_strcasecmp(fetch->name,string) == 0)
+            {
+                return fetch->type;
+                break;
+            }
+        }
+    }
+    return GLYR_GET_UNSURE;
 }
 
 /*-----------------------------------------------*/
@@ -1093,6 +1115,23 @@ const char * glyr_data_type_to_string(GLYR_DATA_TYPE type)
         return type_strings[GLYR_TYPE_NOIDEA];
     }
 }
+/*-----------------------------------------------*/
+
+__attribute__((visibility("default")))
+GLYR_DATA_TYPE glyr_string_to_data_type(const char * string) 
+{
+    if(string != NULL)
+    {
+        gsize table_size = (sizeof(type_strings)/sizeof(const char*));
+        for(gsize i = 0; i < table_size; i++)
+        {
+            if(g_ascii_strcasecmp(string,type_strings[i]) == 0) 
+                return i;
+        }
+    }
+    return GLYR_TYPE_NOIDEA;
+}
+
 /*-----------------------------------------------*/
 
 __attribute__((visibility("default")))

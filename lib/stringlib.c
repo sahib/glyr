@@ -890,6 +890,7 @@ static gchar * trim_in_text(gchar * string)
 
         gsize space_ctr= 0;
         gsize lfeed_ctr = 0;
+
         for(gsize it = 0; it < str_len; it++)
         {
             gboolean is_space = isspace(string[it]);
@@ -1086,13 +1087,13 @@ gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * 
         conv_string = g_convert_with_iconv(string,-1,converter,NULL,new_size,&err_step_one);
         if(conv_string == NULL)
         {
-            g_print("glyr: conversion-error: %s\n",err_step_one->message);
+            g_print("conversion-error: %s\n",err_step_one->message);
         }
         g_iconv_close(converter);
     }
     else
     {
-        g_print("glyr: Unable to convert charsets.\n");
+        g_print("Unable to convert charsets.\n");
     }
     return conv_string;
 }

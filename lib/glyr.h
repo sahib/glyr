@@ -1036,6 +1036,8 @@ void glyr_string_to_md5sum(const char * string, unsigned char * md5sum);
 GLYR_FIELD_REQUIREMENT glyr_get_requirements(GLYR_GET_TYPE type);
 
 bool glyr_type_is_image(GLYR_GET_TYPE type);
+GLYR_GET_TYPE glyr_string_to_get_type(const char * string);
+GLYR_DATA_TYPE glyr_string_to_data_type(const char * string);
 
 #ifdef __cplusplus
 }
