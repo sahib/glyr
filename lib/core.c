@@ -1720,6 +1720,11 @@ GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * 
         {
             *err = GLYRE_NO_PROVIDER;
         }
+
+        if(query != NULL)
+        {
+            query->q_errno = GLYRE_NO_PROVIDER;
+        }
     }
     return result_list;
 }

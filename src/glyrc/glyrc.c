@@ -23,7 +23,7 @@
 #include <getopt.h>
 #include <glib.h>
 
-#ifndef G_OS_WIN32
+#ifdef __linux__
 /* Backtrace*/
 #include <execinfo.h>
 #endif
@@ -101,7 +101,7 @@ void log_func(const gchar *log_domain,GLogLevelFlags log_level,const gchar *mess
 
 ////////////////////////////////////////////////////////////////
 
-#ifndef G_OS_WIN32
+#ifdef __linux__
 #define STACK_FRAME_SIZE 20
 
 /* Obtain a backtrace and print it to stdout. */
@@ -140,7 +140,7 @@ static void sig_handler(int signal)
             cvprint(DEFAULT,"       It would be just natural to blame us now, so just visit <https://github.com/sahib/glyr/issues>\n");
             cvprint(DEFAULT,"       and throw hard words like 'backtrace', 'bug report' or even the '$(command I issued' at them).\n");
             cvprint(DEFAULT,"       The libglyr developers will try to fix it as soon as possible so please stop pulling their hair.\n");
-#ifndef G_OS_WIN32
+#ifdef __linux__
             cvprint(DEFAULT,"\nA list of the last called functions follows, please add this to your report:\n");
             print_trace();
 #endif
@@ -386,7 +386,7 @@ static void parse_commandline_general(int argc, char * const * argv, GlyrQuery *
     {
         gint c;
         gint option_index = 0;
-        if((c = getopt_long_only(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index)) == -1)
+        if((c = getopt_long(argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index)) == -1)
         {
             break;
         }

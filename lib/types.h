@@ -356,6 +356,8 @@ typedef struct _GlyrQuery {
     bool download; 
     float qsratio; 
 
+    GLYR_ERROR q_errno;
+
     bool db_autoread;
     bool db_autowrite;
     GlyrDatabase * local_db;

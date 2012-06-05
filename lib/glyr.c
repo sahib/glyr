@@ -592,6 +592,7 @@ static void set_query_on_defaults(GlyrQuery * glyrs)
     glyrs->callback.download = NULL;
     glyrs->callback.user_pointer = NULL;
     glyrs->musictree_path = NULL;
+    glyrs->q_errno = GLYRE_OK;
 
     glyrs->db_autoread = GLYR_DEFAULT_DB_AUTOREAD;
     glyrs->db_autowrite = GLYR_DEFAULT_DB_AUTOWRITE;	
@@ -824,93 +825,106 @@ static gboolean check_if_valid(GlyrQuery * q, MetaDataFetcher * fetch)
 
 /*-----------------------------------------------*/
 
-__attribute__((visibility("default")))
-GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
+static void set_error(GLYR_ERROR err_in, GlyrQuery * query, GLYR_ERROR * err_out)
 {
-    if(is_initalized == FALSE || QUERY_IS_INITALIZED(settings) == FALSE)
+    if(query)
+        query->q_errno = err_in;
+    if(err_out)
+        *err_out = err_in;
+}
+
+/*-----------------------------------------------*/
+
+__attribute__((visibility("default")))
+GlyrMemCache * glyr_get(GlyrQuery * query, GLYR_ERROR * e, int * length)
+{
+    if(is_initalized == FALSE || QUERY_IS_INITALIZED(query) == FALSE)
     {
         glyr_message(-1,NULL,"Warning: Either query or library is not initialized.\n");
         if(e != NULL)
         {
-            *e = GLYRE_NO_INIT;
+            set_error(GLYRE_NO_INIT, query, e);
         }
         return NULL;
     }
 
-    if(e) *e = GLYRE_OK;
-    if(settings != NULL)
+    set_error(GLYRE_OK, query, e);
+
+    if(query != NULL)
     {
-        if(g_ascii_strncasecmp(settings->lang,"auto",4) == 0)
+        if(g_ascii_strncasecmp(query->lang,"auto",4) == 0)
         {
-            glyr_opt_lang(settings,"auto");
+            glyr_opt_lang(query,"auto");
         }
 
         GList * result = NULL;
-        if(e) *e = GLYRE_UNKNOWN_GET;
+        set_error(GLYRE_UNKNOWN_GET, query, e);
+
         for(GList * elem = r_getFList(); elem; elem = elem->next)
         {
             MetaDataFetcher * item = elem->data;
-            if(settings->type == item->type)
+            if(query->type == item->type)
             {
-                if(check_if_valid(settings,item) == TRUE)
+                if(check_if_valid(query,item) == TRUE)
                 {
                     /* Print some user info, always useful */
-                    if(settings->artist != NULL)
+                    if(query->artist != NULL)
                     {
-                        glyr_message(2,settings,"- Artist   : ");
-                        glyr_message(2,settings,"%s\n",settings->artist);
+                        glyr_message(2,query,"- Artist   : ");
+                        glyr_message(2,query,"%s\n",query->artist);
                     }
-                    if(settings->album != NULL)
+                    if(query->album != NULL)
                     {
-                        glyr_message(2,settings,"- Album    : ");
-                        glyr_message(2,settings,"%s\n",settings->album);
+                        glyr_message(2,query,"- Album    : ");
+                        glyr_message(2,query,"%s\n",query->album);
                     }
-                    if(settings->title != NULL)
+                    if(query->title != NULL)
                     {
-                        glyr_message(2,settings,"- Title    : ");
-                        glyr_message(2,settings,"%s\n",settings->title);
+                        glyr_message(2,query,"- Title    : ");
+                        glyr_message(2,query,"%s\n",query->title);
                     }
-                    if(settings->lang != NULL)
+                    if(query->lang != NULL)
                     {
-                        glyr_message(2,settings,"- Language : ");
-                        glyr_message(2,settings,"%s\n",settings->lang);
+                        glyr_message(2,query,"- Language : ");
+                        glyr_message(2,query,"%s\n",query->lang);
                     }
 
-                    if(e) *e = GLYRE_OK;
-                    glyr_message(2,settings,"- Type     : %s\n\n",item->name);
+                    set_error(GLYRE_OK, query, e);
+                    glyr_message(2,query,"- Type     : %s\n\n",item->name);
 
                     /* Lookup what we search for here: Images (url, or raw) or text */
-                    settings->imagejob = !(item->full_data);
+                    query->imagejob = !(item->full_data);
 
                     /* If ->parallel is <= 0, it gets autodetected */
-                    auto_detect_parallel(item, settings);
+                    auto_detect_parallel(item, query);
 
                     /* Now start your engines, gentlemen */
-                    result = start_engine(settings,item,e);
+                    result = start_engine(query,item,e);
                     break;
                 }
                 else
                 {
-                    if(e) *e = GLYRE_INSUFF_DATA;
+                    set_error(GLYRE_INSUFF_DATA, query, e);
                 }
             }
         }
 
         /* Make this query reusable */
-        settings->itemctr = 0;
+        query->itemctr = 0;
 
         /* Start of the returned list */
         GlyrMemCache * head = NULL;
 
         /* Librarby was stopped, just return NULL. */
-        if(result != NULL && GET_ATOMIC_SIGNAL_EXIT(settings))
+        if(result != NULL && GET_ATOMIC_SIGNAL_EXIT(query))
         {
             for(GList * elem = result; elem; elem = elem->next)
                 DL_free(elem->data);
 
             g_list_free(result);
             result = NULL;
-            if(e) *e = GLYRE_WAS_STOPPED;
+
+            set_error(GLYRE_WAS_STOPPED, query, e);
         }
 
         /* Set the length */
@@ -932,16 +946,16 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
                 item->next = (elem->next) ? elem->next->data : NULL;
                 item->prev = (elem->prev) ? elem->prev->data : NULL;
 
-                if(settings->db_autowrite && settings->local_db && item->cached == FALSE)
+                if(query->db_autowrite && query->local_db && item->cached == FALSE)
                 {
                     db_inserts++;
-                    glyr_db_insert(settings->local_db,settings,item);
+                    glyr_db_insert(query->local_db,query,item);
                 }
             }
 
             if(db_inserts > 0)
             {
-                glyr_message(2,settings,"--- Inserted %d item%s into db.\n",db_inserts,(db_inserts == 1) ? "" : "s");
+                glyr_message(2,query,"--- Inserted %d item%s into db.\n",db_inserts,(db_inserts == 1) ? "" : "s");
             }
 
             /* Finish. */
@@ -955,12 +969,12 @@ GlyrMemCache * glyr_get(GlyrQuery * settings, GLYR_ERROR * e, int * length)
         }
 
         /* Done! */
-        SET_ATOMIC_SIGNAL_EXIT(settings,0);
+        SET_ATOMIC_SIGNAL_EXIT(query,0);
         return head;
     }
 
-    if(e) *e = GLYRE_EMPTY_STRUCT;
-    SET_ATOMIC_SIGNAL_EXIT(settings,0);
+    set_error(GLYRE_EMPTY_STRUCT, query, e);
+    SET_ATOMIC_SIGNAL_EXIT(query,0);
     return NULL;
 }
 
