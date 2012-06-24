@@ -3,7 +3,7 @@
 #include "../../stringlib.h"
 #include "../../register_plugins.h"
 
-static gboolean path_go_up(char * song_dir_path);
+//static gboolean path_go_up(char * song_dir_path);
 static GList * find_in_musictree(const gchar * song_file_path, const gchar * regex, gint up_to,GlyrQuery * query);
 static void foreach_file(const gchar * song_dir_path, const GRegex * cRegex, GlyrQuery * query, GList ** retv_list);
 
@@ -89,7 +89,9 @@ static void foreach_file(const gchar * song_dir_path, const GRegex * cRegex, Gly
                     if(absolute_path != NULL)
                     {
                         /* Read file */
-                        gchar * retv = get_file_contents(absolute_path,&size);
+                        gchar * file_path = g_filename_from_utf8(absolute_path, -1, NULL, NULL, NULL);
+                        gchar * retv = get_file_contents(file_path,&size);
+                        g_free(file_path);
                         g_free(absolute_path);
 
                         /* Add file to result list if not null */
@@ -113,25 +115,19 @@ static void foreach_file(const gchar * song_dir_path, const GRegex * cRegex, Gly
 
 //---------------------------------------------------
 
-static gboolean path_go_up(char * song_dir_path)
+static gchar * path_go_up(char * song_dir_path)
 {
     if(song_dir_path != NULL)
     {
-        gchar * sep = strrchr(song_dir_path,G_DIR_SEPARATOR);
-        if(sep != NULL && sep != song_dir_path)
-        {
-            *sep = 0;
-            return TRUE;
+        song_dir_path = g_strstrip(song_dir_path);
+        if(g_str_has_suffix(song_dir_path, "/")) {
+            gsize len = strlen(song_dir_path);
+            song_dir_path[len-1] = '\0';
         }
 
-        if(sep != NULL && sep == song_dir_path)
-        {
-            sep[1] = 0;
-            return TRUE;
-        }
+        return g_path_get_dirname(song_dir_path);
     }
-
-    return FALSE;
+    return NULL;
 }
 
 //---------------------------------------------------
@@ -150,6 +146,12 @@ static GList * find_in_musictree(const gchar * song_file_path, const gchar * reg
         song_dir_path = g_path_get_dirname(song_file_path);
     }
 
+    if(song_dir_path != NULL) {
+        gchar * tmp = song_dir_path;
+        song_dir_path = g_filename_from_utf8(song_dir_path, -1, NULL, NULL, NULL);
+        g_free(tmp);
+    }
+
     if(song_dir_path != NULL)
     {
         /* Compile the regex just once */
@@ -162,7 +164,7 @@ static GList * find_in_musictree(const gchar * song_file_path, const gchar * reg
                 foreach_file(song_dir_path,compiled_regex, query, &retv_list);
 
                 /* Cannot go up anymore */
-                if(path_go_up(song_dir_path) == FALSE)
+                if((song_dir_path = path_go_up(song_dir_path)) == NULL)
                     break;
             }
 
@@ -224,8 +226,8 @@ static GList * musictree_provider_parse(cb_object * capo)
     switch(capo->s->type)
     {
         case GLYR_GET_COVERART:
-            search_regex = "^(folder|AlbumArt|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
-            recurse_depth = 2;
+            search_regex = "^(folder|front|album|AlbumArt|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
+            recurse_depth = 3;
             break;
         case GLYR_GET_ARTIST_PHOTOS:
             search_regex = "^(${artist}|artist)\\.(jpg|png|jpeg|gif)$";
