@@ -123,6 +123,7 @@ const gchar * const regex_table[][2] = {
 	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
 	{"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
 	{"(\\(|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
+    //{"([(\\[{<]|)feat(\\.|uring).*",""}, /* "feat." -> " " */
 	{"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
 };	
 
@@ -161,7 +162,7 @@ gchar * regex_replace_by_table(const gchar * string, const gchar * const delete_
 
 		if(match_error != NULL)
     		{
-      			glyr_message(-1,NULL,"glyr: Error while matching: %s\n", match_error->message);
+      			fprintf(stderr,"glyr: Unexcepted error while matching: %s\n", match_error->message);
       			g_error_free(match_error);
     		}
 	}
@@ -1152,3 +1153,9 @@ gboolean regex_match_compiled(const gchar * string, const GRegex * cRegex)
     }
     return retv;
 }
+
+#if 0
+int main(int argc, char * argv[]) {
+    printf("%s\n", regex_replace_by_table(argv[1], regex_table, regex_table_size));
+}
+#endif
