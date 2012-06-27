@@ -47,8 +47,8 @@ static const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
 
 /*--------------------------------------------------------*/
 
-#define BEG "<table class=\"tbl0\">"
-#define END "</table>"
+#define BEG "<img src=\"http://www.lyricsvip.com/images/phone2.gif\" alt=\"phone\" /></div>"
+#define END "<br />\n<div class=\"ad\">"
 
 static GList * lyrics_lyricsvip_parse(cb_object *capo)
 {
