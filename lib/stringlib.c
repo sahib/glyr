@@ -119,11 +119,11 @@ gsize levenshtein_safe_strcmp(const gchar * s, const gchar * t)
  * @return a newly allocated string
  */
 const gchar * const regex_table[][2] = {
-	{"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
-	{"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
-	{"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
-	{"(\\(|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
-	{"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
+	{"CD[[:blank:]]*[0-9]+",        ""}, /* 'CD 1'  -> ''    */
+	{"track[[:blank:]]*[0-9]+",     ""}, /* 'CD 1'  -> ''    */
+	{"[`'\".,]",                    ""}, /* Punctuation.     */
+	{"([(\\[{<]|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
+	{"[[:space:]]{2,}",             " "}  /* 'a  b'  -> 'a b' */
 };	
 
 const gsize regex_table_size = sizeof(regex_table) / (2 * sizeof(gchar*));
