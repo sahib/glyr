@@ -1,8 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 
-len_greater_0 = lambda results: len(results) > 0
-len_equal_0 = lambda results: len(results) == 0
+from tests.__common__ import *
 
 not_found_options = {
         'get_type': 'cover',

@@ -5,6 +5,8 @@ import plyr
 import renderer
 import termcolor
 import threading
+import os
+
 
 PRINT_CHARS = [('Y', 'green'), ('X', 'red'), ('#', 'yellow')]
 THREAD_LIST = []
@@ -20,6 +22,19 @@ def _run_query(provider, canvas, options, expect):
     qry.providers = [provider]
     results = qry.commit()
 
+    # Write results to results/ folder
+    ctr = 0
+    for item in results:
+        item.write(os.path.join('results', '{art}_{alb}_{tit}_{typ}_{prv}_{nbr}'.format(
+            art = options.get('artist', ''),
+            alb = options.get('album', ''),
+            tit = options.get('title', ''),
+            typ = options.get('get_type', ''),
+            prv = provider,
+            nbr = str(ctr)
+            )))
+        ctr += 1
+
     if expect(results):
         draw_string = 'Y'
 
@@ -29,28 +44,35 @@ def _run_query(provider, canvas, options, expect):
     DRAW_LOCK.release()
 
 
-def test_by_dictionary(testcases, colored=True):
+def test_by_dictionary(testcases, includes=[], colored=True):
     'Input a dictionary with testcases and print the results (colored?)'
     canvas = renderer.AsciiTable(PRINT_CHARS[2][0])
     THREAD_LIST = []
+
+    # Go through all testcases, and start a thread fro them
     for testcase in testcases:
-        for subcase in testcase['data']:
-            qry_thread = threading.Thread(target=_run_query,
-                    args=(testcase['name'], canvas,
-                          subcase['options'], subcase['expect']))
+        if len(includes) == 0 or testcase['name'] in includes:
+            for subcase in testcase['data']:
+                qry_thread = threading.Thread(target=_run_query,
+                        args=(testcase['name'], canvas,
+                            subcase['options'], subcase['expect']))
 
-            THREAD_LIST.append(qry_thread)
-            qry_thread.start()
+                THREAD_LIST.append(qry_thread)
+                qry_thread.start()
 
+    # Wait for all of them to join, and remove them eventually.
     for thread in THREAD_LIST:
         thread.join()
         THREAD_LIST.remove(thread)
 
+    # Render the table
     block = canvas.draw()
 
+    # Colorize it maybe
     if colored:
         for char_color in PRINT_CHARS:
             block = block.replace(char_color[0], termcolor.colored(
                 char_color[0], color=char_color[1]))
 
+    # Finally, print it.
     print(block)

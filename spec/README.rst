@@ -1,5 +1,5 @@
-Testsuit for libglyr
-====================
+Testsuite for libglyr
+=====================
 
 The testsuite has been rewritten to use Python + plyr,
 which saves me quite some work. 
@@ -21,6 +21,8 @@ capi:
     ./bin/check_*
 
 provider: 
+   
+  Before running, you need to install plyr: http://sahib.github.com/python-glyr/intro.html
 
   :: 
 
