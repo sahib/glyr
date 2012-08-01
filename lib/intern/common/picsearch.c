@@ -56,7 +56,6 @@ static GlyrMemCache * parse_details_page(GlyrMemCache * to_parse)
         if(start != NULL)
         {
             char * img_url = get_search_value(start,IMG_HOOK_BEGIN,IMG_HOOK_ENDIN);
-            puts(img_url);
             if(img_url != NULL)
             {
                 result = DL_init();

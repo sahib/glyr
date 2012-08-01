@@ -1,0 +1,5 @@
+h1. Various other executables built along libglyr
+
+* @glyrc@: the commandline interface 
+* @utils@: various utils, e.g. a linkchecker, a db cleaner and an util to guess the lang ('de') from the Locale
+* @examples@: Well, all the examples for a convinient quickstart.

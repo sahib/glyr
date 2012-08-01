@@ -835,6 +835,7 @@ static void set_error(GLYR_ERROR err_in, GlyrQuery * query, GLYR_ERROR * err_out
 
 /*-----------------------------------------------*/
 
+
 __attribute__((visibility("default")))
 GlyrMemCache * glyr_get(GlyrQuery * query, GLYR_ERROR * e, int * length)
 {

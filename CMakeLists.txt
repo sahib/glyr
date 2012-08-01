@@ -210,8 +210,7 @@ ADD_SUBDIRECTORY( ${SUBDIR_SRC} )
 
 IF(DEFINED TEST)
     MESSAGE("-- Building with tests: ${TEST}")
-    ADD_SUBDIRECTORY( spec/C )
-    ADD_CUSTOM_TARGET(test COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/spec/run.rb" DEPENDS check_api)
+    ADD_SUBDIRECTORY( spec/capi )
 ENDIF()
 
 # ------------------------------------------------
