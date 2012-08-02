@@ -43,21 +43,6 @@ TESTCASES = [{
     }, {
     # }}}
     # {{{
-    'name': 'allmusic',
-    'data': [{
-        'options': {
-            'get_type': 'cover',
-            'artist': 'Adele',
-            'album': '19',
-            },
-        'expect': len_greater_0
-        }, {
-        'options': not_found_options,
-        'expect': len_equal_0
-        }]
-    }, {
-    # }}}
-    # {{{
     'name': 'discogs',
     'data': [{
         'options': {

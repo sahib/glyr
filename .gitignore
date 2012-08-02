@@ -10,6 +10,7 @@ core
 libglyr.pc
 doc/doc
 doc/build
+spec/provider/results/
 
 # Ignore documentation, local working directory
 child/

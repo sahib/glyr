@@ -11,21 +11,6 @@ not_found_options = {
 
 TESTCASES = [{
     # {{{
-    'name': 'allmusic',
-    'data': [{
-        'options': {
-            'get_type': 'albumreview',
-            'artist': '36 Crazyfists',
-            'album': 'Rest Inside the Flames'
-            },
-        'expect': len_greater_0
-        }, {
-        'options': not_found_options,
-        'expect': len_equal_0
-        }],
-    }, {
-    # }}}
-    # {{{
     'name': 'metallum',
     'data': [{
         'options': {

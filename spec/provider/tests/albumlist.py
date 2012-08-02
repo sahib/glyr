@@ -11,9 +11,9 @@ TESTCASES = [{
         'options': {
             'get_type': 'albumlist',
             'artist': 'Equilibrium',
-            'number': 13
+            'number': 4
             },
-        'expect': lambda r: len(r) == 13
+        'expect': lambda r: len(r) == 4
         }, {
         'options':  {
             'get_type': 'tracklist',

@@ -55,6 +55,7 @@ static GList * cover_lastfm_parse(cb_object *capo)
     gchar * find  = capo->cache->data;
     gsize tag_len = strlen(tag_ssize);
 
+
     while(continue_search(g_list_length(result_list),capo->s) && (find = strstr(find + tag_len, tag_ssize)) != NULL)
     {
         gchar * url = get_search_value(find, (gchar*)tag_ssize, (gchar*)tag_esize);

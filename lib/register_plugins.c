@@ -51,12 +51,11 @@ extern MetaDataFetcher glyrFetcher_backdrops;
 
 
 /* Externalized sourceprovider vars, add yours here */
-extern MetaDataSource ainfo_allmusic_src;
 extern MetaDataSource ainfo_lastfm_src;
 extern MetaDataSource ainfo_lyricsreg_src;
+extern MetaDataSource ainfo_bbcmusic_src;
 extern MetaDataSource albumlist_musicbrainz_src;
 extern MetaDataSource cover_albumart_src;
-extern MetaDataSource cover_allmusic_src;
 extern MetaDataSource cover_amazon_src;
 extern MetaDataSource cover_coverhunt_src;
 extern MetaDataSource cover_discogs_src;
@@ -87,8 +86,8 @@ extern MetaDataSource photos_singerpictures_src;
 extern MetaDataSource photos_discogs_src;
 extern MetaDataSource photos_rhapsody_src;
 extern MetaDataSource photos_picsearch_src;
+extern MetaDataSource photos_bbcmusic_src;
 extern MetaDataSource relations_musicbrainz_src;
-extern MetaDataSource review_allmusic_src;
 extern MetaDataSource review_amazon_src;
 extern MetaDataSource review_metallum_src;
 extern MetaDataSource similar_artist_lastfm_src;
@@ -138,12 +137,11 @@ void plugin_add_to_list(GList ** list, void * data)
 
 static void register_provider_plugins(void)
 {
-    plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_allmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_lastfm_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_lyricsreg_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_bbcmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_allmusic_src);
 
     // FIXME: Silly amazon requires to be a Seller to use their API
     // WTF?! God I hate thos Just-for-the-paying-people-salesmen dudes
@@ -176,7 +174,7 @@ static void register_provider_plugins(void)
     // FIXME: Chartlyrics reacts very slowly, and often not at all
     // add again when running again ( :( - good api though)    
     // 28.1.2012: Seems to be on again, API fails too often though still.
-    // plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&lyrics_chartlyrics_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_flickr_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_lastfm_src);
@@ -184,8 +182,8 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_singerpictures_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_rhapsody_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&photos_picsearch_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&photos_bbcmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&review_allmusic_src);
 
     // FIXME: Silly amazon requires to be a Seller to use their API
     // WTF?! God I hate thos Just-for-the-paying people-salesmen

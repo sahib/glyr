@@ -63,7 +63,9 @@ def test_by_dictionary(testcases, includes=[], colored=True):
     # Wait for all of them to join, and remove them eventually.
     for thread in THREAD_LIST:
         thread.join()
-        THREAD_LIST.remove(thread)
+
+    # Make sure to be reentrant
+    THREAD_LIST = []
 
     # Render the table
     block = canvas.draw()

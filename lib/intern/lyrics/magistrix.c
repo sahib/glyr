@@ -49,6 +49,50 @@ static GlyrMemCache * parse_lyric_page(GlyrMemCache * cache)
 
 ///////////////////////////////////
 
+#define SEARCH_FIRST_RESULT "<table class='searchresult'>"
+#define SEARCH_LAST_RESULT  "</table>"
+#define SEARCH_NODE "<div class='title'>"
+#define SEARCH_LINK_START "&ndash;\n<a href=\""
+#define SEARCH_LINK_END   "\" class"
+
+static GList * parse_search_result_page(cb_object * capo)
+{
+    GList * result_list = NULL;
+    char * first_result = strstr(capo->cache->data, SEARCH_FIRST_RESULT);
+    if(first_result != NULL) 
+    {
+        char * end_of_results = strstr(first_result + sizeof(SEARCH_FIRST_RESULT), SEARCH_LAST_RESULT);
+        if(end_of_results)
+        {
+            char * node = first_result;
+            while((node = strstr(node + sizeof(SEARCH_NODE), SEARCH_NODE))
+                   && continue_search(g_list_length(result_list), capo->s))
+            {
+                char * new_url = get_search_value(node, SEARCH_LINK_START, SEARCH_LINK_END);
+                if(new_url != NULL) 
+                {
+                    char * full_url = g_strdup_printf("www.magistrix.de%s", new_url);
+                    GlyrMemCache * lyrics_page = download_single(full_url, capo->s, NULL);
+                    if(lyrics_page)
+                    {
+                        GlyrMemCache * item = parse_lyric_page(lyrics_page);
+                        if(item != NULL)
+                        {
+                            result_list = g_list_prepend(result_list, item);
+                        }
+                        DL_free(lyrics_page);
+                    }
+                    g_free(new_url);
+                    g_free(full_url);
+                }
+            }
+        }
+    }
+    return result_list;
+}
+
+///////////////////////////////////
+
 static GList * lyrics_magistrix_parse (cb_object * capo)
 {
     GList * result_list = NULL;
@@ -61,6 +105,11 @@ static GList * lyrics_magistrix_parse (cb_object * capo)
             {
                 result_list = g_list_prepend(result_list,result);
             }
+        }
+        else
+        {
+            /* Parse Searchresult page */
+            result_list = parse_search_result_page(capo);
         }
     }
     return result_list;
@@ -76,7 +125,7 @@ MetaDataSource lyrics_magistrix_src =
     .get_url   = lyrics_magistrix_url,
     .type      = GLYR_GET_LYRICS,
     .quality   = 60,
-    .speed     = 70,
+    .speed     = 75,
     .endmarker = NULL,
     .free_url  = false
 };

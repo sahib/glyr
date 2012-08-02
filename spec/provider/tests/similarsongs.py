@@ -6,7 +6,7 @@ from tests.__common__ import *
 not_found_options = {
         'get_type': 'similarsongs',
         'artist': 'The band they called Horse',
-        'album': 'The album you all know.'
+        'title': 'The album you all know.'
         }
 
 TESTCASES = [{
@@ -16,14 +16,14 @@ TESTCASES = [{
         'options': {
             'get_type': 'similarsongs',
             'artist': 'Equilibrium',
-            'album': 'Wurzelbert'
+            'title': 'Wurzelbert'
             },
         'expect': len_greater_0
         }, {
         'options': {
             'get_type': 'similarsongs',
             'artist': 'In Flames',
-            'album': 'Reroute to Remain',
+            'title': 'Trigger',
             'number': 3
             },
         'expect': lambda r: len(r) == 3

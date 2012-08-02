@@ -12,7 +12,7 @@ Running: tests.similarsongs :
 .--------------+-------------+-----------+----------------------------.
 | O/P          | Equilibrium | In Flames | The band they called Horse |
 +--------------+-------------+-----------+----------------------------+
-| lastfm       | X           | X         | Y                          |
+| lastfm       | Y           | Y         | Y                          |
 '--------------+-------------+-----------+----------------------------'
 
 
@@ -31,7 +31,7 @@ Running: tests.lyrics :
 | O/P          | Die Apokalyptischen Reiter | The band they called Horse | Lady Gaga | Knorkator | In Flames | Excrementory Grindfuckers | Amy Whitehouse | Equilibrium | Annihilator |
 +--------------+----------------------------+----------------------------+-----------+-----------+-----------+---------------------------+----------------+-------------+-------------+
 | metrolyrics  | Y                          | Y                          | #         | #         | #         | #                         | #              | #           | #           |
-| magistrix    | #                          | Y                          | X         | Y         | #         | #                         | #              | #           | #           |
+| magistrix    | #                          | Y                          | Y         | Y         | #         | #                         | #              | #           | #           |
 | lyrdb        | #                          | Y                          | #         | #         | #         | #                         | #              | #           | #           |
 | lipwalk      | #                          | Y                          | #         | Y         | Y         | #                         | #              | #           | #           |
 | lyricswiki   | #                          | Y                          | #         | #         | #         | Y                         | #              | #           | #           |
@@ -121,7 +121,7 @@ Running: tests.albumlist :
 .--------------+----------------------+-------------.
 | O/P          | Benele Banga Baracka | Equilibrium |
 +--------------+----------------------+-------------+
-| musicbrainz  | Y                    | X           |
+| musicbrainz  | Y                    | Y           |
 '--------------+----------------------+-------------'
 
 
