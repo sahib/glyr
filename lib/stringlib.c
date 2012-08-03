@@ -284,7 +284,7 @@ gchar * strreplace(const char * string, const char * subs, const char * with)
     return result;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* "Clapton, Eric" -> "Eric Clapton"
  * Cheers Christoph for writing this.
@@ -325,7 +325,7 @@ gchar * unwind_artist_name(const gchar * artist)
     }
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl_escape)
 {
@@ -355,6 +355,9 @@ gchar * prepare_string(const gchar * input, gboolean delintify, gboolean do_curl
                     if(result != NULL && delintify == TRUE)
                     {
                         remove_tags_from_string(result,-1,'(',')');
+                        // To aggressive I think. Some artists use this.
+                        //remove_tags_from_string(result,-1,'<','>');
+                        //remove_tags_from_string(result,-1,'[',']');
                     }
 
                     if(do_curl_escape == TRUE) g_free(no_lint);
@@ -400,7 +403,7 @@ gchar * prepare_url(const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
     return tmp;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 gchar * get_next_word(const gchar * string, const gchar * delim, gsize *offset, gsize len)
 {
@@ -429,7 +432,7 @@ gchar * get_next_word(const gchar * string, const gchar * delim, gsize *offset, 
     return word;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 static int convert_to_number(const gchar * string)
 {
@@ -507,7 +510,7 @@ char *unescape_html_UTF8(const char * data)
     return result;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* List from http://stackoverflow.com/questions/1082162/how-to-unescape-html-in-c/1082191#1082191,
  * Thanks for this. Probably directly from wikipedia: https://secure.wikimedia.org/wikipedia/en/wiki/List_of_XML_and_HTML_character_entity_references
@@ -771,7 +774,7 @@ const char * html_to_unicode_table[][2] =
     { NULL, NULL }
 };
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* returns newly allocated string without unicode like expressions */
 char * strip_html_unicode(const gchar * string)
@@ -838,7 +841,7 @@ char * strip_html_unicode(const gchar * string)
     return sResult;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /*
  * Remove all characters between the start tag $start and endtag $end.
@@ -879,7 +882,7 @@ gsize remove_tags_from_string(gchar * string, gint length, gchar start, gchar en
     return ctr;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 static gchar * trim_in_text(gchar * string)
 {
@@ -909,7 +912,7 @@ static gchar * trim_in_text(gchar * string)
     return buffer;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* Beautify lyrics in general, by removing endline spaces, *
  * trimming everything and removing double newlines        */
@@ -969,7 +972,7 @@ gchar * beautify_string(const gchar * lyrics)
 }
 
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* Does not necessarely handle unicode, just ascii */
 void trim_copy(gchar *input, gchar *output)
@@ -1001,14 +1004,14 @@ void trim_copy(gchar *input, gchar *output)
 }
 
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 void trim_inplace(gchar *s)
 {
     trim_copy(s, s);
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* Returns new pointer */
 gchar * trim_nocopy(gchar * s)
@@ -1034,7 +1037,7 @@ gchar * trim_nocopy(gchar * s)
     return start;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* Just copies the value from begin to start (excluding end[0]) */
 gchar * copy_value(const gchar * begin, const gchar * end)
@@ -1054,7 +1057,7 @@ gchar * copy_value(const gchar * begin, const gchar * end)
     return NULL;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 void chomp_breakline(gchar * string)
 {
@@ -1076,7 +1079,7 @@ void chomp_breakline(gchar * string)
     }
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * new_size)
 {
@@ -1099,7 +1102,7 @@ gchar * convert_charset(const gchar * string, gchar * from, gchar * to, gsize * 
     return conv_string;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string)
 {
@@ -1116,7 +1119,7 @@ gchar * get_search_value(gchar * ref, gchar * name, gchar * end_string)
     return result;
 }
 
-/* ------------------------------------------------------------- */
+///////////////////////////////////////
 
 /* Note: Not case-sens: Ä -> a! */
 const gchar * const umlaut_table[][2] = {
