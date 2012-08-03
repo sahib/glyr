@@ -23,9 +23,9 @@
 
 /*--------------------------------*/
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	return generic_img_finalizer(s,list,stop_me,GLYR_TYPE_BACKDROPS,result_list);
+    return generic_img_finalizer (s,list,stop_me,GLYR_TYPE_BACKDROPS,result_list);
 }
 
 /*--------------------------------*/
@@ -33,12 +33,12 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_backdrops =
 {
-	.name = "backdrops",
-	.type = GLYR_GET_BACKDROPS,
-   	.default_data_type = GLYR_TYPE_BACKDROPS,
-	.reqs = GLYR_REQUIRES_ARTIST,
-	.full_data = FALSE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+    .name = "backdrops",
+    .type = GLYR_GET_BACKDROPS,
+    .default_data_type = GLYR_TYPE_BACKDROPS,
+    .reqs = GLYR_REQUIRES_ARTIST,
+    .full_data = FALSE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

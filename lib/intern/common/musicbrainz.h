@@ -23,9 +23,9 @@
 
 #include "../../core.h"
 
-gint please_what_type(GlyrQuery * s);
-const gchar * generic_musicbrainz_url(GlyrQuery * sets);
-const gchar * get_mbid_from_xml(GlyrQuery * s, GlyrMemCache * c, gint * offset);
-GlyrMemCache * generic_musicbrainz_parse(cb_object * capo, gint * last_mbid, const gchar * include);
+gint please_what_type (GlyrQuery * s);
+const gchar * generic_musicbrainz_url (GlyrQuery * sets);
+const gchar * get_mbid_from_xml (GlyrQuery * s, GlyrMemCache * c, gint * offset);
+GlyrMemCache * generic_musicbrainz_parse (cb_object * capo, gint * last_mbid, const gchar * include);
 
 #endif

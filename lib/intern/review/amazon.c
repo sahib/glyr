@@ -21,32 +21,32 @@
 #include "../../stringlib.h"
 #include "../common/amazon.h"
 
-static const gchar * review_amazon_url(GlyrQuery * settings)
+static const gchar * review_amazon_url (GlyrQuery * settings)
 {
-    return generic_amazon_url(settings,"EditorialReview");
+    return generic_amazon_url (settings,"EditorialReview");
 }
 
 #define TheContent "<Content>"
 #define TheEndofCt "</Content>"
-static GList * review_amazon_parse(cb_object * capo)
+static GList * review_amazon_parse (cb_object * capo)
 {
     gchar * node = capo->cache->data;
     gsize conlen = (sizeof TheContent) - 1;
     GList * result_list = NULL;
-    while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+conlen,TheContent)) != NULL)
+    while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node+conlen,TheContent) ) != NULL)
     {
-        gchar * endOfText = strstr(node+conlen,TheEndofCt);
-        gchar * text = copy_value(node+conlen,endOfText);
-        if(text != NULL)
+        gchar * endOfText = strstr (node+conlen,TheEndofCt);
+        gchar * text = copy_value (node+conlen,endOfText);
+        if (text != NULL)
         {
             /* Ignore reviews with 350 chars
              * as mostly just advertisement */
-            if((endOfText - (node+conlen)) > 350)
+            if ( (endOfText - (node+conlen) ) > 350)
             {
                 GlyrMemCache * result = DL_init();
                 result->data = text;
-                result->size = result->data ? strlen(result->data) : 0;
-                result_list = g_list_prepend(result_list,result);
+                result->size = result->data ? strlen (result->data) : 0;
+                result_list = g_list_prepend (result_list,result);
             }
         }
     }

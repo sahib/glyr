@@ -1,5 +1,5 @@
 /***********************************************************
- * This file is part of glyr 
+ * This file is part of glyr
  * + a commnadline tool and library to download various sort of musicrelated metadata.
  * + Copyright (C) [2011]  [Christopher Pahl]
  * + Hosted at: https://github.com/sahib/glyr
@@ -40,11 +40,11 @@ typedef enum
 
 /////////////////////////////
 
-void enable_color(bool enable);
+void enable_color (bool enable);
 
 /////////////////////////////
 
-void cprint(termcolor col,int verbosity, GlyrQuery * s, const char * fmt, ...);
+void cprint (termcolor col,int verbosity, GlyrQuery * s, const char * fmt, ...);
 
 #define cvprint(col,fmt, ...) cprint(col,-1,NULL,fmt,##__VA_ARGS__)
 

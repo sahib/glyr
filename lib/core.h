@@ -31,13 +31,13 @@
 #include <glib.h>
 
 /*
- * Logdomain. 
+ * Logdomain.
  * Use --log-filter="Glyr" for gmpc to
  * just see glyrs debug output
  */
 #ifdef G_LOG_DOMAIN
-    #undef G_LOG_DOMAIN
-#endif 
+#undef G_LOG_DOMAIN
+#endif
 
 #define G_LOG_DOMAIN "Glyr"
 
@@ -64,12 +64,13 @@
 /* ----------------- Messages ------------------------- */
 /*------------------------------------------------------*/
 
-int glyr_message(int v, GlyrQuery * s, const char * fmt, ...);
+int glyr_message (int v, GlyrQuery * s, const char * fmt, ...);
 
 /*------------------------------------------------------*/
 
 /* Used to pass arguments to DL_buffer() */
-typedef struct {
+typedef struct
+{
     GlyrMemCache * cache;
     GlyrQuery * query;
     char * endmarker;
@@ -100,7 +101,7 @@ typedef struct cb_object
     // has this struct been consumed?
     gboolean consumed;
 
-    // If this item reached DL_buff 
+    // If this item reached DL_buff
     gboolean was_buffered;
 
     // DLBuffer data
@@ -124,15 +125,15 @@ typedef struct MetaDataFetcher
     GLYR_GET_TYPE type;
 
     /* callbacks */
-    void (*init)(void);
-    void (*destroy)(void);
-    GList* (*finalize)(GlyrQuery*,GList*,gboolean*,GList**);
+    void (*init) (void);
+    void (*destroy) (void);
+    GList* (*finalize) (GlyrQuery*,GList*,gboolean*,GList**);
 
     /* Default value for ->parallel, if set to auto */
     long default_parallel;
 
     /* Optionaly and required fields for this getter */
-    GLYR_FIELD_REQUIREMENT reqs;  
+    GLYR_FIELD_REQUIREMENT reqs;
 
     /* Wether this Fetcher delievers the full data (lyrics),
        or just URLs of the data. */
@@ -152,7 +153,7 @@ typedef struct MetaDataSource
     gchar key;     /* A key that may be used in --from   */
 
     GList * (* parser) (struct cb_object *); /* called when parsing is needed                  */
-    const char  * (* get_url)(GlyrQuery *);  /* called when the url of this provider is needed */
+    const char  * (* get_url) (GlyrQuery *); /* called when the url of this provider is needed */
 
     GLYR_GET_TYPE type; /* For what fetcher this provider is working..   */
     gboolean free_url;  /* URL is dyn. allocated - set this always!      */
@@ -170,28 +171,28 @@ typedef struct MetaDataSource
 
 /*------------------------------------------------------*/
 
-typedef GList*(*AsyncDLCB)(cb_object*,void *,bool*,gint*);
-GList * async_download(GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr, gboolean free_caches);
-GList * start_engine(GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err);
-GlyrMemCache * download_single(const char* url, GlyrQuery * s, const char * end);
+typedef GList* (*AsyncDLCB) (cb_object*,void *,bool*,gint*);
+GList * async_download (GList * url_list, GList * endmark_list, GlyrQuery * s, long parallel_fac, long timeout_fac, AsyncDLCB callback, void * userptr, gboolean free_caches);
+GList * start_engine (GlyrQuery * query, MetaDataFetcher * fetcher, GLYR_ERROR * err);
+GlyrMemCache * download_single (const char* url, GlyrQuery * s, const char * end);
 
 /*------------------------------------------------------*/
 
-GlyrMemCache * DL_init(void);
-GlyrMemCache * DL_copy(GlyrMemCache * cache);
-void DL_free(GlyrMemCache *cache);
-void DL_set_data(GlyrMemCache * cache, const gchar * data, gint len);
+GlyrMemCache * DL_init (void);
+GlyrMemCache * DL_copy (GlyrMemCache * cache);
+void DL_free (GlyrMemCache *cache);
+void DL_set_data (GlyrMemCache * cache, const gchar * data, gint len);
 
 /*------------------------------------------------------*/
 
-void update_md5sum(GlyrMemCache * c);
-void glist_free_full(GList * List, void (* free_func)(void * ptr));
+void update_md5sum (GlyrMemCache * c);
+void glist_free_full (GList * List, void (* free_func) (void * ptr) );
 
 /*------------------------------------------------------*/
 
-gboolean size_is_okay(int sZ, int min, int max);
-gboolean is_in_result_list(GlyrMemCache * cache, GList * result_list);
-gboolean provider_is_enabled(GlyrQuery * q, MetaDataSource * f);
-gboolean continue_search(gint current, GlyrQuery * s);
+gboolean size_is_okay (int sZ, int min, int max);
+gboolean is_in_result_list (GlyrMemCache * cache, GList * result_list);
+gboolean provider_is_enabled (GlyrQuery * q, MetaDataSource * f);
+gboolean continue_search (gint current, GlyrQuery * s);
 
 #endif

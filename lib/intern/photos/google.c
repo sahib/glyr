@@ -23,23 +23,23 @@
 
 /*--------------------------------------------------------*/
 
-static const gchar * photos_google_url(GlyrQuery * s)
+static const gchar * photos_google_url (GlyrQuery * s)
 {
     const gchar * result = NULL;
-    gchar * searchterm = g_strdup("${artist}+band+photos");
-    if(searchterm != NULL)
+    gchar * searchterm = g_strdup ("${artist}+band+photos");
+    if (searchterm != NULL)
     {
-        result = generic_google_url(s,searchterm);
-        g_free(searchterm);
+        result = generic_google_url (s,searchterm);
+        g_free (searchterm);
     }
     return result;
 }
 
 /*--------------------------------------------------------*/
 
-static GList * photos_google_parse(cb_object * capo)
+static GList * photos_google_parse (cb_object * capo)
 {
-    return generic_google_parse(capo);
+    return generic_google_parse (capo);
 }
 
 /*--------------------------------------------------------*/

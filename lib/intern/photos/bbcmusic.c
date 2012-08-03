@@ -31,47 +31,47 @@
 #define CONTENT_BEGIN "<image><src>"
 #define CONTENT_ENDIN "</src></image>"
 
-static GlyrMemCache * parse_bbc_xml(GlyrMemCache * input)
+static GlyrMemCache * parse_bbc_xml (GlyrMemCache * input)
 {
     GlyrMemCache * result = NULL;
-    char * content = get_search_value(input->data, CONTENT_BEGIN, CONTENT_ENDIN);
-    if(content != NULL)
+    char * content = get_search_value (input->data, CONTENT_BEGIN, CONTENT_ENDIN);
+    if (content != NULL)
     {
         result = DL_init();
         result->data = content;
-        result->dsrc = g_strdup(input->dsrc);
-        result->size = strlen(content);
+        result->dsrc = g_strdup (input->dsrc);
+        result->size = strlen (content);
     }
     return result;
 }
 
 /////////////////////////////////
 
-static const char * photos_bbcmusic_url(GlyrQuery * qry)
+static const char * photos_bbcmusic_url (GlyrQuery * qry)
 {
     return "http://musicbrainz.org/ws/2/artist?query=artist:${artist}";
 }
 
 /////////////////////////////////
 
-static GList * photos_bbcmusic_parse(cb_object * capo)
+static GList * photos_bbcmusic_parse (cb_object * capo)
 {
     GList * result_list = NULL;
 
-    char * mbid = mbid_parse_data(capo->cache, "artist", "name", capo->s->artist, capo->s);
+    char * mbid = mbid_parse_data (capo->cache, "artist", "name", capo->s->artist, capo->s);
 
-    if(mbid != NULL)
+    if (mbid != NULL)
     {
-        char * full_url = g_strdup_printf(API_ROOT, mbid);
-        if(full_url != NULL)
+        char * full_url = g_strdup_printf (API_ROOT, mbid);
+        if (full_url != NULL)
         {
-            GlyrMemCache * bbc_xml = download_single(full_url, capo->s, NULL);
-            if(bbc_xml != NULL)
+            GlyrMemCache * bbc_xml = download_single (full_url, capo->s, NULL);
+            if (bbc_xml != NULL)
             {
-                GlyrMemCache * item = parse_bbc_xml(bbc_xml);
-                if(item != NULL)
+                GlyrMemCache * item = parse_bbc_xml (bbc_xml);
+                if (item != NULL)
                 {
-                    result_list = g_list_prepend(result_list, item);
+                    result_list = g_list_prepend (result_list, item);
                 }
             }
         }
@@ -84,14 +84,14 @@ static GList * photos_bbcmusic_parse(cb_object * capo)
 
 MetaDataSource photos_bbcmusic_src =
 {
-	.name      = "bbcmusic",
-	.key       = 'b',
-	.free_url  = false,
-	.type      = GLYR_GET_ARTIST_PHOTOS,
-	.parser    = photos_bbcmusic_parse,
-	.get_url   = photos_bbcmusic_url,
-	.quality   = 80,
-	.speed     = 60,
-	.endmarker = NULL,
-    .lang_aware = false 
+    .name      = "bbcmusic",
+    .key       = 'b',
+    .free_url  = false,
+    .type      = GLYR_GET_ARTIST_PHOTOS,
+    .parser    = photos_bbcmusic_parse,
+    .get_url   = photos_bbcmusic_url,
+    .quality   = 80,
+    .speed     = 60,
+    .endmarker = NULL,
+    .lang_aware = false
 };

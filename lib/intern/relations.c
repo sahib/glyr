@@ -22,9 +22,9 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_RELATION,result_list);
+    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_RELATION,result_list);
 }
 
 //-------------------------------------
@@ -32,12 +32,12 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_relations =
 {
-	.name = "relations",
-	.type = GLYR_GET_RELATIONS,
-    	.default_data_type = GLYR_TYPE_RELATION,
-	.reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+    .name = "relations",
+    .type = GLYR_GET_RELATIONS,
+    .default_data_type = GLYR_TYPE_RELATION,
+    .reqs = GLYR_REQUIRES_ARTIST | GLYR_OPTIONAL_ALBUM | GLYR_OPTIONAL_TITLE,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

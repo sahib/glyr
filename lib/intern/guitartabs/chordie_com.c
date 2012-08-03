@@ -27,111 +27,111 @@
 #define RESULTS_ENDIN "<!--results end-->"
 #define NODE "<a class=\"darkblue\" href=\""
 
-static const gchar * guitartabs_chordie_url(GlyrQuery * s)
+static const gchar * guitartabs_chordie_url (GlyrQuery * s)
 {
-	return SEARCH_URL;
+    return SEARCH_URL;
 }
 
 /*--------------------------------------------------------*/
 
-static gboolean check_title_value(GlyrQuery * s, const gchar * to_check)
+static gboolean check_title_value (GlyrQuery * s, const gchar * to_check)
 {
-	gboolean result = FALSE;
-	if(to_check != NULL)
-	{
-		gchar * artist = g_strrstr(to_check,"(");
-		if(artist != NULL)
-		{
-			artist[0] = 0;
-			artist++;
+    gboolean result = FALSE;
+    if (to_check != NULL)
+    {
+        gchar * artist = g_strrstr (to_check,"(");
+        if (artist != NULL)
+        {
+            artist[0] = 0;
+            artist++;
 
-			gchar * end_bracket = strchr(artist,')');
-			if(end_bracket)
-			{
-				end_bracket[0] = 0;
-			}
+            gchar * end_bracket = strchr (artist,')');
+            if (end_bracket)
+            {
+                end_bracket[0] = 0;
+            }
 
-			result = (levenshtein_strnormcmp(s,artist,s->artist)  <= s->fuzzyness &&
-				  levenshtein_strnormcmp(s,to_check,s->title) <= s->fuzzyness);
-		}
-	}
-	return result;
+            result = (levenshtein_strnormcmp (s,artist,s->artist)  <= s->fuzzyness &&
+                      levenshtein_strnormcmp (s,to_check,s->title) <= s->fuzzyness);
+        }
+    }
+    return result;
 }
 
 /*--------------------------------------------------------*/
 
-static GlyrMemCache * parse_result_page(GlyrQuery * s, gchar * content_url)
+static GlyrMemCache * parse_result_page (GlyrQuery * s, gchar * content_url)
 {
-	GlyrMemCache * result = NULL;
-	if(content_url != NULL)
-	{
-		GlyrMemCache * dl_cache = download_single(content_url,s,NULL);
-		if(dl_cache != NULL)
-		{
-			gchar * content = get_search_value(dl_cache->data,"<div class=\"song\">","</div>");
-			if(content != NULL)
-			{
-				result = DL_init();
-				result->data = content; 
-				result->size = strlen(content);
-				result->dsrc = g_strdup(content_url);
-			}
-			DL_free(dl_cache);
-		}
-	}
-	return result;
+    GlyrMemCache * result = NULL;
+    if (content_url != NULL)
+    {
+        GlyrMemCache * dl_cache = download_single (content_url,s,NULL);
+        if (dl_cache != NULL)
+        {
+            gchar * content = get_search_value (dl_cache->data,"<div class=\"song\">","</div>");
+            if (content != NULL)
+            {
+                result = DL_init();
+                result->data = content;
+                result->size = strlen (content);
+                result->dsrc = g_strdup (content_url);
+            }
+            DL_free (dl_cache);
+        }
+    }
+    return result;
 }
 
 
 /*--------------------------------------------------------*/
 
-static GList * guitartabs_chordie_parse(cb_object * capo)
+static GList * guitartabs_chordie_parse (cb_object * capo)
 {
-	GList * result_list = NULL;
-	gchar * search_begin = strstr(capo->cache->data,RESULTS_BEGIN);
-	if(search_begin != NULL)
-	{
-		gchar * search_ending = strstr(search_begin,RESULTS_ENDIN);
-		if(search_ending != NULL)
-		{
-			gchar * node  = search_begin;
-			gsize nodelen = (sizeof NODE) - 1;
-			while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node + nodelen, NODE)) != NULL && node >= search_begin && node <= search_ending)
-			{
-				gchar * url = get_search_value(node,NODE,"\" ");
-				if(url != NULL)
-				{
-					gchar * name_value = get_search_value(node,"\">","</a>");
-					if(check_title_value(capo->s, name_value) == TRUE)
-					{
-						gchar * content_url = g_strdup_printf("%s%s",BASE_URL,url);
-						GlyrMemCache * result = parse_result_page(capo->s,content_url);
-						if(result != NULL)
-						{
-							result_list = g_list_prepend(result_list,result);
-						}
-						g_free(content_url);
-					}
-					g_free(name_value);
-					g_free(url);
-				}
-			}
-		}
-	}
-	return result_list;
+    GList * result_list = NULL;
+    gchar * search_begin = strstr (capo->cache->data,RESULTS_BEGIN);
+    if (search_begin != NULL)
+    {
+        gchar * search_ending = strstr (search_begin,RESULTS_ENDIN);
+        if (search_ending != NULL)
+        {
+            gchar * node  = search_begin;
+            gsize nodelen = (sizeof NODE) - 1;
+            while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node + nodelen, NODE) ) != NULL && node >= search_begin && node <= search_ending)
+            {
+                gchar * url = get_search_value (node,NODE,"\" ");
+                if (url != NULL)
+                {
+                    gchar * name_value = get_search_value (node,"\">","</a>");
+                    if (check_title_value (capo->s, name_value) == TRUE)
+                    {
+                        gchar * content_url = g_strdup_printf ("%s%s",BASE_URL,url);
+                        GlyrMemCache * result = parse_result_page (capo->s,content_url);
+                        if (result != NULL)
+                        {
+                            result_list = g_list_prepend (result_list,result);
+                        }
+                        g_free (content_url);
+                    }
+                    g_free (name_value);
+                    g_free (url);
+                }
+            }
+        }
+    }
+    return result_list;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource guitartabs_chordie_src =
 {
-	.name = "chordie",
-	.key  = 'c',
-	.parser    = guitartabs_chordie_parse,
-	.get_url   = guitartabs_chordie_url,
-	.type      = GLYR_GET_GUITARTABS,
-	.quality   = 95,
-	.speed     = 75,
-	.endmarker = NULL,
-	.free_url  = false
+    .name = "chordie",
+    .key  = 'c',
+    .parser    = guitartabs_chordie_parse,
+    .get_url   = guitartabs_chordie_url,
+    .type      = GLYR_GET_GUITARTABS,
+    .quality   = 95,
+    .speed     = 75,
+    .endmarker = NULL,
+    .free_url  = false
 };

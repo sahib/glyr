@@ -24,23 +24,23 @@
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	/* Fix up messy text, escape chars etc.  */
-	for(GList * elem = list; elem; elem = elem->next)
-	{
-		GlyrMemCache * item = elem->data;
-		if(item != NULL)
-		{
+    /* Fix up messy text, escape chars etc.  */
+    for (GList * elem = list; elem; elem = elem->next)
+    {
+        GlyrMemCache * item = elem->data;
+        if (item != NULL)
+        {
 
-			gchar * temp = beautify_string(item->data);
-			g_free(item->data);
-			item->data = temp;
-			item->size = (item->data) ? strlen(item->data) : 0;
-		}
-	}
+            gchar * temp = beautify_string (item->data);
+            g_free (item->data);
+            item->data = temp;
+            item->size = (item->data) ? strlen (item->data) : 0;
+        }
+    }
 
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_ALBUM_REVIEW,result_list);
+    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_ALBUM_REVIEW,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -48,13 +48,13 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_review =
 {
-	.name = "albumreview",
-	.type = GLYR_GET_ALBUM_REVIEW,
-    	.default_data_type = GLYR_TYPE_ALBUM_REVIEW,
-	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory,
-	.default_parallel = 2
+    .name = "albumreview",
+    .type = GLYR_GET_ALBUM_REVIEW,
+    .default_data_type = GLYR_TYPE_ALBUM_REVIEW,
+    .reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory,
+    .default_parallel = 2
 };

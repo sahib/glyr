@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-static const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
+static const gchar * albumlist_musicbrainz_url (GlyrQuery * sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=\"Official\"";
 }
@@ -36,15 +36,15 @@ static const gchar * albumlist_musicbrainz_url(GlyrQuery * sets)
 
 /////////////////////////////////////////////////////////////
 
-static bool is_in_list(GList * list, const char * to_cmp)
+static bool is_in_list (GList * list, const char * to_cmp)
 {
     bool rc = false;
-    for(GList * elem = list; elem; elem = elem->next)
+    for (GList * elem = list; elem; elem = elem->next)
     {
         GlyrMemCache * item = elem->data;
-        if(item != NULL)
+        if (item != NULL)
         {
-            if(g_ascii_strcasecmp(item->data,to_cmp) == 0)
+            if (g_ascii_strcasecmp (item->data,to_cmp) == 0)
             {
                 rc = true;
                 break;
@@ -57,36 +57,36 @@ static bool is_in_list(GList * list, const char * to_cmp)
 
 /////////////////////////////////////////////////////////////
 
-static GList * albumlist_musicbrainz_parse(cb_object * capo)
+static GList * albumlist_musicbrainz_parse (cb_object * capo)
 {
-	GList * result_list = NULL;
-	gchar * node = capo->cache->data;
+    GList * result_list = NULL;
+    gchar * node = capo->cache->data;
 
-	while(continue_search(g_list_length(result_list),capo->s) && (node = strstr(node+1,ALBUM_BEGIN)) != NULL)
-	{
-		gchar * name = get_search_value(node,TITLE_BEGIN,TITLE_ENDIN);
-		if(name != NULL && is_in_list(result_list,name) == false)
-		{
-			GlyrMemCache * result = DL_init();
-			result->data = name;
-			result->size = (result->data) ? strlen(result->data) : 0;
-			result_list = g_list_prepend(result_list,result);
-		}
-	}
-	return result_list;
+    while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node+1,ALBUM_BEGIN) ) != NULL)
+    {
+        gchar * name = get_search_value (node,TITLE_BEGIN,TITLE_ENDIN);
+        if (name != NULL && is_in_list (result_list,name) == false)
+        {
+            GlyrMemCache * result = DL_init();
+            result->data = name;
+            result->size = (result->data) ? strlen (result->data) : 0;
+            result_list = g_list_prepend (result_list,result);
+        }
+    }
+    return result_list;
 }
 
 /////////////////////////////////////////////////////////////
 
 MetaDataSource albumlist_musicbrainz_src =
 {
-	.name = "musicbrainz",
-	.key = 'm',
-	.free_url = false,
-	.parser  = albumlist_musicbrainz_parse,
-	.get_url = albumlist_musicbrainz_url,
-	.type    = GLYR_GET_ALBUMLIST,
-	.quality = 95,
-	.speed   = 95,
-	.endmarker = NULL
+    .name = "musicbrainz",
+    .key = 'm',
+    .free_url = false,
+    .parser  = albumlist_musicbrainz_parse,
+    .get_url = albumlist_musicbrainz_url,
+    .type    = GLYR_GET_ALBUMLIST,
+    .quality = 95,
+    .speed   = 95,
+    .endmarker = NULL
 };

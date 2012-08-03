@@ -21,6 +21,6 @@
 #ifndef UPDATE_H
 #define UPDATE_H
 
-void update(void);
+void update (void);
 
 #endif /* end of include guard: UPDATE_H */

@@ -20,5 +20,5 @@
 
 #include "../../core.h"
 
-char * mbid_lookup(const char * query, GLYR_DATA_TYPE type, GlyrQuery * qry);
-char * mbid_parse_data(GlyrMemCache * data, const char * lookup_entity, const char * find_entity, const char * compre_entity, GlyrQuery * qry);
+char * mbid_lookup (const char * query, GLYR_DATA_TYPE type, GlyrQuery * qry);
+char * mbid_parse_data (GlyrMemCache * data, const char * lookup_entity, const char * find_entity, const char * compre_entity, GlyrQuery * qry);

@@ -27,71 +27,71 @@
 /* Locales that are just mapped to 'en' */
 const char * locale_map_to_en = "ca|uk|us";
 
-static const gchar * ainfo_lastfm_url(GlyrQuery * s)
+static const gchar * ainfo_lastfm_url (GlyrQuery * s)
 {
-	gchar * url = NULL;
-	gchar * right_artist = strreplace(s->artist," ","+");
-	if(right_artist != NULL)
-	{
-		gchar * lang = "en";
+    gchar * url = NULL;
+    gchar * right_artist = strreplace (s->artist," ","+");
+    if (right_artist != NULL)
+    {
+        gchar * lang = "en";
 
-		/* Check if this is an allowed language */
-		if(strstr(GLYR_DEFAULT_SUPPORTED_LANGS,s->lang) != NULL)
-		{
-			lang = (gchar*)s->lang;
-		}
+        /* Check if this is an allowed language */
+        if (strstr (GLYR_DEFAULT_SUPPORTED_LANGS,s->lang) != NULL)
+        {
+            lang = (gchar*) s->lang;
+        }
 
-		/* Do we need to map a language to 'en'? */
-		if(strstr(locale_map_to_en,s->lang) != NULL)
-		{
-			lang = "en";
-		}
+        /* Do we need to map a language to 'en'? */
+        if (strstr (locale_map_to_en,s->lang) != NULL)
+        {
+            lang = "en";
+        }
 
-		url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
-		g_free(right_artist);
-	}
-	return url;
+        url = g_strdup_printf ("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
+        g_free (right_artist);
+    }
+    return url;
 }
 
 /*-------------------------------------*/
 
-static GList * ainfo_lastfm_parse(cb_object * capo)
+static GList * ainfo_lastfm_parse (cb_object * capo)
 {
-	GList * result_list = NULL;
-	gchar * content_begin = strstr(capo->cache->data,CONTENT_BEGIN);
-	gchar * content_endin = strstr(capo->cache->data,CONTENT_ENDIN);
-	if(content_endin == NULL)
-	{
-		content_endin = strstr(capo->cache->data,OTHER_ENDIN);
-	}
+    GList * result_list = NULL;
+    gchar * content_begin = strstr (capo->cache->data,CONTENT_BEGIN);
+    gchar * content_endin = strstr (capo->cache->data,CONTENT_ENDIN);
+    if (content_endin == NULL)
+    {
+        content_endin = strstr (capo->cache->data,OTHER_ENDIN);
+    }
 
-	if(content_begin && content_endin)
-	{
-		content_begin += (sizeof CONTENT_BEGIN) - 1;
-		gchar * content = copy_value(content_begin,content_endin);
-		if(content != NULL)
-		{
-			GlyrMemCache * result = DL_init();
-			result->data = content;
-			result->size = strlen(result->data);
-			result_list = g_list_prepend(result_list,result);
-		}
-	}
-	return result_list;
+    if (content_begin && content_endin)
+    {
+        content_begin += (sizeof CONTENT_BEGIN) - 1;
+        gchar * content = copy_value (content_begin,content_endin);
+        if (content != NULL)
+        {
+            GlyrMemCache * result = DL_init();
+            result->data = content;
+            result->size = strlen (result->data);
+            result_list = g_list_prepend (result_list,result);
+        }
+    }
+    return result_list;
 }
 
 /*-------------------------------------*/
 
 MetaDataSource ainfo_lastfm_src =
 {
-	.name      = "lastfm",
-	.key       = 'l',
-	.free_url  = true,
-	.type      = GLYR_GET_ARTISTBIO,
-	.parser    = ainfo_lastfm_parse,
-	.get_url   = ainfo_lastfm_url,
-	.quality   = 95,
-	.speed     = 85,
-	.endmarker = NULL,
+    .name      = "lastfm",
+    .key       = 'l',
+    .free_url  = true,
+    .type      = GLYR_GET_ARTISTBIO,
+    .parser    = ainfo_lastfm_parse,
+    .get_url   = ainfo_lastfm_url,
+    .quality   = 95,
+    .speed     = 85,
+    .endmarker = NULL,
     .lang_aware = true
 };

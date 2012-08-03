@@ -24,9 +24,9 @@
 
 /*----------------------------------------------------------------*/
 
-static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-	return generic_txt_finalizer(s,list,stop_me,GLYR_TYPE_TRACK,result_list);
+    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_TRACK,result_list);
 }
 
 /*----------------------------------------------------------------*/
@@ -34,12 +34,12 @@ static GList * factory(GlyrQuery * s, GList * list, gboolean * stop_me, GList **
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tracklist =
 {
-	.name = "tracklist",
-	.type = GLYR_GET_TRACKLIST,
-    	.default_data_type = GLYR_TYPE_TRACK,
-	.reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
-	.full_data = TRUE,
-	.init    = NULL,
-	.destroy = NULL,
-	.finalize = factory
+    .name = "tracklist",
+    .type = GLYR_GET_TRACKLIST,
+    .default_data_type = GLYR_TYPE_TRACK,
+    .reqs = GLYR_REQUIRES_ARTIST | GLYR_REQUIRES_ALBUM,
+    .full_data = TRUE,
+    .init    = NULL,
+    .destroy = NULL,
+    .finalize = factory
 };

@@ -23,12 +23,12 @@
 
 #include "../../lib/glyr.h"
 
-char * escape_colon_expr(const char * path, GlyrQuery * q, GlyrMemCache * c);
+char * escape_colon_expr (const char * path, GlyrQuery * q, GlyrMemCache * c);
 
-void increment_item_counter(void);
-int get_item_counter(void);
+void increment_item_counter (void);
+int get_item_counter (void);
 
-char * get_write_path(void);
-void set_write_path(char * path);
+char * get_write_path (void);
+void set_write_path (char * path);
 
 #endif

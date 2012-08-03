@@ -24,25 +24,25 @@
 
 /*--------------------------------------------------------*/
 
-static const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
+static const gchar * lyrics_lyricsvip_url (GlyrQuery * settings)
 {
-	gchar * result = NULL;
-	gchar * artist_clean = strreplace(settings->artist, " ", "-");
-	if(artist_clean != NULL)
-	{
-		gchar * title_clean =  strreplace(settings->title, " ", "-");
-		if(title_clean != NULL)
-		{
-			gchar * prep_artist = curl_easy_escape(NULL,artist_clean,0);
-			gchar * prep_title  = curl_easy_escape(NULL,title_clean,0);
-			result = g_strdup_printf(LV_URL, prep_artist, prep_title);
-			g_free(title_clean);
-			curl_free(prep_artist);
-			curl_free(prep_title);
-		}
-		g_free(artist_clean);
-	}
-	return result;
+    gchar * result = NULL;
+    gchar * artist_clean = strreplace (settings->artist, " ", "-");
+    if (artist_clean != NULL)
+    {
+        gchar * title_clean =  strreplace (settings->title, " ", "-");
+        if (title_clean != NULL)
+        {
+            gchar * prep_artist = curl_easy_escape (NULL,artist_clean,0);
+            gchar * prep_title  = curl_easy_escape (NULL,title_clean,0);
+            result = g_strdup_printf (LV_URL, prep_artist, prep_title);
+            g_free (title_clean);
+            curl_free (prep_artist);
+            curl_free (prep_title);
+        }
+        g_free (artist_clean);
+    }
+    return result;
 }
 
 /*--------------------------------------------------------*/
@@ -50,45 +50,45 @@ static const gchar * lyrics_lyricsvip_url(GlyrQuery * settings)
 #define BEG "<img src=\"http://www.lyricsvip.com/images/phone2.gif\" alt=\"phone\" /></div>"
 #define END "<br />\n<div class=\"ad\">"
 
-static GList * lyrics_lyricsvip_parse(cb_object *capo)
+static GList * lyrics_lyricsvip_parse (cb_object *capo)
 {
-	gchar * start = NULL;
-	gchar * end = NULL;
-	gchar * content = NULL;
-	GList * result_list  = NULL;
+    gchar * start = NULL;
+    gchar * end = NULL;
+    gchar * content = NULL;
+    GList * result_list  = NULL;
 
-	if((start = strstr(capo->cache->data,BEG)) != NULL)
-	{
-		if((end = strstr(start,END)) != NULL)
-		{
-			if(ABS(end-start) > 0)
-			{
-				*(end) = 0;
+    if ( (start = strstr (capo->cache->data,BEG) ) != NULL)
+    {
+        if ( (end = strstr (start,END) ) != NULL)
+        {
+            if (ABS (end-start) > 0)
+            {
+                * (end) = 0;
 
-				content = strreplace(start,"<br />","");
-				if(content)
-				{
-					GlyrMemCache * result = DL_init();
-					result->data = content;
-					result->size = strlen(content);
-					result_list = g_list_prepend(result_list,result);
-				}
-			}
-		}
-	}
-	return result_list;
+                content = strreplace (start,"<br />","");
+                if (content)
+                {
+                    GlyrMemCache * result = DL_init();
+                    result->data = content;
+                    result->size = strlen (content);
+                    result_list = g_list_prepend (result_list,result);
+                }
+            }
+        }
+    }
+    return result_list;
 }
 
 /*--------------------------------------------------------*/
 
 MetaDataSource lyrics_lyricsvip_src =
 {
-	.name = "lyricsvip",
-	.key  = 'v',
-	.parser    = lyrics_lyricsvip_parse,
-	.get_url   = lyrics_lyricsvip_url,
-	.type      = GLYR_GET_LYRICS,
-	.quality   = 60,
-	.speed     = 85,
-	.free_url  = true
+    .name = "lyricsvip",
+    .key  = 'v',
+    .parser    = lyrics_lyricsvip_parse,
+    .get_url   = lyrics_lyricsvip_url,
+    .type      = GLYR_GET_LYRICS,
+    .quality   = 60,
+    .speed     = 85,
+    .free_url  = true
 };

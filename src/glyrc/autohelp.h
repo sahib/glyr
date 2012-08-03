@@ -23,7 +23,7 @@
 
 #include <glib.h>
 #include "../../lib/glyr.h"
-void suggest_other_getter(GlyrQuery * query, const char * wrong_input);
-void suggest_other_provider(GlyrQuery * query, const char * wrong_input);
+void suggest_other_getter (GlyrQuery * query, const char * wrong_input);
+void suggest_other_provider (GlyrQuery * query, const char * wrong_input);
 
 #endif

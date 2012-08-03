@@ -23,28 +23,28 @@
 
 /* ------------------------- */
 
-static const gchar * cover_picsearch_url(GlyrQuery * s)
+static const gchar * cover_picsearch_url (GlyrQuery * s)
 {
-	return generic_picsearch_url(s,"${artist}+${album}+coverart");
+    return generic_picsearch_url (s,"${artist}+${album}+coverart");
 }
 
 /* ------------------------- */
-static GList * cover_picsearch_parse(cb_object * capo)
+static GList * cover_picsearch_parse (cb_object * capo)
 {
-	return generic_picsearch_parse(capo);
+    return generic_picsearch_parse (capo);
 }
 
 /* ------------------------- */
 
 MetaDataSource cover_picsearch_src =
 {
-.name      = "picsearch",
-.key       = 'p',
-.parser    = cover_picsearch_parse,
-.get_url   = cover_picsearch_url,
-.type      = GLYR_GET_COVERART,
-.quality   = 50,
-.speed     = 60,
-.endmarker = NULL,
-.free_url  = true
+    .name      = "picsearch",
+    .key       = 'p',
+    .parser    = cover_picsearch_parse,
+    .get_url   = cover_picsearch_url,
+    .type      = GLYR_GET_COVERART,
+    .quality   = 50,
+    .speed     = 60,
+    .endmarker = NULL,
+    .free_url  = true
 };

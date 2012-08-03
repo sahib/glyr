@@ -26,6 +26,6 @@
 #include <glib.h>
 
 /* Check if a file is contained in the db */
-gboolean db_contains(GlyrDatabase * db, GlyrMemCache * cache);
+gboolean db_contains (GlyrDatabase * db, GlyrMemCache * cache);
 
 #endif

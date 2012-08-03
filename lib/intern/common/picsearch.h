@@ -24,7 +24,7 @@
 
 #include "../../core.h"
 
-const gchar * generic_picsearch_url(GlyrQuery * s, const char * fmt);
-GList * generic_picsearch_parse(cb_object * capo);
+const gchar * generic_picsearch_url (GlyrQuery * s, const char * fmt);
+GList * generic_picsearch_parse (cb_object * capo);
 
 #endif

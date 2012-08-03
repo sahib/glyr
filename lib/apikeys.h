@@ -21,7 +21,7 @@
 #ifndef APIKEYS_H
 #define APIKEYS_H
 
-/* 
+/*
  * Please register your own keys if you fork parts of this code!
  * */
 #define API_KEY_AMAZON  "AKIAJ6NEA642OU3FM24Q"

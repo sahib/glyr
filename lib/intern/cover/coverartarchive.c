@@ -25,7 +25,7 @@
 
 //////////////////////////////////////////////////
 
-static const char * cover_coverartarchive_url(GlyrQuery * qry)
+static const char * cover_coverartarchive_url (GlyrQuery * qry)
 {
     return "http://musicbrainz.org/ws/2/release?query=artist:${artist}%20AND%20release:${album}";
 }
@@ -35,23 +35,23 @@ static const char * cover_coverartarchive_url(GlyrQuery * qry)
 #define IMAGE_NODE "\"image\":\""
 
 /* This should work, but apparently there is no real data yet there... */
-static GList * parse_archive_json(GlyrMemCache * input, GlyrQuery * qry)
+static GList * parse_archive_json (GlyrMemCache * input, GlyrQuery * qry)
 {
     GList * result_list = NULL;
     char * node = input->data;
 
-    puts(input->data);
-    while((node = strstr(node + sizeof(IMAGE_NODE), IMAGE_NODE)))
+    puts (input->data);
+    while ( (node = strstr (node + sizeof (IMAGE_NODE), IMAGE_NODE) ) )
     {
-        char * url = copy_value(node, strstr(node + sizeof(IMAGE_NODE), "\""));
-        if(url != NULL)
+        char * url = copy_value (node, strstr (node + sizeof (IMAGE_NODE), "\"") );
+        if (url != NULL)
         {
             GlyrMemCache * item = DL_init();
             item->data = url;
-            item->size = strlen(url);
-            item->dsrc = g_strdup(input->dsrc);
+            item->size = strlen (url);
+            item->dsrc = g_strdup (input->dsrc);
 
-            result_list = g_list_prepend(result_list, item);
+            result_list = g_list_prepend (result_list, item);
         }
     }
     return result_list;
@@ -64,23 +64,23 @@ static GList * parse_archive_json(GlyrMemCache * input, GlyrQuery * qry)
 
 //////////////////////////////////////////////////
 
-static GList * cover_coverartarchive_parse(cb_object * capo)
+static GList * cover_coverartarchive_parse (cb_object * capo)
 {
     GList *result_list = NULL;
-    char * mbid = mbid_parse_data(capo->cache, "release", "title", capo->s->album, capo->s);
-    if(mbid != NULL)
+    char * mbid = mbid_parse_data (capo->cache, "release", "title", capo->s->album, capo->s);
+    if (mbid != NULL)
     {
-        char * full_url = g_strdup_printf(API_ROOT, mbid);
-        if(full_url != NULL)
+        char * full_url = g_strdup_printf (API_ROOT, mbid);
+        if (full_url != NULL)
         {
-            puts(full_url);
-            GlyrMemCache * json_data = download_single(full_url, capo->s, NULL);
-            if(json_data != NULL)
+            puts (full_url);
+            GlyrMemCache * json_data = download_single (full_url, capo->s, NULL);
+            if (json_data != NULL)
             {
-                result_list = parse_archive_json(json_data, capo->s);
-                DL_free(json_data);
+                result_list = parse_archive_json (json_data, capo->s);
+                DL_free (json_data);
             }
-            g_free(full_url);
+            g_free (full_url);
         }
     }
     return result_list;
