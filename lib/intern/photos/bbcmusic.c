@@ -58,7 +58,7 @@ static GList * photos_bbcmusic_parse(cb_object * capo)
 {
     GList * result_list = NULL;
 
-    char * mbid = mbid_parse_data(capo->cache, "artist", capo->s->artist, capo->s);
+    char * mbid = mbid_parse_data(capo->cache, "artist", "name", capo->s->artist, capo->s);
 
     if(mbid != NULL)
     {

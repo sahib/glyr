@@ -160,6 +160,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_RELATIONS}/musicbrainz.c"
 	"${DIR_RELATIONS}/generated.c"
 	"${DIR_TAGS}/musicbrainz.c"
+	"${DIR_COVER}/coverartarchive.c"
 	"${DIR_COVER}/lastfm.c"
 	"${DIR_COVER}/jamendo.c"
 	"${DIR_COVER}/google.c"

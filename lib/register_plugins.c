@@ -34,7 +34,7 @@ GList * glyrMetaDataSourceList = NULL;
 GList * glyrMetaDataPluginList = NULL;
 
 
-/* Externalized fetcher vars, add yours here */
+/* Externalized fetcher vars, add yours here  {{{ */
 extern MetaDataFetcher glyrFetcher_cover;
 extern MetaDataFetcher glyrFetcher_lyrics;
 extern MetaDataFetcher glyrFetcher_artistphotos;
@@ -48,13 +48,14 @@ extern MetaDataFetcher glyrFetcher_relations;
 extern MetaDataFetcher glyrFetcher_tracklist;
 extern MetaDataFetcher glyrFetcher_guitartabs;
 extern MetaDataFetcher glyrFetcher_backdrops;
+/* }}} */
 
-
-/* Externalized sourceprovider vars, add yours here */
+/* Externalized sourceprovider vars, add yours here {{{ */
 extern MetaDataSource ainfo_lastfm_src;
 extern MetaDataSource ainfo_lyricsreg_src;
 extern MetaDataSource ainfo_bbcmusic_src;
 extern MetaDataSource albumlist_musicbrainz_src;
+extern MetaDataSource cover_coverartarchive_src;
 extern MetaDataSource cover_albumart_src;
 extern MetaDataSource cover_amazon_src;
 extern MetaDataSource cover_coverhunt_src;
@@ -94,7 +95,7 @@ extern MetaDataSource similar_artist_lastfm_src;
 extern MetaDataSource similar_song_lastfm_src;
 extern MetaDataSource tags_musicbrainz_src;
 extern MetaDataSource tracklist_musicbrainz_src;
-extern MetaDataSource guitartabs_guitaretab_src;
+//extern MetaDataSource guitartabs_guitaretab_src;
 extern MetaDataSource guitartabs_chordie_src;
 extern MetaDataSource backdrops_htbackdrops_src;
 
@@ -102,6 +103,7 @@ extern MetaDataSource backdrops_htbackdrops_src;
 extern MetaDataSource local_provider_src;
 extern MetaDataSource relations_generated_src;
 extern MetaDataSource musictree_provider_src;
+/* }}} */
 
 // Disabled due to bad quality.
 //extern MetaDataSource lyrics_darklyrics_src;
@@ -141,15 +143,20 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_lyricsreg_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&ainfo_bbcmusic_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
+
+    // FIXME: Seems to be broken too. (serverside)
+    //plugin_add_to_list(&glyrMetaDataSourceList,&cover_albumart_src);
 
     // FIXME: Silly amazon requires to be a Seller to use their API
-    // WTF?! God I hate thos Just-for-the-paying-people-salesmen dudes
     // plugin_add_to_list(&glyrMetaDataSourceList,&cover_amazon_src);
 
-    //FIXME: Coverhunt seems to be down. Add again when up and running
-    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
+    // FIXME: Coverhunt seems to be down. Add again when up and running
+    //plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverhunt_src);
 
+
+    // FIXME: No real data yet there.. adele:19 gives a correct mbid, but no results
+    //plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverartarchive_src);
+    
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_google_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&cover_lastfm_src);
@@ -186,7 +193,6 @@ static void register_provider_plugins(void)
     plugin_add_to_list(&glyrMetaDataSourceList,&relations_musicbrainz_src);
 
     // FIXME: Silly amazon requires to be a Seller to use their API
-    // WTF?! God I hate thos Just-for-the-paying people-salesmen
     //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&review_metallum_src);
     plugin_add_to_list(&glyrMetaDataSourceList,&similar_artist_lastfm_src);

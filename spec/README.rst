@@ -28,3 +28,8 @@ provider:
 
     cd spec/providers
     python runner.py
+
+  ```runner.py``` supports a ```--only```argument, which can be used for exclusion: ::
+
+    python runner.py --only cover|lyrics                          # Run all tests for cover and lyrics
+    python runner.py --only cover:google,lastfm|lyrics:lyricswiki # Run the covertests google and lastfm, also lyricswiki.
