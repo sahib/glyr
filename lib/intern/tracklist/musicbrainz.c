@@ -101,7 +101,7 @@ static GList * tracklist_musicbrainz_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource tracklist_musicbrainz_src =
 {

@@ -39,7 +39,7 @@ static const gchar * photos_singerlyrics_url (GlyrQuery * settings)
     return result_url;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define SIZE_BEGIN "</a><br>"
 #define SIZE_END   "<br>"
@@ -89,7 +89,7 @@ static gboolean check_image_size (GlyrQuery * s, gchar * ref_to_img_start)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define FINAL_BASE_URL "http://www.singerpictures.com/images/pic/%s.jpg"
 #define URL_ID_START "rel=\"nofollow\"><img src='/images/pic/"
@@ -120,7 +120,7 @@ static GList * photos_singerlyrics_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource photos_singerpictures_src =
 {

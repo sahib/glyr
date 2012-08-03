@@ -32,7 +32,7 @@ artist && title          -> title
 artist && album          -> album
 */
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* Wrap around the (a bit more) generic versions */
 static GList * tags_musicbrainz_parse (cb_object * capo)
@@ -80,14 +80,14 @@ static GList * tags_musicbrainz_parse (cb_object * capo)
     return results;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * tags_musicbrainz_url (GlyrQuery * sets)
 {
     return generic_musicbrainz_url (sets);
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource tags_musicbrainz_src =
 {

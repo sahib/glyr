@@ -28,7 +28,7 @@
 /* Update information URL */
 #define GLYR_VERSION_URL "http://sahib.github.com/glyr/version.html"
 
-/*----------------------------*/
+/////////////////////////////////
 
 static gboolean check_version (gboolean * errord)
 {
@@ -102,4 +102,4 @@ void update (void)
     }
 }
 
-/*-------------------------*/
+/////////////////////////////////

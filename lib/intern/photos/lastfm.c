@@ -105,7 +105,7 @@ static GList * photos_lastfm_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource photos_lastfm_src =
 {

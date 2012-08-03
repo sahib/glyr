@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * relations_generated_parse (cb_object * capo)
 {
@@ -62,14 +62,14 @@ static GList * relations_generated_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * relations_generated_url (GlyrQuery * sets)
 {
     return OFFLINE_PROVIDER;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource relations_generated_src =
 {

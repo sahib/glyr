@@ -53,7 +53,7 @@ static GList * review_amazon_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource review_amazon_src =
 {

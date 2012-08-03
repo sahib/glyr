@@ -23,14 +23,14 @@
 #define GT_BASE "http://www.guitaretab.com"
 #define GT_URL GT_BASE"/fetch/?type=tab&query=${title}"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * gt_guitaretabs_url (GlyrQuery * settings)
 {
     return GT_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GlyrMemCache * parse_single_page (GlyrQuery * s, const gchar * url)
 {
@@ -51,7 +51,7 @@ static GlyrMemCache * parse_single_page (GlyrQuery * s, const gchar * url)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define SEARCH_RESULTS_BEGIN "<div class=\"specrows albums\">"
 #define SEARCH_RESULTS_ENDIN "</table>"
@@ -126,7 +126,7 @@ static GList * gt_guitaretabs_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource guitartabs_guitaretab_src =
 {

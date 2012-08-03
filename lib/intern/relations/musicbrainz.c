@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../common/musicbrainz.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define RELATION_TARGLYR_GET_TYPE "<relation-list target-type=\"Url\">"
 #define RELATION_BEGIN_TYPE  "<relation"
@@ -68,14 +68,14 @@ static GList * relations_musicbrainz_parse (cb_object * capo)
     return results;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * relations_musicbrainz_url (GlyrQuery * sets)
 {
     return generic_musicbrainz_url (sets);
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource relations_musicbrainz_src =
 {

@@ -392,7 +392,7 @@ extern "C"
     * </listitem>
     * <listitem>
     * <para>
-    * %GLYR_GET_SIMILIAR_SONGS
+    * %GLYR_GET_SIMILAR_SONGS
     * </para>
     * </listitem>
     * </itemizedlist>

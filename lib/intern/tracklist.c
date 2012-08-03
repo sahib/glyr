@@ -22,14 +22,14 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-/*----------------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
     return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_TRACK,result_list);
 }
 
-/*----------------------------------------------------------------*/
+/////////////////////////////////
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_tracklist =

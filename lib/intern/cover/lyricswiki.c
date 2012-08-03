@@ -31,7 +31,7 @@ const gchar * cover_lyricswiki_url (GlyrQuery * sets)
     return url;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 static gboolean check_file_format (GlyrQuery * query, gchar * filename)
 {
@@ -123,7 +123,7 @@ GList * cover_lyricswiki_parse (cb_object * capo)
     return result_list;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource cover_lyricswiki_src =
 {

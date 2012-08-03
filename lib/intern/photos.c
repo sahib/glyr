@@ -21,14 +21,14 @@
 #include "../core.h"
 #include "generic.h"
 
-/*--------------------------------*/
+/////////////////////////////////
 
 static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
     return generic_img_finalizer (s,list,stop_me,GLYR_TYPE_ARTIST_PHOTO,result_list);
 }
 
-/*--------------------------------*/
+/////////////////////////////////
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_artistphotos =

@@ -1,3 +1,7 @@
-- Keep providers updated :)
-- Replace cover:musicbrainz with coverartarchive once they got it working... (d'oh')
-- Fix magistrix and minor lyrics annoyance
+- make enums in cache.c serializeable (translate to string)
+- make prepare_string() recv. a GlyrQuery, introduce glyr_opt_normalize(.., GLYR_NORM_AGGRESIVE);
+- update plyr
+- look through docs for errors.
+- GLYR_GET_UNSURE  -> GLYR_GET_UNKNOWN
+- GLYR_TYPE_NOIDEA -> GLYR_TYPE_UNKNOWN
+- GLYR_GET_ARTISTBIO -> GLYR_GET_ARTIST_BIO

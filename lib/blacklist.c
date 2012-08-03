@@ -21,7 +21,7 @@
 /* The blacklist consists of two links at the moment :-P */
 #include "blacklist.h"
 
-/*-----------------------------------------------------------------*/
+/////////////////////////////////
 
 GHashTable * lookup_table = NULL;
 gchar * blacklist_array[] =
@@ -30,7 +30,7 @@ gchar * blacklist_array[] =
     "http://cdn.recordshopx.com/cover/normal/5/53/53138.jpg%3Fcd"  /* blank image */
 };
 
-/*-----------------------------------------------------------------*/
+/////////////////////////////////
 
 void blacklist_build (void)
 {
@@ -45,14 +45,14 @@ void blacklist_build (void)
     }
 }
 
-/*-----------------------------------------------------------------*/
+/////////////////////////////////
 
 void blacklist_destroy (void)
 {
     g_hash_table_destroy (lookup_table);
 }
 
-/*-----------------------------------------------------------------*/
+/////////////////////////////////
 
 gboolean is_blacklisted (gchar * URL)
 {
@@ -62,4 +62,4 @@ gboolean is_blacklisted (gchar * URL)
     return ! (g_hash_table_lookup (lookup_table,URL) == NULL);
 }
 
-/*-----------------------------------------------------------------*/
+/////////////////////////////////

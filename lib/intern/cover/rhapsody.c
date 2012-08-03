@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-/*--------------------------------------*/
+/////////////////////////////////
 
 static gchar * translate_string (gchar * string)
 {
@@ -43,7 +43,7 @@ static gchar * translate_string (gchar * string)
     return result;
 }
 
-/*--------------------------------------*/
+/////////////////////////////////
 
 static const gchar * cover_rhapsody_url (GlyrQuery * query)
 {
@@ -59,7 +59,7 @@ static const gchar * cover_rhapsody_url (GlyrQuery * query)
     return result;
 }
 
-/*--------------------------------------*/
+/////////////////////////////////
 
 static gboolean check_size (GlyrQuery * s, gchar * ref)
 {
@@ -80,7 +80,7 @@ static gboolean check_size (GlyrQuery * s, gchar * ref)
     return result;
 }
 
-/*--------------------------------------*/
+/////////////////////////////////
 
 #define DELIM_BEG "<art>"
 #define DELIM_END "</art>"
@@ -137,7 +137,7 @@ static GList * cover_rhapsody_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource cover_rhapsody_src =
 {

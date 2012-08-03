@@ -33,7 +33,7 @@ static const gchar * cover_albumart_url (GlyrQuery * sets)
     return NULL;
 }
 
-/*------------------------------------*/
+/////////////////////////////////
 
 #define NODE_START "<div id=\"main\">"
 #define NODE_NEXT "<li><div style=\""
@@ -89,7 +89,7 @@ static GList * cover_albumart_parse (cb_object * capo)
     return result_list;
 }
 
-/*------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource cover_albumart_src =
 {

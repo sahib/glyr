@@ -32,7 +32,7 @@ static const gchar * guitartabs_chordie_url (GlyrQuery * s)
     return SEARCH_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static gboolean check_title_value (GlyrQuery * s, const gchar * to_check)
 {
@@ -58,7 +58,7 @@ static gboolean check_title_value (GlyrQuery * s, const gchar * to_check)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GlyrMemCache * parse_result_page (GlyrQuery * s, gchar * content_url)
 {
@@ -83,7 +83,7 @@ static GlyrMemCache * parse_result_page (GlyrQuery * s, gchar * content_url)
 }
 
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * guitartabs_chordie_parse (cb_object * capo)
 {
@@ -121,7 +121,7 @@ static GList * guitartabs_chordie_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource guitartabs_chordie_src =
 {

@@ -22,20 +22,20 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-/*----------------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
     return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_SIMILAR_SONG,result_list);
 }
 
-/*----------------------------------------------------------------*/
+/////////////////////////////////
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_similiar_artists =
+MetaDataFetcher glyrFetcher_similar_artists =
 {
     .name = "similarartists",
-    .type = GLYR_GET_SIMILIAR_ARTISTS,
+    .type = GLYR_GET_SIMILAR_ARTISTS,
     .default_data_type = GLYR_TYPE_SIMILAR_ARTIST,
     .reqs = GLYR_REQUIRES_ARTIST,
     .full_data = TRUE,

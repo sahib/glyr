@@ -123,8 +123,8 @@ const gchar * const regex_table[][2] =
     {"CD[[:blank:]]*[0-9]+",   ""}, /* 'CD 1'  -> ''    */
     {"track[[:blank:]]*[0-9]+",""}, /* 'CD 1'  -> ''    */
     {"(`|'|\"|\\.|,)",         ""}, /* Punctuation.     */
-    {"(\\(|)feat(\\.|uring).*",""}, /* "feat." -> " "   */
-    //{"([(\\[{<]|)feat(\\.|uring).*",""}, /* "feat." -> " " */
+    {"feat(\\.|uring).*",""}, /* "feat." -> " "   */
+    {"feat\\..*",""}, /* "feat." -> " "   */
     {"[[:space:]]{2,}",       " "}  /* 'a  b'  -> 'a b' */
 };
 
@@ -1159,7 +1159,7 @@ gboolean regex_match_compiled (const gchar * string, const GRegex * cRegex)
     return retv;
 }
 
-#if 0
+#if 1
 int main (int argc, char * argv[])
 {
     printf ("%s\n", regex_replace_by_table (argv[1], regex_table, regex_table_size) );

@@ -26,6 +26,7 @@
 #include "register_plugins.h"
 #include "blacklist.h"
 #include "cache.h"
+#include "stringlib.h"
 
 //////////////////////////////////
 
@@ -57,8 +58,8 @@ static const char * type_strings[] =
     [GLYR_TYPE_ARTIST_PHOTO] = "artistphoto",
     [GLYR_TYPE_ALBUM_REVIEW] = "albumreview",
     [GLYR_TYPE_ARTISTBIO] = "artistbio",
-    [GLYR_TYPE_SIMILAR_ARTIST] = "similiar_artist",
-    [GLYR_TYPE_SIMILAR_SONG] = "similiar_song",
+    [GLYR_TYPE_SIMILAR_ARTIST] = "similar_artist",
+    [GLYR_TYPE_SIMILAR_SONG] = "similar_song",
     [GLYR_TYPE_TRACK] = "trackname",
     [GLYR_TYPE_ALBUMLIST] = "albumname",
     [GLYR_TYPE_TAG] = "tag",
@@ -73,7 +74,7 @@ static const char * type_strings[] =
     [GLYR_TYPE_NOIDEA] = "unknown"
 };
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 const gchar * map_language[][2] =
 {
@@ -83,7 +84,7 @@ const gchar * map_language[][2] =
 };
 
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 void glyr_internal_log (const gchar *log_domain,GLogLevelFlags log_level,const gchar *message, gpointer user_data)
 {
@@ -91,7 +92,7 @@ void glyr_internal_log (const gchar *log_domain,GLogLevelFlags log_level,const g
 }
 
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* Local scopes are cool. */
 #define END_STRING(STR,CHAR)           \
@@ -188,14 +189,14 @@ gchar * guess_language (void)
     return result_lang;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static int glyr_set_info (GlyrQuery * s, int at, const char * arg);
 static void set_query_on_defaults (GlyrQuery * glyrs);
 
-/*--------------------------------------------------------*/
-/*-------------------- OTHER -----------------------------*/
-/*--------------------------------------------------------*/
+/////////////////////////////////
+// OTHER
+/////////////////////////////////
 
 // return a descriptive string on error ID
 __attribute__ ( (visibility ("default") ) )
@@ -208,7 +209,7 @@ const char * glyr_strerror (GLYR_ERROR ID)
     return err_strings[GLYRE_UNKNOWN];
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_signal_exit (GlyrQuery * query)
@@ -216,7 +217,7 @@ void glyr_signal_exit (GlyrQuery * query)
     SET_ATOMIC_SIGNAL_EXIT (query,1);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_update_md5sum (GlyrMemCache * cache)
@@ -224,7 +225,7 @@ void glyr_cache_update_md5sum (GlyrMemCache * cache)
     update_md5sum (cache);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_data (GlyrMemCache * cache, const char * data, int len)
@@ -232,7 +233,7 @@ void glyr_cache_set_data (GlyrMemCache * cache, const char * data, int len)
     DL_set_data (cache,data,len);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GlyrMemCache * glyr_cache_copy (GlyrMemCache * cache)
@@ -240,7 +241,7 @@ GlyrMemCache * glyr_cache_copy (GlyrMemCache * cache)
     return DL_copy (cache);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 const char * glyr_version (void)
@@ -248,9 +249,9 @@ const char * glyr_version (void)
     return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 // _opt_
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 // Seperate method because va_arg struggles with function pointers
 __attribute__ ( (visibility ("default") ) )
@@ -265,7 +266,7 @@ GLYR_ERROR glyr_opt_dlcallback (GlyrQuery * settings, DL_callback dl_cb, void * 
     return GLYRE_EMPTY_STRUCT;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_type (GlyrQuery * s, GLYR_GET_TYPE type)
@@ -279,7 +280,7 @@ GLYR_ERROR glyr_opt_type (GlyrQuery * s, GLYR_GET_TYPE type)
     return GLYRE_BAD_VALUE;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_artist (GlyrQuery * s, char * artist)
@@ -289,7 +290,7 @@ GLYR_ERROR glyr_opt_artist (GlyrQuery * s, char * artist)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_album (GlyrQuery * s, char * album)
@@ -299,7 +300,7 @@ GLYR_ERROR glyr_opt_album (GlyrQuery * s, char * album)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_title (GlyrQuery * s, char * title)
@@ -309,7 +310,7 @@ GLYR_ERROR glyr_opt_title (GlyrQuery * s, char * title)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 static int size_set (int * ref, int size)
 {
@@ -327,7 +328,7 @@ static int size_set (int * ref, int size)
     return GLYRE_BAD_OPTION;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_img_maxsize (GlyrQuery * s, int size)
@@ -336,7 +337,7 @@ GLYR_ERROR glyr_opt_img_maxsize (GlyrQuery * s, int size)
     return size_set (&s->img_max_size,size);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_img_minsize (GlyrQuery * s, int size)
@@ -345,7 +346,7 @@ GLYR_ERROR glyr_opt_img_minsize (GlyrQuery * s, int size)
     return size_set (&s->img_min_size,size);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_parallel (GlyrQuery * s, unsigned long val)
@@ -355,7 +356,7 @@ GLYR_ERROR glyr_opt_parallel (GlyrQuery * s, unsigned long val)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_timeout (GlyrQuery * s, unsigned long val)
@@ -365,7 +366,7 @@ GLYR_ERROR glyr_opt_timeout (GlyrQuery * s, unsigned long val)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_redirects (GlyrQuery * s, unsigned long val)
@@ -375,7 +376,7 @@ GLYR_ERROR glyr_opt_redirects (GlyrQuery * s, unsigned long val)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_useragent (GlyrQuery * s, const char * useragent)
@@ -385,7 +386,7 @@ GLYR_ERROR glyr_opt_useragent (GlyrQuery * s, const char * useragent)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_lang (GlyrQuery * s, char * langcode)
@@ -408,7 +409,7 @@ GLYR_ERROR glyr_opt_lang (GlyrQuery * s, char * langcode)
     return GLYRE_BAD_VALUE;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_lang_aware_only (GlyrQuery * s, bool lang_aware_only)
@@ -418,7 +419,7 @@ GLYR_ERROR glyr_opt_lang_aware_only (GlyrQuery * s, bool lang_aware_only)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_number (GlyrQuery * s, unsigned int num)
@@ -428,7 +429,7 @@ GLYR_ERROR glyr_opt_number (GlyrQuery * s, unsigned int num)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_verbosity (GlyrQuery * s, unsigned int level)
@@ -438,7 +439,7 @@ GLYR_ERROR glyr_opt_verbosity (GlyrQuery * s, unsigned int level)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_from (GlyrQuery * s, const char * from)
@@ -452,7 +453,7 @@ GLYR_ERROR glyr_opt_from (GlyrQuery * s, const char * from)
     return GLYRE_BAD_VALUE;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_allowed_formats (GlyrQuery * s, const char * formats)
@@ -462,7 +463,7 @@ GLYR_ERROR glyr_opt_allowed_formats (GlyrQuery * s, const char * formats)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_musictree_path (GlyrQuery * s, const char * musictree_path)
@@ -472,7 +473,7 @@ GLYR_ERROR glyr_opt_musictree_path (GlyrQuery * s, const char * musictree_path)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_plugmax (GlyrQuery * s, int plugmax)
@@ -487,7 +488,7 @@ GLYR_ERROR glyr_opt_plugmax (GlyrQuery * s, int plugmax)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_qsratio (GlyrQuery * s, float ratio)
@@ -497,7 +498,7 @@ GLYR_ERROR glyr_opt_qsratio (GlyrQuery * s, float ratio)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_proxy (GlyrQuery * s, const char * proxystring)
@@ -507,7 +508,7 @@ GLYR_ERROR glyr_opt_proxy (GlyrQuery * s, const char * proxystring)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_fuzzyness (GlyrQuery * s, int fuzz)
@@ -517,7 +518,7 @@ GLYR_ERROR glyr_opt_fuzzyness (GlyrQuery * s, int fuzz)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_download (GlyrQuery * s, bool download)
@@ -527,7 +528,7 @@ GLYR_ERROR glyr_opt_download (GlyrQuery * s, bool download)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_force_utf8 (GlyrQuery * s, bool force_utf8)
@@ -537,7 +538,7 @@ GLYR_ERROR glyr_opt_force_utf8 (GlyrQuery * s, bool force_utf8)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_lookup_db (GlyrQuery * s, GlyrDatabase * db)
@@ -551,7 +552,7 @@ GLYR_ERROR glyr_opt_lookup_db (GlyrQuery * s, GlyrDatabase * db)
     return GLYRE_BAD_VALUE;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_db_autowrite (GlyrQuery * s, bool db_autowrite)
@@ -561,7 +562,7 @@ GLYR_ERROR glyr_opt_db_autowrite (GlyrQuery * s, bool db_autowrite)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_db_autoread (GlyrQuery * s, bool db_autoread)
@@ -571,9 +572,9 @@ GLYR_ERROR glyr_opt_db_autoread (GlyrQuery * s, bool db_autoread)
     return GLYRE_OK;
 }
 
-/*-----------------------------------------------*/
-/*-----------------------------------------------*/
-/*-----------------------------------------------*/
+/////////////////////////////////
+/////////////////////////////////
+/////////////////////////////////
 
 static void set_query_on_defaults (GlyrQuery * glyrs)
 {
@@ -623,7 +624,7 @@ static void set_query_on_defaults (GlyrQuery * glyrs)
     glyrs->is_initalized = QUERY_INITIALIZER;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_query_init (GlyrQuery * glyrs)
@@ -634,7 +635,7 @@ void glyr_query_init (GlyrQuery * glyrs)
     }
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_query_destroy (GlyrQuery * sets)
@@ -656,7 +657,7 @@ void glyr_query_destroy (GlyrQuery * sets)
 
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GlyrMemCache * glyr_download (const char * url, GlyrQuery * s)
@@ -664,7 +665,7 @@ GlyrMemCache * glyr_download (const char * url, GlyrQuery * s)
     return download_single (url,s,NULL);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_free_list (GlyrMemCache * head)
@@ -690,7 +691,7 @@ void glyr_free_list (GlyrMemCache * head)
     }
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_free (GlyrMemCache * c)
@@ -698,7 +699,7 @@ void glyr_cache_free (GlyrMemCache * c)
     DL_free (c);
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GlyrMemCache * glyr_cache_new (void)
@@ -706,7 +707,7 @@ GlyrMemCache * glyr_cache_new (void)
     return DL_init();
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 // !! NOT THREADSAFE !! //
 __attribute__ ( (visibility ("default") ) )
@@ -745,7 +746,7 @@ void glyr_init (void)
 }
 
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 // !! NOT THREADSAFE !! //
 __attribute__ ( (visibility ("default") ) )
@@ -768,7 +769,7 @@ void glyr_cleanup (void)
 
 
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 /* Sets parallel field depending on the get_type */
 static void auto_detect_parallel (MetaDataFetcher * fetcher, GlyrQuery * query)
@@ -787,7 +788,7 @@ static void auto_detect_parallel (MetaDataFetcher * fetcher, GlyrQuery * query)
     }
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 static gboolean check_if_valid (GlyrQuery * q, MetaDataFetcher * fetch)
 {
@@ -825,7 +826,7 @@ static gboolean check_if_valid (GlyrQuery * q, MetaDataFetcher * fetch)
     return isValid;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 static void set_error (GLYR_ERROR err_in, GlyrQuery * query, GLYR_ERROR * err_out)
 {
@@ -835,8 +836,20 @@ static void set_error (GLYR_ERROR err_in, GlyrQuery * query, GLYR_ERROR * err_ou
         *err_out = err_in;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
+
+#define PRINT_NORMALIZED_ATTR(name, var)                    \
+    if(var != NULL && query->verbosity >= 2)                \
+    {                                                       \
+        char * prepared = prepare_string(var, TRUE, FALSE); \
+        if(prepared != NULL)                                \
+        {                                                   \
+            glyr_message(2, query, name);                   \
+            glyr_message(2, query, "%s\n", prepared);       \
+            g_free(prepared);                               \
+        }                                                   \
+    }                                                       \
 
 __attribute__ ( (visibility ("default") ) )
 GlyrMemCache * glyr_get (GlyrQuery * query, GLYR_ERROR * e, int * length)
@@ -871,21 +884,10 @@ GlyrMemCache * glyr_get (GlyrQuery * query, GLYR_ERROR * e, int * length)
                 if (check_if_valid (query,item) == TRUE)
                 {
                     /* Print some user info, always useful */
-                    if (query->artist != NULL)
-                    {
-                        glyr_message (2,query,"- Artist   : ");
-                        glyr_message (2,query,"%s\n",query->artist);
-                    }
-                    if (query->album != NULL)
-                    {
-                        glyr_message (2,query,"- Album    : ");
-                        glyr_message (2,query,"%s\n",query->album);
-                    }
-                    if (query->title != NULL)
-                    {
-                        glyr_message (2,query,"- Title    : ");
-                        glyr_message (2,query,"%s\n",query->title);
-                    }
+                    PRINT_NORMALIZED_ATTR("- Artist   : ", query->artist);
+                    PRINT_NORMALIZED_ATTR("- Album    : ", query->album);
+                    PRINT_NORMALIZED_ATTR("- Title    : ", query->title);
+
                     if (query->lang != NULL)
                     {
                         glyr_message (2,query,"- Language : ");
@@ -981,7 +983,7 @@ GlyrMemCache * glyr_get (GlyrQuery * query, GLYR_ERROR * e, int * length)
     return NULL;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 int glyr_cache_write (GlyrMemCache * data, const char * path)
@@ -1023,7 +1025,7 @@ int glyr_cache_write (GlyrMemCache * data, const char * path)
     return bytes;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 static int glyr_set_info (GlyrQuery * s, int at, const char * arg)
 {
@@ -1076,7 +1078,7 @@ static int glyr_set_info (GlyrQuery * s, int at, const char * arg)
     return result;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 const char * glyr_get_type_to_string (GLYR_GET_TYPE type)
@@ -1097,7 +1099,7 @@ const char * glyr_get_type_to_string (GLYR_GET_TYPE type)
     return result;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_GET_TYPE glyr_string_to_get_type (const char * string)
@@ -1118,7 +1120,7 @@ GLYR_GET_TYPE glyr_string_to_get_type (const char * string)
     return GLYR_GET_UNSURE;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 const char * glyr_data_type_to_string (GLYR_DATA_TYPE type)
@@ -1132,7 +1134,7 @@ const char * glyr_data_type_to_string (GLYR_DATA_TYPE type)
         return type_strings[GLYR_TYPE_NOIDEA];
     }
 }
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_DATA_TYPE glyr_string_to_data_type (const char * string)
@@ -1149,7 +1151,7 @@ GLYR_DATA_TYPE glyr_string_to_data_type (const char * string)
     return GLYR_TYPE_NOIDEA;
 }
 
-/*-----------------------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_print (GlyrMemCache * cacheditem)

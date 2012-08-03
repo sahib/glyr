@@ -37,7 +37,7 @@ static const gchar * lyrics_lipwalk_url (GlyrQuery * settings)
     return LIPWALK_URL;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 static GlyrMemCache * parse_lyrics_page (GlyrMemCache * cache)
 {
@@ -68,7 +68,7 @@ static GlyrMemCache * parse_lyrics_page (GlyrMemCache * cache)
     return result_cache;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 static gboolean validate_track_description (GlyrQuery * query, gchar * description)
 {
@@ -92,7 +92,7 @@ static gboolean validate_track_description (GlyrQuery * query, gchar * descripti
     return result;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 static GList * lyrics_lipwalk_parse (cb_object *capo)
 {
@@ -142,7 +142,7 @@ static GList * lyrics_lipwalk_parse (cb_object *capo)
     return result_list;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lipwalk_src =
 {

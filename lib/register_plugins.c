@@ -39,7 +39,7 @@ extern MetaDataFetcher glyrFetcher_cover;
 extern MetaDataFetcher glyrFetcher_lyrics;
 extern MetaDataFetcher glyrFetcher_artistphotos;
 extern MetaDataFetcher glyrFetcher_artistbio;
-extern MetaDataFetcher glyrFetcher_similiar_artists;
+extern MetaDataFetcher glyrFetcher_similar_artists;
 extern MetaDataFetcher glyrFetcher_similar_song;
 extern MetaDataFetcher glyrFetcher_review;
 extern MetaDataFetcher glyrFetcher_albumlist;
@@ -266,7 +266,7 @@ void register_fetcher_plugins (void)
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_lyrics);
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_artistphotos);
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_artistbio);
-    plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_similiar_artists);
+    plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_similar_artists);
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_similar_song);
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_review);
     plugin_add_to_list (&glyrMetaDataPluginList,&glyrFetcher_albumlist);

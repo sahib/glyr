@@ -22,7 +22,7 @@
 
 #define API_KEY API_KEY_LASTFM
 
-static const char * similiar_lastfm_url (GlyrQuery * sets)
+static const char * similar_lastfm_url (GlyrQuery * sets)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&artist=${artist}&api_key="API_KEY;
 }
@@ -43,7 +43,7 @@ static const char * similiar_lastfm_url (GlyrQuery * sets)
 #define IMAGE_X_BEGIN "<image size=\"mega\">"
 #define IMAGE_ENDIN   "</image>"
 
-static GList * similiar_lastfm_parse (cb_object * capo)
+static GList * similar_lastfm_parse (cb_object * capo)
 {
     GList * results = NULL;
     gchar * find = capo->cache->data;
@@ -85,17 +85,17 @@ static GList * similiar_lastfm_parse (cb_object * capo)
     return results;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource similar_artist_lastfm_src =
 {
     .name = "lastfm",
     .key  = 'l',
-    .parser    = similiar_lastfm_parse,
-    .get_url   = similiar_lastfm_url,
+    .parser    = similar_lastfm_parse,
+    .get_url   = similar_lastfm_url,
     .quality   = 90,
     .speed     = 90,
     .endmarker = NULL,
     .free_url  = false,
-    .type      = GLYR_GET_SIMILIAR_ARTISTS
+    .type      = GLYR_GET_SIMILAR_ARTISTS
 };

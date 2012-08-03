@@ -29,19 +29,19 @@
 #define SUBST_URL "http://www.metal-archives.com/release/ajax-view-lyrics/id/%s"
 #define BAD_STRING "(lyrics not available)"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * lyrics_metallum_url (GlyrQuery * s)
 {
     return AJAX_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define ID_START "id=\\\"lyricsLink_"
 #define ID_END   "\\\""
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * lyrics_metallum_parse (cb_object * capo)
 {
@@ -69,7 +69,7 @@ static GList * lyrics_metallum_parse (cb_object * capo)
     return result_items;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_metallum_src =
 {

@@ -47,7 +47,7 @@ static const gchar * lyrics_elyrics_url (GlyrQuery * settings)
     return result_url;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 /* Neat try elyrics to vary this string with every request :-) */
 #define FROM_MIDDLE "http://www.elyrics.net"
@@ -78,7 +78,7 @@ static void remove_from_from_string (gchar * string)
     }
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 #define LYRICS_BEGIN "<div class='ly' style='font-size:12px;'>"
 #define LYRICS_ALT_END "these lyrics are submitted by"
@@ -116,7 +116,7 @@ static GList * lyrics_elyrics_parse (cb_object * capo)
     return results;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_elyrics_src =
 {

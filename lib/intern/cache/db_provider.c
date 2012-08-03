@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../cache.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * local_provider_parse (cb_object * capo)
 {
@@ -49,14 +49,14 @@ static GList * local_provider_parse (cb_object * capo)
     return converter_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * local_provider_url (GlyrQuery * sets)
 {
     return OFFLINE_PROVIDER;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource local_provider_src =
 {

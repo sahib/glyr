@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-static const gchar * similiar_song_lastfm_url (GlyrQuery * sets)
+static const gchar * similar_song_lastfm_url (GlyrQuery * sets)
 {
     return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${artist}&track=${title}&api_key="API_KEY_LASTFM;
 }
@@ -38,7 +38,7 @@ static const gchar * similiar_song_lastfm_url (GlyrQuery * sets)
 #define URL_BEGIN "<url>"
 #define URL_ENDIN "</url>"
 
-static GList * similiar_song_lastfm_parse (cb_object * capo)
+static GList * similar_song_lastfm_parse (cb_object * capo)
 {
     GList * results = NULL;
     gchar * begin = capo->cache->data;
@@ -68,17 +68,17 @@ static GList * similiar_song_lastfm_parse (cb_object * capo)
     return results;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource similar_song_lastfm_src =
 {
     .name = "lastfm",
     .key  = 'l',
-    .parser    = similiar_song_lastfm_parse,
-    .get_url   = similiar_song_lastfm_url,
+    .parser    = similar_song_lastfm_parse,
+    .get_url   = similar_song_lastfm_url,
     .quality   = 90,
     .speed     = 90,
     .endmarker = NULL,
     .free_url  = false,
-    .type      = GLYR_GET_SIMILIAR_SONGS
+    .type      = GLYR_GET_SIMILAR_SONGS
 };

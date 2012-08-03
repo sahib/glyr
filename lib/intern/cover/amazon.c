@@ -57,14 +57,14 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 // therefore I had to use freeapisign.com to access the webservices, the bad thing is:
 // it is limited to 30K requests per month. If you have an own account: replace the Acceskey here,
 // as an fallback there is the albumart and coverhunt plugin which implement a search on amazon (on serverside)
-/*-------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * cover_amazon_url (GlyrQuery * sets)
 {
     return generic_amazon_url (sets,"Images");
 }
 
-/*-------------------------------------------------*/
+/////////////////////////////////
 
 #define END_OF_URL "</URL>"
 #define C_MAX(X) (capo->s->img_max_size <  X && capo->s->img_max_size != -1)
@@ -102,7 +102,7 @@ static GList * cover_amazon_parse (cb_object *capo)
     return result_list;
 }
 
-/*-------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource cover_amazon_src =
 {

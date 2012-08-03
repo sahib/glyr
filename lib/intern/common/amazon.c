@@ -23,7 +23,7 @@
 #include "../../stringlib.h"
 #include "amazon.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define ACCESS_KEY API_KEY_AMAZON
 #define rg_markup "__RESPONSE_GROUP__"

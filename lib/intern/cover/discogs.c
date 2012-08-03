@@ -23,7 +23,7 @@
 
 #define API_ENTRY "http://api.discogs.com/database/search?type=release&q=${artist}"
 
-/*------------------------------------------------*/
+/////////////////////////////////
 
 /*
  * # Example Snippet (for type = release)
@@ -147,7 +147,7 @@ static GList * cover_discogs_parse (cb_object * capo)
     return result_list;
 }
 
-/*------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource cover_discogs_src =
 {

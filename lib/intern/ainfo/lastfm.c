@@ -53,7 +53,7 @@ static const gchar * ainfo_lastfm_url (GlyrQuery * s)
     return url;
 }
 
-/*-------------------------------------*/
+/////////////////////////////////
 
 static GList * ainfo_lastfm_parse (cb_object * capo)
 {
@@ -80,7 +80,7 @@ static GList * ainfo_lastfm_parse (cb_object * capo)
     return result_list;
 }
 
-/*-------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource ainfo_lastfm_src =
 {

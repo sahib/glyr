@@ -23,7 +23,7 @@
 #define LINE_BEGIN "<photo id="
 #define LINE_ENDIN "/>"
 
-/*------------------------------------*/
+/////////////////////////////////
 
 static const gchar * photos_flickr_url (GlyrQuery * settings)
 {
@@ -47,7 +47,7 @@ static const gchar * photos_flickr_url (GlyrQuery * settings)
     return url;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * photos_flickr_parse (cb_object * capo)
 {
@@ -84,7 +84,7 @@ static GList * photos_flickr_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource photos_flickr_src =
 {

@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../common/google.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * photos_google_url (GlyrQuery * s)
 {
@@ -35,14 +35,14 @@ static const gchar * photos_google_url (GlyrQuery * s)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * photos_google_parse (cb_object * capo)
 {
     return generic_google_parse (capo);
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource photos_google_src =
 {

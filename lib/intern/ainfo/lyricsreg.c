@@ -24,14 +24,14 @@
 #define INFO_BEGIN "<div id=\"content\">"
 #define OPTN_BEGIN "Biography:<br />"
 #define INFO_ENDIN "</div>"
-/*-------------------------------------*/
+/////////////////////////////////
 
 static const gchar * ainfo_lyricsreg_url (GlyrQuery * s)
 {
     return "http://www.lyricsreg.com/biography/${artist}/";
 }
 
-/*-------------------------------------*/
+/////////////////////////////////
 
 static GList * ainfo_lyricsreg_parse (cb_object * capo)
 {
@@ -68,7 +68,7 @@ static GList * ainfo_lyricsreg_parse (cb_object * capo)
     return result_list;
 }
 
-/*-------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource ainfo_lyricsreg_src =
 {

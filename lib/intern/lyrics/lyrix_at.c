@@ -27,7 +27,7 @@ const char * lyrics_lyrixat_url (GlyrQuery * settings)
     return AT_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define SEARCH_START_TAG "<!-- start of result item //-->"
 #define LYRIC_BEGIN "<div class='songtext' id='stextDIV'>"
@@ -36,7 +36,7 @@ const char * lyrics_lyrixat_url (GlyrQuery * settings)
 #define TITLE_END "<"
 #define MAX_TRIES 5
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static void parse_lyrics_page (const gchar * url, GList ** result_list, cb_object * capo)
 {
@@ -65,7 +65,7 @@ static void parse_lyrics_page (const gchar * url, GList ** result_list, cb_objec
     }
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 GList * lyrics_lyrixat_parse (cb_object * capo)
 {
@@ -109,7 +109,7 @@ GList * lyrics_lyrixat_parse (cb_object * capo)
     }
     return result_list;
 }
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lyrix_src =
 {

@@ -22,14 +22,14 @@
 
 #define GLYR_GET_URL "http://www.lyricstime.com/search/?q=${artist}+${title}&t=default"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const char * lyrics_lyricstime_url (GlyrQuery * settings)
 {
     return GLYR_GET_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define LYR_BEGIN "<div id=\"songlyrics\" >"
 #define LYR_ENDIN "</div>"
@@ -63,7 +63,7 @@ static GlyrMemCache * parse_page (GlyrMemCache * dl, cb_object * capo)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define START_SEARCH "<div id=\"searchresult\">"
 #define SEARCH_ENDIN "</div>"
@@ -104,7 +104,7 @@ static gboolean validate_artist (cb_object * capo, gchar * backpointer)
     return i_shall_continue;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * lyrics_lyricstime_parse (cb_object * capo)
 {
@@ -152,7 +152,7 @@ static GList * lyrics_lyricstime_parse (cb_object * capo)
     return rList;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lyricstime_src =
 {

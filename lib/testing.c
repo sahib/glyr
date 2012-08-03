@@ -24,7 +24,7 @@
 #include "stringlib.h"
 #include "register_plugins.h"
 
-/*-----------------------------------*/
+/////////////////////////////////
 
 static MetaDataSource * get_metadata_struct (const char * provider_name, GLYR_GET_TYPE type)
 {
@@ -49,7 +49,7 @@ static MetaDataSource * get_metadata_struct (const char * provider_name, GLYR_GE
     return result;
 }
 
-/*-----------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 const char * glyr_testing_call_url (const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query)
@@ -75,7 +75,7 @@ const char * glyr_testing_call_url (const char * provider_name, GLYR_GET_TYPE ty
     return result;
 }
 
-/*-----------------------------------*/
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GlyrMemCache * glyr_testing_call_parser (const char * provider_name, GLYR_GET_TYPE type, GlyrQuery * query, GlyrMemCache * cache)
@@ -113,4 +113,4 @@ GlyrMemCache * glyr_testing_call_parser (const char * provider_name, GLYR_GET_TY
     return result;
 }
 
-/*-----------------------------------*/
+/////////////////////////////////

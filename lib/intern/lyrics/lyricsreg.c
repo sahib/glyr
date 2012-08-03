@@ -58,7 +58,7 @@ static GList * lyrics_lyricsreg_parse (cb_object * capo)
     return result_list;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lyricsreg_src =
 {

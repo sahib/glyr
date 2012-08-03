@@ -22,7 +22,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* 'please' is important. gcc won't compile without. */
 gint please_what_type (GlyrQuery * s)
@@ -46,7 +46,7 @@ gint please_what_type (GlyrQuery * s)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 const gchar * generic_musicbrainz_url (GlyrQuery * sets)
 {
@@ -67,7 +67,7 @@ const gchar * generic_musicbrainz_url (GlyrQuery * sets)
     }
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define ID_BEGIN "id=\""
 const gchar * get_mbid_from_xml (GlyrQuery * s, GlyrMemCache * c, gint * offset)
@@ -133,7 +133,7 @@ const gchar * get_mbid_from_xml (GlyrQuery * s, GlyrMemCache * c, gint * offset)
     return mbid;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* Returns only a parseable memcache */
 GlyrMemCache * generic_musicbrainz_parse (cb_object * capo, gint * last_mbid, const gchar * include)

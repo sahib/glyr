@@ -29,7 +29,7 @@ struct callback_save_struct
     GList * results;
 };
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* Simple finalizer template sufficient for most */
 GList * generic_txt_finalizer (GlyrQuery * settings, GList * input_list, gboolean * stop_me, GLYR_DATA_TYPE type, GList ** result_list)
@@ -81,7 +81,7 @@ GList * generic_txt_finalizer (GlyrQuery * settings, GList * input_list, gboolea
     return almost_copied;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * async_dl_callback (cb_object * capo, void * userptr, bool * stop_download, gint * add_item)
 {
@@ -136,7 +136,7 @@ static GList * async_dl_callback (cb_object * capo, void * userptr, bool * stop_
     return NULL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 GList * generic_img_finalizer (GlyrQuery * s, GList * list, gboolean * stop_me, GLYR_DATA_TYPE type, GList ** result_list)
 {
@@ -205,4 +205,4 @@ GList * generic_img_finalizer (GlyrQuery * s, GList * list, gboolean * stop_me, 
     return NULL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////

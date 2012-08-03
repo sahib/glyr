@@ -22,7 +22,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 /* Methods used by more than one provider go here */
 const gchar * generic_google_url (GlyrQuery * sets, const gchar * searchterm)
@@ -76,7 +76,7 @@ const gchar * generic_google_url (GlyrQuery * sets, const gchar * searchterm)
     return g_strdup_printf ("http://www.google.%s/images?q=%s&safe=off%s%s",lang,searchterm, (back!=NULL) ? "" : "&", back);
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define IMG_SRC_START "&amp;usg="
 #define WIDTH_START   "&amp;w="
@@ -102,7 +102,7 @@ static gint google_get_size_value (gchar * ref, gchar * name)
     return number;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static gboolean google_check_image_size (GlyrQuery * s, gchar * ref)
 {
@@ -119,7 +119,7 @@ static gboolean google_check_image_size (GlyrQuery * s, gchar * ref)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define FIRST_RESULT "<a href=\"/imgres?imgurl="
 #define END_OF_URL "&amp;imgrefurl="

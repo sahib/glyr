@@ -23,7 +23,7 @@
 
 #define API_ENTRY "http://api.discogs.com/database/search?type=artist&q=${artist}"
 
-/*------------------------------------------------*/
+/////////////////////////////////
 
 /*
  * # Example Snippet (for type = release)
@@ -137,7 +137,7 @@ static GList * photos_discogs_parse (cb_object * capo)
     return result_list;
 }
 
-/*------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource photos_discogs_src =
 {

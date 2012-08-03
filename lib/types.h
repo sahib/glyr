@@ -125,8 +125,8 @@ extern "C"
     * @GLYR_GET_LYRICS:  Get Songtext
     * @GLYR_GET_ARTIST_PHOTOS: Get Live/Promotion/Fanartwork
     * @GLYR_GET_ARTISTBIO: Get information about this artist
-    * @GLYR_GET_SIMILIAR_ARTISTS: get similar artists
-    * @GLYR_GET_SIMILIAR_SONGS: get similar songs
+    * @GLYR_GET_SIMILAR_ARTISTS: get similar artists
+    * @GLYR_GET_SIMILAR_SONGS: get similar songs
     * @GLYR_GET_ALBUM_REVIEW: get album reviews
     * @GLYR_GET_TRACKLIST: get a tracklist for a specified album
     * @GLYR_GET_TAGS: get tags for a certain item
@@ -153,8 +153,8 @@ extern "C"
         GLYR_GET_LYRICS,
         GLYR_GET_ARTIST_PHOTOS,
         GLYR_GET_ARTISTBIO,
-        GLYR_GET_SIMILIAR_ARTISTS,
-        GLYR_GET_SIMILIAR_SONGS,
+        GLYR_GET_SIMILAR_ARTISTS,
+        GLYR_GET_SIMILAR_SONGS,
         GLYR_GET_ALBUM_REVIEW,
         GLYR_GET_TRACKLIST,
         GLYR_GET_TAGS,

@@ -35,7 +35,7 @@ static const gchar * backdrops_htbackdrops_url (GlyrQuery * q)
     return result;
 }
 
-/*-------------------------------*/
+/////////////////////////////////
 
 static gboolean check_size (GlyrQuery * query, const gchar * size_string)
 {
@@ -57,7 +57,7 @@ static gboolean check_size (GlyrQuery * query, const gchar * size_string)
     return result;
 }
 
-/*-------------------------------*/
+/////////////////////////////////
 
 #define NODE "<image>"
 
@@ -96,7 +96,7 @@ static GList * backdrops_htbackdrops_parse (cb_object * capo)
     return result_list;
 }
 
-/*-------------------------------*/
+/////////////////////////////////
 
 MetaDataSource backdrops_htbackdrops_src =
 {

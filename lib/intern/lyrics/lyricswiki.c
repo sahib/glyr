@@ -25,14 +25,14 @@
 #define LW_URL "http://lyrics.wikia.com/api.php?action=lyrics&fmt=xml&func=getSong&artist=${artist}&song=${title}"
 #define NOT_FOUND "<lyrics>Not found</lyrics>"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * lyrics_lyricswiki_url (GlyrQuery * settings)
 {
     return LW_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 // Compare response, so lyricswiki's search did not fool us
 static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title, cb_object * capo)
@@ -61,7 +61,7 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
 }
 
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define LYR_NODE  "<div class='lyricbox'><div class='rtMatcher'><a href='http://www.ringtonematcher.com"
 #define LYR_BEGIN "</a></div>"
@@ -97,7 +97,7 @@ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static GList * lyrics_lyricswiki_parse (cb_object * capo)
 {
@@ -119,7 +119,7 @@ static GList * lyrics_lyricswiki_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lyricswiki_src =
 {

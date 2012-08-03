@@ -22,14 +22,14 @@
 
 #define LYRDB_URL "http://webservices.lyrdb.com/lookup.php?q=${artist}|${title}&for=match&agent=libglyr"
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 static const char * lyrics_lyrdb_url (GlyrQuery * settings)
 {
     return LYRDB_URL;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 static GList * lyrics_lyrdb_parse (cb_object * capo)
 {
@@ -77,7 +77,7 @@ static GList * lyrics_lyrdb_parse (cb_object * capo)
     return result_list;
 }
 
-/*---------------------------------------------------*/
+/////////////////////////////////
 
 MetaDataSource lyrics_lyrdb_src =
 {

@@ -67,7 +67,7 @@ int main (void)
 
     /* Fill some silly values */
     GlyrQuery query_long, query_longer;
-    configure (&query_long,GLYR_GET_SIMILIAR_ARTISTS);
+    configure (&query_long,GLYR_GET_SIMILAR_ARTISTS);
     configure (&query_longer,GLYR_GET_LYRICS);
 
     GlyrDatabase * db = glyr_db_init ("/tmp");

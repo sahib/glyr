@@ -23,14 +23,14 @@
 #define CL_API_URL "http://api.chartlyrics.com/apiv1.asmx/SearchLyric?artist=${artist}&song=${title}"
 #define CL_API_GET "http://api.chartlyrics.com/apiv1.asmx/GetLyric?lyricId=%s&lyricCheckSum=%s"
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 static const gchar * lyrics_chartlyrics_url (GlyrQuery * s)
 {
     return CL_API_URL;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define LYRIC_TEXT_BEG "<Lyric>"
 #define LYRIC_TEXT_END "</Lyric>"
@@ -54,7 +54,7 @@ static GlyrMemCache * get_lyrics_from_results (GlyrQuery * s, const gchar * url)
     return result;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 #define LYRIC_NODE "<SearchLyricResult>"
 
@@ -106,7 +106,7 @@ static GList * lyrics_chartlyrics_parse (cb_object * capo)
     return result_list;
 }
 
-/*--------------------------------------------------------*/
+/////////////////////////////////
 
 
 MetaDataSource lyrics_chartlyrics_src =
