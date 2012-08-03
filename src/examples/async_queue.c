@@ -29,7 +29,7 @@
  * gcc threadexample.c -o threadexample $(pkg-config --libs --cflags glib-2.0 gthread-2.0) -lglyr -std=c99 -Wall
  */
 
-/* ------------------------------ */
+/////////////////////////////////
 
 typedef struct _FinishedNotify
 {
@@ -38,7 +38,7 @@ typedef struct _FinishedNotify
 
 } FinishedNotify;
 
-/* ------------------------------ */
+/////////////////////////////////
 
 /* Our polling thread */
 gpointer apollo_orbiter (gpointer gp_queue)
@@ -75,7 +75,7 @@ gpointer apollo_orbiter (gpointer gp_queue)
     return NULL;
 }
 
-/* ------------------------------ */
+/////////////////////////////////
 
 void build_queries (GlyrQuery * one, GlyrQuery * two, GlyrQuery * three)
 {
@@ -95,14 +95,14 @@ void build_queries (GlyrQuery * one, GlyrQuery * two, GlyrQuery * three)
     glyr_opt_type  (three, GLYR_GET_ARTIST_PHOTOS);
 }
 
-/* ------------------------------ */
+/////////////////////////////////
 
 gint sort_async_queue_jobs (gconstpointer a, gconstpointer b, gpointer data)
 {
     return (a == THREAD_TERMINATOR) ? -1 : (b == THREAD_TERMINATOR) ? 1 : 0;
 }
 
-/* ------------------------------ */
+/////////////////////////////////
 
 int main (void)
 {

@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../common/google.h"
 
-/* ------------------------- */
+/////////////////////////////////
 
 static const gchar * cover_google_url (GlyrQuery * s)
 {
@@ -35,14 +35,14 @@ static const gchar * cover_google_url (GlyrQuery * s)
     return result;
 }
 
-/* ------------------------- */
+/////////////////////////////////
 
 static GList * cover_google_parse (cb_object * capo)
 {
     return generic_google_parse (capo);
 }
 
-/* ------------------------- */
+/////////////////////////////////
 
 MetaDataSource cover_google_src =
 {

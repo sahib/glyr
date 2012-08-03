@@ -25,7 +25,7 @@ static const gchar * tracklist_musicbrainz_url (GlyrQuery * sets)
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&releasetypes=Official&limit=10&title=${album}&limit=1";
 }
 
-/* ----------------------------------------- */
+/////////////////////////////////
 
 #define REL_ID_BEGIN "id=\""
 #define REL_ID_ENDIN "\" ext:score="
@@ -36,7 +36,7 @@ static const gchar * tracklist_musicbrainz_url (GlyrQuery * sets)
 #define TIT_BEGIN "<title>"
 #define TIT_ENDIN "</title>"
 
-/* ----------------------------------------- */
+/////////////////////////////////
 
 static GList * traverse_xml (const gchar * data, const gchar * url, cb_object * capo)
 {
@@ -70,7 +70,7 @@ static GList * traverse_xml (const gchar * data, const gchar * url, cb_object * 
     return collection;
 }
 
-/* ----------------------------------------- */
+/////////////////////////////////
 
 /* Use simple text parsing, xml parsing has no advantage here */
 static GList * tracklist_musicbrainz_parse (cb_object * capo)

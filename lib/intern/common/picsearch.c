@@ -41,7 +41,7 @@ const gchar * generic_picsearch_url (GlyrQuery * s, const char * fmt)
     return g_strdup_printf (base_url, fmt, img_min_size, img_max_size);
 }
 
-/* ------------------------- */
+/////////////////////////////////
 
 #define IMG_HOOK "div class=\"thumbnailTop\""
 #define IMG_HOOK_BEGIN "<a rel=\"nofollow\" href=\""
@@ -68,7 +68,7 @@ static GlyrMemCache * parse_details_page (GlyrMemCache * to_parse)
     return result;
 }
 
-/* ------------------------- */
+/////////////////////////////////
 
 #define NODE "<div class=\"imgContainer\">"
 #define NODE_NEEDS_TO_BEGIN "/imageDetail.cgi"

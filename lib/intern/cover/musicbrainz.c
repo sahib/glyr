@@ -21,14 +21,14 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static const char * cover_musicbrainz_url (GlyrQuery * q)
 {
     return "http://musicbrainz.org/ws/2/release?query=${album}&limit=10&offset=0";
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 #define COVERART "<div class=\"cover-art\">"
 #define AMZ_URL_START "\"http://ecx.images-amazon.com/"
@@ -63,12 +63,12 @@ static GlyrMemCache * parse_web_page (GlyrMemCache * page)
     return retv;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 #define NODE "<release ext:score="
 #define DL_URL "http://musicbrainz.org/release/%s"
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static GList * cover_musicbrainz_parse (cb_object * capo)
 {
@@ -106,7 +106,7 @@ static GList * cover_musicbrainz_parse (cb_object * capo)
     return result_list;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 MetaDataSource cover_musicbrainz_src =
 {

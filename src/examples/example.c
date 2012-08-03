@@ -42,7 +42,7 @@ static void print_item (GlyrMemCache * cacheditem, int num)
     fprintf (stderr,"\n------------------------\n");
 }
 
-/* ------------------------------------------ */
+/////////////////////////////////
 
 /* This is called whenever glyr gets a ready to use item */
 static GLYR_ERROR funny_callback (GlyrMemCache * c, GlyrQuery * q)
@@ -69,7 +69,7 @@ static GLYR_ERROR funny_callback (GlyrMemCache * c, GlyrQuery * q)
     return GLYRE_OK;
 }
 
-/* ------------------------------------------ */
+/////////////////////////////////
 
 int main (int argc, char * argv[])
 {

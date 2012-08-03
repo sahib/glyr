@@ -30,14 +30,14 @@
 static int get_cover_size (GlyrQuery * query);
 static bool check_values (GlyrQuery * query, char * artist, char * album);
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static const char * cover_jamendo_url (GlyrQuery * sets)
 {
     return SOURCE_URL;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 void do_line_split (char ** p_arr, char * line)
 {
@@ -55,7 +55,7 @@ void do_line_split (char ** p_arr, char * line)
     }
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static GList * cover_jamendo_parse (cb_object *capo)
 {
@@ -94,7 +94,7 @@ static GList * cover_jamendo_parse (cb_object *capo)
     return result_list;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static bool check_values (GlyrQuery * query, char * artist, char * album)
 {
@@ -106,7 +106,7 @@ static bool check_values (GlyrQuery * query, char * artist, char * album)
     return false;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static int get_cover_size (GlyrQuery * query)
 {
@@ -131,7 +131,7 @@ static int get_cover_size (GlyrQuery * query)
 }
 
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 MetaDataSource cover_jamendo_src =
 {

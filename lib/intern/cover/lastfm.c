@@ -21,14 +21,14 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 static const char * cover_lastfm_url (GlyrQuery * sets)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=album.search&autocorrect=1&album=${artist}+${album}&api_key="API_KEY_LASTFM;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 #define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
@@ -77,7 +77,7 @@ static GList * cover_lastfm_parse (cb_object *capo)
     return result_list;
 }
 
-/* ----------------------------------------------- */
+/////////////////////////////////
 
 MetaDataSource cover_lastfm_src =
 {

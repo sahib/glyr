@@ -54,4 +54,4 @@ const gchar * generic_amazon_url (GlyrQuery * sets, const gchar * response_group
     return NULL;
 }
 
-/* ------------------------------------------------------------- */
+/////////////////////////////////

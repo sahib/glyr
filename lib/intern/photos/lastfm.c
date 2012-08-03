@@ -24,14 +24,14 @@
 #define URL_BEGIN "\">"
 #define URL_ENDIN "</size>"
 
-/* -------------------------------------------- */
+/////////////////////////////////
 
 static const gchar * photos_lastfm_url (GlyrQuery * settings)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&autocorrect=1&artist=${artist}&api_key="API_KEY_LASTFM;
 }
 
-/* -------------------------------------------- */
+/////////////////////////////////
 
 static gboolean size_fits (GlyrQuery * s, gchar ** ref)
 {
@@ -75,7 +75,7 @@ static gboolean size_fits (GlyrQuery * s, gchar ** ref)
     return result;
 }
 
-/* -------------------------------------------- */
+/////////////////////////////////
 
 static GList * photos_lastfm_parse (cb_object * capo)
 {

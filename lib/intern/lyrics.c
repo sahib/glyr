@@ -22,7 +22,7 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-/* ------------------------------------- */
+/////////////////////////////////
 
 static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
@@ -43,7 +43,7 @@ static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList *
     return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_LYRICS,result_list);
 }
 
-/* ------------------------------------- */
+/////////////////////////////////
 
 /* PlugStruct */
 MetaDataFetcher glyrFetcher_lyrics =
@@ -59,4 +59,4 @@ MetaDataFetcher glyrFetcher_lyrics =
     .default_parallel = 1
 };
 
-/* ------------------------------------- */
+/////////////////////////////////

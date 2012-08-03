@@ -27,11 +27,11 @@
 #include "blacklist.h"
 #include "cache.h"
 
-//* ------------------------------------------------------- */
+//////////////////////////////////
 
 static volatile gboolean is_initalized = FALSE;
 
-//* ------------------------------------------------------- */
+//////////////////////////////////
 
 static const char * err_strings[] =
 {
@@ -1196,7 +1196,7 @@ void glyr_cache_print (GlyrMemCache * cacheditem)
     }
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GlyrFetcherInfo * glyr_info_get (void)
@@ -1204,7 +1204,7 @@ GlyrFetcherInfo * glyr_info_get (void)
     return get_plugin_info();
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_info_free (GlyrFetcherInfo * info)
@@ -1212,7 +1212,7 @@ void glyr_info_free (GlyrFetcherInfo * info)
     free_plugin_info (info);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 char * glyr_md5sum_to_string (unsigned char * md5sum)
@@ -1232,7 +1232,7 @@ char * glyr_md5sum_to_string (unsigned char * md5sum)
     return md5str;
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 #define CHAR_TO_NUM(c) (unsigned char)(g_ascii_isdigit(c) ? c - '0' : (c - 'a') + 10)
 
@@ -1250,7 +1250,7 @@ void glyr_string_to_md5sum (const char * string, unsigned char * md5sum)
 }
 #undef CHAR_TO_NUM
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 GLYR_FIELD_REQUIREMENT glyr_get_requirements (GLYR_GET_TYPE type)
@@ -1286,7 +1286,7 @@ GLYR_FIELD_REQUIREMENT glyr_get_requirements (GLYR_GET_TYPE type)
         Field = g_strdup(Value);              \
     }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_dsrc (GlyrMemCache * cache, const char * download_source)
@@ -1294,7 +1294,7 @@ void glyr_cache_set_dsrc (GlyrMemCache * cache, const char * download_source)
     SET_CACHE_STRING (cache,cache->dsrc,download_source);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_prov (GlyrMemCache * cache, const char * provider)
@@ -1302,7 +1302,7 @@ void glyr_cache_set_prov (GlyrMemCache * cache, const char * provider)
     SET_CACHE_STRING (cache,cache->prov,provider);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_img_format (GlyrMemCache * cache, const char * img_format)
@@ -1310,7 +1310,7 @@ void glyr_cache_set_img_format (GlyrMemCache * cache, const char * img_format)
     SET_CACHE_STRING (cache,cache->img_format,img_format);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_type (GlyrMemCache * cache, GLYR_DATA_TYPE type)
@@ -1319,7 +1319,7 @@ void glyr_cache_set_type (GlyrMemCache * cache, GLYR_DATA_TYPE type)
         cache->type = MAX (type,GLYR_TYPE_NOIDEA);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_rating (GlyrMemCache * cache, int rating)
@@ -1328,7 +1328,7 @@ void glyr_cache_set_rating (GlyrMemCache * cache, int rating)
         cache->rating = rating;
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
 bool glyr_type_is_image (GLYR_GET_TYPE type)
@@ -1336,4 +1336,4 @@ bool glyr_type_is_image (GLYR_GET_TYPE type)
     return TYPE_IS_IMAGE (type);
 }
 
-/* --------------------------------------------------------- */
+/////////////////////////////////

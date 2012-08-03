@@ -109,7 +109,7 @@ extern MetaDataSource musictree_provider_src;
 //extern MetaDataSource lyrics_darklyrics_src;
 //extern MetaDataSource lyrics_directlyrics_src;
 //extern MetaDataSource lyrics_songlyrics_src;
-/* --------------------------------------- */
+/////////////////////////////////
 
 /* Get fetcher list */
 GList * r_getFList (void)
@@ -117,7 +117,7 @@ GList * r_getFList (void)
     return glyrMetaDataPluginList;
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 /* Get Source list */
 GList * r_getSList (void)
@@ -125,7 +125,7 @@ GList * r_getSList (void)
     return glyrMetaDataSourceList;
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 void plugin_add_to_list (GList ** list, void * data)
 {
@@ -135,7 +135,7 @@ void plugin_add_to_list (GList ** list, void * data)
     }
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 static void register_provider_plugins (void)
 {
@@ -210,7 +210,7 @@ static void register_provider_plugins (void)
     plugin_add_to_list (&glyrMetaDataSourceList,&musictree_provider_src);
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 /* Just presort a bit, so we don't need to shuffle the plugins always *
  * This has no actual practical use, it's just that pretty plugins are listed
@@ -226,7 +226,7 @@ static gint compare_by_priority (gconstpointer a, gconstpointer b)
            ) : 0;
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 static void get_list_from_type (MetaDataFetcher * fetch)
 {
@@ -248,7 +248,7 @@ static void get_list_from_type (MetaDataFetcher * fetch)
 
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 static void init_provider_list (void)
 {
@@ -256,7 +256,7 @@ static void init_provider_list (void)
         get_list_from_type ( (MetaDataFetcher *) (fetch->data) );
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 /* Register fetchers */
 void register_fetcher_plugins (void)
@@ -294,7 +294,7 @@ void register_fetcher_plugins (void)
     init_provider_list();
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 /* Unregister 'em again */
 void unregister_fetcher_plugins (void)
@@ -325,7 +325,7 @@ void unregister_fetcher_plugins (void)
     }
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 GlyrFetcherInfo * get_plugin_info (void)
 {
@@ -383,7 +383,7 @@ GlyrFetcherInfo * get_plugin_info (void)
     return head;
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 static void free_single_item (GlyrFetcherInfo * info)
 {
@@ -404,7 +404,7 @@ static void free_single_item (GlyrFetcherInfo * info)
     g_free (info);
 }
 
-/* --------------------------------------- */
+/////////////////////////////////
 
 void free_plugin_info (GlyrFetcherInfo * infos)
 {

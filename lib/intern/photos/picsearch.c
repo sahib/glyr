@@ -21,20 +21,20 @@
 #include "../../stringlib.h"
 #include "../common/picsearch.h"
 
-/* ------------------------- */
+/////////////////////////////////
 
 static const gchar * photos_picsearch_url (GlyrQuery * s)
 {
     return generic_picsearch_url (s,"${artist}+band");
 }
 
-/* ------------------------- */
+/////////////////////////////////
 static GList * photos_picsearch_parse (cb_object * capo)
 {
     return generic_picsearch_parse (capo);
 }
 
-/* ------------------------- */
+/////////////////////////////////
 
 MetaDataSource photos_picsearch_src =
 {
