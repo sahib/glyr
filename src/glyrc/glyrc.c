@@ -186,7 +186,9 @@ static void init_cancel_handler (GlyrQuery * p_lastQuery)
 static void print_version (GlyrQuery * s)
 {
     cprint (DEFAULT,-1,s, "%s\n\n",glyr_version() );
-    cprint (DEFAULT,-1,s, "This is still beta software, expect quite a lot bugs.\n");
+
+    cprint (DEFAULT,-1,s, "libglyr is licensed under the terms of the GPLv3.\n");
+    cprint (DEFAULT,-1,s, "Please refer to the COPYING file you received with glyr.\n\n");
     cprint (DEFAULT,-1,s, "Email bugs to <sahib@online.de> or use the bugtracker\n"
             "at https://github.com/sahib/glyr/issues - Thank you! \n");
 
