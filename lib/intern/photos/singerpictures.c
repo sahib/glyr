@@ -31,6 +31,8 @@ static const gchar * photos_singerlyrics_url (GlyrQuery * settings)
         gchar * prep_artist = NULL;
         if(settings->normalization & GLYR_NORMALIZE_ARTIST)
             prep_artist = prepare_string (space_to_min_artist, settings->normalization,TRUE);
+        else
+            prep_artist = prepare_string (space_to_min_artist, GLYR_NORMALIZE_NONE,TRUE);
 
         if (prep_artist != NULL)
         {

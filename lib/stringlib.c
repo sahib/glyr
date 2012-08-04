@@ -339,7 +339,7 @@ gchar * prepare_string (const gchar * input, GLYR_NORMALIZATION mode, gboolean d
         if (downed != NULL)
         {
             gchar * normalized = g_utf8_normalize (downed,-1,G_NORMALIZE_NFKC);
-            if ((mode & GLYR_NORMALIZE_MODERATE || mode & GLYR_NORMALIZE_AGGRESSIVE) && normalized != NULL)
+            if (normalized != NULL)
             {
                 if (normalized != NULL && mode & GLYR_NORMALIZE_AGGRESSIVE)
                 {
@@ -348,24 +348,27 @@ gchar * prepare_string (const gchar * input, GLYR_NORMALIZATION mode, gboolean d
                     remove_tags_from_string (normalized,-1,'[',']');
                 }
 
-                gchar * no_lint = regex_replace_by_table (normalized,regex_table,regex_table_size);
-                if (no_lint != NULL)
+                if (mode & GLYR_NORMALIZE_MODERATE || mode & GLYR_NORMALIZE_AGGRESSIVE)
+                {
+                    gchar * no_lint = regex_replace_by_table (normalized,regex_table,regex_table_size);
+                    g_free(normalized);
+                    normalized = no_lint;
+                }
+
+                if (normalized != NULL)
                 {
                     if (do_curl_escape)
                     {
-                        char * m_result = curl_easy_escape (NULL, no_lint, 0);
+                        char * m_result = curl_easy_escape (NULL, normalized, 0);
                         result = g_strdup (m_result);
                         curl_free (m_result);
+                        g_free(normalized);
                     }
                     else
                     {
-                        result = no_lint;
+                        result = normalized;
                     }
-
-
-                    if (do_curl_escape == TRUE) g_free (no_lint);
                 }
-                g_free (normalized);
             }
             else
             {
@@ -397,12 +400,18 @@ gchar * prepare_url (const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
 
         if (s->normalization & GLYR_NORMALIZE_ARTIST)
             p_artist = prepare_string (trim_nocopy (unwinded_artist), s->normalization, do_curl_escape);
+        else
+            p_artist = prepare_string (trim_nocopy (unwinded_artist), GLYR_NORMALIZE_NONE, do_curl_escape);
 
         if (s->normalization & GLYR_NORMALIZE_ALBUM)
             p_album  = prepare_string (s->album, s->normalization, do_curl_escape);
+        else
+            p_album  = prepare_string (s->album, GLYR_NORMALIZE_NONE, do_curl_escape);
 
         if (s->normalization & GLYR_NORMALIZE_TITLE)
             p_title  = prepare_string (s->title, s->normalization, do_curl_escape);
+        else
+            p_title  = prepare_string (s->title, GLYR_NORMALIZE_NONE, do_curl_escape);
 
         swap_string (&tmp,"${artist}",p_artist);
         swap_string (&tmp,"${album}", p_album);

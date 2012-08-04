@@ -897,14 +897,20 @@ GlyrMemCache * glyr_get (GlyrQuery * query, GLYR_ERROR * e, int * length)
                     /* Print some user info, always useful */
                     if (query->normalization & GLYR_NORMALIZE_ARTIST) {
                         PRINT_NORMALIZED_ATTR("- Artist   : ", query->normalization, query->artist);
+                    } else {
+                        PRINT_NORMALIZED_ATTR("- Artist   : ", GLYR_NORMALIZE_NONE, query->artist);
                     }
 
                     if (query->normalization & GLYR_NORMALIZE_ALBUM) {
                         PRINT_NORMALIZED_ATTR("- Album    : ", query->normalization, query->album);
+                    } else {
+                        PRINT_NORMALIZED_ATTR("- Album    : ", GLYR_NORMALIZE_NONE, query->album);
                     }
 
                     if (query->normalization & GLYR_NORMALIZE_TITLE) {
                         PRINT_NORMALIZED_ATTR("- Title    : ", query->normalization, query->title);
+                    } else {
+                        PRINT_NORMALIZED_ATTR("- Title    : ", GLYR_NORMALIZE_NONE, query->title);
                     }
 
                     if (query->lang != NULL)

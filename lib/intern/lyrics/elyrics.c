@@ -34,9 +34,13 @@ static const gchar * lyrics_elyrics_url (GlyrQuery * settings)
         gchar * prep_title = NULL, * prep_artist = NULL;
         if (settings->normalization & GLYR_NORMALIZE_ARTIST)
             prep_title  = prepare_string (space_to_min_title, settings->normalization,TRUE);
+        else
+            prep_title  = prepare_string (space_to_min_title, GLYR_NORMALIZE_NONE,TRUE);
 
         if (settings->normalization & GLYR_NORMALIZE_ARTIST)
             prep_artist = prepare_string (space_to_min_artist, settings->normalization,TRUE);
+        else
+            prep_artist = prepare_string (space_to_min_artist, GLYR_NORMALIZE_NONE,TRUE);
 
         if (prep_title && prep_artist)
         {

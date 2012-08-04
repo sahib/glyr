@@ -523,7 +523,6 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             break;
         case 'N':
             {
-                puts(optarg);
                 GLYR_NORMALIZATION norm = 0;
                 if (g_ascii_strcasecmp (optarg, "aggressive") == 0)
                     norm = GLYR_NORMALIZE_AGGRESSIVE;
@@ -536,6 +535,8 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
                     cprint (RED,-1,NULL,"No valid normalization level: '%s'\n", optarg);
                     exit(-1);
                 }
+
+                norm |= GLYR_NORMALIZE_ALL;
 
                 glyr_opt_normalize(glyrs, norm);
             }
