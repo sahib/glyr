@@ -378,6 +378,7 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
         {"fuzzyness",     required_argument, 0, 'z'},
         {"callback",      required_argument, 0, 'j'},
         {"musictree-path",required_argument, 0, 's'},
+        {"normalization", required_argument, 0, 'N'},
         {0,               0,                 0, '0'}
     };
 
@@ -386,7 +387,7 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
     {
         gint c;
         gint option_index = 0;
-        if ( (c = getopt_long (argc, argv, "f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index) ) == -1)
+        if ( (c = getopt_long (argc, argv, "N:f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index) ) == -1)
         {
             break;
         }
@@ -519,6 +520,25 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             break;
         case 'Y':
             enable_color (false);
+            break;
+        case 'N':
+            {
+                puts(optarg);
+                GLYR_NORMALIZATION norm = 0;
+                if (g_ascii_strcasecmp (optarg, "aggressive") == 0)
+                    norm = GLYR_NORMALIZE_AGGRESSIVE;
+                else if (g_ascii_strcasecmp (optarg, "moderate") == 0)
+                    norm = GLYR_NORMALIZE_MODERATE;
+                else if (g_ascii_strcasecmp (optarg, "none") == 0)
+                    norm = GLYR_NORMALIZE_NONE;
+                else 
+                {
+                    cprint (RED,-1,NULL,"No valid normalization level: '%s'\n", optarg);
+                    exit(-1);
+                }
+
+                glyr_opt_normalize(glyrs, norm);
+            }
             break;
         case '?':
             cprint (RED,-1,NULL,"Option \"%s\" is not known\n",argv[optind-1]);

@@ -56,6 +56,8 @@ void cprint (termcolor col,gint verbosity, GlyrQuery * s, const char * fmt, ...)
 
         if (col != DEFAULT && global_enable_color)
             resetcolor (GLYR_OUTPUT);
+
+        fflush(stdout);
     }
 }
 
