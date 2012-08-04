@@ -1171,7 +1171,7 @@ gboolean regex_match_compiled (const gchar * string, const GRegex * cRegex)
     return retv;
 }
 
-#if 1
+#if 0
 int main (int argc, char * argv[])
 {
     printf ("%s\n", regex_replace_by_table (argv[1], regex_table, regex_table_size) );
