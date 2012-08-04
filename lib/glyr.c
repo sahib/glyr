@@ -57,7 +57,7 @@ static const char * type_strings[] =
     [GLYR_TYPE_LYRICS] = "songtext",
     [GLYR_TYPE_ARTIST_PHOTO] = "artistphoto",
     [GLYR_TYPE_ALBUM_REVIEW] = "albumreview",
-    [GLYR_TYPE_ARTISTBIO] = "artistbio",
+    [GLYR_TYPE_ARTIST_BIO] = "artistbio",
     [GLYR_TYPE_SIMILAR_ARTIST] = "similar_artist",
     [GLYR_TYPE_SIMILAR_SONG] = "similar_song",
     [GLYR_TYPE_TRACK] = "trackname",
@@ -272,7 +272,7 @@ __attribute__ ( (visibility ("default") ) )
 GLYR_ERROR glyr_opt_type (GlyrQuery * s, GLYR_GET_TYPE type)
 {
     if (s == NULL) return GLYRE_EMPTY_STRUCT;
-    if (type != GLYR_GET_UNSURE)
+    if (type != GLYR_GET_UNKNOWN)
     {
         s->type = type;
         return GLYRE_OK;
@@ -586,7 +586,7 @@ static void set_query_on_defaults (GlyrQuery * glyrs)
     /* Initialize free pointer pool */
     memset (glyrs,0,sizeof (GlyrQuery) );
 
-    glyrs->type = GLYR_GET_UNSURE;
+    glyrs->type = GLYR_GET_UNKNOWN;
     glyrs->artist = NULL;
     glyrs->album  = NULL;
     glyrs->title  = NULL;
@@ -1117,7 +1117,7 @@ GLYR_GET_TYPE glyr_string_to_get_type (const char * string)
             }
         }
     }
-    return GLYR_GET_UNSURE;
+    return GLYR_GET_UNKNOWN;
 }
 
 /////////////////////////////////

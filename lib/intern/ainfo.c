@@ -40,7 +40,7 @@ static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList *
         }
     }
 
-    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_ARTISTBIO,result_list);
+    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_ARTIST_BIO,result_list);
 }
 
 /////////////////////////////////
@@ -49,8 +49,8 @@ static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList *
 MetaDataFetcher glyrFetcher_artistbio =
 {
     .name = "artistbio",
-    .type = GLYR_GET_ARTISTBIO,
-    .default_data_type = GLYR_TYPE_ARTISTBIO,
+    .type = GLYR_GET_ARTIST_BIO,
+    .default_data_type = GLYR_TYPE_ARTIST_BIO,
     .reqs = GLYR_REQUIRES_ARTIST,
     .full_data = TRUE,
     .init      = NULL,

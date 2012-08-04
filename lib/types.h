@@ -124,7 +124,7 @@ extern "C"
     * @GLYR_GET_COVERART: Get Coverart.
     * @GLYR_GET_LYRICS:  Get Songtext
     * @GLYR_GET_ARTIST_PHOTOS: Get Live/Promotion/Fanartwork
-    * @GLYR_GET_ARTISTBIO: Get information about this artist
+    * @GLYR_GET_ARTIST_BIO: Get information about this artist
     * @GLYR_GET_SIMILAR_ARTISTS: get similar artists
     * @GLYR_GET_SIMILAR_SONGS: get similar songs
     * @GLYR_GET_ALBUM_REVIEW: get album reviews
@@ -134,7 +134,7 @@ extern "C"
     * @GLYR_GET_ALBUMLIST: get a list of albums from a certain artist
     * @GLYR_GET_GUITARTABS: get guitar tabs for a specified artist/title
     * @GLYR_GET_BACKDROPS: get large backdrops (backgrounds) from a certain artist.
-    * @GLYR_GET_UNSURE: The default value after initializing a query.
+    * @GLYR_GET_UNKNOWN: The default value after initializing a query.
     * @GLYR_GET_ANY: Delievers everything (like the 'locale' provider), do not use this.
     *
     * You tell libglyr what metadata you want by choosing one of the below
@@ -148,11 +148,11 @@ extern "C"
      */
     typedef enum
     {
-        GLYR_GET_UNSURE,
+        GLYR_GET_UNKNOWN,
         GLYR_GET_COVERART,
         GLYR_GET_LYRICS,
         GLYR_GET_ARTIST_PHOTOS,
-        GLYR_GET_ARTISTBIO,
+        GLYR_GET_ARTIST_BIO,
         GLYR_GET_SIMILAR_ARTISTS,
         GLYR_GET_SIMILAR_SONGS,
         GLYR_GET_ALBUM_REVIEW,
@@ -167,12 +167,12 @@ extern "C"
 
     /**
     * GLYR_DATA_TYPE:
-    * @GLYR_TYPE_NOIDEA: You shouldn't get this
+    * @GLYR_TYPE_UNKNOWN: You shouldn't get this
     * @GLYR_TYPE_LYRICS: Songtext
     * @GLYR_TYPE_ALBUM_REVIEW: Albumreview
     * @GLYR_TYPE_ARTIST_PHOTO: Pictures showing a certain band
     * @GLYR_TYPE_COVERART: coverart
-    * @GLYR_TYPE_ARTISTBIO: Artist bio
+    * @GLYR_TYPE_ARTIST_BIO: Artist bio
     * @GLYR_TYPE_SIMILAR_ARTIST: Similiar artists
     * @GLYR_TYPE_SIMILAR_SONG: Similar songs
     * @GLYR_TYPE_ALBUMLIST: List of albums: each cache containing one name
@@ -199,12 +199,12 @@ extern "C"
      */
     typedef enum
     {
-        GLYR_TYPE_NOIDEA,
+        GLYR_TYPE_UNKNOWN,
         GLYR_TYPE_LYRICS,
         GLYR_TYPE_ALBUM_REVIEW,
         GLYR_TYPE_ARTIST_PHOTO,
         GLYR_TYPE_COVERART,
-        GLYR_TYPE_ARTISTBIO,
+        GLYR_TYPE_ARTIST_BIO,
         GLYR_TYPE_SIMILAR_ARTIST,
         GLYR_TYPE_SIMILAR_SONG,
         GLYR_TYPE_ALBUMLIST,

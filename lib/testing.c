@@ -29,7 +29,7 @@
 static MetaDataSource * get_metadata_struct (const char * provider_name, GLYR_GET_TYPE type)
 {
     MetaDataSource * result = NULL;
-    if (provider_name && type !=  GLYR_GET_UNSURE)
+    if (provider_name && type !=  GLYR_GET_UNKNOWN)
     {
         gsize name_len = strlen (provider_name);
         GList * source_list = r_getSList();

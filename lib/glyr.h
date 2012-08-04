@@ -867,7 +867,7 @@ extern "C"
                 search_regex = "^(${album})\\.(info|txt)$";
                 recurse_depth = 2;
                 break;
-            case GLYR_GET_ARTISTBIO:
+            case GLYR_GET_ARTIST_BIO:
                 search_regex = "^BIOGRAPHY(\\.txt)?$";
                 recurse_depth = 2;
                 break;

@@ -628,7 +628,7 @@ static GLYR_ERROR callback (GlyrMemCache * c, GlyrQuery * s)
 
 GLYR_GET_TYPE get_type_from_string (const char * string)
 {
-    GLYR_GET_TYPE result = GLYR_GET_UNSURE;
+    GLYR_GET_TYPE result = GLYR_GET_UNKNOWN;
     if (g_ascii_strncasecmp (string,"none",4) == 0)
         return GLYR_GET_ANY;
 
@@ -744,7 +744,7 @@ static bool parse_type_argument (const char * argvi, GlyrQuery * qp)
     if (argvi != NULL)
     {
         GLYR_GET_TYPE type = get_type_from_string (argvi);
-        if (type == GLYR_GET_UNSURE)
+        if (type == GLYR_GET_UNKNOWN)
         {
             cvprint (RED,"Error: \"%s\" is not a know getter.\n",argvi);
             cvprint (DEFAULT,"Currently available are:\n");
