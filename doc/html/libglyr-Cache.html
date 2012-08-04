@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Cache</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="ch01.html" title="[Insert title here]">
@@ -45,41 +45,41 @@ Stable, unless otherwise indicated
 #include &lt;glyr/cache.h&gt;
 
 #define             <a class="link" href="libglyr-Cache.html#GLYR-DB-FILENAME:CAPS" title="GLYR_DB_FILENAME">GLYR_DB_FILENAME</a>
-<span class="returnvalue">int</span>                 <a class="link" href="libglyr-Cache.html#glyr-db-delete" title="glyr_db_delete ()">glyr_db_delete</a>                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-destroy" title="glyr_db_destroy ()">glyr_db_destroy</a>                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db_object</code></em>);
-<span class="returnvalue">int</span>                 <a class="link" href="libglyr-Cache.html#glyr-db-edit" title="glyr_db_edit ()">glyr_db_edit</a>                        (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *edited</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-foreach" title="glyr_db_foreach ()">glyr_db_foreach</a>                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
+<span class="returnvalue">int</span>                 <a class="link" href="libglyr-Cache.html#glyr-db-delete" title="glyr_db_delete ()">glyr_db_delete</a>                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-destroy" title="glyr_db_destroy ()">glyr_db_destroy</a>                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db_object</code></em>);
+<span class="returnvalue">int</span>                 <a class="link" href="libglyr-Cache.html#glyr-db-edit" title="glyr_db_edit ()">glyr_db_edit</a>                        (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *edited</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-foreach" title="glyr_db_foreach ()">glyr_db_foreach</a>                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-Cache.html#glyr-foreach-callback" title="glyr_foreach_callback ()"><span class="type">glyr_foreach_callback</span></a> cb</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *userptr</code></em>);
-<a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="returnvalue">GlyrDatabase</span></a> *      <a class="link" href="libglyr-Cache.html#glyr-db-init" title="glyr_db_init ()">glyr_db_init</a>                        (<em class="parameter"><code>const <span class="type">char</span> *root_path</code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-insert" title="glyr_db_insert ()">glyr_db_insert</a>                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *q</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);
-<a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()">glyr_db_lookup</a>                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);
-<a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      <a class="link" href="libglyr-Cache.html#glyr-db-make-dummy" title="glyr_db_make_dummy ()">glyr_db_make_dummy</a>                  (<em class="parameter"><code><span class="type">void</span></code></em>);
-<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-replace" title="glyr_db_replace ()">glyr_db_replace</a>                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
+<span class="returnvalue">GlyrDatabase</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-init" title="glyr_db_init ()">glyr_db_init</a>                        (<em class="parameter"><code>const <span class="type">char</span> *root_path</code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-insert" title="glyr_db_insert ()">glyr_db_insert</a>                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *q</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *cache</code></em>);
+<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()">glyr_db_lookup</a>                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);
+<span class="returnvalue">GlyrMemCache</span> *      <a class="link" href="libglyr-Cache.html#glyr-db-make-dummy" title="glyr_db_make_dummy ()">glyr_db_make_dummy</a>                  (<em class="parameter"><code><span class="type">void</span></code></em>);
+<span class="returnvalue">void</span>                <a class="link" href="libglyr-Cache.html#glyr-db-replace" title="glyr_db_replace ()">glyr_db_replace</a>                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *data</code></em>);
-<span class="returnvalue">int</span>                 (<a class="link" href="libglyr-Cache.html#glyr-foreach-callback" title="glyr_foreach_callback ()">*glyr_foreach_callback</a>)            (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *q</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *item</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *data</code></em>);
+<span class="returnvalue">int</span>                 (<a class="link" href="libglyr-Cache.html#glyr-foreach-callback" title="glyr_foreach_callback ()">*glyr_foreach_callback</a>)            (<em class="parameter"><code><span class="type">GlyrQuery</span> *q</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *item</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *userptr</code></em>);
 </pre>
 </div>
 <div class="refsect1">
 <a name="libglyr-Cache.description"></a><h2>Description</h2>
 <p>
-The Cache offers application authors to store the items found 
+The Cache offers application authors to store the items found
 by glyr persistently in a DB-Cache and get them again once needed.
 Before usage it is necessary to open the DB via <a class="link" href="libglyr-Cache.html#glyr-db-init" title="glyr_db_init ()"><code class="function">glyr_db_init()</code></a>,
 which expects a folder where the DB will be stored, after this
 there are 4 operations you can use on the query:
 </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>
 Lookup by a Query (<a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()"><code class="function">glyr_db_lookup()</code></a>)
 </p></li>
@@ -96,7 +96,7 @@ Iterate (<a class="link" href="libglyr-Cache.html#glyr-db-foreach" title="glyr_d
 <p>
 </p>
 <p>
-If you want to insert "own" caches, e.g. to indicate that some artist wasn't found you could use 
+If you want to insert "own" caches, e.g. to indicate that some artist wasn't found you could use
 the following piece of code:
 </p>
 <div class="informalexample"><pre class="programlisting">
@@ -122,8 +122,8 @@ the following piece of code:
 <hr>
 <div class="refsect2">
 <a name="glyr-db-delete"></a><h3>glyr_db_delete ()</h3>
-<pre class="programlisting"><span class="returnvalue">int</span>                 glyr_db_delete                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">int</span>                 glyr_db_delete                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);</pre>
 <p>
 The database is searched for the artist, album, title and type specified in <em class="parameter"><code>query</code></em>.
 If items in the DB match they will deleted.
@@ -131,7 +131,7 @@ If items in the DB match they will deleted.
 <p>
 Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-delete" title="glyr_db_delete ()"><code class="function">glyr_db_delete()</code></a>:
 </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>
 <a class="link" href="libglyr-Glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a> - If false URLs to images are searched, true for real images.
 </p></li>
@@ -144,8 +144,11 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-d
 </ul></div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -165,13 +168,16 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-d
 <hr>
 <div class="refsect2">
 <a name="glyr-db-destroy"></a><h3>glyr_db_destroy ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_destroy                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db_object</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_destroy                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db_object</code></em>);</pre>
 <p>
 Close the connection and free all associated memory.
 You may not use it anymore.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><em class="parameter"><code>db_object</code></em> :</span></p></td>
 <td>A database connection</td>
@@ -181,9 +187,9 @@ You may not use it anymore.
 <hr>
 <div class="refsect2">
 <a name="glyr-db-edit"></a><h3>glyr_db_edit ()</h3>
-<pre class="programlisting"><span class="returnvalue">int</span>                 glyr_db_edit                        (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *edited</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">int</span>                 glyr_db_edit                        (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *edited</code></em>);</pre>
 <p>
 A simple convenience function to delete caches according to the settings specified in <em class="parameter"><code>query</code></em>,
 (Same rules as in <a class="link" href="libglyr-Cache.html#glyr-db-delete" title="glyr_db_delete ()"><code class="function">glyr_db_delete()</code></a> apply here).
@@ -196,25 +202,28 @@ You could have written it yourself like this:
 <div class="informalexample"><pre class="programlisting">
 int glyr_db_edit(GlyrDatabase * db, GlyrQuery * query, GlyrMemCache * edited)
 {
-int result = 0;
-if(db &amp;&amp; query)
-{
-	result = glyr_db_delete(db,query);
-	if(result != 0)
-	{
-		for(GlyrMemCache * elem = edited; elem; elem = elem-&gt;next)
-		{
-			glyr_db_insert(db,query,edited);
-		}
-	}
-}
-return result;
+  int result = 0;
+  if(db &amp;&amp; query)
+  {
+      result = glyr_db_delete(db,query);
+      if(result != 0)
+      {
+          for(GlyrMemCache * elem = edited; elem; elem = elem-&gt;next)
+          {
+              glyr_db_insert(db,query,edited);
+          }
+      }
+  }
+  return result;
 }
 </pre></div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -238,12 +247,12 @@ return result;
 <hr>
 <div class="refsect2">
 <a name="glyr-db-foreach"></a><h3>glyr_db_foreach ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_foreach                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_foreach                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code><a class="link" href="libglyr-Cache.html#glyr-foreach-callback" title="glyr_foreach_callback ()"><span class="type">glyr_foreach_callback</span></a> cb</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *userptr</code></em>);</pre>
 <p>
 Iterate over all items in the database.
-Callback may not be null. If callback returns a number != 0, 
+Callback may not be null. If callback returns a number != 0,
 iteration aborts.
 </p>
 <p>
@@ -251,7 +260,8 @@ Callback parameters:
 </p>
 <p>
 1) The artist / album / title / type that was used to get this cache is stored in 'query', other fields are not filled.
-   
+</p>
+<p>
 2) The actual cache completely filled.
 </p>
 <p>
@@ -260,8 +270,11 @@ Callback parameters:
 <p>
 This is useful if you want to have statistics or such.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -281,14 +294,17 @@ This is useful if you want to have statistics or such.
 <hr>
 <div class="refsect2">
 <a name="glyr-db-init"></a><h3>glyr_db_init ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="returnvalue">GlyrDatabase</span></a> *      glyr_db_init                        (<em class="parameter"><code>const <span class="type">char</span> *root_path</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">GlyrDatabase</span> *      glyr_db_init                        (<em class="parameter"><code>const <span class="type">char</span> *root_path</code></em>);</pre>
 <p>
-Allocates a new database object, and create a SQLite database 
-at the given path. The filename is in <a class="link" href="libglyr-Cache.html#GLYR-DB-FILENAME:CAPS" title="GLYR_DB_FILENAME"><span class="type">GLYR_DB_FILENAME</span></a> 
+Allocates a new database object, and create a SQLite database
+at the given path. The filename is in <a class="link" href="libglyr-Cache.html#GLYR-DB-FILENAME:CAPS" title="GLYR_DB_FILENAME"><span class="type">GLYR_DB_FILENAME</span></a>
 You can now use insert,delete, edit and lookup on it.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>root_path</code></em> :</span></p></td>
@@ -304,14 +320,17 @@ You can now use insert,delete, edit and lookup on it.
 <hr>
 <div class="refsect2">
 <a name="glyr-db-insert"></a><h3>glyr_db_insert ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_insert                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *q</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *cache</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_insert                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *q</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *cache</code></em>);</pre>
 <p>
 The cache wil be inserted to the db <em class="parameter"><code>db</code></em>, <em class="parameter"><code>q</code></em> is used to determine the artist, album, title and type.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -332,21 +351,21 @@ The cache wil be inserted to the db <em class="parameter"><code>db</code></em>, 
 <hr>
 <div class="refsect2">
 <a name="glyr-db-lookup"></a><h3>glyr_db_lookup ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_db_lookup                      (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_db_lookup                      (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>);</pre>
 <p>
 The artist,album,title and type field are used to query
-the database. 
+the database.
 </p>
 <p>
-If you used <a class="link" href="libglyr-Glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a> to bind the DB to a query, 
+If you used <a class="link" href="libglyr-Glyr.html#glyr-opt-lookup-db" title="glyr_opt_lookup_db ()"><code class="function">glyr_opt_lookup_db()</code></a> to bind the DB to a query,
 You may use <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> as an alternative for this method.
 If your specify "local" in <a class="link" href="libglyr-Glyr.html#glyr-opt-from" title="glyr_opt_from ()"><code class="function">glyr_opt_from()</code></a> only the DB is searched.
 </p>
 <p>
 Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()"><code class="function">glyr_db_lookup()</code></a>:
 </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem"><p>
 <a class="link" href="libglyr-Glyr.html#glyr-opt-download" title="glyr_opt_download ()"><code class="function">glyr_opt_download()</code></a> - If false URLs to images are searched, true for real images.
 </p></li>
@@ -359,8 +378,11 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-l
 </ul></div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -372,7 +394,7 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-l
 </tr>
 <tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
-<td>A newly allocated <a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> or NULL if nothing found</td>
+<td>A newly allocated <span class="type">GlyrMemCache</span> or NULL if nothing found</td>
 </tr>
 </tbody>
 </table></div>
@@ -380,15 +402,18 @@ Other query-fields honored by <a class="link" href="libglyr-Cache.html#glyr-db-l
 <hr>
 <div class="refsect2">
 <a name="glyr-db-make-dummy"></a><h3>glyr_db_make_dummy ()</h3>
-<pre class="programlisting"><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="returnvalue">GlyrMemCache</span></a> *      glyr_db_make_dummy                  (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
+<pre class="programlisting"><span class="returnvalue">GlyrMemCache</span> *      glyr_db_make_dummy                  (<em class="parameter"><code><span class="type">void</span></code></em>);</pre>
 <p>
 The idea behind this function is to create a dummy entry for the cache, e.g. to indicate a certain item
-was not found. In this case you create a dummy with a 'rating' of -1 and push it into the DB. 
+was not found. In this case you create a dummy with a 'rating' of -1 and push it into the DB.
 If one does a lookup (via <a class="link" href="libglyr-Glyr.html#glyr-get" title="glyr_get ()"><code class="function">glyr_get()</code></a> or <a class="link" href="libglyr-Cache.html#glyr-db-lookup" title="glyr_db_lookup ()"><code class="function">glyr_db_lookup()</code></a>) then this cache will be returned, one is able
 to check if the item was not found before.
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody><tr>
 <td><p><span class="term"><span class="emphasis"><em>Returns</em></span> :</span></p></td>
 <td>A newly allocated cache, use <a class="link" href="libglyr-Glyr.html#glyr-cache-free" title="glyr_cache_free ()"><code class="function">glyr_cache_free()</code></a> to free it.</td>
@@ -398,17 +423,17 @@ to check if the item was not found before.
 <hr>
 <div class="refsect2">
 <a name="glyr-db-replace"></a><h3>glyr_db_replace ()</h3>
-<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_replace                     (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrDatabase" title="GlyrDatabase"><span class="type">GlyrDatabase</span></a> *db</code></em>,
+<pre class="programlisting"><span class="returnvalue">void</span>                glyr_db_replace                     (<em class="parameter"><code><span class="type">GlyrDatabase</span> *db</code></em>,
                                                          <em class="parameter"><code>unsigned <span class="type">char</span> *md5sum</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *query</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *data</code></em>);</pre>
+                                                         <em class="parameter"><code><span class="type">GlyrQuery</span> *query</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *data</code></em>);</pre>
 <p>
 Simple convenience function to edit caches in the Database.
 Best understood by example:
 </p>
 <div class="informalexample"><pre class="programlisting">
 // If you have a cache called 'c', that's already
-// In the Database: 
+// In the Database:
 // Save the old checksum, edit it, update the database.
 unsigned char old_md5sum[16] = {0};
 memcpy(old_md5sum,c-&gt;md5sum,16);
@@ -421,15 +446,18 @@ glyr_db_replace(s-&gt;local_db, old_md5sum, s, c);
 <p>
 Some caveats:
 </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
 You may insert a cache several times, if the source url (cache-&gt;dsrc) is different,
 but with the same checksum. If you call <a class="link" href="libglyr-Cache.html#glyr-db-replace" title="glyr_db_replace ()"><code class="function">glyr_db_replace()</code></a> once more, the caches
 with the double md5sum get deleted and replaced by the new one.
 </p></li></ul></div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>db</code></em> :</span></p></td>
@@ -453,8 +481,8 @@ with the double md5sum get deleted and replaced by the new one.
 <hr>
 <div class="refsect2">
 <a name="glyr-foreach-callback"></a><h3>glyr_foreach_callback ()</h3>
-<pre class="programlisting"><span class="returnvalue">int</span>                 (*glyr_foreach_callback)            (<em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrQuery" title="GlyrQuery"><span class="type">GlyrQuery</span></a> *q</code></em>,
-                                                         <em class="parameter"><code><a class="link" href="libglyr-Types.html#GlyrMemCache" title="GlyrMemCache"><span class="type">GlyrMemCache</span></a> *item</code></em>,
+<pre class="programlisting"><span class="returnvalue">int</span>                 (*glyr_foreach_callback)            (<em class="parameter"><code><span class="type">GlyrQuery</span> *q</code></em>,
+                                                         <em class="parameter"><code><span class="type">GlyrMemCache</span> *item</code></em>,
                                                          <em class="parameter"><code><span class="type">void</span> *userptr</code></em>);</pre>
 </div>
 </div>

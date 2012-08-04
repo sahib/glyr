@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Misc</title>
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="index.html" title="libglyr Reference Manual">
 <link rel="up" href="ch01.html" title="[Insert title here]">
 <link rel="prev" href="libglyr-Glyr.html" title="Glyr">
@@ -54,11 +54,11 @@ Stable, unless otherwise indicated
 <a name="libglyr-Misc.description"></a><h2>Description</h2>
 <p>
 Provides different functions to help with certain tasks
-may run into in certain cases. 
-This includes: 
+may run into in certain cases.
+This includes:
 </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
-String utils (e.g. <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a>) 
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+String utils (e.g. <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a>)
 </p></li></ul></div>
 <p>
 </p>
@@ -71,12 +71,12 @@ String utils (e.g. <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strc
                                                          <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);</pre>
 <p>
 Computes the levenshtein distance betwenn <em class="parameter"><code>string</code></em> and <em class="parameter"><code>other</code></em>.
-See Also: http://de.wikipedia.org/wiki/Levenshtein-Distanz  
+See Also: http://de.wikipedia.org/wiki/Levenshtein-Distanz
 </p>
 <p>
-In very simple words this means: <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a> checks if two 
-string are 'similar', the similarity is returned as int from 
-0 (== total match) to MAX(strlen(string),strlen(other)) 
+In very simple words this means: <a class="link" href="libglyr-Misc.html#glyr-levenshtein-strcmp" title="glyr_levenshtein_strcmp ()"><code class="function">glyr_levenshtein_strcmp()</code></a> checks if two
+string are 'similar', the similarity is returned as int from
+0 (== total match) to MAX(strlen(string),strlen(other))
 </p>
 <p>
 This is fully UTF-8 aware and calls <a href="../glib/glib-Unicode-Manipulation.html#g-utf8-normalize"><code class="function">g_utf8_normalize()</code></a> beforehand.
@@ -89,10 +89,10 @@ Example:
 <p>
 Equilibrium &lt;=&gt; Aqquilibrim
 will return 3 since:
-Equilibrium -&gt; Aquilibrium // one Edit:   'E' -&gt; 'A' 
+Equilibrium -&gt; Aquilibrium // one Edit:   'E' -&gt; 'A'
 </p>
 <p>
-Aquilibrium -&gt; Aquilibrim  // one Delete: 'u' -&gt; ''  
+Aquilibrium -&gt; Aquilibrim  // one Delete: 'u' -&gt; ''
 </p>
 <p>
 Aquilibrim  -&gt; Aqquilibrim // one Insert: ''  -&gt; 'q'
@@ -102,8 +102,11 @@ Aquilibrim  -&gt; Aqquilibrim // one Insert: ''  -&gt; 'q'
 </div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>string</code></em> :</span></p></td>
@@ -126,9 +129,9 @@ Aquilibrim  -&gt; Aqquilibrim // one Insert: ''  -&gt; 'q'
 <pre class="programlisting"><span class="returnvalue">size_t</span>              glyr_levenshtein_strnormcmp         (<em class="parameter"><code>const <span class="type">char</span> *string</code></em>,
                                                          <em class="parameter"><code>const <span class="type">char</span> *other</code></em>);</pre>
 <p>
-Same as levenshtein_strcmp, but tries to normalize the two strings as  
-best as it can (includes strdown, stripping html, 
-utf8 normalization, stripping stuff like (CD 1) 
+Same as levenshtein_strcmp, but tries to normalize the two strings as
+best as it can (includes strdown, stripping html,
+utf8 normalization, stripping stuff like (CD 1)
 and Clapton, Eric -&gt; Eric Clapton
 </p>
 <p>
@@ -151,8 +154,11 @@ but a lot higher value with <a class="link" href="libglyr-Misc.html#glyr-levensh
 </div>
 <p>
 </p>
-<div class="variablelist"><table border="0">
+<div class="variablelist"><table border="0" class="variablelist">
+<colgroup>
 <col align="left" valign="top">
+<col>
+</colgroup>
 <tbody>
 <tr>
 <td><p><span class="term"><em class="parameter"><code>string</code></em> :</span></p></td>
