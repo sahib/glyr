@@ -105,7 +105,7 @@ extern "C"
         GLYR_NORMALIZE_TITLE      =  1 << 5,
         GLYR_NORMALIZE_ALL        =  GLYR_NORMALIZE_ARTIST | GLYR_NORMALIZE_ALBUM | GLYR_NORMALIZE_TITLE
     }
-    GLYR_NORMALIZATION;
+                                 GLYR_NORMALIZATION;
 
     /**
      * GLYR_ERROR:
@@ -247,8 +247,8 @@ extern "C"
         GLYR_TYPE_BACKDROPS
     }   GLYR_DATA_TYPE;
 
-    
-/* Silly compatibility defines to mantain backwards compatibility */
+
+    /* Silly compatibility defines to mantain backwards compatibility */
 #define   GLYR_TYPE_SIMILIAR_ARTIST   GLYR_TYPE_SIMILAR_ARTIST
 #define   GLYR_TYPE_SIMILIAR_SONG     GLYR_TYPE_SIMILAR_SONG
 #define   GLYR_GET_SIMILIAR_ARTISTS   GLYR_GET_SIMILAR_ARTISTS

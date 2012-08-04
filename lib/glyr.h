@@ -887,9 +887,9 @@ extern "C"
      * glyr_opt_normalize:
      * @s: The GlyrQuery settings struct to store this option in.
      * @norm: Any members of GLYR_NORMALIZATION, which may be binary or'd
-     * 
-     * Defines how much artist/album/title is normalized. 
-     * 
+     *
+     * Defines how much artist/album/title is normalized.
+     *
      * <itemizedlist>
      * <listitem>
      * <para>
