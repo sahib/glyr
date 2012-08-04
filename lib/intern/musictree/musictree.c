@@ -28,7 +28,7 @@ static gchar * get_file_contents (const gchar * filename, gsize * len)
 
 static GLYR_DATA_TYPE get_data_type_from_query (GlyrQuery * query)
 {
-    GLYR_DATA_TYPE type = GLYR_TYPE_NOIDEA;
+    GLYR_DATA_TYPE type = GLYR_TYPE_UNKNOWN;
     for (GList * elem = r_getFList(); elem != NULL; elem = elem->next)
     {
         MetaDataFetcher * fetcher = elem->data;

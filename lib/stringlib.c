@@ -221,6 +221,8 @@ static gchar * leven_normalize_string (const gchar * str)
             if (pretty_string != NULL)
             {
                 remove_tags_from_string (pretty_string,-1,'(',')');
+                remove_tags_from_string (pretty_string,-1,'[',']');
+                remove_tags_from_string (pretty_string,-1,'<','>');
                 rv = pretty_string;
             }
             g_free (norm_string);
@@ -328,7 +330,7 @@ gchar * unwind_artist_name (const gchar * artist)
 
 ///////////////////////////////////////
 
-gchar * prepare_string (const gchar * input, gboolean delintify, gboolean do_curl_escape)
+gchar * prepare_string (const gchar * input, GLYR_NORMALIZATION mode, gboolean do_curl_escape)
 {
     gchar * result = NULL;
     if (input != NULL)
@@ -337,14 +339,21 @@ gchar * prepare_string (const gchar * input, gboolean delintify, gboolean do_cur
         if (downed != NULL)
         {
             gchar * normalized = g_utf8_normalize (downed,-1,G_NORMALIZE_NFKC);
-            if (normalized != NULL)
+            if ((mode & GLYR_NORMALIZE_MODERATE || mode & GLYR_NORMALIZE_AGGRESSIVE) && normalized != NULL)
             {
+                if (normalized != NULL && mode & GLYR_NORMALIZE_AGGRESSIVE)
+                {
+                    remove_tags_from_string (normalized,-1,'(',')');
+                    remove_tags_from_string (normalized,-1,'<','>');
+                    remove_tags_from_string (normalized,-1,'[',']');
+                }
+
                 gchar * no_lint = regex_replace_by_table (normalized,regex_table,regex_table_size);
                 if (no_lint != NULL)
                 {
                     if (do_curl_escape)
                     {
-                        char* m_result = curl_easy_escape (NULL,no_lint,0);
+                        char * m_result = curl_easy_escape (NULL, no_lint, 0);
                         result = g_strdup (m_result);
                         curl_free (m_result);
                     }
@@ -353,17 +362,14 @@ gchar * prepare_string (const gchar * input, gboolean delintify, gboolean do_cur
                         result = no_lint;
                     }
 
-                    if (result != NULL && delintify == TRUE)
-                    {
-                        remove_tags_from_string (result,-1,'(',')');
-                        // To aggressive I think. Some artists use this.
-                        //remove_tags_from_string(result,-1,'<','>');
-                        //remove_tags_from_string(result,-1,'[',']');
-                    }
 
                     if (do_curl_escape == TRUE) g_free (no_lint);
                 }
                 g_free (normalized);
+            }
+            else
+            {
+                result = normalized;
             }
             g_free (downed);
         }
@@ -387,10 +393,16 @@ gchar * prepare_url (const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         tmp = g_strdup (URL);
 
         gchar * unwinded_artist = unwind_artist_name (s->artist);
+        gchar * p_artist = NULL, * p_album = NULL, * p_title = NULL;
 
-        gchar * p_artist = prepare_string (trim_nocopy (unwinded_artist),FALSE,do_curl_escape);
-        gchar * p_album  = prepare_string (s->album,TRUE,do_curl_escape);
-        gchar * p_title  = prepare_string (s->title,TRUE,do_curl_escape);
+        if (s->normalization & GLYR_NORMALIZE_ARTIST)
+            p_artist = prepare_string (trim_nocopy (unwinded_artist), s->normalization, do_curl_escape);
+
+        if (s->normalization & GLYR_NORMALIZE_ALBUM)
+            p_album  = prepare_string (s->album, s->normalization, do_curl_escape);
+
+        if (s->normalization & GLYR_NORMALIZE_TITLE)
+            p_title  = prepare_string (s->title, s->normalization, do_curl_escape);
 
         swap_string (&tmp,"${artist}",p_artist);
         swap_string (&tmp,"${album}", p_album);

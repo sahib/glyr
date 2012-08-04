@@ -206,7 +206,7 @@ void DL_free (GlyrMemCache *cache)
         }
 
         cache->size = 0;
-        cache->type = GLYR_TYPE_NOIDEA;
+        cache->type = GLYR_TYPE_UNKNOWN;
 
         g_free (cache->img_format);
         g_free (cache);
@@ -222,7 +222,7 @@ GlyrMemCache* DL_init (void)
     GlyrMemCache * cache = g_malloc0 (sizeof (GlyrMemCache) );
     memset (cache,0,sizeof (GlyrMemCache) );
 
-    cache->type = GLYR_TYPE_NOIDEA;
+    cache->type = GLYR_TYPE_UNKNOWN;
     cache->cached = FALSE;
     cache->duration = 0;
     cache->rating = 0;
@@ -1248,7 +1248,7 @@ static void fix_data_types (GList * list, MetaDataSource * src, GlyrQuery * quer
     for (GList * elem = list; elem; elem = elem->next)
     {
         GlyrMemCache * item = elem->data;
-        if (item != NULL && item->type == GLYR_TYPE_NOIDEA)
+        if (item != NULL && item->type == GLYR_TYPE_UNKNOWN)
         {
             if (TYPE_IS_IMAGE (query->type) && query->download == FALSE)
             {

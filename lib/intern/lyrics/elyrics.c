@@ -31,8 +31,12 @@ static const gchar * lyrics_elyrics_url (GlyrQuery * settings)
     gchar * space_to_min_title  = strreplace (settings->title, " ","-");
     if (space_to_min_artist && space_to_min_title)
     {
-        gchar * prep_title  = prepare_string (space_to_min_title,FALSE,TRUE);
-        gchar * prep_artist = prepare_string (space_to_min_artist,FALSE,TRUE);
+        gchar * prep_title = NULL, * prep_artist = NULL;
+        if (settings->normalization & GLYR_NORMALIZE_ARTIST)
+            prep_title  = prepare_string (space_to_min_title, settings->normalization,TRUE);
+
+        if (settings->normalization & GLYR_NORMALIZE_ARTIST)
+            prep_artist = prepare_string (space_to_min_artist, settings->normalization,TRUE);
 
         if (prep_title && prep_artist)
         {

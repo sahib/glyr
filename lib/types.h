@@ -65,6 +65,7 @@ extern "C"
 #define GLYR_DEFAULT_MUISCTREE_PATH NULL
 #define GLYR_DEFAULT_SUPPORTED_LANGS "en;de;fr;es;it;jp;pl;pt;ru;sv;tr;zh"
 #define GLYR_DEFAULT_LANG_AWARE_ONLY false
+#define GLYR_DEFAULT_NORMALIZATION GLYR_NORMALIZE_MODERATE
 
     /* Disallow *.gif, mostly bad quality
      * jpeg and jpg, because some not standardaware
@@ -79,6 +80,32 @@ extern "C"
     /* --------------------------- */
     /* --------- GROUPS ---------- */
     /* --------------------------- */
+
+    /**
+     * GLYR_NORMALIZATION:
+     * @GLYR_NORMALIZE_NONE: Do no normalization to input artist/album/title.
+     * @GLYR_NORMALIZE_MODERATE: Do quite some normalization, but don't break stuff.
+     * @GLYR_NORMALIZE_AGGRESSIVE: Do everything under MODERATE, but also remove everythin in () [] and <>.
+     * @GLYR_NORMALIZE_ARTIST: Normalize artist field, when set.
+     * @GLYR_NORMALIZE_ALBUM: Normalize album field, when set.
+     * @GLYR_NORMALIZE_TITLE: Normalize title field, when set.
+     * @GLYR_NORMALIZE_ALL: Normalize all fields, when set.
+     *
+     * The normalization levels, that may be applied to artist/album/title.
+     *
+     * Default is: GLYR_NORMALIZE_AGGRESSIVE | GLYR_NORMALIZE_ALL
+     **/
+    typedef enum
+    {
+        GLYR_NORMALIZE_NONE       =  1 << 0,
+        GLYR_NORMALIZE_MODERATE   =  1 << 1,
+        GLYR_NORMALIZE_AGGRESSIVE =  1 << 2,
+        GLYR_NORMALIZE_ARTIST     =  1 << 3,
+        GLYR_NORMALIZE_ALBUM      =  1 << 4,
+        GLYR_NORMALIZE_TITLE      =  1 << 5,
+        GLYR_NORMALIZE_ALL        =  GLYR_NORMALIZE_ARTIST | GLYR_NORMALIZE_ALBUM | GLYR_NORMALIZE_TITLE
+    }
+    GLYR_NORMALIZATION;
 
     /**
      * GLYR_ERROR:
@@ -333,6 +360,8 @@ extern "C"
     * @allowed_formats: Allowed imageformats.
     * @useragent: Useragent to use during http-requests
     * @musictree_path: Used for the musictree provider.
+    * @q_errno: Any error that happenend during glyr_get() (same as argument to glyr_get())
+    * @normalization: What normalization to apply to artist/album/title; GLYR_NORMALIZE_MODERATE is default.
     *
     * This structure holds all settings used to influence libglyr.
     * You should set all fields glyr_opt_*, refer also to the documentation there to find out their exact meaning.
@@ -361,6 +390,8 @@ extern "C"
         float qsratio;
 
         GLYR_ERROR q_errno;
+
+        GLYR_NORMALIZATION normalization;
 
         bool db_autoread;
         bool db_autowrite;

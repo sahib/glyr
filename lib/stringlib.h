@@ -81,7 +81,7 @@ gchar * prepare_url (const gchar * URL, GlyrQuery * s, gboolean do_curl_escape);
 gchar * beautify_string (const gchar * lyrics);
 
 /* "Normalizes" a string, suitable for URls afterwards */
-gchar * prepare_string (const gchar * input, gboolean delinitfy, gboolean do_curl_escape);
+gchar * prepare_string (const gchar * input, GLYR_NORMALIZATION mode, gboolean do_curl_escape);
 
 /* Search for name in ref, ending with end_string and return it */
 gchar * get_search_value (gchar * ref, gchar * name, gchar * end_string);

@@ -884,6 +884,42 @@ extern "C"
     GLYR_ERROR glyr_opt_musictree_path (GlyrQuery * s, const char * musictree_path);
 
     /**
+     * glyr_opt_normalize:
+     * @s: The GlyrQuery settings struct to store this option in.
+     * @norm: Any members of GLYR_NORMALIZATION, which may be binary or'd
+     * 
+     * Defines how much artist/album/title is normalized. 
+     * 
+     * <itemizedlist>
+     * <listitem>
+     * <para>
+     * GLYR_NORMALIZE_NONE: Do no normalization, except strdown and utf-8-normalization.
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * GLYR_NORMALIZE_MODERATE: Remove stuff like feat., featuring. Track 01 etc.
+     * </para>
+     * </listitem>
+     * <listitem>
+     * <para>
+     * GLYR_NORMALIZE_AGGRESSIVE: Also remove everything between (), [] and <>. Slightly destructive!
+     * </para>
+     * </listitem>
+     * </itemizedlist>
+     *
+     * <note>
+     * <para>
+     * Even for None, utf-8 normalization and strdown() is done.
+     * The default is GLYR_NORMALIZE_AGGRESSIVE | GLYR_NORMALIZE_ALL
+     * </para>
+     * </note>
+     *
+     * Returns: an error ID
+     */
+    GLYR_ERROR glyr_opt_normalize (GlyrQuery * s, GLYR_NORMALIZATION norm);
+
+    /**
     * glyr_download:
     * @url: A valid url, for example returned by libglyr
     * @s: A settings struct managing timeout, useragent and redirects.

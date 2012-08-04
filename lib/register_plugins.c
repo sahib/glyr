@@ -237,7 +237,7 @@ static void get_list_from_type (MetaDataFetcher * fetch)
         if (item && (fetch->type == item->type || item->type == GLYR_GET_ANY) )
         {
             fetch->provider = g_list_prepend (fetch->provider,item);
-            if (item->data_type == GLYR_TYPE_NOIDEA)
+            if (item->data_type == GLYR_TYPE_UNKNOWN)
             {
                 item->data_type = fetch->default_data_type;
             }

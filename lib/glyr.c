@@ -71,7 +71,7 @@ static const char * type_strings[] =
     [GLYR_TYPE_TXT_URL] = "HTMLURL",
     [GLYR_TYPE_GUITARTABS] = "guitartabs",
     [GLYR_TYPE_BACKDROPS] = "backdrop",
-    [GLYR_TYPE_NOIDEA] = "unknown"
+    [GLYR_TYPE_UNKNOWN] = "unknown"
 };
 
 /////////////////////////////////
@@ -573,6 +573,16 @@ GLYR_ERROR glyr_opt_db_autoread (GlyrQuery * s, bool db_autoread)
 }
 
 /////////////////////////////////
+
+__attribute__ ( (visibility ("default") ) )
+GLYR_ERROR glyr_opt_normalize (GlyrQuery * s, GLYR_NORMALIZATION norm)
+{
+    if (s == NULL) return GLYRE_EMPTY_STRUCT;
+    s->normalization = norm;
+    return GLYRE_OK;
+}
+
+/////////////////////////////////
 /////////////////////////////////
 /////////////////////////////////
 
@@ -616,6 +626,7 @@ static void set_query_on_defaults (GlyrQuery * glyrs)
     glyrs->force_utf8 = GLYR_DEFAULT_FORCE_UTF8;
     glyrs->lang = GLYR_DEFAULT_LANG;
     glyrs->lang_aware_only = GLYR_DEFAULT_LANG_AWARE_ONLY;
+    glyrs->normalization = GLYR_NORMALIZE_AGGRESSIVE | GLYR_NORMALIZE_ALL;
     glyrs->signal_exit = FALSE;
     glyrs->itemctr = 0;
 
@@ -839,10 +850,10 @@ static void set_error (GLYR_ERROR err_in, GlyrQuery * query, GLYR_ERROR * err_ou
 /////////////////////////////////
 
 
-#define PRINT_NORMALIZED_ATTR(name, var)                    \
+#define PRINT_NORMALIZED_ATTR(name, mode, var)              \
     if(var != NULL && query->verbosity >= 2)                \
     {                                                       \
-        char * prepared = prepare_string(var, TRUE, FALSE); \
+        char * prepared = prepare_string(var, mode, FALSE); \
         if(prepared != NULL)                                \
         {                                                   \
             glyr_message(2, query, name);                   \
@@ -884,9 +895,17 @@ GlyrMemCache * glyr_get (GlyrQuery * query, GLYR_ERROR * e, int * length)
                 if (check_if_valid (query,item) == TRUE)
                 {
                     /* Print some user info, always useful */
-                    PRINT_NORMALIZED_ATTR("- Artist   : ", query->artist);
-                    PRINT_NORMALIZED_ATTR("- Album    : ", query->album);
-                    PRINT_NORMALIZED_ATTR("- Title    : ", query->title);
+                    if (query->normalization & GLYR_NORMALIZE_ARTIST) {
+                        PRINT_NORMALIZED_ATTR("- Artist   : ", query->normalization, query->artist);
+                    }
+
+                    if (query->normalization & GLYR_NORMALIZE_ALBUM) {
+                        PRINT_NORMALIZED_ATTR("- Album    : ", query->normalization, query->album);
+                    }
+
+                    if (query->normalization & GLYR_NORMALIZE_TITLE) {
+                        PRINT_NORMALIZED_ATTR("- Title    : ", query->normalization, query->title);
+                    }
 
                     if (query->lang != NULL)
                     {
@@ -1131,7 +1150,7 @@ const char * glyr_data_type_to_string (GLYR_DATA_TYPE type)
     }
     else
     {
-        return type_strings[GLYR_TYPE_NOIDEA];
+        return type_strings[GLYR_TYPE_UNKNOWN];
     }
 }
 /////////////////////////////////
@@ -1148,7 +1167,7 @@ GLYR_DATA_TYPE glyr_string_to_data_type (const char * string)
                 return i;
         }
     }
-    return GLYR_TYPE_NOIDEA;
+    return GLYR_TYPE_UNKNOWN;
 }
 
 /////////////////////////////////
@@ -1318,7 +1337,7 @@ __attribute__ ( (visibility ("default") ) )
 void glyr_cache_set_type (GlyrMemCache * cache, GLYR_DATA_TYPE type)
 {
     if (cache != NULL)
-        cache->type = MAX (type,GLYR_TYPE_NOIDEA);
+        cache->type = MAX (type,GLYR_TYPE_UNKNOWN);
 }
 
 /////////////////////////////////
