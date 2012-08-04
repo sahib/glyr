@@ -247,6 +247,15 @@ extern "C"
         GLYR_TYPE_BACKDROPS
     }   GLYR_DATA_TYPE;
 
+    
+/* Silly compatibility defines to mantain backwards compatibility */
+#define   GLYR_TYPE_SIMILIAR_ARTIST   GLYR_TYPE_SIMILAR_ARTIST
+#define   GLYR_TYPE_SIMILIAR_SONG     GLYR_TYPE_SIMILAR_SONG
+#define   GLYR_GET_SIMILIAR_ARTISTS   GLYR_GET_SIMILAR_ARTISTS
+#define   GLYR_GET_SIMILIAR_SONGS     GLYR_GET_SIMILAR_SONGS
+#define   GLYR_GET_ARTISTBIO          GLYR_GET_ARTIST_BIO
+#define   GLYR_GET_UNSURE             GLYR_GET_UNKNOWN
+#define   GLYR_TYPE_NOIDEA            GLYR_TYPE_UNKNOWN
 
     /**
     * GLYR_FIELD_REQUIREMENT:
