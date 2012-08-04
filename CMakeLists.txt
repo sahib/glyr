@@ -36,10 +36,10 @@ ENDIF()
 # ------------------------------------------------
 # Versioning 
 # ------------------------------------------------
-SET(GLYR_VERSION_MAJOR "0")
-SET(GLYR_VERSION_MINOR "9")
-SET(GLYR_VERSION_MICRO "9")
-SET(GLYR_VERSION_NAME  "Catholic Cat")
+SET(GLYR_VERSION_MAJOR "1")
+SET(GLYR_VERSION_MINOR "0")
+SET(GLYR_VERSION_MICRO "0")
+SET(GLYR_VERSION_NAME  "Bloody Boar")
 # ------------------------------------------------
 
 

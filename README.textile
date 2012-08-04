@@ -64,7 +64,7 @@ h3. libglyr:
 See the "examples in src/examples":https://github.com/sahib/glyr/wiki for a quickstart.
 There's also a more "gentle (and brief) introduction.":https://github.com/sahib/glyr/wiki/Introduction-to-libglyr
 Also see the "API Reference":http://sahib.github.com/glyr/doc/html/index.html
-*Please note:* The Api won't be guaranteed to be stable before version 1.0. (currently 0.9.8)
+*Please note:* Since version 1.0.0 the API will be stable, and will only be open for extensions.
 
 h3. glyrc:
 
@@ -75,7 +75,10 @@ h2. FAQ
 
 h3. Anyone using it already?
 
-"GMPC":http://gmpc.wikia.com/wiki/Gnome_Music_Player_Client, "Pragha":http://pragha.wikispaces.com/, and "Freya":https://github.com/studentkittens/Freya .
+* "GMPC":http://gmpc.wikia.com/wiki/Gnome_Music_Player_Client
+* "Pragha":http://pragha.wikispaces.com/
+* "Freya":https://github.com/studentkittens/Freya
+* "lyvi":http://ok100.github.com/lyvi/
 
 h3. Glyr.. such a silly name! Why? 
 
@@ -88,7 +91,11 @@ Some knowledge of C might be required, but the code is straight forward most of 
 Bash scripts are pretty straight-forward:
 @glyrc cover --artist Equilibrium --album Sagas --write '/tmp/:artist:_:album:.:format:' --callback 'sxiv ":path:"'@
 
-Additionally there are bindings to Python and Ruby (or there will be soon)
+Additionally there are bindings to Python and Ruby:
+
+* "plyr":https://github.com/sahib/python-glyr by me (complete API).
+* "ruby-glyr":https://github.com/meh/ruby-glyr by meh (complete API).
+
 
 h3. How..how am I supposed to use it?
 
