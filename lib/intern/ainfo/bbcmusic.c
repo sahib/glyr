@@ -71,8 +71,11 @@ static GList * ainfo_bbcmusic_parse (cb_object * capo)
                 {
                     result_list = g_list_prepend (result_list, item);
                 }
+                DL_free(bbc_xml);
             }
+            g_free(full_url);
         }
+        g_free(mbid);
     }
 
     return result_list;
