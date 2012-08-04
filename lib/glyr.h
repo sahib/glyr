@@ -795,8 +795,8 @@ extern "C"
     * Disable:
     * </informalexample>
     * <informalexample>
-    * glyr_opt_from(s,"all;-local");
     * <programlisting>
+    * glyr_opt_from(s,"all;-local");
     * </programlisting>
     * </informalexample>
     *
@@ -1056,7 +1056,7 @@ extern "C"
      *    // do something when artist is required
      * }
      * else
-     * if(reqs / GLYR_OPTIONAL_TITLE)
+     * if(reqs & GLYR_OPTIONAL_TITLE)
      * {
      *   // Title is optional
      * }
