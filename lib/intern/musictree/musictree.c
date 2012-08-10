@@ -231,6 +231,7 @@ static GList * musictree_provider_parse (cb_object * capo)
         search_regex = "^(folder|front|album|AlbumArt|cover|.*${album}.*)\\.(jpg|png|jpeg|gif)";
         recurse_depth = 3;
         break;
+    case GLYR_GET_BACKDROPS:
     case GLYR_GET_ARTIST_PHOTOS:
         search_regex = "^(${artist}|artist)\\.(jpg|png|jpeg|gif)$";
         recurse_depth = 3;
