@@ -326,7 +326,7 @@ extern "C"
     *
     * Returns: an error ID
     */
-    GLYR_ERROR glyr_opt_artist (GlyrQuery * s, char * artist);
+    GLYR_ERROR glyr_opt_artist (GlyrQuery * s, const char * artist);
 
     /**
     * glyr_opt_album:
@@ -376,7 +376,7 @@ extern "C"
     *
     * Returns: an error ID
     */
-    GLYR_ERROR glyr_opt_album (GlyrQuery * s,  char * album);
+    GLYR_ERROR glyr_opt_album (GlyrQuery * s, const char * album);
 
     /**
     * glyr_opt_title:
@@ -421,7 +421,7 @@ extern "C"
     *
     * Returns: an error ID
     */
-    GLYR_ERROR glyr_opt_title (GlyrQuery * s,  char * title);
+    GLYR_ERROR glyr_opt_title (GlyrQuery * s, const char * title);
 
     /**
     * glyr_opt_img_minsize:
@@ -511,7 +511,7 @@ extern "C"
     *
     * Returns: an error ID
     */
-    GLYR_ERROR glyr_opt_lang (GlyrQuery * s, char * langcode);
+    GLYR_ERROR glyr_opt_lang (GlyrQuery * s, const char * langcode);
 
     /**
     * glyr_opt_lang_aware_only:
