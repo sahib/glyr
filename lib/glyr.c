@@ -283,7 +283,7 @@ GLYR_ERROR glyr_opt_type (GlyrQuery * s, GLYR_GET_TYPE type)
 /////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
-GLYR_ERROR glyr_opt_artist (GlyrQuery * s, char * artist)
+GLYR_ERROR glyr_opt_artist (GlyrQuery * s, const char * artist)
 {
     if (s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info (s,0,artist);
@@ -293,7 +293,7 @@ GLYR_ERROR glyr_opt_artist (GlyrQuery * s, char * artist)
 /////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
-GLYR_ERROR glyr_opt_album (GlyrQuery * s, char * album)
+GLYR_ERROR glyr_opt_album (GlyrQuery * s, const char * album)
 {
     if (s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info (s,1,album);
@@ -303,7 +303,7 @@ GLYR_ERROR glyr_opt_album (GlyrQuery * s, char * album)
 /////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
-GLYR_ERROR glyr_opt_title (GlyrQuery * s, char * title)
+GLYR_ERROR glyr_opt_title (GlyrQuery * s, const char * title)
 {
     if (s == NULL) return GLYRE_EMPTY_STRUCT;
     glyr_set_info (s,2,title);
@@ -389,7 +389,7 @@ GLYR_ERROR glyr_opt_useragent (GlyrQuery * s, const char * useragent)
 /////////////////////////////////
 
 __attribute__ ( (visibility ("default") ) )
-GLYR_ERROR glyr_opt_lang (GlyrQuery * s, char * langcode)
+GLYR_ERROR glyr_opt_lang (GlyrQuery * s, const char * langcode)
 {
     if (s == NULL) return GLYRE_EMPTY_STRUCT;
     if (langcode != NULL)
