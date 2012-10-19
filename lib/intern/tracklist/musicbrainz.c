@@ -28,7 +28,7 @@ static const gchar * tracklist_musicbrainz_url (GlyrQuery * sets)
 /////////////////////////////////
 
 #define REL_ID_BEGIN "id=\""
-#define REL_ID_ENDIN "\" ext:score="
+#define REL_ID_ENDIN "\" "
 #define REL_ID_FORM  "http://musicbrainz.org/ws/1/release/%s?type=xml&inc=tracks"
 
 #define DUR_BEGIN "<duration>"
@@ -72,7 +72,6 @@ static GList * traverse_xml (const gchar * data, const gchar * url, cb_object * 
 
 /////////////////////////////////
 
-/* Use simple text parsing, xml parsing has no advantage here */
 static GList * tracklist_musicbrainz_parse (cb_object * capo)
 {
     GList * result_list = NULL;
