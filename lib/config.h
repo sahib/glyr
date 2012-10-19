@@ -1,7 +1,7 @@
 /**
  * SECTION:config
  * @short_description: Compiletime Information
- * @title: Config
+ * @title: Config 
  * @section_id:
  * @stability: Stable
  * @include: glyr/config.h

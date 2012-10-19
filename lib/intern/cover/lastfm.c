@@ -30,6 +30,7 @@ static const char * cover_lastfm_url (GlyrQuery * sets)
 
 /////////////////////////////////
 
+#define ALBUM_NODE "<album>"
 #define BAD_DEFAULT_IMAGE "http://cdn.last.fm/flatness/catalogue/noimage/2/default_album_medium.png"
 
 static GList * cover_lastfm_parse (cb_object *capo)
@@ -53,26 +54,39 @@ static GList * cover_lastfm_parse (cb_object *capo)
     /* The result (perhaps) */
     GList * result_list = NULL;
     gchar * find  = capo->cache->data;
-    gsize tag_len = strlen (tag_ssize);
 
-
-    while (continue_search (g_list_length (result_list),capo->s) && (find = strstr (find + tag_len, tag_ssize) ) != NULL)
+    while (continue_search (g_list_length (result_list),capo->s) && (find = strstr (find + sizeof(ALBUM_NODE), ALBUM_NODE) ) != NULL)
     {
-        gchar * url = get_search_value (find, (gchar*) tag_ssize, (gchar*) tag_esize);
-        if (url != NULL)
-        {
-            if (strcmp (url,BAD_DEFAULT_IMAGE) != 0)
+        gchar * artist = get_search_value (find, "<artist>", "</artist>");
+        gchar * album  = get_search_value (find, "<name>", "</name>");
+
+        if (levenshtein_strnormcmp (capo->s, artist, capo->s->artist) <= capo->s->fuzzyness &&
+            levenshtein_strnormcmp (capo->s, album,  capo->s->album) <= capo->s->fuzzyness) {
+
+            gchar * img_start = strstr(find, tag_ssize);
+
+            if (img_start != NULL)
             {
-                GlyrMemCache * result = DL_init();
-                result->data = url;
-                result->size = strlen (url);
-                result_list = g_list_prepend (result_list,result);
-            }
-            else
-            {
-                g_free (url);
+                gchar * url = get_search_value (find, (gchar*) tag_ssize, (gchar*) tag_esize);
+                if (url != NULL)
+                {
+                    if (strcmp (url,BAD_DEFAULT_IMAGE) != 0)
+                    {
+                        GlyrMemCache * result = DL_init();
+                        result->data = url;
+                        result->size = strlen (url);
+                        result_list = g_list_prepend (result_list,result);
+                    }
+                    else
+                    {
+                        g_free (url);
+                    }
+                }
             }
         }
+
+        g_free (artist);
+        g_free (album);
     }
     return result_list;
 }

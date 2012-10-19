@@ -26,6 +26,21 @@ import traceback
 import executor
 
 TESTS_DIR = 'tests'
+USAGE = '''
+Usage: runner.py [--help|-h] [--only|-o]
+
+--help | -h   Print this text and exit.
+--only | -o   Restrict test to certain providers and getters.
+
+              Example:
+
+                --only 'cover'
+                --only 'cover|albumlist'
+                --only 'cover:google'
+                --only 'cover:google,lastfm'
+
+With no arguments all tests are run.
+'''
 
 
 def parse_only_argument(argument):
@@ -50,6 +65,11 @@ def main():
     """
     Import all testfiles and run some of them.
     """
+
+    if '--help' in sys.argv or '-h' in sys.argv:
+        print(USAGE)
+        sys.exit(0)
+
     test_modules = []
     allowed_modules = {}
 
@@ -70,7 +90,7 @@ def main():
                 sys.exit(-1)
 
     # Parse --only string, and pass it further
-    if len(sys.argv) > 2 and sys.argv[1] == '--only':
+    if len(sys.argv) > 2 and ('--only' in sys.argv or '-o' in sys.argv):
         allowed_modules = parse_only_argument(sys.argv[2])
 
     # Now run through them, and execute all specified ones.
