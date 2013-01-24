@@ -22,7 +22,7 @@
 #include "../../apikeys.h"
 #include "../../stringlib.h"
 
-#define HTBACKDROPS_URL "http://htbackdrops.com/api/%s"                        \
+#define HTBACKDROPS_URL "http://htbackdrops.com/api/%s"    \
     "/searchXML?keywords=${artist}&default_operator=and&"  \
     "fields=title&inc=mb_name&limit=%d&dmax_w=%d&dmin_h=%d"
 

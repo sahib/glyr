@@ -27,6 +27,7 @@
 
 static const char * cover_coverartarchive_url (GlyrQuery * qry)
 {
+    /* Return a search for the mbid, later we'll search for the cover */
     return "http://musicbrainz.org/ws/2/release?query=artist:${artist}%20AND%20release:${album}";
 }
 

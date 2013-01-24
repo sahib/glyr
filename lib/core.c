@@ -988,7 +988,10 @@ static void check_all_types_in_url_list (GList * cache_list, GlyrQuery * s)
                 passer->url   = item->data;
                 passer->query = s;
 
-                GThread * thread = g_thread_create ( (GThreadFunc) wrap_retrieve_content,passer,true,NULL);
+                GThread * thread = g_thread_new("content_retriever",
+                        (GThreadFunc) wrap_retrieve_content,
+                        passer);
+
                 if (thread != NULL)
                 {
                     thread_list = g_list_prepend (thread_list,thread);

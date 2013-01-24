@@ -727,9 +727,6 @@ void glyr_init (void)
     /* Protect agains double initialization */
     if (is_initalized == FALSE)
     {
-        /* Init for threads */
-        g_thread_init (NULL);
-
         /* Set loghandler */
         g_log_set_handler (G_LOG_DOMAIN, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL
                            | G_LOG_FLAG_RECURSION,

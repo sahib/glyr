@@ -106,7 +106,6 @@ gint sort_async_queue_jobs (gconstpointer a, gconstpointer b, gpointer data)
 
 int main (void)
 {
-    g_thread_init (NULL);
     glyr_init();
     atexit (glyr_cleanup);
 
@@ -117,7 +116,7 @@ int main (void)
 
     /* Initialize a new thread */
     GError * err = NULL;
-    GThread * apollo = g_thread_create (apollo_orbiter,&notify,TRUE,&err);
+    GThread * apollo = g_thread_new("apollo", apollo_orbiter, &notify);
 
     if (apollo != NULL)
     {

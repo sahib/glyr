@@ -77,8 +77,8 @@ int main (void)
     GlyrMemCache * a, * b;
 
     /* Create two threads */
-    GThread * thread_a = g_thread_create (call_get, (gpointer) &query_long,true,NULL);
-    GThread * thread_b = g_thread_create (call_get, (gpointer) &query_longer,true,NULL);
+    GThread * thread_a = g_thread_new ("call_get", call_get, (gpointer) &query_long);
+    GThread * thread_b = g_thread_new ("call_get", call_get, (gpointer) &query_longer);
 
     puts ("Running!");
 

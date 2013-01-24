@@ -155,7 +155,7 @@ static void register_provider_plugins (void)
 
 
     // FIXME: No real data yet there.. adele:19 gives a correct mbid, but no results
-    //plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverartarchive_src);
+    plugin_add_to_list(&glyrMetaDataSourceList,&cover_coverartarchive_src);
 
     plugin_add_to_list (&glyrMetaDataSourceList,&cover_discogs_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&cover_google_src);

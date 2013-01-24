@@ -43,7 +43,7 @@ int main (int argc, const char *argv[])
 
     g_printerr ("-- Starting GET\n");
 
-    GThread * killer = g_thread_create (killer_thread, (gpointer) &q,TRUE,NULL);
+    GThread * killer = g_thread_new("killer_thread", killer_thread, (gpointer) &q);
 
     gint len = 0;
     GlyrMemCache * list = glyr_get (&q,NULL,&len);
