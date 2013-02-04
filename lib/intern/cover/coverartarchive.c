@@ -41,7 +41,6 @@ static GList * parse_archive_json (GlyrMemCache * input, GlyrQuery * qry)
     GList * result_list = NULL;
     char * node = input->data;
 
-    puts (input->data);
     while ( (node = strstr (node + sizeof (IMAGE_NODE), IMAGE_NODE) ) )
     {
         char * url = copy_value (node, strstr (node + sizeof (IMAGE_NODE), "\"") );
@@ -74,7 +73,6 @@ static GList * cover_coverartarchive_parse (cb_object * capo)
         char * full_url = g_strdup_printf (API_ROOT, mbid);
         if (full_url != NULL)
         {
-            puts (full_url);
             GlyrMemCache * json_data = download_single (full_url, capo->s, NULL);
             if (json_data != NULL)
             {
