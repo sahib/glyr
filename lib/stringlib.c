@@ -413,13 +413,17 @@ gchar * prepare_url (const gchar * URL, GlyrQuery * s, gboolean do_curl_escape)
         else
             p_title  = prepare_string (s->title, GLYR_NORMALIZE_NONE, do_curl_escape);
 
+        gchar * p_num = g_strdup_printf("%d", s->number * 3);
+
         swap_string (&tmp,"${artist}",p_artist);
         swap_string (&tmp,"${album}", p_album);
         swap_string (&tmp,"${title}", p_title);
+        swap_string (&tmp,"${number}", p_num);
 
         g_free (p_artist);
         g_free (p_album);
         g_free (p_title);
+        g_free (p_num);
         g_free (unwinded_artist);
     }
     return tmp;

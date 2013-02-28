@@ -56,9 +56,6 @@ static const gchar * ainfo_lastfm_url (GlyrQuery * s)
 
 /////////////////////////////////
 
-
-/////////////////////////////////
-
 static GList * ainfo_lastfm_parse (cb_object * capo)
 {
     GList * result_list = NULL;

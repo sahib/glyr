@@ -54,6 +54,7 @@ extern MetaDataFetcher glyrFetcher_backdrops;
 extern MetaDataSource ainfo_lastfm_src;
 extern MetaDataSource ainfo_lyricsreg_src;
 extern MetaDataSource ainfo_bbcmusic_src;
+extern MetaDataSource ainfo_echonest_src;
 extern MetaDataSource albumlist_musicbrainz_src;
 extern MetaDataSource cover_coverartarchive_src;
 extern MetaDataSource cover_albumart_src;
@@ -142,6 +143,7 @@ static void register_provider_plugins (void)
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_lyricsreg_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_bbcmusic_src);
+    plugin_add_to_list (&glyrMetaDataSourceList,&ainfo_echonest_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&albumlist_musicbrainz_src);
 
     // FIXME: Seems to be broken too. (serverside)
