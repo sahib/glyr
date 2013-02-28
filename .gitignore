@@ -1,5 +1,6 @@
 # Ignore object files
 *.o
+*.a
 *.so
 __pycache__/
 *.pyc
