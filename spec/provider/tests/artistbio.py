@@ -45,6 +45,20 @@ TESTCASES = [{
     }, {
     # }}}
     # {{{
+    'name': 'echonest',
+    'data': [{
+        'options': {
+            'get_type': 'artistbio',
+            'artist': 'Jennifer Lopez',
+            },
+        'expect': lambda r: len(r) == 1 and r[0].size > 35000
+        }, {
+        'options': not_found_options,
+        'expect': len_equal_0
+        }],
+    }, {
+    # }}}
+    # {{{
     'name': 'lyricsreg',
     'data': [{
         'options': {

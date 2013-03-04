@@ -76,6 +76,9 @@ static GList * ainfo_echonest_parse (cb_object * capo)
     jsmntok_t tokens[num_tokens];
     jsmnerr_t error;
 
+    /* make sure it terminates */
+    memset(tokens, 0, num_tokens * sizeof(jsmntok_t));
+
     /* Init the parser */
     jsmn_init(&parser);
 

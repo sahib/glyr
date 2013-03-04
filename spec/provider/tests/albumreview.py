@@ -42,6 +42,21 @@ TESTCASES = [{
         'options': not_found_options,
         'expect': len_equal_0
         }],
+    }, {
+    # }}}
+    # {{{
+    'name': 'echonest',
+    'data': [{
+        'options': {
+            'get_type': 'albumreview',
+            'artist': 'Of Monsters and Men',
+            'album': 'My Head is an Animal'
+            },
+        'expect': len_greater_0
+        }, {
+        'options': not_found_options,
+        'expect': len_equal_0
+        }],
     }
     # }}}
 ]
