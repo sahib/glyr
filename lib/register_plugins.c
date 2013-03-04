@@ -91,6 +91,7 @@ extern MetaDataSource photos_picsearch_src;
 extern MetaDataSource photos_bbcmusic_src;
 extern MetaDataSource relations_musicbrainz_src;
 extern MetaDataSource review_amazon_src;
+extern MetaDataSource review_echonest_src;
 extern MetaDataSource review_metallum_src;
 extern MetaDataSource similar_artist_lastfm_src;
 extern MetaDataSource similar_song_lastfm_src;
@@ -197,6 +198,7 @@ static void register_provider_plugins (void)
     // FIXME: Silly amazon requires to be a Seller to use their API
     //plugin_add_to_list(&glyrMetaDataSourceList,&review_amazon_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&review_metallum_src);
+    plugin_add_to_list (&glyrMetaDataSourceList,&review_echonest_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&similar_artist_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&similar_song_lastfm_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&tags_musicbrainz_src);

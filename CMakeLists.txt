@@ -159,6 +159,7 @@ SET(LIB_SOURCE_LOCATIONS
 	"${DIR_SIMILSO}/lastfm.c"
 	"${DIR_TRACKLIST}/musicbrainz.c"
 	"${DIR_REVIEW}/amazon.c"
+    "${DIR_REVIEW}/echonest.c"
 	"${DIR_REVIEW}/metallum.c"
 	"${DIR_ALBUMLIST}/musicbrainz.c"
 	"${DIR_RELATIONS}/musicbrainz.c"
