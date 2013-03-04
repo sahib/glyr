@@ -1,7 +1,7 @@
 # Maintainer: Christopher Pahl <sahib@online.de>
 # glyr PKGBUILD for ArchLinux
 pkgname=glyr-git
-pkgver=20110901
+pkgver=20130304
 pkgrel=1
 pkgdesc="A music metadata searchengine utility and library written in C"
 arch=('i686' 'x86_64')
@@ -32,7 +32,7 @@ build()
     cd ${srcdir}/${_gitname}
    
     cmake . -DCMAKE_INSTALL_PREFIX=/usr
-    make || return 1
+    make glyrc -j4 || return 1
 }
 
 package() {
