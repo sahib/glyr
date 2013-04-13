@@ -31,6 +31,69 @@ static const char * lyrics_vagalume_url (GlyrQuery * s)
     return VAGALUME_DOMAIN VAGALUME_PATH;
 }
 
+/* This was taken from here:
+ * https://git.gnome.org/browse/json-glib/tree/json-glib/json-scanner.c#n558 */
+static gunichar get_unichar(const char *src)
+{
+	gunichar uchar;
+	gchar ch;
+	gint i;
+
+	uchar = 0;
+	for (i = 0; i < 4; ++i) {
+		ch = src[i];
+		if (g_ascii_isxdigit(ch))
+			uchar += ((gunichar) g_ascii_xdigit_value(ch) << ((3 - i) * 4));
+		else
+			break;
+	}
+
+	return uchar;
+}
+
+static GString * vagalume_escape_text(const char * src, int len)
+{
+	GString * output = g_string_sized_new(len);
+
+	for (int i = 0; i < len; ++i) {
+		if (src[i] == '\\') {
+			++i;
+			if (src[i] == 'n') {
+				output = g_string_append_c(output, '\n');
+				continue;
+			} else if (src[i] == 'u') {
+				++i;
+				/* this was taken from here:
+				 * https://git.gnome.org/browse/json-glib/tree/json-glib/json-scanner.c#n1116 */
+				gunichar ucs = get_unichar(src + i);
+				/* 4 characters read, the XXXX in \uXXXX, but we leave the last
+				 * increment to the for loop */
+				i += 3;
+				if (g_unichar_type(ucs) == G_UNICODE_SURROGATE) {
+					/* read next surrogate, but first update our source string
+					 * pointer */
+					++i;
+					if ('\\' == src[i++] && 'u' == src[i++]) {
+						gunichar ucs_lo = get_unichar(src + i);
+						/* 6 characters read from \uXXXX: '\\', 'u' and XXXX,
+						 * but again, leave the last one to be updated by the
+						 * for loop*/
+						i += 5;
+
+						ucs = (((ucs & 0x3ff) << 10) | (ucs_lo & 0x3ff)) + 0x10000;
+					}
+				}
+
+				output = g_string_append_unichar(output, ucs);
+			}
+		} else {
+			output = g_string_append_c(output, src[i]);
+		}
+	}
+
+	return output;
+}
+
 static gboolean found_song (const char *json, jsmntok_t *tokens, int *cur_token, int *tokens_left)
 {
 	gboolean found_key = false, song_found = false;
@@ -129,15 +192,16 @@ static GList * lyrics_vagalume_parse (cb_object * capo)
 
 				GlyrMemCache * cache = DL_init();
 				if (cache != NULL) {
-					cache->data = g_strndup(lyrics_start, len);
-					cache->size = len;
+					GString * data = vagalume_escape_text(lyrics_start, len);
+
+					cache->data = data->str;
+					cache->size = data->len;
 					result_list = g_list_prepend(result_list, cache);
 				}
 			}
 		}
 	} else {
 		/* not handled */
-		fprintf(stderr, "Not handled\n");
 	}
 
 	return result_list;
