@@ -410,6 +410,7 @@ static struct header_data * retrieve_content_info (gchar * url, gchar * proxystr
         curl_easy_setopt (eh, CURLOPT_FOLLOWLOCATION, TRUE);
         curl_easy_setopt (eh, CURLOPT_MAXREDIRS, 5L);
         curl_easy_setopt (eh, CURLOPT_HEADER,TRUE);
+        curl_easy_setopt (eh, CURLOPT_SSL_VERIFYPEER, FALSE);
 
         /* Dirty hack here: Amazon bitches at me when setting NOBODY to true *
          * But otherwise large images won't pass with other providers        *
@@ -478,6 +479,7 @@ static DLBufferContainer * DL_setopt (CURL *eh, GlyrMemCache * cache, const char
     curl_easy_setopt (eh, CURLOPT_PRIVATE, magic_private_ptr);
     curl_easy_setopt (eh, CURLOPT_VERBOSE, (s && s->verbosity >= 4) );
     curl_easy_setopt (eh, CURLOPT_WRITEFUNCTION, DL_buffer);
+    curl_easy_setopt (eh, CURLOPT_SSL_VERIFYPEER, FALSE);
 
     DLBufferContainer * dlbuffer = g_malloc0 (sizeof (DLBufferContainer) );
     curl_easy_setopt (eh, CURLOPT_WRITEDATA, (void *) dlbuffer);
