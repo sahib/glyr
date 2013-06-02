@@ -65,7 +65,7 @@ static GlyrMemCache * parse_web_page (GlyrMemCache * page)
 
 /////////////////////////////////
 
-#define NODE "<release ext:score="
+#define NODE "<release "
 #define DL_URL "http://musicbrainz.org/release/%s"
 
 /////////////////////////////////
@@ -75,15 +75,18 @@ static GList * cover_musicbrainz_parse (cb_object * capo)
     GList * result_list = NULL;
 
     char * node = capo->cache->data;
+
     while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node + 1,NODE) ) )
     {
         char * album  = get_search_value (node,"<title>","</title>");
         char * artist = get_search_value (node,"<name>" ,"</name>" );
 
+
         if (levenshtein_strnormcmp (capo->s,artist,capo->s->artist) <= capo->s->fuzzyness &&
                 levenshtein_strnormcmp (capo->s,album ,capo->s->album ) <= capo->s->fuzzyness)
         {
-            char * ID = get_search_value (node,"id=\"","\">");
+
+            char * ID = get_search_value (node,"id=\"","\" ");
             if (ID != NULL)
             {
                 char * url = g_strdup_printf (DL_URL,ID);
