@@ -35,7 +35,7 @@ static GlyrMemCache * parse_lyric_page (GlyrMemCache * cache)
     g_return_val_if_fail (cache,NULL);
     g_return_val_if_fail (cache->data,NULL);
 
-    gchar * data = get_search_value (cache->data,"id='songtext'>","</div>");
+    gchar * data = get_search_value (cache->data,"id='songtext'>","<div class='lyric-actions'>");
     if (data != NULL)
     {
         result = DL_init();
