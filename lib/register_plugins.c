@@ -77,7 +77,7 @@ extern MetaDataSource lyrics_lyricsvip_src;
 extern MetaDataSource lyrics_lyricswiki_src;
 extern MetaDataSource lyrics_lyrix_src;
 extern MetaDataSource lyrics_magistrix_src;
-extern MetaDataSource lyrics_metrolyrics_src;
+//extern MetaDataSource lyrics_metrolyrics_src;
 extern MetaDataSource lyrics_metallum_src;
 extern MetaDataSource lyrics_elyrics_src;
 extern MetaDataSource lyrics_chartlyrics_src;
@@ -178,7 +178,7 @@ static void register_provider_plugins (void)
     plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_lyricswiki_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_lyrix_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_magistrix_src);
-    plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
+    //plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_metrolyrics_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_metallum_src);
     plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_elyrics_src);
 	plugin_add_to_list (&glyrMetaDataSourceList,&lyrics_vagalume_src);

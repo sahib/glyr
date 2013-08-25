@@ -194,21 +194,6 @@ TESTCASES = [{
     }, {
     # }}}
     # {{{
-    'name': 'metrolyrics',
-    'data': [{
-        'options': {
-            'get_type': 'lyrics',
-            'artist': 'Die Apokalyptischen Reiter',
-            'title': 'Friede sei mir dir'
-            },
-        'expect': len_greater_0
-        }, {
-        'options': not_found_options,
-        'expect': len_equal_0
-        }],
-    }, {
-    # }}}
-    # {{{
     'name': 'chartlyrics',
     'data': [{
         'options': {
