@@ -123,14 +123,12 @@ static gboolean found_song (const char *json, jsmntok_t *tokens, int *cur_token,
                 continue;
             }
             if (found_key) {
-                if (len == 13 && g_ascii_strncasecmp(text_start, "song_notfound", len) == 0) {
-                    /* song not found! */
+                if (len == 5 && g_ascii_strncasecmp(text_start, "exact", len) == 0) {
+                    song_found = true;
                     break;
                 } else {
-                    /* FIXME the only other "type" I've seen is "exact",
-                     * don't know if there are any others. Maybe log the
-                     * value if it is not "exact"? */
-                    song_found = true;
+                    /* other types are notfound, song_notfound and aprox
+                     * aprox results can be crazy, let's ignore them */
                     break;
                 }
             }
