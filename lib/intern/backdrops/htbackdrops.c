@@ -22,7 +22,7 @@
 #include "../../apikeys.h"
 #include "../../stringlib.h"
 
-#define HTBACKDROPS_URL "http://htbackdrops.com/api/%s"    \
+#define HTBACKDROPS_URL "http://htbackdrops.org/api/%s"    \
     "/searchXML?keywords=${artist}&default_operator=and&"  \
     "fields=title&inc=mb_name&limit=%d&dmax_w=%d&dmin_h=%d"
 
@@ -82,7 +82,7 @@ static GList * backdrops_htbackdrops_parse (cb_object * capo)
                     if (id != NULL)
                     {
                         GlyrMemCache * result = DL_init();
-                        result->data = g_strdup_printf ("http://htbackdrops.com/api/"API_KEY_HTBACK"/download/%s/fullsize",id);
+                        result->data = g_strdup_printf ("http://htbackdrops.org/api/"API_KEY_HTBACK"/download/%s/fullsize",id);
                         result->size = strlen (result->data);
                         result_list  = g_list_prepend (result_list,result);
                         g_free (id);
