@@ -12,11 +12,11 @@
 
 #define GLYR_VERSION_MAJOR "1"
 #define GLYR_VERSION_MINOR "0"
-#define GLYR_VERSION_MICRO "1"
+#define GLYR_VERSION_MICRO "2"
 
 #define GLYR_VERSION_MAJOR_INT 1
 #define GLYR_VERSION_MINOR_INT 0
-#define GLYR_VERSION_MICRO_INT 1
+#define GLYR_VERSION_MICRO_INT 2
 
 /**
  * GLYR_CHECK_VERSION:
@@ -36,7 +36,7 @@
 */
 #define GLYR_CHECK_VERSION(X,Y,Z) (X <= GLYR_VERSION_MAJOR_INT || Y <= GLYR_VERSION_MINOR_INT || Z <= GLYR_VERSION_MICRO_INT)
 
-#define GLYR_VERSION_NAME  "Bloody Boar"
+#define GLYR_VERSION_NAME  "Raving Raven"
 #define GLYR_DEBUG         TRUE
 
 /* Message output */

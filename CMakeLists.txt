@@ -38,8 +38,8 @@ ENDIF()
 # ------------------------------------------------
 SET(GLYR_VERSION_MAJOR "1")
 SET(GLYR_VERSION_MINOR "0")
-SET(GLYR_VERSION_MICRO "1")
-SET(GLYR_VERSION_NAME  "Bloody Boar")
+SET(GLYR_VERSION_MICRO "2")
+SET(GLYR_VERSION_NAME  "Raving Raven")
 # ------------------------------------------------
 
 
