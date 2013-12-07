@@ -63,8 +63,8 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
 
 /////////////////////////////////
 
-#define LYR_NODE  "<div class='lyricbox'><div class='rtMatcher'><a href='http://www.ringtonematcher.com"
-#define LYR_BEGIN "</span></div>"
+#define LYR_NODE  "<div class='lyricbox'>"
+#define LYR_BEGIN "</div>"
 #define LYR_ENDIN "<!--"
 
 GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
