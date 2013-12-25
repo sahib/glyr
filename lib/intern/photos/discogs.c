@@ -80,13 +80,15 @@ static GlyrMemCache * transform_url (cb_object * s, const char * url)
             if (sp != NULL)
             {
                 char * ep = strchr (sp + 1, '-');
-                size_t rest_len = rc_size - (ep - rc_url) + 1;
-                memmove (sp,ep,rest_len);
+                if(ep != NULL) {
+                    size_t rest_len = rc_size - (ep - rc_url) + 1;
+                    memmove (sp,ep,rest_len);
 
-                rc = DL_init();
-                rc->data = (char*) rc_url;
-                rc->size = strlen (url);
-                rc->dsrc = g_strdup (s->url);
+                    rc = DL_init();
+                    rc->data = (char*) rc_url;
+                    rc->size = strlen (url);
+                    rc->dsrc = g_strdup (s->url);
+                }
             }
         }
     }
