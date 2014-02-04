@@ -1,6 +1,6 @@
 /***********************************************************
  * This file is part of glyr
- * + a commnandline tool and library to download various sort of musicrelated metadata.
+ * + a command-line tool and library to download various sort of musicrelated metadata.
  * + Copyright (C) [2011-2012]  [Christopher Pahl]
  * + Hosted at: https://github.com/sahib/glyr
  *
