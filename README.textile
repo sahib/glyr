@@ -1,4 +1,4 @@
-h1. Glyr is a searcheninge for musicrelated metadata
+h1. Glyr is a search engine for music related metadata
 
 The finest search you can buy for no money ^TM^
 
