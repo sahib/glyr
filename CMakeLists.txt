@@ -42,6 +42,15 @@ SET(GLYR_VERSION_MICRO "5")
 SET(GLYR_VERSION_NAME  "Raving Raven")
 # ------------------------------------------------
 
+exec_program(
+    "git"
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ARGS "describe"
+    OUTPUT_VARIABLE VERSION 
+)
+
+string(REGEX MATCH "-g.*$" VERSION_SHA1 ${VERSION})
+string(REGEX REPLACE "[-g]" "" VERSION_SHA1 ${VERSION_SHA1})
 
 # ------------------------------------------------
 # CFlags and warnlevel / build config 
