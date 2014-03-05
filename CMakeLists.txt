@@ -49,8 +49,8 @@ exec_program(
     OUTPUT_VARIABLE VERSION 
 )
 
-string(REGEX MATCH "-g.*$" VERSION_SHA1 ${VERSION})
-string(REGEX REPLACE "[-g]" "" VERSION_SHA1 ${VERSION_SHA1})
+# string(REGEX MATCH "-g.*$" VERSION_SHA1 ${VERSION})
+# string(REGEX REPLACE "[-g]" "" VERSION_SHA1 ${VERSION_SHA1})
 
 # ------------------------------------------------
 # CFlags and warnlevel / build config 
