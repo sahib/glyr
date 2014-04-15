@@ -283,6 +283,8 @@ void help_short (GlyrQuery * s)
             IN"    glyrc cache list --cache /tmp # List all in the cache\n"
             IN"    glyrc cache delete cover -a Equilibrium -b Sagas --cache /tmp # Delete artist/album\n"
             IN"    glyrc cache select lyrics -a Knorkator -t 'A' -n 2 --cache /tmp # Search for two items in cache and print them\n"
+            IN"\n"
+            IN"The return code will be 0 on success, 1 on any failure. No distinction is made which error happened.\n"
             IN"\n\n"
             "With each item received you get a link to the original source, please refer to the individual terms of use,\n"
             "copying and distributing of this data might be not allowed.\n"
@@ -704,7 +706,7 @@ static void do_iterate_over_db (GlyrDatabase * db)
 
 //////////////////////////////////////
 
-static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatabase * db)
+static int do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatabase * db)
 {
     const char list_op[] = "list";
     const char slct_op[] = "select";
@@ -715,7 +717,7 @@ static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatab
     if (db == NULL)
     {
         cvprint (RED,"No database specified. Use --cache.\n");
-        return;
+        return EXIT_FAILURE;
     }
 
     ////////////////////////////////
@@ -723,8 +725,7 @@ static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatab
     if (g_ascii_strncasecmp (operation,list_op,sizeof (list_op) - 1) == 0)
     {
         do_iterate_over_db (db);
-
-        return;
+        return EXIT_SUCCESS;
     }
 
     ////////////////////////////////
@@ -733,8 +734,7 @@ static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatab
     {
         int killed_items = glyr_db_delete (db,q);
         cvprint (BLUE,"Deleted %d items from the db.",killed_items);
-
-        return;
+        return killed_items > 0;
     }
 
     ////////////////////////////////
@@ -744,6 +744,11 @@ static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatab
         GlyrMemCache * list = glyr_db_lookup (db,q);
         GlyrMemCache * iter = list;
 
+        if(iter == NULL)  
+        {
+            return EXIT_FAILURE;
+        }
+
         while (iter != NULL)
         {
             glyr_cache_print (iter);
@@ -751,8 +756,10 @@ static void do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatab
             iter = iter->next;
         }
 
-        return;
+        return EXIT_SUCCESS;
     }
+
+    return EXIT_FAILURE;
 }
 
 
@@ -846,8 +853,8 @@ int main (int argc, char * argv[])
     atexit (global_cleanup);
     init_signals();
 
-    /* Assume success */
-    gint exit_code = EXIT_SUCCESS;
+    /* Assume failure, as always in life */
+    gint exit_code = EXIT_FAILURE;
 
     /* Init / Destroy of libglyr.
      * You _have_ to call this before making any calls
@@ -885,6 +892,8 @@ int main (int argc, char * argv[])
 
             if (my_list != NULL)
             {
+                exit_code = EXIT_SUCCESS;
+
                 if (CBQueryData.as_one && glyr_type_is_image (my_query.type) == false)
                 {
                     GlyrMemCache * concat = concatenate_list (my_list);
