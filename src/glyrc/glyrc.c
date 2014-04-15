@@ -22,6 +22,7 @@
 #include <stdio.h>
 #include <getopt.h>
 #include <glib.h>
+#include <glib/gstdio.h>
 
 #ifdef __linux__
 /* Backtrace*/
@@ -173,6 +174,43 @@ static void handle_cancel (int signo)
 
 ////////////////////////////////////////////////////////////////
 
+static char * create_cache_directory (void)
+{
+    char * xdg_cache_dir = g_strdup(g_getenv("XDG_CACHE_HOME"));
+    if(xdg_cache_dir == NULL) {
+        xdg_cache_dir = (char *)g_getenv("HOME");
+        if(xdg_cache_dir == NULL) {
+            xdg_cache_dir = g_strdup("/tmp");
+        } else {
+            xdg_cache_dir = g_strdup_printf("%s%c.cache",
+                xdg_cache_dir,
+                G_DIR_SEPARATOR
+            );
+        }
+    }
+
+    char * full_path = g_strdup_printf("%s%cglyrc",
+        xdg_cache_dir,
+        G_DIR_SEPARATOR
+    );
+
+    if(!g_file_test(full_path, G_FILE_TEST_IS_DIR)) {
+        g_printerr("<%s> does not exist yet. Creating...", full_path);
+        if(g_mkdir_with_parents(full_path, 0777)  != 0) {
+            g_printerr("Could not mkdir cache directory at %s\n", full_path);
+            exit(EXIT_FAILURE);
+        } else {
+            g_printerr("done.\n");
+        }
+        
+    }
+
+    g_free(xdg_cache_dir);
+    return full_path;
+}
+
+////////////////////////////////////////////////////////////////
+
 static void init_cancel_handler (GlyrQuery * p_lastQuery)
 {
     glob_lastQuery = p_lastQuery;
@@ -181,7 +219,7 @@ static void init_cancel_handler (GlyrQuery * p_lastQuery)
 
 ////////////////////////////////////////////////////////////////
 // --------------------------------------------------------- //
-// --------------------------------------------------------- //
+///////////////////////////////////////////////////////////////
 
 static void print_version (GlyrQuery * s)
 {
@@ -360,7 +398,7 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
         {"verbosity",     required_argument, 0, 'v'},
         {"qsratio",       required_argument, 0, 'q'},
         {"formats",       required_argument, 0, 'F'},
-        {"cache",         required_argument, 0, 'c'},
+        {"cache",         optional_argument, 0, 'c'},
         {"help",          no_argument,       0, 'h'},
         {"version",       no_argument,       0, 'V'},
         {"download",      no_argument,       0, 'd'},
@@ -391,7 +429,7 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
     {
         gint c;
         gint option_index = 0;
-        if ( (c = getopt_long (argc, argv, "N:f:W:w:p:r:m:x:u:v:q:c:F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index) ) == -1)
+        if ( (c = getopt_long (argc, argv, "N:f:W:w:p:r:m:x:u:v:q:c::F:hVodDLa:b:t:i:e:s:n:l:z:j:k:8gGyY",long_options, &option_index) ) == -1)
         {
             break;
         }
@@ -474,7 +512,12 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             break;
         case 'c':
         {
-            GlyrDatabase * new_db = glyr_db_init (optarg);
+            char * path = g_strdup(optarg);
+            if(path == NULL) {
+                path = create_cache_directory();
+            }
+
+            GlyrDatabase * new_db = glyr_db_init (path);
             if (db == NULL)
             {
                 cprint (DEFAULT,-1,NULL,"Unable to open or create a database at specified path.\n");
@@ -483,6 +526,7 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             *db = new_db;
             glyr_opt_db_autowrite (glyrs,TRUE);
             glyr_opt_lookup_db (glyrs,new_db);
+            g_free(path);
         }
         break;
         case 'l':
