@@ -811,6 +811,9 @@ GList * async_download (GList * url_list, GList * endmark_list, GlyrQuery * s, l
                 if (wait_time == -1)
                     wait_time = 100;
 
+                if (wait_time >= s->timeout * 1000)
+                    wait_time = s->timeout * 1000;
+
                 /* Nothing happens.. */
                 if (max_fd == -1)
                 {
