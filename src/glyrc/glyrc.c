@@ -79,12 +79,12 @@ typedef struct
 //////////////////////////
 
 #define INIT_CALLBACK_DATA \
-    {                          \
-        .output_path  = NULL,  \
-                        .exec_on_call = NULL,  \
-                                        .as_one       = false, \
-                                                .append_format= false  \
-    }                          \
+{                          \
+    .output_path  = NULL,  \
+    .exec_on_call = NULL,  \
+    .as_one       = false, \
+    .append_format= false  \
+}                          \
                                                      
 //////////////////////////
 
@@ -441,9 +441,9 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             char * dirname = g_path_get_dirname (optarg);
             gsize opt_len = strlen (optarg);
             if (g_ascii_strncasecmp (optarg,"stdout",opt_len) == 0 ||
-                    g_ascii_strncasecmp (optarg,"stderr",opt_len) == 0 ||
-                    g_ascii_strncasecmp (optarg,"null",  opt_len) == 0 ||
-                    g_file_test (dirname,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
+                g_ascii_strncasecmp (optarg,"stderr",opt_len) == 0 ||
+                g_ascii_strncasecmp (optarg,"null",  opt_len) == 0 ||
+                g_file_test (dirname,G_FILE_TEST_IS_DIR | G_FILE_TEST_EXISTS) == TRUE)
             {
                 CBData->output_path = optarg;
                 g_free (dirname);
