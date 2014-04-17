@@ -598,16 +598,6 @@ static void parse_commandline_general (int argc, char * const * argv, GlyrQuery 
             exit (-1);
         } // end switch()
     } // end while()
-
-    if (optind < argc && glyrs->verbosity >= 2)
-    {
-        cprint (DEFAULT,2,glyrs,"Note: You have unused arguments:\n");
-        for (int i = optind; i < argc; ++i)
-        {
-            cprint (DEFAULT,2,glyrs,"      * %s\n",argv[optind]);
-        }
-        cprint (DEFAULT,2,glyrs,"\n\n");
-    }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -628,8 +618,8 @@ static GLYR_ERROR callback (GlyrMemCache * c, GlyrQuery * s)
     {
         gsize write_len = strlen (CBQueryData->output_path);
         if (g_ascii_strncasecmp (CBQueryData->output_path,"stdout",write_len) == 0 ||
-                g_ascii_strncasecmp (CBQueryData->output_path,"stderr",write_len) == 0 ||
-                g_ascii_strncasecmp (CBQueryData->output_path,"null",  write_len) == 0)
+            g_ascii_strncasecmp (CBQueryData->output_path,"stderr",write_len) == 0 ||
+            g_ascii_strncasecmp (CBQueryData->output_path,"null",  write_len) == 0)
         {
             glyr_cache_write (c,CBQueryData->output_path);
         }
@@ -750,7 +740,7 @@ static void do_iterate_over_db (GlyrDatabase * db)
 
 //////////////////////////////////////
 
-static int do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatabase * db)
+static int do_cache_interface (const char * operation, GlyrQuery * q, GlyrDatabase * db, callback_data_t * cbdata)
 {
     const char list_op[] = "list";
     const char slct_op[] = "select";
@@ -788,15 +778,13 @@ static int do_cache_interface (const char * operation, GlyrQuery * q, GlyrDataba
         GlyrMemCache * list = glyr_db_lookup (db,q);
         GlyrMemCache * iter = list;
 
-        if(iter == NULL)  
-        {
+        if(iter == NULL)  {
             return EXIT_FAILURE;
         }
 
-        while (iter != NULL)
-        {
-            glyr_cache_print (iter);
-            cvprint (BLUE,"//////////////////////\n");
+        q->callback.user_pointer = cbdata;
+        while (iter != NULL) {
+            callback(iter, q);
             iter = iter->next;
         }
 
@@ -975,16 +963,18 @@ int main (int argc, char * argv[])
             GlyrQuery db_query;
             GlyrDatabase * db = NULL;
             callback_data_t CBQueryData = INIT_CALLBACK_DATA;
+            SET_IF_NULL (CBQueryData.output_path,".");
 
             glyr_query_init (&db_query);
+            glyr_opt_verbosity (&db_query,2);
 
-            if (argc >= 4)
+            if (argc >= 4 && strcmp("list", argv[2]) != 0)
             {
                 parse_type_argument (argv[3],&db_query);
             }
 
             parse_commandline_general (argc-2, argv+2,&db_query,&CBQueryData,&db);
-            do_cache_interface (argv[2],&db_query,db);
+            do_cache_interface (argv[2],&db_query,db, &CBQueryData);
         }
         else
         {
