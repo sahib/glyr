@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-static const gchar * albumlist_musicbrainz_url (GlyrQuery * sets)
+static const gchar *albumlist_musicbrainz_url(GlyrQuery *sets)
 {
     return "http://musicbrainz.org/ws/1/release/?type=xml&artist=${artist}&limit=100";
 }
@@ -42,16 +42,13 @@ static const gchar * albumlist_musicbrainz_url (GlyrQuery * sets)
 
 /////////////////////////////////////////////////////////////
 
-static bool is_in_list (GList * list, const char * to_cmp)
+static bool is_in_list(GList *list, const char *to_cmp)
 {
     bool rc = false;
-    for (GList * elem = list; elem; elem = elem->next)
-    {
-        GlyrMemCache * item = elem->data;
-        if (item != NULL)
-        {
-            if (g_ascii_strcasecmp (item->data,to_cmp) == 0)
-            {
+    for(GList *elem = list; elem; elem = elem->next) {
+        GlyrMemCache *item = elem->data;
+        if(item != NULL) {
+            if(g_ascii_strcasecmp(item->data, to_cmp) == 0) {
                 rc = true;
                 break;
             }
@@ -63,13 +60,14 @@ static bool is_in_list (GList * list, const char * to_cmp)
 
 /////////////////////////////////////////////////////////////
 
-static bool type_is_valid (const char * type)
+static bool type_is_valid(const char *type)
 {
     bool result = FALSE;
-    if (type == NULL)
+    if(type == NULL) {
         return result;
+    }
 
-    static const char * valid_types[] = {
+    static const char *valid_types[] = {
         "Single Official",
         "Album Official",
         NULL
@@ -77,7 +75,7 @@ static bool type_is_valid (const char * type)
 
     int check_idx = 0;
     while(valid_types[check_idx]) {
-        if (g_strcmp0(valid_types[check_idx], type) == 0) {
+        if(g_strcmp0(valid_types[check_idx], type) == 0) {
             result = TRUE;
             break;
         }
@@ -89,48 +87,42 @@ static bool type_is_valid (const char * type)
 
 /////////////////////////////////////////////////////////////
 
-static GList * albumlist_musicbrainz_parse (cb_object * capo)
+static GList *albumlist_musicbrainz_parse(cb_object *capo)
 {
-    GList * result_list = NULL;
-    gchar * node = capo->cache->data;
+    GList *result_list = NULL;
+    gchar *node = capo->cache->data;
 
-    while (continue_search (g_list_length (result_list),capo->s) &&
-            (node = strstr (node + 1, ALBUM_BEGIN) ) != NULL)
-    {
-        gchar * type = get_search_value (node, TYPE_BEGIN, TYPE_ENDIN);
-        if (type_is_valid (type)) 
-        {
-            gchar * artist = get_search_value (node,ARTIST_BEGIN, ARTIST_ENDIN);
-            if (artist != NULL && 
-                    levenshtein_strnormcmp (capo->s, capo->s->artist, artist) <= capo->s->fuzzyness) {
+    while(continue_search(g_list_length(result_list), capo->s) &&
+            (node = strstr(node + 1, ALBUM_BEGIN)) != NULL) {
+        gchar *type = get_search_value(node, TYPE_BEGIN, TYPE_ENDIN);
+        if(type_is_valid(type)) {
+            gchar *artist = get_search_value(node, ARTIST_BEGIN, ARTIST_ENDIN);
+            if(artist != NULL &&
+                    levenshtein_strnormcmp(capo->s, capo->s->artist, artist) <= capo->s->fuzzyness) {
 
 
-                gchar * name = get_search_value (node,TITLE_BEGIN,TITLE_ENDIN);
+                gchar *name = get_search_value(node, TITLE_BEGIN, TITLE_ENDIN);
 
-                if (name != NULL && is_in_list (result_list,name) == false)
-                {
-                    GlyrMemCache * result = DL_init();
+                if(name != NULL && is_in_list(result_list, name) == false) {
+                    GlyrMemCache *result = DL_init();
                     result->data = name;
-                    result->size = (result->data) ? strlen (result->data) : 0;
-                    result_list = g_list_prepend (result_list,result);
-                }
-                else 
-                {
-                    g_free (name);
+                    result->size = (result->data) ? strlen(result->data) : 0;
+                    result_list = g_list_prepend(result_list, result);
+                } else {
+                    g_free(name);
                 }
             }
-            g_free (artist);
+            g_free(artist);
         }
 
-        g_free (type);
+        g_free(type);
     }
     return result_list;
 }
 
 /////////////////////////////////////////////////////////////
 
-MetaDataSource albumlist_musicbrainz_src =
-{
+MetaDataSource albumlist_musicbrainz_src = {
     .name = "musicbrainz",
     .key = 'm',
     .free_url = false,

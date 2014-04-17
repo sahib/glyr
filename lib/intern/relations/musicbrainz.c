@@ -27,58 +27,52 @@
 #define RELATION_BEGIN_TYPE  "<relation"
 
 /* Wrap around the (a bit more) generic versions */
-static GList * relations_musicbrainz_parse (cb_object * capo)
+static GList *relations_musicbrainz_parse(cb_object *capo)
 {
-    GList * results = NULL;
+    GList *results = NULL;
     gint mbid_marker = 0;
-    while (continue_search (g_list_length (results), capo->s) )
-    {
-        GlyrMemCache  * infobuf = generic_musicbrainz_parse (capo,&mbid_marker,"url-rels");
-        if (infobuf == NULL)
-        {
+    while(continue_search(g_list_length(results), capo->s)) {
+        GlyrMemCache   *infobuf = generic_musicbrainz_parse(capo, &mbid_marker, "url-rels");
+        if(infobuf == NULL) {
             break;
         }
         gsize nlen = (sizeof RELATION_BEGIN_TYPE) - 1;
-        gchar * node = strstr (infobuf->data,RELATION_TARGLYR_GET_TYPE);
-        if (node != NULL)
-        {
+        gchar *node = strstr(infobuf->data, RELATION_TARGLYR_GET_TYPE);
+        if(node != NULL) {
             gint ctr = 0;
-            while (continue_search (ctr,capo->s) && (node = strstr (node+nlen,RELATION_BEGIN_TYPE) ) )
-            {
+            while(continue_search(ctr, capo->s) && (node = strstr(node + nlen, RELATION_BEGIN_TYPE))) {
                 node += nlen;
-                gchar * target = get_search_value (node,"target=\"","\"");
-                gchar * type   = get_search_value (node,"type=\"","\"");
+                gchar *target = get_search_value(node, "target=\"", "\"");
+                gchar *type   = get_search_value(node, "type=\"", "\"");
 
-                if (type != NULL && target != NULL)
-                {
-                    GlyrMemCache * tmp = DL_init();
-                    tmp->data = g_strdup_printf ("%s:%s",type,target);
-                    tmp->size = strlen (tmp->data);
-                    tmp->dsrc = g_strdup (infobuf->dsrc);
-                    results = g_list_prepend (results,tmp);
+                if(type != NULL && target != NULL) {
+                    GlyrMemCache *tmp = DL_init();
+                    tmp->data = g_strdup_printf("%s:%s", type, target);
+                    tmp->size = strlen(tmp->data);
+                    tmp->dsrc = g_strdup(infobuf->dsrc);
+                    results = g_list_prepend(results, tmp);
                     ctr++;
 
-                    g_free (type);
-                    g_free (target);
+                    g_free(type);
+                    g_free(target);
                 }
             }
         }
-        DL_free (infobuf);
+        DL_free(infobuf);
     }
     return results;
 }
 
 /////////////////////////////////
 
-static const gchar * relations_musicbrainz_url (GlyrQuery * sets)
+static const gchar *relations_musicbrainz_url(GlyrQuery *sets)
 {
-    return generic_musicbrainz_url (sets);
+    return generic_musicbrainz_url(sets);
 }
 
 /////////////////////////////////
 
-MetaDataSource relations_musicbrainz_src =
-{
+MetaDataSource relations_musicbrainz_src = {
     .name = "musicbrainz",
     .key  = 'm',
     .parser    = relations_musicbrainz_parse,

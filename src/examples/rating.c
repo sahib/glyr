@@ -37,56 +37,51 @@
  * 4) 'rm /tmp/metadata.db' to start again.
  */
 
-int main (int argc, const char *argv[])
+int main(int argc, const char *argv[])
 {
-    int amount_to_get = (argc > 1) ? strtol (argv[1],NULL,10) : 3;
+    int amount_to_get = (argc > 1) ? strtol(argv[1], NULL, 10) : 3;
     GLYR_ERROR err;
 
     glyr_init();
-    atexit (glyr_cleanup);
-    srand (time (NULL) );
+    atexit(glyr_cleanup);
+    srand(time(NULL));
 
-    GlyrDatabase * db = glyr_db_init ("/tmp");
-    if (db != NULL)
-    {
+    GlyrDatabase *db = glyr_db_init("/tmp");
+    if(db != NULL) {
         GlyrQuery q;
-        glyr_query_init (&q);
-        glyr_opt_artist (&q,"Die Apokalyptischen Reiter");
-        glyr_opt_type (&q,GLYR_GET_ARTIST_PHOTOS);
-        glyr_opt_download (&q,false);
-        glyr_opt_number (&q,amount_to_get);
+        glyr_query_init(&q);
+        glyr_opt_artist(&q, "Die Apokalyptischen Reiter");
+        glyr_opt_type(&q, GLYR_GET_ARTIST_PHOTOS);
+        glyr_opt_download(&q, false);
+        glyr_opt_number(&q, amount_to_get);
 
-        glyr_opt_lookup_db (&q,db);
+        glyr_opt_lookup_db(&q, db);
 
         /* Say, we want to manage the writing part ourself */
-        glyr_opt_db_autowrite (&q,false);
+        glyr_opt_db_autowrite(&q, false);
 
         /* Now either get me some from the web or the db */
-        GlyrMemCache * list = glyr_get (&q,&err,NULL);
-        if (err != GLYRE_OK)
-        {
-            fprintf (stderr,"Error occured: %s\n",glyr_strerror (err) );
+        GlyrMemCache *list = glyr_get(&q, &err, NULL);
+        if(err != GLYRE_OK) {
+            fprintf(stderr, "Error occured: %s\n", glyr_strerror(err));
         }
 
-        if (list != NULL)
-        {
-            for (GlyrMemCache * cache = list; cache; cache = cache->next)
-            {
-                puts ("-----------------");
-                glyr_cache_print (cache);
-                puts ("-----------------");
+        if(list != NULL) {
+            for(GlyrMemCache *cache = list; cache; cache = cache->next) {
+                puts("-----------------");
+                glyr_cache_print(cache);
+                puts("-----------------");
 
                 /* Give it some rating if not already cached */
-                if (cache->cached == false)
-                {
+                if(cache->cached == false) {
                     cache->rating = rand() % 100;
-                    glyr_db_insert (db,&q,cache);
+                    glyr_db_insert(db, &q, cache);
                 }
             }
-            glyr_free_list (list);
+            glyr_free_list(list);
         }
-        glyr_query_destroy (&q);
-        glyr_db_destroy (db);
+        glyr_query_destroy(&q);
+        glyr_db_destroy(db);
     }
     return EXIT_SUCCESS;
 }

@@ -22,57 +22,52 @@
 
 /////////////////////////////////
 
-static GList * relations_generated_parse (cb_object * capo)
+static GList *relations_generated_parse(cb_object *capo)
 {
-    GList * result_list = NULL;
-    GList * temple_list = NULL;
+    GList *result_list = NULL;
+    GList *temple_list = NULL;
 
-    if (capo->s->title && capo->s->album)
-    {
-        temple_list = g_list_prepend (temple_list,"Musicbrainz Recording:http://musicbrainz.org/search?query=\"${title}\"+AND+artist%3A\"${artist}\"+AND+release%3A\"${album}\"&type=recording&advanced=1");
+    if(capo->s->title && capo->s->album) {
+        temple_list = g_list_prepend(temple_list, "Musicbrainz Recording:http://musicbrainz.org/search?query=\"${title}\"+AND+artist%3A\"${artist}\"+AND+release%3A\"${album}\"&type=recording&advanced=1");
     }
 
-    if (capo->s->album)
-    {
-        temple_list = g_list_prepend (temple_list,"Musicbrainz Album:http://musicbrainz.org/search?query=\"${album}\"+AND+artist%3A\"${artist}\"&type=release&advanced=1");
-        temple_list = g_list_prepend (temple_list,"Wikipedia Album:http://en.wikipedia.org/wiki/Special:Search/${album}(${artist})");
+    if(capo->s->album) {
+        temple_list = g_list_prepend(temple_list, "Musicbrainz Album:http://musicbrainz.org/search?query=\"${album}\"+AND+artist%3A\"${artist}\"&type=release&advanced=1");
+        temple_list = g_list_prepend(temple_list, "Wikipedia Album:http://en.wikipedia.org/wiki/Special:Search/${album}(${artist})");
     }
 
-    temple_list = g_list_prepend (temple_list,"Musicbrainz Artist:http://musicbrainz.org/search?query=\"${artist}\"&type=artist");
-    temple_list = g_list_prepend (temple_list,"Wikipedia Artist:http://en.wikipedia.org/wiki/Special:Search/${artist}");
-    temple_list = g_list_prepend (temple_list,"Lastfm Page:http://last.fm/music/${artist}");
+    temple_list = g_list_prepend(temple_list, "Musicbrainz Artist:http://musicbrainz.org/search?query=\"${artist}\"&type=artist");
+    temple_list = g_list_prepend(temple_list, "Wikipedia Artist:http://en.wikipedia.org/wiki/Special:Search/${artist}");
+    temple_list = g_list_prepend(temple_list, "Lastfm Page:http://last.fm/music/${artist}");
 
-    for (GList * elem = temple_list; elem; elem = elem->next)
-    {
-        gchar * result_url = prepare_url (elem->data, capo->s,TRUE);
-        if (result_url != NULL)
-        {
-            GlyrMemCache * result = DL_init();
+    for(GList *elem = temple_list; elem; elem = elem->next) {
+        gchar *result_url = prepare_url(elem->data, capo->s, TRUE);
+        if(result_url != NULL) {
+            GlyrMemCache *result = DL_init();
             result->data = result_url;
-            result->size = strlen (result_url);
-            result->dsrc = g_strdup (OFFLINE_PROVIDER);
-            result->prov = g_strdup ("generated");
+            result->size = strlen(result_url);
+            result->dsrc = g_strdup(OFFLINE_PROVIDER);
+            result->prov = g_strdup("generated");
             result->type = GLYR_TYPE_RELATION;
-            update_md5sum (result);
-            result_list = g_list_prepend (result_list, result);
+            update_md5sum(result);
+            result_list = g_list_prepend(result_list, result);
         }
     }
 
-    g_list_free (temple_list);
+    g_list_free(temple_list);
     return result_list;
 }
 
 /////////////////////////////////
 
-static const gchar * relations_generated_url (GlyrQuery * sets)
+static const gchar *relations_generated_url(GlyrQuery *sets)
 {
     return OFFLINE_PROVIDER;
 }
 
 /////////////////////////////////
 
-MetaDataSource relations_generated_src =
-{
+MetaDataSource relations_generated_src = {
     .name = "generated",
     .key  = 'g',
     .parser    = relations_generated_parse,

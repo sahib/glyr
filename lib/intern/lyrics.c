@@ -24,30 +24,27 @@
 
 /////////////////////////////////
 
-static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList *factory(GlyrQuery *s, GList *list, gboolean *stop_me, GList **result_list)
 {
     /* Fix up lyrics, escape chars etc.  */
-    for (GList * elem = list; elem; elem = elem->next)
-    {
-        GlyrMemCache * item = elem->data;
-        if (item != NULL)
-        {
-            gchar * temp = beautify_string (item->data);
-            g_free (item->data);
+    for(GList *elem = list; elem; elem = elem->next) {
+        GlyrMemCache *item = elem->data;
+        if(item != NULL) {
+            gchar *temp = beautify_string(item->data);
+            g_free(item->data);
             item->data = temp;
-            item->size = (item->data) ? strlen (item->data) : 0;
+            item->size = (item->data) ? strlen(item->data) : 0;
         }
     }
 
     /* Let the rest do by the norma generic finalizer */
-    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_LYRICS,result_list);
+    return generic_txt_finalizer(s, list, stop_me, GLYR_TYPE_LYRICS, result_list);
 }
 
 /////////////////////////////////
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_lyrics =
-{
+MetaDataFetcher glyrFetcher_lyrics = {
     .name = "lyrics",
     .type = GLYR_GET_LYRICS,
     .default_data_type = GLYR_TYPE_LYRICS,

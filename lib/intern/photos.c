@@ -23,16 +23,15 @@
 
 /////////////////////////////////
 
-static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
+static GList *factory(GlyrQuery *s, GList *list, gboolean *stop_me, GList **result_list)
 {
-    return generic_img_finalizer (s,list,stop_me,GLYR_TYPE_ARTIST_PHOTO,result_list);
+    return generic_img_finalizer(s, list, stop_me, GLYR_TYPE_ARTIST_PHOTO, result_list);
 }
 
 /////////////////////////////////
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_artistphotos =
-{
+MetaDataFetcher glyrFetcher_artistphotos = {
     .name = "artistphoto",
     .type = GLYR_GET_ARTIST_PHOTOS,
     .default_data_type = GLYR_TYPE_ARTIST_PHOTO,

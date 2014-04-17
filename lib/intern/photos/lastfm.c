@@ -26,49 +26,43 @@
 
 /////////////////////////////////
 
-static const gchar * photos_lastfm_url (GlyrQuery * settings)
+static const gchar *photos_lastfm_url(GlyrQuery *settings)
 {
     return "http://ws.audioscrobbler.com/2.0/?method=artist.getimages&autocorrect=1&artist=${artist}&api_key="API_KEY_LASTFM;
 }
 
 /////////////////////////////////
 
-static gboolean size_fits (GlyrQuery * s, gchar ** ref)
+static gboolean size_fits(GlyrQuery *s, gchar **ref)
 {
     gboolean result = FALSE;
-    if (ref != NULL)
-    {
-        gchar * search_ptr = ref[0];
-        if (search_ptr != NULL)
-        {
-            search_ptr = strchr (search_ptr,'"');
+    if(ref != NULL) {
+        gchar *search_ptr = ref[0];
+        if(search_ptr != NULL) {
+            search_ptr = strchr(search_ptr, '"');
 
             gint ratio = 0;
-            gchar * width_string  = get_search_value (search_ptr,"width=\"","\"");
-            gchar * height_string = get_search_value (search_ptr,"height=\"","\"");
-            if (width_string && height_string)
-            {
-                ratio  = (strtol (width_string,NULL,10) + strtol (height_string,NULL,10) ) /2;
+            gchar *width_string  = get_search_value(search_ptr, "width=\"", "\"");
+            gchar *height_string = get_search_value(search_ptr, "height=\"", "\"");
+            if(width_string && height_string) {
+                ratio  = (strtol(width_string, NULL, 10) + strtol(height_string, NULL, 10)) / 2;
             }
-            g_free (width_string);
-            g_free (height_string);
+            g_free(width_string);
+            g_free(height_string);
 
             gboolean original_size_allowed = TRUE;
-            if (g_strstr_len (ref[0],100,"original") != NULL)
-            {
+            if(g_strstr_len(ref[0], 100, "original") != NULL) {
                 /* Deny extremelly large images by default, except explicitely wanted */
-                if (! (ratio >= 1000 && s->img_min_size >= 1000 && s->img_max_size == -1) )
-                {
+                if(!(ratio >= 1000 && s->img_min_size >= 1000 && s->img_max_size == -1)) {
                     original_size_allowed = FALSE;
                 }
             }
 
-            if (size_is_okay (ratio, s->img_min_size, s->img_max_size) == TRUE && original_size_allowed == TRUE)
-            {
+            if(size_is_okay(ratio, s->img_min_size, s->img_max_size) == TRUE && original_size_allowed == TRUE) {
                 result = TRUE;
             }
 
-            search_ptr = strchr (search_ptr,'>');
+            search_ptr = strchr(search_ptr, '>');
         }
         ref[0] = search_ptr + 1;
     }
@@ -77,26 +71,22 @@ static gboolean size_fits (GlyrQuery * s, gchar ** ref)
 
 /////////////////////////////////
 
-static GList * photos_lastfm_parse (cb_object * capo)
+static GList *photos_lastfm_parse(cb_object *capo)
 {
-    gchar * root = capo->cache->data;
-    GList * result_list = NULL;
+    gchar *root = capo->cache->data;
+    GList *result_list = NULL;
 
-    while (continue_search (g_list_length (result_list),capo->s) && (root = strstr (root,SIZE_FO) ) != NULL)
-    {
-        gchar * begin = root + strlen (SIZE_FO);
-        if (size_fits (capo->s,&begin) == TRUE)
-        {
-            gchar * endin = strstr (begin,URL_ENDIN);
-            if (endin != NULL)
-            {
-                gchar * urlb = copy_value (begin,endin);
-                if (urlb != NULL)
-                {
-                    GlyrMemCache * cache = DL_init();
+    while(continue_search(g_list_length(result_list), capo->s) && (root = strstr(root, SIZE_FO)) != NULL) {
+        gchar *begin = root + strlen(SIZE_FO);
+        if(size_fits(capo->s, &begin) == TRUE) {
+            gchar *endin = strstr(begin, URL_ENDIN);
+            if(endin != NULL) {
+                gchar *urlb = copy_value(begin, endin);
+                if(urlb != NULL) {
+                    GlyrMemCache *cache = DL_init();
                     cache->data = urlb;
-                    cache->size = strlen (urlb);
-                    result_list = g_list_prepend (result_list,cache);
+                    cache->size = strlen(urlb);
+                    result_list = g_list_prepend(result_list, cache);
                 }
             }
         }
@@ -107,8 +97,7 @@ static GList * photos_lastfm_parse (cb_object * capo)
 
 /////////////////////////////////
 
-MetaDataSource photos_lastfm_src =
-{
+MetaDataSource photos_lastfm_src = {
     .name = "lastfm",
     .key  = 'l',
     .parser    = photos_lastfm_parse,

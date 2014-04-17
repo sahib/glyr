@@ -20,7 +20,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-static const gchar * similar_song_lastfm_url (GlyrQuery * sets)
+static const gchar *similar_song_lastfm_url(GlyrQuery *sets)
 {
     return  "http://ws.audioscrobbler.com/2.0/?method=track.getsimilar&artist=${artist}&track=${title}&api_key="API_KEY_LASTFM;
 }
@@ -38,40 +38,37 @@ static const gchar * similar_song_lastfm_url (GlyrQuery * sets)
 #define URL_BEGIN "<url>"
 #define URL_ENDIN "</url>"
 
-static GList * similar_song_lastfm_parse (cb_object * capo)
+static GList *similar_song_lastfm_parse(cb_object *capo)
 {
-    GList * results = NULL;
-    gchar * begin = capo->cache->data;
+    GList *results = NULL;
+    gchar *begin = capo->cache->data;
 
-    while (continue_search (g_list_length (results),capo->s) && (begin = strstr (begin, TRACK_BEGIN) ) != NULL)
-    {
-        gchar * track  = get_search_value (begin,NAME_BEGIN,NAME_ENDIN);
-        gchar * match  = get_search_value (begin,MATCH_BEGIN,MATCH_ENDIN);
-        gchar * url    = get_search_value (begin,URL_BEGIN,URL_ENDIN);
-        gchar * artist = get_search_value (strstr (begin,ARTIST_BEGIN),NAME_BEGIN,NAME_ENDIN);
+    while(continue_search(g_list_length(results), capo->s) && (begin = strstr(begin, TRACK_BEGIN)) != NULL) {
+        gchar *track  = get_search_value(begin, NAME_BEGIN, NAME_ENDIN);
+        gchar *match  = get_search_value(begin, MATCH_BEGIN, MATCH_ENDIN);
+        gchar *url    = get_search_value(begin, URL_BEGIN, URL_ENDIN);
+        gchar *artist = get_search_value(strstr(begin, ARTIST_BEGIN), NAME_BEGIN, NAME_ENDIN);
 
-        if (artist && track)
-        {
-            GlyrMemCache * result = DL_init();
-            result->data = g_strdup_printf ("%s\n%s\n%s\n%s\n",track,artist,match,url);
-            result->size = strlen (result->data);
-            results = g_list_prepend (results, result);
+        if(artist && track) {
+            GlyrMemCache *result = DL_init();
+            result->data = g_strdup_printf("%s\n%s\n%s\n%s\n", track, artist, match, url);
+            result->size = strlen(result->data);
+            results = g_list_prepend(results, result);
         }
 
-        g_free (track);
-        g_free (artist);
-        g_free (match);
-        g_free (url);
+        g_free(track);
+        g_free(artist);
+        g_free(match);
+        g_free(url);
 
-        begin += sizeof (TRACK_BEGIN) - 1;
+        begin += sizeof(TRACK_BEGIN) - 1;
     }
     return results;
 }
 
 /////////////////////////////////
 
-MetaDataSource similar_song_lastfm_src =
-{
+MetaDataSource similar_song_lastfm_src = {
     .name = "lastfm",
     .key  = 'l',
     .parser    = similar_song_lastfm_parse,

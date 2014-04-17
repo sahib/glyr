@@ -24,21 +24,21 @@
 /* JSON Parsing */
 #include "../../jsmn/jsmn.h"
 
-static const gchar * ainfo_echonest_url (GlyrQuery * s)
+static const gchar *ainfo_echonest_url(GlyrQuery *s)
 {
     return "http://developer.echonest.com/api/v4/artist/biographies?api_key="API_KEY_ECHONEST"&results=${number}&format=json&name=${artist}";
 }
 
 /////////////////////////////////
 
-static char * echonest_strip_escapes(char * src, char * dest, int len) 
+static char *echonest_strip_escapes(char *src, char *dest, int len)
 {
     int offset = 0;
 
-    for (int i = 0; i < len; ++i) {
-        if (src[i] == '\\') {
+    for(int i = 0; i < len; ++i) {
+        if(src[i] == '\\') {
             ++i;
-            if (src[i] == 'n') {
+            if(src[i] == 'n') {
                 dest[offset++] = '\n';
                 continue;
             }
@@ -51,10 +51,10 @@ static char * echonest_strip_escapes(char * src, char * dest, int len)
 
 /////////////////////////////////
 
-static bool echonest_check_if_text_is_valid(char * text, int len) 
+static bool echonest_check_if_text_is_valid(char *text, int len)
 {
     bool rc = false;
-    if (len >= 125) {
+    if(len >= 125) {
         return true;
     }
 
@@ -63,13 +63,13 @@ static bool echonest_check_if_text_is_valid(char * text, int len)
 
 /////////////////////////////////
 
-static GList * ainfo_echonest_parse (cb_object * capo)
+static GList *ainfo_echonest_parse(cb_object *capo)
 {
-    char * json = capo->cache->data;
+    char *json = capo->cache->data;
     bool is_text = false;
     const int num_tokens = 512;
-    
-    GList * results = NULL;
+
+    GList *results = NULL;
 
     /* jasmin stuff */
     jsmn_parser parser;
@@ -85,30 +85,30 @@ static GList * ainfo_echonest_parse (cb_object * capo)
     /* Parse the json text */
     error = jsmn_parse(&parser, capo->cache->data, tokens, num_tokens);
 
-    if (error == JSMN_SUCCESS) {
-        for (int i = 0; i < num_tokens; ++i) {
-            jsmntok_t * tok = &tokens[i];
+    if(error == JSMN_SUCCESS) {
+        for(int i = 0; i < num_tokens; ++i) {
+            jsmntok_t *tok = &tokens[i];
             size_t len = tok->end - tok->start;
-            char * text_off = json + tok->start;
-            
+            char *text_off = json + tok->start;
+
             /* End of tokens? */
             if(tok->start == 0 && tok->end == 0) {
                 break;
             }
 
             /* Check for the "text" field. */
-            if (tok->type == JSMN_STRING) {
-                if (len == 4 && g_ascii_strncasecmp(text_off, "text", len) == 0) {
+            if(tok->type == JSMN_STRING) {
+                if(len == 4 && g_ascii_strncasecmp(text_off, "text", len) == 0) {
                     is_text = true;
                     continue;
                 }
             }
 
             /* Interesting part! */
-            if (is_text == true && tok->type == JSMN_STRING) {
-                if (echonest_check_if_text_is_valid(text_off, len)) {
-                    GlyrMemCache * cache = DL_init();
-                    if (cache != NULL) {
+            if(is_text == true && tok->type == JSMN_STRING) {
+                if(echonest_check_if_text_is_valid(text_off, len)) {
+                    GlyrMemCache *cache = DL_init();
+                    if(cache != NULL) {
                         cache->data = g_strndup(text_off, len);
                         cache->data = echonest_strip_escapes(cache->data, cache->data, len);
                         cache->size = len;
@@ -128,8 +128,7 @@ static GList * ainfo_echonest_parse (cb_object * capo)
 
 /////////////////////////////////
 
-MetaDataSource ainfo_echonest_src =
-{
+MetaDataSource ainfo_echonest_src = {
     .name      = "echonest",
     .key       = 'e',
     .free_url  = false,
@@ -139,5 +138,5 @@ MetaDataSource ainfo_echonest_src =
     .quality   = 95,
     .speed     = 85,
     .endmarker = NULL,
-    .lang_aware = false 
+    .lang_aware = false
 };

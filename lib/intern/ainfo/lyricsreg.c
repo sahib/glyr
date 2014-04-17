@@ -26,41 +26,36 @@
 #define INFO_ENDIN "</div>"
 /////////////////////////////////
 
-static const gchar * ainfo_lyricsreg_url (GlyrQuery * s)
+static const gchar *ainfo_lyricsreg_url(GlyrQuery *s)
 {
     return "http://www.lyricsreg.com/biography/${artist}/";
 }
 
 /////////////////////////////////
 
-static GList * ainfo_lyricsreg_parse (cb_object * capo)
+static GList *ainfo_lyricsreg_parse(cb_object *capo)
 {
-    GList * result_list = NULL;
-    gchar * point_to_start = strstr (capo->cache->data,INFO_BEGIN);
-    if (point_to_start != NULL)
-    {
-        gchar * opt_begin = strstr (point_to_start,OPTN_BEGIN);
+    GList *result_list = NULL;
+    gchar *point_to_start = strstr(capo->cache->data, INFO_BEGIN);
+    if(point_to_start != NULL) {
+        gchar *opt_begin = strstr(point_to_start, OPTN_BEGIN);
         gsize skip_len = (sizeof INFO_BEGIN) - 1;
-        if (opt_begin != NULL)
-        {
+        if(opt_begin != NULL) {
             point_to_start = opt_begin;
             skip_len = (sizeof OPTN_BEGIN) - 1;
         }
 
         point_to_start += skip_len;
-        gchar * end = strstr (point_to_start, INFO_ENDIN);
-        if (end != NULL)
-        {
+        gchar *end = strstr(point_to_start, INFO_ENDIN);
+        if(end != NULL) {
             gsize info_len = end - point_to_start;
-            if (info_len > 200)
-            {
-                gchar * info = copy_value (point_to_start, end);
-                if (info != NULL)
-                {
-                    GlyrMemCache * result = DL_init();
+            if(info_len > 200) {
+                gchar *info = copy_value(point_to_start, end);
+                if(info != NULL) {
+                    GlyrMemCache *result = DL_init();
                     result->data = info;
                     result->size = info_len;
-                    result_list = g_list_prepend (result_list,result);
+                    result_list = g_list_prepend(result_list, result);
                 }
             }
         }
@@ -70,8 +65,7 @@ static GList * ainfo_lyricsreg_parse (cb_object * capo)
 
 /////////////////////////////////
 
-MetaDataSource ainfo_lyricsreg_src =
-{
+MetaDataSource ainfo_lyricsreg_src = {
     .name      = "lyricsreg",
     .key       = 'r',
     .free_url  = false,

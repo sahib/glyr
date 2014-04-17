@@ -33,11 +33,12 @@
 
 #define STREQ(s1,s2) (g_ascii_strcasecmp(s1,s2) == 0)
 
-static const char * cover_slothradio_url (GlyrQuery * s)
+static const char *cover_slothradio_url(GlyrQuery *s)
 {
-    const char * locale = "us";
-    if (STREQ (s->lang,"uk") || STREQ (s->lang,"de") )
+    const char *locale = "us";
+    if(STREQ(s->lang, "uk") || STREQ(s->lang, "de")) {
         locale = s->lang;
+    }
 
     /*
      * Possible image sizes:
@@ -47,82 +48,81 @@ static const char * cover_slothradio_url (GlyrQuery * s)
      * s = small  (50 **2)
      **/
     char image_size = 'x';
-    if (s->img_max_size != -1)
-    {
-        if (s->img_max_size < 75)
+    if(s->img_max_size != -1) {
+        if(s->img_max_size < 75) {
             image_size = 's';
-        else if (s->img_max_size < 150)
+        } else if(s->img_max_size < 150) {
             image_size = 'm';
-        else if (s->img_max_size < 350)
+        } else if(s->img_max_size < 350) {
             image_size = 'l';
+        }
     }
 
-    return g_strdup_printf (API_URL,s->artist,s->album,image_size,locale);
+    return g_strdup_printf(API_URL, s->artist, s->album, image_size, locale);
 }
 
 ///////////////////////
 
-static bool check_size (GlyrQuery * q, char * node)
+static bool check_size(GlyrQuery *q, char *node)
 {
     bool rc = false;
-    char * width  = get_search_value (node,"width=\"", "\"");
-    char * height = get_search_value (node,"height=\"","\"");
+    char *width  = get_search_value(node, "width=\"", "\"");
+    char *height = get_search_value(node, "height=\"", "\"");
 
-    if (width && height)
-    {
-        int w = strtol (width, NULL,10);
-        int h = strtol (height,NULL,10);
+    if(width && height) {
+        int w = strtol(width, NULL, 10);
+        int h = strtol(height, NULL, 10);
 
-        if (size_is_okay (w,q->img_min_size,q->img_max_size) &&
-                size_is_okay (h,q->img_min_size,q->img_max_size) )
+        if(size_is_okay(w, q->img_min_size, q->img_max_size) &&
+                size_is_okay(h, q->img_min_size, q->img_max_size)) {
             rc = true;
+        }
     }
-    g_free (width);
-    g_free (height);
+    g_free(width);
+    g_free(height);
 
     return rc;
 }
 
 ///////////////////////
 
-static GList * cover_slothradio_parse (cb_object * capo)
+static GList *cover_slothradio_parse(cb_object *capo)
 {
-    GList * result_list = NULL;
+    GList *result_list = NULL;
 
-    const char * bound_start = strstr (capo->cache->data,RESULT_LIST_START);
-    if (bound_start == NULL)
+    const char *bound_start = strstr(capo->cache->data, RESULT_LIST_START);
+    if(bound_start == NULL) {
         return NULL;
+    }
 
-    const char * bound_end  = strstr (bound_start,RESULT_LIST_END);
-    if (bound_end == NULL)
+    const char *bound_end  = strstr(bound_start, RESULT_LIST_END);
+    if(bound_end == NULL) {
         return NULL;
+    }
 
-    char * node = (char*) bound_start;
-    while ( (node = strstr (node + sizeof (RESULT_ITEM_START),RESULT_ITEM_START) ) != NULL)
-    {
-        if (node >= bound_end)
+    char *node = (char *) bound_start;
+    while((node = strstr(node + sizeof(RESULT_ITEM_START), RESULT_ITEM_START)) != NULL) {
+        if(node >= bound_end) {
             break;
+        }
 
-        char * url = get_search_value (node,"img src=\"","\"");
-        if (url != NULL)
-        {
-            if (check_size (capo->s,node) )
-            {
-                GlyrMemCache * result = DL_init();
-                result->dsrc = g_strdup (capo->url);
+        char *url = get_search_value(node, "img src=\"", "\"");
+        if(url != NULL) {
+            if(check_size(capo->s, node)) {
+                GlyrMemCache *result = DL_init();
+                result->dsrc = g_strdup(capo->url);
                 result->data = url;
-                result->size = strlen (url);
+                result->size = strlen(url);
 
-                result_list = g_list_prepend (result_list,result);
-            }
-            else
-            {
-                g_free (url);
+                result_list = g_list_prepend(result_list, result);
+            } else {
+                g_free(url);
             }
         }
 
-        if (continue_search (g_list_length (result_list),capo->s) == false)
+        if(continue_search(g_list_length(result_list), capo->s) == false) {
             break;
+        }
     }
 
     return result_list;
@@ -130,8 +130,7 @@ static GList * cover_slothradio_parse (cb_object * capo)
 
 ///////////////////////
 
-MetaDataSource cover_slothradio_src =
-{
+MetaDataSource cover_slothradio_src = {
     .name      = "slothradio",
     .key       = 's',
     .parser    = cover_slothradio_parse,
