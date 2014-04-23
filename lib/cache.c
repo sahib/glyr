@@ -192,7 +192,7 @@ static int select_callback(void *result, int argc, char **argv, char **azColName
 ////////////////// Useful Defines //////////////////////
 ////////////////////////////////////////////////////////
 
-#define INSERT_STRING(SQL, RG) {                        \
+#define INSERT_STRING(SQL, ARG) {                        \
         if(SQL && ARG) {                                    \
             /* We have to use _ascii_ here,                   */\
             /* since there seems to be some encoding problems */\
@@ -200,7 +200,7 @@ static int select_callback(void *result, int argc, char **argv, char **azColName
             /* lower and highercase umlauts for example       */\
             /* Simple encoding-indepent lowercase prevents it */\
             gchar * lower_str = g_ascii_strdown(ARG, 1);    \
-            gchar * sql = sqlite3_mprintf(SQL, ower_str);   \
+            gchar * sql = sqlite3_mprintf(SQL, lower_str);   \
             execute(db,sql);                                \
             sqlite3_free(sql);                              \
             g_free(lower_str);                              \
@@ -210,9 +210,9 @@ static int select_callback(void *result, int argc, char **argv, char **azColName
 ////////////////////////////////////////////////////////
 
 /* Ensure no invalid data comes in */
-#define ABORT_ON_FAILED_REQS(REQS, PT_ARG, RG) {                   \
-        if((REQS & OPT_ARG) == 0 && ARG == NULL) {                     \
-            glyr_message(-1, ULL, Warning: %s != NULL failed", ARG);   \
+#define ABORT_ON_FAILED_REQS(REQS, OPT_ARG, ARG) {                   \
+        if((REQS & OPT_ARG) == 0 && OPT_ARG == NULL) {               \
+            glyr_message(-1, NULL, "Warning: %s != NULL failed", ARG);   \
             goto rollback;                                             \
         }                                                              \
     }
@@ -230,7 +230,7 @@ static int select_callback(void *result, int argc, char **argv, char **azColName
         gchar * lower = g_ascii_strdown(VARNAME, 1);                         \
         if(lower != NULL)                                                    \
         {                                                                    \
-            TO_CONSTR = sqlite3_mprintf("AND %s = '%q'\n", IELDNAME, ower);  \
+            TO_CONSTR = sqlite3_mprintf("AND %s = '%q'\n", FIELDNAME, lower);  \
             g_free(lower);                                                   \
         }                                                                    \
     }
@@ -241,12 +241,12 @@ static int select_callback(void *result, int argc, char **argv, char **azColName
 
 ////////////////////////////////////////////////////////
 
-#define SQL_BIND_TEXT(stmt, ext, os) {                                               \
+#define SQL_BIND_TEXT(stmt, text, pos) {                                               \
         int cpPos = pos;                                                                 \
         if(stmt && text) {                                                               \
-            int rc = sqlite3_bind_text(stmt, pPos, ext,strlen(text) + 1, SQLITE_STATIC); \
+            int rc = sqlite3_bind_text(stmt, cpPos, text,strlen(text) + 1, SQLITE_STATIC); \
             if(rc != SQLITE_OK) {                                                        \
-                printf("Could not bind value: %d\n", c);                                 \
+                printf("Could not bind value: %d\n", rc);                                 \
             }                                                                            \
         }                                                                                \
     }                                                                                    \
@@ -919,7 +919,7 @@ static gchar *convert_from_option_to_sql(GlyrQuery *q)
         if(item && (q->type == item->type || item->type == GLYR_GET_ANY)) {
             if(provider_is_enabled(q, item) == TRUE) {
                 gchar *old_mem = result;
-                result = g_strdup_printf("%s%s'%s'", result, (*result) ? ",  : "", item->name);
+                result = g_strdup_printf("%s%s'%s'", result, (*result) ? ","  : "", item->name);
                 g_free(old_mem);
             }
         }

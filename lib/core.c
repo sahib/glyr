@@ -1552,7 +1552,7 @@ void update_md5sum(GlyrMemCache *c)
 
 void glist_free_full(GList *List, void (* free_func)(void *ptr))
 {
-#if GLIB_CHECK_VERSION(2, 8, )
+#if GLIB_CHECK_VERSION(2, 28, 0)
 
     /* Use official version */
     g_list_free_full(List, free_func);
