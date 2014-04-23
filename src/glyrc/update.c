@@ -30,23 +30,26 @@
 
 /////////////////////////////////
 
-static gboolean check_version(gboolean *errord)
+static gboolean check_version (gboolean * errord)
 {
     gboolean result = FALSE;
     GlyrQuery q;
-    glyr_query_init(&q);
-    glyr_opt_verbosity(&q, 3);
+    glyr_query_init (&q);
+    glyr_opt_verbosity (&q,3);
 
-    GlyrMemCache *version_page = glyr_download(GLYR_VERSION_URL, &q);
-    if(version_page != NULL && version_page->data != NULL) {
-        glong version = strtol(version_page->data, NULL, 10);
+    GlyrMemCache * version_page = glyr_download (GLYR_VERSION_URL,&q);
+    if (version_page != NULL && version_page->data != NULL)
+    {
+        glong version = strtol (version_page->data,NULL,10);
         glong current = GLYR_VERSION_MAJOR_INT * 100 + GLYR_VERSION_MINOR_INT * 10 + GLYR_VERSION_MICRO_INT;
         result = (version > current);
-    } else {
+    }
+    else
+    {
         *errord = TRUE;
     }
 
-    glyr_query_destroy(&q);
+    glyr_query_destroy (&q);
     return result;
 }
 
@@ -78,18 +81,24 @@ static gboolean check_version(gboolean *errord)
 /********************************************************************/
 
 
-void update(void)
+void update (void)
 {
     gboolean error = FALSE;
-    if(check_version(&error)) {
-        g_printerr("Updating:\n");
-        if(system(UPDATE_SCRIPT) == -1) {
-            g_printerr("Warning: the script returned a bad exitstatus.\n");
+    if (check_version (&error) )
+    {
+        g_printerr ("Updating:\n");
+        if (system (UPDATE_SCRIPT) == -1)
+        {
+            g_printerr ("Warning: the script returned a bad exitstatus.\n");
         }
-    } else if(error) {
-        g_printerr("Error while updating.\n");
-    } else {
-        g_printerr("No updates found.\n");
+    }
+    else if (error)
+    {
+        g_printerr ("Error while updating.\n");
+    }
+    else
+    {
+        g_printerr ("No updates found.\n");
     }
 }
 

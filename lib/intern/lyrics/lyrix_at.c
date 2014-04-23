@@ -20,9 +20,9 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define AT_URL "http://lyrix.at/lyrics-search/s-${artist}, ${title}, any, 321, .html"
+#define AT_URL "http://lyrix.at/lyrics-search/s-${artist},,${title},,any,1321,0.html"
 
-const char *lyrics_lyrixat_url(GlyrQuery *settings)
+const char * lyrics_lyrixat_url (GlyrQuery * settings)
 {
     return AT_URL;
 }
@@ -38,59 +38,70 @@ const char *lyrics_lyrixat_url(GlyrQuery *settings)
 
 /////////////////////////////////
 
-static void parse_lyrics_page(const gchar *url, GList **result_list, cb_object *capo)
+static void parse_lyrics_page (const gchar * url, GList ** result_list, cb_object * capo)
 {
-    GlyrMemCache *lyrcache = download_single(url, capo->s, "<!-- eBay Relevance Ad -->");
-    if(lyrcache != NULL) {
-        gchar *lyr_begin = strstr(lyrcache->data, LYRIC_BEGIN);
-        if(lyr_begin != NULL) {
-            gchar *lyr_endin = strstr(lyr_begin, "</div>");
-            if(lyr_endin != NULL) {
-                gchar *lyrics = copy_value(lyr_begin, lyr_endin);
-                if(lyrics != NULL) {
-                    GlyrMemCache *result = DL_init();
-                    result->data = strreplace(lyrics, "<br />", "");
-                    result->size = strlen(result->data);
-                    result->dsrc = g_strdup(url);
-                    *result_list = g_list_prepend(*result_list, result);
+    GlyrMemCache * lyrcache = download_single (url,capo->s,"<!-- eBay Relevance Ad -->");
+    if (lyrcache != NULL)
+    {
+        gchar * lyr_begin = strstr (lyrcache->data,LYRIC_BEGIN);
+        if (lyr_begin != NULL)
+        {
+            gchar * lyr_endin = strstr (lyr_begin,"</div>");
+            if (lyr_endin != NULL)
+            {
+                gchar * lyrics = copy_value (lyr_begin,lyr_endin);
+                if (lyrics != NULL)
+                {
+                    GlyrMemCache * result = DL_init();
+                    result->data = strreplace (lyrics,"<br />","");
+                    result->size = strlen (result->data);
+                    result->dsrc = g_strdup (url);
+                    *result_list = g_list_prepend (*result_list,result);
                 }
-                g_free(lyrics);
+                g_free (lyrics);
             }
         }
-        DL_free(lyrcache);
+        DL_free (lyrcache);
     }
 }
 
 /////////////////////////////////
 
-GList *lyrics_lyrixat_parse(cb_object *capo)
+GList * lyrics_lyrixat_parse (cb_object * capo)
 {
     /* lyrix.at does not offer any webservice -> use the searchfield to get some results */
-    GList *result_list = NULL;
-    gchar *search_begin_tag = capo->cache->data;
+    GList * result_list = NULL;
+    gchar * search_begin_tag = capo->cache->data;
     gint ctr = 0;
 
-    while(continue_search(g_list_length(result_list), capo->s) && (search_begin_tag = strstr(search_begin_tag + 1, SEARCH_START_TAG)) && MAX_TRIES >= ctr++) {
-        gchar *url_tag = search_begin_tag;
-        url_tag = strstr(url_tag, URL_TAG_BEGIN);
-        if(url_tag != NULL) {
-            gchar *title_tag = strstr(url_tag, URL_TAG_ENDIN);
-            if(title_tag) {
-                gchar *title_end = strstr(title_tag, TITLE_END);
-                if(title_end != NULL) {
+    while (continue_search (g_list_length (result_list),capo->s) && (search_begin_tag = strstr (search_begin_tag+1,SEARCH_START_TAG) ) && MAX_TRIES >= ctr++)
+    {
+        gchar * url_tag = search_begin_tag;
+        url_tag = strstr (url_tag,URL_TAG_BEGIN);
+        if (url_tag != NULL)
+        {
+            gchar * title_tag = strstr (url_tag,URL_TAG_ENDIN);
+            if (title_tag)
+            {
+                gchar * title_end = strstr (title_tag,TITLE_END);
+                if (title_end != NULL)
+                {
                     gsize tag_end_len = (sizeof URL_TAG_ENDIN) - 1;
-                    gchar *title = copy_value(title_tag + tag_end_len, title_end);
-                    if(title != NULL) {
-                        if(levenshtein_strnormcmp(capo->s, title, capo->s->title) <= capo->s->fuzzyness) {
-                            gchar *url_part = copy_value(url_tag + strlen(URL_TAG_BEGIN), title_tag);
-                            if(url_part != NULL) {
-                                gchar *url = g_strdup_printf("http://lyrix.at/de%s", url_part);
-                                parse_lyrics_page(url, &result_list, capo);
-                                g_free(url);
-                                g_free(url_part);
+                    gchar * title = copy_value (title_tag + tag_end_len,title_end);
+                    if (title != NULL)
+                    {
+                        if (levenshtein_strnormcmp (capo->s,title,capo->s->title) <= capo->s->fuzzyness)
+                        {
+                            gchar * url_part = copy_value (url_tag+strlen (URL_TAG_BEGIN),title_tag);
+                            if (url_part != NULL)
+                            {
+                                gchar * url = g_strdup_printf ("http://lyrix.at/de%s",url_part);
+                                parse_lyrics_page (url,&result_list,capo);
+                                g_free (url);
+                                g_free (url_part);
                             }
                         }
-                        g_free(title);
+                        g_free (title);
                     }
                 }
             }
@@ -100,7 +111,8 @@ GList *lyrics_lyrixat_parse(cb_object *capo)
 }
 /////////////////////////////////
 
-MetaDataSource lyrics_lyrix_src = {
+MetaDataSource lyrics_lyrix_src =
+{
     .name = "lyrix",
     .key  = 'a',
     .parser    = lyrics_lyrixat_parse,

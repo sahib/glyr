@@ -30,33 +30,32 @@ static bool global_enable_color = true;
 
 /////////////////////////////
 
-static void printcol(FILE *stream, termcolor fg)
+static void printcol (FILE * stream, termcolor fg)
 {
-    fprintf(stream, "%c[0;%dm", 0x1B, fg + 30);
+    fprintf (stream,"%c[0;%dm", 0x1B, fg + 30);
 }
 
 /////////////////////////////
 
-static void resetcolor(FILE *stream)
+static void resetcolor (FILE * stream)
 {
-    fprintf(stream, "%c[0m", 0x1B);
+    fprintf (stream,"%c[0m",0x1B);
 }
 
-void cprint(termcolor col, gint verbosity, GlyrQuery *s, const char *fmt, ...)
+void cprint (termcolor col,gint verbosity, GlyrQuery * s, const char * fmt, ...)
 {
-    if((s && verbosity <= s->verbosity) || verbosity == -1) {
-        if(col != DEFAULT && global_enable_color) {
-            printcol(GLYR_OUTPUT, col);
-        }
+    if ( (s && verbosity <= s->verbosity) || verbosity == -1)
+    {
+        if (col != DEFAULT && global_enable_color)
+            printcol (GLYR_OUTPUT,col);
 
         va_list param;
-        va_start(param, fmt);
-        g_logv("Glyrc", G_LOG_LEVEL_INFO, fmt, param);
-        va_end(param);
+        va_start (param,fmt);
+        g_logv ("Glyrc",G_LOG_LEVEL_INFO,fmt,param);
+        va_end (param);
 
-        if(col != DEFAULT && global_enable_color) {
-            resetcolor(GLYR_OUTPUT);
-        }
+        if (col != DEFAULT && global_enable_color)
+            resetcolor (GLYR_OUTPUT);
 
         fflush(stdout);
     }
@@ -65,11 +64,11 @@ void cprint(termcolor col, gint verbosity, GlyrQuery *s, const char *fmt, ...)
 
 /////////////////////////////
 
-void enable_color(bool enable)
+void enable_color (bool enable)
 {
     global_enable_color = enable;
 }
 
 /////////////////////////////
 
-void enable_color(bool enable);
+void enable_color (bool enable);

@@ -27,26 +27,27 @@
 #define RESULT_URL "http://www.jamendo.com/get/album/id/album/artworkurl/redirect/%s/?artwork_size=%d"
 #define SOURCE_URL "http://api.jamendo.com/get2/id+name+artist_name/album/plain/?order=searchweight_desc&n=100&searchquery=${album}"
 
-static int get_cover_size(GlyrQuery *query);
-static bool check_values(GlyrQuery *query, char *artist, char *album);
+static int get_cover_size (GlyrQuery * query);
+static bool check_values (GlyrQuery * query, char * artist, char * album);
 
 /////////////////////////////////
 
-static const char *cover_jamendo_url(GlyrQuery *sets)
+static const char * cover_jamendo_url (GlyrQuery * sets)
 {
     return SOURCE_URL;
 }
 
 /////////////////////////////////
 
-void do_line_split(char **p_arr, char *line)
+void do_line_split (char ** p_arr, char * line)
 {
-    g_return_if_fail(p_arr && line);
+    g_return_if_fail (p_arr && line);
 
-    char *hop = line;
+    char * hop = line;
     *p_arr = line;
 
-    while((hop = strchr(hop, '\t')) != NULL) {
+    while ( (hop = strchr (hop,'\t') ) != NULL)
+    {
         p_arr++;
 
         *hop = 0;
@@ -56,32 +57,37 @@ void do_line_split(char **p_arr, char *line)
 
 /////////////////////////////////
 
-static GList *cover_jamendo_parse(cb_object *capo)
+static GList * cover_jamendo_parse (cb_object *capo)
 {
     // A nice parser with zero memory overhead..
 
-    GList *result_list = NULL;
-    gchar *line = capo->cache->data;
+    GList * result_list = NULL;
+    gchar * line = capo->cache->data;
 
-    while(continue_search(g_list_length(result_list), capo->s)) {
-        char *line_end;
+    while (continue_search (g_list_length (result_list),capo->s) )
+    {
+        char * line_end;
 
-        if((line_end = strchr(line, '\n')) != NULL) {
+        if ( (line_end = strchr (line,'\n') ) != NULL)
+        {
             *line_end = 0;
 
-            char *line_split[3] = {0, 0, 0};
-            do_line_split(line_split, line);
+            char * line_split[3] = {0,0,0};
+            do_line_split (line_split,line);
 
-            if(check_values(capo->s, line_split[2], line_split[1])) {
-                char *url =  g_strdup_printf(RESULT_URL, line_split[0], get_cover_size(capo->s));
-                GlyrMemCache *result = DL_init();
+            if (check_values (capo->s,line_split[2],line_split[1]) )
+            {
+                char * url =  g_strdup_printf (RESULT_URL,line_split[0],get_cover_size (capo->s) );
+                GlyrMemCache * result = DL_init();
                 result->data = url;
-                result->size = strlen(url);
-                result_list = g_list_prepend(result_list, result);
+                result->size = strlen (url);
+                result_list = g_list_prepend (result_list,result);
             }
 
             line = ++line_end;
-        } else {
+        }
+        else
+        {
             break;
         }
     }
@@ -90,10 +96,11 @@ static GList *cover_jamendo_parse(cb_object *capo)
 
 /////////////////////////////////
 
-static bool check_values(GlyrQuery *query, char *artist, char *album)
+static bool check_values (GlyrQuery * query, char * artist, char * album)
 {
-    if(levenshtein_strnormcmp(query, query->artist, artist) <= query->fuzzyness
-            && levenshtein_strnormcmp(query, query->album, album) <= query->fuzzyness) {
+    if (levenshtein_strnormcmp (query, query->artist, artist) <= query->fuzzyness
+            && levenshtein_strnormcmp (query, query->album,album) <= query->fuzzyness)
+    {
         return true;
     }
     return false;
@@ -101,17 +108,22 @@ static bool check_values(GlyrQuery *query, char *artist, char *album)
 
 /////////////////////////////////
 
-static int get_cover_size(GlyrQuery *query)
+static int get_cover_size (GlyrQuery * query)
 {
-    int cover_size[] = {50, 50, 100, 200, 300, 400, 600, INT_MAX};
-    int array_len = (sizeof(cover_size) / sizeof(int));
+    int cover_size[] = {50,50,100,200,300,400,600,INT_MAX};
+    int array_len = (sizeof (cover_size) /sizeof (int) );
 
-    if(query->img_max_size == -1) {
+    if (query->img_max_size == -1)
+    {
         return 400;
-    } else {
-        for(int i = 1; i < array_len; i++) {
-            if(query->img_max_size <= cover_size[i]) {
-                return cover_size[i - 1];
+    }
+    else
+    {
+        for (int i=1; i<array_len; i++)
+        {
+            if (query->img_max_size <= cover_size[i])
+            {
+                return cover_size[i-1];
             }
         }
     }
@@ -121,7 +133,8 @@ static int get_cover_size(GlyrQuery *query)
 
 /////////////////////////////////
 
-MetaDataSource cover_jamendo_src = {
+MetaDataSource cover_jamendo_src =
+{
     .name      = "jamendo",
     .key       = 'j',
     .parser    = cover_jamendo_parse,

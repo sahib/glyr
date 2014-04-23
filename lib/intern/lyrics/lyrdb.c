@@ -24,48 +24,54 @@
 
 /////////////////////////////////
 
-static const char *lyrics_lyrdb_url(GlyrQuery *settings)
+static const char * lyrics_lyrdb_url (GlyrQuery * settings)
 {
     return LYRDB_URL;
 }
 
 /////////////////////////////////
 
-static GList *lyrics_lyrdb_parse(cb_object *capo)
+static GList * lyrics_lyrdb_parse (cb_object * capo)
 {
     gchar *slash = NULL;
-    GList *result_list = NULL;
+    GList * result_list = NULL;
 
-    if((slash = strchr(capo->cache->data, '\\')) != NULL) {
-        gchar *uID = copy_value(capo->cache->data, slash);
-        if(uID != NULL) {
-            gchar *lyr_url = g_strdup_printf("http://webservices.lyrdb.com/getlyr.php?q=%s", uID);
-            if(lyr_url != NULL) {
-                GlyrMemCache *new_cache = download_single(lyr_url, capo->s, NULL);
-                if(new_cache != NULL) {
+    if ( (slash = strchr (capo->cache->data,'\\') ) != NULL)
+    {
+        gchar * uID = copy_value (capo->cache->data,slash);
+        if (uID != NULL)
+        {
+            gchar * lyr_url = g_strdup_printf ("http://webservices.lyrdb.com/getlyr.php?q=%s",uID);
+            if (lyr_url != NULL)
+            {
+                GlyrMemCache * new_cache = download_single (lyr_url,capo->s,NULL);
+                if (new_cache != NULL)
+                {
                     gsize i = 0;
-                    gchar *buffer = g_malloc0(new_cache->size + 1);
-                    for(i = 0; i < new_cache->size; i++) {
+                    gchar * buffer = g_malloc0 (new_cache->size + 1);
+                    for (i = 0; i < new_cache->size; i++)
+                    {
                         buffer[i] = (new_cache->data[i] == '\r') ?
                                     ' ' :
                                     new_cache->data[i];
                     }
                     buffer[i] = 0;
 
-                    if(i != 0) {
-                        GlyrMemCache *result = DL_init();
+                    if (i != 0)
+                    {
+                        GlyrMemCache * result = DL_init();
                         result->data = buffer;
                         result->size = i;
-                        result->dsrc = g_strdup(lyr_url);
+                        result->dsrc = g_strdup (lyr_url);
 
-                        result_list = g_list_prepend(result_list, result);
+                        result_list = g_list_prepend (result_list,result);
                     }
 
-                    DL_free(new_cache);
+                    DL_free (new_cache);
                 }
-                g_free(lyr_url);
+                g_free (lyr_url);
             }
-            g_free(uID);
+            g_free (uID);
         }
     }
     return result_list;
@@ -73,7 +79,8 @@ static GList *lyrics_lyrdb_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource lyrics_lyrdb_src = {
+MetaDataSource lyrics_lyrdb_src =
+{
     .name = "lyrdb",
     .key  = 'd',
     .encoding  = "LATIN1",

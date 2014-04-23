@@ -21,12 +21,13 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-static const gchar *cover_albumart_url(GlyrQuery *sets)
+static const gchar * cover_albumart_url (GlyrQuery * sets)
 {
     gint i = sets->img_min_size;
     gint e = sets->img_max_size;
 
-    if((e >= 50 || e == -1) && (i == -1 || i < 450)) {
+    if ( (e >= 50 || e == -1) && (i == -1 || i < 450) )
+    {
         return "http://www.albumart.org/index.php?searchkey=${artist}&itempage=1&newsearch=1&searchindex=Music";
     }
     return NULL;
@@ -39,42 +40,50 @@ static const gchar *cover_albumart_url(GlyrQuery *sets)
 #define AMZ "http://ecx.images-amazon.com/images/"
 #define IMG_FORMAT ".jpg"
 
-static GList *cover_albumart_parse(cb_object *capo)
+static GList * cover_albumart_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
-    gchar *node = strstr(capo->cache->data, NODE_START);
-    if(node != NULL) {
+    GList * result_list = NULL;
+    gchar * node = strstr (capo->cache->data,NODE_START);
+    if (node != NULL)
+    {
         /* Decide what size we want */
         gsize size_it = 2;
-        if(capo->s->img_max_size < 450 && capo->s->img_max_size != -1 && capo->s->img_min_size < 160) {
+        if (capo->s->img_max_size < 450 && capo->s->img_max_size != -1 && capo->s->img_min_size < 160)
+        {
             size_it = 1;
         }
 
         /* Go through all nodes */
-        while(continue_search(g_list_length(result_list), capo->s) && (node = strstr(node + (sizeof NODE_NEXT) - 1, NODE_NEXT))) {
-            gchar *img_tag = node;
-            gchar *img_end = NULL;
+        while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node + (sizeof NODE_NEXT) - 1,NODE_NEXT) ) )
+        {
+            gchar * img_tag = node;
+            gchar * img_end = NULL;
 
-            gchar *album_name = get_search_value(node, "title=\"", "\"");
-            if(levenshtein_strnormcmp(capo->s, album_name, capo->s->album) <= capo->s->fuzzyness) {
-                for(gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1) {
-                    if((img_tag = strstr(img_tag, AMZ)) == NULL) {
+            gchar * album_name = get_search_value (node,"title=\"","\"");
+            if (levenshtein_strnormcmp (capo->s,album_name,capo->s->album) <= capo->s->fuzzyness)
+            {
+                for (gsize it = 0; it < size_it; it++, img_tag += (sizeof AMZ) - 1)
+                {
+                    if ( (img_tag = strstr (img_tag,AMZ) ) == NULL)
+                    {
                         break;
                     }
                 }
 
-                if((img_end  = strstr(img_tag, IMG_FORMAT)) != NULL) {
-                    gchar *img_url = copy_value(img_tag, img_end);
-                    if(img_url != NULL) {
-                        GlyrMemCache *result = DL_init();
-                        result->data = g_strdup_printf(AMZ"%s"IMG_FORMAT, img_url);
-                        result->size = strlen(result->data);
-                        result_list = g_list_prepend(result_list, result);
-                        g_free(img_url);
+                if ( (img_end  = strstr (img_tag,IMG_FORMAT) ) != NULL)
+                {
+                    gchar * img_url = copy_value (img_tag,img_end);
+                    if (img_url != NULL)
+                    {
+                        GlyrMemCache * result = DL_init();
+                        result->data = g_strdup_printf (AMZ"%s"IMG_FORMAT, img_url);
+                        result->size = strlen (result->data);
+                        result_list = g_list_prepend (result_list,result);
+                        g_free (img_url);
                     }
                 }
             }
-            g_free(album_name);
+            g_free (album_name);
         }
     }
     return result_list;
@@ -82,7 +91,8 @@ static GList *cover_albumart_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource cover_albumart_src = {
+MetaDataSource cover_albumart_src =
+{
     .name      = "albumart",
     .key       = 'b',
     .parser    = cover_albumart_parse,

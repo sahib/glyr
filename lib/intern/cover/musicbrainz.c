@@ -23,7 +23,7 @@
 
 /////////////////////////////////
 
-static const char *cover_musicbrainz_url(GlyrQuery *q)
+static const char * cover_musicbrainz_url (GlyrQuery * q)
 {
     return "http://musicbrainz.org/ws/2/release?query=${album}&limit=10&offset=0";
 }
@@ -37,24 +37,28 @@ static const char *cover_musicbrainz_url(GlyrQuery *q)
  * This is silly overall,
  * but coverartarchive.org does not seem to work fully yet.
  */
-static GlyrMemCache *parse_web_page(GlyrMemCache *page)
+static GlyrMemCache * parse_web_page (GlyrMemCache * page)
 {
-    GlyrMemCache *retv = NULL;
-    if(page && page->data) {
-        char *begin = strstr(page->data, COVERART);
-        if(begin != NULL) {
-            char *amz_url = strstr(begin, AMZ_URL_START);
-            if(amz_url != NULL) {
-                char *img_url = get_search_value(amz_url, "\"", "\"");
-                if(img_url != NULL) {
+    GlyrMemCache * retv = NULL;
+    if (page && page->data)
+    {
+        char * begin = strstr (page->data,COVERART);
+        if (begin != NULL)
+        {
+            char * amz_url = strstr (begin,AMZ_URL_START);
+            if (amz_url != NULL)
+            {
+                char * img_url = get_search_value (amz_url,"\"","\"");
+                if (img_url != NULL)
+                {
                     retv = DL_init();
-                    retv->dsrc = g_strdup(page->dsrc);
+                    retv->dsrc = g_strdup (page->dsrc);
                     retv->data  = img_url;
-                    retv->size  = strlen(img_url);
+                    retv->size  = strlen (img_url);
                 }
             }
         }
-        DL_free(page);
+        DL_free (page);
     }
     return retv;
 }
@@ -66,35 +70,40 @@ static GlyrMemCache *parse_web_page(GlyrMemCache *page)
 
 /////////////////////////////////
 
-static GList *cover_musicbrainz_parse(cb_object *capo)
+static GList * cover_musicbrainz_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
+    GList * result_list = NULL;
 
-    char *node = capo->cache->data;
+    char * node = capo->cache->data;
 
-    while(continue_search(g_list_length(result_list), capo->s) && (node = strstr(node + 1, NODE))) {
-        char *album  = get_search_value(node, "<title>", "</title>");
-        char *artist = get_search_value(node, "<name>" , "</name>");
+    while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node + 1,NODE) ) )
+    {
+        char * album  = get_search_value (node,"<title>","</title>");
+        char * artist = get_search_value (node,"<name>" ,"</name>" );
 
 
-        if(levenshtein_strnormcmp(capo->s, artist, capo->s->artist) <= capo->s->fuzzyness &&
-                levenshtein_strnormcmp(capo->s, album , capo->s->album) <= capo->s->fuzzyness) {
+        if (levenshtein_strnormcmp (capo->s,artist,capo->s->artist) <= capo->s->fuzzyness &&
+                levenshtein_strnormcmp (capo->s,album ,capo->s->album ) <= capo->s->fuzzyness)
+        {
 
-            char *ID = get_search_value(node, "id=\"", "\" ");
-            if(ID != NULL) {
-                char *url = g_strdup_printf(DL_URL, ID);
-                if(url != NULL) {
-                    GlyrMemCache *item = parse_web_page(download_single(url, capo->s, NULL));
-                    if(item != NULL) {
-                        result_list = g_list_prepend(result_list, item);
+            char * ID = get_search_value (node,"id=\"","\" ");
+            if (ID != NULL)
+            {
+                char * url = g_strdup_printf (DL_URL,ID);
+                if (url != NULL)
+                {
+                    GlyrMemCache * item = parse_web_page (download_single (url,capo->s,NULL) );
+                    if (item != NULL)
+                    {
+                        result_list = g_list_prepend (result_list,item);
                     }
                 }
-                g_free(url);
+                g_free (url);
             }
-            g_free(ID);
+            g_free (ID);
         }
-        g_free(artist);
-        g_free(album);
+        g_free (artist);
+        g_free (album);
     }
 
     return result_list;
@@ -102,7 +111,8 @@ static GList *cover_musicbrainz_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource cover_musicbrainz_src = {
+MetaDataSource cover_musicbrainz_src =
+{
     .name      = "musicbrainz",
     .key       = 'z',
     .parser    = cover_musicbrainz_parse,

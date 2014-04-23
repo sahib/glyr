@@ -22,15 +22,16 @@
 #include "../stringlib.h"
 #include "generic.h"
 
-static GList *factory(GlyrQuery *s, GList *list, gboolean *stop_me, GList **result_list)
+static GList * factory (GlyrQuery * s, GList * list, gboolean * stop_me, GList ** result_list)
 {
-    return generic_txt_finalizer(s, list, stop_me, GLYR_TYPE_RELATION, result_list);
+    return generic_txt_finalizer (s,list,stop_me,GLYR_TYPE_RELATION,result_list);
 }
 
 //-------------------------------------
 
 /* PlugStruct */
-MetaDataFetcher glyrFetcher_relations = {
+MetaDataFetcher glyrFetcher_relations =
+{
     .name = "relations",
     .type = GLYR_GET_RELATIONS,
     .default_data_type = GLYR_TYPE_RELATION,

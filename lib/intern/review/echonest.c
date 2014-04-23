@@ -24,21 +24,21 @@
 /* JSON Parsing */
 #include "../../jsmn/jsmn.h"
 
-static const gchar *review_echonest_url(GlyrQuery *s)
+static const gchar * review_echonest_url (GlyrQuery * s)
 {
     return "http://developer.echonest.com/api/v4/artist/reviews?api_key="API_KEY_ECHONEST"&results=${number}&format=json&name=${artist}";
 }
 
 /////////////////////////////////
 
-static int strip_escapes(char *text, int len)
+static int strip_escapes(char * text, int len) 
 {
     int offset = 0;
 
-    for(int i = 0; i < len; ++i) {
-        if(text[i] == '\\') {
+    for (int i = 0; i < len; ++i) {
+        if (text[i] == '\\') {
             ++i;
-            if(text[i] == 'n') {
+            if (text[i] == 'n') {
                 text[offset++] = '\n';
                 continue;
             }
@@ -51,11 +51,10 @@ static int strip_escapes(char *text, int len)
 
 /////////////////////////////////
 
-static GList *add_result(GList *results, cb_object *capo, char *url, char *summary, char *release)
-{
-    if(levenshtein_strnormcmp(capo->s, capo->s->album, release) <= capo->s->fuzzyness) {
-        if(strlen(summary) >= 125) {
-            GlyrMemCache *result = DL_init();
+static GList *add_result(GList *results, cb_object *capo, char *url, char *summary, char *release) {
+    if (levenshtein_strnormcmp(capo->s, capo->s->album, release) <= capo->s->fuzzyness) {
+        if (strlen(summary) >= 125) {
+            GlyrMemCache * result = DL_init();
             result->data = g_strdup_printf("%s\n \n \nRead more on: %s\n", summary, url);
             result->size = strlen(result->data);
             result->size -= strip_escapes(result->data, result->size);
@@ -67,9 +66,9 @@ static GList *add_result(GList *results, cb_object *capo, char *url, char *summa
 
 /////////////////////////////////
 
-static bool json_is_key(jsmntok_t tokens[], int current, char *json, char *key)
+static bool json_is_key(jsmntok_t tokens[], int current, char *json, char *key) 
 {
-    jsmntok_t *token = &tokens[current];
+    jsmntok_t * token = &tokens[current];
     return (token->type == JSMN_STRING &&
             g_ascii_strncasecmp(
                 json + token->start,
@@ -80,10 +79,10 @@ static bool json_is_key(jsmntok_t tokens[], int current, char *json, char *key)
 
 /////////////////////////////////
 
-static char *json_get_next_value(jsmntok_t tokens[], int current, char *json)
+static char * json_get_next_value(jsmntok_t tokens[], int current, char *json) 
 {
     jsmntok_t *next_token = &tokens[current + 1];
-    if(next_token != NULL && next_token->type == JSMN_STRING) {
+    if (next_token != NULL && next_token->type == JSMN_STRING) {
         return g_strndup(json + next_token->start, next_token->end - next_token->start);
     } else {
         return NULL;
@@ -97,14 +96,14 @@ static char *json_get_next_value(jsmntok_t tokens[], int current, char *json)
         g_free(name);                                     \
         name = json_get_next_value(tokens, i++, json);    \
     }                                                     \
- 
-static GList *review_echonest_parse(cb_object *capo)
+
+static GList * review_echonest_parse (cb_object * capo)
 {
-    char *json = capo->cache->data;
+    char * json = capo->cache->data;
     const int num_tokens = 512;
+    
 
-
-    GList *results = NULL;
+    GList * results = NULL;
 
     /* jasmin stuff */
     jsmn_parser parser;
@@ -126,9 +125,9 @@ static GList *review_echonest_parse(cb_object *capo)
     /* Save partial results here */
     char *url = NULL, *summary = NULL, *release = NULL;
 
-    if(error == JSMN_SUCCESS) {
-        for(int i = 0; i < num_tokens; ++i) {
-            jsmntok_t *token = &tokens[i];
+    if (error == JSMN_SUCCESS) {
+        for (int i = 0; i < num_tokens; ++i) {
+            jsmntok_t * token = &tokens[i];
 
             /* End of tokens? */
             if(token->start <= 0 && token->end <= 0) {
@@ -139,9 +138,9 @@ static GList *review_echonest_parse(cb_object *capo)
             JSON_GET_VALUE_IF_KEY(summary, "summary");
             JSON_GET_VALUE_IF_KEY(release, "release");
 
-            char *next_bracket = strchr(json + token->start, '}');
-            if(next_bracket > curr_bracket) {
-                if(url && summary && release) {
+            char * next_bracket = strchr(json + token->start, '}');
+            if (next_bracket > curr_bracket) {
+                if (url && summary && release) {
                     results = add_result(results, capo, url, summary, release);
                 }
                 curr_bracket = next_bracket;
@@ -149,7 +148,7 @@ static GList *review_echonest_parse(cb_object *capo)
 
         }
 
-        if(url && summary && release) {
+        if (url && summary && release) {
             results = add_result(results, capo, url, summary, release);
         }
 
@@ -165,7 +164,8 @@ static GList *review_echonest_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource review_echonest_src = {
+MetaDataSource review_echonest_src =
+{
     .name      = "echonest",
     .key       = 'e',
     .free_url  = false,
@@ -175,5 +175,5 @@ MetaDataSource review_echonest_src = {
     .quality   = 70,
     .speed     = 85,
     .endmarker = NULL,
-    .lang_aware = false
+    .lang_aware = false 
 };

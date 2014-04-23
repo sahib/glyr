@@ -25,7 +25,7 @@
 
 /////////////////////////////////
 
-static const gchar *lyrics_chartlyrics_url(GlyrQuery *s)
+static const gchar * lyrics_chartlyrics_url (GlyrQuery * s)
 {
     return CL_API_URL;
 }
@@ -35,19 +35,21 @@ static const gchar *lyrics_chartlyrics_url(GlyrQuery *s)
 #define LYRIC_TEXT_BEG "<Lyric>"
 #define LYRIC_TEXT_END "</Lyric>"
 
-static GlyrMemCache *get_lyrics_from_results(GlyrQuery *s, const gchar *url)
+static GlyrMemCache * get_lyrics_from_results (GlyrQuery * s, const gchar * url)
 {
-    GlyrMemCache *result = NULL;
-    GlyrMemCache *dl_cache = download_single(url, s, NULL);
-    if(dl_cache != NULL) {
-        gchar *text = get_search_value(dl_cache->data, LYRIC_TEXT_BEG, LYRIC_TEXT_END);
-        if(text != NULL) {
+    GlyrMemCache * result = NULL;
+    GlyrMemCache * dl_cache = download_single (url,s,NULL);
+    if (dl_cache != NULL)
+    {
+        gchar * text = get_search_value (dl_cache->data,LYRIC_TEXT_BEG,LYRIC_TEXT_END);
+        if (text != NULL)
+        {
             result = DL_init();
             result->data = text;
-            result->size = strlen(text);
-            result->dsrc = g_strdup(url);
+            result->size = strlen (text);
+            result->dsrc = g_strdup (url);
         }
-        DL_free(dl_cache);
+        DL_free (dl_cache);
     }
     return result;
 }
@@ -68,34 +70,38 @@ static GlyrMemCache *get_lyrics_from_results(GlyrQuery *s, const gchar *url)
 #define LYRIC_ID_BEG "<LyricId>"
 #define LYRIC_ID_END "</LyricId>"
 
-static GList *lyrics_chartlyrics_parse(cb_object *capo)
+static GList * lyrics_chartlyrics_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
-    gchar *node = capo->cache->data;
+    GList * result_list = NULL;
+    gchar * node = capo->cache->data;
     gint nodelen = (sizeof LYRIC_NODE) - 1;
 
-    while(continue_search(g_list_length(result_list), capo->s) && (node = strstr(node + nodelen, LYRIC_NODE)) != NULL) {
+    while (continue_search (g_list_length (result_list),capo->s) && (node = strstr (node + nodelen, LYRIC_NODE) ) != NULL)
+    {
         node += nodelen;
-        gchar *artist = get_search_value(node, ARTIST_BEG, ARTIST_END);
-        gchar *title  = get_search_value(node, SONG_BEG, SONG_END);
+        gchar * artist = get_search_value (node,ARTIST_BEG,ARTIST_END);
+        gchar * title  = get_search_value (node,SONG_BEG,SONG_END);
 
-        if(levenshtein_strnormcmp(capo->s, artist, capo->s->artist) <= capo->s->fuzzyness &&
-                levenshtein_strnormcmp(capo->s, title, capo->s->title)   <= capo->s->fuzzyness) {
-            gchar *lyric_id = get_search_value(node, LYRIC_ID_BEG, LYRIC_ID_END);
-            gchar *lyric_checksum = get_search_value(node, LYRIC_CHECKSUM_BEG, LYRIC_CHECKSUM_END);
-            if(lyric_id && lyric_checksum && strcmp(lyric_id, "0") != 0) {
-                gchar *content_url = g_strdup_printf(CL_API_GET, lyric_id, lyric_checksum);
-                GlyrMemCache *result = get_lyrics_from_results(capo->s, content_url);
-                if(result != NULL) {
-                    result_list = g_list_prepend(result_list, result);
+        if (levenshtein_strnormcmp (capo->s,artist,capo->s->artist) <= capo->s->fuzzyness &&
+                levenshtein_strnormcmp (capo->s,title,capo->s->title)   <= capo->s->fuzzyness)
+        {
+            gchar * lyric_id = get_search_value (node,LYRIC_ID_BEG,LYRIC_ID_END);
+            gchar * lyric_checksum = get_search_value (node,LYRIC_CHECKSUM_BEG,LYRIC_CHECKSUM_END);
+            if (lyric_id && lyric_checksum && strcmp (lyric_id,"0") != 0)
+            {
+                gchar * content_url = g_strdup_printf (CL_API_GET,lyric_id,lyric_checksum);
+                GlyrMemCache * result = get_lyrics_from_results (capo->s,content_url);
+                if (result != NULL)
+                {
+                    result_list = g_list_prepend (result_list,result);
                 }
-                g_free(content_url);
+                g_free (content_url);
             }
-            g_free(lyric_id);
-            g_free(lyric_checksum);
+            g_free (lyric_id);
+            g_free (lyric_checksum);
         }
-        g_free(artist);
-        g_free(title);
+        g_free (artist);
+        g_free (title);
     }
     return result_list;
 }
@@ -103,7 +109,8 @@ static GList *lyrics_chartlyrics_parse(cb_object *capo)
 /////////////////////////////////
 
 
-MetaDataSource lyrics_chartlyrics_src = {
+MetaDataSource lyrics_chartlyrics_src =
+{
     .name = "chartlyrics",
     .key  = 'c',
     .parser    = lyrics_chartlyrics_parse,

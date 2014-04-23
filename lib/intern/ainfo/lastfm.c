@@ -26,59 +26,67 @@
 #define CDATA_BEGIN "<![CDATA["
 
 /* Locales that are just mapped to 'en' */
-const char *locale_map_to_en = "ca|uk|us";
+const char * locale_map_to_en = "ca|uk|us";
 
-static const gchar *ainfo_lastfm_url(GlyrQuery *s)
+static const gchar * ainfo_lastfm_url (GlyrQuery * s)
 {
-    gchar *url = NULL;
-    gchar *right_artist = strreplace(s->artist, " ", "+");
-    if(right_artist != NULL) {
-        gchar *lang = "en";
+    gchar * url = NULL;
+    gchar * right_artist = strreplace (s->artist," ","+");
+    if (right_artist != NULL)
+    {
+        gchar * lang = "en";
 
         /* Check if this is an allowed language */
-        if(strstr(GLYR_DEFAULT_SUPPORTED_LANGS, s->lang) != NULL) {
-            lang = (gchar *) s->lang;
+        if (strstr (GLYR_DEFAULT_SUPPORTED_LANGS,s->lang) != NULL)
+        {
+            lang = (gchar*) s->lang;
         }
 
         /* Do we need to map a language to 'en'? */
-        if(strstr(locale_map_to_en, s->lang) != NULL) {
+        if (strstr (locale_map_to_en,s->lang) != NULL)
+        {
             lang = "en";
         }
 
-        url = g_strdup_printf("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&lang=%s&api_key="API_KEY_LASTFM, right_artist, lang);
-        g_free(right_artist);
+        url = g_strdup_printf ("http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&autocorrect=1&artist=%s&lang=%s&api_key="API_KEY_LASTFM,right_artist,lang);
+        g_free (right_artist);
     }
     return url;
 }
 
 /////////////////////////////////
 
-static GList *ainfo_lastfm_parse(cb_object *capo)
+static GList * ainfo_lastfm_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
-    gchar *content_begin = strstr(capo->cache->data, CONTENT_BEGIN);
+    GList * result_list = NULL;
+    gchar * content_begin = strstr (capo->cache->data,CONTENT_BEGIN);
 
-    if(content_begin != NULL) {
-        gchar *content_endin = strstr(capo->cache->data, CONTENT_ENDIN);
+    if (content_begin != NULL)
+    {
+        gchar * content_endin = strstr (capo->cache->data,CONTENT_ENDIN);
 
-        if(content_endin == NULL) {
-            content_endin = strstr(capo->cache->data, OTHER_ENDIN);
+        if (content_endin == NULL)
+        {
+            content_endin = strstr (capo->cache->data,OTHER_ENDIN);
         }
 
-        if(content_endin != NULL) {
+        if (content_endin != NULL)
+        {
             content_begin += (sizeof CONTENT_BEGIN) - 1;
 
-            char *skip_cdata = strstr(content_begin, CDATA_BEGIN);
-            if(skip_cdata != NULL) {
+            char * skip_cdata = strstr(content_begin, CDATA_BEGIN);
+            if (skip_cdata != NULL)
+            {
                 content_begin = skip_cdata + (sizeof CDATA_BEGIN) - 1;
             }
 
-            gchar *content = copy_value(content_begin, content_endin);
-            if(content != NULL) {
-                GlyrMemCache *result = DL_init();
+            gchar * content = copy_value (content_begin,content_endin);
+            if (content != NULL)
+            {
+                GlyrMemCache * result = DL_init();
                 result->data = content;
-                result->size = strlen(result->data);
-                result_list = g_list_prepend(result_list, result);
+                result->size = strlen (result->data);
+                result_list = g_list_prepend (result_list,result);
             }
         }
     }
@@ -87,7 +95,8 @@ static GList *ainfo_lastfm_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource ainfo_lastfm_src = {
+MetaDataSource ainfo_lastfm_src =
+{
     .name      = "lastfm",
     .key       = 'l',
     .free_url  = true,

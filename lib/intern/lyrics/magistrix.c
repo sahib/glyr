@@ -22,25 +22,26 @@
 
 #define MG_URL "http://www.magistrix.de/lyrics/search?q=${artist}+${title}"
 
-static const char *lyrics_magistrix_url(GlyrQuery *settings)
+static const char * lyrics_magistrix_url (GlyrQuery * settings)
 {
     return MG_URL;
 }
 
 ///////////////////////////////////
 
-static GlyrMemCache *parse_lyric_page(GlyrMemCache *cache)
+static GlyrMemCache * parse_lyric_page (GlyrMemCache * cache)
 {
-    GlyrMemCache *result = NULL;
-    g_return_val_if_fail(cache, NULL);
-    g_return_val_if_fail(cache->data, NULL);
+    GlyrMemCache * result = NULL;
+    g_return_val_if_fail (cache,NULL);
+    g_return_val_if_fail (cache->data,NULL);
 
-    gchar *data = get_search_value(cache->data, "id='songtext'>", "<div class='lyric-actions'>");
-    if(data != NULL) {
+    gchar * data = get_search_value (cache->data,"id='songtext'>","<div class='lyric-actions'>");
+    if (data != NULL)
+    {
         result = DL_init();
         result->data = data;
-        result->size = strlen(data);
-        result->dsrc = g_strdup(cache->dsrc);
+        result->size = strlen (data);
+        result->dsrc = g_strdup (cache->dsrc);
     }
 
     return result;
@@ -54,29 +55,35 @@ static GlyrMemCache *parse_lyric_page(GlyrMemCache *cache)
 #define SEARCH_LINK_START "&ndash;\n<a href=\""
 #define SEARCH_LINK_END   "\" class"
 
-static GList *parse_search_result_page(cb_object *capo)
+static GList * parse_search_result_page (cb_object * capo)
 {
-    GList *result_list = NULL;
-    char *first_result = strstr(capo->cache->data, SEARCH_FIRST_RESULT);
-    if(first_result != NULL) {
-        char *end_of_results = strstr(first_result + sizeof(SEARCH_FIRST_RESULT), SEARCH_LAST_RESULT);
-        if(end_of_results) {
-            char *node = first_result;
-            while((node = strstr(node + sizeof(SEARCH_NODE), SEARCH_NODE))
-                    && continue_search(g_list_length(result_list), capo->s)) {
-                char *new_url = get_search_value(node, SEARCH_LINK_START, SEARCH_LINK_END);
-                if(new_url != NULL) {
-                    char *full_url = g_strdup_printf("www.magistrix.de%s", new_url);
-                    GlyrMemCache *lyrics_page = download_single(full_url, capo->s, NULL);
-                    if(lyrics_page) {
-                        GlyrMemCache *item = parse_lyric_page(lyrics_page);
-                        if(item != NULL) {
-                            result_list = g_list_prepend(result_list, item);
+    GList * result_list = NULL;
+    char * first_result = strstr (capo->cache->data, SEARCH_FIRST_RESULT);
+    if (first_result != NULL)
+    {
+        char * end_of_results = strstr (first_result + sizeof (SEARCH_FIRST_RESULT), SEARCH_LAST_RESULT);
+        if (end_of_results)
+        {
+            char * node = first_result;
+            while ( (node = strstr (node + sizeof (SEARCH_NODE), SEARCH_NODE) )
+                    && continue_search (g_list_length (result_list), capo->s) )
+            {
+                char * new_url = get_search_value (node, SEARCH_LINK_START, SEARCH_LINK_END);
+                if (new_url != NULL)
+                {
+                    char * full_url = g_strdup_printf ("www.magistrix.de%s", new_url);
+                    GlyrMemCache * lyrics_page = download_single (full_url, capo->s, NULL);
+                    if (lyrics_page)
+                    {
+                        GlyrMemCache * item = parse_lyric_page (lyrics_page);
+                        if (item != NULL)
+                        {
+                            result_list = g_list_prepend (result_list, item);
                         }
-                        DL_free(lyrics_page);
+                        DL_free (lyrics_page);
                     }
-                    g_free(new_url);
-                    g_free(full_url);
+                    g_free (new_url);
+                    g_free (full_url);
                 }
             }
         }
@@ -86,18 +93,23 @@ static GList *parse_search_result_page(cb_object *capo)
 
 ///////////////////////////////////
 
-static GList *lyrics_magistrix_parse(cb_object *capo)
+static GList * lyrics_magistrix_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
-    if(strstr(capo->cache->data, "Es wurden keine Songtexte gefunden") == NULL) {      /* "No songtext" page? */
-        if(strstr(capo->cache->data, "<title>Songtext-Suche</title>") == NULL) {      /* Are we not on the search result page? */
-            GlyrMemCache *result = parse_lyric_page(capo->cache);
-            if(result != NULL) {
-                result_list = g_list_prepend(result_list, result);
+    GList * result_list = NULL;
+    if (strstr (capo->cache->data,"Es wurden keine Songtexte gefunden") == NULL) /* "No songtext" page? */
+    {
+        if (strstr (capo->cache->data,"<title>Songtext-Suche</title>") == NULL) /* Are we not on the search result page? */
+        {
+            GlyrMemCache * result = parse_lyric_page (capo->cache);
+            if (result != NULL)
+            {
+                result_list = g_list_prepend (result_list,result);
             }
-        } else {
+        }
+        else
+        {
             /* Parse Searchresult page */
-            result_list = parse_search_result_page(capo);
+            result_list = parse_search_result_page (capo);
         }
     }
     return result_list;
@@ -105,7 +117,8 @@ static GList *lyrics_magistrix_parse(cb_object *capo)
 
 ///////////////////////////////////
 
-MetaDataSource lyrics_magistrix_src = {
+MetaDataSource lyrics_magistrix_src =
+{
     .name = "magistrix",
     .key  = 'x',
     .parser    = lyrics_magistrix_parse,

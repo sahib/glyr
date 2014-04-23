@@ -22,22 +22,27 @@
 
 /////////////////////////////////
 
-static GList *local_provider_parse(cb_object *capo)
+static GList * local_provider_parse (cb_object * capo)
 {
-    GList *converter_list = NULL;
-    if(capo->s && capo->s->local_db != NULL) {
+    GList * converter_list = NULL;
+    if (capo->s && capo->s->local_db != NULL)
+    {
         gint counter = 0;
-        GlyrMemCache *head = glyr_db_lookup(capo->s->local_db, capo->s);
-        while(head != NULL) {
-            if(counter < capo->s->number) {
-                converter_list = g_list_prepend(converter_list, head);
+        GlyrMemCache * head = glyr_db_lookup (capo->s->local_db,capo->s);
+        while (head != NULL)
+        {
+            if (counter < capo->s->number)
+            {
+                converter_list = g_list_prepend (converter_list,head);
                 head->cached = TRUE;
                 head = head->next;
                 counter++;
-            } else {
-                GlyrMemCache *to_delete = head;
+            }
+            else
+            {
+                GlyrMemCache * to_delete = head;
                 head = head->next;
-                DL_free(to_delete);
+                DL_free (to_delete);
             }
         }
     }
@@ -46,14 +51,15 @@ static GList *local_provider_parse(cb_object *capo)
 
 /////////////////////////////////
 
-static const gchar *local_provider_url(GlyrQuery *sets)
+static const gchar * local_provider_url (GlyrQuery * sets)
 {
     return OFFLINE_PROVIDER;
 }
 
 /////////////////////////////////
 
-MetaDataSource local_provider_src = {
+MetaDataSource local_provider_src =
+{
     .name = "local",
     .key  = 'l',
     .parser    = local_provider_parse,

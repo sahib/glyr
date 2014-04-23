@@ -23,30 +23,34 @@
 #define INFO_BEGIN "</div><div style=\"text-align:center;\">"
 #define INFO_ENDIN " <a href=\""
 
-static const char *lyrics_lyricsreg_url(GlyrQuery *s)
+static const char * lyrics_lyricsreg_url (GlyrQuery * s)
 {
     return "http://www.lyricsreg.com/lyrics/${artist}/${title}/";
 }
 
-static GList *lyrics_lyricsreg_parse(cb_object *capo)
+static GList * lyrics_lyricsreg_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
-    gchar *start = strstr(capo->cache->data, INFO_BEGIN);
+    GList * result_list = NULL;
+    gchar * start = strstr (capo->cache->data, INFO_BEGIN);
 
-    if(start != NULL) {
+    if (start != NULL)
+    {
         start += (sizeof INFO_BEGIN) - 1;
-        gchar *end = strstr(start, INFO_ENDIN);
-        if(end != NULL) {
+        gchar * end = strstr (start,INFO_ENDIN);
+        if (end != NULL)
+        {
             * (end) = 0;
-            gchar *no_br_tags = strreplace(start, "<br />", NULL);
-            if(no_br_tags != NULL) {
-                GlyrMemCache *tmp = DL_init();
-                tmp->data = beautify_string(no_br_tags);
-                tmp->size = tmp->data ? strlen(tmp->data) : 0;
-                g_free(no_br_tags);
+            gchar * no_br_tags = strreplace (start,"<br />",NULL);
+            if (no_br_tags != NULL)
+            {
+                GlyrMemCache * tmp = DL_init();
+                tmp->data = beautify_string (no_br_tags);
+                tmp->size = tmp->data ? strlen (tmp->data) : 0;
+                g_free (no_br_tags);
 
-                if(tmp->data != NULL) {
-                    result_list = g_list_prepend(result_list, tmp);
+                if (tmp->data != NULL)
+                {
+                    result_list = g_list_prepend (result_list,tmp);
                 }
             }
         }
@@ -56,7 +60,8 @@ static GList *lyrics_lyricsreg_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource lyrics_lyricsreg_src = {
+MetaDataSource lyrics_lyricsreg_src =
+{
     .name = "lyricsreg",
     .key  = 'r',
     .parser    = lyrics_lyricsreg_parse,

@@ -29,13 +29,13 @@
 
 /**
  * Vagalume Provider written by: Felipe Bessa Coelho
- *
+ * 
  * https://github.com/fcoelho
  *
  * Many thanks.
  */
 
-static const char *lyrics_vagalume_url(GlyrQuery *s)
+static const char * lyrics_vagalume_url (GlyrQuery * s)
 {
     return VAGALUME_DOMAIN VAGALUME_PATH;
 }
@@ -49,29 +49,28 @@ static gunichar get_unichar(const char *src)
     gint i;
 
     uchar = 0;
-    for(i = 0; i < 4; ++i) {
+    for (i = 0; i < 4; ++i) {
         ch = src[i];
-        if(g_ascii_isxdigit(ch)) {
+        if (g_ascii_isxdigit(ch))
             uchar += ((gunichar) g_ascii_xdigit_value(ch) << ((3 - i) * 4));
-        } else {
+        else
             break;
-        }
     }
 
     return uchar;
 }
 
-static GString *vagalume_escape_text(const char *src, int len)
+static GString * vagalume_escape_text(const char * src, int len)
 {
-    GString *output = g_string_sized_new(len);
+    GString * output = g_string_sized_new(len);
 
-    for(int i = 0; i < len; ++i) {
-        if(src[i] == '\\') {
+    for (int i = 0; i < len; ++i) {
+        if (src[i] == '\\') {
             ++i;
-            if(src[i] == 'n') {
+            if (src[i] == 'n') {
                 output = g_string_append_c(output, '\n');
                 continue;
-            } else if(src[i] == 'u') {
+            } else if (src[i] == 'u') {
                 ++i;
                 /* this was taken from here:
                  * https://git.gnome.org/browse/json-glib/tree/json-glib/json-scanner.c#n1116 */
@@ -79,11 +78,11 @@ static GString *vagalume_escape_text(const char *src, int len)
                 /* 4 characters read, the XXXX in \uXXXX, but we leave the last
                  * increment to the for loop */
                 i += 3;
-                if(g_unichar_type(ucs) == G_UNICODE_SURROGATE) {
+                if (g_unichar_type(ucs) == G_UNICODE_SURROGATE) {
                     /* read next surrogate, but first update our source string
                      * pointer */
                     ++i;
-                    if('\\' == src[i++] && 'u' == src[i++]) {
+                    if ('\\' == src[i++] && 'u' == src[i++]) {
                         gunichar ucs_lo = get_unichar(src + i);
                         /* 6 characters read from \uXXXX: '\\', 'u' and XXXX,
                          * but again, leave the last one to be updated by the
@@ -104,28 +103,27 @@ static GString *vagalume_escape_text(const char *src, int len)
     return output;
 }
 
-static gboolean found_song(const char *json, jsmntok_t *tokens, int *cur_token, int *tokens_left)
+static gboolean found_song (const char *json, jsmntok_t *tokens, int *cur_token, int *tokens_left)
 {
     gboolean found_key = false, song_found = false;
 
     /* check "type" key to see if song was found */
-    for(*cur_token = 0, *tokens_left = 1; *tokens_left > 0; ++ (*cur_token), -- (*tokens_left)) {
-        jsmntok_t *token = &tokens[*cur_token];
+    for (*cur_token = 0, *tokens_left = 1; *tokens_left > 0; ++(*cur_token), --(*tokens_left)) {
+        jsmntok_t * token = &tokens[*cur_token];
 
-        if(token->type == JSMN_ARRAY || token->type == JSMN_OBJECT) {
+        if (token->type == JSMN_ARRAY || token->type == JSMN_OBJECT)
             *tokens_left += token->size;
-        }
 
-        if(token->type == JSMN_STRING) {
+        if (token->type == JSMN_STRING) {
             size_t len = token->end - token->start;
             const char *text_start = json + token->start;
 
-            if(len == 4 && g_ascii_strncasecmp(text_start, "type", len) == 0) {
+            if (len == 4 && g_ascii_strncasecmp(text_start, "type", len) == 0) {
                 found_key = true;
                 continue;
             }
-            if(found_key) {
-                if(len == 5 && g_ascii_strncasecmp(text_start, "exact", len) == 0) {
+            if (found_key) {
+                if (len == 5 && g_ascii_strncasecmp(text_start, "exact", len) == 0) {
                     song_found = true;
                     break;
                 } else {
@@ -136,35 +134,34 @@ static gboolean found_song(const char *json, jsmntok_t *tokens, int *cur_token, 
             }
         }
     }
-
+    
     /* we return only here to make sure tokens_left is updated at the end of
      * the for loop (specially if we break out of it) */
     return song_found;
 }
 
-static jsmntok_t *get_text_token(const char *json, jsmntok_t *tokens, int *cur_token, int *tokens_left)
+static jsmntok_t * get_text_token(const char *json, jsmntok_t *tokens, int *cur_token, int *tokens_left)
 {
     gboolean found_key = false;
-    jsmntok_t *text_token = NULL;
+    jsmntok_t * text_token = NULL;
 
     /* find the first occurrence of "text" */
-    for(/* empty */; *tokens_left > 0; ++ (*cur_token), -- (*tokens_left)) {
-        jsmntok_t *token = &tokens[*cur_token];
+    for (/* empty */; *tokens_left > 0; ++(*cur_token), --(*tokens_left)) {
+        jsmntok_t * token = &tokens[*cur_token];
 
-        if(token->type == JSMN_ARRAY || token->type == JSMN_OBJECT) {
+        if (token->type == JSMN_ARRAY || token->type == JSMN_OBJECT)
             *tokens_left += token->size;
-        }
 
-        if(token->type == JSMN_STRING) {
+        if (token->type == JSMN_STRING) {
             size_t len = token->end - token->start;
             const char *text_start = json + token->start;
 
-            if(len == 4 && g_ascii_strncasecmp(text_start, "text", len) == 0) {
+            if (len == 4 && g_ascii_strncasecmp(text_start, "text", len) == 0) {
                 found_key = true;
                 continue;
             }
 
-            if(found_key) {
+            if (found_key) {
                 /* this is it */
                 text_token = token;
                 break;
@@ -175,9 +172,9 @@ static jsmntok_t *get_text_token(const char *json, jsmntok_t *tokens, int *cur_t
     return text_token;
 }
 
-static GList *lyrics_vagalume_parse(cb_object *capo)
+static GList * lyrics_vagalume_parse (cb_object * capo)
 {
-    GList *result_list = NULL;
+    GList * result_list = NULL;
 
     /* jsmn variables */
     jsmn_parser parser;
@@ -195,17 +192,18 @@ static GList *lyrics_vagalume_parse(cb_object *capo)
 
     parse_result = jsmn_parse(&parser, json, tokens, 512);
 
-    if(parse_result == JSMN_SUCCESS) {
+    if (parse_result == JSMN_SUCCESS)
+    {
         gboolean song_found = found_song(json, tokens, &cur_token, &tokens_left);
-        if(song_found) {
-            jsmntok_t *text_token = get_text_token(json, tokens, &cur_token, &tokens_left);
-            if(text_token) {
-                const char *lyrics_start = json + text_token->start;
+        if (song_found) {
+            jsmntok_t * text_token = get_text_token(json, tokens, &cur_token, &tokens_left);
+            if (text_token) {
+                const char * lyrics_start = json + text_token->start;
                 size_t len = text_token->end - text_token->start;
 
-                GlyrMemCache *cache = DL_init();
-                if(cache != NULL) {
-                    GString *data = vagalume_escape_text(lyrics_start, len);
+                GlyrMemCache * cache = DL_init();
+                if (cache != NULL) {
+                    GString * data = vagalume_escape_text(lyrics_start, len);
 
                     cache->data = data->str;
                     cache->size = data->len;
@@ -225,7 +223,8 @@ static GList *lyrics_vagalume_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource lyrics_vagalume_src = {
+MetaDataSource lyrics_vagalume_src =
+{
     .name = "vagalume",
     .key  = 'g',
     .parser    = lyrics_vagalume_parse,

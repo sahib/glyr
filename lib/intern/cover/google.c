@@ -23,27 +23,29 @@
 
 /////////////////////////////////
 
-static const gchar *cover_google_url(GlyrQuery *s)
+static const gchar * cover_google_url (GlyrQuery * s)
 {
-    const gchar *result = NULL;
-    gchar *searchterm = g_strdup("${artist}+${album}+album");
-    if(searchterm != NULL) {
-        result = generic_google_url(s, searchterm);
-        g_free(searchterm);
+    const gchar * result = NULL;
+    gchar * searchterm = g_strdup ("${artist}+${album}+album");
+    if (searchterm != NULL)
+    {
+        result = generic_google_url (s,searchterm);
+        g_free (searchterm);
     }
     return result;
 }
 
 /////////////////////////////////
 
-static GList *cover_google_parse(cb_object *capo)
+static GList * cover_google_parse (cb_object * capo)
 {
-    return generic_google_parse(capo);
+    return generic_google_parse (capo);
 }
 
 /////////////////////////////////
 
-MetaDataSource cover_google_src = {
+MetaDataSource cover_google_src =
+{
     .name      = "google",
     .key       = 'g',
     .parser    = cover_google_parse,

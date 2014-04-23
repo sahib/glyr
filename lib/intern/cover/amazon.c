@@ -59,9 +59,9 @@ http://ecx.images-amazon.com/images/I/51rnlRwtsiL.jpg
 // as an fallback there is the albumart and coverhunt plugin which implement a search on amazon (on serverside)
 /////////////////////////////////
 
-static const gchar *cover_amazon_url(GlyrQuery *sets)
+static const gchar * cover_amazon_url (GlyrQuery * sets)
 {
-    return generic_amazon_url(sets, "Images");
+    return generic_amazon_url (sets,"Images");
 }
 
 /////////////////////////////////
@@ -70,29 +70,32 @@ static const gchar *cover_amazon_url(GlyrQuery *sets)
 #define C_MAX(X) (capo->s->img_max_size <  X && capo->s->img_max_size != -1)
 #define C_MIN(X) (capo->s->img_min_size >= X && capo->s->img_min_size != -1)
 
-static GList *cover_amazon_parse(cb_object *capo)
+static GList * cover_amazon_parse (cb_object *capo)
 {
     const gchar *tag_ssize = (capo->s->img_max_size == -1 && capo->s->img_min_size == -1) ? "<LargeImage>"  :
-                             (C_MAX(30) && C_MIN(-1)) ? "<SwatchImage>" :
-                             (C_MAX(70) && C_MIN(30)) ? "<SmallImage>"  :
-                             (C_MAX(150) && C_MIN(70)) ? "<MediumImage>" :
+                             (C_MAX ( 30) && C_MIN (-1) ) ? "<SwatchImage>" :
+                             (C_MAX ( 70) && C_MIN (30) ) ? "<SmallImage>"  :
+                             (C_MAX (150) && C_MIN (70) ) ? "<MediumImage>" :
                              "<LargeImage>"  ;
 
-    GList *result_list = NULL;
-    gchar *find = capo->cache->data;
-    while(continue_search(g_list_length(result_list), capo->s) && (find = strstr(find + strlen(tag_ssize), tag_ssize)) != NULL) {
+    GList * result_list = NULL;
+    gchar * find = capo->cache->data;
+    while (continue_search (g_list_length (result_list),capo->s) && (find = strstr (find + strlen (tag_ssize), tag_ssize) ) != NULL)
+    {
         /* Next two XML tags not relevant */
-        nextTag(find);
-        nextTag(find);
+        nextTag (find);
+        nextTag (find);
 
-        gchar *endTag = NULL;
-        if((endTag = strstr(find, END_OF_URL)) != NULL) {
-            gchar *result_url = copy_value(find, endTag);
-            if(result_url != NULL) {
-                GlyrMemCache *result = DL_init();
+        gchar * endTag = NULL;
+        if ( (endTag = strstr (find, END_OF_URL) ) != NULL)
+        {
+            gchar * result_url = copy_value (find,endTag);
+            if (result_url != NULL)
+            {
+                GlyrMemCache * result = DL_init();
                 result->data = result_url;
                 result->size = endTag - find;
-                result_list = g_list_prepend(result_list, result);
+                result_list = g_list_prepend (result_list,result);
             }
         }
     }
@@ -101,7 +104,8 @@ static GList *cover_amazon_parse(cb_object *capo)
 
 /////////////////////////////////
 
-MetaDataSource cover_amazon_src = {
+MetaDataSource cover_amazon_src =
+{
     .name      = "amazon",
     .key       = 'a',
     .parser    = cover_amazon_parse,
