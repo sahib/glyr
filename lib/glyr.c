@@ -110,7 +110,7 @@ gchar *guess_language(void)
     /* Default to 'en' in any case */
     gchar *result_lang = g_strdup("en");
 
-#if GLIB_CHECK_VERSION(2, 8, )
+#if GLIB_CHECK_VERSION(2, 28, 0)
     gboolean break_out = FALSE;
 
     /* Please never ever free this */
@@ -145,7 +145,7 @@ gchar *guess_language(void)
         g_strfreev(variants);
     }
 
-#elif GLIB_CHECK_VERSION(2, 6, )
+#elif GLIB_CHECK_VERSION(2, 26, 0)
 
     /* Fallback to simpler version of the above,
      * g_get_locale_variants is not there in this version

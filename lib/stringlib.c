@@ -288,11 +288,11 @@ gchar *unwind_artist_name(const gchar *artist)
     }
 
     /*split string in two*/
-    gchar *separator = strchr(artist, ', );
+    gchar *separator = strchr(artist, ',' );
 
     if(separator) {
         gchar *result = NULL;
-        gchar **strsplit = g_strsplit(artist, ", , 2);
+        gchar **strsplit = g_strsplit(artist, "," , 2);
         if((strsplit[0] != NULL) && (strsplit[1] != NULL)) {
             char *tmp = NULL;
 

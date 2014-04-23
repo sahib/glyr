@@ -54,7 +54,7 @@ static jsmnerr_t jsmn_parse_primitive(jsmn_parser *parser, const char *js,
         case '\r' :
         case '\n' :
         case ' ' :
-        case ',   :
+        case ','   :
         case ']'  :
         case '}' :
             goto found;
@@ -235,7 +235,7 @@ jsmnerr_t jsmn_parse(jsmn_parser *parser, const char *js, jsmntok_t *tokens,
         case '\r' :
         case '\n' :
         case ':' :
-        case ', :
+        case ',' :
         case ' ':
             break;
 #ifdef JSMN_STRICT

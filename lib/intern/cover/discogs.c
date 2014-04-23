@@ -52,7 +52,7 @@
 #define THUMB_SUBDNOE "\"thumb\": \""
 #define FOLLR_SUBNODE "\"uri\": \""
 #define NODE THUMB_SUBDNOE
-#define ENDOF_SUBNODE "\", 
+#define ENDOF_SUBNODE "\","
 
 
 /////////////////////////////////////////////////////
