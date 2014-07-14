@@ -1,7 +1,7 @@
 # Maintainer: Christopher Pahl <sahib@online.de>
 # glyr PKGBUILD for ArchLinux
 pkgname=glyr-git
-pkgver=20130304
+pkgver=1.0.6
 pkgrel=1
 pkgdesc="A music metadata searchengine utility and library written in C"
 arch=('i686' 'x86_64')
@@ -11,31 +11,21 @@ conflicts=('glyr')
 makedepends=('git' 'cmake')
 license=('GPL3')
 url=("https://github.com/sahib/glyr")
+source=('git+https://github.com/sahib/glyr.git#branch=master')
+md5sums=('SKIP')
 
-_gitroot="git://github.com/sahib/glyr.git"
-_gitname="glyr"
-
-build() 
-{
-    cd ${srcdir}/
-
-    msg "Connecting to the Git server...."
-    if [[ -d ${srcdir}/${_gitname} ]] ; then
-        cd ${_gitname}
-        git pull origin master
-	msg "Updating existing repo..."
-    else
-        git clone --depth 1 ${_gitroot}
-    fi
-    
-    msg "Git checkout done."
-    cd ${srcdir}/${_gitname}
-   
+build() {
+    cd "$srcdir/glyr"
     cmake . -DCMAKE_INSTALL_PREFIX=/usr
     make glyrc -j4 || return 1
 }
 
 package() {
-  cd "$srcdir/${_gitname}"
+  cd "$srcdir/glyr"
   make DESTDIR=$pkgdir install || return 1
+}
+
+pkgver() {
+    cd "$srcdir/glyr"
+    git tag --sort="-v:refname" | grep '^[0-9]' | head -1
 }
