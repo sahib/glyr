@@ -64,9 +64,10 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
 /////////////////////////////////
 
 #define LYR_NODE  "<div class='lyricbox'>"
-#define LYR_BEGIN "</div>"
+#define LYR_BEGIN ">"
 #define LYR_ENDIN "<!--"
 #define LYR_INSTRUMENTAL "/Category:Instrumental"
+#define LYR_SCRIPT_TAG "</script"
 
 GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
 {
@@ -75,6 +76,10 @@ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
     while (continue_search (g_list_length (result_list),query) && (node = strstr (node,LYR_NODE) ) )
     {
         node += (sizeof LYR_NODE);
+        char *script_tag = strstr(node, LYR_SCRIPT_TAG);
+        if(script_tag) {
+            node = script_tag + sizeof(LYR_SCRIPT_TAG);
+        }
 
         bool is_instrumental = strstr(node, LYR_INSTRUMENTAL) != NULL;
         gchar * lyr = get_search_value (node,LYR_BEGIN,LYR_ENDIN);
