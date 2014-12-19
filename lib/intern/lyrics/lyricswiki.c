@@ -78,7 +78,7 @@ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
         node += (sizeof LYR_NODE);
         char *script_tag = strstr(node, LYR_SCRIPT_TAG);
         if(script_tag) {
-            node = script_tag + sizeof(LYR_SCRIPT_TAG);
+            node = script_tag + sizeof(LYR_SCRIPT_TAG) - 1;
         }
 
         bool is_instrumental = strstr(node, LYR_INSTRUMENTAL) != NULL;
