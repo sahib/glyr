@@ -20,7 +20,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define AT_URL "http://lyrix.at/lyrics-search/s-${artist},,${title},,any,1321,0.html"
+#define AT_URL "https://www.lyrix.at/lyrics-search/s-${artist},,${title},,any,1321,0.html"
 
 const char * lyrics_lyrixat_url (GlyrQuery * settings)
 {
@@ -31,7 +31,7 @@ const char * lyrics_lyrixat_url (GlyrQuery * settings)
 
 #define SEARCH_START_TAG "<!-- start of result item //-->"
 #define LYRIC_BEGIN "<div class='songtext' id='stextDIV'>"
-#define URL_TAG_BEGIN "<a href='/de"
+#define URL_TAG_BEGIN "<a href='/t/"
 #define URL_TAG_ENDIN "'>"
 #define TITLE_END "<"
 #define MAX_TRIES 5
@@ -95,7 +95,7 @@ GList * lyrics_lyrixat_parse (cb_object * capo)
                             gchar * url_part = copy_value (url_tag+strlen (URL_TAG_BEGIN),title_tag);
                             if (url_part != NULL)
                             {
-                                gchar * url = g_strdup_printf ("http://lyrix.at/de%s",url_part);
+                                gchar * url = g_strdup_printf ("https://www.lyrix.at/t/%s",url_part);
                                 parse_lyrics_page (url,&result_list,capo);
                                 g_free (url);
                                 g_free (url_part);
