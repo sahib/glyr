@@ -21,7 +21,7 @@
 #include "../../stringlib.h"
 #include "../../core.h"
 
-#define API_URL "http://www.slothradio.com/covers/?adv=1&artist=%s&album=%s&imgsize=%c&locale=%s&sort=salesrank"
+#define API_URL "http://www.slothradio.com/covers/?adv=1&artist=${artist}&album=${album}&imgsize=%c&locale=%s&sort=salesrank"
 
 #define RESULT_LIST_START "<!-- RESULT LIST START -->"
 #define RESULT_ITEM_START "<!-- RESULT ITEM START -->"
@@ -57,7 +57,7 @@ static const char * cover_slothradio_url (GlyrQuery * s)
             image_size = 'l';
     }
 
-    return g_strdup_printf (API_URL,s->artist,s->album,image_size,locale);
+    return g_strdup_printf (API_URL, image_size, locale);
 }
 
 ///////////////////////
