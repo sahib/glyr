@@ -21,7 +21,7 @@
 #include "../../core.h"
 #include "../../stringlib.h"
 
-#define API_ENTRY "http://api.discogs.com/database/search?type=release&q=${artist}"
+#define API_ENTRY "https://api.discogs.com/database/search?type=release&q=${artist}&token=gUtGiYqikFIMrDYStQNgewQbrCdRoTBOTXDNtRgB"
 
 /////////////////////////////////
 
@@ -77,7 +77,6 @@ static bool check_artist_album (GlyrQuery * q, const char * artist_album)
 static GlyrMemCache * transform_url (cb_object * s, const char * url)
 {
     GlyrMemCache * rc = NULL;
-    size_t rc_size = strlen (url);
     char * rc_url  = g_strdup (url);
 
     if (rc_url != NULL)
@@ -90,12 +89,12 @@ static GlyrMemCache * transform_url (cb_object * s, const char * url)
             {
                 char * ep = strchr (sp + 1, '-');
                 if(ep != NULL) {
-                    size_t rest_len = rc_size - (ep - rc_url) + 1;
-                    memmove (sp,ep,rest_len);
+                    // size_t rest_len = rc_size - (ep - rc_url) + 1;
+                    // memmove (sp,ep,rest_len);
 
                     rc = DL_init();
                     rc->data = (char*) rc_url;
-                    rc->size = strlen (url);
+                    rc->size = strlen (rc_url);
                     rc->dsrc = g_strdup (s->url);
                 }
             }
@@ -134,7 +133,6 @@ static GList * cover_discogs_parse (cb_object * capo)
             char * thumb_url = get_search_value (node,THUMB_SUBDNOE,ENDOF_SUBNODE);
             if (thumb_url)
             {
-
                 GlyrMemCache * p = transform_url (capo,thumb_url);
                 if (p != NULL)
                 {
