@@ -287,7 +287,7 @@ void help_short (GlyrQuery * s)
             IN"-k --proxy               String: Set the proxy to use in the form of [protocol://][user:pass@]yourproxy.domain[:port]\n"
             "\nPROVIDER SPECIFIC OPTIONS\n"
             IN"-d --download            Download Images.\n"
-            IN"-D --skip-download       Don't download images, but return the URLs to them (act like a search engine)\n"
+            IN"-D --no-download         Don't download images, but return the URLs to them (act like a search engine)\n"
             IN"-a --artist              String: Artist name to search for\n"
             IN"-b --album               String: Album name to search for\n"
             IN"-t --title               String: Songname to search for\n"
