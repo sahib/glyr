@@ -243,10 +243,17 @@ GlyrMemCache * glyr_cache_copy (GlyrMemCache * cache)
 
 /////////////////////////////////
 
+#ifndef BUILD_DATE
+#define BUILD_DATE __DATE__
+#endif
+#ifndef BUILD_TIME
+#define BUILD_TIME __TIME__
+#endif
+
 __attribute__ ( (visibility ("default") ) )
 const char * glyr_version (void)
 {
-    return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["__DATE__"] compiled at ["__TIME__"]";
+    return "Version "GLYR_VERSION_MAJOR"."GLYR_VERSION_MINOR"."GLYR_VERSION_MICRO" ("GLYR_VERSION_NAME") of ["BUILD_DATE"] compiled at ["BUILD_TIME"]";
 }
 
 /////////////////////////////////
