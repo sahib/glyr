@@ -73,17 +73,20 @@ GList * parse_result_page (GlyrQuery * query, GlyrMemCache * to_parse)
 {
     GList * result_list = NULL;
     gchar * node = to_parse->data;
-    while (continue_search (g_list_length (result_list),query) && (node = strstr (node,LYR_NODE) ) )
+    while (continue_search (g_list_length (result_list),query) && (node = strstr (node,LYR_NODE)))
     {
         node += (sizeof LYR_NODE);
         char *script_tag = strstr(node, LYR_SCRIPT_TAG);
-        if(script_tag) {
+        char *end_tag = strstr(node, LYR_ENDIN);
+
+        if(script_tag && script_tag < end_tag) {
             node = script_tag + sizeof(LYR_SCRIPT_TAG) - 1;
         }
 
         bool is_instrumental = strstr(node, LYR_INSTRUMENTAL) != NULL;
         gchar * lyr = get_search_value (node,LYR_BEGIN,LYR_ENDIN);
         gchar * beautiness_test = beautify_string (lyr);
+
         if (is_instrumental || (beautiness_test != NULL && beautiness_test[0]))
         {
             if (is_instrumental || (lyr != NULL && strstr (lyr,BAD_STRING) == NULL && strstr (lyr,EXTERNAL_LINKS) == NULL))
