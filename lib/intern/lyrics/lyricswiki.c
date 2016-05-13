@@ -63,7 +63,7 @@ static gboolean lv_cmp_content (const gchar * to_artist, const gchar * to_title,
 
 /////////////////////////////////
 
-#define LYR_NODE  "<div class='lyricbox'>"
+#define LYR_NODE  "<div class='lyricbox"
 #define LYR_BEGIN ">"
 #define LYR_ENDIN "<!--"
 #define LYR_INSTRUMENTAL "/Category:Instrumental"
