@@ -317,7 +317,7 @@ void help_short (GlyrQuery * s)
             IN"    glyrc cover --artist SomeBand --album SomeAlbum\n"
             IN"   \n"
             IN"  DB:\n\n"
-            IN"    glyrc lyrics -a A -b B --cache /tmp # Write found items to cache; create it if not existant\n"
+            IN"    glyrc lyrics -a A -b B --cache /tmp # Write found items to cache; create it if not existent\n"
             IN"    glyrc cache list --cache /tmp # List all in the cache\n"
             IN"    glyrc cache delete cover -a Equilibrium -b Sagas --cache /tmp # Delete artist/album\n"
             IN"    glyrc cache select lyrics -a Knorkator -t 'A' -n 2 --cache /tmp # Search for two items in cache and print them\n"
