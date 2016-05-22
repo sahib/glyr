@@ -306,7 +306,7 @@ void help_short (GlyrQuery * s)
             IN"-Y --no-color            Prints no colored output\n"
             IN"-s --musictree-path <p>  <p> is a path to your music directory. Glyr might fetch things like folger.jpg from there;\n"
             IN"-j --callback            Command: Set a bash command to be executed when a item is finished downloading;\n"
-            IN"                                  All escapes mentioned in --write are supported too, and additonally:\n"
+            IN"                                  All escapes mentioned in --write are supported too, and additionally:\n"
             IN"                                    * path : The path were the item was written to.\n"
             "\nDATABASE OPTIONS\n"
             IN"-c --cache <folder>      Creates or opens an existing cache at <folder>/metadata.db and lookups data from there.\n"
