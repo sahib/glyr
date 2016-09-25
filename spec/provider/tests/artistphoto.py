@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+# encoding: utf-8
 #################################################################
 # This file is part of glyr
 # + a command-line tool and library to download various sort of music related metadata.
@@ -17,8 +19,6 @@
 # You should have received a copy of the GNU General Public License
 # along with glyr. If not, see <http://www.gnu.org/licenses/>.
 #################################################################
-#!/usr/bin/env python
-# encoding: utf-8
 
 from tests.__common__ import *
 
