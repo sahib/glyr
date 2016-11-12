@@ -1,6 +1,11 @@
 Hand written changelog of important changes.
 Use the github page to view the automated git generated brother.
 
+2016/11/12
+----------
+
++ Changed License to LGPLv3 (from GPLv3)
+
 2011/03/07
 ----------
 + Fixed lyrix.at parser (ctr was incremented always, not only on item found)
