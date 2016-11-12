@@ -48,7 +48,7 @@ h2. FEATURES
 * Download of a user defined amount of items, @glyrc cover -a Foo -b Bar -n 30@ tries to load 30 covers of album 'Bar' by artist 'Foo'.
 * Grouped download: Query providers by descending Accuray / Speed; controllable by the user over the @qsratio@
 * Optional download of images, URL is returned otherwise - so it can act a bit like a search-engine.
-* Free Software licensed under the terms of the GPLv3
+* Free Software licensed under the terms of the LGPLv3
 * libglyr is portable, easy, threadsafe and lowlevel enough for everyone.
 * ...lots of other options like min/max size for images.
 * A built-in cache to store the metadata (using SQLite)
