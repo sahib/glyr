@@ -160,7 +160,7 @@ You also might consider a small (CS-Students are already motivated by 1 Cent <im
 h2. DISCLAIMER
 
 As usual, no warranty is granted that this software works like expected.
-Refer to the GPLv3 copy you got with libglyr. It is "here.":https://github.com/sahib/glyr/blob/master/COPYING
+Refer to the LGPLv3 copy you got with libglyr. It is "here.":https://github.com/sahib/glyr/blob/master/COPYING
 Glyr is just a way to find the data, it does not own any rights on the data it found.
 
 **All retrieved items are copyrighted by their respective copyright owners.**
