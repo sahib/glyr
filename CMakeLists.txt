@@ -70,7 +70,7 @@ IF(CMAKE_COMPILER_IS_GNUCC)
     SET(GCC_ONLY_OPT   "-s")
 ENDIF()
 
-SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
+SET(COMMON_FLAGS "${GCC_ONLY_FLAGS} -I/usr/local/lib -L/usr/local/lib -Wall -Wextra -Wstrict-prototypes -W -Wno-unused-parameter -Wno-strict-prototypes -fvisibility=hidden")
 SET(CMAKE_C_FLAGS_RELEASE "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -Os ${GCC_ONLY_OPT}")
 SET(CMAKE_C_FLAGS_DEBUG   "${COMMON_FLAGS} ${CMAKE_C_FLAGS} -g3")
 SET(CMAKE_C_FLAGS "${COMMON_FLAGS} ${CMAKE_C_FLAGS}")
