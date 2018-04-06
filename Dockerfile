@@ -16,4 +16,6 @@ RUN cmake .. && make
 
 RUN apt-get -y purge g++ gcc cmake pkg-config git && apt-get clean && rm -rf /var/lib/apt
 
+RUN ln -s /opt/glyr/build/bin/glyrc /usr/bin/
+
 CMD /opt/glyr/build/bin/glyrc
